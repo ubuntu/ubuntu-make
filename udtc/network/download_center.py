@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 class DownloadCenter:
     """A DownloadCenter enables to download requested urls in separate threads."""
 
-    def __init__(self, urls, callback, report=lambda x: None, logger=None):
+    def __init__(self, urls, callback, report=lambda x: None):
         """Generate a threaded download machine.
         urls is a list of urls to download
         callback is the callback that will be called once all those urls are downloaded.
@@ -62,8 +62,9 @@ class DownloadCenter:
             logger.info("Start downloading {} as {}".format(url, tmp_file.name))
 
             def _report(block_no, block_size, file_size):
-                self._download_progress[url] = {"current": int(block_no * block_size), "size": file_size}
-                logger.debug("Current download update: {}".format(self._download_progress))
+                logger.debug("Current download update: {}*{}".format(block_no, block_size))
+                self._download_progress[url] = {"current": min(int(block_no * block_size), file_size), "size": file_size}
+                logger.debug("Deliver download update: {}".format(self._download_progress))
                 self._wired_report(self._download_progress)
 
             urlretrieve(url=url,
@@ -86,5 +87,5 @@ class DownloadCenter:
 
         uris of the temporary files will be passed on the wired callback
         """
-        logger.info("All pending downloads for [] done".format(self._urls))
+        logger.info("All pending downloads for {} done".format(self._urls))
         self._wired_callback(self._downloaded_files)
