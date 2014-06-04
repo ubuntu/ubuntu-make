@@ -9,15 +9,17 @@ As a first step, it's focusing on installing a full fledge android developer env
 **/!\ WIP, not ready for consumption yet**
 
 ## Running command line tool
-----
 To run the tool:
 
     $ ./developer-tools-center
 
 You can of course use --help to get more information and change the verbosity of the output with -v, -vv.
 
+## Requirements
+
+> Note that this project is using python3 and requires at least python 3.3. All commands (including nosetests) are using the python 3 version. See later on how installing the corresponding virtualenv.
+
 ## Different level of logging
-----
 Multiple logging profiles are available in *log-confs/* to be able to have different traces of your execution (useful when debugging in particular). For instance, you will find:
 
 * **debug.yaml**: Similar than using -vv, but will put logs to a *debug.log* file.
@@ -33,9 +35,6 @@ To load one of those logging profile:
 
     $ LOG_CFG=log-confs/testing.yaml ./developer-tools-center
 
-## Running tests
-----
-
 ### Types of tests
 There are three kinds of tests:
 
@@ -45,9 +44,18 @@ There are three kinds of tests:
 
 To run all those tests:
 
-    $ nosetests3
+    $ nosetests
 
 ### Running some tests with all debug infos
 By default, nose won't display debug output of the passing tests. When you want or work on some tests and want to see full debug log, you can use this existing node profile:
 
-    $ nosetests3 -c log-confs/debug_test.cfg tests.small.test_download_center:TestDownloadCenter.test_multiple_with_one_404_url
+    $ nosetests -c log-confs/debug_test.cfg tests.small.test_download_center:TestDownloadCenter.test_multiple_with_one_404_url
+
+## Create your own environment and run from it
+In the project root directory (env/ is already in .gitignore):
+
+    $ virtualenv --python=python3 env
+    $ env/bin/pip install -r requirements.txt
+    $ source env/bin/activate
+    $ ./developer-tools-center
+
