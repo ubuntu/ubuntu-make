@@ -24,7 +24,7 @@ import os
 import time
 
 import udtc
-from udtc import download_center
+from udtc.network.download_center import DownloadCenter
 
 logger = logging.getLogger(__name__)
 
@@ -34,4 +34,4 @@ if __name__ == '__main__':
     logger.debug("test debug")
     logger.error("test error")
 
-    download_center.DownloadCenter(["http://victorlin.me/posts/2012/08/26/good-logging-practice-in-python"], lambda x: print(x))
+    DownloadCenter(["http://victorlin.me/posts/2012/08/26/good-logging-practice-in-python"], lambda x: print(x))

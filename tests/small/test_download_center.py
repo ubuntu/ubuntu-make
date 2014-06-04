@@ -25,7 +25,7 @@ from unittest import TestCase
 from unittest.mock import Mock
 from ..tools import *
 from ..tools.local_server import LocalHttp
-from udtc.download_center import DownloadCenter
+from udtc.network.download_center import DownloadCenter
 
 
 class TestDownloadCenter(TestCase):

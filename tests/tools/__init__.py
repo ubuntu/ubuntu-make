@@ -31,7 +31,7 @@ def get_data_dir():
 
 def assertFilesIdenticals(filename1, filename2):
     """assert if the files content are identical"""
-    if open(filename1).read() == open(filename2).read():
+    if open(filename1).read() != open(filename2).read():
         logger.error("{}: {}\n{}: {}".format(filename1, open(filename1).read(),
                                              filename2, open(filename2).read()))
         raise AssertionError("{} and {} aren't identical".format(filename1, filename2))
