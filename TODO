@@ -1,0 +1,2 @@
+- List all tests under nose and be able to shell complete to only run one test with debug infos, like:
+nosetests3 tests.small.test_download_center:TestDownloadCenter.test_download_with_progress -c log-confs/debug_test.cfg
