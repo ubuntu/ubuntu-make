@@ -155,4 +155,15 @@ class TestDownloadCenter(TestCase):
         pass
 
     def test_download_same_file_multiple_times(self):
-        pass
+        """we only do one download when the same file is requested more than once in the same request"""
+        requests = [self.build_server_address("simplefile"), self.build_server_address("simplefile")]
+        report = CopyingMock()
+        DownloadCenter(requests, self.callback, report=report)
+        self.wait_for_callback(self.callback)
+
+        # ensure we only have one file downloaded and mapped back as a result)
+        callback_args, callback_kwargs = self.callback.call_args
+        map_result = callback_args[0]
+        self.assertEqual(len(map_result), 1)
+        # ensure we only downloaded one file (didn't send multiple parallel requests)
+        self.assertEqual(report.call_count, 2)

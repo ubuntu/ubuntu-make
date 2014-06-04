@@ -43,13 +43,13 @@ class DownloadCenter:
         self._wired_callback = callback
         self._wired_report = report
 
-        self._urls = urls
+        self._urls = set(urls)
         self._downloaded_files = {}
 
         self._download_progress = {}
 
         executor = futures.ThreadPoolExecutor(max_workers=3)
-        for url in urls:
+        for url in self._urls:
             future = executor.submit(self._download, url)
             future.tag_url = url
             future.add_done_callback(self._one_callback)
