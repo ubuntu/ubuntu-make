@@ -151,8 +151,28 @@ class TestDownloadCenter(TestCase):
         self.assertEqual(report.call_args, call(result_dict))
 
 
-    def test_wrong_url(self):
-        pass
+    def test_404_url(self):
+        """we return an empty downloaded asset when we try to download 404 urls"""
+        request = self.build_server_address("does_not_exist")
+        foo = DownloadCenter([request], self.callback)
+        self.wait_for_callback(self.callback)
+
+        # no download means the file isn't in the result
+        callback_args, callback_kwargs = self.callback.call_args
+        map_result = callback_args[0]
+        self.assertDictEqual(map_result, {})
+
+    def test_multiple_with_one_404_url(self):
+        """we raise an error when we try to download 404 urls"""
+        requests = [self.build_server_address("does_not_exist"), self.build_server_address("simplefile")]
+        foo = DownloadCenter(requests, self.callback)
+        self.wait_for_callback(self.callback)
+
+        # we should only have the simple file in the asset
+        callback_args, callback_kwargs = self.callback.call_args
+        map_result = callback_args[0]
+        self.assertIn(self.build_server_address("simplefile"), map_result)
+        self.assertEqual(len(map_result), 1)
 
     def test_download_same_file_multiple_times(self):
         """we only do one download when the same file is requested more than once in the same request"""

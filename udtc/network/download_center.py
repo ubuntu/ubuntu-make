@@ -21,6 +21,7 @@
 
 from concurrent import futures
 import logging
+import os
 import tempfile
 from urllib.request import urlretrieve
 
@@ -43,7 +44,7 @@ class DownloadCenter:
         self._wired_callback = callback
         self._wired_report = report
 
-        self._urls = set(urls)
+        self._urls = list(set(urls))
         self._downloaded_files = {}
 
         self._download_progress = {}
@@ -66,10 +67,15 @@ class DownloadCenter:
                 self._download_progress[url] = {"current": min(int(block_no * block_size), file_size), "size": file_size}
                 logger.debug("Deliver download update: {}".format(self._download_progress))
                 self._wired_report(self._download_progress)
+            try:
+                urlretrieve(url=url,
+                            filename=tmp_file.name,
+                            reporthook=_report)
+            except:
+                # cleanup the temp file before rethrowing
+                os.remove(tmp_file.name)
+                raise
 
-            urlretrieve(url=url,
-                        filename=tmp_file.name,
-                        reporthook=_report)
         return tmp_file.name
 
     def _one_callback(self, future):
@@ -77,8 +83,14 @@ class DownloadCenter:
 
         (will be wired on the constructor)
         """
-        logger.info("{} download finished".format(future.result()))
-        self._downloaded_files[future.tag_url] = future.result()
+
+        # if couldn't download this file: remove from the list of downloaded asset
+        if future.exception():
+            logger.warn("{} couldn't finish download: {}".format(future.tag_url, future.exception()))
+            self._urls.remove(future.tag_url)
+        else:
+            logger.info("{} download finished".format(future.result()))
+            self._downloaded_files[future.tag_url] = future.result()
         if len(self._urls) == len(self._downloaded_files):
             self._callback()
 
