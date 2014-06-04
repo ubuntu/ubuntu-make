@@ -44,7 +44,7 @@ class LocalHttp:
         self.future = executor.submit(self._serve)
 
     def _serve(self):
-        logger.warning("Serving locally from {} on {}".format(self.path, self.get_address()))
+        logger.info("Serving locally from {} on {}".format(self.path, self.get_address()))
         self.httpd.serve_forever()
 
     def get_address(self):
@@ -53,7 +53,7 @@ class LocalHttp:
 
     def stop(self):
         """Stop local server"""
-        logger.debug("Stopping serving on {}".format(self.port))
+        logger.info("Stopping serving on {}".format(self.port))
         self.httpd.shutdown()
         self.httpd.socket.close()
 

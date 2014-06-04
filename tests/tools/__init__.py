@@ -17,11 +17,12 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-"""Common tools to get some paths"""
+"""Common tools between tests"""
 
+from copy import deepcopy
 import logging
 import os
-from tests.tools.local_server import LocalHttp
+from unittest.mock import Mock
 
 logger = logging.getLogger(__name__)
 
@@ -35,3 +36,10 @@ def assertFilesIdenticals(filename1, filename2):
         logger.error("{}: {}\n{}: {}".format(filename1, open(filename1).read(),
                                              filename2, open(filename2).read()))
         raise AssertionError("{} and {} aren't identical".format(filename1, filename2))
+
+class CopyingMock(Mock):
+    """Mock for recording calls with mutable arguments"""
+    def __call__(self, *args, **kwargs):
+        args = deepcopy(args)
+        kwargs = deepcopy(kwargs)
+        return super(CopyingMock, self).__call__(*args, **kwargs)
