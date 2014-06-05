@@ -46,9 +46,9 @@ class DownloadCenter:
         The callback will get a dictionary parameter like:
         {
             "url": {
-                "content": page content as bytes if download is set to False
-                "error": string detailing the error which occurred (path and content would be empty)
-                "path": temporary files (which needs to be deleted by the caller) if download is True (default)
+                "content": page content as bytes if download is set to False. close() will clean it from memory
+                "error": string detailing the error which occurred (path and content would be empty).
+                "fd": temporary file descriptor. close() will delete it from disk.
             }
         }
         """
@@ -66,8 +66,8 @@ class DownloadCenter:
         for url in self._urls:
             # switch between inline memory and temp file
             if download:
-                dest = tempfile.NamedTemporaryFile(delete=False)
-                logger.info("Start downloading {} as {}".format(url, dest.name))
+                dest = tempfile.TemporaryFile()
+                logger.info("Start downloading {} as a temporary file".format(url))
             else:
                 dest = BytesIO()
                 logger.info("Start downloading {} in memory".format(url))
@@ -118,7 +118,7 @@ class DownloadCenter:
             block_num += 1
             _report(block_num, self.BLOCK_SIZE, total_size)
 
-        dest.close()
+        dest.seek(0)
         conn.close()
         return dest
 
@@ -128,19 +128,18 @@ class DownloadCenter:
         (will be wired on the constructor)
         """
 
-        result = {"content": None, "error": None, "path": None}
+        result = { "buffer": None, "error": None, "fd": None }
         if future.exception():
             logger.warn("{} couldn't finish download: {}".format(future.tag_url, future.exception()))
             result["error"] = str(future.exception())
-            # cleaned unusable temp file is something bad happened
-            if future.tag_download:
-                os.remove(future.tag_dest.name)
+            # cleaned unusable temp file as something bad happened
+            future.tag_dest.close()
         else:
             logger.info("{} download finished".format(future.tag_url))
             if future.tag_download:
-                result["path"] = future.result().name
+                result["fd"] = future.result()
             else:
-                result["content"] = future.result()
+                result["buffer"] = future.result()
         self._downloaded_content[future.tag_url] = result
         if len(self._urls) == len(self._downloaded_content):
             self._callback()

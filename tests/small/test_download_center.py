@@ -45,14 +45,12 @@ class TestDownloadCenter(TestCase):
     def setUp(self):
         super(TestDownloadCenter, self).setUp()
         self.callback = Mock()
-        self.files_to_clean = []
-        for file in self.files_to_clean:
-            os.remove(file)
+        self.fd_to_close = []
 
     def tearDown(self):
         super(TestDownloadCenter, self).tearDown()
-        for file in self.files_to_clean:
-            os.remove(file)
+        for fd in self.fd_to_close:
+            fd.close()
 
     def build_server_address(self, path):
         """build server address to path to get requested"""
@@ -68,8 +66,10 @@ class TestDownloadCenter(TestCase):
                 raise(BaseException("Function not called within 5 seconds"))
         for calls in mock_function_to_be_called.call_args[0]:
             for request in calls:
-                if calls[request]['path']:
-                    self.files_to_clean.append(calls[request]['path'])
+                if calls[request]['fd']:
+                    self.fd_to_close.append(calls[request]['fd'])
+                if calls[request]['buffer']:
+                    self.fd_to_close.append(calls[request]['buffer'])
 
     def test_download(self):
         """we deliver one successful download"""
@@ -81,9 +81,9 @@ class TestDownloadCenter(TestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        assertFilesIdenticals(os.path.join(self.server_dir, filename),
-                              result['path'])
-        self.assertIsNone(result['content'])
+        self.assertEquals(open(os.path.join(self.server_dir, filename), 'rb').read(),
+                          result['fd'].read())
+        self.assertIsNone(result['buffer'])
         self.assertIsNone(result['error'])
 
     def test_download_with_progress(self):
@@ -128,8 +128,8 @@ class TestDownloadCenter(TestCase):
         self.assertIn(self.build_server_address("simplefile"), map_result)
         # ensure each temp file corresponds to the source content
         for filename in ("biggerfile", "simplefile"):
-            assertFilesIdenticals(os.path.join(self.server_dir, filename),
-                                  map_result[self.build_server_address(filename)]['path'])
+            self.assertEquals(open(os.path.join(self.server_dir, filename), 'rb').read(),
+                              map_result[self.build_server_address(filename)]['fd'].read())
 
     def test_multiple_downloads_with_reports(self):
         """we deliver more than on download in parallel"""
@@ -162,8 +162,8 @@ class TestDownloadCenter(TestCase):
         callback_args, callback_kwargs = self.callback.call_args
         result = callback_args[0][self.build_server_address("does_not_exist")]
         self.assertIn("Error 404", result["error"])
-        self.assertIsNone(result["content"])
-        self.assertIsNone(result["path"])
+        self.assertIsNone(result["buffer"])
+        self.assertIsNone(result["fd"])
 
     def test_multiple_with_one_404_url(self):
         """we raise an error when we try to download 404 urls"""
@@ -176,7 +176,7 @@ class TestDownloadCenter(TestCase):
         map_result = callback_args[0]
         self.assertEqual(len(map_result), 2)
         self.assertIsNotNone(map_result[self.build_server_address("does_not_exist")]["error"])
-        self.assertIsNotNone(map_result[self.build_server_address("simplefile")]["path"])
+        self.assertIsNotNone(map_result[self.build_server_address("simplefile")]["fd"])
 
     def test_download_same_file_multiple_times(self):
         """we only do one download when the same file is requested more than once in the same request"""
@@ -191,3 +191,18 @@ class TestDownloadCenter(TestCase):
         self.assertEqual(len(map_result), 1)
         # ensure we only downloaded one file (didn't send multiple parallel requests)
         self.assertEqual(report.call_count, 2)
+
+    def test_in_memory_download(self):
+        """we deliver download on memory objects"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        foo = DownloadCenter([request], self.callback, download=False)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        self.assertEqual(open(os.path.join(self.server_dir, filename), 'rb').read(),
+                         result['buffer'].read())
+        self.assertIsNone(result['fd'])
+        self.assertIsNone(result['error'])
