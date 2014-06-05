@@ -75,7 +75,7 @@ class TestDownloadCenter(TestCase):
         """we deliver one successful download"""
         filename = "simplefile"
         request = self.build_server_address(filename)
-        foo = DownloadCenter([request], self.callback)
+        DownloadCenter([request], self.callback)
         self.wait_for_callback(self.callback)
 
         result = self.callback.call_args[0][0][request]
@@ -92,7 +92,7 @@ class TestDownloadCenter(TestCase):
         filesize = os.path.getsize(os.path.join(self.server_dir, filename))
         report = CopyingMock()
         request = self.build_server_address(filename)
-        foo = DownloadCenter([request], self.callback, report=report)
+        DownloadCenter([request], self.callback, report=report)
         self.wait_for_callback(self.callback)
 
         self.assertEqual(report.call_count, 2)
@@ -106,19 +106,19 @@ class TestDownloadCenter(TestCase):
         filesize = os.path.getsize(os.path.join(self.server_dir, filename))
         report = CopyingMock()
         request = self.build_server_address(filename)
-        foo = DownloadCenter([request], self.callback, report=report)
+        dl_center = DownloadCenter([request], self.callback, report=report)
         self.wait_for_callback(self.callback)
 
         self.assertEqual(report.call_count, 3)
         self.assertEqual(report.call_args_list,
                          [call({self.build_server_address(filename): {'size': filesize, 'current': 0}}),
-                          call({self.build_server_address(filename): {'size': filesize, 'current': foo.BLOCK_SIZE}}),
+                          call({self.build_server_address(filename): {'size': filesize, 'current': dl_center.BLOCK_SIZE}}),
                           call({self.build_server_address(filename): {'size': filesize, 'current': filesize}})])
 
     def test_multiple_downloads(self):
         """we deliver more than on download in parallel"""
         requests = [self.build_server_address("biggerfile"), self.build_server_address("simplefile")]
-        foo = DownloadCenter(requests, self.callback)
+        DownloadCenter(requests, self.callback)
         self.wait_for_callback(self.callback)
 
         # ensure we saw 2 different requests
@@ -135,7 +135,7 @@ class TestDownloadCenter(TestCase):
         """we deliver more than on download in parallel"""
         requests = [self.build_server_address("biggerfile"), self.build_server_address("simplefile")]
         report = CopyingMock()
-        foo = DownloadCenter(requests, self.callback, report=report)
+        DownloadCenter(requests, self.callback, report=report)
         self.wait_for_callback(self.callback)
 
         self.assertEqual(report.call_count, 5)
@@ -155,7 +155,7 @@ class TestDownloadCenter(TestCase):
     def test_404_url(self):
         """we return an error for a request including a 404 url"""
         request = self.build_server_address("does_not_exist")
-        foo = DownloadCenter([request], self.callback)
+        DownloadCenter([request], self.callback)
         self.wait_for_callback(self.callback)
 
         # no download means the file isn't in the result
@@ -168,7 +168,7 @@ class TestDownloadCenter(TestCase):
     def test_multiple_with_one_404_url(self):
         """we raise an error when we try to download 404 urls"""
         requests = [self.build_server_address("does_not_exist"), self.build_server_address("simplefile")]
-        foo = DownloadCenter(requests, self.callback)
+        DownloadCenter(requests, self.callback)
         self.wait_for_callback(self.callback)
 
         # we should have the two content, one in error
@@ -196,7 +196,7 @@ class TestDownloadCenter(TestCase):
         """we deliver download on memory objects"""
         filename = "simplefile"
         request = self.build_server_address(filename)
-        foo = DownloadCenter([request], self.callback, download=False)
+        DownloadCenter([request], self.callback, download=False)
         self.wait_for_callback(self.callback)
 
         result = self.callback.call_args[0][0][request]
