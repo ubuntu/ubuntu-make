@@ -31,8 +31,6 @@ from udtc.network.download_center import DownloadCenter
 class TestDownloadCenter(TestCase):
     """This will test the download center by sending one or more download requests"""
 
-    BLOCK_SIZE = 1024*8 # from urlretrieve code
-
     @classmethod
     def setUpClass(cls):
         super(TestDownloadCenter, cls).setUpClass()
@@ -70,7 +68,8 @@ class TestDownloadCenter(TestCase):
                 raise(BaseException("Function not called within 5 seconds"))
         for calls in mock_function_to_be_called.call_args[0]:
             for request in calls:
-                self.files_to_clean.append(calls[request])
+                if calls[request]['path']:
+                    self.files_to_clean.append(calls[request]['path'])
 
     def test_download(self):
         """we deliver one successful download"""
@@ -79,11 +78,13 @@ class TestDownloadCenter(TestCase):
         foo = DownloadCenter([request], self.callback)
         self.wait_for_callback(self.callback)
 
-        temp_file = self.callback.call_args[0][0][request]
+        result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
         assertFilesIdenticals(os.path.join(self.server_dir, filename),
-                              temp_file)
+                              result['path'])
+        self.assertIsNone(result['content'])
+        self.assertIsNone(result['error'])
 
     def test_download_with_progress(self):
         """we deliver progress hook while downloading"""
@@ -111,7 +112,7 @@ class TestDownloadCenter(TestCase):
         self.assertEqual(report.call_count, 3)
         self.assertEqual(report.call_args_list,
                          [call({self.build_server_address(filename): {'size': filesize, 'current': 0}}),
-                          call({self.build_server_address(filename): {'size': filesize, 'current': self.BLOCK_SIZE}}),
+                          call({self.build_server_address(filename): {'size': filesize, 'current': foo.BLOCK_SIZE}}),
                           call({self.build_server_address(filename): {'size': filesize, 'current': filesize}})])
 
     def test_multiple_downloads(self):
@@ -128,7 +129,7 @@ class TestDownloadCenter(TestCase):
         # ensure each temp file corresponds to the source content
         for filename in ("biggerfile", "simplefile"):
             assertFilesIdenticals(os.path.join(self.server_dir, filename),
-                                  map_result[self.build_server_address(filename)])
+                                  map_result[self.build_server_address(filename)]['path'])
 
     def test_multiple_downloads_with_reports(self):
         """we deliver more than on download in parallel"""
@@ -152,15 +153,17 @@ class TestDownloadCenter(TestCase):
 
 
     def test_404_url(self):
-        """we return an empty downloaded asset when we try to download 404 urls"""
+        """we return an error for a request including a 404 url"""
         request = self.build_server_address("does_not_exist")
         foo = DownloadCenter([request], self.callback)
         self.wait_for_callback(self.callback)
 
         # no download means the file isn't in the result
         callback_args, callback_kwargs = self.callback.call_args
-        map_result = callback_args[0]
-        self.assertDictEqual(map_result, {})
+        result = callback_args[0][self.build_server_address("does_not_exist")]
+        self.assertIn("Error 404", result["error"])
+        self.assertIsNone(result["content"])
+        self.assertIsNone(result["path"])
 
     def test_multiple_with_one_404_url(self):
         """we raise an error when we try to download 404 urls"""
@@ -168,11 +171,12 @@ class TestDownloadCenter(TestCase):
         foo = DownloadCenter(requests, self.callback)
         self.wait_for_callback(self.callback)
 
-        # we should only have the simple file in the asset
+        # we should have the two content, one in error
         callback_args, callback_kwargs = self.callback.call_args
         map_result = callback_args[0]
-        self.assertIn(self.build_server_address("simplefile"), map_result)
-        self.assertEqual(len(map_result), 1)
+        self.assertEqual(len(map_result), 2)
+        self.assertIsNotNone(map_result[self.build_server_address("does_not_exist")]["error"])
+        self.assertIsNotNone(map_result[self.build_server_address("simplefile")]["path"])
 
     def test_download_same_file_multiple_times(self):
         """we only do one download when the same file is requested more than once in the same request"""
