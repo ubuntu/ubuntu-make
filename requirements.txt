@@ -1,2 +1,3 @@
 nose
+pep8
 pyyaml

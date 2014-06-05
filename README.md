@@ -59,3 +59,19 @@ In the project root directory (env/ is already in .gitignore):
     $ source env/bin/activate
     $ ./developer-tools-center
 
+## Development
+
+### Style guide and checking
+
+We are running pep8 relaxing in .pep8 the max line length to 120. env/ is excluded as well from the pep8 check.
+
+Running the tests, in particular:
+
+    $ nosetests test/__init__.py
+
+is running those pep8 checks on the code.
+
+You can run as well the pep8 tool directly from the project directory:
+
+    $ pep8 .
+
