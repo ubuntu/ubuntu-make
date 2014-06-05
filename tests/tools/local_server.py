@@ -24,8 +24,8 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 import logging
 import os
 import posixpath
+import ssl
 import urllib
-import socketserver
 
 logger = logging.getLogger(__name__)
 
@@ -33,13 +33,22 @@ logger = logging.getLogger(__name__)
 class LocalHttp:
     """Local threaded http server. will be serving path content"""
 
-    def __init__(self, path):
+    def __init__(self, path, use_ssl=False):
+        """path is the local path to server
+        use_ssl turn on the use of the local certificate or not.
+        """
         self.port = 9876
         self.path = path
+        self.use_ssl = use_ssl
         handler = RequestHandler
         handler.root_path = path
         # can be TCPServer, but we don't have a self.httpd.server_name then
         self.httpd = HTTPServer(("", self.port), RequestHandler)
+        if self.use_ssl:
+            self.httpd.socket = ssl.wrap_socket(self.httpd.socket,
+                                                certfile=os.path.join(os.path.dirname(__file__), '..',
+                                                                      'data', 'local_cert.pem'),
+                                                server_side=True)
         executor = futures.ThreadPoolExecutor(max_workers=1)
         self.future = executor.submit(self._serve)
 
@@ -49,7 +58,8 @@ class LocalHttp:
 
     def get_address(self):
         """Get public address"""
-        return "http://{}:{}".format(self.httpd.server_name, self.port)
+        return "http{}://{}:{}".format("s" if self.use_ssl else "",
+                                       self.httpd.server_name, self.port)
 
     def stop(self):
         """Stop local server"""
