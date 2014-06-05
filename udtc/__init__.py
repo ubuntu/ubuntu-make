@@ -18,29 +18,33 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-import os
+import logging
 import logging.config
-
+import os
 import yaml
 
-def setup_logging(
-    default_file='logging.yaml',
-    default_level=logging.WARNING,
-    env_key='LOG_CFG',
-    level=None):
+_default_log_level = logging.WARNING
+
+logger = logging.getLogger(__name__)
+
+
+def setup_logging(default_file='logging.yaml', env_key='LOG_CFG', level=_default_log_level):
     """Setup logging configuration
 
+    Order of preference:
+    - manually define level
+    - env_key env variable if set (logging config file)
+    - default_file path if present (logging config file)
+    - fallback to _default_log_level
     """
     path = default_file
     value = os.getenv(env_key, None)
-    if level:
-        logging.basicConfig(level=level)
-        return
-    if value:
-        path = value
-    if os.path.exists(path):
-        with open(path, 'rt') as f:
-            config = yaml.load(f.read())
-        logging.config.dictConfig(config)
-    else:
-        logging.basicConfig(level=default_level)
+    logging.basicConfig(level=level, format="[%(name)s] %(levelname)s: %(message)s")
+    if level == _default_log_level:
+        if value:
+            path = value
+        if os.path.exists(path):
+            with open(path, 'rt') as f:
+                config = yaml.load(f.read())
+            logging.config.dictConfig(config)
+    logger.info("Logging level set to {}".format(logging.getLevelName(level)))
