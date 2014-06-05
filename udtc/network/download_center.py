@@ -23,7 +23,6 @@ from concurrent import futures
 from http.client import HTTPSConnection, HTTPConnection
 from io import BytesIO
 import logging
-import os
 import ssl
 import tempfile
 from urllib.parse import urlparse
@@ -34,7 +33,7 @@ logger = logging.getLogger(__name__)
 class DownloadCenter:
     """A DownloadCenter enables to read or download requested urls in separate threads."""
 
-    BLOCK_SIZE = 1024*8 # from urlretrieve code
+    BLOCK_SIZE = 1024*8  # from urlretrieve code
 
     def __init__(self, urls, callback, download=True, report=lambda x: None):
         """Generate a threaded download machine.
@@ -78,7 +77,7 @@ class DownloadCenter:
             future.add_done_callback(self._one_callback)
 
     def _fetch(self, url, dest):
-        """Get an url.content and close the connexion.
+        """Get an url content and close the connexion.
 
         This write the content to dest return it, after seeking at start
         """
@@ -106,17 +105,17 @@ class DownloadCenter:
             conn.close()
             raise(BaseException("Error {}: {}".format(resp.status, resp.reason)))
 
-        total_size = int(resp.headers["Content-Length"])
+        content_size = int(resp.headers["Content-Length"])
         # read in chunk and send report updates
         block_num = 0
-        _report(block_num, self.BLOCK_SIZE, total_size)
+        _report(block_num, self.BLOCK_SIZE, content_size)
         while True:
             data = resp.read(self.BLOCK_SIZE)
             if not data:
                 break
             dest.write(data)
             block_num += 1
-            _report(block_num, self.BLOCK_SIZE, total_size)
+            _report(block_num, self.BLOCK_SIZE, content_size)
 
         dest.seek(0)
         conn.close()
@@ -128,7 +127,7 @@ class DownloadCenter:
         (will be wired on the constructor)
         """
 
-        result = { "buffer": None, "error": None, "fd": None }
+        result = {"buffer": None, "error": None, "fd": None}
         if future.exception():
             logger.warn("{} couldn't finish download: {}".format(future.tag_url, future.exception()))
             result["error"] = str(future.exception())

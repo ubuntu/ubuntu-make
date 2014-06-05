@@ -27,6 +27,7 @@ import posixpath
 import ssl
 from . import get_data_dir
 import urllib
+import urllib.parse
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +48,7 @@ class LocalHttp:
         self.httpd = HTTPServer(("", self.port), RequestHandler)
         if self.use_ssl:
             self.httpd.socket = ssl.wrap_socket(self.httpd.socket,
-                                                certfile= os.path.join(get_data_dir(), 'local_cert.pem'),
+                                                certfile=os.path.join(get_data_dir(), 'local_cert.pem'),
                                                 server_side=True)
         executor = futures.ThreadPoolExecutor(max_workers=1)
         self.future = executor.submit(self._serve)
@@ -75,12 +76,12 @@ class RequestHandler(SimpleHTTPRequestHandler):
     def translate_path(self, path):
         """translate path given routes
 
-    Most of it is a copy of the parent function which can't be override and
-    uses cwd
-    """
+        Most of it is a copy of the parent function which can't be override and
+        uses cwd
+        """
         # abandon query parameters
-        path = path.split('?',1)[0]
-        path = path.split('#',1)[0]
+        path = path.split('?', 1)[0]
+        path = path.split('#', 1)[0]
         # Don't forget explicit trailing slash when normalizing. Issue17324
         trailing_slash = path.rstrip().endswith('/')
         path = posixpath.normpath(urllib.parse.unquote(path))
@@ -93,13 +94,14 @@ class RequestHandler(SimpleHTTPRequestHandler):
         for word in words:
             drive, word = os.path.splitdrive(word)
             head, word = os.path.split(word)
-            if word in (os.curdir, os.pardir): continue
+            if word in (os.curdir, os.pardir):
+                continue
             path = os.path.join(path, word)
         if trailing_slash:
             path += '/'
         return path
 
-    def log_message(self, format, *args):
+    def log_message(self, fmt, *args):
         """Log an arbitrary message.
 
         override from SimpleHTTPRequestHandler to not output to stderr but log in the logging system
@@ -108,4 +110,4 @@ class RequestHandler(SimpleHTTPRequestHandler):
         logger.debug("%s - - [%s] %s\n" %
                      (self.address_string(),
                       self.log_date_time_string(),
-                      format%args))
+                      fmt % args))

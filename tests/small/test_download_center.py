@@ -32,6 +32,8 @@ from udtc.network.download_center import DownloadCenter
 class TestDownloadCenter(TestCase):
     """This will test the download center by sending one or more download requests"""
 
+    server = None
+
     @classmethod
     def setUpClass(cls):
         super(TestDownloadCenter, cls).setUpClass()
@@ -62,7 +64,7 @@ class TestDownloadCenter(TestCase):
 
         Add temp files to the clean file list afterwards"""
         timeout = time() + 5
-        while(not mock_function_to_be_called.called):
+        while not mock_function_to_be_called.called:
             if time() > timeout:
                 raise(BaseException("Function not called within 5 seconds"))
         for calls in mock_function_to_be_called.call_args[0]:
@@ -113,7 +115,8 @@ class TestDownloadCenter(TestCase):
         self.assertEqual(report.call_count, 3)
         self.assertEqual(report.call_args_list,
                          [call({self.build_server_address(filename): {'size': filesize, 'current': 0}}),
-                          call({self.build_server_address(filename): {'size': filesize, 'current': dl_center.BLOCK_SIZE}}),
+                          call({self.build_server_address(filename): {'size': filesize,
+                                                                      'current': dl_center.BLOCK_SIZE}}),
                           call({self.build_server_address(filename): {'size': filesize, 'current': filesize}})])
 
     def test_multiple_downloads(self):
@@ -151,7 +154,6 @@ class TestDownloadCenter(TestCase):
             result_dict[self.build_server_address(filename)] = {'size': file_size,
                                                                 'current': file_size}
         self.assertEqual(report.call_args, call(result_dict))
-
 
     def test_404_url(self):
         """we return an error for a request including a 404 url"""
@@ -209,9 +211,10 @@ class TestDownloadCenter(TestCase):
         self.assertIsNone(result['error'])
 
 
-
 class TestDownloadCenterSecure(TestCase):
     """This will test the download center in secure mode by sending one or more download requests"""
+
+    server = None
 
     @classmethod
     def setUpClass(cls):
@@ -243,7 +246,7 @@ class TestDownloadCenterSecure(TestCase):
 
         Add temp files to the clean file list afterwards"""
         timeout = time() + 5
-        while(not mock_function_to_be_called.called):
+        while not mock_function_to_be_called.called:
             if time() > timeout:
                 raise(BaseException("Function not called within 5 seconds"))
         for calls in mock_function_to_be_called.call_args[0]:
@@ -261,7 +264,8 @@ class TestDownloadCenterSecure(TestCase):
         # prepare the cert and set it as the trusted system context
         context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
         context.verify_mode = ssl.CERT_REQUIRED
-        mockssl.create_default_context.return_value = context.load_verify_locations(os.path.join(get_data_dir(), 'local_cert.pem'))
+        mockssl.create_default_context.return_value = context.load_verify_locations(os.path.join(get_data_dir(),
+                                                                                                 'local_cert.pem'))
         DownloadCenter([request], self.callback)
         self.wait_for_callback(self.callback)
 
@@ -270,7 +274,6 @@ class TestDownloadCenterSecure(TestCase):
         self.assertEqual(self.callback.call_count, 1)
         self.assertEquals(open(os.path.join(self.server_dir, filename), 'rb').read(),
                           result['fd'].read())
-
 
     def test_with_invalid_certificate(self):
         """we error on invalid ssl certificate"""

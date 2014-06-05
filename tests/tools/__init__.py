@@ -26,16 +26,19 @@ from unittest.mock import Mock
 
 logger = logging.getLogger(__name__)
 
+
 def get_data_dir():
     """return absolute data dir path"""
     return os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data'))
 
-def assertFilesIdenticals(filename1, filename2):
+
+def assert_files_identicals(filename1, filename2):
     """assert if the files content are identical"""
     if open(filename1).read() != open(filename2).read():
         logger.error("{}: {}\n{}: {}".format(filename1, open(filename1).read(),
                                              filename2, open(filename2).read()))
         raise AssertionError("{} and {} aren't identical".format(filename1, filename2))
+
 
 class CopyingMock(Mock):
     """Mock for recording calls with mutable arguments"""
