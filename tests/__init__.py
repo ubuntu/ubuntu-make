@@ -20,5 +20,22 @@
 """Enable logging with a sane formatting syntax when tests are run."""
 
 import logging
+import os
+import pep8
+from .tools import get_root_dir
+from unittest import TestCase
+
 logging.basicConfig(level=logging.DEBUG,
                     format="%(asctime)s [%(name)s] %(levelname)s: %(message)s")
+
+
+class CodeCheck(TestCase):
+
+    def test_pep8(self):
+        """Proceed a pep8 checking
+
+        Note that we have a .pep8 config file for maximum line length tweak
+        and excluding the virtualenv dir."""
+        pep8style = pep8.StyleGuide(config_file=os.path.join(get_root_dir(), '.pep8'))
+        results = pep8style.check_files([get_root_dir()])
+        self.assertEquals(results.get_statistics(), [])
