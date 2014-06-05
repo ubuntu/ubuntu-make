@@ -25,6 +25,7 @@ import logging
 import os
 import posixpath
 import ssl
+from . import get_data_dir
 import urllib
 
 logger = logging.getLogger(__name__)
@@ -46,8 +47,7 @@ class LocalHttp:
         self.httpd = HTTPServer(("", self.port), RequestHandler)
         if self.use_ssl:
             self.httpd.socket = ssl.wrap_socket(self.httpd.socket,
-                                                certfile=os.path.join(os.path.dirname(__file__), '..',
-                                                                      'data', 'local_cert.pem'),
+                                                certfile= os.path.join(get_data_dir(), 'local_cert.pem'),
                                                 server_side=True)
         executor = futures.ThreadPoolExecutor(max_workers=1)
         self.future = executor.submit(self._serve)

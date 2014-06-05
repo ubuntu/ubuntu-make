@@ -78,9 +78,9 @@ class DownloadCenter:
             future.add_done_callback(self._one_callback)
 
     def _fetch(self, url, dest):
-        """Get an url.content
+        """Get an url.content and close the connexion.
 
-        This write the content to dest and close it.
+        This write the content to dest return it, after seeking at start
         """
 
         def _report(block_no, block_size, total_size):

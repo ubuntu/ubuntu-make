@@ -24,7 +24,7 @@ import ssl
 from time import time
 from unittest import TestCase
 from unittest.mock import Mock, call, patch
-from ..tools import *
+from ..tools import get_data_dir, CopyingMock
 from ..tools.local_server import LocalHttp
 from udtc.network.download_center import DownloadCenter
 
