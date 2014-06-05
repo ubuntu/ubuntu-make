@@ -20,9 +20,10 @@
 """Tests for the download center module using a local server"""
 
 import os
+import ssl
 from time import time
 from unittest import TestCase
-from unittest.mock import Mock, call
+from unittest.mock import Mock, call, patch
 from ..tools import *
 from ..tools.local_server import LocalHttp
 from udtc.network.download_center import DownloadCenter
@@ -206,3 +207,79 @@ class TestDownloadCenter(TestCase):
                          result['buffer'].read())
         self.assertIsNone(result['fd'])
         self.assertIsNone(result['error'])
+
+
+
+class TestDownloadCenterSecure(TestCase):
+    """This will test the download center in secure mode by sending one or more download requests"""
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestDownloadCenterSecure, cls).setUpClass()
+        cls.server_dir = os.path.join(get_data_dir(), "server-content")
+        cls.server = LocalHttp(cls.server_dir, use_ssl=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        super(TestDownloadCenterSecure, cls).tearDownClass()
+        cls.server.stop()
+
+    def setUp(self):
+        super(TestDownloadCenterSecure, self).setUp()
+        self.callback = Mock()
+        self.fd_to_close = []
+
+    def tearDown(self):
+        super(TestDownloadCenterSecure, self).tearDown()
+        for fd in self.fd_to_close:
+            fd.close()
+
+    def build_server_address(self, path):
+        """build server address to path to get requested"""
+        return "{}/{}".format(self.server.get_address(), path)
+
+    def wait_for_callback(self, mock_function_to_be_called):
+        """wait for the callback to be called until a timeout.
+
+        Add temp files to the clean file list afterwards"""
+        timeout = time() + 5
+        while(not mock_function_to_be_called.called):
+            if time() > timeout:
+                raise(BaseException("Function not called within 5 seconds"))
+        for calls in mock_function_to_be_called.call_args[0]:
+            for request in calls:
+                if calls[request]['fd']:
+                    self.fd_to_close.append(calls[request]['fd'])
+                if calls[request]['buffer']:
+                    self.fd_to_close.append(calls[request]['buffer'])
+
+    @patch('udtc.network.download_center.ssl')
+    def test_download(self, mockssl):
+        """we deliver one successful download under ssl with known cert"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        # prepare the cert and set it as the trusted system context
+        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+        context.verify_mode = ssl.CERT_REQUIRED
+        mockssl.create_default_context.return_value = context.load_verify_locations(os.path.join(get_data_dir(), 'local_cert.pem'))
+        DownloadCenter([request], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        self.assertEquals(open(os.path.join(self.server_dir, filename), 'rb').read(),
+                          result['fd'].read())
+
+
+    def test_with_invalid_certificate(self):
+        """we error on invalid ssl certificate"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([request], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertIn("CERTIFICATE_VERIFY_FAILED", result["error"])
+        self.assertIsNone(result["buffer"])
+        self.assertIsNone(result["fd"])
