@@ -57,14 +57,14 @@ There are three kinds of tests:
 * **medium tests**: testing the whole workflow, directly calling end user tool from the command line, but without any effect on the system. Requirements like installing packages are mocked, as well as the usage of a local webserver serving (smaller) content similar that what will be fetched in a real use case. The assets have the same formats and layout.
 * **large tests**: same tests are run than for the medium tests, but with real server download and installation of dpkg packages. Most of those tests needs root rights. However, be aware than those tests only run on a graphical environment, will interfere with it and will install/remove packages on your system.
 
-To run all those tests:
+To run all those tests (with python warnings):
 
-    $ nosetests
+    $ PYTHONWARNINGS=d nosetests
 
 #### Running some tests with all debug infos
 By default, nose won't display debug output of the passing tests. When you want or work on some tests and want to see full debug log, you can use this existing node profile:
 
-    $ nosetests -c log-confs/debug_test.cfg tests.small.test_download_center:TestDownloadCenter.test_multiple_with_one_404_url
+    $ PYTHONWARNINGS=d nosetests -c log-confs/debug_test.cfg tests.small.test_download_center:TestDownloadCenter.test_multiple_with_one_404_url
 
 ### Create your own environment and run from it
 For an easier development workflow, we encourage the use of virtualenv to test and iterate on the project in contrast of installing all requirements on your machine. In the project root directory (env/ is already in .gitignore and excluded for pep8 checking):
@@ -73,3 +73,9 @@ For an easier development workflow, we encourage the use of virtualenv to test a
     $ env/bin/pip install -r requirements.txt
     $ source env/bin/activate
     $ ./developer-tools-center
+
+## Release management
+Refresh .pot files:
+
+   $ ./setup.py extract_messages --output po/ubuntu-developer-tools-center.pot
+
