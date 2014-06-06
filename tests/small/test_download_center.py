@@ -84,8 +84,9 @@ class TestDownloadCenter(TestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        self.assertEquals(open(os.path.join(self.server_dir, filename), 'rb').read(),
-                          result['fd'].read())
+        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result['fd'].read())
         self.assertIsNone(result['buffer'])
         self.assertIsNone(result['error'])
 
@@ -132,8 +133,9 @@ class TestDownloadCenter(TestCase):
         self.assertIn(self.build_server_address("simplefile"), map_result)
         # ensure each temp file corresponds to the source content
         for filename in ("biggerfile", "simplefile"):
-            self.assertEquals(open(os.path.join(self.server_dir, filename), 'rb').read(),
-                              map_result[self.build_server_address(filename)]['fd'].read())
+            with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+                self.assertEqual(file_on_disk.read(),
+                                 map_result[self.build_server_address(filename)]['fd'].read())
 
     def test_multiple_downloads_with_reports(self):
         """we deliver more than on download in parallel"""
@@ -205,8 +207,9 @@ class TestDownloadCenter(TestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        self.assertEqual(open(os.path.join(self.server_dir, filename), 'rb').read(),
-                         result['buffer'].read())
+        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result['buffer'].read())
         self.assertIsNone(result['fd'])
         self.assertIsNone(result['error'])
 
@@ -272,8 +275,9 @@ class TestDownloadCenterSecure(TestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        self.assertEquals(open(os.path.join(self.server_dir, filename), 'rb').read(),
-                          result['fd'].read())
+        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result['fd'].read())
 
     def test_with_invalid_certificate(self):
         """we error on invalid ssl certificate"""

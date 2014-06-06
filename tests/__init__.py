@@ -38,4 +38,4 @@ class CodeCheck(TestCase):
         and excluding the virtualenv dir."""
         pep8style = pep8.StyleGuide(config_file=os.path.join(get_root_dir(), '.pep8'))
         results = pep8style.check_files([get_root_dir()])
-        self.assertEquals(results.get_statistics(), [])
+        self.assertEqual(results.get_statistics(), [])

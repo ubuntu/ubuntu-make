@@ -27,6 +27,7 @@ import ssl
 import tempfile
 from urllib.parse import urlparse
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -129,7 +130,7 @@ class DownloadCenter:
 
         result = {"buffer": None, "error": None, "fd": None}
         if future.exception():
-            logger.warn("{} couldn't finish download: {}".format(future.tag_url, future.exception()))
+            logger.warning("{} couldn't finish download: {}".format(future.tag_url, future.exception()))
             result["error"] = str(future.exception())
             # cleaned unusable temp file as something bad happened
             future.tag_dest.close()
