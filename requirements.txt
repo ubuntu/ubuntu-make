@@ -1,3 +1,9 @@
+# runtime requirements
+pyyaml
+
+# test tools
 nose
 pep8
-pyyaml
+
+# setup only
+babel
