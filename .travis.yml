@@ -4,7 +4,7 @@ python:
 before_install:
   - sudo add-apt-repository -y ppa:didrocks/ppa
   - sudo apt-get update
-  - sudo apt-get install -qq apt apt-utils libapt-pkg-dev python3-distutils-extra python3-sphinx
+  - sudo apt-get install -qq apt apt-utils libapt-pkg-dev
 install:
   - "pip install -r requirements.txt"
 script: nosetests
