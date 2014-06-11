@@ -1,6 +1,6 @@
 # runtime requirements
 pyyaml
--e bzr+lp:python-apt#egg=apt
+-e bzr+lp:python-apt/@0.9.3.5#egg=apt
 
 # test tools
 nose
