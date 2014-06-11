@@ -183,7 +183,6 @@ class RequirementsHandler(object):
                             continue
                         try:
                             os.close(fd)
-                            #print("closed: ", fd)
                         except OSError as e:
                             # there will be one fd that can not be closed
                             # as its the fd from pythons internal diropen()
