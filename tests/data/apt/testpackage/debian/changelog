@@ -1,0 +1,5 @@
+testpackage (0.0.1) trusty; urgency=low
+
+  * Initial release
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 11 Jun 2014 14:00:13 +0200

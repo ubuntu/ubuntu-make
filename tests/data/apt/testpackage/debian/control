@@ -1,0 +1,36 @@
+Source: testpackage
+Section: misc
+Priority: extra
+Maintainer: Didier Roche <didrocks@ubuntu.com>
+Build-Depends: debhelper (>= 9.0.0)
+Standards-Version: 3.9.5
+
+Package: testpackage
+Architecture: all
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Description: Dummy package for testing
+ Package used for testing debs installation
+
+Package: testpackage0
+Architecture: all
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Description: Dummy package for testinga - other
+ Package used for other testing debs installation
+
+Package: testpackage1
+Architecture: all
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         testpackage,
+Description: Dummy package for testing - dep
+ Package used for testing debs installation with dep
+
+Package: testpackage2
+Architecture: all
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Breaks: testpackage (<< 0.2),
+Description: Dummy package for testing - breaks
+ Package used for testing debs installation with break
