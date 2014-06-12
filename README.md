@@ -70,6 +70,7 @@ By default, nose won't display debug output of the passing tests. When you want 
 For an easier development workflow, we encourage the use of virtualenv to test and iterate on the project in contrast of installing all requirements on your machine. In the project root directory (env/ is already in .gitignore and excluded for pep8 checking):
 
     $ virtualenv --python=python3 env
+    $ sudo apt-get install -qq apt apt-utils libapt-pkg-dev # those are the requirements to compile python-apt
     $ env/bin/pip install -r requirements.txt
     $ source env/bin/activate
     $ ./developer-tools-center
