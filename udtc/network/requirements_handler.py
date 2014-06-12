@@ -136,9 +136,10 @@ class RequirementsHandler(object):
                 self._progress_callback = progress_callback
 
             def pulse(self, owner):
-                progress = owner.partial_present / owner.total_needed * 100
-                logger.debug("{} download update: {}%".format(self._bucket['bucket'], progress))
-                self._progress_callback(self._status, progress)
+                percent = (((self.current_bytes + self.current_items) * 100.0) /
+                           float(self.total_bytes + self.total_items))
+                logger.debug("{} download update: {}%".format(self._bucket['bucket'], percent))
+                self._progress_callback(self._status, percent)
 
         class _InstallProgress(apt.progress.base.InstallProgress):
             """Progress handler for installing a bucket"""
