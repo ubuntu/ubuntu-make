@@ -31,6 +31,6 @@ Package: testpackage2
 Architecture: all
 Depends: ${shlibs:Depends},
          ${misc:Depends},
-Breaks: testpackage (<< 0.2),
+Conflicts: testpackage (<< 0.2),
 Description: Dummy package for testing - breaks
  Package used for testing debs installation with break
