@@ -76,22 +76,23 @@ class RequirementsHandler(object):
         def _really_install_bucket(self, current_bucket):
             """Really install current bucket and bind signals"""
             logger.debug("Starting {} installation".format(current_bucket["bucket"]))
+            # exchange file output for apt and dpkg after the fork() call (open it empty)
+            self.apt_fd = tempfile.NamedTemporaryFile(delete=False)
+            self.apt_fd.close()
+
             for pkg_name in current_bucket["bucket"]:
                 try:
                     pkg = self.cache[pkg_name]
                     if pkg.is_installed and pkg.is_upgradable:
                         pkg.mark_upgrade()
                     else:
-                        pkg.mark_install()
+                        pkg.mark_install(auto_fix=False)
                 except Exception as msg:
                     logger.error("Can't mark for install {}: {}".format(pkg_name, msg))
                     raise
                     # TODO: the root check should be here:
                     # apt.cache.LockFailedException: Failed to lock /var/cache/apt/archives/lock
 
-            # exchange file output for apt and dpkg after the fork() call (open it empty)
-            self.apt_fd = tempfile.NamedTemporaryFile(delete=False)
-            self.apt_fd.close()
             # this can raise on installedArchives() exception if the commit() fails
             self.cache.commit(fetch_progress=self._FetchProgress(current_bucket,
                                                                  RequirementsHandler.STATUS_DOWNLOADING,
@@ -111,7 +112,9 @@ class RequirementsHandler(object):
                 error_message = str(future.exception())
                 try:
                     with open(self.apt_fd.name) as f:
-                        error_message = "{}\nSubprocess output: {}".format(error_message, f.read())
+                        subprocess_content = f.read()
+                        if subprocess_content:
+                            error_message = "{}\nSubprocess output: {}".format(error_message, subprocess_content)
                 except FileNotFoundError:
                     pass
                 logger.error(error_message)
