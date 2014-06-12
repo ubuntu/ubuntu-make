@@ -92,14 +92,14 @@ class TestRequirementsHandler(TestCase):
                 count += 1
         return count
 
-    def wait_for_callback(self, mock_function_to_be_called, timeout=5):
+    def wait_for_callback(self, mock_function_to_be_called, timeout=10):
         """wait for the callback to be called until a timeout.
 
         Add temp files to the clean file list afterwards"""
         timeout_time = time() + timeout
         while not mock_function_to_be_called.called:
             if time() > timeout_time:
-                raise(BaseException("Function not called within 5 seconds"))
+                raise(BaseException("Function not called within 10 seconds"))
 
     def test_singleton(self):
         """Ensure we are delivering a singleton for RequirementsHandler"""
@@ -151,7 +151,6 @@ class TestRequirementsHandler(TestCase):
                                                          RequirementsHandler.STATUS_INSTALLING)
         self.assertTrue(downloading_msg > 1)
         self.assertTrue(installing_msg > 1)
-        self.assertEquals(progress_callback.call_args_list[-1][0], (RequirementsHandler.STATUS_INSTALLING, 100))
 
     def test_install_twice(self):
         """Test appending two installations and wait for results"""
