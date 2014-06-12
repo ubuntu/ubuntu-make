@@ -26,6 +26,7 @@ from concurrent import futures
 import fcntl
 import logging
 import os
+import tempfile
 import time
 
 logger = logging.getLogger(__name__)
@@ -34,9 +35,9 @@ logger = logging.getLogger(__name__)
 class RequirementsHandler(object):
     """Handle platform requirements"""
 
-    class _RequirementsHandlers:
+    STATUS_DOWNLOADING, STATUS_INSTALLING = range(2)
 
-        STATUS_DOWNLOADING, STATUS_INSTALLING = range(2)
+    class _RequirementsHandler:
 
         """Private implementation"""
         def __init__(self):
@@ -61,7 +62,7 @@ class RequirementsHandler(object):
 
             bucket is a list of packages to install"""
             # TODO: check/move to root
-            logger.info("Pend {} for installation".format(bucket))
+            logger.info("Installation {} pending".format(bucket))
             bucket_pack = {
                 "bucket": bucket,
                 "progress_callback": progress_callback,
@@ -83,27 +84,39 @@ class RequirementsHandler(object):
                     else:
                         pkg.mark_install()
                 except Exception as msg:
-                    logger.error("Can't install {}: {}".format(pkg_name, msg))
+                    logger.error("Can't mark for install {}: {}".format(pkg_name, msg))
                     raise
                     # TODO: the root check should be here:
                     # apt.cache.LockFailedException: Failed to lock /var/cache/apt/archives/lock
 
+            # exchange file output for apt and dpkg after the fork() call (open it empty)
+            self.apt_fd = tempfile.NamedTemporaryFile(delete=False)
+            self.apt_fd.close()
+            # this can raise on installedArchives() exception if the commit() fails
             self.cache.commit(fetch_progress=self._FetchProgress(current_bucket,
-                                                                 self.STATUS_DOWNLOADING,
+                                                                 RequirementsHandler.STATUS_DOWNLOADING,
                                                                  current_bucket["progress_callback"]),
                               install_progress=self._InstallProgress(current_bucket,
-                                                                     self.STATUS_INSTALLING,
+                                                                     RequirementsHandler.STATUS_INSTALLING,
                                                                      current_bucket["progress_callback"],
-                                                                     self._force_load_apt_cache))
+                                                                     self._force_load_apt_cache,
+                                                                     self.apt_fd.name))
             return True
 
-        @staticmethod
-        def _on_done(future):
+        def _on_done(self, future):
             """Call future associated bucket done callback"""
             result = {"bucket": future.tag_bucket["bucket"],
                       "error": None}
             if future.exception():
-                result["error"] = str(future.exception())
+                error_message = str(future.exception())
+                try:
+                    with open(self.apt_fd.name) as f:
+                        error_message = "{}\nSubprocess output: {}".format(error_message, f.read())
+                except FileNotFoundError:
+                    pass
+                logger.error(error_message)
+                result["error"] = error_message
+            os.remove(self.apt_fd.name)
             future.tag_bucket["installed_callback"](result)
 
         def _force_load_apt_cache(self):
@@ -123,18 +136,19 @@ class RequirementsHandler(object):
                 self._progress_callback = progress_callback
 
             def pulse(self, owner):
-                progress = self.fetched_bytes / self.total_bytes * 100
+                progress = owner.partial_present / owner.total_needed * 100
                 logger.debug("{} download update: {}%".format(self._bucket['bucket'], progress))
                 self._progress_callback(self._status, progress)
 
         class _InstallProgress(apt.progress.base.InstallProgress):
             """Progress handler for installing a bucket"""
-            def __init__(self, bucket, status, progress_callback, force_load_apt_cache):
+            def __init__(self, bucket, status, progress_callback, force_load_apt_cache, exchange_filename):
                 apt.progress.base.InstallProgress.__init__(self)
                 self._bucket = bucket
                 self._status = status
                 self._progress_callback = progress_callback
                 self._force_load_apt_cache = force_load_apt_cache
+                self._exchange_filename = exchange_filename
 
             def error(self, pkg, msg):
                 logger.error("{} installation finished with an error: {}".format(self._bucket['bucket'], msg))
@@ -142,7 +156,9 @@ class RequirementsHandler(object):
                 raise BaseException(msg)
 
             def finish_update(self):
-                logger.debug("Install for {} done with success.".format(self._bucket['bucket']))
+                # warning: this function can be called even if dpkg failed (it raised an exception around commit()
+                # DO NOT CALL directly the callbacks from there.
+                logger.debug("Install for {} ended.".format(self._bucket['bucket']))
                 self._force_load_apt_cache()  # reload apt cache
 
             def status_change(self, pkg, percent, status):
@@ -153,9 +169,8 @@ class RequirementsHandler(object):
             def _redirect_stdin():
                 os.dup2(os.open(os.devnull, os.O_RDWR), 0)
 
-            @staticmethod
-            def _redirect_output():
-                fd = os.open(os.devnull, os.O_RDWR)
+            def _redirect_output(self):
+                fd = os.open(self._exchange_filename, os.O_RDWR)
                 os.dup2(fd, 1)
                 os.dup2(fd, 2)
 
@@ -204,7 +219,7 @@ class RequirementsHandler(object):
 
     def __new__(cls):
         if not RequirementsHandler._instance:
-            RequirementsHandler._instance = RequirementsHandler._RequirementsHandlers()
+            RequirementsHandler._instance = RequirementsHandler._RequirementsHandler()
         else:
             logger.debug("Reusing existing apt instance")
         return RequirementsHandler._instance
