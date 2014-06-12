@@ -50,7 +50,7 @@ class TestRequirementsHandler(TestCase):
 
         # create the fake dpkg wrapper
         with tempfile.NamedTemporaryFile(delete=False, mode='w') as f:
-            f.write("#!/bin/sh\nfakeroot dpkg --root={root} --force-not-root --force-bad-path "
+            f.write("#!/bin/sh\neatmydata fakeroot dpkg --root={root} --force-not-root --force-bad-path "
                     "--log={root}/var/log/dpkg.log \"$@\"".format(root=self.chroot_path))
             self.dpkg = f.name
         st = os.stat(self.dpkg)
@@ -127,7 +127,6 @@ class TestRequirementsHandler(TestCase):
                                                          RequirementsHandler.STATUS_INSTALLING)
         self.assertTrue(downloading_msg > 1)
         self.assertTrue(installing_msg > 1)
-        self.assertEquals(progress_callback.call_args_list[-1][0], (RequirementsHandler.STATUS_INSTALLING, 100))
 
     def test_install_multiple_packages(self):
         """Install multiple packages in one shot"""
