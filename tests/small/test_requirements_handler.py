@@ -113,7 +113,7 @@ class TestRequirementsHandler(TestCase):
 
         self.assertEqual(self.done_callback.call_args[0][0]["bucket"], ['testpackage'])
         self.assertIsNone(self.done_callback.call_args[0][0]["error"])
-        self.assertTrue(self.handler.cache["testpackage"].is_installed)
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
 
     def test_install_progress(self):
         """Install one package and get progress feedback"""
@@ -127,7 +127,6 @@ class TestRequirementsHandler(TestCase):
                                                          RequirementsHandler.STATUS_INSTALLING)
         self.assertTrue(downloading_msg > 1)
         self.assertTrue(installing_msg > 1)
-        self.assertEquals(progress_callback.call_args_list[-1][0], (RequirementsHandler.STATUS_INSTALLING, 100))
 
     def test_install_multiple_packages(self):
         """Install multiple packages in one shot"""
@@ -136,8 +135,7 @@ class TestRequirementsHandler(TestCase):
 
         self.assertEqual(self.done_callback.call_args[0][0]["bucket"], ['testpackage', 'testpackage0'])
         self.assertIsNone(self.done_callback.call_args[0][0]["error"])
-        self.assertTrue(self.handler.cache["testpackage"].is_installed)
-        self.assertTrue(self.handler.cache["testpackage0"].is_installed)
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage", "testpackage0"]))
 
     def test_install_multiple_packages_progress(self):
         """Install multiple packages in one shot and ensure that progress is global"""
@@ -160,8 +158,7 @@ class TestRequirementsHandler(TestCase):
         self.wait_for_callback(self.done_callback)
         self.wait_for_callback(done_callback0)
 
-        self.assertTrue(self.handler.cache["testpackage"].is_installed)
-        self.assertTrue(self.handler.cache["testpackage0"].is_installed)
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage", "testpackage0"]))
 
     def test_install_pending_order(self):
         """Installation order of pending requests are respected"""
@@ -225,7 +222,7 @@ class TestRequirementsHandler(TestCase):
         self.wait_for_callback(done_callback)
         self.wait_for_callback(self.done_callback)
 
-        self.assertTrue(self.handler.cache["testpackage"].is_installed)
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
         self.assertFalse(progress_second_callback.called)
 
     def test_deps(self):
@@ -233,30 +230,45 @@ class TestRequirementsHandler(TestCase):
         self.handler.install_bucket(["testpackage1"], lambda x, y: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
-        self.assertTrue(self.handler.cache["testpackage1"].is_installed)
-        self.assertTrue(self.handler.cache["testpackage"].is_installed)
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage1", "testpackage"]))
 
     def test_fail(self):
-        """Raise an error when asking for the impossible (installing 2 packages in conflicts)"""
+        """An error is caught when asking for the impossible (installing 2 packages in conflicts)"""
         self.handler.install_bucket(["testpackage", "testpackage2"], lambda x, y: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertIsNotNone(self.done_callback.call_args[0][0]["error"])
-        self.assertTrue(self.handler.cache["testpackage"].is_installed)
-        self.assertFalse(self.handler.cache["testpackage2"].is_installed)
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
+        self.assertFalse(self.handler.is_bucket_installed(["testpackage2"]))
 
     def test_install_shadow_pkg(self):
-        """Raise an error if we try to install a none existing package"""
+        """An error is caught if we try to install a none existing package"""
         self.handler.install_bucket(["foo"], lambda x, y: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertIsNotNone(self.done_callback.call_args[0][0]["error"])
 
     def test_error_in_dpkg(self):
-        """Test that an error while installing a package is caught"""
+        """An error while installing a package is caught"""
         with open(self.dpkg, mode='w') as f:
             f.write("#!/bin/sh\nexit 1")  # Simulate an error in dpkg
         self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertIsNotNone(self.done_callback.call_args[0][0]["error"])
+
+    def test_is_installed_bucket_installed(self):
+        """Install bucket should return True if a bucket is installed"""
+        self.handler.install_bucket(["testpackage", "testpackage1"], lambda x, y: "", self.done_callback)
+        self.wait_for_callback(self.done_callback)
+        self.assertTrue(self.handler.is_bucket_installed(['testpackage', 'testpackage1']))
+
+    def test_is_installed_bucket_half_installed(self):
+        """Install bucket shouldn't be considered installed if not fully installed"""
+        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+        self.wait_for_callback(self.done_callback)
+        self.assertFalse(self.handler.is_bucket_installed(['testpackage', 'testpackage1']))
+
+    def test_is_installed_bucket_not_installed(self):
+        """Install bucket should return False if a bucket is installed"""
+        self.assertFalse(self.handler.is_bucket_installed(['testpackage', 'testpackage1']))
