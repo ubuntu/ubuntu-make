@@ -240,37 +240,18 @@ class TestDownloadCenterSecure(TestCase):
         for fd in self.fd_to_close:
             fd.close()
 
-    def build_server_address(self, path):
-        """build server address to path to get requested"""
-        return "{}/{}".format(self.server.get_address(), path)
-
-    def wait_for_callback(self, mock_function_to_be_called):
-        """wait for the callback to be called until a timeout.
-
-        Add temp files to the clean file list afterwards"""
-        timeout = time() + 5
-        while not mock_function_to_be_called.called:
-            if time() > timeout:
-                raise(BaseException("Function not called within 5 seconds"))
-        for calls in mock_function_to_be_called.call_args[0]:
-            for request in calls:
-                if calls[request].fd:
-                    self.fd_to_close.append(calls[request].fd)
-                if calls[request].buffer:
-                    self.fd_to_close.append(calls[request].buffer)
-
     @patch('udtc.network.download_center.ssl')
     def test_download(self, mockssl):
         """we deliver one successful download under ssl with known cert"""
         filename = "simplefile"
-        request = self.build_server_address(filename)
+        request = TestDownloadCenter.build_server_address(self, filename)
         # prepare the cert and set it as the trusted system context
         context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
         context.verify_mode = ssl.CERT_REQUIRED
         mockssl.create_default_context.return_value = context.load_verify_locations(os.path.join(get_data_dir(),
                                                                                                  'local_cert.pem'))
         DownloadCenter([request], self.callback)
-        self.wait_for_callback(self.callback)
+        TestDownloadCenter.wait_for_callback(self, self.callback)
 
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
@@ -282,9 +263,9 @@ class TestDownloadCenterSecure(TestCase):
     def test_with_invalid_certificate(self):
         """we error on invalid ssl certificate"""
         filename = "simplefile"
-        request = self.build_server_address(filename)
+        request = TestDownloadCenter.build_server_address(self, filename)
         DownloadCenter([request], self.callback)
-        self.wait_for_callback(self.callback)
+        TestDownloadCenter.wait_for_callback(self, self.callback)
 
         result = self.callback.call_args[0][0][request]
         self.assertIn("CERTIFICATE_VERIFY_FAILED", result.error)
