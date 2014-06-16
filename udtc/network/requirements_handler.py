@@ -93,10 +93,10 @@ class RequirementsHandler(object, metaclass=Singleton):
 
         # this can raise on installedArchives() exception if the commit() fails
         self.cache.commit(fetch_progress=self._FetchProgress(current_bucket,
-                                                             RequirementsHandler.STATUS_DOWNLOADING,
+                                                             self.STATUS_DOWNLOADING,
                                                              current_bucket["progress_callback"]),
                           install_progress=self._InstallProgress(current_bucket,
-                                                                 RequirementsHandler.STATUS_INSTALLING,
+                                                                 self.STATUS_INSTALLING,
                                                                  current_bucket["progress_callback"],
                                                                  self._force_load_apt_cache,
                                                                  self.apt_fd.name))
