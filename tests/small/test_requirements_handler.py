@@ -183,11 +183,9 @@ class TestRequirementsHandler(TestCase):
         current_status = RequirementsHandler.STATUS_DOWNLOADING
         current_status_change_count = 1
         calls = ordered_progress_callback.call_args_list
-        for i in range(len(calls)):
-            if i == 0:
-                continue
-            if calls[i][0][0] != current_status:
-                current_status = calls[i][0][0]
+        for current_call in calls[1:]:
+            if current_call[0][0] != current_status:
+                current_status = current_call[0][0]
                 current_status_change_count += 1
         self.assertEqual(current_status_change_count, 4)
 
