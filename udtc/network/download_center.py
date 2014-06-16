@@ -47,11 +47,12 @@ class DownloadCenter:
 
         The callback will get a dictionary parameter like:
         {
-            "url": {
-                "content": page content as bytes if download is set to False. close() will clean it from memory
-                "error": string detailing the error which occurred (path and content would be empty).
-                "fd": temporary file descriptor. close() will delete it from disk.
-            }
+            "url":
+                DownloadResult(buffer=page content as bytes if download is set to False. close() will clean it from
+                                      memory,
+                               error=string detailing the error which occurred (path and content would be empty),
+                               fd=temporary file descriptor. close() will delete it from disk
+                )
         }
         """
 
