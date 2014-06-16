@@ -19,6 +19,7 @@
 
 """Module delivering a DownloadCenter to download in parallel multiple requests"""
 
+from collections import namedtuple
 from concurrent import futures
 from http.client import HTTPSConnection, HTTPConnection
 from io import BytesIO
@@ -35,8 +36,9 @@ class DownloadCenter:
     """A DownloadCenter enables to read or download requested urls in separate threads."""
 
     BLOCK_SIZE = 1024*8  # from urlretrieve code
+    DownloadResult = namedtuple("DownloadResult", ["buffer", "error", "fd"])
 
-    def __init__(self, urls, callback, download=True, report=lambda x: None):
+    def __init__(self, urls, on_done, download=True, report=lambda x: None):
         """Generate a threaded download machine.
         urls is a list of urls to download or read from
         callback is the callback that will be called once all those urls are downloaded.
@@ -53,7 +55,7 @@ class DownloadCenter:
         }
         """
 
-        self._wired_callback = callback
+        self._done_callback = on_done
         self._wired_report = report
         self._download_to_file = download
 
@@ -75,7 +77,7 @@ class DownloadCenter:
             future.tag_url = url
             future.tag_download = download
             future.tag_dest = dest
-            future.add_done_callback(self._one_callback)
+            future.add_done_callback(self._one_done)
 
     def _fetch(self, url, dest):
         """Get an url content and close the connexion.
@@ -122,32 +124,32 @@ class DownloadCenter:
         conn.close()
         return dest
 
-    def _one_callback(self, future):
+    def _one_done(self, future):
         """Callback that will be called once the download finishes.
 
         (will be wired on the constructor)
         """
 
-        result = {"buffer": None, "error": None, "fd": None}
+        result = self.DownloadResult(buffer=None, error=None, fd=None)
         if future.exception():
             logger.warning("{} couldn't finish download: {}".format(future.tag_url, future.exception()))
-            result["error"] = str(future.exception())
+            result = result._replace(error=str(future.exception()))
             # cleaned unusable temp file as something bad happened
             future.tag_dest.close()
         else:
             logger.info("{} download finished".format(future.tag_url))
             if future.tag_download:
-                result["fd"] = future.result()
+                result = result._replace(fd=future.result())
             else:
-                result["buffer"] = future.result()
+                result = result._replace(buffer=future.result())
         self._downloaded_content[future.tag_url] = result
         if len(self._urls) == len(self._downloaded_content):
-            self._callback()
+            self._done()
 
-    def _callback(self):
+    def _done(self):
         """Callback that will be called once all download finishes.
 
         uris of the temporary files will be passed on the wired callback
         """
         logger.info("All pending downloads for {} done".format(self._urls))
-        self._wired_callback(self._downloaded_content)
+        self._done_callback(self._downloaded_content)

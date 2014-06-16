@@ -22,6 +22,7 @@
 import apt
 import apt.progress
 import apt.progress.base
+from collections import namedtuple
 from concurrent import futures
 import fcntl
 import logging
@@ -37,6 +38,8 @@ class RequirementsHandler(object, metaclass=Singleton):
     """Handle platform requirements"""
 
     STATUS_DOWNLOADING, STATUS_INSTALLING = range(2)
+
+    RequirementsResult = namedtuple("RequirementsResult", ["bucket", "error"])
 
     def __init__(self):
         logger.info("Create a new apt cache")
@@ -104,8 +107,7 @@ class RequirementsHandler(object, metaclass=Singleton):
 
     def _on_done(self, future):
         """Call future associated bucket done callback"""
-        result = {"bucket": future.tag_bucket["bucket"],
-                  "error": None}
+        result = self.RequirementsResult(bucket=future.tag_bucket["bucket"], error=None)
         if future.exception():
             error_message = str(future.exception())
             try:
@@ -116,7 +118,7 @@ class RequirementsHandler(object, metaclass=Singleton):
             except FileNotFoundError:
                 pass
             logger.error(error_message)
-            result["error"] = error_message
+            result = result._replace(error=error_message)
         os.remove(self.apt_fd.name)
         future.tag_bucket["installed_callback"](result)
 

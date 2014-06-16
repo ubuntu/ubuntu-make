@@ -111,8 +111,8 @@ class TestRequirementsHandler(TestCase):
         self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
-        self.assertEqual(self.done_callback.call_args[0][0]["bucket"], ['testpackage'])
-        self.assertIsNone(self.done_callback.call_args[0][0]["error"])
+        self.assertEqual(self.done_callback.call_args[0][0].bucket, ['testpackage'])
+        self.assertIsNone(self.done_callback.call_args[0][0].error)
         self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
 
     def test_install_progress(self):
@@ -133,8 +133,8 @@ class TestRequirementsHandler(TestCase):
         self.handler.install_bucket(["testpackage", "testpackage0"], lambda x, y: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
-        self.assertEqual(self.done_callback.call_args[0][0]["bucket"], ['testpackage', 'testpackage0'])
-        self.assertIsNone(self.done_callback.call_args[0][0]["error"])
+        self.assertEqual(self.done_callback.call_args[0][0].bucket, ['testpackage', 'testpackage0'])
+        self.assertIsNone(self.done_callback.call_args[0][0].error)
         self.assertTrue(self.handler.is_bucket_installed(["testpackage", "testpackage0"]))
 
     def test_install_multiple_packages_progress(self):
@@ -177,8 +177,8 @@ class TestRequirementsHandler(TestCase):
         self.wait_for_callback(done_callback0)
 
         self.assertEqual(self.done_callback.call_args_list,
-                         [call({'bucket': ['testpackage'], 'error': None}),
-                          call({'bucket': ['testpackage0'], 'error': None})])
+                         [call(RequirementsHandler.RequirementsResult(bucket=['testpackage'], error=None)),
+                          call(RequirementsHandler.RequirementsResult(bucket=['testpackage0'], error=None))])
         # we will get progress with 0, 1 (first bucket), 0, 1 (second bucket). So 4 progress signal status change
         current_status = RequirementsHandler.STATUS_DOWNLOADING
         current_status_change_count = 1
@@ -235,7 +235,7 @@ class TestRequirementsHandler(TestCase):
         self.handler.install_bucket(["testpackage", "testpackage2"], lambda x, y: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
-        self.assertIsNotNone(self.done_callback.call_args[0][0]["error"])
+        self.assertIsNotNone(self.done_callback.call_args[0][0].error)
         self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
         self.assertFalse(self.handler.is_bucket_installed(["testpackage2"]))
 
@@ -244,7 +244,7 @@ class TestRequirementsHandler(TestCase):
         self.handler.install_bucket(["foo"], lambda x, y: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
-        self.assertIsNotNone(self.done_callback.call_args[0][0]["error"])
+        self.assertIsNotNone(self.done_callback.call_args[0][0].error)
 
     def test_error_in_dpkg(self):
         """An error while installing a package is caught"""
@@ -253,7 +253,7 @@ class TestRequirementsHandler(TestCase):
         self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
-        self.assertIsNotNone(self.done_callback.call_args[0][0]["error"])
+        self.assertIsNotNone(self.done_callback.call_args[0][0].error)
 
     def test_is_installed_bucket_installed(self):
         """Install bucket should return True if a bucket is installed"""

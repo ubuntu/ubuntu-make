@@ -69,10 +69,10 @@ class TestDownloadCenter(TestCase):
                 raise(BaseException("Function not called within 5 seconds"))
         for calls in mock_function_to_be_called.call_args[0]:
             for request in calls:
-                if calls[request]['fd']:
-                    self.fd_to_close.append(calls[request]['fd'])
-                if calls[request]['buffer']:
-                    self.fd_to_close.append(calls[request]['buffer'])
+                if calls[request].fd:
+                    self.fd_to_close.append(calls[request].fd)
+                if calls[request].buffer:
+                    self.fd_to_close.append(calls[request].buffer)
 
     def test_download(self):
         """we deliver one successful download"""
@@ -86,9 +86,9 @@ class TestDownloadCenter(TestCase):
         self.assertEqual(self.callback.call_count, 1)
         with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
-                             result['fd'].read())
-        self.assertIsNone(result['buffer'])
-        self.assertIsNone(result['error'])
+                             result.fd.read())
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.error)
 
     def test_download_with_progress(self):
         """we deliver progress hook while downloading"""
@@ -135,7 +135,7 @@ class TestDownloadCenter(TestCase):
         for filename in ("biggerfile", "simplefile"):
             with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
                 self.assertEqual(file_on_disk.read(),
-                                 map_result[self.build_server_address(filename)]['fd'].read())
+                                 map_result[self.build_server_address(filename)].fd.read())
 
     def test_multiple_downloads_with_reports(self):
         """we deliver more than on download in parallel"""
@@ -166,9 +166,9 @@ class TestDownloadCenter(TestCase):
         # no download means the file isn't in the result
         callback_args, callback_kwargs = self.callback.call_args
         result = callback_args[0][self.build_server_address("does_not_exist")]
-        self.assertIn("Error 404", result["error"])
-        self.assertIsNone(result["buffer"])
-        self.assertIsNone(result["fd"])
+        self.assertIn("Error 404", result.error)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.fd)
 
     def test_multiple_with_one_404_url(self):
         """we raise an error when we try to download 404 urls"""
@@ -180,8 +180,8 @@ class TestDownloadCenter(TestCase):
         callback_args, callback_kwargs = self.callback.call_args
         map_result = callback_args[0]
         self.assertEqual(len(map_result), 2)
-        self.assertIsNotNone(map_result[self.build_server_address("does_not_exist")]["error"])
-        self.assertIsNotNone(map_result[self.build_server_address("simplefile")]["fd"])
+        self.assertIsNotNone(map_result[self.build_server_address("does_not_exist")].error)
+        self.assertIsNotNone(map_result[self.build_server_address("simplefile")].fd)
 
     def test_download_same_file_multiple_times(self):
         """we only do one download when the same file is requested more than once in the same request"""
@@ -209,9 +209,9 @@ class TestDownloadCenter(TestCase):
         self.assertEqual(self.callback.call_count, 1)
         with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
-                             result['buffer'].read())
-        self.assertIsNone(result['fd'])
-        self.assertIsNone(result['error'])
+                             result.buffer.read())
+        self.assertIsNone(result.fd)
+        self.assertIsNone(result.error)
 
 
 class TestDownloadCenterSecure(TestCase):
@@ -254,10 +254,10 @@ class TestDownloadCenterSecure(TestCase):
                 raise(BaseException("Function not called within 5 seconds"))
         for calls in mock_function_to_be_called.call_args[0]:
             for request in calls:
-                if calls[request]['fd']:
-                    self.fd_to_close.append(calls[request]['fd'])
-                if calls[request]['buffer']:
-                    self.fd_to_close.append(calls[request]['buffer'])
+                if calls[request].fd:
+                    self.fd_to_close.append(calls[request].fd)
+                if calls[request].buffer:
+                    self.fd_to_close.append(calls[request].buffer)
 
     @patch('udtc.network.download_center.ssl')
     def test_download(self, mockssl):
@@ -277,7 +277,7 @@ class TestDownloadCenterSecure(TestCase):
         self.assertEqual(self.callback.call_count, 1)
         with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
-                             result['fd'].read())
+                             result.fd.read())
 
     def test_with_invalid_certificate(self):
         """we error on invalid ssl certificate"""
@@ -287,6 +287,6 @@ class TestDownloadCenterSecure(TestCase):
         self.wait_for_callback(self.callback)
 
         result = self.callback.call_args[0][0][request]
-        self.assertIn("CERTIFICATE_VERIFY_FAILED", result["error"])
-        self.assertIsNone(result["buffer"])
-        self.assertIsNone(result["fd"])
+        self.assertIn("CERTIFICATE_VERIFY_FAILED", result.error)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.fd)
