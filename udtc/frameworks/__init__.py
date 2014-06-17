@@ -39,38 +39,35 @@ class BaseCategory():
 
     NOT_INSTALLED, PARTIALLY_INSTALLED, FULLY_INSTALLED = range(3)
     categories = NoneDict()
+    main_category = None
 
     def __init__(self, name, description="", logo_path=None, is_main_category=False):
         self.name = name
         self.description = description
         self.logo_path = logo_path
-        self.main_category = is_main_category
+        self.is_main_category = is_main_category
         self.default = None
         self.frameworks = NoneDict()
         if self.name in self.categories:
-            logger.error("There is already a registered category with {} as a name. Don't register the second one"
+            logger.error("There is already a registered category with {} as a name. Don't register the second one."
                          .format(name))
         else:
             self.categories[self.name] = self
+            if is_main_category:
+                BaseCategory.main_category = self
 
     @property
     def prog_name(self):
         """Get programmatic, path and CLI compatible names"""
         return self.name.lower().replace('/', '-').replace(' ', '-')
 
-    @classmethod
-    def get_main_category(cls):
-        """Return main category if any"""
-        for category in cls.categories.values():
-            if category.main_category:
-                logger.debug("Found main category as requested")
-                return category
-        logger.warning("There is no main category while we requested one")
-        return None
-
     def register_framework(self, framework, is_default=False):
         """Register a new framework"""
-        self.frameworks[framework.name] = framework
+        if framework.name in self.frameworks:
+            logger.error("There is already a registered framework with {} as a name. Don't register the second one."
+                         .format(framework.name))
+        else:
+            self.frameworks[framework.name] = framework
         if is_default:
             self.default = framework
 

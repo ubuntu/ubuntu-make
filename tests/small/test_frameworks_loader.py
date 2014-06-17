@@ -52,27 +52,24 @@ class TestFrameworkLoader(TestCase):
 
     def tearDown(self):
         # we reset the loaded categories
-        frameworks.BaseCategory.categories = NoneDict()
+        self.CategoryHandler.categories = NoneDict()
+        self.CategoryHandler.main_category = None
 
     def test_load_main_category(self):
         """The main category is loaded"""
         self.assertEquals(len([1 for category in self.CategoryHandler.categories.values()
-                               if category.main_category]), 1)
+                               if category.is_main_category]), 1)
 
     def test_get_main_category(self):
-        """get_main_category functions returns main category"""
-        main_category = [category for category in self.CategoryHandler.categories.values() if category.main_category][0]
-        self.assertEquals(self.CategoryHandler.get_main_category(), main_category)
-
-    def test_get_main_category_with_none(self):
-        """get_main_category functions returns None when there is no main category"""
-        frameworks.BaseCategory.categories = NoneDict()
-        self.assertIsNone(self.CategoryHandler.get_main_category())
+        """main_category property returns main category"""
+        main_category = [category for category in self.CategoryHandler.categories.values()
+                         if category.is_main_category][0]
+        self.assertEquals(self.CategoryHandler.main_category, main_category)
 
     def test_load_category(self):
         """There is at least one category (not main) loaded"""
         self.assertTrue(len([1 for category in self.CategoryHandler.categories.values()
-                             if not category.main_category]) > 0)
+                             if not category.is_main_category]) > 0)
 
     def test_get_category_by_name(self):
         """categories index returns matching category"""
@@ -169,12 +166,73 @@ class TestEmptyFrameworkLoader(TestCase):
                 patchelem(udtc.frameworks, '__package__', "testframeworksdoesntexist"):
             frameworks.load_frameworks()
 
+    def tearDown(self):
+        # we reset the loaded categories
+        frameworks.BaseCategory.categories = NoneDict()
+
     def test_invalid_framework(self):
         """There is one main category, but nothing else"""
-        main_category = [category for category in self.CategoryHandler.categories.values() if category.main_category][0]
-        self.assertEquals(self.CategoryHandler.get_main_category(), main_category)
+        main_category = [category for category in self.CategoryHandler.categories.values()
+                         if category.is_main_category][0]
+        self.assertEquals(self.CategoryHandler.main_category, main_category)
         self.assertEquals(len(self.CategoryHandler.categories), 1)
+
+
+class TestDuplicatedFrameworkLoader(TestCase):
+    """This will test the dynamic framework loader activity with some duplicated categories and frameworks"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        sys.path.append(get_data_dir())
+        cls.testframeworks_dir = os.path.join(get_data_dir(), 'duplicatedframeworks')
+        cls.CategoryHandler = frameworks.BaseCategory
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        sys.path.remove(get_data_dir())
+
+    def setUp(self):
+        # load custom unexisting framework directory
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "duplicatedframeworks"):
+            frameworks.load_frameworks()
+        self.categoryA = self.CategoryHandler.categories["Category A"]
+
+    def tearDown(self):
+        # we reset the loaded categories
+        frameworks.BaseCategory.categories = NoneDict()
+
+    def test_duplicated_categories(self):
+        """We only load one category when a second with same name is met"""
+        # main + categoryA
+        self.assertEquals(len(self.CategoryHandler.categories), 2)
+        self.assertEquals(self.CategoryHandler.categories["Category A"].name, "Category A")
+
+    def test_duplicated_frameworks(self):
+        """We only load one framework when a second with the same name is met"""
+        self.assertEquals(len(self.categoryA.frameworks), 1)
+
+    def test_main_category_empty(self):
+        """The main category (unused here) is empty by default"""
+        self.assertEquals(len(self.CategoryHandler.main_category.frameworks), 0)
+
+
+class TestNotLoadedFrameworkLoader(TestCase):
+
+    def setUp(self):
+        self.CategoryHandler = frameworks.BaseCategory
+
+    def test_get_no_main_category(self):
+        """main_category returns None when there is no main category"""
+        self.assertIsNone(self.CategoryHandler.main_category)
+
+    def test_get_with_no_category(self):
+        """categories is empty when there is no category loaded"""
+        self.assertEquals(len(self.CategoryHandler.categories), 0)
 
 # TODO: test load file without the abstract interface filed up
 # TODO: test load framework in main category
 # TODO: add another class to just try loading real production directories
+# TODO: test path for setup() and defaults + categories
