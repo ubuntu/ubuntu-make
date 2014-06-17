@@ -64,3 +64,9 @@ class ConfigHandler(metaclass=Singleton):
         with open(config_file, 'w') as f:
             yaml.dump(config, f, default_flow_style=False)
         self._config = config
+
+
+class NoneDict(dict):
+    """We don't use a defaultdict(lambda: None) as it's growing everytime something is requested"""
+    def __getitem__(self, key):
+        return dict.get(self, key)

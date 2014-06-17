@@ -27,7 +27,7 @@ import logging
 import os
 import pkgutil
 import sys
-from udtc.tools import ConfigHandler
+from udtc.tools import ConfigHandler, NoneDict
 from udtc.settings import DEFAULT_INSTALL_TOOLS_PATH
 
 
@@ -38,7 +38,7 @@ class BaseCategory():
     """Base Category class to be inherited"""
 
     NOT_INSTALLED, PARTIALLY_INSTALLED, FULLY_INSTALLED = range(3)
-    categories = set()
+    categories = NoneDict()
 
     def __init__(self, name, description="", logo_path=None, is_main_category=False):
         self.name = name
@@ -46,8 +46,12 @@ class BaseCategory():
         self.logo_path = logo_path
         self.main_category = is_main_category
         self.default = None
-        self.frameworks = {}
-        self.categories.add(self)
+        self.frameworks = NoneDict()
+        if self.name in self.categories:
+            logger.error("There is already a registered category with {} as a name. Don't register the second one"
+                         .format(name))
+        else:
+            self.categories[self.name] = self
 
     @property
     def prog_name(self):
@@ -57,21 +61,11 @@ class BaseCategory():
     @classmethod
     def get_main_category(cls):
         """Return main category if any"""
-        for category in cls.categories:
+        for category in cls.categories.values():
             if category.main_category:
                 logger.debug("Found main category as requested")
                 return category
         logger.warning("There is no main category while we requested one")
-        return None
-
-    @classmethod
-    def get_category_by_name(cls, name):
-        """Return a category matching a particular name"""
-        for category in cls.categories:
-            if category.name == name:
-                logger.debug("Found category matching {}".format(name))
-                return category
-        logger.warning("There is no category matching {}".format(name))
         return None
 
     def register_framework(self, framework, is_default=False):
@@ -82,7 +76,7 @@ class BaseCategory():
 
     def is_installed(self):
         """Return if the category is installed"""
-        installed_frameworks = [framework for framework in self.frameworks if framework.is_installed()]
+        installed_frameworks = [framework for framework in self.frameworks.values() if framework.is_installed()]
         if len(installed_frameworks) == 0:
             return self.NOT_INSTALLED
         if len(installed_frameworks) == len(self.frameworks):

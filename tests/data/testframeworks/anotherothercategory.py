@@ -23,29 +23,29 @@
 import udtc.frameworks
 
 
-class BCategory(udtc.frameworks.BaseCategory):
+class CCategory(udtc.frameworks.BaseCategory):
 
     def __init__(self):
-        super().__init__(name="Category/B", description="Category B description")
+        super().__init__(name="Category/C", description="Category C description")
 
 
 class FrameworkA(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):
-        super().__init__(name="Framework A", description="Description for framework A",
+        super().__init__(name="Framework A", description="Description for framework A (not installed)",
                          category=category)
 
     def setup(self):
         super().setup()
 
     def is_installed(self):
-        return True
+        return False
 
 
 class FrameworkB(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):
-        super().__init__(name="Framework/B", description="Description for framework B",
+        super().__init__(name="Framework/B", description="Description for framework B (installed)",
                          category=category)
 
     def setup(self):
