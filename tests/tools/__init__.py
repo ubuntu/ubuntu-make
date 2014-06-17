@@ -19,6 +19,7 @@
 
 """Common tools between tests"""
 
+from contextlib import contextmanager
 from copy import deepcopy
 import importlib
 import logging
@@ -60,3 +61,11 @@ def change_xdg_config_path(dirname):
     import udtc.tools
     importlib.reload(xdg.BaseDirectory)
     udtc.tools.xdg_config_home = xdg.BaseDirectory.xdg_config_home
+
+
+@contextmanager
+def patchelem(element, attr, value):
+    old_value = getattr(element, attr)
+    setattr(element, attr, value)
+    yield
+    setattr(element, attr, old_value)
