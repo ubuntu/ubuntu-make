@@ -20,8 +20,10 @@
 """Common tools between tests"""
 
 from copy import deepcopy
+import importlib
 import logging
 import os
+import xdg.BaseDirectory
 from unittest.mock import Mock
 
 logger = logging.getLogger(__name__)
@@ -51,3 +53,10 @@ class CopyingMock(Mock):
         args = deepcopy(args)
         kwargs = deepcopy(kwargs)
         return super(CopyingMock, self).__call__(*args, **kwargs)
+
+
+def change_xdg_config_path(dirname):
+    os.environ['XDG_CONFIG_HOME'] = dirname
+    import udtc.tools
+    importlib.reload(xdg.BaseDirectory)
+    udtc.tools.xdg_config_home = xdg.BaseDirectory.xdg_config_home

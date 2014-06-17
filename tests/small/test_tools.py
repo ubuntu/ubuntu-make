@@ -19,16 +19,13 @@
 
 """Tests the various udtc tools"""
 
-import importlib
 import os
 import shutil
 import tempfile
-from ..tools import get_data_dir
+from ..tools import change_xdg_config_path, get_data_dir
 from unittest import TestCase
-import udtc
 from udtc import settings
 from udtc.tools import ConfigHandler, Singleton
-import xdg.BaseDirectory
 
 
 class TestConfigHandler(TestCase):
@@ -42,10 +39,9 @@ class TestConfigHandler(TestCase):
         except KeyError:
             pass
 
-    def install_config_dir(self, name):
-        """Set this config directory to xdg variables"""
-        os.environ['XDG_CONFIG_HOME'] = os.path.join(get_data_dir(), 'configs', name)
-        importlib.reload(xdg.BaseDirectory)
+    def config_dir_for_name(self, name):
+        """Return the config dir for this name"""
+        return os.path.join(get_data_dir(), 'configs', name)
 
     def test_singleton(self):
         """Ensure we are delivering a singleton for TestConfigHandler"""
@@ -55,7 +51,7 @@ class TestConfigHandler(TestCase):
 
     def test_load_config(self):
         """Valid config loads correct content"""
-        self.install_config_dir("valid")
+        change_xdg_config_path(self.config_dir_for_name("valid"))
         self.assertEquals(ConfigHandler().config,
                           {'frameworks': {
                               'Android': {
@@ -66,20 +62,18 @@ class TestConfigHandler(TestCase):
 
     def test_load_no_config(self):
         """No existing file gives an empty result"""
-        self.install_config_dir("foo")
+        change_xdg_config_path(self.config_dir_for_name("foo"))
         self.assertIsNone(ConfigHandler().config)
 
     def test_load_invalid_config(self):
         """Existing invalid file gives an empty result"""
-        self.install_config_dir("invalid")
+        change_xdg_config_path(self.config_dir_for_name("invalid"))
         self.assertIsNone(ConfigHandler().config)
 
     def test_save_new_config(self):
         """Save a new config in a vanilla directory"""
         with tempfile.TemporaryDirectory() as tmpdirname:
-            os.environ['XDG_CONFIG_HOME'] = tmpdirname
-            importlib.reload(xdg.BaseDirectory)
-            udtc.tools.xdg_config_home = xdg.BaseDirectory.xdg_config_home
+            change_xdg_config_path(tmpdirname)
             content = {'foo': 'bar'}
             ConfigHandler().config = content
 
@@ -90,13 +84,19 @@ class TestConfigHandler(TestCase):
     def test_save_config_existing(self):
         """Replace an existing config with a new one"""
         with tempfile.TemporaryDirectory() as tmpdirname:
-            os.environ['XDG_CONFIG_HOME'] = tmpdirname
-            importlib.reload(xdg.BaseDirectory)
-            udtc.tools.xdg_config_home = xdg.BaseDirectory.xdg_config_home
-            shutil.copy(os.path.join(get_data_dir(), 'configs', 'valid', settings.CONFIG_FILENAME), tmpdirname)
+            change_xdg_config_path(tmpdirname)
+            shutil.copy(os.path.join(self.config_dir_for_name('valid'), settings.CONFIG_FILENAME), tmpdirname)
             content = {'foo': 'bar'}
             ConfigHandler().config = content
 
             self.assertEquals(ConfigHandler().config, content)
             with open(os.path.join(tmpdirname, settings.CONFIG_FILENAME)) as f:
                 self.assertEquals(f.read(), 'foo: bar\n')
+
+    def test_dont_create_file_without_assignment(self):
+        """We don't create any file without an assignment"""
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            change_xdg_config_path(tmpdirname)
+            ConfigHandler()
+
+            self.assertEquals(len(os.listdir(tmpdirname)), 0)
