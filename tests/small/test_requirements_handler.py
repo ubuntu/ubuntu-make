@@ -36,7 +36,7 @@ class TestRequirementsHandler(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(TestRequirementsHandler, cls).setUpClass()
+        super().setUpClass()
         cls.handler = RequirementsHandler()
 
         apt.apt_pkg.config.clear("APT::Update::Post-Invoke")
@@ -45,7 +45,7 @@ class TestRequirementsHandler(TestCase):
         cls.apt_package_dir = os.path.join(get_data_dir(), "apt")
 
     def setUp(self):
-        super(TestRequirementsHandler, self).setUp()
+        super().setUp()
         self.chroot_path = tempfile.mkdtemp()
 
         # create the fake dpkg wrapper
@@ -80,7 +80,7 @@ class TestRequirementsHandler(TestCase):
         self.done_callback = Mock()
 
     def tearDown(self):
-        super(TestRequirementsHandler, self).tearDown()
+        super().tearDown()
         shutil.rmtree(self.chroot_path)
         os.remove(self.dpkg)
 

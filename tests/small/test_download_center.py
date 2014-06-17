@@ -36,22 +36,22 @@ class TestDownloadCenter(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(TestDownloadCenter, cls).setUpClass()
+        super().setUpClass()
         cls.server_dir = os.path.join(get_data_dir(), "server-content")
         cls.server = LocalHttp(cls.server_dir)
 
     @classmethod
     def tearDownClass(cls):
-        super(TestDownloadCenter, cls).tearDownClass()
+        super().tearDownClass()
         cls.server.stop()
 
     def setUp(self):
-        super(TestDownloadCenter, self).setUp()
+        super().setUp()
         self.callback = Mock()
         self.fd_to_close = []
 
     def tearDown(self):
-        super(TestDownloadCenter, self).tearDown()
+        super().tearDown()
         for fd in self.fd_to_close:
             fd.close()
 
@@ -221,22 +221,22 @@ class TestDownloadCenterSecure(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(TestDownloadCenterSecure, cls).setUpClass()
+        super().setUpClass()
         cls.server_dir = os.path.join(get_data_dir(), "server-content")
         cls.server = LocalHttp(cls.server_dir, use_ssl=True)
 
     @classmethod
     def tearDownClass(cls):
-        super(TestDownloadCenterSecure, cls).tearDownClass()
+        super().tearDownClass()
         cls.server.stop()
 
     def setUp(self):
-        super(TestDownloadCenterSecure, self).setUp()
+        super().setUp()
         self.callback = Mock()
         self.fd_to_close = []
 
     def tearDown(self):
-        super(TestDownloadCenterSecure, self).tearDown()
+        super().tearDown()
         for fd in self.fd_to_close:
             fd.close()
 
