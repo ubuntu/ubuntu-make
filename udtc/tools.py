@@ -70,3 +70,12 @@ class NoneDict(dict):
     """We don't use a defaultdict(lambda: None) as it's growing everytime something is requested"""
     def __getitem__(self, key):
         return dict.get(self, key)
+
+
+class classproperty(object):
+    """Class property, similar to instance properties"""
+    def __init__(self, f):
+        self.f = f
+
+    def __get__(self, obj, owner):
+        return self.f(owner)

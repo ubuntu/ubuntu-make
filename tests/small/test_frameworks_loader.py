@@ -63,7 +63,6 @@ class TestFrameworkLoader(BaseFrameworkLoader):
     def tearDown(self):
         # we reset the loaded categories
         self.CategoryHandler.categories = NoneDict()
-        self.CategoryHandler.main_category = None
         super().tearDown()
 
     def test_load_main_category(self):
@@ -154,6 +153,12 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Category returns than half frameworks are installed"""
         self.assertEquals(self.CategoryHandler.categories["Category/C"].is_installed(),
                           self.CategoryHandler.PARTIALLY_INSTALLED)
+
+    def test_frameworks_loaded_in_main_category(self):
+        """Some frameworks are loaded and attached to main category"""
+        self.assertTrue(len(self.CategoryHandler.main_category.frameworks) > 1)
+        self.assertIsNotNone(self.CategoryHandler.main_category.frameworks["Framework Free A"])
+        self.assertIsNotNone(self.CategoryHandler.main_category.frameworks["Framework Free / B"])
 
 
 class TestEmptyFrameworkLoader(BaseFrameworkLoader):
@@ -280,6 +285,5 @@ class TestInvalidFrameworkLoader(BaseFrameworkLoader):
         self.assertFalse(self.categoryA.has_frameworks())
         self.expect_warn_error = True  # It errors the fact that it ignores one invalid framework
 
-# TODO: test load framework in main category
 # TODO: add another class to just try loading real production directories
 # TODO: test path for setup() and defaults + categories

@@ -27,7 +27,7 @@ import logging
 import os
 import pkgutil
 import sys
-from udtc.tools import ConfigHandler, NoneDict
+from udtc.tools import ConfigHandler, NoneDict, classproperty
 from udtc.settings import DEFAULT_INSTALL_TOOLS_PATH
 
 
@@ -53,8 +53,13 @@ class BaseCategory():
                          .format(name))
         else:
             self.categories[self.name] = self
-            if is_main_category:
-                BaseCategory.main_category = self
+
+    @classproperty
+    def main_category(self):
+        for category in self.categories.values():
+            if category.is_main_category:
+                return category
+        return None
 
     @property
     def prog_name(self):
