@@ -19,6 +19,7 @@
 
 """Tests the framework loader"""
 
+import importlib
 import os
 import sys
 from ..tools import get_data_dir, patchelem
@@ -28,7 +29,17 @@ from udtc import frameworks
 from udtc.tools import NoneDict
 
 
-class TestFrameworkLoader(TestCase):
+class BaseFrameworkLoader(TestCase):
+    """Unload and reload the module to ensure we clean all class dict"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        importlib.reload(frameworks)
+        cls.CategoryHandler = frameworks.BaseCategory
+
+
+class TestFrameworkLoader(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity"""
 
     @classmethod
@@ -36,7 +47,6 @@ class TestFrameworkLoader(TestCase):
         super().setUpClass()
         sys.path.append(get_data_dir())
         cls.testframeworks_dir = os.path.join(get_data_dir(), 'testframeworks')
-        cls.CategoryHandler = frameworks.BaseCategory
 
     @classmethod
     def tearDownClass(cls):
@@ -145,7 +155,7 @@ class TestFrameworkLoader(TestCase):
                           self.CategoryHandler.PARTIALLY_INSTALLED)
 
 
-class TestEmptyFrameworkLoader(TestCase):
+class TestEmptyFrameworkLoader(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with an empty set of frameworks"""
 
     @classmethod
@@ -153,7 +163,6 @@ class TestEmptyFrameworkLoader(TestCase):
         super().setUpClass()
         sys.path.append(get_data_dir())
         cls.testframeworks_dir = os.path.join(get_data_dir(), 'testframeworksdoesntexist')
-        cls.CategoryHandler = frameworks.BaseCategory
 
     @classmethod
     def tearDownClass(cls):
@@ -178,7 +187,7 @@ class TestEmptyFrameworkLoader(TestCase):
         self.assertEquals(len(self.CategoryHandler.categories), 1)
 
 
-class TestDuplicatedFrameworkLoader(TestCase):
+class TestDuplicatedFrameworkLoader(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with some duplicated categories and frameworks"""
 
     @classmethod
@@ -186,7 +195,6 @@ class TestDuplicatedFrameworkLoader(TestCase):
         super().setUpClass()
         sys.path.append(get_data_dir())
         cls.testframeworks_dir = os.path.join(get_data_dir(), 'duplicatedframeworks')
-        cls.CategoryHandler = frameworks.BaseCategory
 
     @classmethod
     def tearDownClass(cls):
@@ -219,7 +227,7 @@ class TestDuplicatedFrameworkLoader(TestCase):
         self.assertEquals(len(self.CategoryHandler.main_category.frameworks), 0)
 
 
-class TestNotLoadedFrameworkLoader(TestCase):
+class TestNotLoadedFrameworkLoader(BaseFrameworkLoader):
 
     def setUp(self):
         self.CategoryHandler = frameworks.BaseCategory
@@ -233,7 +241,7 @@ class TestNotLoadedFrameworkLoader(TestCase):
         self.assertEquals(len(self.CategoryHandler.categories), 0)
 
 
-class TestInvalidFrameworkLoader(TestCase):
+class TestInvalidFrameworkLoader(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with some invalid (interface not fullfilled) frameworks"""
 
     @classmethod
@@ -241,7 +249,6 @@ class TestInvalidFrameworkLoader(TestCase):
         super().setUpClass()
         sys.path.append(get_data_dir())
         cls.testframeworks_dir = os.path.join(get_data_dir(), 'invalidframeworks')
-        cls.CategoryHandler = frameworks.BaseCategory
 
     @classmethod
     def tearDownClass(cls):
