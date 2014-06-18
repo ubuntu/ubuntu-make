@@ -57,9 +57,9 @@ There are three kinds of tests:
 * **medium tests**: testing the whole workflow, directly calling end user tool from the command line, but without any effect on the system. Requirements like installing packages are mocked, as well as the usage of a local webserver serving (smaller) content similar that what will be fetched in a real use case. The assets have the same formats and layout.
 * **large tests**: same tests are run than for the medium tests, but with real server download and installation of dpkg packages. Most of those tests needs root rights. However, be aware than those tests only run on a graphical environment, will interfere with it and will install/remove packages on your system.
 
-To run all those tests (with python warnings):
+To run all those tests, with coverage report (like in Travis CI) and with python warnings:
 
-    $ PYTHONWARNINGS=d nosetests
+    $ PYTHONWARNINGS=d nosetests -c logs-confs/prod_tests.cfg
 
 #### Running some tests with all debug infos
 By default, nose won't display debug output of the passing tests. When you want or work on some tests and want to see full debug log, you can use this existing node profile:

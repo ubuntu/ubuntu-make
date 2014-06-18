@@ -24,6 +24,7 @@ import apt.progress
 import apt.progress.base
 from collections import namedtuple
 from concurrent import futures
+from contextlib import suppress
 import fcntl
 import logging
 import os
@@ -110,13 +111,11 @@ class RequirementsHandler(object, metaclass=Singleton):
         result = self.RequirementsResult(bucket=future.tag_bucket["bucket"], error=None)
         if future.exception():
             error_message = str(future.exception())
-            try:
+            with suppress(FileNotFoundError):
                 with open(self.apt_fd.name) as f:
                     subprocess_content = f.read()
                     if subprocess_content:
                         error_message = "{}\nSubprocess output: {}".format(error_message, subprocess_content)
-            except FileNotFoundError:
-                pass
             logger.error(error_message)
             result = result._replace(error=error_message)
         os.remove(self.apt_fd.name)
@@ -170,15 +169,15 @@ class RequirementsHandler(object, metaclass=Singleton):
             self._progress_callback(self._status, percent)
 
         @staticmethod
-        def _redirect_stdin():
+        def _redirect_stdin():  # pragma: no cover (in a fork)
             os.dup2(os.open(os.devnull, os.O_RDWR), 0)
 
-        def _redirect_output(self):
+        def _redirect_output(self):  # pragma: no cover (in a fork)
             fd = os.open(self._exchange_filename, os.O_RDWR)
             os.dup2(fd, 1)
             os.dup2(fd, 2)
 
-        def _fixup_fds(self):
+        def _fixup_fds(self):  # pragma: no cover (in a fork)
             required_fds = [0, 1, 2,  # stdin, stdout, stderr
                             self.writefd,
                             self.write_stream.fileno(),
@@ -212,7 +211,7 @@ class RequirementsHandler(object, metaclass=Singleton):
 
         def fork(self):
             pid = os.fork()
-            if pid == 0:
+            if pid == 0:  # pragma: no cover (in a fork)
                 self._fixup_fds()
                 self._redirect_stdin()
                 self._redirect_output()
