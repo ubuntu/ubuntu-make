@@ -232,7 +232,38 @@ class TestNotLoadedFrameworkLoader(TestCase):
         """categories is empty when there is no category loaded"""
         self.assertEquals(len(self.CategoryHandler.categories), 0)
 
-# TODO: test load file without the abstract interface filed up
+
+class TestInvalidFrameworkLoader(TestCase):
+    """This will test the dynamic framework loader activity with some invalid (interface not fullfilled) frameworks"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        sys.path.append(get_data_dir())
+        cls.testframeworks_dir = os.path.join(get_data_dir(), 'invalidframeworks')
+        cls.CategoryHandler = frameworks.BaseCategory
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        sys.path.remove(get_data_dir())
+
+    def setUp(self):
+        # load custom unexisting framework directory
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "invalidframeworks"):
+            frameworks.load_frameworks()
+        self.categoryA = self.CategoryHandler.categories["Category A"]
+
+    def tearDown(self):
+        # we reset the loaded categories
+        frameworks.BaseCategory.categories = NoneDict()
+
+    def test_load(self):
+        """Previous loading should have been successful"""
+        self.assertTrue(self.categoryA.has_one_framework)
+
+
 # TODO: test load framework in main category
 # TODO: add another class to just try loading real production directories
 # TODO: test path for setup() and defaults + categories

@@ -162,4 +162,7 @@ def load_frameworks():
             current_category = CategoryClass()
         for framework_name, FrameworkClass in inspect.getmembers(module, _is_frameworkclass):
             logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
-            FrameworkClass(current_category)
+            try:
+                FrameworkClass(current_category)
+            except TypeError as e:
+                logger.error("Can't attach {} to {}: {}".format(framework_name, current_category.name, e))
