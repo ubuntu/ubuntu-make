@@ -19,10 +19,11 @@
 
 """Tests the framework loader"""
 
+from contextlib import suppress
 import importlib
 import os
 import sys
-from ..tools import get_data_dir, patchelem, LoggedTestCase
+from ..tools import get_data_dir, change_xdg_config_path, patchelem, LoggedTestCase
 import udtc
 from udtc import frameworks
 from udtc.tools import NoneDict
@@ -36,6 +37,20 @@ class BaseFrameworkLoader(LoggedTestCase):
         super().setUpClass()
         importlib.reload(frameworks)
         cls.CategoryHandler = frameworks.BaseCategory
+
+    def setUp(self):
+        """Ensure we don't have any config file loaded"""
+        super().setUp()
+        change_xdg_config_path(self.config_dir_for_name("foo"))
+
+    def tearDown(self):
+        with suppress(KeyError):
+            os.environ.pop('XDG_CONFIG_HOME')
+        super().tearDown()
+
+    def config_dir_for_name(self, name):
+        """Return the config dir for this name"""
+        return os.path.join(get_data_dir(), 'configs', name)
 
 
 class TestFrameworkLoader(BaseFrameworkLoader):
@@ -170,6 +185,58 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Test that a default framework flag is accessible"""
         framework_default = self.categoryA.frameworks["Framework A"]
         self.assertEquals(self.categoryA.default_framework, framework_default)
+
+    def test_default_install_path(self):
+        """Default install path is what we expect, based on category and framework prog_name"""
+        self.assertEquals(self.categoryA.frameworks["Framework/B"].install_path,
+                          os.path.expanduser("~/tools/category-a/framework-b"))
+
+    def test_specified_at_load_install_path(self):
+        """Default install path is overriden by framework specified install path at load time"""
+        self.assertEquals(self.categoryA.frameworks["Framework A"].install_path,
+                          os.path.expanduser("~/tools/custom/frameworka"))
+
+
+class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
+    """This will test the dynamic framework loader activity with a valid configuration"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        sys.path.append(get_data_dir())
+        cls.testframeworks_dir = os.path.join(get_data_dir(), 'testframeworks')
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.path.remove(get_data_dir())
+        super().tearDownClass()
+
+    def setUp(self):
+        # load valid configuration
+        super().setUp()
+        change_xdg_config_path(self.config_dir_for_name("valid"))
+        # load custom framework directory
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+            frameworks.load_frameworks()
+        self.categoryA = self.CategoryHandler.categories["Category A"]
+
+    def tearDown(self):
+        # we reset the loaded categories
+        self.CategoryHandler.categories = NoneDict()
+        super().tearDown()
+
+    def test_config_override_defaults(self):
+        """Configuration override defaults (explicit or implicit). If not present in config, still load default"""
+        # was overridden with at load time
+        self.assertEquals(self.categoryA.frameworks["Framework A"].install_path,
+                          "/home/didrocks/quickly/ubuntu-developer-tools/adt-eclipse")
+        # was default
+        self.assertEquals(self.categoryA.frameworks["Framework/B"].install_path,
+                          "/home/didrocks/foo/bar/android-studio")
+        # isn't in the config
+        self.assertEquals(self.CategoryHandler.categories['Category/C'].frameworks["Framework A"].install_path,
+                          os.path.expanduser("~/tools/category-c/framework-a"))
 
 
 class TestEmptyFrameworkLoader(BaseFrameworkLoader):
@@ -333,6 +400,14 @@ class TestInvalidFrameworkLoader(BaseFrameworkLoader):
         self.assertFalse(self.categoryA.has_frameworks())
         self.expect_warn_error = True  # It errors the fact that it ignores one invalid framework
 
-# TODO: add another class to just try loading real production directories
+
+class TestProductionFrameworkLoader(BaseFrameworkLoader):
+    """Load production framework and ensure there is no warning and no error"""
+
+    def test_load(self):
+        frameworks.load_frameworks()
+        self.assertTrue(len(frameworks.BaseCategory.categories) > 0)
+        self.assertIsNotNone(frameworks.BaseCategory.main_category)
+        self.assertEquals(len(frameworks.BaseCategory.categories["Android"].frameworks), 2)
+
 # TODO: test path for setup() and defaults + categories
-# TODO: load based on path, config file, and so on…

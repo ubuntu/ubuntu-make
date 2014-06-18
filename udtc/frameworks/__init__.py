@@ -21,7 +21,7 @@
 """Base Handling functions and base class of backends"""
 
 import abc
-from importlib import import_module
+from importlib import import_module, reload
 import inspect
 import logging
 import os
@@ -122,7 +122,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
                 self.category.default_framework.is_category_default = False
 
         if not install_path_dir:
-            install_path_dir = os.path.join("" if category.main_category else category.prog_name, self.prog_name)
+            install_path_dir = os.path.join("" if category.is_main_category else category.prog_name, self.prog_name)
         self.default_install_path = os.path.join(DEFAULT_INSTALL_TOOLS_PATH, install_path_dir)
         self.install_path = self.default_install_path
         # check if we have an install path previously set
@@ -172,12 +172,13 @@ def _is_frameworkclass(o):
 def load_frameworks():
     """Load all modules and assign to correct category"""
     main_category = MainCategory()
-    print(os.path.dirname(__file__))
     for loader, module_name, ispkg in pkgutil.iter_modules(path=[os.path.dirname(__file__)]):
         module_name = "{}.{}".format(__package__, module_name)
         logger.debug("New framework module: {}".format(module_name))
         if module_name not in sys.modules:
             import_module(module_name)
+        else:
+            reload(sys.modules[module_name])
         module = sys.modules[module_name]
         current_category = main_category  # if no category found -> we assign to main category
         for category_name, CategoryClass in inspect.getmembers(module, _is_categoryclass):

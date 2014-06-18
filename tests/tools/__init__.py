@@ -20,11 +20,12 @@
 """Common tools between tests"""
 
 from io import StringIO
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from copy import deepcopy
 import importlib
 import logging
 import os
+from udtc.tools import Singleton, ConfigHandler
 import xdg.BaseDirectory
 from unittest import TestCase
 from unittest.mock import Mock
@@ -83,6 +84,8 @@ def change_xdg_config_path(dirname):
     os.environ['XDG_CONFIG_HOME'] = dirname
     import udtc.tools
     importlib.reload(xdg.BaseDirectory)
+    with suppress(KeyError):
+        Singleton._instances.pop(ConfigHandler)
     udtc.tools.xdg_config_home = xdg.BaseDirectory.xdg_config_home
 
 

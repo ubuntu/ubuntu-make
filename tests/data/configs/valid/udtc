@@ -1,6 +1,6 @@
 frameworks:
-  Android:
-    ADT:
-      path: /home/didrocks/tools/android/adt-eclipse
-    Android Studio:
-      path: /home/didrocks/foo/bar/android
+  Category A:
+    Framework A:
+      path: /home/didrocks/quickly/ubuntu-developer-tools/adt-eclipse
+    Framework/B:
+      path: /home/didrocks/foo/bar/android-studio

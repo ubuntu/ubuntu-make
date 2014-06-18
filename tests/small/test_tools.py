@@ -19,6 +19,7 @@
 
 """Tests the various udtc tools"""
 
+from contextlib import suppress
 import os
 import shutil
 import tempfile
@@ -33,10 +34,9 @@ class TestConfigHandler(LoggedTestCase):
     def tearDown(self):
         # remove caching
         Singleton._instances = {}
-        try:
+        with suppress(KeyError):
             os.environ.pop('XDG_CONFIG_HOME')
-        except KeyError:
-            pass
+        super().tearDown()
 
     def config_dir_for_name(self, name):
         """Return the config dir for this name"""
@@ -53,9 +53,9 @@ class TestConfigHandler(LoggedTestCase):
         change_xdg_config_path(self.config_dir_for_name("valid"))
         self.assertEquals(ConfigHandler().config,
                           {'frameworks': {
-                              'Android': {
-                                  'ADT': {'path': '/home/didrocks/tools/android/adt-eclipse'},
-                                  'Android Studio': {'path': '/home/didrocks/foo/bar/android'}
+                              'Category A': {
+                                  'Framework A': {'path': '/home/didrocks/quickly/ubuntu-developer-tools/adt-eclipse'},
+                                  'Framework/B': {'path': '/home/didrocks/foo/bar/android-studio'}
                               }
                           }})
 
@@ -68,6 +68,7 @@ class TestConfigHandler(LoggedTestCase):
         """Existing invalid file gives an empty result"""
         change_xdg_config_path(self.config_dir_for_name("invalid"))
         self.assertIsNone(ConfigHandler().config)
+        self.expect_warn_error = True
 
     def test_save_new_config(self):
         """Save a new config in a vanilla directory"""
