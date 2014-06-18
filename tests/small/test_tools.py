@@ -62,12 +62,12 @@ class TestConfigHandler(LoggedTestCase):
     def test_load_no_config(self):
         """No existing file gives an empty result"""
         change_xdg_config_path(self.config_dir_for_name("foo"))
-        self.assertIsNone(ConfigHandler().config)
+        self.assertEquals(ConfigHandler().config, {})
 
     def test_load_invalid_config(self):
         """Existing invalid file gives an empty result"""
         change_xdg_config_path(self.config_dir_for_name("invalid"))
-        self.assertIsNone(ConfigHandler().config)
+        self.assertEquals(ConfigHandler().config, {})
         self.expect_warn_error = True
 
     def test_save_new_config(self):

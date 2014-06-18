@@ -42,7 +42,7 @@ class ConfigHandler(metaclass=Singleton):
 
     def __init__(self):
         """Load the config"""
-        self._config = None
+        self._config = {}
         config_file = load_first_config(CONFIG_FILENAME)
         logger.debug("Opening {}".format(config_file))
         try:

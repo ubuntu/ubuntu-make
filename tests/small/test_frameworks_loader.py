@@ -23,7 +23,8 @@ from contextlib import suppress
 import importlib
 import os
 import sys
-from ..tools import get_data_dir, change_xdg_config_path, patchelem, LoggedTestCase
+import tempfile
+from ..tools import get_data_dir, change_xdg_config_path, patchelem, LoggedTestCase, ConfigHandler
 import udtc
 from udtc import frameworks
 from udtc.tools import NoneDict
@@ -239,6 +240,60 @@ class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
                           os.path.expanduser("~/tools/category-c/framework-a"))
 
 
+class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
+    """This will test the dynamic framework loader activity being able to save some configurations"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        sys.path.append(get_data_dir())
+        cls.testframeworks_dir = os.path.join(get_data_dir(), 'testframeworks')
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.path.remove(get_data_dir())
+        super().tearDownClass()
+
+    def setUp(self):
+        super().setUp()
+        # load custom framework directory
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+            frameworks.load_frameworks()
+        self.categoryA = self.CategoryHandler.categories["Category A"]
+
+    def tearDown(self):
+        # we reset the loaded categories
+        self.CategoryHandler.categories = NoneDict()
+        super().tearDown()
+
+    def test_call_setup_save_config(self):
+        """Calling setup with a custom install path save it in the configuration"""
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            # load custom framework directory
+            change_xdg_config_path(tmpdirname)
+            self.categoryA.frameworks["Framework/B"].setup()
+
+            self.assertEquals(ConfigHandler().config,
+                              {'frameworks': {
+                                  'Category A': {
+                                      'Framework/B': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+                                  }}})
+
+    def test_call_setup_save_tweaked_path(self):
+        """Calling setup with a custom install path save it in the configuration"""
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            # load custom framework directory
+            change_xdg_config_path(tmpdirname)
+            self.categoryA.frameworks["Framework/B"].setup(install_path="/home/foo/bar")
+
+            self.assertEquals(ConfigHandler().config,
+                              {'frameworks': {
+                                  'Category A': {
+                                      'Framework/B': {'path': '/home/foo/bar'}
+                                  }}})
+
+
 class TestEmptyFrameworkLoader(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with an empty set of frameworks"""
 
@@ -409,5 +464,3 @@ class TestProductionFrameworkLoader(BaseFrameworkLoader):
         self.assertTrue(len(frameworks.BaseCategory.categories) > 0)
         self.assertIsNotNone(frameworks.BaseCategory.main_category)
         self.assertEquals(len(frameworks.BaseCategory.categories["Android"].frameworks), 2)
-
-# TODO: test path for setup() and defaults + categories
