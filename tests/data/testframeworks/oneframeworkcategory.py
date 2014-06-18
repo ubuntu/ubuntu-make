@@ -35,5 +35,5 @@ class FrameworkA(udtc.frameworks.BaseFramework):
         super().__init__(name="Framework A", description="Description for framework A",
                          category=category, install_path_dir="custom/frameworka")
 
-    def setup(self):
-        super().setup()
+    def setup(self, install_path=None):
+        super().setup(install_path=install_path)

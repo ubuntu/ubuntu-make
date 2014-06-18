@@ -35,8 +35,8 @@ class FrameworkC(udtc.frameworks.BaseFramework):
         super().__init__(name="Framework C", description="Description for framework C",
                          category=category)
 
-    def setup(self):
-        super().setup()
+    def setup(self, install_path=None):
+        super().setup(install_path=install_path)
 
 
 class FrameworkD(udtc.frameworks.BaseFramework):
@@ -45,5 +45,5 @@ class FrameworkD(udtc.frameworks.BaseFramework):
         super().__init__(name="Framework D", description="Description for framework D",
                          category=category)
 
-    def setup(self):
-        super().setup()
+    def setup(self, install_path=None):
+        super().setup(install_path=install_path)

@@ -142,16 +142,16 @@ class TestFrameworkLoader(BaseFrameworkLoader):
 
     def test_nothing_installed(self):
         """Category returns that no framework is installed"""
-        self.assertEquals(self.categoryA.is_installed(), self.CategoryHandler.NOT_INSTALLED)
+        self.assertEquals(self.categoryA.is_installed, self.CategoryHandler.NOT_INSTALLED)
 
     def test_category_fully_installed(self):
         """Category returns than all frameworks are installed"""
-        self.assertEquals(self.CategoryHandler.categories["Category/B"].is_installed(),
+        self.assertEquals(self.CategoryHandler.categories["Category/B"].is_installed,
                           self.CategoryHandler.FULLY_INSTALLED)
 
     def test_category_half_installed(self):
         """Category returns than half frameworks are installed"""
-        self.assertEquals(self.CategoryHandler.categories["Category/C"].is_installed(),
+        self.assertEquals(self.CategoryHandler.categories["Category/C"].is_installed,
                           self.CategoryHandler.PARTIALLY_INSTALLED)
 
     def test_frameworks_loaded_in_main_category(self):
@@ -159,6 +159,17 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         self.assertTrue(len(self.CategoryHandler.main_category.frameworks) > 1)
         self.assertIsNotNone(self.CategoryHandler.main_category.frameworks["Framework Free A"])
         self.assertIsNotNone(self.CategoryHandler.main_category.frameworks["Framework Free / B"])
+
+    def test_frameworks_report_installed(self):
+        """Frameworks have an is_installed property"""
+        category = self.CategoryHandler.categories["Category/C"]
+        self.assertFalse(category.frameworks["Framework A"].is_installed)
+        self.assertTrue(category.frameworks["Framework/B"].is_installed)
+
+    def test_default_framework(self):
+        """Test that a default framework flag is accessible"""
+        framework_default = self.categoryA.frameworks["Framework A"]
+        self.assertEquals(self.categoryA.default_framework, framework_default)
 
 
 class TestEmptyFrameworkLoader(BaseFrameworkLoader):
@@ -211,12 +222,11 @@ class TestDuplicatedFrameworkLoader(BaseFrameworkLoader):
 
     def setUp(self):
         super().setUp()
-        # load custom unexisting framework directory
         with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(udtc.frameworks, '__package__', "duplicatedframeworks"):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["Category A"]
-        self.expect_warn_error = True  # as we load multiple duplicate categories and framework
+        self.expect_warn_error = True  # as we load multiple duplicate categories and frameworks
 
     def tearDown(self):
         # we reset the loaded categories
@@ -236,6 +246,44 @@ class TestDuplicatedFrameworkLoader(BaseFrameworkLoader):
     def test_main_category_empty(self):
         """The main category (unused here) is empty by default"""
         self.assertEquals(len(self.CategoryHandler.main_category.frameworks), 0)
+
+
+class TestMultipleDefaultFrameworkLoader(BaseFrameworkLoader):
+    """This will test if we try to load multiple default frameworsk in loader"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        sys.path.append(get_data_dir())
+        cls.testframeworks_dir = os.path.join(get_data_dir(), 'multipledefaultsframeworks')
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.path.remove(get_data_dir())
+        super().tearDownClass()
+
+    def setUp(self):
+        super().setUp()
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "multipledefaultsframeworks"):
+            frameworks.load_frameworks()
+        self.categoryA = self.CategoryHandler.categories["Category A"]
+        self.expect_warn_error = True  # as we load multiple default frameworks in a category
+
+    def tearDown(self):
+        # we reset the loaded categories
+        frameworks.BaseCategory.categories = NoneDict()
+        super().tearDown()
+
+    def test_multiple_defaults(self):
+        """Setting multiple defaults frameworks to a category should void any default"""
+        self.assertIsNone(self.categoryA.default_framework)
+        self.assertEquals(len(self.categoryA.frameworks), 2)  # ensure they are still loaded
+
+    def test_one_default_in_main_category(self):
+        """Reject default framework for main category"""
+        self.assertIsNone(self.CategoryHandler.main_category.default_framework)
+        self.assertEquals(len(self.CategoryHandler.main_category.frameworks), 1)  # ensure it's still loaded
 
 
 class TestNotLoadedFrameworkLoader(BaseFrameworkLoader):
@@ -287,3 +335,4 @@ class TestInvalidFrameworkLoader(BaseFrameworkLoader):
 
 # TODO: add another class to just try loading real production directories
 # TODO: test path for setup() and defaults + categories
+# TODO: load based on path, config file, and so on…

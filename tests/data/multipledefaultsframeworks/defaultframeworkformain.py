@@ -18,15 +18,9 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-"""Framework with category module"""
+"""Try to get a reject to set a framework as default for main category"""
 
 import udtc.frameworks
-
-
-class ACategory(udtc.frameworks.BaseCategory):
-
-    def __init__(self):
-        super().__init__(name="Category A", description="Category A description")
 
 
 class FrameworkA(udtc.frameworks.BaseFramework):
@@ -34,16 +28,6 @@ class FrameworkA(udtc.frameworks.BaseFramework):
     def __init__(self, category):
         super().__init__(name="Framework A", description="Description for framework A", is_category_default=True,
                          category=category, install_path_dir="custom/frameworka")
-
-    def setup(self, install_path=None):
-        super().setup(install_path=install_path)
-
-
-class FrameworkB(udtc.frameworks.BaseFramework):
-
-    def __init__(self, category):
-        super().__init__(name="Framework/B", description="Description for framework B",
-                         category=category)
 
     def setup(self, install_path=None):
         super().setup(install_path=install_path)

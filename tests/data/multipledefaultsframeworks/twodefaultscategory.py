@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-"""Framework with category module"""
+"""Framework with two defaults frameworks"""
 
 import udtc.frameworks
 
@@ -42,7 +42,7 @@ class FrameworkA(udtc.frameworks.BaseFramework):
 class FrameworkB(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):
-        super().__init__(name="Framework/B", description="Description for framework B",
+        super().__init__(name="Framework B", description="Description for framework B", is_category_default=True,
                          category=category)
 
     def setup(self, install_path=None):

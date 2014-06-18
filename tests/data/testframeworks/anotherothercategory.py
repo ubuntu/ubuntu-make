@@ -35,9 +35,10 @@ class FrameworkA(udtc.frameworks.BaseFramework):
         super().__init__(name="Framework A", description="Description for framework A (not installed)",
                          category=category)
 
-    def setup(self):
-        super().setup()
+    def setup(self, install_path=None):
+        super().setup(install_path=install_path)
 
+    @property
     def is_installed(self):
         return False
 
@@ -48,8 +49,9 @@ class FrameworkB(udtc.frameworks.BaseFramework):
         super().__init__(name="Framework/B", description="Description for framework B (installed)",
                          category=category)
 
-    def setup(self):
-        super().setup()
+    def setup(self, install_path=None):
+        super().setup(install_path=install_path)
 
+    @property
     def is_installed(self):
         return True

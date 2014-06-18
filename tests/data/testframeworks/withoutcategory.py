@@ -29,8 +29,8 @@ class FrameworkFreeA(udtc.frameworks.BaseFramework):
         super().__init__(name="Framework Free A", description="Description for framework A in no category",
                          category=category, install_path_dir="custom/frameworka")
 
-    def setup(self):
-        super().setup()
+    def setup(self, install_path=None):
+        super().setup(install_path=install_path)
 
 
 class FrameworkFreeB(udtc.frameworks.BaseFramework):
@@ -39,5 +39,5 @@ class FrameworkFreeB(udtc.frameworks.BaseFramework):
         super().__init__(name="Framework Free / B", description="Description for framework B in no category",
                          category=category)
 
-    def setup(self):
-        super().setup()
+    def setup(self, install_path=None):
+        super().setup(install_path=install_path)

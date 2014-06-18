@@ -66,19 +66,26 @@ class BaseCategory():
         """Get programmatic, path and CLI compatible names"""
         return self.name.lower().replace('/', '-').replace(' ', '-')
 
-    def register_framework(self, framework, is_default=False):
+    @property
+    def default_framework(self):
+        """Get default framework"""
+        for framework in self.frameworks.values():
+            if framework.is_category_default:
+                return framework
+        return None
+
+    def register_framework(self, framework):
         """Register a new framework"""
         if framework.name in self.frameworks:
             logger.error("There is already a registered framework with {} as a name. Don't register the second one."
                          .format(framework.name))
         else:
             self.frameworks[framework.name] = framework
-        if is_default:
-            self.default = framework
 
+    @property
     def is_installed(self):
         """Return if the category is installed"""
-        installed_frameworks = [framework for framework in self.frameworks.values() if framework.is_installed()]
+        installed_frameworks = [framework for framework in self.frameworks.values() if framework.is_installed]
         if len(installed_frameworks) == 0:
             return self.NOT_INSTALLED
         if len(installed_frameworks) == len(self.frameworks):
@@ -96,13 +103,23 @@ class BaseCategory():
 
 class BaseFramework(metaclass=abc.ABCMeta):
 
-    category_default = False
-
-    def __init__(self, name, description, category, logo_path=None, install_path_dir=None):
+    def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None):
         self.name = name
         self.description = description
         self.logo_path = None
         self.category = category
+        self.is_category_default = is_category_default
+
+        if self.is_category_default:
+            if self.category == BaseCategory.main_category:
+                logger.error("Main category can't have default framework as {} requires".format(name))
+                self.is_category_default = False
+            elif self.category.default_framework is not None:
+                logger.error("Can't set {} as default for {}: this category already has a default framework ({}). "
+                             "Don't set any as default".format(category.name, name,
+                                                               self.category.default_framework.name))
+                self.is_category_default = False
+                self.category.default_framework.is_category_default = False
 
         if not install_path_dir:
             install_path_dir = os.path.join("" if category.main_category else category.prog_name, self.prog_name)
@@ -114,7 +131,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
             self.install_path = config["frameworks"][category.name][name]["path"]
         except (TypeError, KeyError, FileNotFoundError):
             pass
-        category.register_framework(self, is_default=self.category_default)
+        category.register_framework(self)
 
     @property
     def prog_name(self):
@@ -132,6 +149,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
               .setdefault(self.name, {})["path"] = self.install_path
         ConfigHandler().config = config
 
+    @property
     def is_installed(self):
         """Method call to know if the framework is installed"""
         return os.path.isdir(self.install_path)
