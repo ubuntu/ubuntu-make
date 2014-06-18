@@ -25,13 +25,12 @@ import shutil
 import stat
 import tempfile
 from time import time
-from ..tools import get_data_dir
-from unittest import TestCase
+from ..tools import get_data_dir, LoggedTestCase
 from unittest.mock import Mock, call
 from udtc.network.requirements_handler import RequirementsHandler
 
 
-class TestRequirementsHandler(TestCase):
+class TestRequirementsHandler(LoggedTestCase):
     """This will test the download center by sending one or more download requests"""
 
     @classmethod
@@ -238,6 +237,7 @@ class TestRequirementsHandler(TestCase):
         self.assertIsNotNone(self.done_callback.call_args[0][0].error)
         self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
         self.assertFalse(self.handler.is_bucket_installed(["testpackage2"]))
+        self.expect_warn_error = True
 
     def test_install_shadow_pkg(self):
         """An error is caught if we try to install a none existing package"""
@@ -245,6 +245,7 @@ class TestRequirementsHandler(TestCase):
         self.wait_for_callback(self.done_callback)
 
         self.assertIsNotNone(self.done_callback.call_args[0][0].error)
+        self.expect_warn_error = True
 
     def test_error_in_dpkg(self):
         """An error while installing a package is caught"""
@@ -254,6 +255,7 @@ class TestRequirementsHandler(TestCase):
         self.wait_for_callback(self.done_callback)
 
         self.assertIsNotNone(self.done_callback.call_args[0][0].error)
+        self.expect_warn_error = True
 
     def test_is_installed_bucket_installed(self):
         """Install bucket should return True if a bucket is installed"""

@@ -22,14 +22,13 @@
 import importlib
 import os
 import sys
-from ..tools import get_data_dir, patchelem
-from unittest import TestCase
+from ..tools import get_data_dir, patchelem, LoggedTestCase
 import udtc
 from udtc import frameworks
 from udtc.tools import NoneDict
 
 
-class BaseFrameworkLoader(TestCase):
+class BaseFrameworkLoader(LoggedTestCase):
     """Unload and reload the module to ensure we clean all class dict"""
 
     @classmethod
@@ -50,10 +49,11 @@ class TestFrameworkLoader(BaseFrameworkLoader):
 
     @classmethod
     def tearDownClass(cls):
-        super().tearDownClass()
         sys.path.remove(get_data_dir())
+        super().tearDownClass()
 
     def setUp(self):
+        super().setUp()
         # load custom framework directory
         with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(udtc.frameworks, '__package__', "testframeworks"):
@@ -64,6 +64,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         # we reset the loaded categories
         self.CategoryHandler.categories = NoneDict()
         self.CategoryHandler.main_category = None
+        super().tearDown()
 
     def test_load_main_category(self):
         """The main category is loaded"""
@@ -166,10 +167,11 @@ class TestEmptyFrameworkLoader(BaseFrameworkLoader):
 
     @classmethod
     def tearDownClass(cls):
-        super().tearDownClass()
         sys.path.remove(get_data_dir())
+        super().tearDownClass()
 
     def setUp(self):
+        super().setUp()
         # load custom unexisting framework directory
         with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(udtc.frameworks, '__package__', "testframeworksdoesntexist"):
@@ -178,6 +180,7 @@ class TestEmptyFrameworkLoader(BaseFrameworkLoader):
     def tearDown(self):
         # we reset the loaded categories
         frameworks.BaseCategory.categories = NoneDict()
+        super().tearDown()
 
     def test_invalid_framework(self):
         """There is one main category, but nothing else"""
@@ -198,19 +201,22 @@ class TestDuplicatedFrameworkLoader(BaseFrameworkLoader):
 
     @classmethod
     def tearDownClass(cls):
-        super().tearDownClass()
         sys.path.remove(get_data_dir())
+        super().tearDownClass()
 
     def setUp(self):
+        super().setUp()
         # load custom unexisting framework directory
         with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(udtc.frameworks, '__package__', "duplicatedframeworks"):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["Category A"]
+        self.expect_warn_error = True  # as we load multiple duplicate categories and framework
 
     def tearDown(self):
         # we reset the loaded categories
         frameworks.BaseCategory.categories = NoneDict()
+        super().tearDown()
 
     def test_duplicated_categories(self):
         """We only load one category when a second with same name is met"""
@@ -230,6 +236,7 @@ class TestDuplicatedFrameworkLoader(BaseFrameworkLoader):
 class TestNotLoadedFrameworkLoader(BaseFrameworkLoader):
 
     def setUp(self):
+        super().setUp()
         self.CategoryHandler = frameworks.BaseCategory
 
     def test_get_no_main_category(self):
@@ -252,10 +259,11 @@ class TestInvalidFrameworkLoader(BaseFrameworkLoader):
 
     @classmethod
     def tearDownClass(cls):
-        super().tearDownClass()
         sys.path.remove(get_data_dir())
+        super().tearDownClass()
 
     def setUp(self):
+        super().setUp()
         # load custom unexisting framework directory
         with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(udtc.frameworks, '__package__', "invalidframeworks"):
@@ -265,11 +273,12 @@ class TestInvalidFrameworkLoader(BaseFrameworkLoader):
     def tearDown(self):
         # we reset the loaded categories
         frameworks.BaseCategory.categories = NoneDict()
+        super().tearDown()
 
     def test_load(self):
         """Previous loading should have been successful"""
-        self.assertTrue(self.categoryA.has_one_framework)
-
+        self.assertFalse(self.categoryA.has_frameworks())
+        self.expect_warn_error = True  # It errors the fact that it ignores one invalid framework
 
 # TODO: test load framework in main category
 # TODO: add another class to just try loading real production directories

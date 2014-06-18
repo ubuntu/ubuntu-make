@@ -22,13 +22,12 @@
 import os
 import shutil
 import tempfile
-from ..tools import change_xdg_config_path, get_data_dir
-from unittest import TestCase
+from ..tools import change_xdg_config_path, get_data_dir, LoggedTestCase
 from udtc import settings
 from udtc.tools import ConfigHandler, Singleton
 
 
-class TestConfigHandler(TestCase):
+class TestConfigHandler(LoggedTestCase):
     """This will test the config handler using xdg dirs"""
 
     def tearDown(self):

@@ -19,15 +19,38 @@
 
 """Common tools between tests"""
 
+from io import StringIO
 from contextlib import contextmanager
 from copy import deepcopy
 import importlib
 import logging
 import os
 import xdg.BaseDirectory
+from unittest import TestCase
 from unittest.mock import Mock
 
 logger = logging.getLogger(__name__)
+
+
+class LoggedTestCase(TestCase):
+    """A base TestCase class which asserts if there is a warning or error unless self.expect_warn_error is True"""
+
+    def setUp(self):
+        super().setUp()
+        self.error_warn_logs = StringIO()
+        self.__handler = logging.StreamHandler(self.error_warn_logs)
+        self.__handler.setLevel(logging.WARNING)
+        logging.root.addHandler(self.__handler)
+        self.expect_warn_error = False
+
+    def tearDown(self):
+        super().tearDown()
+        logging.root.removeHandler(self.__handler)
+        if self.expect_warn_error:
+            self.assertNotEquals(self.error_warn_logs.getvalue(), "")
+        else:
+            self.assertEquals(self.error_warn_logs.getvalue(), "")
+        self.error_warn_logs.close()
 
 
 def get_data_dir():

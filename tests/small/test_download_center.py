@@ -22,14 +22,13 @@
 import os
 import ssl
 from time import time
-from unittest import TestCase
 from unittest.mock import Mock, call, patch
-from ..tools import get_data_dir, CopyingMock
+from ..tools import get_data_dir, CopyingMock, LoggedTestCase
 from ..tools.local_server import LocalHttp
 from udtc.network.download_center import DownloadCenter
 
 
-class TestDownloadCenter(TestCase):
+class TestDownloadCenter(LoggedTestCase):
     """This will test the download center by sending one or more download requests"""
 
     server = None
@@ -169,6 +168,7 @@ class TestDownloadCenter(TestCase):
         self.assertIn("Error 404", result.error)
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.fd)
+        self.expect_warn_error = True
 
     def test_multiple_with_one_404_url(self):
         """we raise an error when we try to download 404 urls"""
@@ -182,6 +182,7 @@ class TestDownloadCenter(TestCase):
         self.assertEqual(len(map_result), 2)
         self.assertIsNotNone(map_result[self.build_server_address("does_not_exist")].error)
         self.assertIsNotNone(map_result[self.build_server_address("simplefile")].fd)
+        self.expect_warn_error = True
 
     def test_download_same_file_multiple_times(self):
         """we only do one download when the same file is requested more than once in the same request"""
@@ -214,7 +215,7 @@ class TestDownloadCenter(TestCase):
         self.assertIsNone(result.error)
 
 
-class TestDownloadCenterSecure(TestCase):
+class TestDownloadCenterSecure(LoggedTestCase):
     """This will test the download center in secure mode by sending one or more download requests"""
 
     server = None
@@ -271,3 +272,4 @@ class TestDownloadCenterSecure(TestCase):
         self.assertIn("CERTIFICATE_VERIFY_FAILED", result.error)
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.fd)
+        self.expect_warn_error = True
