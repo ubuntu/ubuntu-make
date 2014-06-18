@@ -20,11 +20,11 @@ You can of course use --help to get more information and change the verbosity of
 
 ## Different level of logging
 
-Multiple logging profiles are available in *log-confs/* to be able to have different traces of your execution (useful when debugging in particular). For instance, you will find:
+Multiple logging profiles are available in *confs/* to be able to have different traces of your execution (useful when debugging in particular). For instance, you will find:
 
-* **debug.yaml**: Similar than using -vv, but will put logs to a *debug.log* file.
-* **debug_network.yaml**: The root logging level is INFO (-v), the network activities are in DEBUG mode and will be logged in *debug_network.log*.
-* **testing.yaml**: Mostly for tests, similar than using -vv, but:
+* **debug.logcfg**: Similar than using -vv, but will put logs to a *debug.log*.
+* **debug_network.logcfg**: The root logging level is INFO (-v), the network activities are in DEBUG mode and will be logged in *debug_network.log*.
+* **testing.logcfg**: Mostly for tests, similar than using -vv, but:
  * DEBUG logs and above are available in *debug.log*.
  * INFO logs and above are available in *info.log*.
  * WARNING and ERROR logs are available in *error.log*.
@@ -33,7 +33,7 @@ On normal circumstances, we expect *error.log* to remain empty.
 
 To load one of those logging profile:
 
-    $ LOG_CFG=log-confs/testing.yaml ./developer-tools-center
+    $ LOG_CFG=confs/testing.logcfg ./developer-tools-center
 
 ## Development
 ### Style guide and checking
@@ -59,12 +59,12 @@ There are three kinds of tests:
 
 To run all those tests, with coverage report (like in Travis CI) and with python warnings:
 
-    $ PYTHONWARNINGS=d nosetests -c logs-confs/prod_tests.cfg
+    $ PYTHONWARNINGS=d nosetests -c confs/prod.nose
 
 #### Running some tests with all debug infos
 By default, nose won't display debug output of the passing tests. When you want or work on some tests and want to see full debug log, you can use this existing node profile:
 
-    $ PYTHONWARNINGS=d nosetests -c log-confs/debug_test.cfg tests.small.test_download_center:TestDownloadCenter.test_multiple_with_one_404_url
+    $ PYTHONWARNINGS=d nosetests -c confs/debug.nose tests.small.test_download_center:TestDownloadCenter.test_multiple_with_one_404_url
 
 ### Create your own environment and run from it
 For an easier development workflow, we encourage the use of virtualenv to test and iterate on the project in contrast of installing all requirements on your machine. In the project root directory (env/ is already in .gitignore and excluded for pep8 checking):
