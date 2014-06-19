@@ -21,3 +21,4 @@ import os
 
 DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join("~", "tools"))
 CONFIG_FILENAME = "udtc"
+LSB_RELEASE_FILE = "/etc/lsb-release"

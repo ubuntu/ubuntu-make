@@ -22,10 +22,14 @@
 from contextlib import suppress
 import os
 import shutil
+import subprocess
+import stat
+import sys
 import tempfile
 from ..tools import change_xdg_config_path, get_data_dir, LoggedTestCase
-from udtc import settings
-from udtc.tools import ConfigHandler, Singleton
+from udtc import settings, tools
+from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_current_ubuntu_version
+from unittest.mock import patch
 
 
 class TestConfigHandler(LoggedTestCase):
@@ -100,3 +104,59 @@ class TestConfigHandler(LoggedTestCase):
             ConfigHandler()
 
             self.assertEquals(len(os.listdir(tmpdirname)), 0)
+
+class TestTools(LoggedTestCase):
+
+    def tearDown(self):
+        """Reset cached values"""
+        tools._current_arch = None
+        tools._version = None
+
+    def get_lsb_release_filepath(self, name):
+        return os.path.join(get_data_dir(), 'lsb_releases', name)
+
+    def local_current_arch(self):
+        return subprocess.check_output(["dpkg", "--print-architecture"], universal_newlines=True).rstrip("\n")
+
+    def test_get_current_arch(self):
+        """Current arch is reported"""
+        self.assertEquals(get_current_arch(), self.local_current_arch())
+
+    def test_get_current_arch_twice(self):
+        """Current arch is reported twice and the same"""
+        current_arch = self.local_current_arch()
+        self.assertEquals(get_current_arch(), current_arch)
+        self.assertEquals(get_current_arch(), current_arch)
+
+    def test_get_current_arch_no_dpkg(self):
+        """Assert an error if dpkg exit with an error"""
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            sys.path.insert(0, tmpdirname)
+            dpkg_file_path = os.path.join(tmpdirname, "dpkg")
+            with open(dpkg_file_path, mode='w') as f:
+                f.write("#!/bin/sh\nexit 1")  # Simulate an error in dpkg
+            os.environ['PATH'] = '{}:{}'.format(tmpdirname, os.getenv('PATH'))
+            st = os.stat(dpkg_file_path)
+            os.chmod(dpkg_file_path, st.st_mode | stat.S_IEXEC)
+            self.assertRaises(subprocess.CalledProcessError, get_current_arch)
+        sys.path.remove(tmpdirname)
+
+    @patch("udtc.tools.settings")
+    def test_get_current_ubuntu_version(self, settings_module):
+        """Current ubuntu version is reported from our lsb_release local file"""
+        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("valid")
+        self.assertEquals(get_current_ubuntu_version(), '14.04')
+
+    @patch("udtc.tools.settings")
+    def test_get_current_ubuntu_version_invalid(self, settings_module):
+        """Raise an error when parsing an invalid lsb release file"""
+        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("invalid")
+        self.assertRaises(BaseException, get_current_ubuntu_version)
+        self.expect_warn_error = True
+
+    @patch("udtc.tools.settings")
+    def test_get_current_ubuntu_version_no_lsb_release(self, settings_module):
+        """Raise an error when there is no lsb release file"""
+        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("notexist")
+        self.assertRaises(BaseException, get_current_ubuntu_version)
+        self.expect_warn_error = True

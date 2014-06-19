@@ -19,7 +19,8 @@
 
 import logging
 import os
-from udtc.settings import CONFIG_FILENAME
+import subprocess
+from udtc import settings
 from xdg.BaseDirectory import load_first_config, xdg_config_home
 import yaml
 import yaml.scanner
@@ -27,6 +28,9 @@ import yaml.parser
 
 logger = logging.getLogger(__name__)
 
+# cache current arch. Shouldn't change in the life of the process ;)
+_current_arch = None
+_version = None
 
 class Singleton(type):
 
@@ -43,7 +47,7 @@ class ConfigHandler(metaclass=Singleton):
     def __init__(self):
         """Load the config"""
         self._config = {}
-        config_file = load_first_config(CONFIG_FILENAME)
+        config_file = load_first_config(settings.CONFIG_FILENAME)
         logger.debug("Opening {}".format(config_file))
         try:
             with open(config_file) as f:
@@ -59,7 +63,7 @@ class ConfigHandler(metaclass=Singleton):
 
     @config.setter
     def config(self, config):
-        config_file = os.path.join(xdg_config_home, CONFIG_FILENAME)
+        config_file = os.path.join(xdg_config_home, settings.CONFIG_FILENAME)
         logging.debug("Saving new configuration: {} in {}".format(config, config_file))
         with open(config_file, 'w') as f:
             yaml.dump(config, f, default_flow_style=False)
@@ -79,3 +83,34 @@ class classproperty(object):
 
     def __get__(self, obj, owner):
         return self.f(owner)
+
+
+def get_current_arch():
+    """Get current configuration dpkg architecture"""
+    global _current_arch
+    if _current_arch is None:
+        _current_arch = subprocess.check_output(["dpkg", "--print-architecture"], universal_newlines=True).rstrip("\n")
+    return _current_arch
+
+
+def get_current_ubuntu_version():
+    """Return current ubuntu version or raise an error if couldn't find any"""
+    global _version
+    if _version is None:
+        try:
+            with open(settings.LSB_RELEASE_FILE) as lsb_release_file:
+                for line in lsb_release_file:
+                    line = line.strip()
+                    if line.startswith('DISTRIB_RELEASE='):
+                        tag, release = line.split('=', 1)
+                        _version = release
+                        break
+                else:
+                    message = "Couldn't find DISTRIB_RELEASE in {}".format(settings.LSB_RELEASE_FILE)
+                    logger.error(message)
+                    raise BaseException(message)
+        except (FileNotFoundError, IOError) as e:
+            message = "Can't open lsb-release file: {}".format(e)
+            logger.error(message)
+            raise BaseException(message)
+    return _version

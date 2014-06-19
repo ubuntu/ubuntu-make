@@ -28,6 +28,7 @@ from ..tools import get_data_dir, change_xdg_config_path, patchelem, LoggedTestC
 import udtc
 from udtc import frameworks
 from udtc.tools import NoneDict
+from unittest.mock import Mock
 
 
 class BaseFrameworkLoader(LoggedTestCase):
@@ -53,6 +54,23 @@ class BaseFrameworkLoader(LoggedTestCase):
         """Return the config dir for this name"""
         return os.path.join(get_data_dir(), 'configs', name)
 
+    def fake_arch_version(self, arch, version):
+        """Help to mock the current arch and version on further calls"""
+        self._saved_current_arch_fn = udtc.frameworks.get_current_arch
+        self.get_current_arch_mock = Mock()
+        self.get_current_arch_mock.return_value = arch
+        udtc.frameworks.get_current_arch = self.get_current_arch_mock
+
+        self._saved_current_ubuntu_version_fn = udtc.frameworks.get_current_ubuntu_version
+        self.get_current_ubuntu_version_mock = Mock()
+        self.get_current_ubuntu_version_mock.return_value = version
+        udtc.frameworks.get_current_ubuntu_version = self.get_current_ubuntu_version_mock
+
+    def restore_arch_version(self):
+        """Restore initial current arch and version"""
+        udtc.frameworks.get_current_arch = self._saved_current_arch_fn
+        udtc.frameworks.get_current_ubuntu_version = self._saved_current_ubuntu_version_fn
+
 
 class TestFrameworkLoader(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity"""
@@ -70,6 +88,8 @@ class TestFrameworkLoader(BaseFrameworkLoader):
 
     def setUp(self):
         super().setUp()
+        # fake versions and archs
+        self.fake_arch_version("bar", "10.10.10")
         # load custom framework directory
         with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(udtc.frameworks, '__package__', "testframeworks"):
@@ -79,6 +99,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
     def tearDown(self):
         # we reset the loaded categories
         self.CategoryHandler.categories = NoneDict()
+        self.restore_arch_version()
         super().tearDown()
 
     def test_load_main_category(self):
@@ -197,6 +218,22 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         self.assertEquals(self.categoryA.frameworks["Framework A"].install_path,
                           os.path.expanduser("~/tools/custom/frameworka"))
 
+    def test_no_restriction_installable_framework(self):
+        """Framework with an no arch or version restriction is installable"""
+        self.assertTrue(self.categoryA.frameworks["Framework A"].is_installable)
+
+    def test_right_arch_right_version_framework(self):
+        """Framework with a correct arch and correct version is installable"""
+        self.assertTrue(self.CategoryHandler.categories["Category D"].frameworks["Framework C"].is_installable)
+
+    def test_unsupported_arch_framework(self):
+        """Framework with an unsupported arch isn't registered"""
+        self.assertIsNone(self.CategoryHandler.categories["Category D"].frameworks["Framework A"])
+
+    def test_unsupported_version_framework(self):
+        """Framework with an unsupported arch isn't registered"""
+        self.assertIsNone(self.CategoryHandler.categories["Category D"].frameworks["Framework B"])
+
 
 class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with a valid configuration"""
@@ -293,6 +330,63 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
                                       'Framework/B': {'path': '/home/foo/bar'}
                                   }}})
 
+
+class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
+    """This will test the dynamic framework loader activity. This class doesn't load frameworks before the tests does"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        sys.path.append(get_data_dir())
+        cls.testframeworks_dir = os.path.join(get_data_dir(), 'testframeworks')
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.path.remove(get_data_dir())
+        super().tearDownClass()
+
+    def setUp(self):
+        super().setUp()
+        # fake versions and archs
+        self.fake_arch_version("foo", "10.04")
+
+    def tearDown(self):
+        # we reset the loaded categories
+        self.CategoryHandler.categories = NoneDict()
+        self.restore_arch_version()
+        super().tearDown()
+
+        self.categoryA = self.CategoryHandler.categories["Category A"]
+
+    def test_arch_report_issue_framework(self):
+        """Framework where we can't reach arch and having a restriction isn't installable"""
+        self.get_current_arch_mock.side_effect = BaseException('arch detection failure!')
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+            frameworks.load_frameworks()
+
+        # restricted arch framework isn't installable
+        self.assertIsNone(self.CategoryHandler.categories["Category D"].frameworks["Framework A"])
+        # framework with no arch restriction but others are still installable
+        self.assertTrue(self.CategoryHandler.categories["Category D"].frameworks["Framework B"].is_installable)
+        # framework without any restriction is still installable
+        self.assertTrue(self.CategoryHandler.categories["Category A"].frameworks["Framework A"].is_installable)
+        self.expect_warn_error = True
+
+    def test_version_report_issue_framework(self):
+        """Framework where we can't reach version and having a restriction isn't installable"""
+        self.get_current_ubuntu_version_mock.side_effect = BaseException('version detection failure!')
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+            frameworks.load_frameworks()
+
+        # restricted version framework isn't installable
+        self.assertIsNone(self.CategoryHandler.categories["Category D"].frameworks["Framework B"])
+        # framework with no version restriction but others are still installable
+        self.assertTrue(self.CategoryHandler.categories["Category D"].frameworks["Framework A"].is_installable)
+        # framework without any restriction is still installable
+        self.assertTrue(self.CategoryHandler.categories["Category A"].frameworks["Framework A"].is_installable)
+        self.expect_warn_error = True
 
 class TestEmptyFrameworkLoader(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with an empty set of frameworks"""

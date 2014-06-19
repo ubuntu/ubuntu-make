@@ -27,7 +27,7 @@ import logging
 import os
 import pkgutil
 import sys
-from udtc.tools import ConfigHandler, NoneDict, classproperty
+from udtc.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version
 from udtc.settings import DEFAULT_INSTALL_TOOLS_PATH
 
 
@@ -103,12 +103,19 @@ class BaseCategory():
 
 class BaseFramework(metaclass=abc.ABCMeta):
 
-    def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None):
+    def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None,
+                 only_on_archs=[], only_ubuntu_version=[]):
         self.name = name
         self.description = description
         self.logo_path = None
         self.category = category
         self.is_category_default = is_category_default
+        self.only_on_archs = only_on_archs
+        self.only_ubuntu_version = only_ubuntu_version
+
+        if not self.is_installable:
+            logger.info("Don't register {} as it's not installable on this configuration.".format(name))
+            return
 
         if self.is_category_default:
             if self.category == BaseCategory.main_category:
@@ -132,6 +139,28 @@ class BaseFramework(metaclass=abc.ABCMeta):
         except (TypeError, KeyError, FileNotFoundError):
             pass
         category.register_framework(self)
+
+    @property
+    def is_installable(self):
+        """Return if the framework can be installed on that arch"""
+        try:
+            if len(self.only_on_archs) > 0:
+                # we have some restricted archs, check we support it
+                current_arch = get_current_arch()
+                if current_arch not in self.only_on_archs:
+                    logger.debug("{} only supports {} archs and you are on {}.".format(self.name, self.only_on_archs,
+                                                                                    current_arch))
+                    return False
+            if len(self.only_ubuntu_version) > 0:
+                current_version = get_current_ubuntu_version()
+                if current_version not in self.only_ubuntu_version:
+                    logger.debug("{} only supports {} and you are on {}.".format(self.name, self.only_ubuntu_version,
+                                                                                 current_version))
+                    return False
+        except:
+            logger.error("An error occurred when detecting platform, don't register {}".format(self.name))
+            return False
+        return True
 
     @property
     def prog_name(self):
