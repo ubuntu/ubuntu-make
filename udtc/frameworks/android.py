@@ -23,6 +23,8 @@
 from gettext import gettext as _
 import udtc.frameworks
 
+_supported_archs = ['i386', 'amd64']
+
 
 class AndroidCategory(udtc.frameworks.BaseCategory):
 
@@ -35,7 +37,8 @@ class EclipseAdt(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="ADT", description="Android Developer Tools (using eclipse)",
-                         category=category, install_path_dir="android/adt-eclipse")
+                         category=category, install_path_dir="android/adt-eclipse",
+                         only_on_archs=_supported_archs)
 
     def setup(self, install_path=None):
         print("Installing…")
@@ -46,7 +49,7 @@ class AndroidStudio(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Android Studio", description="Android Studio", is_category_default=True,
-                         category=category)
+                         category=category, only_on_archs=_supported_archs)
 
     def setup(self, install_path=None):
         print("Installing android studio…")
