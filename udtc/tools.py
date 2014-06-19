@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 _current_arch = None
 _version = None
 
+
 class Singleton(type):
 
     _instances = {}

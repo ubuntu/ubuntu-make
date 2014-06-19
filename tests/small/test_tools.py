@@ -105,6 +105,7 @@ class TestConfigHandler(LoggedTestCase):
 
             self.assertEquals(len(os.listdir(tmpdirname)), 0)
 
+
 class TestTools(LoggedTestCase):
 
     def tearDown(self):

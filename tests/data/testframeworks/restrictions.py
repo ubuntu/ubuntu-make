@@ -39,7 +39,6 @@ class FrameworkA(udtc.frameworks.BaseFramework):
         super().setup(install_path=install_path)
 
 
-
 class FrameworkB(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):

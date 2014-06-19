@@ -149,7 +149,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
                 current_arch = get_current_arch()
                 if current_arch not in self.only_on_archs:
                     logger.debug("{} only supports {} archs and you are on {}.".format(self.name, self.only_on_archs,
-                                                                                    current_arch))
+                                                                                       current_arch))
                     return False
             if len(self.only_ubuntu_version) > 0:
                 current_version = get_current_ubuntu_version()

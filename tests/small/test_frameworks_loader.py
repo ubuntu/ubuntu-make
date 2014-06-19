@@ -400,6 +400,7 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         self.assertTrue(self.CategoryHandler.categories["Category A"].frameworks["Framework A"].is_installable)
         self.expect_warn_error = True
 
+
 class TestEmptyFrameworkLoader(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with an empty set of frameworks"""
 
