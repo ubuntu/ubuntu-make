@@ -1,0 +1,11 @@
+Package: testpackage
+Status: install ok installed
+Priority: extra
+Section: misc
+Installed-Size: 26
+Maintainer: Didier Roche <didrocks@ubuntu.com>
+Architecture: all
+Version: 0.0.0
+Description: Dummy package for testing
+ Package used for testing debs installation
+

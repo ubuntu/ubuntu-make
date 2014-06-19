@@ -214,6 +214,19 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.fd)
         self.assertIsNone(result.error)
 
+    def test_unsupported_protocol(self):
+        """Raises an exception when trying to download for an unsupported protocol"""
+        filename = "simplefile"
+        request = self.build_server_address(filename).replace('http', 'ftp')
+        DownloadCenter([request], self.callback, download=False)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertIn("Protocol not supported", result.error)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.fd)
+        self.expect_warn_error = True
+
 
 class TestDownloadCenterSecure(LoggedTestCase):
     """This will test the download center in secure mode by sending one or more download requests"""

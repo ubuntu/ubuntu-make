@@ -26,7 +26,7 @@ import stat
 import tempfile
 from time import time
 from ..tools import get_data_dir, LoggedTestCase
-from unittest.mock import Mock, call
+from unittest.mock import Mock, call, patch
 from udtc.network.requirements_handler import RequirementsHandler
 
 
@@ -42,6 +42,7 @@ class TestRequirementsHandler(LoggedTestCase):
         apt.apt_pkg.config.clear("APT::Update::Post-Invoke-Success")
         apt.apt_pkg.config.clear("DPkg::Post-Invoke")
         cls.apt_package_dir = os.path.join(get_data_dir(), "apt")
+        cls.apt_status_dir = os.path.join(cls.apt_package_dir, "states")
 
     def setUp(self):
         super().setUp()
@@ -70,6 +71,7 @@ class TestRequirementsHandler(LoggedTestCase):
         os.mkdir(os.path.join(os.path.join(dpkg_dir, 'updates')))
         open(os.path.join(dpkg_dir, 'status'), 'w').close()
         open(os.path.join(dpkg_dir, 'available'), 'w').close()
+        self.dpkg_dir = dpkg_dir
 
         cache = apt.Cache(rootdir=self.chroot_path)
         apt.apt_pkg.config.set("Dir::Bin::dpkg", self.dpkg)  # must be called after initializing the rootdir bcache
@@ -272,3 +274,52 @@ class TestRequirementsHandler(LoggedTestCase):
     def test_is_installed_bucket_not_installed(self):
         """Install bucket should return False if a bucket is installed"""
         self.assertFalse(self.handler.is_bucket_installed(['testpackage', 'testpackage1']))
+
+    def test_apt_cache_not_ready(self):
+        """When the first apt.Cache() access tells it's not ready, we wait and recover"""
+        origin_cache = apt.Cache
+        raise_returned = False
+
+        def cache_call(*args, **kwargs):
+            nonlocal raise_returned
+            if raise_returned:
+                return origin_cache()
+            else:
+                raise_returned = True
+                raise SystemError
+
+        with patch('udtc.network.requirements_handler.apt.Cache') as aptcache_mock:
+            aptcache_mock.side_effect = cache_call
+            self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+            self.wait_for_callback(self.done_callback)
+
+    def test_upgrade(self):
+        """Upgrade one package already installed"""
+        shutil.copy(os.path.join(self.apt_status_dir, "testpackage_installed_dpkg_status"),
+                    os.path.join(self.dpkg_dir, "status"))
+        self.handler.cache = apt.Cache()
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
+        self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.0")
+        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+        self.wait_for_callback(self.done_callback)
+
+        self.assertEqual(self.done_callback.call_args[0][0].bucket, ['testpackage'])
+        self.assertIsNone(self.done_callback.call_args[0][0].error)
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
+        self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.1")
+
+    def test_one_install_one_upgrade(self):
+        """Install and Upgrade one package in the same bucket"""
+        shutil.copy(os.path.join(self.apt_status_dir, "testpackage_installed_dpkg_status"),
+                    os.path.join(self.dpkg_dir, "status"))
+        self.handler.cache = apt.Cache()
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
+        self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.0")
+        self.assertFalse(self.handler.is_bucket_installed(["testpackage0"]))
+        self.handler.install_bucket(["testpackage", "testpackage0"], lambda x, y: "", self.done_callback)
+        self.wait_for_callback(self.done_callback)
+
+        self.assertEqual(self.done_callback.call_args[0][0].bucket, ['testpackage', 'testpackage0'])
+        self.assertIsNone(self.done_callback.call_args[0][0].error)
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage", "testpackage0"]))
+        self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.1")

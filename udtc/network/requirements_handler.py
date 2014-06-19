@@ -86,14 +86,14 @@ class RequirementsHandler(object, metaclass=Singleton):
             try:
                 pkg = self.cache[pkg_name]
                 if pkg.is_installed and pkg.is_upgradable:
+                    logger.debug("Marking {} for upgrade".format(pkg_name))
                     pkg.mark_upgrade()
                 else:
+                    logger.debug("Marking {} for install".format(pkg_name))
                     pkg.mark_install(auto_fix=False)
             except Exception as msg:
                 logger.error("Can't mark for install {}: {}".format(pkg_name, msg))
                 raise
-                # TODO: the root check should be here:
-                # apt.cache.LockFailedException: Failed to lock /var/cache/apt/archives/lock
 
         # this can raise on installedArchives() exception if the commit() fails
         self.cache.commit(fetch_progress=self._FetchProgress(current_bucket,
