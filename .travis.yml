@@ -7,4 +7,4 @@ before_install:
   - sudo apt-get install -qq apt apt-utils libapt-pkg-dev
 install:
   - "pip install -r requirements.txt"
-script: nosetests -c confs/prod.nose
+script: ./runtests

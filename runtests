@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2014 Canonical
+#
+# Authors:
+#  Didier Roche
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; version 3.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+import argparse
+import nose
+import os
+
+root_dir = os.path.dirname(__file__)
+config_dir = os.path.join(root_dir, 'confs')
+DEBUG_CONFIG_FILE = os.path.join(config_dir, "debug.nose")
+COVERAGE_CONFIG_FILE = os.path.join(config_dir, "prod.nose")
+TESTS_DIR = os.path.join(root_dir, 'tests')
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description="Run udtc tests. Specified list of test run in debug mode. "
+                                                 "Running a partial suite of tests is using a normal mode. "
+                                                 "Running all tests is using coverage by default.")
+
+    parser.add_argument("tests", nargs='*', help="Action to perform: all (or omitted) to run all tests. "
+                                                 "small/medium/large/pep8 or nose syntax: "
+                                                 "tests.small.test_frameworks_loader:TestFrameworkLoaderSaveConfig.foo")
+
+    config_group = parser.add_argument_group('Run configuration options',
+                                             description="The default configuration is to use the debug profile when "
+                                                         "running some manually specific list of tests. No profile is "
+                                                         "selected when running some suites of tests and coverage "
+                                                         "profile when selecting all tests.")\
+        .add_mutually_exclusive_group()
+    config_group.add_argument("-c", "--config", help="Force using debug profile even when running all tests")
+    config_group.add_argument("--coverage", action="store_true", help="Force using coverage profile even when some "
+                                                                      "tests or tessuite")
+    config_group.add_argument("--debug", action="store_true", help="Force using debug profile even when running "
+                                                                   "all tests")
+    config_group.add_argument("--no-config", action="store_true", help="Disable any automated or manual config "
+                                                                       "selection")
+
+    args = parser.parse_args()
+
+    ## handle config first
+    nose_args = []
+    specified_config = False
+    if args.config:
+        nose_args.extend(["--config", args.config])
+        specified_config = True
+    elif args.debug:
+        nose_args.extend(["--config", DEBUG_CONFIG_FILE])
+        specified_config = True
+    elif args.coverage:
+        nose_args.extend(["--config", COVERAGE_CONFIG_FILE])
+        specified_config = True
+    elif args.no_config:
+        specified_config = True
+
+    if not "all" in args.tests and len(args.tests) > 0:
+        for test_type in args.tests:
+            for named_test_type in ("small", "medium", "large", "pep8"):
+                if test_type == named_test_type:
+                    if test_type == "pep8":
+                        nose_args.append(os.path.join(TESTS_DIR, "__init__.py"))
+                    else:
+                        nose_args.append(os.path.join(TESTS_DIR, named_test_type))
+                    break
+            # Not a named test_type, but a list of tests to run
+            else:
+                nose_args.append(test_type)
+                # If no config is given, choose debug by default for partial run
+                if not specified_config:
+                    nose_args.extend(["--config", DEBUG_CONFIG_FILE])
+                    specified_config = True
+    else:
+        # If no config is given, run with coverage
+        if not specified_config:
+            nose_args.extend(["--config", COVERAGE_CONFIG_FILE])
+            specified_config = True
+
+    ## need a fake $0 argument
+    nose_args.insert(0, "")
+    nose.main(argv=nose_args)
