@@ -23,39 +23,54 @@
 import udtc.frameworks
 
 
-class DCategory(udtc.frameworks.BaseCategory):
+class ECategory(udtc.frameworks.BaseCategory):
 
     def __init__(self):
-        super().__init__(name="Category D", description="Category D description (with restricted frameworks)")
+        super().__init__(name="Category E", description="Category E description")
 
 
 class FrameworkA(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):
-        super().__init__(name="Framework A", description="Description for framework A (restricted arch)",
-                         category=category, only_on_archs=["foo", "baz"])
+        super().__init__(name="Framework A", description="Description for framework A (installable chained to parent)",
+                         category=category)
 
     def setup(self, install_path=None):
         super().setup(install_path=install_path)
 
+    @property
+    def is_installable(self):
+        return super().is_installable
 
 
 class FrameworkB(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):
-        super().__init__(name="Framework B", description="Description for framework B (restricted version)",
-                         category=category, only_ubuntu_version=["9.10", "10.04"])
+        super().__init__(name="Framework B", description="Description for framework B (installable forced to True even "
+                                                         "with archs restrictions)",
+                         category=category, only_on_archs=["archswhichdontexist"],
+                         only_ubuntu_version=["versionwhichdontexist"])
 
     def setup(self, install_path=None):
         super().setup(install_path=install_path)
+
+    @property
+    def is_installable(self):
+        """overridden to say True"""
+        return True
 
 
 class FrameworkC(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):
-        super().__init__(name="Framework C", description="Description for framework C (restricted version and arch)",
-                         category=category, only_on_archs=["foo", "bar", "baz"],
-                         only_ubuntu_version=["9.10", "10.04", "10.10.10"])
+        super().__init__(name="Framework C", description="Description for framework C (installable forced to False "
+                                                         "even with no restriction",
+                         category=category)
 
     def setup(self, install_path=None):
         super().setup(install_path=install_path)
+
+    @property
+    def is_installable(self):
+        """overridden to say False"""
+        return False

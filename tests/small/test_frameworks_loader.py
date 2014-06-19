@@ -234,6 +234,18 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Framework with an unsupported arch isn't registered"""
         self.assertIsNone(self.CategoryHandler.categories["Category D"].frameworks["Framework B"])
 
+    def test_child_installable_chained_parent(self):
+        """Framework with an is_installable chained to parent"""
+        self.assertTrue(self.CategoryHandler.categories["Category E"].frameworks["Framework A"].is_installable)
+
+    def test_child_installable_overridden(self):
+        """Framework with an is_installable override to True from children (with unmatched restrictions)"""
+        self.assertTrue(self.CategoryHandler.categories["Category E"].frameworks["Framework B"].is_installable)
+
+    def test_child_installable_overridden_false(self):
+        """Framework with an is_installable override to False from children (with no restrictions)"""
+        self.assertIsNone(self.CategoryHandler.categories["Category E"].frameworks["Framework C"])
+
 
 class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with a valid configuration"""
