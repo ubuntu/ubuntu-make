@@ -17,6 +17,7 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+from gi.repository import GLib
 import logging
 import os
 import subprocess
@@ -115,3 +116,10 @@ def get_current_ubuntu_version():
             logger.error(message)
             raise BaseException(message)
     return _version
+
+
+def in_mainloop_thread(function):
+    """Decorator to run a function in a mainloop thread"""
+    def inner(*args, **kwargs):
+        return GLib.idle_add(function, *args, **kwargs)
+    return inner

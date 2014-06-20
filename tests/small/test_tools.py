@@ -19,6 +19,8 @@
 
 """Tests the various udtc tools"""
 
+from gi.repository import GLib, GObject
+from concurrent import futures
 from contextlib import suppress
 import os
 import shutil
@@ -26,6 +28,8 @@ import subprocess
 import stat
 import sys
 import tempfile
+from time import time
+import threading
 from ..tools import change_xdg_config_path, get_data_dir, LoggedTestCase
 from udtc import settings, tools
 from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_current_ubuntu_version
@@ -112,6 +116,7 @@ class TestTools(LoggedTestCase):
         """Reset cached values"""
         tools._current_arch = None
         tools._version = None
+        super().tearDown()
 
     def get_lsb_release_filepath(self, name):
         return os.path.join(get_data_dir(), 'lsb_releases', name)
@@ -161,3 +166,74 @@ class TestTools(LoggedTestCase):
         settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("notexist")
         self.assertRaises(BaseException, get_current_ubuntu_version)
         self.expect_warn_error = True
+
+
+class TestToolsThreads(LoggedTestCase):
+    """Test main loop threading helpers"""
+
+    def setUp(self):
+        super().setUp()
+        self.mainloop = None
+        self.mainloop_thread = None
+        self.function_thread = None
+        self.parallel_function_thread = None
+
+    # function that will complete once the mainloop is started
+    def wait_for_mainloop_function(self):
+        self.parallel_function_thread = threading.current_thread().ident
+        timeout_time = time() + 5
+        while not self.mainloop or not self.mainloop.is_running():
+            if time() > timeout_time:
+                raise(BaseException("Mainloop not started in 5 seconds"))
+
+    def get_mainloop_thread(self):
+        self.mainloop_thread = threading.current_thread().ident
+
+    def start_glib_mainloop(self):
+        GObject.threads_init()
+        self.mainloop = GLib.MainLoop()
+        # quit after 5 seconds if nothing made the mainloop to end
+        GLib.timeout_add_seconds(5, self.mainloop.quit)
+        GLib.idle_add(self.get_mainloop_thread)
+        self.mainloop.run()
+
+    def test_run_function_in_mainloop_thread(self):
+        """Test that decorated mainloop thread functions are really running in that thread"""
+
+        # function supposed to run in the mainloop thread
+        @tools.in_mainloop_thread
+        def _function_in_mainloop_thread(future):
+            self.function_thread = threading.current_thread().ident
+            self.mainloop.quit()
+
+        executor = futures.ThreadPoolExecutor(max_workers=1)
+        future = executor.submit(self.wait_for_mainloop_function)
+        future.add_done_callback(_function_in_mainloop_thread)
+        self.start_glib_mainloop()
+
+        # mainloop and thread were started
+        self.assertIsNotNone(self.mainloop_thread)
+        self.assertIsNotNone(self.parallel_function_thread)
+        self.assertEquals(self.mainloop_thread, self.function_thread)
+        self.assertNotEquals(self.mainloop_thread, self.parallel_function_thread)
+
+    def test_run_function_not_in_mainloop_thread(self):
+        """Test that non decorated callback functions are not running in the mainloop thread"""
+
+        # function not supposed to run in the mainloop thread
+        def _function_not_in_mainloop_thread(future):
+            self.function_thread = threading.current_thread().ident
+            self.mainloop.quit()
+
+        executor = futures.ThreadPoolExecutor(max_workers=1)
+        future = executor.submit(self.wait_for_mainloop_function)
+        future.add_done_callback(_function_not_in_mainloop_thread)
+        self.start_glib_mainloop()
+
+        # mainloop and thread were started
+        self.assertIsNotNone(self.mainloop_thread)
+        self.assertIsNotNone(self.parallel_function_thread)
+        self.assertNotEquals(self.mainloop_thread, self.function_thread)
+        self.assertNotEquals(self.mainloop_thread, self.parallel_function_thread)
+        # the function parallel thread id was reused
+        self.assertEquals(self.function_thread, self.parallel_function_thread)
