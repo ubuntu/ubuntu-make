@@ -27,6 +27,7 @@ import logging
 import os
 import pkgutil
 import sys
+from udtc.network.requirements_handler import RequirementsHandler
 from udtc.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version
 from udtc.settings import DEFAULT_INSTALL_TOOLS_PATH
 
@@ -104,7 +105,7 @@ class BaseCategory():
 class BaseFramework(metaclass=abc.ABCMeta):
 
     def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None,
-                 only_on_archs=[], only_ubuntu_version=[]):
+                 only_on_archs=[], only_ubuntu_version=[], packages_requirements=[]):
         self.name = name
         self.description = description
         self.logo_path = None
@@ -112,6 +113,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.is_category_default = is_category_default
         self.only_on_archs = only_on_archs
         self.only_ubuntu_version = only_ubuntu_version
+        self.packages_requirements = packages_requirements
 
         if not self.is_installable:
             logger.info("Don't register {} as it's not installable on this configuration.".format(name))
@@ -181,7 +183,12 @@ class BaseFramework(metaclass=abc.ABCMeta):
     @property
     def is_installed(self):
         """Method call to know if the framework is installed"""
-        return os.path.isdir(self.install_path)
+        if not os.path.isdir(self.install_path):
+            return False
+        if not RequirementsHandler().is_bucket_installed(self.packages_requirements):
+            return False
+        logger.debug("{} is installed".format(self.name))
+        return True
 
 
 class MainCategory(BaseCategory):

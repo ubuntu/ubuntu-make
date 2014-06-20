@@ -28,7 +28,7 @@ from ..tools import get_data_dir, change_xdg_config_path, patchelem, LoggedTestC
 import udtc
 from udtc import frameworks
 from udtc.tools import NoneDict
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 
 class BaseFrameworkLoader(LoggedTestCase):
@@ -245,6 +245,28 @@ class TestFrameworkLoader(BaseFrameworkLoader):
     def test_child_installable_overridden_false(self):
         """Framework with an is_installable override to False from children (with no restrictions)"""
         self.assertIsNone(self.CategoryHandler.categories["Category E"].frameworks["Framework C"])
+
+    def test_check_not_installed_wrong_path(self):
+        """Framework isn't installed path doesn't exist"""
+        self.assertFalse(self.CategoryHandler.categories["Category F"].frameworks["Framework A"].is_installed)
+
+    def test_check_installed_right_path_no_package_req(self):
+        """Framework is installed if right path but no package req."""
+        self.assertTrue(self.CategoryHandler.categories["Category F"].frameworks["Framework B"].is_installed)
+
+    def test_check_not_installed_wrong_requirements(self):
+        """Framework isn't installed if path and package requirements aren't met"""
+        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+            requirement_mock.return_value.is_bucket_installed.return_value = False
+            self.assertFalse(self.CategoryHandler.categories["Category F"].frameworks["Framework C"].is_installed)
+            requirement_mock.return_value.is_bucket_installed.assert_called_with(['foo', 'bar'])
+
+    def test_check_installed_with_matched_requirements(self):
+        """Framework is installed if path and package requirements are met"""
+        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+            requirement_mock.return_value.is_bucket_installed.return_value = True
+            self.assertTrue(self.CategoryHandler.categories["Category F"].frameworks["Framework C"].is_installed)
+            requirement_mock.return_value.is_bucket_installed.assert_called_with(['foo', 'bar'])
 
 
 class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
