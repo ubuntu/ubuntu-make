@@ -31,6 +31,7 @@ logger = logging.getLogger(__name__)
 
 # cache current arch. Shouldn't change in the life of the process ;)
 _current_arch = None
+_foreign_arch = None
 _version = None
 
 
@@ -93,6 +94,15 @@ def get_current_arch():
     if _current_arch is None:
         _current_arch = subprocess.check_output(["dpkg", "--print-architecture"], universal_newlines=True).rstrip("\n")
     return _current_arch
+
+
+def get_foreign_archs():
+    """Get foreign architectures that were enabled"""
+    global _foreign_arch
+    if _foreign_arch is None:
+        _foreign_arch = subprocess.check_output(["dpkg", "--print-foreign-architectures"], universal_newlines=True)\
+            .rstrip("\n").split()
+    return _foreign_arch
 
 
 def get_current_ubuntu_version():

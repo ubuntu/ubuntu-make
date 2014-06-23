@@ -21,7 +21,7 @@
 
 from gi.repository import GLib, GObject
 from concurrent import futures
-from contextlib import suppress
+from contextlib import contextmanager, suppress
 import os
 import shutil
 import subprocess
@@ -32,7 +32,7 @@ from time import time
 import threading
 from ..tools import change_xdg_config_path, get_data_dir, LoggedTestCase
 from udtc import settings, tools
-from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_current_ubuntu_version
+from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version
 from unittest.mock import patch
 
 
@@ -112,40 +112,53 @@ class TestConfigHandler(LoggedTestCase):
 
 class TestTools(LoggedTestCase):
 
+    def setUp(self):
+        """Reset previously cached values"""
+        super().setUp()
+        tools._current_arch = None
+        tools._foreign_arch = None
+        tools._version = None
+
     def tearDown(self):
         """Reset cached values"""
         tools._current_arch = None
+        tools._foreign_arch = None
         tools._version = None
         super().tearDown()
 
     def get_lsb_release_filepath(self, name):
         return os.path.join(get_data_dir(), 'lsb_releases', name)
 
-    def local_current_arch(self):
-        return subprocess.check_output(["dpkg", "--print-architecture"], universal_newlines=True).rstrip("\n")
-
-    def test_get_current_arch(self):
-        """Current arch is reported"""
-        self.assertEquals(get_current_arch(), self.local_current_arch())
-
-    def test_get_current_arch_twice(self):
-        """Current arch is reported twice and the same"""
-        current_arch = self.local_current_arch()
-        self.assertEquals(get_current_arch(), current_arch)
-        self.assertEquals(get_current_arch(), current_arch)
-
-    def test_get_current_arch_no_dpkg(self):
-        """Assert an error if dpkg exit with an error"""
+    @contextmanager
+    def create_dpkg(self, content):
+        """Create a temporary dpkg which can be used as context"""
         with tempfile.TemporaryDirectory() as tmpdirname:
             sys.path.insert(0, tmpdirname)
             dpkg_file_path = os.path.join(tmpdirname, "dpkg")
             with open(dpkg_file_path, mode='w') as f:
-                f.write("#!/bin/sh\nexit 1")  # Simulate an error in dpkg
+                f.write("#!/bin/sh\n{}".format(content))
             os.environ['PATH'] = '{}:{}'.format(tmpdirname, os.getenv('PATH'))
             st = os.stat(dpkg_file_path)
             os.chmod(dpkg_file_path, st.st_mode | stat.S_IEXEC)
+            yield
+            sys.path.remove(tmpdirname)
+
+    def test_get_current_arch(self):
+        """Current arch is reported"""
+        with self.create_dpkg("echo fooarch"):
+            subprocess.call(["dpkg"])
+            self.assertEquals(get_current_arch(), "fooarch")
+
+    def test_get_current_arch_twice(self):
+        """Current arch is reported twice and the same"""
+        with self.create_dpkg("echo fooarch"):
+            self.assertEquals(get_current_arch(), "fooarch")
+            self.assertEquals(get_current_arch(), "fooarch")
+
+    def test_get_current_arch_no_dpkg(self):
+        """Assert an error if dpkg exit with an error"""
+        with self.create_dpkg("exit 1"):
             self.assertRaises(subprocess.CalledProcessError, get_current_arch)
-        sys.path.remove(tmpdirname)
 
     @patch("udtc.tools.settings")
     def test_get_current_ubuntu_version(self, settings_module):
@@ -166,6 +179,21 @@ class TestTools(LoggedTestCase):
         settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("notexist")
         self.assertRaises(BaseException, get_current_ubuntu_version)
         self.expect_warn_error = True
+
+    def test_get_foreign_arch(self):
+        """Get current foreign arch (one)"""
+        with self.create_dpkg("echo fooarch"):
+            self.assertEquals(get_foreign_archs(), ["fooarch"])
+
+    def test_get_foreign_archs(self):
+        """Get current foreign arch (multiple)"""
+        with self.create_dpkg("echo fooarch\necho bararch\necho bazarch"):
+            self.assertEquals(get_foreign_archs(), ["fooarch", "bararch", "bazarch"])
+
+    def test_get_foreign_archs_error(self):
+        """Get current foreign arch raises an exception if dpkg is in error"""
+        with self.create_dpkg("exit 1"):
+            self.assertRaises(subprocess.CalledProcessError, get_foreign_archs)
 
 
 class TestToolsThreads(LoggedTestCase):
