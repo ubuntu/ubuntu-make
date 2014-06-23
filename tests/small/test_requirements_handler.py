@@ -275,6 +275,14 @@ class TestRequirementsHandler(LoggedTestCase):
         """Install bucket should return False if a bucket is installed"""
         self.assertFalse(self.handler.is_bucket_installed(['testpackage', 'testpackage1']))
 
+    def test_is_bucket_available(self):
+        """Test that an available bucket on that platform is reported"""
+        self.assertTrue(self.handler.is_bucket_available(['testpackage', 'testpackage1']))
+
+    def test_unavailable_bucket(self):
+        """Test that an unavailable bucket on that platform is reported"""
+        self.assertFalse(self.handler.is_bucket_available(['testpackage42', 'testpackage404']))
+
     def test_apt_cache_not_ready(self):
         """When the first apt.Cache() access tells it's not ready, we wait and recover"""
         origin_cache = apt.Cache

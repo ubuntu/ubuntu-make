@@ -18,22 +18,23 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-"""Framework with package requirements"""
+"""Framework with package requirements on Category"""
 
 import udtc.frameworks
 
 
-class CategoryF(udtc.frameworks.BaseCategory):
+class CategoryG(udtc.frameworks.BaseCategory):
 
     def __init__(self):
-        super().__init__(name="Category F", description="Category F to test installed state")
+        super().__init__(name="Category G", description="Category G to test installed state",
+                         packages_requirements=["baz"])
 
 
 class FrameworkA(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):
-        super().__init__(name="Framework A", description="Description for framework A (impossible path)",
-                         category=category, install_path_dir="/foo/bar/baz")
+        super().__init__(name="Framework A", description="Description for framework A (with add req.)",
+                         category=category, install_path_dir="/", packages_requirements=["buz", "biz"])
 
     def setup(self, install_path=None):
         super().setup(install_path=install_path)
@@ -42,19 +43,8 @@ class FrameworkA(udtc.frameworks.BaseFramework):
 class FrameworkB(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):
-        super().__init__(name="Framework B", description="Description for framework B (good install dir, "
-                                                         "no package req)",
+        super().__init__(name="Framework B", description="Description for framework B (with no req.)",
                          category=category, install_path_dir="/")
-
-    def setup(self, install_path=None):
-        super().setup(install_path=install_path)
-
-
-class FrameworkC(udtc.frameworks.BaseFramework):
-
-    def __init__(self, category):
-        super().__init__(name="Framework C", description="Description for framework C (good install dir, package req.)",
-                         category=category, install_path_dir="/", packages_requirements=["foo", "bar"])
 
     def setup(self, install_path=None):
         super().setup(install_path=install_path)

@@ -254,6 +254,10 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Framework is installed if right path but no package req."""
         self.assertTrue(self.CategoryHandler.categories["Category F"].frameworks["Framework B"].is_installed)
 
+    def test_check_unmatched_requirements_not_installed(self):
+        """Framework with unmatched requirements are not registered"""
+        self.assertIsNone(self.CategoryHandler.categories["Category F"].frameworks["Framework C"])
+
 
 class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with a valid configuration"""
@@ -429,6 +433,20 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
             requirement_mock.return_value.is_bucket_installed.assert_called_with(['foo', 'bar'])
             # we don't call is_bucket_available if requirements are met
             self.assertFalse(call(['foo', 'bar']) in requirement_mock.return_value.is_bucket_available.call_args_list)
+
+    def test_check_requirements_inherited_from_category(self):
+        """Framework without package requirements are inherited from category"""
+        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+            self.loadFramework("testframeworks")
+            self.assertEquals(self.CategoryHandler.categories["Category G"].frameworks["Framework B"]
+                              .packages_requirements, ["baz"])
+
+    def test_check_requirements_from_category_merge_into_exiting(self):
+        """Framework with package requirements merged them from the associated category"""
+        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+            self.loadFramework("testframeworks")
+            self.assertEquals(self.CategoryHandler.categories["Category G"].frameworks["Framework A"]
+                              .packages_requirements, ["buz", "biz", "baz"])
 
 
 class TestEmptyFrameworkLoader(BaseFrameworkLoader):

@@ -42,14 +42,14 @@ class BaseCategory():
     categories = NoneDict()
     main_category = None
 
-    def __init__(self, name, description="", logo_path=None, is_main_category=False, packages_requirements=[]):
+    def __init__(self, name, description="", logo_path=None, is_main_category=False, packages_requirements=None):
         self.name = name
         self.description = description
         self.logo_path = logo_path
         self.is_main_category = is_main_category
         self.default = None
         self.frameworks = NoneDict()
-        self.packages_requirements = packages_requirements
+        self.packages_requirements = [] if packages_requirements is None else packages_requirements
         if self.name in self.categories:
             logger.error("There is already a registered category with {} as a name. Don't register the second one."
                          .format(name))
@@ -106,15 +106,15 @@ class BaseCategory():
 class BaseFramework(metaclass=abc.ABCMeta):
 
     def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None,
-                 only_on_archs=[], only_ubuntu_version=[], packages_requirements=[]):
+                 only_on_archs=None, only_ubuntu_version=None, packages_requirements=None):
         self.name = name
         self.description = description
         self.logo_path = None
         self.category = category
         self.is_category_default = is_category_default
-        self.only_on_archs = only_on_archs
-        self.only_ubuntu_version = only_ubuntu_version
-        self.packages_requirements = packages_requirements
+        self.only_on_archs = [] if only_on_archs is None else only_on_archs
+        self.only_ubuntu_version = [] if only_ubuntu_version is None else only_ubuntu_version
+        self.packages_requirements = [] if packages_requirements is None else packages_requirements
         self.packages_requirements.extend(self.category.packages_requirements)
         self.need_root = False
 
