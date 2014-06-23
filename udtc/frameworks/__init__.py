@@ -42,13 +42,14 @@ class BaseCategory():
     categories = NoneDict()
     main_category = None
 
-    def __init__(self, name, description="", logo_path=None, is_main_category=False):
+    def __init__(self, name, description="", logo_path=None, is_main_category=False, packages_requirements=[]):
         self.name = name
         self.description = description
         self.logo_path = logo_path
         self.is_main_category = is_main_category
         self.default = None
         self.frameworks = NoneDict()
+        self.packages_requirements = packages_requirements
         if self.name in self.categories:
             logger.error("There is already a registered category with {} as a name. Don't register the second one."
                          .format(name))
@@ -114,10 +115,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.only_on_archs = only_on_archs
         self.only_ubuntu_version = only_ubuntu_version
         self.packages_requirements = packages_requirements
-
-        if not self.is_installable:
-            logger.info("Don't register {} as it's not installable on this configuration.".format(name))
-            return
+        self.packages_requirements.extend(self.category.packages_requirements)
+        self.need_root = False
 
         if self.is_category_default:
             if self.category == BaseCategory.main_category:
@@ -140,6 +139,12 @@ class BaseFramework(metaclass=abc.ABCMeta):
             self.install_path = config["frameworks"][category.name][name]["path"]
         except (TypeError, KeyError, FileNotFoundError):
             pass
+
+        # This requires install_path and will register need_root or not
+        if not self.is_installed and not self.is_installable:
+            logger.info("Don't register {} as it's not installable on this configuration.".format(name))
+            return
+
         category.register_framework(self)
 
     @property
@@ -159,6 +164,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
                     logger.debug("{} only supports {} and you are on {}.".format(self.name, self.only_ubuntu_version,
                                                                                  current_version))
                     return False
+            if not RequirementsHandler().is_bucket_available(self.packages_requirements):
+                return False
         except:
             logger.error("An error occurred when detecting platform, don't register {}".format(self.name))
             return False
@@ -185,7 +192,11 @@ class BaseFramework(metaclass=abc.ABCMeta):
         """Method call to know if the framework is installed"""
         if not os.path.isdir(self.install_path):
             return False
-        if not RequirementsHandler().is_bucket_installed(self.packages_requirements):
+        try:
+            if not RequirementsHandler().is_bucket_installed(self.packages_requirements):
+                self.need_root = True
+                return False
+        except KeyError:
             return False
         logger.debug("{} is installed".format(self.name))
         return True

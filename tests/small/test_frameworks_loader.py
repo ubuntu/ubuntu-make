@@ -28,7 +28,7 @@ from ..tools import get_data_dir, change_xdg_config_path, patchelem, LoggedTestC
 import udtc
 from udtc import frameworks
 from udtc.tools import NoneDict
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, call
 
 
 class BaseFrameworkLoader(LoggedTestCase):
@@ -254,20 +254,6 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Framework is installed if right path but no package req."""
         self.assertTrue(self.CategoryHandler.categories["Category F"].frameworks["Framework B"].is_installed)
 
-    def test_check_not_installed_wrong_requirements(self):
-        """Framework isn't installed if path and package requirements aren't met"""
-        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
-            requirement_mock.return_value.is_bucket_installed.return_value = False
-            self.assertFalse(self.CategoryHandler.categories["Category F"].frameworks["Framework C"].is_installed)
-            requirement_mock.return_value.is_bucket_installed.assert_called_with(['foo', 'bar'])
-
-    def test_check_installed_with_matched_requirements(self):
-        """Framework is installed if path and package requirements are met"""
-        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
-            requirement_mock.return_value.is_bucket_installed.return_value = True
-            self.assertTrue(self.CategoryHandler.categories["Category F"].frameworks["Framework C"].is_installed)
-            requirement_mock.return_value.is_bucket_installed.assert_called_with(['foo', 'bar'])
-
 
 class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with a valid configuration"""
@@ -392,12 +378,16 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
 
         self.categoryA = self.CategoryHandler.categories["Category A"]
 
+    def loadFramework(self, framework_name):
+        """Load framework name"""
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', framework_name):
+            frameworks.load_frameworks()
+
     def test_arch_report_issue_framework(self):
         """Framework where we can't reach arch and having a restriction isn't installable"""
         self.get_current_arch_mock.side_effect = BaseException('arch detection failure!')
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
-            frameworks.load_frameworks()
+        self.loadFramework("testframeworks")
 
         # restricted arch framework isn't installable
         self.assertIsNone(self.CategoryHandler.categories["Category D"].frameworks["Framework A"])
@@ -410,9 +400,7 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
     def test_version_report_issue_framework(self):
         """Framework where we can't reach version and having a restriction isn't installable"""
         self.get_current_ubuntu_version_mock.side_effect = BaseException('version detection failure!')
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
-            frameworks.load_frameworks()
+        self.loadFramework("testframeworks")
 
         # restricted version framework isn't installable
         self.assertIsNone(self.CategoryHandler.categories["Category D"].frameworks["Framework B"])
@@ -421,6 +409,26 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         # framework without any restriction is still installable
         self.assertTrue(self.CategoryHandler.categories["Category A"].frameworks["Framework A"].is_installable)
         self.expect_warn_error = True
+
+    def test_check_not_installed_wrong_requirements(self):
+        """Framework isn't installed if path and package requirements aren't met"""
+        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+            requirement_mock.return_value.is_bucket_installed.return_value = False
+            self.loadFramework("testframeworks")
+            self.assertFalse(self.CategoryHandler.categories["Category F"].frameworks["Framework C"].is_installed)
+            requirement_mock.return_value.is_bucket_installed.assert_called_with(['foo', 'bar'])
+            # is_bucket_available is called when it's not installed
+            requirement_mock.return_value.is_bucket_available.assert_any_calls(call(['foo', 'bar']))
+
+    def test_check_installed_with_matched_requirements(self):
+        """Framework is installed if path and package requirements are met"""
+        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+            requirement_mock.return_value.is_bucket_installed.return_value = True
+            self.loadFramework("testframeworks")
+            self.assertTrue(self.CategoryHandler.categories["Category F"].frameworks["Framework C"].is_installed)
+            requirement_mock.return_value.is_bucket_installed.assert_called_with(['foo', 'bar'])
+            # we don't call is_bucket_available if requirements are met
+            self.assertFalse(call(['foo', 'bar']) in requirement_mock.return_value.is_bucket_available.call_args_list)
 
 
 class TestEmptyFrameworkLoader(BaseFrameworkLoader):

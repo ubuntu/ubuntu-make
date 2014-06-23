@@ -59,6 +59,15 @@ class RequirementsHandler(object, metaclass=Singleton):
                 is_installed = False
         return is_installed
 
+    def is_bucket_available(self, bucket):
+        """Check if bucket available on the platform"""
+        all_in_cache = True
+        for pkg_name in bucket:
+            if pkg_name not in self.cache:
+                logger.info("{} isn't available on this platform".format(pkg_name))
+                all_in_cache = False
+        return all_in_cache
+
     def install_bucket(self, bucket, progress_callback, installed_callback):
         """Install a specific bucket. If any other bucket is in progress, queue the request
 
