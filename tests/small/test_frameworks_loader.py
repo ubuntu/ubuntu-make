@@ -258,6 +258,10 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Framework with unmatched requirements are not registered"""
         self.assertIsNone(self.CategoryHandler.categories["Category F"].frameworks["Framework C"])
 
+    def test_no_root_need_if_no_requirements(self):
+        """Framework with not requirements don't need root access"""
+        self.assertFalse(self.categoryA.frameworks["Framework A"].need_root_access)
+
 
 class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with a valid configuration"""
@@ -447,6 +451,22 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
             self.loadFramework("testframeworks")
             self.assertEquals(self.CategoryHandler.categories["Category G"].frameworks["Framework A"]
                               .packages_requirements, ["buz", "biz", "baz"])
+
+    def test_root_needed_if_not_matched_requirements(self):
+        """Framework with unmatched requirements need root access"""
+        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+            requirement_mock.return_value.is_bucket_installed.return_value = False
+            self.loadFramework("testframeworks")
+            self.assertTrue(self.CategoryHandler.categories["Category F"].frameworks["Framework C"].need_root_access)
+
+    def test_no_root_needed_if_matched_requirements_even_uninstalled(self):
+        """Framework which are uninstalled but with matched requirements doesn't need root access"""
+        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+            requirement_mock.return_value.is_bucket_installed.return_value = True
+            self.loadFramework("testframeworks")
+            # ensure the framework isn't installed, but the bucket being installed, we don't need root access
+            self.assertFalse(self.CategoryHandler.categories["Category F"].frameworks["Framework A"].is_installed)
+            self.assertFalse(self.CategoryHandler.categories["Category F"].frameworks["Framework A"].need_root_access)
 
 
 class TestEmptyFrameworkLoader(BaseFrameworkLoader):

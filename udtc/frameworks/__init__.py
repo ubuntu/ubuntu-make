@@ -21,6 +21,7 @@
 """Base Handling functions and base class of backends"""
 
 import abc
+from contextlib import suppress
 from importlib import import_module, reload
 import inspect
 import logging
@@ -116,7 +117,10 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.only_ubuntu_version = [] if only_ubuntu_version is None else only_ubuntu_version
         self.packages_requirements = [] if packages_requirements is None else packages_requirements
         self.packages_requirements.extend(self.category.packages_requirements)
-        self.need_root = False
+
+        self.need_root_access = False
+        with suppress(KeyError):
+            self.need_root_access = not RequirementsHandler().is_bucket_installed(self.packages_requirements)
 
         if self.is_category_default:
             if self.category == BaseCategory.main_category:
@@ -194,7 +198,6 @@ class BaseFramework(metaclass=abc.ABCMeta):
             return False
         try:
             if not RequirementsHandler().is_bucket_installed(self.packages_requirements):
-                self.need_root = True
                 return False
         except KeyError:
             return False
