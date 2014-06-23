@@ -146,7 +146,6 @@ class TestTools(LoggedTestCase):
     def test_get_current_arch(self):
         """Current arch is reported"""
         with self.create_dpkg("echo fooarch"):
-            subprocess.call(["dpkg"])
             self.assertEquals(get_current_arch(), "fooarch")
 
     def test_get_current_arch_twice(self):

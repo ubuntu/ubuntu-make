@@ -23,11 +23,13 @@ import apt
 import os
 import shutil
 import stat
+import subprocess
 import tempfile
 from time import time
 from ..tools import get_data_dir, LoggedTestCase
 from unittest.mock import Mock, call, patch
 from udtc.network.requirements_handler import RequirementsHandler
+from udtc import tools
 
 
 class TestRequirementsHandler(LoggedTestCase):
@@ -81,9 +83,11 @@ class TestRequirementsHandler(LoggedTestCase):
         self.done_callback = Mock()
 
     def tearDown(self):
-        super().tearDown()
-        shutil.rmtree(self.chroot_path)
+        tools._current_arch = None
+        tools._foreign_arch = None
+        #shutil.rmtree(self.chroot_path)
         os.remove(self.dpkg)
+        super().tearDown()
 
     def count_number_progress_call(self, call_args_list, tag):
         """Count the number of tag in progress call and return it"""
@@ -283,6 +287,32 @@ class TestRequirementsHandler(LoggedTestCase):
         """Test that an unavailable bucket on that platform is reported"""
         self.assertFalse(self.handler.is_bucket_available(['testpackage42', 'testpackage404']))
 
+    def test_is_bucket_available_foreign_archs(self):
+        """After adding a foreign arch, test that the package is available on it"""
+        subprocess.call([self.dpkg, "--add-architecture", "foo"])
+        # fake cache handler as didn't find an easy way to mock in the set
+        self.handler.cache = {"testpackage:foo": "", 'testpackage1': ""}
+        with patch("udtc.network.requirements_handler.get_foreign_archs") as get_foreign_call:
+            get_foreign_call.return_value = ["foo"]
+            self.assertTrue(self.handler.is_bucket_available(['testpackage:foo', 'testpackage1']))
+
+    def test_is_bucket_unavailable__with_foreign_archs(self):
+        """After adding a foreign arch, test that the package is unavailable and report so"""
+        subprocess.call([self.dpkg, "--add-architecture", "foo"])
+        self.handler.cache = apt.Cache()
+        with patch("udtc.network.requirements_handler.get_foreign_archs") as get_foreign_call:
+            get_foreign_call.return_value = ["foo"]
+            self.assertFalse(self.handler.is_bucket_available(['testpackage:foo', 'testpackage1']))
+
+    def test_bucket_unavailable_but_foreign_archs_no_added(self):
+        """Bucket is set as available when foreign arch not added"""
+        self.assertTrue(self.handler.is_bucket_available(['testpackage:foo', 'testpackage1']))
+
+    def test_bucket_unavailable_foreign_archs_no_added_another_package_not_available(self):
+        """Bucket is set as unavailable when foreign arch not added, but another package on current arch is
+         unavailable"""
+        self.assertFalse(self.handler.is_bucket_available(['testpackage:foo', 'testpackage123']))
+
     def test_apt_cache_not_ready(self):
         """When the first apt.Cache() access tells it's not ready, we wait and recover"""
         origin_cache = apt.Cache
@@ -331,3 +361,43 @@ class TestRequirementsHandler(LoggedTestCase):
         self.assertIsNone(self.done_callback.call_args[0][0].error)
         self.assertTrue(self.handler.is_bucket_installed(["testpackage", "testpackage0"]))
         self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.1")
+
+    def test_install_with_foreign_foreign_arch_added(self):
+        """Install packages with a foreign arch added"""
+        subprocess.call([self.dpkg, "--add-architecture", "foo"])
+        executor_init = self.handler.executor
+        self.handler.executor = Mock()
+        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock,\
+                patch("udtc.network.requirements_handler.get_foreign_archs") as get_foreign_call:
+            get_foreign_call.return_value = ["foo"]
+            self.handler.install_bucket(["testpackage:foo", "testpackage1"], lambda x, y: "", lambda: "")
+            self.assertFalse(subprocess_mock.call.called)
+            self.assertTrue(self.handler.executor.submit.called)
+        self.handler.executor = executor_init
+
+    def test_install_with_foreign_foreign_arch_not_added(self):
+        """Install packages with a foreign arch, while the foreign arch wasn't added"""
+        executor_init = self.handler.executor
+        self.handler.executor = Mock()
+        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock,\
+                patch("udtc.network.requirements_handler.get_foreign_archs") as get_foreign_call:
+            get_foreign_call.return_value = []
+            self.handler.install_bucket(["testpackage:foo", "testpackage1"], lambda x, y: "", lambda: "")
+            self.assertTrue(subprocess_mock.call.called)
+            self.assertTrue(self.handler.executor.submit.called)
+        self.handler.executor = executor_init
+
+    def test_install_with_foreign_foreign_arch_add_fails(self):
+        """Install packages with a foreign arch, where adding a foreign arch fails"""
+        executor_init = self.handler.executor
+        self.handler.executor = Mock()
+        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock,\
+                patch("udtc.network.requirements_handler.get_foreign_archs") as get_foreign_call:
+            subprocess_mock.call.return_value = False
+            get_foreign_call.return_value = []
+            self.assertRaises(BaseException, self.handler.install_bucket, ["testpackage:foo", "testpackage1"],
+                              lambda x, y: "", lambda: "")
+            self.assertTrue(subprocess_mock.call.called)
+            self.assertFalse(self.handler.executor.submit.called)
+        self.handler.executor = executor_init
+        self.expect_warn_error = True

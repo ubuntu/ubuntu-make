@@ -28,9 +28,10 @@ from contextlib import suppress
 import fcntl
 import logging
 import os
+import subprocess
 import tempfile
 import time
-from udtc.tools import Singleton
+from udtc.tools import Singleton, get_foreign_archs, get_current_arch
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +65,13 @@ class RequirementsHandler(object, metaclass=Singleton):
         all_in_cache = True
         for pkg_name in bucket:
             if pkg_name not in self.cache:
+                # this can be also a foo:arch and we don't have <arch> added. Tell is may be available
+                if ":" in pkg_name:
+                    arch = pkg_name.split(":", -1)[-1]
+                    if arch not in get_foreign_archs():
+                        logger.info("{} isn't available on this platform, but {} isn't enabled. So it may be available "
+                                    "later on".format(pkg_name, arch))
+                        continue
                 logger.info("{} isn't available on this platform".format(pkg_name))
                 all_in_cache = False
         return all_in_cache
@@ -80,6 +88,18 @@ class RequirementsHandler(object, metaclass=Singleton):
             "installed_callback": installed_callback
         }
 
+        for pkg_name in bucket:
+            if ":" in pkg_name:
+                arch = pkg_name.split(":", -1)[-1]
+                # try to add the arch
+                if arch not in get_foreign_archs() and arch != get_current_arch():
+                    logger.info("Adding foreign arch: {}".format(arch))
+                    with open(os.devnull, "w") as f:
+                        if not subprocess.call(["dpkg", "--add-architecture", arch], stdout=f):
+                            msg = "Can't add foreign foreign architecture {}".format(arch)
+                            logger.error(msg)
+                            raise BaseException(msg)
+                        self._force_load_apt_cache()
         future = self.executor.submit(self._really_install_bucket, bucket_pack)
         future.tag_bucket = bucket_pack
         future.add_done_callback(self._on_done)
