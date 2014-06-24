@@ -51,11 +51,12 @@ class BaseCategory():
         self.default = None
         self.frameworks = NoneDict()
         self.packages_requirements = [] if packages_requirements is None else packages_requirements
-        if self.name in self.categories:
+        if self.prog_name in self.categories:
             logger.error("There is already a registered category with {} as a name. Don't register the second one."
                          .format(name))
         else:
-            self.categories[self.name] = self
+            self.categories[self.prog_name] = self
+        print(self.categories[self.prog_name])
 
     @classproperty
     def main_category(self):
@@ -79,11 +80,11 @@ class BaseCategory():
 
     def register_framework(self, framework):
         """Register a new framework"""
-        if framework.name in self.frameworks:
+        if framework.prog_name in self.frameworks:
             logger.error("There is already a registered framework with {} as a name. Don't register the second one."
                          .format(framework.name))
         else:
-            self.frameworks[framework.name] = framework
+            self.frameworks[framework.prog_name] = framework
 
     @property
     def is_installed(self):
@@ -140,7 +141,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         # check if we have an install path previously set
         config = ConfigHandler().config
         try:
-            self.install_path = config["frameworks"][category.name][name]["path"]
+            self.install_path = config["frameworks"][category.prog_name][self.prog_name]["path"]
         except (TypeError, KeyError, FileNotFoundError):
             pass
 
@@ -187,8 +188,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
             self.install_path = install_path
         config = ConfigHandler().config
         config.setdefault("frameworks", {})\
-              .setdefault(self.category.name, {})\
-              .setdefault(self.name, {})["path"] = self.install_path
+              .setdefault(self.category.prog_name, {})\
+              .setdefault(self.prog_name, {})["path"] = self.install_path
         ConfigHandler().config = config
 
     @property
