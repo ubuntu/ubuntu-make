@@ -30,10 +30,12 @@ logger = logging.getLogger(__name__)
 def run_command_for_args(args):
     """Run correct command for args"""
     # args.category can be a category or a framework in main
+    target = None
     try:
-        BaseCategory.categories[args.category].run_for(args)
+        target = BaseCategory.categories[args.category]
     except AttributeError:
-        BaseCategory.main_category.frameworks[args.category].run_for(args)
+        target = BaseCategory.main_category.frameworks[args.category]
+    target.run_for(args)
 
 
 def main(parser):
