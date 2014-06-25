@@ -1,0 +1,2 @@
+# just source that file to enable shell completion on udtc
+eval "$(register-python-argcomplete ./developer-tools-center)"

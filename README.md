@@ -18,6 +18,13 @@ You can of course use --help to get more information and change the verbosity of
 
 > Note that this project is using python3 and requires at least python 3.3. All commands are using the python 3 version. See later on how installing the corresponding virtualenv.
 
+
+## Shell completion
+
+To enable shell completion on bash or zsh, just run:
+
+    $ . enable_completion
+
 ## Different level of logging
 
 Multiple logging profiles are available in *confs/* to be able to have different traces of your execution (useful when debugging in particular). For instance, you will find:
