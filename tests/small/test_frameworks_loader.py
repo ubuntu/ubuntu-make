@@ -272,28 +272,24 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args = Mock()
         args.category = "category-a"
         args.framework = "framework-b"
-        run_for_call = self.CategoryHandler.categories[args.category].frameworks["framework-b"].run_for
-        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], 'run_for')\
-                as run_for_mock:
-            run_for_mock.side_effect = run_for_call
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "setup")\
+                as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
 
-            self.assertTrue(run_for_mock.called)
-            self.assertEquals(run_for_mock.call_args, call(args))
+            self.assertTrue(setup_call.called)
+            self.assertEquals(setup_call.call_args, call(args.destdir))
 
     def test_parse_no_framework_run_default_for_category(self):
         """Parsing category will run default framework"""
         args = Mock()
         args.category = "category-a"
         args.framework = None
-        run_for_call = self.CategoryHandler.categories[args.category].frameworks["framework-a"].run_for
-        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], 'run_for')\
-                as run_for_mock:
-            run_for_mock.side_effect = run_for_call
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "setup")\
+                as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
 
-            self.assertTrue(run_for_mock.called)
-            self.assertEquals(run_for_mock.call_args, call(args))
+            self.assertTrue(setup_call.called)
+            self.assertEquals(setup_call.call_args, call(args.destdir))
 
     def test_parse_no_framework_with_no_default_returns_errors(self):
         """Parsing a category with no default returns an error when calling run"""
@@ -596,7 +592,7 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         """No category or framework returns an empty namespace"""
         main_parser = argparse.ArgumentParser()
         self.install_category_parser(main_parser, ['category-a'])
-        self.assertEquals(main_parser.parse_args([]), argparse.Namespace())
+        self.assertEquals(main_parser.parse_args([]), argparse.Namespace(category=None))
 
     def test_install_category_with_no_framework(self):
         """Install category with no framework returns None"""
@@ -626,7 +622,9 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         main_parser = argparse.ArgumentParser()
         self.install_category_parser(main_parser, ['main'])
         args = main_parser.parse_args(["framework-free-a"])
-        self.CategoryHandler.main_category.frameworks["framework-free-a"].run_for(args)
+        with patch.object(self.CategoryHandler.main_category.frameworks["framework-free-a"], "setup") as setup_call:
+            self.CategoryHandler.main_category.frameworks["framework-free-a"].run_for(args)
+            self.assertTrue(setup_call.called)
 
 
 class TestEmptyFrameworkLoader(BaseFrameworkLoader):

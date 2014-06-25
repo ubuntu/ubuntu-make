@@ -247,6 +247,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
     def run_for(self, args):
         """Running commands from args namespace"""
         logger.debug("Call run_for on {}".format(self.name))
+        self.setup(args.destdir)
 
 
 class MainCategory(BaseCategory):
