@@ -19,6 +19,7 @@
 
 """Tests the framework loader"""
 
+import argparse
 from contextlib import suppress
 import importlib
 import os
@@ -266,6 +267,42 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Framework with not requirements don't need root access"""
         self.assertFalse(self.categoryA.frameworks["framework-a"].need_root_access)
 
+    def test_parse_category_and_framework_run_correct_framework(self):
+        """Parsing category and framework return right category and framework"""
+        args = Mock()
+        args.category = "category-a"
+        args.framework = "framework-b"
+        run_for_call = self.CategoryHandler.categories[args.category].frameworks["framework-b"].run_for
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], 'run_for')\
+                as run_for_mock:
+            run_for_mock.side_effect = run_for_call
+            self.CategoryHandler.categories[args.category].run_for(args)
+
+            self.assertTrue(run_for_mock.called)
+            self.assertEquals(run_for_mock.call_args, call(args))
+
+    def test_parse_no_framework_run_default_for_category(self):
+        """Parsing category will run default framework"""
+        args = Mock()
+        args.category = "category-a"
+        args.framework = None
+        run_for_call = self.CategoryHandler.categories[args.category].frameworks["framework-a"].run_for
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], 'run_for')\
+                as run_for_mock:
+            run_for_mock.side_effect = run_for_call
+            self.CategoryHandler.categories[args.category].run_for(args)
+
+            self.assertTrue(run_for_mock.called)
+            self.assertEquals(run_for_mock.call_args, call(args))
+
+    def test_parse_no_framework_with_no_default_returns_errors(self):
+        """Parsing a category with no default returns an error when calling run"""
+        args = Mock()
+        args.category = "category-b"
+        args.framework = None
+        self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
+        self.expect_warn_error = True
+
 
 class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with a valid configuration"""
@@ -388,13 +425,23 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         self.restore_arch_version()
         super().tearDown()
 
-        self.categoryA = self.CategoryHandler.categories["category-a"]
-
     def loadFramework(self, framework_name):
         """Load framework name"""
         with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(udtc.frameworks, '__package__', framework_name):
             frameworks.load_frameworks()
+
+    def install_category_parser(self, main_parser, categories=[]):
+        """Install parser for those categories"""
+        categories_parser = main_parser.add_subparsers(dest="category")
+        category_parsers = []
+        for category in categories:
+            with patch('udtc.frameworks.is_completion_mode') as completionmode_mock:
+                completionmode_mock.return_value = False
+                self.loadFramework("testframeworks")
+                category_parsers.append(self.CategoryHandler.categories[category]
+                                        .install_category_parser(categories_parser))
+        return category_parsers
 
     def test_arch_report_issue_framework(self):
         """Framework where we can't reach arch and having a restriction isn't installable"""
@@ -471,6 +518,115 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
             # ensure the framework isn't installed, but the bucket being installed, we don't need root access
             self.assertFalse(self.CategoryHandler.categories["category-f"].frameworks["framework-a"].is_installed)
             self.assertFalse(self.CategoryHandler.categories["category-f"].frameworks["framework-a"].need_root_access)
+
+    def test_completion_mode_dont_use_expensive_calls(self):
+        """Completion mode bypass expensive calls and so, register all frameworks"""
+        with patch('udtc.frameworks.ConfigHandler') as config_handler_mock,\
+                patch('udtc.frameworks.RequirementsHandler') as requirementhandler_mock,\
+                patch('udtc.frameworks.is_completion_mode') as completionmode_mock:
+            completionmode_mock.return_value = True
+            self.loadFramework("testframeworks")
+
+            self.assertTrue(completionmode_mock.called)
+            self.assertFalse(len(config_handler_mock.return_value.config.mock_calls) > 0)
+            self.assertFalse(requirementhandler_mock.return_value.is_bucket_installed.called)
+            # test that a non installed framework is registered
+            self.assertIsNotNone(self.CategoryHandler.categories["category-e"].frameworks["framework-c"])
+
+    def test_use_expensive_calls_when_not_in_completion_mode(self):
+        """Non completion mode have expensive calls and don't register all frameworks"""
+        with patch('udtc.frameworks.ConfigHandler') as config_handler_mock,\
+                patch('udtc.frameworks.RequirementsHandler') as requirementhandler_mock,\
+                patch('udtc.frameworks.is_completion_mode') as completionmode_mock:
+            completionmode_mock.return_value = False
+            self.loadFramework("testframeworks")
+
+            self.assertTrue(completionmode_mock.called)
+            self.assertTrue(len(config_handler_mock.return_value.config.mock_calls) > 0)
+            self.assertTrue(requirementhandler_mock.return_value.is_bucket_installed.called)
+            # test that a non installed framework is registered
+            self.assertIsNone(self.CategoryHandler.categories["category-e"].frameworks["framework-c"])
+
+    def test_install_category_and_framework_parsers(self):
+        """Install category and framework parsers contains works"""
+        main_parser = argparse.ArgumentParser()
+        categories_parser = main_parser.add_subparsers()
+        with patch('udtc.frameworks.is_completion_mode') as completionmode_mock:
+            completionmode_mock.return_value = False
+            self.loadFramework("testframeworks")
+            category_parser = self.CategoryHandler.categories['category-a'].install_category_parser(categories_parser)
+
+            self.assertTrue('category-a' in categories_parser.choices)
+            self.assertTrue('framework-a' in category_parser.choices)
+            self.assertTrue('framework-b' in category_parser.choices)
+
+    def test_parse_category_and_framework(self):
+        """Parsing category and framework return right category and framework"""
+        main_parser = argparse.ArgumentParser()
+        self.install_category_parser(main_parser, ['category-a'])
+        args = main_parser.parse_args(["category-a", "framework-a"])
+        self.assertEquals(args.category, "category-a")
+        self.assertEquals(args.framework, "framework-a")
+        self.assertEquals(args.destdir, None)
+
+    def test_parse_invalid_categories_raise_exit_error(self):
+        """Invalid categories parse requests exit"""
+        def error_without_message(x):
+            raise SystemExit()
+        main_parser = argparse.ArgumentParser()
+        main_parser.print_usage = lambda x: ""
+        main_parser.error = error_without_message
+        self.install_category_parser(main_parser, [])
+
+        self.assertRaises(SystemExit, main_parser.parse_args, ["category-a", "framework-a"])
+
+    def test_parse_invalid_frameworks_return_error(self):
+        """Invalid framework parse requests exit"""
+        def error_without_message(x):
+            raise SystemExit()
+        main_parser = argparse.ArgumentParser()
+        self.install_category_parser(main_parser, ["category-a"])
+        category_parser = main_parser._actions[1].choices["category-a"]
+        category_parser.print_usage = lambda x: ""
+        category_parser.error = error_without_message
+
+        self.assertRaises(SystemExit, main_parser.parse_args, ["category-a", "framework-aa"])
+
+    def test_parse_no_category_return_empty_namespace(self):
+        """No category or framework returns an empty namespace"""
+        main_parser = argparse.ArgumentParser()
+        self.install_category_parser(main_parser, ['category-a'])
+        self.assertEquals(main_parser.parse_args([]), argparse.Namespace())
+
+    def test_install_category_with_no_framework(self):
+        """Install category with no framework returns None"""
+        main_parser = argparse.ArgumentParser()
+        self.assertEquals(self.install_category_parser(main_parser, ['empty-category']), [None])
+
+    def test_install_main_category(self):
+        """Main category install directly at root of the parser"""
+        main_parser = argparse.ArgumentParser()
+        main_cat_parser = self.install_category_parser(main_parser, ['main'])[0]
+
+        self.assertTrue('framework-free---b' in main_cat_parser.choices)
+        self.assertTrue('framework-free-a' in main_cat_parser.choices)
+        self.assertFalse('framework-a' in main_cat_parser.choices)
+
+    def test_parse_main_category(self):
+        """Main category elements can be directly accessed"""
+        main_parser = argparse.ArgumentParser()
+        self.install_category_parser(main_parser, ['main'])
+        args = main_parser.parse_args(["framework-free-a"])
+        self.assertEquals(args.category, "framework-free-a")
+        self.assertEquals(args.destdir, None)
+        self.assertFalse("framework" in args)
+
+    def test_run_framework_in_main_category(self):
+        """Frameworks command from main category can be run as usual"""
+        main_parser = argparse.ArgumentParser()
+        self.install_category_parser(main_parser, ['main'])
+        args = main_parser.parse_args(["framework-free-a"])
+        self.CategoryHandler.main_category.frameworks["framework-free-a"].run_for(args)
 
 
 class TestEmptyFrameworkLoader(BaseFrameworkLoader):

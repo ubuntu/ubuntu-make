@@ -29,7 +29,8 @@ import os
 import pkgutil
 import sys
 from udtc.network.requirements_handler import RequirementsHandler
-from udtc.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version
+from udtc.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
+    is_completion_mode
 from udtc.settings import DEFAULT_INSTALL_TOOLS_PATH
 
 
@@ -56,7 +57,6 @@ class BaseCategory():
                          .format(name))
         else:
             self.categories[self.prog_name] = self
-        print(self.categories[self.prog_name])
 
     @classproperty
     def main_category(self):
@@ -96,6 +96,21 @@ class BaseCategory():
             return self.FULLY_INSTALLED
         return self.PARTIALLY_INSTALLED
 
+    def install_category_parser(self, parser):
+        """Install category parser and get frameworks"""
+        if not self.has_frameworks():
+            logging.debug("Skipping {} having no framework".format(self.name))
+            return
+        # framework parser is directly category parser
+        if self.is_main_category:
+            category_subparser = parser
+        else:
+            category_parser = parser.add_parser(self.prog_name, help=self.description)
+            category_subparser = category_parser.add_subparsers(dest="framework")
+        for framework in self.frameworks.values():
+            framework.install_framework_parser(category_subparser)
+        return category_subparser
+
     def has_frameworks(self):
         """Return if a category has at least one framework"""
         return len(self.frameworks) > 0
@@ -103,6 +118,18 @@ class BaseCategory():
     def has_one_framework(self):
         """Return if a category has one framework"""
         return len(self.frameworks) == 1
+
+    def run_for(self, args):
+        """Running commands from args namespace"""
+        # try to call default framework if any
+        if not args.framework:
+            if not self.default_framework:
+                message = "A default framework for category {} was requested where there is none".format(self.name)
+                logger.error(message)
+                raise BaseException(message)
+            self.default_framework.run_for(args)
+            return
+        self.frameworks[args.framework].run_for(args)
 
 
 class BaseFramework(metaclass=abc.ABCMeta):
@@ -118,6 +145,12 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.only_ubuntu_version = [] if only_ubuntu_version is None else only_ubuntu_version
         self.packages_requirements = [] if packages_requirements is None else packages_requirements
         self.packages_requirements.extend(self.category.packages_requirements)
+
+        # don't detect anything for completion mode (as we need to be quick), so avoid opening apt cache and detect
+        # if it's installed.
+        if is_completion_mode():
+            category.register_framework(self)
+            return
 
         self.need_root_access = False
         with suppress(KeyError):
@@ -204,6 +237,16 @@ class BaseFramework(metaclass=abc.ABCMeta):
             return False
         logger.debug("{} is installed".format(self.name))
         return True
+
+    def install_framework_parser(self, parser):
+        """Install framework parser"""
+        framework_parser = parser.add_parser(self.prog_name, help=self.description)
+        framework_parser.add_argument('destdir', nargs='?')
+        return framework_parser
+
+    def run_for(self, args):
+        """Running commands from args namespace"""
+        logger.debug("Call run_for on {}".format(self.name))
 
 
 class MainCategory(BaseCategory):

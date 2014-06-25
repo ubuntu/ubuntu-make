@@ -61,9 +61,9 @@ class TestConfigHandler(LoggedTestCase):
         change_xdg_config_path(self.config_dir_for_name("valid"))
         self.assertEquals(ConfigHandler().config,
                           {'frameworks': {
-                              'Category A': {
-                                  'Framework A': {'path': '/home/didrocks/quickly/ubuntu-developer-tools/adt-eclipse'},
-                                  'Framework/B': {'path': '/home/didrocks/foo/bar/android-studio'}
+                              'category-a': {
+                                  'framework-a': {'path': '/home/didrocks/quickly/ubuntu-developer-tools/adt-eclipse'},
+                                  'framework-b': {'path': '/home/didrocks/foo/bar/android-studio'}
                               }
                           }})
 
@@ -124,6 +124,8 @@ class TestTools(LoggedTestCase):
         tools._current_arch = None
         tools._foreign_arch = None
         tools._version = None
+        with suppress(KeyError):
+            os.environ.pop("_ARGCOMPLETE")
         super().tearDown()
 
     def get_lsb_release_filepath(self, name):
@@ -193,6 +195,15 @@ class TestTools(LoggedTestCase):
         """Get current foreign arch raises an exception if dpkg is in error"""
         with self.create_dpkg("exit 1"):
             self.assertRaises(subprocess.CalledProcessError, get_foreign_archs)
+
+    def test_in_completion_mode(self):
+        """We return if we are in completion mode"""
+        os.environ["_ARGCOMPLETE"] = "1"
+        self.assertTrue(tools.is_completion_mode())
+
+    def test_not_incompletion_mode(self):
+        """We are not in completion mode by default"""
+        self.assertFalse(tools.is_completion_mode())
 
 
 class TestToolsThreads(LoggedTestCase):

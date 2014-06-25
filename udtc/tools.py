@@ -133,3 +133,10 @@ def in_mainloop_thread(function):
     def inner(*args, **kwargs):
         return GLib.idle_add(function, *args, **kwargs)
     return inner
+
+
+def is_completion_mode():
+    """Return true if we are in completion mode"""
+    if os.environ.get('_ARGCOMPLETE') == '1':
+        return True
+    return False
