@@ -23,8 +23,10 @@ from gettext import gettext as _
 import logging
 import logging.config
 import os
+import sys
 from textwrap import dedent
-from udtc.network.download_center import DownloadCenter
+from udtc.frameworks import BaseCategory, load_frameworks
+from .ui import cli
 import yaml
 
 gettext.textdomain("ubuntu-developer-tools-center")
@@ -71,16 +73,17 @@ def get_data_dir():
     return _datadir
 
 
-def main():
-    """Main entry point of the program"""
-
-    parser = argparse.ArgumentParser(description=_("Deploy and setup developers environment easily on ubuntu"),
-                                     epilog=dedent(_("""\
-                                         Note that you can also configure different debug logs behaviors using LOG_CFG
-                                         pointing to a log yaml profile.
-                                         """)))
-    parser.add_argument("-v", "--verbose", action="count", default=0, help=_("increase output verbosity (2 levels)"))
-    args = parser.parse_args()
+def set_logging_from_args(args, parser):
+    """Choose logging ignoring any unknown sys.argv options"""
+    result_verbosity_arg = []
+    for arg in args:
+        if arg.startswith("-v"):
+            for char in arg:
+                if char not in ['-', 'v']:
+                    break
+            else:
+                result_verbosity_arg.append(arg)
+    args = parser.parse_args(result_verbosity_arg)
 
     # setup logging level if set by the command line
     if args.verbose == 1:
@@ -90,4 +93,38 @@ def main():
     else:
         _setup_logging()
 
-    DownloadCenter(["http://victorlin.me/posts/2012/08/26/good-logging-practice-in-python"], lambda x: print(x))
+
+class _HelpAction(argparse._HelpAction):
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        parser.print_help()
+        # retrieve subparsers from parser
+        subparsers_actions = [
+            action for action in parser._actions
+            if isinstance(action, argparse._SubParsersAction)]
+        for subparsers_action in subparsers_actions:
+            # get all subparsers and print help
+            for choice, subparser in subparsers_action.choices.items():
+                print(_("* Command '{}':").format(choice))
+                print(subparser.format_help())
+        parser.exit()
+
+
+def main():
+    """Main entry point of the program"""
+
+    parser = argparse.ArgumentParser(description=_("Deploy and setup developers environment easily on ubuntu"),
+                                     epilog=dedent(_("""\
+                                         Note that you can also configure different debug logs behaviors using LOG_CFG
+                                         pointing to a log yaml profile.
+                                         """)),
+                                     add_help=False)
+    parser.add_argument('--help', action=_HelpAction, help='help for help if you need some help')  # add custom help
+    parser.add_argument("-v", "--verbose", action="count", default=0, help=_("increase output verbosity (2 levels)"))
+
+    # set logging ignoring unknown options
+    set_logging_from_args(sys.argv, parser)
+
+    # load frameworks and initialize parser
+    load_frameworks()
+    cli.main(parser)
