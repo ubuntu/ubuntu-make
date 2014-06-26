@@ -85,7 +85,7 @@ class TestRequirementsHandler(LoggedTestCase):
     def tearDown(self):
         tools._current_arch = None
         tools._foreign_arch = None
-        #shutil.rmtree(self.chroot_path)
+        shutil.rmtree(self.chroot_path)
         os.remove(self.dpkg)
         super().tearDown()
 
