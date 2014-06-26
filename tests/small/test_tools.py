@@ -41,10 +41,16 @@ from unittest.mock import patch
 class TestConfigHandler(LoggedTestCase):
     """This will test the config handler using xdg dirs"""
 
+    def setUp(self):
+        super().setUp()
+        self.config_dir = tempfile.mkdtemp()
+        change_xdg_path('XDG_CONFIG_HOME', self.config_dir)
+
     def tearDown(self):
         # remove caching
         Singleton._instances = {}
         change_xdg_path('XDG_CONFIG_HOME', remove=True)
+        shutil.rmtree(self.config_dir)
         super().tearDown()
 
     def config_dir_for_name(self, name):
@@ -81,34 +87,28 @@ class TestConfigHandler(LoggedTestCase):
 
     def test_save_new_config(self):
         """Save a new config in a vanilla directory"""
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            change_xdg_path('XDG_CONFIG_HOME', tmpdirname)
-            content = {'foo': 'bar'}
-            ConfigHandler().config = content
+        content = {'foo': 'bar'}
+        ConfigHandler().config = content
 
-            self.assertEquals(ConfigHandler().config, content)
-            with open(os.path.join(tmpdirname, settings.CONFIG_FILENAME)) as f:
-                self.assertEquals(f.read(), 'foo: bar\n')
+        self.assertEquals(ConfigHandler().config, content)
+        with open(os.path.join(self.config_dir, settings.CONFIG_FILENAME)) as f:
+            self.assertEquals(f.read(), 'foo: bar\n')
 
     def test_save_config_existing(self):
         """Replace an existing config with a new one"""
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            change_xdg_path('XDG_CONFIG_HOME', tmpdirname)
-            shutil.copy(os.path.join(self.config_dir_for_name('valid'), settings.CONFIG_FILENAME), tmpdirname)
-            content = {'foo': 'bar'}
-            ConfigHandler().config = content
+        shutil.copy(os.path.join(self.config_dir_for_name('valid'), settings.CONFIG_FILENAME), self.config_dir)
+        content = {'foo': 'bar'}
+        ConfigHandler().config = content
 
-            self.assertEquals(ConfigHandler().config, content)
-            with open(os.path.join(tmpdirname, settings.CONFIG_FILENAME)) as f:
-                self.assertEquals(f.read(), 'foo: bar\n')
+        self.assertEquals(ConfigHandler().config, content)
+        with open(os.path.join(self.config_dir, settings.CONFIG_FILENAME)) as f:
+            self.assertEquals(f.read(), 'foo: bar\n')
 
     def test_dont_create_file_without_assignment(self):
         """We don't create any file without an assignment"""
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            change_xdg_path('XDG_CONFIG_HOME', tmpdirname)
-            ConfigHandler()
+        ConfigHandler()
 
-            self.assertEquals(len(os.listdir(tmpdirname)), 0)
+        self.assertEquals(len(os.listdir(self.config_dir)), 0)
 
 
 class TestTools(LoggedTestCase):
