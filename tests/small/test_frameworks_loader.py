@@ -25,7 +25,7 @@ import importlib
 import os
 import sys
 import tempfile
-from ..tools import get_data_dir, change_xdg_config_path, patchelem, LoggedTestCase, ConfigHandler
+from ..tools import get_data_dir, change_xdg_path, patchelem, LoggedTestCase, ConfigHandler
 import udtc
 from udtc import frameworks
 from udtc.tools import NoneDict
@@ -44,11 +44,10 @@ class BaseFrameworkLoader(LoggedTestCase):
     def setUp(self):
         """Ensure we don't have any config file loaded"""
         super().setUp()
-        change_xdg_config_path(self.config_dir_for_name("foo"))
+        change_xdg_path('XDG_CONFIG_HOME', self.config_dir_for_name("foo"))
 
     def tearDown(self):
-        with suppress(KeyError):
-            os.environ.pop('XDG_CONFIG_HOME')
+        change_xdg_path('XDG_CONFIG_HOME', remove=True)
         super().tearDown()
 
     def config_dir_for_name(self, name):
@@ -317,7 +316,7 @@ class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
     def setUp(self):
         # load valid configuration
         super().setUp()
-        change_xdg_config_path(self.config_dir_for_name("valid"))
+        change_xdg_path('XDG_CONFIG_HOME', self.config_dir_for_name("valid"))
         # load custom framework-directory
         with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(udtc.frameworks, '__package__', "testframeworks"):
@@ -367,13 +366,14 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
     def tearDown(self):
         # we reset the loaded categories
         self.CategoryHandler.categories = NoneDict()
+        change_xdg_path('XDG_CONFIG_HOME', remove=True)
         super().tearDown()
 
     def test_call_setup_save_config(self):
         """Calling setup save path in the configuration"""
         with tempfile.TemporaryDirectory() as tmpdirname:
             # load custom framework-directory
-            change_xdg_config_path(tmpdirname)
+            change_xdg_path('XDG_CONFIG_HOME', tmpdirname)
             self.categoryA.frameworks["framework-b"].setup()
 
             self.assertEquals(ConfigHandler().config,
@@ -386,7 +386,7 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         """Calling setup with a custom install path save it in the configuration"""
         with tempfile.TemporaryDirectory() as tmpdirname:
             # load custom framework-directory
-            change_xdg_config_path(tmpdirname)
+            change_xdg_path('XDG_CONFIG_HOME', tmpdirname)
             self.categoryA.frameworks["framework-b"].setup(install_path="/home/foo/bar")
 
             self.assertEquals(ConfigHandler().config,

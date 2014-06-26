@@ -80,13 +80,18 @@ class CopyingMock(Mock):
         return super(CopyingMock, self).__call__(*args, **kwargs)
 
 
-def change_xdg_config_path(dirname):
-    os.environ['XDG_CONFIG_HOME'] = dirname
+def change_xdg_path(key, value=None, remove=False):
+    if value:
+        os.environ[key] = value
+    if remove:
+        with suppress(KeyError):
+            os.environ.pop(key)
     import udtc.tools
     importlib.reload(xdg.BaseDirectory)
     with suppress(KeyError):
         Singleton._instances.pop(ConfigHandler)
     udtc.tools.xdg_config_home = xdg.BaseDirectory.xdg_config_home
+    udtc.tools.xdg_data_home = xdg.BaseDirectory.xdg_data_home
 
 
 @contextmanager

@@ -17,12 +17,13 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-from gi.repository import GLib
+from gi.repository import GLib, Gio
 import logging
 import os
 import subprocess
+from textwrap import dedent
 from udtc import settings
-from xdg.BaseDirectory import load_first_config, xdg_config_home
+from xdg.BaseDirectory import load_first_config, xdg_config_home, xdg_data_home
 import yaml
 import yaml.scanner
 import yaml.parser
@@ -140,3 +141,44 @@ def is_completion_mode():
     if os.environ.get('_ARGCOMPLETE') == '1':
         return True
     return False
+
+
+def launcher_exists_and_is_pinned(desktop_filename):
+    """Return true if the desktop filename is pinned in the launcher"""
+    exists = os.path.exists(os.path.join(xdg_data_home, "applications", desktop_filename))
+    if not exists:
+        logger.debug("{} doesn't exists".format(desktop_filename))
+        return False
+    if os.environ.get("XDG_CURRENT_DESKTOP") != "Unity":
+        logger.debug("Don't check launcher as current environment isn't Unity")
+        return True
+    if "com.canonical.Unity.Launcher" not in Gio.Settings.list_schemas():
+        logger.debug("In an Unity environment without the Launcher schema file")
+        return False
+    gsettings = Gio.Settings(schema="com.canonical.Unity.Launcher", path="/com/canonical/unity/launcher/")
+    launcher_list = gsettings.get_strv("favorites")
+    return "application://" + desktop_filename in launcher_list
+
+
+def create_launcher(desktop_filename, content):
+    """Create a desktop file and an unity launcher icon"""
+
+    if not "[Desktop Entry]" in content:
+        content = dedent("""\
+            [Desktop Entry]
+            Version=1.0
+            Type=Application
+            {}""").format(content)
+    # Create file in standard location
+    with open(os.path.join(xdg_data_home, "applications", desktop_filename), "w") as f:
+        f.write(content)
+
+    if "com.canonical.Unity.Launcher" not in Gio.Settings.list_schemas():
+        logger.info("Don't create a launcher icon, as we are not under Unity")
+        return
+    gsettings = Gio.Settings(schema="com.canonical.Unity.Launcher", path="/com/canonical/unity/launcher/")
+    launcher_list = gsettings.get_strv("favorites")
+    launcher_tag = "application://{}".format(desktop_filename)
+    if not launcher_tag in launcher_list:
+        launcher_list.append(launcher_tag)
+        gsettings.set_strv("favorites", launcher_list)

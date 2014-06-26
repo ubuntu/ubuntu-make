@@ -8,7 +8,7 @@
 # the terms of the GNU General Public License as published by the Free Software
 # Foundation; version 3.
 #
-# This program is distributed in the hope that it will be useful, but WITHOUT
+# This program is distributed in he hope that it will be useful, but WITHOUT
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 # FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 # details.
@@ -28,11 +28,13 @@ import subprocess
 import stat
 import sys
 import tempfile
+from textwrap import dedent
 from time import time
 import threading
-from ..tools import change_xdg_config_path, get_data_dir, LoggedTestCase
+from ..tools import change_xdg_path, get_data_dir, LoggedTestCase
 from udtc import settings, tools
-from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version
+from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
+    create_launcher, launcher_exists_and_is_pinned
 from unittest.mock import patch
 
 
@@ -42,8 +44,7 @@ class TestConfigHandler(LoggedTestCase):
     def tearDown(self):
         # remove caching
         Singleton._instances = {}
-        with suppress(KeyError):
-            os.environ.pop('XDG_CONFIG_HOME')
+        change_xdg_path('XDG_CONFIG_HOME', remove=True)
         super().tearDown()
 
     def config_dir_for_name(self, name):
@@ -58,7 +59,7 @@ class TestConfigHandler(LoggedTestCase):
 
     def test_load_config(self):
         """Valid config loads correct content"""
-        change_xdg_config_path(self.config_dir_for_name("valid"))
+        change_xdg_path('XDG_CONFIG_HOME', self.config_dir_for_name("valid"))
         self.assertEquals(ConfigHandler().config,
                           {'frameworks': {
                               'category-a': {
@@ -69,19 +70,19 @@ class TestConfigHandler(LoggedTestCase):
 
     def test_load_no_config(self):
         """No existing file gives an empty result"""
-        change_xdg_config_path(self.config_dir_for_name("foo"))
+        change_xdg_path('XDG_CONFIG_HOME', self.config_dir_for_name("foo"))
         self.assertEquals(ConfigHandler().config, {})
 
     def test_load_invalid_config(self):
         """Existing invalid file gives an empty result"""
-        change_xdg_config_path(self.config_dir_for_name("invalid"))
+        change_xdg_path('XDG_CONFIG_HOME', self.config_dir_for_name("invalid"))
         self.assertEquals(ConfigHandler().config, {})
         self.expect_warn_error = True
 
     def test_save_new_config(self):
         """Save a new config in a vanilla directory"""
         with tempfile.TemporaryDirectory() as tmpdirname:
-            change_xdg_config_path(tmpdirname)
+            change_xdg_path('XDG_CONFIG_HOME', tmpdirname)
             content = {'foo': 'bar'}
             ConfigHandler().config = content
 
@@ -92,7 +93,7 @@ class TestConfigHandler(LoggedTestCase):
     def test_save_config_existing(self):
         """Replace an existing config with a new one"""
         with tempfile.TemporaryDirectory() as tmpdirname:
-            change_xdg_config_path(tmpdirname)
+            change_xdg_path('XDG_CONFIG_HOME', tmpdirname)
             shutil.copy(os.path.join(self.config_dir_for_name('valid'), settings.CONFIG_FILENAME), tmpdirname)
             content = {'foo': 'bar'}
             ConfigHandler().config = content
@@ -104,7 +105,7 @@ class TestConfigHandler(LoggedTestCase):
     def test_dont_create_file_without_assignment(self):
         """We don't create any file without an assignment"""
         with tempfile.TemporaryDirectory() as tmpdirname:
-            change_xdg_config_path(tmpdirname)
+            change_xdg_path('XDG_CONFIG_HOME', tmpdirname)
             ConfigHandler()
 
             self.assertEquals(len(os.listdir(tmpdirname)), 0)
@@ -275,3 +276,158 @@ class TestToolsThreads(LoggedTestCase):
         self.assertNotEquals(self.mainloop_thread, self.parallel_function_thread)
         # the function parallel thread id was reused
         self.assertEquals(self.function_thread, self.parallel_function_thread)
+
+
+class TestLauncherIcons(LoggedTestCase):
+        """Test module for launcher icons handling"""
+
+        def setUp(self):
+            super().setUp()
+            self.local_dir = tempfile.mkdtemp()
+            os.mkdir(os.path.join(self.local_dir, "applications"))
+            change_xdg_path('XDG_DATA_HOME', self.local_dir)
+            self.current_desktop = os.environ.get("XDG_CURRENT_DESKTOP")
+            os.environ["XDG_CURRENT_DESKTOP"] = "Unity"
+
+        def tearDown(self):
+            change_xdg_path('XDG_DATA_HOME', remove=True)
+            shutil.rmtree(self.local_dir)
+            if self.current_desktop:
+                os.environ["XDG_CURRENT_DESKTOP"] = self.current_desktop
+            super().tearDown()
+
+        def get_generic_desktop_content(self):
+            """Return a generic desktop content to win spaces"""
+            return dedent("""\
+                   Name=Android Studio
+                   Icon=/home/didrocks/tools/android-studio/bin/idea.png
+                   Exec="/home/didrocks/tools/android-studio/bin/studio.sh" %f
+                   Comment=Develop with pleasure!
+                   Categories=Development;IDE;
+                   Terminal=false
+                   StartupWMClass=jetbrains-android-studio
+                   """)
+
+        def write_desktop_file(self, filename):
+            """Write a dummy filename to the applications dir and return filepath"""
+            result_file = os.path.join(self.local_dir, "applications", filename)
+            with open(result_file, 'w') as f:
+                f.write("Foo Bar Baz")
+            return result_file
+
+        @patch("udtc.tools.Gio.Settings")
+        def test_can_install(self, SettingsMock):
+            """Install a basic launcher icon"""
+            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
+            desktop_content = self.get_generic_desktop_content()
+            create_launcher("foo.desktop", desktop_content)
+
+            self.assertTrue(SettingsMock.list_schemas.called)
+            SettingsMock.return_value.get_strv.assert_called_with("favorites")
+            SettingsMock.return_value.set_strv.assert_called_with("favorites", ["application://bar.desktop",
+                                                                                "unity://running",
+                                                                                "application://foo.desktop"])
+            result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
+            self.assertTrue(os.path.exists(result_file))
+            self.assertEquals(open(result_file).read(),
+                              "[Desktop Entry]\nVersion=1.0\nType=Application\n" + desktop_content)
+
+        @patch("udtc.tools.Gio.Settings")
+        def test_can_install_whole_file(self, SettingsMock):
+            """Install a basic launcher icon containing the whole desktop content doesn't add the header"""
+            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
+            desktop_content = "[Desktop Entry]\nVersion=1.0\nType=Application\n" + self.get_generic_desktop_content()
+            create_launcher("foo.desktop", desktop_content)
+
+            result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
+            self.assertEquals(open(result_file).read(), desktop_content)
+
+        @patch("udtc.tools.Gio.Settings")
+        def test_can_install_already_in_launcher(self, SettingsMock):
+            """A file listed in launcher still install the files, but the entry isn't changed"""
+            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
+                                                               "unity://running"]
+            create_launcher("foo.desktop", self.get_generic_desktop_content())
+
+            self.assertFalse(SettingsMock.return_value.set_strv.called)
+            result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
+            self.assertTrue(os.path.exists(result_file))
+
+        @patch("udtc.tools.Gio.Settings")
+        def test_install_no_schema_file(self, SettingsMock):
+            """No schema file still installs the file"""
+            SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
+            create_launcher("foo.desktop", self.get_generic_desktop_content())
+
+            self.assertFalse(SettingsMock.return_value.get_strv.called)
+            self.assertFalse(SettingsMock.return_value.set_strv.called)
+            result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
+            self.assertTrue(os.path.exists(result_file))
+
+        @patch("udtc.tools.Gio.Settings")
+        def test_already_existing_file_different_content(self, SettingsMock):
+            """A file with a different file content already exists and is updated"""
+            SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
+            result_file = self.write_desktop_file("foo.desktop")
+            create_launcher("foo.desktop", self.get_generic_desktop_content())
+
+            self.assertEquals(open(result_file).read(),
+                              "[Desktop Entry]\nVersion=1.0\nType=Application\n" + self.get_generic_desktop_content())
+
+        @patch("udtc.tools.Gio.Settings")
+        def test_launcher_exists_and_is_pinned(self, SettingsMock):
+            """Launcher exists and is pinned if the file exists and is in favorites list"""
+            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
+                                                               "unity://running"]
+            self.write_desktop_file("foo.desktop")
+
+            self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
+
+        @patch("udtc.tools.Gio.Settings")
+        def test_launcher_isnt_pinned(self, SettingsMock):
+            """Launcher doesn't exists and is pinned if the file exists but not in favorites list"""
+            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
+            self.write_desktop_file("foo.desktop")
+
+            self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
+
+        @patch("udtc.tools.Gio.Settings")
+        def test_launcher_exists_but_isnt_pinned_in_none_unity(self, SettingsMock):
+            """Launcher exists return True if file exists, not pinned but not in Unity"""
+            os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
+            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
+            self.write_desktop_file("foo.desktop")
+
+            self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
+
+        @patch("udtc.tools.Gio.Settings")
+        def test_launcher_exists_but_not_schema_in_none_unity(self, SettingsMock):
+            """Launcher exists return True if file exists, even if Unity schema isn't installed"""
+            os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
+            SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
+            self.write_desktop_file("foo.desktop")
+
+            self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
+
+        @patch("udtc.tools.Gio.Settings")
+        def test_launcher_exists_but_not_schema_in_unity(self, SettingsMock):
+            """Launcher exists return False if file exists, but no Unity schema installed"""
+            SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
+            self.write_desktop_file("foo.desktop")
+
+            self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
+
+        @patch("udtc.tools.Gio.Settings")
+        def test_launcher_doesnt_exists_but_pinned(self, SettingsMock):
+            """Launcher doesn't exist if no file, even if pinned"""
+            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
+                                                               "unity://running"]
+
+            self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
