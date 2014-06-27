@@ -20,9 +20,11 @@
 """Module for loading the command line interface"""
 
 import argcomplete
+from gi.repository import GLib
 import logging
 import sys
 from udtc.frameworks import BaseCategory
+from udtc.tools import MainLoop
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +38,7 @@ def run_command_for_args(args):
     except AttributeError:
         target = BaseCategory.main_category.frameworks[args.category]
     target.run_for(args)
+    MainLoop().quit()
 
 
 def main(parser):
@@ -51,4 +54,4 @@ def main(parser):
         parser.print_help()
         sys.exit(0)
 
-    run_command_for_args(args)
+    GLib.idle_add(run_command_for_args, args)

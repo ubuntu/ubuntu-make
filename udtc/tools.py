@@ -89,6 +89,26 @@ class classproperty(object):
         return self.f(owner)
 
 
+class MainLoop(object, metaclass=Singleton):
+    """Mainloop simple wrapper"""
+
+    def __init__(self):
+        self.mainloop = GLib.MainLoop()
+
+    def run(self):
+        self.mainloop.run()
+
+    def quit(self):
+        self.mainloop.quit()
+
+    @staticmethod
+    def in_mainloop_thread(function):
+        """Decorator to run a function in a mainloop thread"""
+        def inner(*args, **kwargs):
+            return GLib.idle_add(function, *args, **kwargs)
+        return inner
+
+
 def get_current_arch():
     """Get current configuration dpkg architecture"""
     global _current_arch
@@ -127,13 +147,6 @@ def get_current_ubuntu_version():
             logger.error(message)
             raise BaseException(message)
     return _version
-
-
-def in_mainloop_thread(function):
-    """Decorator to run a function in a mainloop thread"""
-    def inner(*args, **kwargs):
-        return GLib.idle_add(function, *args, **kwargs)
-    return inner
 
 
 def is_completion_mode():

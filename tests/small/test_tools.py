@@ -19,9 +19,9 @@
 
 """Tests the various udtc tools"""
 
-from gi.repository import GLib, GObject
 from concurrent import futures
 from contextlib import contextmanager, suppress
+from gi.repository import GLib
 import os
 import shutil
 import subprocess
@@ -212,16 +212,20 @@ class TestToolsThreads(LoggedTestCase):
 
     def setUp(self):
         super().setUp()
-        self.mainloop = None
+        self.mainloop_object = tools.MainLoop()
         self.mainloop_thread = None
         self.function_thread = None
         self.parallel_function_thread = None
+
+    def tearDown(self):
+        Singleton._instances = {}
+        super().tearDown()
 
     # function that will complete once the mainloop is started
     def wait_for_mainloop_function(self):
         self.parallel_function_thread = threading.current_thread().ident
         timeout_time = time() + 5
-        while not self.mainloop or not self.mainloop.is_running():
+        while not self.mainloop_object.mainloop.is_running():
             if time() > timeout_time:
                 raise(BaseException("Mainloop not started in 5 seconds"))
 
@@ -229,21 +233,19 @@ class TestToolsThreads(LoggedTestCase):
         self.mainloop_thread = threading.current_thread().ident
 
     def start_glib_mainloop(self):
-        GObject.threads_init()
-        self.mainloop = GLib.MainLoop()
         # quit after 5 seconds if nothing made the mainloop to end
-        GLib.timeout_add_seconds(5, self.mainloop.quit)
+        GLib.timeout_add_seconds(5, self.mainloop_object.quit)
         GLib.idle_add(self.get_mainloop_thread)
-        self.mainloop.run()
+        self.mainloop_object.run()
 
     def test_run_function_in_mainloop_thread(self):
-        """Test that decorated mainloop thread functions are really running in that thread"""
+        """Decorated mainloop thread functions are really running in that thread"""
 
         # function supposed to run in the mainloop thread
-        @tools.in_mainloop_thread
+        @tools.MainLoop.in_mainloop_thread
         def _function_in_mainloop_thread(future):
             self.function_thread = threading.current_thread().ident
-            self.mainloop.quit()
+            self.mainloop_object.quit()
 
         executor = futures.ThreadPoolExecutor(max_workers=1)
         future = executor.submit(self.wait_for_mainloop_function)
@@ -257,12 +259,12 @@ class TestToolsThreads(LoggedTestCase):
         self.assertNotEquals(self.mainloop_thread, self.parallel_function_thread)
 
     def test_run_function_not_in_mainloop_thread(self):
-        """Test that non decorated callback functions are not running in the mainloop thread"""
+        """Non decorated callback functions are not running in the mainloop thread"""
 
         # function not supposed to run in the mainloop thread
         def _function_not_in_mainloop_thread(future):
             self.function_thread = threading.current_thread().ident
-            self.mainloop.quit()
+            self.mainloop_object.quit()
 
         executor = futures.ThreadPoolExecutor(max_workers=1)
         future = executor.submit(self.wait_for_mainloop_function)
@@ -276,6 +278,23 @@ class TestToolsThreads(LoggedTestCase):
         self.assertNotEquals(self.mainloop_thread, self.parallel_function_thread)
         # the function parallel thread id was reused
         self.assertEquals(self.function_thread, self.parallel_function_thread)
+
+    def test_singleton(self):
+        """Ensure we are delivering a singleton for RequirementsHandler"""
+        second = tools.MainLoop()
+        self.assertEquals(self.mainloop_object, second)
+
+    def test_mainloop_run(self):
+        """We effectively executes the mainloop"""
+        with patch.object(self.mainloop_object, "mainloop") as mockmainloop:
+            self.mainloop_object.run()
+            self.assertTrue(mockmainloop.run.called)
+
+    def test_mainloop_quit(self):
+        """We effectively executes the mainloop"""
+        with patch.object(self.mainloop_object, "mainloop") as mockmainloop:
+            self.mainloop_object.quit()
+            self.assertTrue(mockmainloop.quit.called)
 
 
 class TestLauncherIcons(LoggedTestCase):

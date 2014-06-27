@@ -26,6 +26,7 @@ import os
 import sys
 from textwrap import dedent
 from udtc.frameworks import BaseCategory, load_frameworks
+from udtc.tools import MainLoop
 from .ui import cli
 import yaml
 
@@ -125,6 +126,10 @@ def main():
     # set logging ignoring unknown options
     set_logging_from_args(sys.argv, parser)
 
+    mainloop = MainLoop()
+
     # load frameworks and initialize parser
     load_frameworks()
     cli.main(parser)
+
+    mainloop.run()
