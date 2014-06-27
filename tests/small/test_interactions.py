@@ -29,8 +29,8 @@ class TestInteractions(LoggedTestCase):
 
     def test_choices(self):
         """We can instantiate with a choices interactions"""
-        choices = [Choice(0, "Choice0", lambda: ""), Choice(1, "Choice1", lambda: ""),
-                   Choice(2, "Choice2", lambda: "")]
+        choices = [Choice(0, "Choice0", "A", lambda: ""), Choice(1, "Choice1", "B", lambda: ""),
+                   Choice(2, "Choice2", "C", lambda: "")]
         inter = TextWithChoices("Foo Content", choices)
 
         self.assertEquals(inter.choices, choices)
@@ -40,17 +40,28 @@ class TestInteractions(LoggedTestCase):
         """Choose call the correct callback"""
         callback1 = Mock()
         callback2 = Mock()
-        choices = [Choice(0, "Choice0", Mock()), Choice(1, "Choice1", callback1),
-                   Choice(2, "Choice2", callback2)]
+        choices = [Choice(0, "Choice0", "A", Mock()), Choice(1, "Choice1", "B", callback1),
+                   Choice(2, "Choice2", "C", callback2)]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.choose(1), callback1)
-        self.assertEquals(inter.choose(2), callback2)
+        self.assertEquals(inter.choose(choice_id=1), callback1)
+        self.assertEquals(inter.choose(choice_id=2), callback2)
+
+    def test_choices_choose_with_shorcut_return_right_callback(self):
+        """Choose  with text shorcut call the correct callback"""
+        callback1 = Mock()
+        callback2 = Mock()
+        choices = [Choice(0, "Choice0", "A", Mock()), Choice(1, "Choice1", "B", callback1),
+                   Choice(2, "Choice2", "C", callback2)]
+        inter = TextWithChoices("Foo Content", choices)
+
+        self.assertEquals(inter.choose(txt_shorcut='B'), callback1)
+        self.assertEquals(inter.choose(txt_shorcut='C'), callback2)
 
     def test_reject_invalid_choices(self):
         """TestChoice with Choices with the same idea raises"""
-        choices = [Choice(0, "Choice0", lambda: ""), Choice(1, "Choice1", lambda: ""),
-                   Choice(0, "Choice2", lambda: "")]
+        choices = [Choice(0, "Choice0", "A", lambda: ""), Choice(1, "Choice1", "B", lambda: ""),
+                   Choice(0, "Choice2", "C", lambda: "")]
         self.assertRaises(BaseException, TextWithChoices, "Foo Content", choices)
         self.expect_warn_error = True
 
@@ -58,11 +69,22 @@ class TestInteractions(LoggedTestCase):
         """Wrong choice_id raises an exception"""
         callback1 = Mock()
         callback2 = Mock()
-        choices = [Choice(0, "Choice0", Mock()), Choice(1, "Choice1", callback1),
-                   Choice(2, "Choice2", callback2)]
+        choices = [Choice(0, "Choice0", "A", Mock()), Choice(1, "Choice1", "B", callback1),
+                   Choice(2, "Choice2", "C", callback2)]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertRaises(BaseException, inter.choose(3))
+        self.assertRaises(BaseException, inter.choose(choice_id=3))
+        self.expect_warn_error = True
+
+    def test_choices_wrong_txt_shortcut_raise(self):
+        """Wrong txt shortcut raises an exception"""
+        callback1 = Mock()
+        callback2 = Mock()
+        choices = [Choice(0, "Choice0", "A", Mock()), Choice(1, "Choice1", "B", callback1),
+                   Choice(2, "Choice2", "C", callback2)]
+        inter = TextWithChoices("Foo Content", choices)
+
+        self.assertRaises(BaseException, inter.choose(txt_shorcut='Z'))
         self.expect_warn_error = True
 
     def test_license_agreement(self):
@@ -79,5 +101,7 @@ class TestInteractions(LoggedTestCase):
         callback_no = Mock()
         inter = LicenseAgreement("License content", callback_yes, callback_no)
 
-        self.assertEquals(inter.choose(0), callback_yes)
-        self.assertEquals(inter.choose(1), callback_no)
+        self.assertEquals(inter.choose(choice_id=0), callback_yes)
+        self.assertEquals(inter.choose(choice_id=1), callback_no)
+        self.assertEquals(inter.choose(txt_shorcut='a'), callback_yes)
+        self.assertEquals(inter.choose(txt_shorcut='N'), callback_no)

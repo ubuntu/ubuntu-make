@@ -28,10 +28,11 @@ logger = logging.getLogger(__name__)
 
 class Choice:
 
-    def __init__(self, id, label, callback_fn):
+    def __init__(self, id, label, txt_shorcut, callback_fn):
         """Choice element containing label and callback function"""
         self.id = id
         self.label = label
+        self.txt_shorcut = txt_shorcut
         self.callback_fn = callback_fn
 
 
@@ -50,19 +51,24 @@ class TextWithChoices:
         self.content = content
         self.choices = choices
 
-    def choose(self, choice_id):
+    def choose(self, choice_id=None, txt_shorcut=None):
         """Return associated callback for choice"""
         for choice in self.choices:
-            if choice.id == choice_id:
+            if (choice_id is not None and choice.id == choice_id) or\
+                    (txt_shorcut is not None and choice.txt_shorcut == txt_shorcut):
                 return choice.callback_fn
-        logger.error("{} isn't an acceptable choice. choices list is: "
-                     "{}".format(choice_id, [choice.id for choice in self.choices]))
+        if choice_id is not None:
+            logger.error("{} isn't an acceptable choice. choices list is: "
+                         "{}".format(choice_id, [choice.id for choice in self.choices]))
+        if txt_shorcut is not None:
+            logger.error("{} isn't an acceptable choice. choices list is: "
+                         "{}".format(txt_shorcut, [choice.txt_shorcut for choice in self.choices]))
 
 
 class LicenseAgreement(TextWithChoices):
 
     def __init__(self, content, callback_yes, callback_no):
         """License agreement text with accept/decline"""
-        choices = [Choice(0, _("I Accept"), callback_yes),
-                   Choice(1, _("I don't accept"), callback_no)]
+        choices = [Choice(0, _("I Accept"), _("a"), callback_yes),
+                   Choice(1, _("I don't accept"), _("N"), callback_no)]
         super().__init__(content, choices=choices)
