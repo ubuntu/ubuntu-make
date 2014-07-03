@@ -67,8 +67,13 @@ class RequirementsHandler(object, metaclass=Singleton):
             if pkg_name not in self.cache:
                 # this can be also a foo:arch and we don't have <arch> added. Tell is may be available
                 if ":" in pkg_name:
-                    arch = pkg_name.split(":", -1)[-1]
-                    if arch not in get_foreign_archs():
+                    # /!\ danger: if current arch == ':appended_arch', on a non multiarch system, dpkg doesn't
+                    # understand that. strip :arch then
+                    # TODO: add tests
+                    (pkg_without_arch_name, arch) = pkg_name.split(":", -1)
+                    if arch == get_current_arch() and pkg_without_arch_name in self.cache:  # false positive, available
+                        continue
+                    elif arch not in get_foreign_archs():  # relax the constraint
                         logger.info("{} isn't available on this platform, but {} isn't enabled. So it may be available "
                                     "later on".format(pkg_name, arch))
                         continue
@@ -104,6 +109,13 @@ class RequirementsHandler(object, metaclass=Singleton):
 
         # mark for install and so on
         for pkg_name in bucket:
+            # /!\ danger: if current arch == ':appended_arch', on a non multiarch system, dpkg doesn't understand that
+            # strip :arch then
+            # TODO: add tests
+            if ":" in pkg_name:
+                (pkg_without_arch_name, arch) = pkg_name.split(":", -1)
+                if arch == get_current_arch():
+                    pkg_name = pkg_without_arch_name
             try:
                 pkg = self.cache[pkg_name]
                 if pkg.is_installed and pkg.is_upgradable:
