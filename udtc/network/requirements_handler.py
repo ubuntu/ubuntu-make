@@ -31,7 +31,7 @@ import os
 import subprocess
 import tempfile
 import time
-from udtc.tools import Singleton, get_foreign_archs, get_current_arch
+from udtc.tools import Singleton, get_foreign_archs, get_current_arch, switch_to_current_user
 
 logger = logging.getLogger(__name__)
 
@@ -79,8 +79,9 @@ class RequirementsHandler(object, metaclass=Singleton):
     def install_bucket(self, bucket, progress_callback, installed_callback):
         """Install a specific bucket. If any other bucket is in progress, queue the request
 
-        bucket is a list of packages to install"""
-        # TODO: check/move to root
+        bucket is a list of packages to install.
+
+        Return a tuple (num packages to install, size packages to download)"""
         logger.info("Installation {} pending".format(bucket))
         bucket_pack = {
             "bucket": bucket,
@@ -100,18 +101,9 @@ class RequirementsHandler(object, metaclass=Singleton):
                             logger.error(msg)
                             raise BaseException(msg)
                         self._force_load_apt_cache()
-        future = self.executor.submit(self._really_install_bucket, bucket_pack)
-        future.tag_bucket = bucket_pack
-        future.add_done_callback(self._on_done)
 
-    def _really_install_bucket(self, current_bucket):
-        """Really install current bucket and bind signals"""
-        logger.debug("Starting {} installation".format(current_bucket["bucket"]))
-        # exchange file output for apt and dpkg after the fork() call (open it empty)
-        self.apt_fd = tempfile.NamedTemporaryFile(delete=False)
-        self.apt_fd.close()
-
-        for pkg_name in current_bucket["bucket"]:
+        # mark for install and so on
+        for pkg_name in bucket:
             try:
                 pkg = self.cache[pkg_name]
                 if pkg.is_installed and pkg.is_upgradable:
@@ -121,18 +113,37 @@ class RequirementsHandler(object, metaclass=Singleton):
                     logger.debug("Marking {} for install".format(pkg_name))
                     pkg.mark_install(auto_fix=False)
             except Exception as msg:
-                logger.error("Can't mark for install {}: {}".format(pkg_name, msg))
-                raise
+                message = "Can't mark for install {}: {}".format(pkg_name, msg)
+                logger.error(message)
+                raise BaseException(message)
+
+        future = self.executor.submit(self._really_install_bucket, bucket_pack)
+        future.tag_bucket = bucket_pack
+        future.add_done_callback(self._on_done)
+        return (self.cache.install_count, self.cache.required_download)
+
+    def _really_install_bucket(self, current_bucket):
+        """Really install current bucket and bind signals"""
+        logger.debug("Starting {} installation".format(current_bucket["bucket"]))
+        # exchange file output for apt and dpkg after the fork() call (open it empty)
+        self.apt_fd = tempfile.NamedTemporaryFile(delete=False)
+        self.apt_fd.close()
 
         # this can raise on installedArchives() exception if the commit() fails
-        self.cache.commit(fetch_progress=self._FetchProgress(current_bucket,
-                                                             self.STATUS_DOWNLOADING,
-                                                             current_bucket["progress_callback"]),
-                          install_progress=self._InstallProgress(current_bucket,
-                                                                 self.STATUS_INSTALLING,
-                                                                 current_bucket["progress_callback"],
-                                                                 self._force_load_apt_cache,
-                                                                 self.apt_fd.name))
+        try:
+            os.seteuid(0)
+            os.setegid(0)
+            self.cache.commit(fetch_progress=self._FetchProgress(current_bucket,
+                                                                 self.STATUS_DOWNLOADING,
+                                                                 current_bucket["progress_callback"]),
+                              install_progress=self._InstallProgress(current_bucket,
+                                                                     self.STATUS_INSTALLING,
+                                                                     current_bucket["progress_callback"],
+                                                                     self._force_load_apt_cache,
+                                                                     self.apt_fd.name))
+        finally:
+            switch_to_current_user()
+
         return True
 
     def _on_done(self, future):
@@ -240,7 +251,10 @@ class RequirementsHandler(object, metaclass=Singleton):
 
         def fork(self):
             pid = os.fork()
-            if pid == 0:  # pragma: no cover (in a fork)
+            if pid == 0:  # pragma: no cover
+                # be root
+                os.seteuid(0)
+                os.setegid(0)
                 self._fixup_fds()
                 self._redirect_stdin()
                 self._redirect_output()

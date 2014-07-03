@@ -28,10 +28,12 @@ import logging
 import os
 import pkgutil
 import sys
+import subprocess
 from udtc.network.requirements_handler import RequirementsHandler
-from udtc.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
-    is_completion_mode
 from udtc.settings import DEFAULT_INSTALL_TOOLS_PATH
+from udtc.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
+    is_completion_mode, switch_to_current_user
+from udtc.ui import UI
 
 
 logger = logging.getLogger(__name__)
@@ -156,6 +158,9 @@ class BaseFramework(metaclass=abc.ABCMeta):
         with suppress(KeyError):
             self.need_root_access = not RequirementsHandler().is_bucket_installed(self.packages_requirements)
 
+        # FIXME: JUST FOR TESTING
+        self.need_root_access = True
+
         if self.is_category_default:
             if self.category == BaseCategory.main_category:
                 logger.error("Main category can't have default framework as {} requires".format(name))
@@ -217,8 +222,24 @@ class BaseFramework(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def setup(self, install_path=None):
         """Method call to setup the Framework"""
+        if not self.is_installable:
+            logger.error("You can't install that framework on that machine")
+            UI.return_main_screen()
+
+        if self.need_root_access and os.geteuid() != 0:
+            logger.debug("Requesting root access")
+            cmd = ["sudo", "-E", "env", "PATH={}".format(os.getenv("PATH"))]
+            cmd.extend(sys.argv)
+            sys.exit(subprocess.call(cmd))
+
+        # be a normal, kind user
+        switch_to_current_user()
+
         if install_path:
             self.install_path = install_path
+
+    def mark_as_installed(self):
+        """Mark the installation as installed in the config file"""
         config = ConfigHandler().config
         config.setdefault("frameworks", {})\
               .setdefault(self.category.prog_name, {})\
