@@ -158,9 +158,6 @@ class BaseFramework(metaclass=abc.ABCMeta):
         with suppress(KeyError):
             self.need_root_access = not RequirementsHandler().is_bucket_installed(self.packages_requirements)
 
-        # FIXME: JUST FOR TESTING
-        self.need_root_access = True
-
         if self.is_category_default:
             if self.category == BaseCategory.main_category:
                 logger.error("Main category can't have default framework as {} requires".format(name))

@@ -306,6 +306,7 @@ class AndroidStudio(udtc.frameworks.BaseFramework):
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-android-studio"))
         UI.delayed_display(DisplayMessage("Installation done"))
+        self.mark_as_installed()
         UI.return_main_screen()
 
     def iterate_until_install_done(self):
