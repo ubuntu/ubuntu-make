@@ -1,4 +1,5 @@
 # runtime requirements
+argcomplete
 pyyaml
 pyxdg
 -e bzr+lp:python-apt/@0.9.3.5#egg=apt
