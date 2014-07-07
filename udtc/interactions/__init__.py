@@ -54,7 +54,7 @@ class TextWithChoices:
             if choice.is_default:
                 if default_found:
                     message = "One default was already registered, can't register a second one in that choices set: {}"\
-                              .format(choices)
+                              .format([choice.label for choice in choices])
                     logger.error(message)
                     raise BaseException(message)
                 default_found = True
@@ -67,19 +67,22 @@ class TextWithChoices:
         for choice in self.choices:
             if (choice_id is not None and choice.id == choice_id) or\
                     (answer is not None and (choice.label.lower() == answer.lower() or
-                                             choice.txt_shorcut.lower() == answer.lower())):
+                                             (choice.txt_shorcut is not None and
+                                              choice.txt_shorcut.lower() == answer.lower()))):
                 return choice.callback_fn()
         msg = _("No suitable answer provided")
         if choice_id is not None:
             msg = "Your entry '{}' isn't an acceptable choice. choices are: {}"\
                   .format(choice_id, [choice.id for choice in self.choices])
         if answer is not None:
-            msg = "Your entry '{}' isn't an acceptable choice. choices are: {}"\
-                  .format(answer, [choice.txt_shorcut for choice in self.choices])
+            msg = "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"\
+                  .format(answer, [choice.txt_shorcut for choice in self.choices if choice.txt_shorcut is not None],
+                          [choice.label for choice in self.choices])
         if not choice_id and not answer:
             for choice in self.choices:
                 if choice.is_default:
                     return choice.callback_fn()
+        logger.error(msg)
         raise InputError(msg)
 
     @property
