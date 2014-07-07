@@ -227,6 +227,19 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.fd)
         self.expect_warn_error = True
 
+    def test_download_with_wrong_md5(self):
+        """we raises an error if we don't have the correct md5sum"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([(request, 'AAAAA')], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertIn("Corrupted download", result.error)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.fd)
+        self.expect_warn_error = True
+
 
 class TestDownloadCenterSecure(LoggedTestCase):
     """This will test the download center in secure mode by sending one or more download requests"""
