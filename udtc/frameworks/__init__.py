@@ -222,6 +222,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         if not self.is_installable:
             logger.error("You can't install that framework on that machine")
             UI.return_main_screen()
+            return
 
         if self.need_root_access and os.geteuid() != 0:
             logger.debug("Requesting root access")
@@ -248,10 +249,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         """Method call to know if the framework is installed"""
         if not os.path.isdir(self.install_path):
             return False
-        try:
-            if not RequirementsHandler().is_bucket_installed(self.packages_requirements):
-                return False
-        except KeyError:
+        if not RequirementsHandler().is_bucket_installed(self.packages_requirements):
             return False
         logger.debug("{} is installed".format(self.name))
         return True

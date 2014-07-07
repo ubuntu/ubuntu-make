@@ -516,6 +516,49 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
             self.assertFalse(self.CategoryHandler.categories["category-f"].frameworks["framework-a"].is_installed)
             self.assertFalse(self.CategoryHandler.categories["category-f"].frameworks["framework-a"].need_root_access)
 
+    def test_root_needed_setup_call_root(self):
+        """Framework with unmatched requirements need root access"""
+        with patch('udtc.frameworks.subprocess') as subprocess_mock,\
+                patch.object(udtc.frameworks.sys, 'exit', return_value=True) as sys_exit_mock,\
+                patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+            requirement_mock.return_value.is_bucket_installed.return_value = False
+            self.loadFramework("testframeworks")
+            self.assertTrue(self.CategoryHandler.categories["category-f"].frameworks["framework-c"].need_root_access)
+            self.CategoryHandler.categories["category-f"].frameworks["framework-c"].setup()
+
+            self.assertEquals(subprocess_mock.call.call_args[0][0][0], "sudo")
+            self.assertTrue(sys_exit_mock.called)
+
+    def test_no_root_needed_setup_doesnt_call_root(self):
+        """Framework with unmatched requirements need root access"""
+        with patch('udtc.frameworks.subprocess') as subprocess_mock,\
+                patch.object(udtc.frameworks.sys, 'exit', return_value=True) as sys_exit_mock,\
+                patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+            requirement_mock.return_value.is_bucket_installed.return_value = True
+            self.loadFramework("testframeworks")
+            self.assertFalse(self.CategoryHandler.categories["category-f"].frameworks["framework-c"].need_root_access)
+            self.CategoryHandler.categories["category-f"].frameworks["framework-c"].setup()
+
+            self.assertFalse(subprocess_mock.call.called)
+            self.assertFalse(sys_exit_mock.called)
+
+    def test_root_needed_setup_doesnt_call_root(self):
+        """setup doesn't call sudo if we are already root"""
+        with patch('udtc.frameworks.subprocess') as subprocess_mock,\
+                patch.object(udtc.frameworks.sys, 'exit', return_value=True) as sys_exit_mock,\
+                patch.object(udtc.frameworks.os, 'geteuid', return_value=0) as geteuid,\
+                patch('udtc.frameworks.RequirementsHandler') as requirement_mock,\
+                patch('udtc.frameworks.switch_to_current_user') as switch_to_current_use_mock:
+            requirement_mock.return_value.is_bucket_installed.return_value = False
+            self.loadFramework("testframeworks")
+            self.assertTrue(self.CategoryHandler.categories["category-f"].frameworks["framework-c"].need_root_access)
+            self.CategoryHandler.categories["category-f"].frameworks["framework-c"].setup()
+
+            self.assertFalse(subprocess_mock.call.called)
+            self.assertFalse(sys_exit_mock.called)
+            geteuid.assert_called_once_with()
+            switch_to_current_use_mock.assert_called_once_with()
+
     def test_completion_mode_dont_use_expensive_calls(self):
         """Completion mode bypass expensive calls and so, register all frameworks"""
         with patch('udtc.frameworks.ConfigHandler') as config_handler_mock,\
@@ -798,3 +841,28 @@ class TestProductionFrameworkLoader(BaseFrameworkLoader):
         self.assertTrue(len(frameworks.BaseCategory.categories) > 0)
         self.assertIsNotNone(frameworks.BaseCategory.main_category)
         self.assertEquals(len(frameworks.BaseCategory.categories["android"].frameworks), 2)
+
+
+class TestCustomFrameworkCantLoad(BaseFrameworkLoader):
+    """Get custom unloadable automatically frameworks to test custom corner cases"""
+
+    class _CustomFramework(udtc.frameworks.BaseFramework):
+
+        def __init__(self):
+            super().__init__(name="Custom", description="Custom uninstallable framework",
+                             category=udtc.frameworks.MainCategory())
+
+        def setup(self):
+            super().setup()
+
+        @property
+        def is_installable(self):
+            return False
+
+    def test_call_setup_on_uninstallable_framework(self):
+        """Calling setup on uninstallable framework return to main UI"""
+        fw = self._CustomFramework()
+        with patch("udtc.frameworks.UI") as UIMock:
+            fw.setup()
+            self.assertTrue(UIMock.return_main_screen.called)
+        self.expect_warn_error = True
