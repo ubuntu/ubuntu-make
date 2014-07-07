@@ -73,6 +73,14 @@ class RequestHandler(SimpleHTTPRequestHandler):
 
     root_path = os.getcwd()
 
+    def end_headers(self):
+        """don't send Content-Length header for a particular file"""
+        if self.path.endswith("-with-no-content-length"):
+            for current_header in self._headers_buffer:
+                if current_header.decode("UTF-8").startswith("Content-Length"):
+                    self._headers_buffer.remove(current_header)
+        super().end_headers()
+
     def translate_path(self, path):
         """translate path given routes
 

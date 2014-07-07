@@ -256,6 +256,27 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.fd)
         self.expect_warn_error = True
 
+    def test_download_with_no_size(self):
+        """we deliver one successful download, even if size isn't provided. Progress returns -1 though"""
+        filename = "simplefile-with-no-content-length"
+        request = self.build_server_address(filename)
+        report = Mock()
+        DownloadCenter([request], self.callback, report=report)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result.fd.read())
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.error)
+        self.assertEqual(report.call_count, 2)
+        self.assertEqual(report.call_args_list,
+                         [call({self.build_server_address(filename): {'size': -1, 'current': -1}}),
+                          call({self.build_server_address(filename): {'size': -1, 'current': -1}})])
+
 
 class TestDownloadCenterSecure(LoggedTestCase):
     """This will test the download center in secure mode by sending one or more download requests"""
