@@ -86,6 +86,7 @@ class CliUI(UI):
                 logger.error(str(e))
                 continue
 
+
 def run_command_for_args(args):
     """Run correct command for args"""
     # args.category can be a category or a framework in main

@@ -235,7 +235,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         if install_path:
             self.install_path = install_path
 
-    def mark_as_installed(self):
+    def mark_in_config(self):
         """Mark the installation as installed in the config file"""
         config = ConfigHandler().config
         config.setdefault("frameworks", {})\

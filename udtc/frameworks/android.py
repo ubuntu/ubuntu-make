@@ -129,8 +129,11 @@ class AndroidStudio(udtc.frameworks.BaseFramework):
         self.download_provider_page()
 
     def download_provider_page(self):
+        # Mark nown known install place for later eventual reinstallation
+        self.mark_in_config()
+
         logger.debug("Download android app provider page")
-        DownloadCenter([(self.STUDIO_DOWNLOAD_PAGE, None)],self.get_metadata_and_check_license, download=False)
+        DownloadCenter([(self.STUDIO_DOWNLOAD_PAGE, None)], self.get_metadata_and_check_license, download=False)
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -189,9 +192,11 @@ class AndroidStudio(udtc.frameworks.BaseFramework):
         self.result_download = None
         UI.display(DisplayMessage("Downloading and installing requirements"))
         self.pbar = ProgressBar().start()
-        self.pkg_num_install, self.pkg_size_download = RequirementsHandler().install_bucket(self.packages_requirements, self.get_progress_requirement, self.requirement_done)
-        DownloadCenter(urls=[(self.to_download['url'], self.to_download['md5sum'])], on_done=self.check_download, report=self.get_progress_download)
-
+        self.pkg_num_install, self.pkg_size_download =\
+            RequirementsHandler().install_bucket(self.packages_requirements, self.get_progress_requirement,
+                                                 self.requirement_done)
+        DownloadCenter(urls=[(self.to_download['url'], self.to_download['md5sum'])], on_done=self.check_download,
+                       report=self.get_progress_download)
 
     @MainLoop.in_mainloop_thread
     def get_progress(self, progress_download, progress_requirement):
@@ -206,7 +211,8 @@ class AndroidStudio(udtc.frameworks.BaseFramework):
         if self.balance_requirement_download is None:
             return
 
-        progress = self.balance_requirement_download * self.last_progress_requirement + (1-self.balance_requirement_download) * self.last_progress_download
+        progress = self.balance_requirement_download * self.last_progress_requirement +\
+            (1 - self.balance_requirement_download) * self.last_progress_download
         self.pbar.update(progress)
         #print("global progress: {}".format(progress))
         return
@@ -239,7 +245,8 @@ class AndroidStudio(udtc.frameworks.BaseFramework):
                 self.balance_requirement_download = 0
             else:
                 # apply a minimum of 15% (no download or small download + install time)
-                self.balance_requirement_download = max(self.pkg_size_download / (self.pkg_size_download + total_size), 0.15)
+                self.balance_requirement_download = max(self.pkg_size_download / (self.pkg_size_download + total_size),
+                                                        0.15)
         self.get_progress(total_current_size / total_size * 100, None)
 
     def requirement_done(self, result):
@@ -306,7 +313,6 @@ class AndroidStudio(udtc.frameworks.BaseFramework):
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-android-studio"))
         UI.delayed_display(DisplayMessage("Installation done"))
-        self.mark_as_installed()
         UI.return_main_screen()
 
     def iterate_until_install_done(self):

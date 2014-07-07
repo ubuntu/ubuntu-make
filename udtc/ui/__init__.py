@@ -22,6 +22,7 @@
 from gi.repository import GLib
 from udtc.tools import Singleton, MainLoop
 
+
 class UI(object, metaclass=Singleton):
 
     currentUI = None
