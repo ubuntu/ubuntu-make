@@ -111,7 +111,7 @@ class TestRequirementsHandler(LoggedTestCase):
 
     def _mock_get_env(self, env):
         if os.geteuid() == 0:
-            if env == "SUDO_UID" :
+            if env == "SUDO_UID":
                 return str(self.user_uid)
             elif env == "SUDO_GID":
                 return str(self.user_gid)
@@ -186,7 +186,6 @@ class TestRequirementsHandler(LoggedTestCase):
         self.assertEquals(os.seteuid.call_count, 2)
         self.assertEquals(os.seteuid.call_args, call(self.user_uid))
         self.assertEquals(os.setegid.call_args, call(self.user_gid))
-
 
     def test_install_progress(self):
         """Install one package and get progress feedback"""
@@ -354,8 +353,8 @@ class TestRequirementsHandler(LoggedTestCase):
         self.assertTrue(self.handler.is_bucket_installed(["testpackage:{}".format(tools.get_current_arch())]))
 
     def test_is_bucket_installed_multi_arch_other(self):
-        return # TODO: add state with that
         """Installed multi-arch package packages returned as installed if so"""
+        return  # TODO: add state with that (once the multi_arch tests are fixed)
 
     def test_is_bucket_installed_with_unavailable_package(self):
         """Bucket isn't installed if some package are even not in the cache"""
