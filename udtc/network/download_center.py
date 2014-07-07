@@ -21,6 +21,7 @@
 
 from collections import namedtuple
 from concurrent import futures
+from contextlib import suppress
 import hashlib
 from http.client import HTTPSConnection, HTTPConnection
 from io import BytesIO
@@ -68,7 +69,11 @@ class DownloadCenter:
         self._download_progress = {}
 
         executor = futures.ThreadPoolExecutor(max_workers=3)
-        for url, md5sum in self._urls:
+        for url_request in self._urls:
+            url, md5sum = (url_request, None)
+            # grab the md5sum if any
+            with suppress(ValueError):
+                (url, md5sum) = url_request
             # switch between inline memory and temp file
             if download:
                 dest = tempfile.TemporaryFile()
@@ -142,7 +147,7 @@ class DownloadCenter:
 
         result = self.DownloadResult(buffer=None, error=None, fd=None)
         if future.exception():
-            logger.debug("Set an error for {} couldn't finish download: {}".format(future.tag_url, future.exception()))
+            logger.error("{} couldn't finish download: {}".format(future.tag_url, future.exception()))
             result = result._replace(error=str(future.exception()))
             # cleaned unusable temp file as something bad happened
             future.tag_dest.close()
