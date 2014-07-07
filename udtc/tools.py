@@ -251,6 +251,8 @@ def strip_tags(content):
 
 
 def switch_to_current_user():
-    """Switch euid and guid to current user"""
+    """Switch euid and guid to current user if current user is root"""
+    if os.geteuid() != 0:
+        return
     os.setegid(int(os.getenv("SUDO_GID")))
     os.seteuid(int(os.getenv("SUDO_UID")))

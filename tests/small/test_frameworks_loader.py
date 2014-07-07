@@ -373,10 +373,10 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         shutil.rmtree(self.config_dir)
         super().tearDown()
 
-    def test_call_setup_save_config(self):
-        """Calling setup save path in the configuration"""
+    def test_call_mark_in_config_save_config(self):
+        """Calling mark_in_config save path in the configuration"""
         # load custom framework-directory
-        self.categoryA.frameworks["framework-b"].setup()
+        self.categoryA.frameworks["framework-b"].mark_in_config()
 
         self.assertEquals(ConfigHandler().config,
                           {'frameworks': {
@@ -384,10 +384,11 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
                                   'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
                               }}})
 
-    def test_call_setup_save_tweaked_path(self):
-        """Calling setup with a custom install path save it in the configuration"""
+    def test_call_setup_save_and_then_mark_in_config_tweaked_path(self):
+        """Calling mark_in_config with a custom install path save it in the configuration"""
             # load custom framework-directory
         self.categoryA.frameworks["framework-b"].setup(install_path="/home/foo/bar")
+        self.categoryA.frameworks["framework-b"].mark_in_config()
 
         self.assertEquals(ConfigHandler().config,
                           {'frameworks': {
