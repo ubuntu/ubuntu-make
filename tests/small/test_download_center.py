@@ -89,6 +89,22 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.error)
 
+    def test_download_with_md5(self):
+        """we deliver once successful download, matching md5sum"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([(request, '268a5059001855fef30b4f95f82044ed')], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result.fd.read())
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.error)
+
     def test_download_with_progress(self):
         """we deliver progress hook while downloading"""
         filename = "simplefile"
