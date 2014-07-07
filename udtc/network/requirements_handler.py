@@ -45,7 +45,7 @@ class RequirementsHandler(object, metaclass=Singleton):
 
     def __init__(self):
         logger.info("Create a new apt cache")
-        self._force_load_apt_cache()
+        self.cache = apt.Cache()
         self.executor = futures.ThreadPoolExecutor(max_workers=1)
 
     def is_bucket_installed(self, bucket):
@@ -55,7 +55,13 @@ class RequirementsHandler(object, metaclass=Singleton):
         logger.debug("Check if {} is installed".format(bucket))
         is_installed = True
         for pkg_name in bucket:
-            if not self.cache[pkg_name].is_installed:
+            # /!\ danger: if current arch == ':appended_arch', on a non multiarch system, dpkg doesn't
+            # understand that. strip :arch then
+            if ":" in pkg_name:
+                (pkg_without_arch_name, arch) = pkg_name.split(":", -1)
+                if arch == get_current_arch():
+                    pkg_name = pkg_without_arch_name
+            if pkg_name not in self.cache or not self.cache[pkg_name].is_installed:
                 logger.info("{} isn't installed".format(pkg_name))
                 is_installed = False
         return is_installed
@@ -94,6 +100,20 @@ class RequirementsHandler(object, metaclass=Singleton):
             "installed_callback": installed_callback
         }
 
+        future = self.executor.submit(self._really_install_bucket, bucket_pack)
+        future.tag_bucket = bucket_pack
+        future.add_done_callback(self._on_done)
+        return (self.cache.install_count, self.cache.required_download)
+
+    def _really_install_bucket(self, current_bucket):
+        """Really install current bucket and bind signals"""
+        bucket = current_bucket["bucket"]
+        logger.debug("Starting {} installation".format(bucket))
+
+        # exchange file output for apt and dpkg after the fork() call (open it empty)
+        self.apt_fd = tempfile.NamedTemporaryFile(delete=False)
+        self.apt_fd.close()
+
         for pkg_name in bucket:
             if ":" in pkg_name:
                 arch = pkg_name.split(":", -1)[-1]
@@ -103,7 +123,6 @@ class RequirementsHandler(object, metaclass=Singleton):
                     with open(os.devnull, "w") as f:
                         if not subprocess.call(["dpkg", "--add-architecture", arch], stdout=f):
                             msg = "Can't add foreign foreign architecture {}".format(arch)
-                            logger.error(msg)
                             raise BaseException(msg)
                         self._force_load_apt_cache()
 
@@ -126,20 +145,7 @@ class RequirementsHandler(object, metaclass=Singleton):
                     pkg.mark_install(auto_fix=False)
             except Exception as msg:
                 message = "Can't mark for install {}: {}".format(pkg_name, msg)
-                logger.error(message)
                 raise BaseException(message)
-
-        future = self.executor.submit(self._really_install_bucket, bucket_pack)
-        future.tag_bucket = bucket_pack
-        future.add_done_callback(self._on_done)
-        return (self.cache.install_count, self.cache.required_download)
-
-    def _really_install_bucket(self, current_bucket):
-        """Really install current bucket and bind signals"""
-        logger.debug("Starting {} installation".format(current_bucket["bucket"]))
-        # exchange file output for apt and dpkg after the fork() call (open it empty)
-        self.apt_fd = tempfile.NamedTemporaryFile(delete=False)
-        self.apt_fd.close()
 
         # this can raise on installedArchives() exception if the commit() fails
         try:
@@ -176,7 +182,7 @@ class RequirementsHandler(object, metaclass=Singleton):
     def _force_load_apt_cache(self):
         """Loop on loading apt cache in case something else is updating"""
         try:
-            self.cache = apt.Cache()
+            self.cache.open()
         except SystemError:
             time.sleep(1)
             self._force_load_apt_cache()
