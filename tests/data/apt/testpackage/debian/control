@@ -34,3 +34,19 @@ Depends: ${shlibs:Depends},
 Conflicts: testpackage (<< 0.2),
 Description: Dummy package for testing - breaks
  Package used for testing debs installation with break
+
+Package: testpackagefoo
+Architecture: foo
+Multi-Arch: foreign
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Description: Dummy package for testing - only available on foo
+ Package used for testing debs installation
+
+Package: testpackagearmhf
+Architecture: armhf
+Multi-Arch: foreign
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Description: Dummy package for testing - only available on armhf
+ Package used for testing debs installation
