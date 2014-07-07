@@ -216,10 +216,18 @@ class TestToolsThreads(LoggedTestCase):
         self.mainloop_thread = None
         self.function_thread = None
         self.parallel_function_thread = None
+        self.saved_stderr = sys.stderr
 
     def tearDown(self):
         Singleton._instances = {}
+        sys.stderr = self.saved_stderr
         super().tearDown()
+
+    def patch_stderr(self):
+        class writer(object):
+            def write(self, data):
+                print(data)
+        sys.stderr = writer()
 
     # function that will complete once the mainloop is started
     def wait_for_mainloop_function(self):
@@ -229,16 +237,23 @@ class TestToolsThreads(LoggedTestCase):
             if time() > timeout_time:
                 raise(BaseException("Mainloop not started in 5 seconds"))
 
+    def wait_for_mainloop_shutdown(self):
+        timeout_time = time() + 5
+        while self.mainloop_object.mainloop.is_running():
+            if time() > timeout_time:
+                raise(BaseException("Mainloop not stopped in 5 seconds"))
+
     def get_mainloop_thread(self):
         self.mainloop_thread = threading.current_thread().ident
 
     def start_glib_mainloop(self):
         # quit after 5 seconds if nothing made the mainloop to end
-        GLib.timeout_add_seconds(5, self.mainloop_object.quit)
+        GLib.timeout_add_seconds(5, self.mainloop_object.mainloop.quit)
         GLib.idle_add(self.get_mainloop_thread)
         self.mainloop_object.run()
 
-    def test_run_function_in_mainloop_thread(self):
+    @patch("udtc.tools.sys")
+    def test_run_function_in_mainloop_thread(self, mocksys):
         """Decorated mainloop thread functions are really running in that thread"""
 
         # function supposed to run in the mainloop thread
@@ -251,6 +266,7 @@ class TestToolsThreads(LoggedTestCase):
         future = executor.submit(self.wait_for_mainloop_function)
         future.add_done_callback(_function_in_mainloop_thread)
         self.start_glib_mainloop()
+        self.wait_for_mainloop_shutdown()
 
         # mainloop and thread were started
         self.assertIsNotNone(self.mainloop_thread)
@@ -258,7 +274,8 @@ class TestToolsThreads(LoggedTestCase):
         self.assertEquals(self.mainloop_thread, self.function_thread)
         self.assertNotEquals(self.mainloop_thread, self.parallel_function_thread)
 
-    def test_run_function_not_in_mainloop_thread(self):
+    @patch("udtc.tools.sys")
+    def test_run_function_not_in_mainloop_thread(self, mocksys):
         """Non decorated callback functions are not running in the mainloop thread"""
 
         # function not supposed to run in the mainloop thread
@@ -270,6 +287,7 @@ class TestToolsThreads(LoggedTestCase):
         future = executor.submit(self.wait_for_mainloop_function)
         future.add_done_callback(_function_not_in_mainloop_thread)
         self.start_glib_mainloop()
+        self.wait_for_mainloop_shutdown()
 
         # mainloop and thread were started
         self.assertIsNotNone(self.mainloop_thread)
@@ -290,11 +308,39 @@ class TestToolsThreads(LoggedTestCase):
             self.mainloop_object.run()
             self.assertTrue(mockmainloop.run.called)
 
-    def test_mainloop_quit(self):
-        """We effectively executes the mainloop"""
-        with patch.object(self.mainloop_object, "mainloop") as mockmainloop:
-            self.mainloop_object.quit()
-            self.assertTrue(mockmainloop.quit.called)
+    @patch("udtc.tools.sys")
+    def test_mainloop_quit(self, mocksys):
+        """We quit the process"""
+        GLib.idle_add(self.mainloop_object.quit)
+        self.start_glib_mainloop()
+        self.wait_for_mainloop_shutdown()
+
+        mocksys.exit.assert_called_once_with(0)
+
+    @patch("udtc.tools.sys")
+    def test_mainloop_quit_with_exit_value(self, mocksys):
+        """We quit the process with a return code"""
+        GLib.idle_add(self.mainloop_object.quit, 42)
+        self.start_glib_mainloop()
+        self.wait_for_mainloop_shutdown()
+
+        mocksys.exit.assert_called_once_with(42)
+
+    @patch("udtc.tools.sys")
+    def unhandled_exception_in_mainloop_thead_exit(self, mocksys):
+        """We quit the process in error for any unhandled exception, logging it"""
+
+        @tools.MainLoop.in_mainloop_thread
+        def _function_raising_exception():
+            raise BaseException("foo")
+
+        _function_raising_exception()
+        self.patch_stderr()
+        self.start_glib_mainloop()
+        self.wait_for_mainloop_shutdown()
+
+        mocksys.exit.assert_called_once_with(1)
+        self.expect_warn_error = True
 
 
 class TestLauncherIcons(LoggedTestCase):

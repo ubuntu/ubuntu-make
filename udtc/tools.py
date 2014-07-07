@@ -105,7 +105,11 @@ class MainLoop(object, metaclass=Singleton):
         self.mainloop.run()
 
     def quit(self, status_code=0):
-        GLib.timeout_add(80, sys.exit, status_code)
+        GLib.timeout_add(80, self._clean_up, status_code)
+
+    def _clean_up(self, exit_code):
+        self.mainloop.quit()
+        sys.exit(exit_code)
 
     @staticmethod
     def in_mainloop_thread(function):
@@ -114,9 +118,8 @@ class MainLoop(object, metaclass=Singleton):
         # GLib.idle_add doesn't propagate try: except in the mainloop, so we handle it there for all functions
         def wrapper(*args, **kwargs):
             try:
-                import time
                 function(*args, **kwargs)
-            except Exception as e:
+            except BaseException as e:
                 logger.error("Unhandled exception: {}".format(e))
                 try:
                     raise

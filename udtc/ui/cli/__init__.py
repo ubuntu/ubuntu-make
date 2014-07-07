@@ -87,6 +87,7 @@ class CliUI(UI):
                 continue
 
 
+@MainLoop.in_mainloop_thread
 def run_command_for_args(args):
     """Run correct command for args"""
     # args.category can be a category or a framework in main
@@ -112,4 +113,4 @@ def main(parser):
         sys.exit(0)
 
     CliUI()
-    GLib.idle_add(run_command_for_args, args)
+    run_command_for_args(args)
