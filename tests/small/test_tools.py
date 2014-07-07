@@ -364,6 +364,9 @@ class TestLauncherIcons(LoggedTestCase):
         def get_generic_desktop_content(self):
             """Return a generic desktop content to win spaces"""
             return dedent("""\
+                   [Desktop Entry]
+                   Version=1.0
+                   Type=Application
                    Name=Android Studio
                    Icon=/home/didrocks/tools/android-studio/bin/idea.png
                    Exec="/home/didrocks/tools/android-studio/bin/studio.sh" %f
@@ -385,8 +388,7 @@ class TestLauncherIcons(LoggedTestCase):
             """Install a basic launcher icon"""
             SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
             SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
-            desktop_content = self.get_generic_desktop_content()
-            create_launcher("foo.desktop", desktop_content)
+            create_launcher("foo.desktop", self.get_generic_desktop_content())
 
             self.assertTrue(SettingsMock.list_schemas.called)
             SettingsMock.return_value.get_strv.assert_called_with("favorites")
@@ -395,19 +397,7 @@ class TestLauncherIcons(LoggedTestCase):
                                                                                 "application://foo.desktop"])
             result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
             self.assertTrue(os.path.exists(result_file))
-            self.assertEquals(open(result_file).read(),
-                              "[Desktop Entry]\nVersion=1.0\nType=Application\n" + desktop_content)
-
-        @patch("udtc.tools.Gio.Settings")
-        def test_can_install_whole_file(self, SettingsMock):
-            """Install a basic launcher icon containing the whole desktop content doesn't add the header"""
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
-            desktop_content = "[Desktop Entry]\nVersion=1.0\nType=Application\n" + self.get_generic_desktop_content()
-            create_launcher("foo.desktop", desktop_content)
-
-            result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
-            self.assertEquals(open(result_file).read(), desktop_content)
+            self.assertEquals(open(result_file).read(), self.get_generic_desktop_content())
 
         @patch("udtc.tools.Gio.Settings")
         def test_can_install_already_in_launcher(self, SettingsMock):
@@ -439,8 +429,7 @@ class TestLauncherIcons(LoggedTestCase):
             result_file = self.write_desktop_file("foo.desktop")
             create_launcher("foo.desktop", self.get_generic_desktop_content())
 
-            self.assertEquals(open(result_file).read(),
-                              "[Desktop Entry]\nVersion=1.0\nType=Application\n" + self.get_generic_desktop_content())
+            self.assertEquals(open(result_file).read(), self.get_generic_desktop_content())
 
         @patch("udtc.tools.Gio.Settings")
         def test_launcher_exists_and_is_pinned(self, SettingsMock):
