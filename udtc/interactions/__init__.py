@@ -95,7 +95,7 @@ class TextWithChoices:
                 answer += _(" ({})").format((choice.txt_shorcut))
             possible_answers.append(answer)
         if self.newline_before_option:
-            prompt = _("{}\n{} ").format(self.content, '/'.join(possible_answers))
+            prompt = _("{}\n[{}] ").format(self.content, '/'.join(possible_answers))
         else:
             prompt = _("{} [{}] ").format(self.content, '/'.join(possible_answers))
         return prompt
@@ -112,13 +112,11 @@ class LicenseAgreement(TextWithChoices):
     @property
     def input(self):
         """Text input prompt handling if we do have some shortcuts"""
-        possible_answers = []
+        answers = []
         for choice in self.choices:
-            answer = choice.label
-            if choice.txt_shorcut:
-                answer += _(" ({})").format((choice.txt_shorcut))
-            possible_answers.append(answer)
-        return '/'.join(possible_answers) + " "
+            answer = _("{} ({})").format(choice.label, choice.txt_shorcut)
+            answers.append(answer)
+        return _("[{}] ").format('/'.join(answers))
 
 
 class InputText:
@@ -126,11 +124,11 @@ class InputText:
     def __init__(self, content, callback_fn, default_input=""):
         """Content text with an line input"""
         self.content = content
-        self.callback_fn = callback_fn
+        self._callback_fn = callback_fn
         self.default_input = default_input
 
     def run_callback(self, result):
-        self.callback_fn(result)
+        self._callback_fn(result)
 
 
 class YesNo(TextWithChoices):
