@@ -70,7 +70,6 @@ class RequirementsHandler(object, metaclass=Singleton):
         """Check if bucket available on the platform"""
         all_in_cache = True
         for pkg_name in bucket:
-            print(pkg_name)
             if pkg_name not in self.cache:
                 # this can be also a foo:arch and we don't have <arch> added. Tell is may be available
                 if ":" in pkg_name:
@@ -122,7 +121,8 @@ class RequirementsHandler(object, metaclass=Singleton):
                 if arch not in get_foreign_archs() and arch != get_current_arch():
                     logger.info("Adding foreign arch: {}".format(arch))
                     with open(os.devnull, "w") as f:
-                        if not subprocess.call(["dpkg", "--add-architecture", arch], stdout=f):
+                        subprocess.call(["which", "dpkg"])
+                        if subprocess.call(["dpkg", "--add-architecture", arch], stdout=f) != 0:
                             msg = "Can't add foreign foreign architecture {}".format(arch)
                             raise BaseException(msg)
                         self._force_reload_apt_cache()

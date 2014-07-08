@@ -41,6 +41,8 @@ class TestRequirementsHandler(LoggedTestCase):
         super().setUpClass()
         cls.handler = RequirementsHandler()
 
+        apt.apt_pkg.config.set("Dir::Cache::pkgcache", "")
+        apt.apt_pkg.config.set("Dir::Cache::srcpkgcache", "")
         apt.apt_pkg.config.clear("APT::Update::Post-Invoke")
         apt.apt_pkg.config.clear("APT::Update::Post-Invoke-Success")
         apt.apt_pkg.config.clear("DPkg::Post-Invoke")
@@ -362,10 +364,6 @@ class TestRequirementsHandler(LoggedTestCase):
         self.wait_for_callback(self.done_callback)
         self.assertTrue(self.handler.is_bucket_installed(["testpackage:{}".format(tools.get_current_arch())]))
 
-    def test_is_bucket_installed_multi_arch_other(self):
-        """Installed multi-arch package packages returned as installed if so"""
-        return  # TODO: add state with that (once the multi_arch tests are fixed)
-
     def test_is_bucket_installed_with_unavailable_package(self):
         """Bucket isn't installed if some package are even not in the cache"""
         self.assertFalse(self.handler.is_bucket_installed(["testpackagedoesntexist"]))
@@ -459,46 +457,41 @@ class TestRequirementsHandler(LoggedTestCase):
         self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.1")
 
     def test_install_with_foreign_foreign_arch_added(self):
-        return # TOFIX
         """Install packages with a foreign arch added"""
         subprocess.call([self.dpkg, "--add-architecture", "foo"])
-        self.handler.cache.open()         # DEBUG: reload cache
+        self.handler.cache.open()  # reopen the cache with the new added architecture
 
-        executor_init = self.handler.executor
-        self.handler.executor = Mock()
-        # patch get_foreign_arch as it doesn't use the rooted dpkg in the tools module
+        bucket = ["testpackagefoo:foo", "testpackage1"]
         with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock:
-            self.handler.install_bucket(["testpackagefoo:foo", "testpackage1"], lambda x, y: "", lambda: "")
+            self.handler.install_bucket(bucket, lambda x, y: "", self.done_callback)
+            self.wait_for_callback(self.done_callback)
+
             self.assertFalse(subprocess_mock.call.called)
-            self.assertTrue(self.handler.executor.submit.called)
-        self.handler.executor = executor_init
+            self.assertEqual(self.done_callback.call_args[0][0].bucket, bucket)
+            self.assertIsNone(self.done_callback.call_args[0][0].error)
+            self.assertTrue(self.handler.is_bucket_installed(bucket))
 
     def test_install_with_foreign_foreign_arch_not_added(self):
-        return #TOFIX
         """Install packages with a foreign arch, while the foreign arch wasn't added"""
-        executor_init = self.handler.executor
-        self.handler.executor = Mock()
-        # patch get_foreign_arch as it doesn't use the rooted dpkg in the tools module
-        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock:
-            self.handler.install_bucket(["testpackage:foo", "testpackage1"], lambda x, y: "", lambda: "")
-            self.assertTrue(subprocess_mock.call.called)
-            self.assertTrue(self.handler.executor.submit.called)
-        self.handler.executor = executor_init
+        bucket = ["testpackagefoo:foo", "testpackage1"]
+        self.handler.install_bucket(bucket, lambda x, y: "", self.done_callback)
+        self.wait_for_callback(self.done_callback)
+
+        self.assertEqual(self.done_callback.call_args[0][0].bucket, bucket)
+        self.assertIsNone(self.done_callback.call_args[0][0].error)
+        self.assertTrue(self.handler.is_bucket_installed(bucket))
 
     def test_install_with_foreign_foreign_arch_add_fails(self):
         """Install packages with a foreign arch, where adding a foreign arch fails"""
-        return
-        executor_init = self.handler.executor
-        self.handler.executor = Mock()
-        # patch get_foreign_arch as it doesn't use the rooted dpkg in the tools module
+        bucket = ["testpackagefoo:foo", "testpackage1"]
         with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock:
-            subprocess_mock.call.return_value = False
-            self.assertRaises(BaseException, self.handler.install_bucket, ["testpackagefoo:foo", "testpackage1"],
-                              lambda x, y: "", lambda: "")
+            subprocess_mock.call.return_value = 1
+            self.handler.install_bucket(bucket, lambda x, y: "", self.done_callback)
+            self.wait_for_callback(self.done_callback)
+
             self.assertTrue(subprocess_mock.call.called)
-            self.assertFalse(self.handler.executor.submit.called)
-        self.handler.executor = executor_init
-        self.expect_warn_error = True
+            self.assertFalse(self.handler.is_bucket_installed(bucket))
+            self.expect_warn_error = True
 
     def test_cant_change_seteuid(self):
         """Not being able to change the euid to root returns an error"""
