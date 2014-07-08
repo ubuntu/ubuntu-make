@@ -260,7 +260,7 @@ class TestDownloadCenter(LoggedTestCase):
         """we deliver one successful download, even if size isn't provided. Progress returns -1 though"""
         filename = "simplefile-with-no-content-length"
         request = self.build_server_address(filename)
-        report = Mock()
+        report = CopyingMock()
         DownloadCenter([request], self.callback, report=report)
         self.wait_for_callback(self.callback)
 
@@ -274,8 +274,8 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.error)
         self.assertEqual(report.call_count, 2)
         self.assertEqual(report.call_args_list,
-                         [call({self.build_server_address(filename): {'size': -1, 'current': -1}}),
-                          call({self.build_server_address(filename): {'size': -1, 'current': -1}})])
+                         [call({self.build_server_address(filename): {'size': -1, 'current': 0}}),
+                          call({self.build_server_address(filename): {'size': -1, 'current': 8192}})])
 
 
 class TestDownloadCenterSecure(LoggedTestCase):

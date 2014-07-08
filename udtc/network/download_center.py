@@ -94,7 +94,10 @@ class DownloadCenter:
         """
 
         def _report(block_no, block_size, total_size):
-            self._download_progress[url] = {"current": min(int(block_no * block_size), total_size), "size": total_size}
+            current_size = int(block_no * block_size)
+            if total_size != -1:
+                current_size = min(current_size, total_size)
+            self._download_progress[url] = {"current": current_size, "size": total_size}
             logger.debug("Deliver download update: {}".format(self._download_progress))
             self._wired_report(self._download_progress)
 
