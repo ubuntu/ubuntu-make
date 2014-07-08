@@ -121,7 +121,6 @@ class RequirementsHandler(object, metaclass=Singleton):
                 if arch not in get_foreign_archs() and arch != get_current_arch():
                     logger.info("Adding foreign arch: {}".format(arch))
                     with open(os.devnull, "w") as f:
-                        subprocess.call(["which", "dpkg"])
                         if subprocess.call(["dpkg", "--add-architecture", arch], stdout=f) != 0:
                             msg = "Can't add foreign foreign architecture {}".format(arch)
                             raise BaseException(msg)
