@@ -26,7 +26,7 @@ import stat
 import subprocess
 import tempfile
 from time import time
-from ..tools import get_data_dir, LoggedTestCase
+from ..tools import get_data_dir, LoggedTestCase, manipulate_path_env
 from unittest.mock import Mock, call, patch
 import udtc
 from udtc.network.requirements_handler import RequirementsHandler
@@ -52,12 +52,18 @@ class TestRequirementsHandler(LoggedTestCase):
         self.chroot_path = tempfile.mkdtemp()
 
         # create the fake dpkg wrapper
-        with tempfile.NamedTemporaryFile(delete=False, mode='w') as f:
-            f.write("#!/bin/sh\nfakeroot dpkg --root={root} --force-not-root --force-bad-path "
+        os.makedirs(os.path.join(self.chroot_path, "usr", "bin"))
+        self.dpkg = os.path.join(self.chroot_path, "usr", "bin", "dpkg")
+        with open(self.dpkg, "w") as f:
+            f.write("#!/bin/sh\nfakeroot /usr/bin/dpkg --root={root} --force-not-root --force-bad-path "
                     "--log={root}/var/log/dpkg.log \"$@\"".format(root=self.chroot_path))
-            self.dpkg = f.name
         st = os.stat(self.dpkg)
         os.chmod(self.dpkg, st.st_mode | stat.S_IEXEC)
+
+        # for arch cache support
+        tools._current_arch = None
+        tools._foreign_arch = None
+        manipulate_path_env(os.path.dirname(self.dpkg))
 
         # apt requirements
         apt_etc = os.path.join(self.chroot_path, 'etc', 'apt')
@@ -79,7 +85,8 @@ class TestRequirementsHandler(LoggedTestCase):
         cache = apt.Cache(rootdir=self.chroot_path)
         apt.apt_pkg.config.set("Dir::Bin::dpkg", self.dpkg)  # must be called after initializing the rootdir cache
         cache.update()
-        self.handler.cache.open()
+        cache.open()
+        self.handler.cache = cache
 
         self.done_callback = Mock()
 
@@ -97,10 +104,13 @@ class TestRequirementsHandler(LoggedTestCase):
         os.getenv = Mock(side_effect=self._mock_get_env)
 
     def tearDown(self):
+        # remove arch cache support
+        manipulate_path_env(os.path.dirname(self.dpkg), remove=True)
+
         tools._current_arch = None
         tools._foreign_arch = None
+
         shutil.rmtree(self.chroot_path)
-        os.remove(self.dpkg)
 
         os.seteuid = self._saved_seteuid_fn
         os.setegid = self._saved_setegid_fn
@@ -379,31 +389,20 @@ class TestRequirementsHandler(LoggedTestCase):
     def test_is_bucket_available_foreign_archs(self):
         """After adding a foreign arch, test that the package is available on it"""
         subprocess.call([self.dpkg, "--add-architecture", "foo"])
-
-        ## ENSURE WE RELOAD APT cache after adding the new arch (this is needed, right?)
-        self.handler.cache.update()
-        self.handler.cache.open()
-        #######
+        self.handler.cache.open()  # reopen the cache with the new added architecture
 
         self.assertTrue(self.handler.is_bucket_available(['testpackagefoo:foo', 'testpackage1']))
-        # patch get_foreign_arch as it doesn't use the rooted dpkg in the tools module
-        with patch("udtc.network.requirements_handler.get_foreign_archs") as get_foreign_call:
-            get_foreign_call.return_value = ["foo"]
-            self.assertTrue(self.handler.is_bucket_available(['testpackagefoo:foo', 'testpackage1']))
 
     def test_is_bucket_unavailable_with_foreign_archs(self):
         """After adding a foreign arch, test that the package is unavailable and report so"""
-        return
         subprocess.call([self.dpkg, "--add-architecture", "foo"])
-        self.handler.cache.open()
-        # patch get_foreign_arch as it doesn't use the rooted dpkg in the tools module
-        with patch("udtc.network.requirements_handler.get_foreign_archs") as get_foreign_call:
-            get_foreign_call.return_value = ["foo"]
-            self.assertFalse(self.handler.is_bucket_available(['testpackagefoo:foo', 'testpackage1']))
+        self.handler.cache.open()   # reopen the cache with the new added architecture
+
+        self.assertFalse(self.handler.is_bucket_available(['testpackagebar:foo', 'testpackage1']))
 
     def test_bucket_unavailable_but_foreign_archs_no_added(self):
         """Bucket is set as available when foreign arch not added"""
-        self.assertTrue(self.handler.is_bucket_available(['testpackage:foo', 'testpackage1']))
+        self.assertTrue(self.handler.is_bucket_available(['testpackagefoo:foo', 'testpackage1']))
 
     def test_bucket_unavailable_foreign_archs_no_added_another_package_not_available(self):
         """Bucket is set as unavailable when foreign arch not added, but another package on current arch is
@@ -460,32 +459,27 @@ class TestRequirementsHandler(LoggedTestCase):
         self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.1")
 
     def test_install_with_foreign_foreign_arch_added(self):
+        return # TOFIX
         """Install packages with a foreign arch added"""
-        return
         subprocess.call([self.dpkg, "--add-architecture", "foo"])
-        # FIXME: DEBUG: try with armhf in case foo didn't WORK
-        subprocess.call([self.dpkg, "--add-architecture", "armhf"])
         self.handler.cache.open()         # DEBUG: reload cache
+
         executor_init = self.handler.executor
         self.handler.executor = Mock()
         # patch get_foreign_arch as it doesn't use the rooted dpkg in the tools module
-        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock,\
-                patch("udtc.network.requirements_handler.get_foreign_archs") as get_foreign_call:
-            get_foreign_call.return_value = ["foo"]
+        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock:
             self.handler.install_bucket(["testpackagefoo:foo", "testpackage1"], lambda x, y: "", lambda: "")
             self.assertFalse(subprocess_mock.call.called)
             self.assertTrue(self.handler.executor.submit.called)
         self.handler.executor = executor_init
 
     def test_install_with_foreign_foreign_arch_not_added(self):
+        return #TOFIX
         """Install packages with a foreign arch, while the foreign arch wasn't added"""
-        return
         executor_init = self.handler.executor
         self.handler.executor = Mock()
         # patch get_foreign_arch as it doesn't use the rooted dpkg in the tools module
-        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock,\
-                patch("udtc.network.requirements_handler.get_foreign_archs") as get_foreign_call:
-            get_foreign_call.return_value = []
+        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock:
             self.handler.install_bucket(["testpackage:foo", "testpackage1"], lambda x, y: "", lambda: "")
             self.assertTrue(subprocess_mock.call.called)
             self.assertTrue(self.handler.executor.submit.called)
@@ -497,10 +491,8 @@ class TestRequirementsHandler(LoggedTestCase):
         executor_init = self.handler.executor
         self.handler.executor = Mock()
         # patch get_foreign_arch as it doesn't use the rooted dpkg in the tools module
-        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock,\
-                patch("udtc.network.requirements_handler.get_foreign_archs") as get_foreign_call:
+        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock:
             subprocess_mock.call.return_value = False
-            get_foreign_call.return_value = []
             self.assertRaises(BaseException, self.handler.install_bucket, ["testpackagefoo:foo", "testpackage1"],
                               lambda x, y: "", lambda: "")
             self.assertTrue(subprocess_mock.call.called)

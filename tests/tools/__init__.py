@@ -100,3 +100,13 @@ def patchelem(element, attr, value):
     setattr(element, attr, value)
     yield
     setattr(element, attr, old_value)
+
+
+def manipulate_path_env(value, remove=False):
+    """prepend value to PATH environment. If remove is true, remove it"""
+    path = os.environ["PATH"].split(os.pathsep)
+    if remove:
+        path.remove(value)
+    else:
+        path.insert(0, value)
+    os.environ["PATH"] = os.pathsep.join(path)
