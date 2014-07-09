@@ -39,13 +39,11 @@ class UI(object, metaclass=Singleton):
     def display(cls, contentType):
         """display in main thread this UI contentType. Can be delayed by 50 ms, like for pulse or message"""
         # TODO: add check for current framework == framework sending contentType
-        #print("display called: {}".format(delayed))
         cls.currentUI._display(contentType)
 
     @classmethod
     @MainLoop.in_mainloop_thread
     def delayed_display(cls, contentType):
-        #print("delayed display called: {}")
         GLib.timeout_add(50, cls._one_time_wrapper, cls.currentUI._display, contentType)
 
     @staticmethod
