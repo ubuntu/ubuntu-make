@@ -18,8 +18,9 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-"""Android module"""
+"""Downloader abstract module"""
 
+import abc
 from contextlib import suppress
 from gettext import gettext as _
 from io import StringIO
@@ -39,35 +40,24 @@ from udtc.tools import MainLoop, strip_tags, create_launcher, get_application_de
 
 logger = logging.getLogger(__name__)
 
-_supported_archs = ['i386', 'amd64']
+_supported_archs = []
 
 
-class AndroidCategory(udtc.frameworks.BaseCategory):
+class BaseInstaller(udtc.frameworks.BaseFramework):
 
-    def __init__(self):
-        super().__init__(name=_("Android"), description=_("Android Developement Environment"),
-                         logo_path=None,
-                         packages_requirements=["openjdk-7-jdk", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386"])
+    def __new__(cls, *args, **kwargs):
+        "This class is not meant to be instantiated, so __new__ returns None."
+        if cls == BaseInstaller:
+            return None
+        return super().__new__(cls)
 
+    def __init__(self, *args, **kwargs):
+        """The Downloader framework isn't instantiated directly, but is useful to inherit from for all frameworks
 
-class EclipseAdt(udtc.frameworks.BaseFramework):
-
-    def __init__(self, category):
-        super().__init__(name="ADT", description="Android Developer Tools (using eclipse)",
-                         category=category, install_path_dir="android/adt-eclipse",
-                         only_on_archs=_supported_archs)
-        self.ADT_DOWNLOAD_PAGE = "https://developer.android.com/sdk/index.html"
-
-    def setup(self, install_path=None):
-        print("Installing…")
-        super().setup()
-
-
-class AndroidStudio(udtc.frameworks.BaseFramework):
-
-    def __init__(self, category):
-        super().__init__(name="Android Studio", description="Android Studio (default)", is_category_default=True,
-                         category=category, only_on_archs=_supported_archs)
+        having a set of downloads to proceed, some eventual supported_archs, """
+        super().__init__(*args, **kwargs)
+        #name="BaseInstaller", description="Android Studio (default)", is_category_default=True,
+        #                 category=category, only_on_archs=_supported_archs)
         self._install_done = False
         self._reinstall = False
         self._arg_install_path = None

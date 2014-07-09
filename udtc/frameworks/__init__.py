@@ -44,7 +44,6 @@ class BaseCategory():
 
     NOT_INSTALLED, PARTIALLY_INSTALLED, FULLY_INSTALLED = range(3)
     categories = NoneDict()
-    main_category = None
 
     def __init__(self, name, description="", logo_path=None, is_main_category=False, packages_requirements=None):
         self.name = name
@@ -296,8 +295,8 @@ def load_frameworks():
             logger.debug("Found category: {}".format(category_name))
             current_category = CategoryClass()
         for framework_name, FrameworkClass in inspect.getmembers(module, _is_frameworkclass):
-            logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
             try:
-                FrameworkClass(current_category)
+                if FrameworkClass(current_category) is not None:
+                    logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
             except TypeError as e:
                 logger.error("Can't attach {} to {}: {}".format(framework_name, current_category.name, e))

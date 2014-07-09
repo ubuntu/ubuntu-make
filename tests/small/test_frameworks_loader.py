@@ -25,9 +25,11 @@ import os
 import shutil
 import sys
 import tempfile
+from ..data.testframeworks.uninstantiableframework import Uninstantiable, InheritedFromUninstantiable
 from ..tools import get_data_dir, change_xdg_path, patchelem, LoggedTestCase, ConfigHandler
 import udtc
 from udtc import frameworks
+from udtc.frameworks.baseinstaller import BaseInstaller
 from udtc.tools import NoneDict
 from unittest.mock import Mock, patch, call
 
@@ -48,6 +50,7 @@ class BaseFrameworkLoader(LoggedTestCase):
 
     def tearDown(self):
         change_xdg_path('XDG_CONFIG_HOME', remove=True)
+        self.CategoryHandler.categories = NoneDict()
         super().tearDown()
 
     def config_dir_for_name(self, name):
@@ -297,6 +300,20 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.framework = None
         self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
         self.expect_warn_error = True
+
+    def test_uninstantiable_framework(self):
+        """A uninstantiable framework isn't loaded"""
+        # use the string as we fake the package when loading them
+        self.assertNotIn(str(Uninstantiable).split('.')[-1],
+                         [str(type(framework)).split('.')[-1] for framework in
+                          self.CategoryHandler.main_category.frameworks.values()])
+
+    def test_inherited_from_uninstantiable_framework(self):
+        """We can attach a framework which inherit from an uninstantiable one"""
+        # use the string as we fake the package when loading them
+        self.assertIn(str(InheritedFromUninstantiable).split('.')[-1],
+                      [str(type(framework)).split('.')[-1] for framework in
+                       self.CategoryHandler.main_category.frameworks.values()])
 
 
 class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
@@ -837,10 +854,16 @@ class TestProductionFrameworkLoader(BaseFrameworkLoader):
     """Load production framework-and ensure there is no warning and no error"""
 
     def test_load(self):
+        """Can load production frameworks"""
         frameworks.load_frameworks()
-        self.assertTrue(len(frameworks.BaseCategory.categories) > 0)
-        self.assertIsNotNone(frameworks.BaseCategory.main_category)
-        self.assertEquals(len(frameworks.BaseCategory.categories["android"].frameworks), 2)
+        self.assertTrue(len(self.CategoryHandler.categories) > 0)
+        self.assertIsNotNone(self.CategoryHandler.main_category)
+        self.assertEquals(len(self.CategoryHandler.categories["android"].frameworks), 2)
+
+    def test_ignored_frameworks(self):
+        """Ignored frameworks aren't loaded"""
+        frameworks.load_frameworks()
+        self.assertNotIn(BaseInstaller, frameworks.BaseCategory.main_category.frameworks.values())
 
 
 class TestCustomFrameworkCantLoad(BaseFrameworkLoader):
