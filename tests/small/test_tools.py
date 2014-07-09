@@ -215,7 +215,6 @@ class TestToolsThreads(LoggedTestCase):
         self.mainloop_object = tools.MainLoop()
         self.mainloop_thread = None
         self.function_thread = None
-        self.parallel_function_thread = None
         self.saved_stderr = sys.stderr
 
     def tearDown(self):
@@ -231,7 +230,6 @@ class TestToolsThreads(LoggedTestCase):
 
     # function that will complete once the mainloop is started
     def wait_for_mainloop_function(self):
-        self.parallel_function_thread = threading.current_thread().ident
         timeout_time = time() + 5
         while not self.mainloop_object.mainloop.is_running():
             if time() > timeout_time:
@@ -270,9 +268,8 @@ class TestToolsThreads(LoggedTestCase):
 
         # mainloop and thread were started
         self.assertIsNotNone(self.mainloop_thread)
-        self.assertIsNotNone(self.parallel_function_thread)
+        self.assertIsNotNone(self.function_thread)
         self.assertEquals(self.mainloop_thread, self.function_thread)
-        self.assertNotEquals(self.mainloop_thread, self.parallel_function_thread)
 
     @patch("udtc.tools.sys")
     def test_run_function_not_in_mainloop_thread(self, mocksys):
@@ -291,11 +288,8 @@ class TestToolsThreads(LoggedTestCase):
 
         # mainloop and thread were started
         self.assertIsNotNone(self.mainloop_thread)
-        self.assertIsNotNone(self.parallel_function_thread)
+        self.assertIsNotNone(self.function_thread)
         self.assertNotEquals(self.mainloop_thread, self.function_thread)
-        self.assertNotEquals(self.mainloop_thread, self.parallel_function_thread)
-        # the function parallel thread id was reused
-        self.assertEquals(self.function_thread, self.parallel_function_thread)
 
     def test_singleton(self):
         """Ensure we are delivering a singleton for RequirementsHandler"""

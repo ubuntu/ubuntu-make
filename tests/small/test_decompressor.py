@@ -21,10 +21,10 @@
 
 import os
 from time import time
-from unittest.mock import Mock, call, patch
+from unittest.mock import Mock
 import shutil
 import tempfile
-from ..tools import get_data_dir, CopyingMock, LoggedTestCase
+from ..tools import get_data_dir, LoggedTestCase
 from udtc.decompressor import Decompressor
 
 
