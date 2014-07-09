@@ -86,7 +86,7 @@ class Decompressor:
 
         result = self.DecompressResult(error=None)
         if future.exception():
-            logger.debug("A decompression failed to {}: {}".format(future.tag_dest, future.exception()))
+            logger.error("A decompression failed to {}: {}".format(future.tag_dest, future.exception()))
             result = result._replace(error=str(future.exception()))
 
         logger.info("Decompression to {} finished".format(future.tag_dest))
@@ -99,5 +99,5 @@ class Decompressor:
 
         uris of the temporary files will be passed on the wired callback
         """
-        logger.info("All pending decompression done to {} done.".format(self._orders[fd].dest for fd in self._orders))
+        logger.info("All pending decompression done to {} done.".format([self._orders[fd].dest for fd in self._orders]))
         self._done_callback(self._decompressed)
