@@ -133,7 +133,7 @@ class TestRequirementsHandler(LoggedTestCase):
         """Count the number of tag in progress call and return it"""
         count = 0
         for call in call_args_list:
-            if call[0][0] == tag:
+            if call[0][0]['step'] == tag:
                 count += 1
         return count
 
@@ -153,7 +153,7 @@ class TestRequirementsHandler(LoggedTestCase):
 
     def test_install(self):
         """Install one package"""
-        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertEqual(self.done_callback.call_args[0][0].bucket, ['testpackage'])
@@ -163,7 +163,7 @@ class TestRequirementsHandler(LoggedTestCase):
     def test_install_multi_arch_current_arch(self):
         """We install a multi_arch package corresponding to current arch"""
         multi_arch_name = "testpackage:{}".format(tools.get_current_arch())
-        self.handler.install_bucket([multi_arch_name], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket([multi_arch_name], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertEqual(self.done_callback.call_args[0][0].bucket, [multi_arch_name])
@@ -172,7 +172,7 @@ class TestRequirementsHandler(LoggedTestCase):
 
     def test_install_perm(self):
         """When we install one package, we first switch to root"""
-        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         os.seteuid.assert_called_once_with(0)
@@ -181,7 +181,7 @@ class TestRequirementsHandler(LoggedTestCase):
     def test_install_return_error_if_no_perm(self):
         """Return an exception when we try to install and we can't switch to root"""
         os.seteuid = self._saved_seteuid_fn
-        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertIsNotNone(self.done_callback.call_args[0][0].error)
@@ -191,7 +191,7 @@ class TestRequirementsHandler(LoggedTestCase):
     def test_install_perm_switch_back_user(self):
         """When we install one package, we switch back to user at the end"""
         udtc.network.requirements_handler.os.geteuid.return_value = 0
-        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         # we call it twice and the latest is the user id
@@ -211,10 +211,15 @@ class TestRequirementsHandler(LoggedTestCase):
                                                          RequirementsHandler.STATUS_INSTALLING)
         self.assertTrue(downloading_msg > 1)
         self.assertTrue(installing_msg > 1)
+        # the first download call is at 0% of progress. testpackage is 1byte to download
+        self.assertEquals(progress_callback.call_args_list[0][0][0],
+                          {'step': 0, 'pkg_size_download': 1, 'percentage': 0.0})
+        self.assertEquals(progress_callback.call_args_list[2][0][0],
+                          {'step': 1, 'percentage': 0.0})
 
     def test_install_multiple_packages(self):
         """Install multiple packages in one shot"""
-        self.handler.install_bucket(["testpackage", "testpackage0"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage", "testpackage0"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertEqual(self.done_callback.call_args[0][0].bucket, ['testpackage', 'testpackage0'])
@@ -233,12 +238,15 @@ class TestRequirementsHandler(LoggedTestCase):
                                                          RequirementsHandler.STATUS_INSTALLING)
         self.assertTrue(downloading_msg > 1)
         self.assertTrue(installing_msg > 1)
+        # the first download call is at 0% of progress. testpackage is 1byte to download
+        self.assertEquals(progress_callback.call_args_list[0][0][0],
+                          {'step': 0, 'pkg_size_download': 1, 'percentage': 0.0})
 
     def test_install_pending(self):
         """Appending two installations and wait for results. Only the first call should have progress"""
         done_callback0 = Mock()
-        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
-        self.handler.install_bucket(["testpackage0"], lambda x, y: "", done_callback0)
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
+        self.handler.install_bucket(["testpackage0"], lambda x: "", done_callback0)
         self.wait_for_callback(self.done_callback)
         self.wait_for_callback(done_callback0)
 
@@ -268,8 +276,8 @@ class TestRequirementsHandler(LoggedTestCase):
         current_status_change_count = 1
         calls = ordered_progress_callback.call_args_list
         for current_call in calls[1:]:
-            if current_call[0][0] != current_status:
-                current_status = current_call[0][0]
+            if current_call[0][0]['step'] != current_status:
+                current_status = current_call[0][0]['step']
                 current_status_change_count += 1
         self.assertEqual(current_status_change_count, 4)
 
@@ -309,14 +317,14 @@ class TestRequirementsHandler(LoggedTestCase):
 
     def test_deps(self):
         """Installing one package, ensure the dep (even with auto_fix=False) is installed"""
-        self.handler.install_bucket(["testpackage1"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage1"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertTrue(self.handler.is_bucket_installed(["testpackage1", "testpackage"]))
 
     def test_fail(self):
         """An error is caught when asking for the impossible (installing 2 packages in conflicts)"""
-        self.handler.install_bucket(["testpackage", "testpackage2"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage", "testpackage2"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertIsNotNone(self.done_callback.call_args[0][0].error)
@@ -326,7 +334,7 @@ class TestRequirementsHandler(LoggedTestCase):
 
     def test_install_shadow_pkg(self):
         """We return an error if we try to install a none existing package"""
-        self.handler.install_bucket(["foo"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["foo"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertIsNotNone(self.done_callback.call_args[0][0].error)
@@ -336,7 +344,7 @@ class TestRequirementsHandler(LoggedTestCase):
         """An error while installing a package is caught"""
         with open(self.dpkg, mode='w') as f:
             f.write("#!/bin/sh\nexit 1")  # Simulate an error in dpkg
-        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertIsNotNone(self.done_callback.call_args[0][0].error)
@@ -344,13 +352,13 @@ class TestRequirementsHandler(LoggedTestCase):
 
     def test_is_installed_bucket_installed(self):
         """Install bucket should return True if a bucket is installed"""
-        self.handler.install_bucket(["testpackage", "testpackage1"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage", "testpackage1"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
         self.assertTrue(self.handler.is_bucket_installed(['testpackage', 'testpackage1']))
 
     def test_is_installed_bucket_half_installed(self):
         """Install bucket shouldn't be considered installed if not fully installed"""
-        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
         self.assertFalse(self.handler.is_bucket_installed(['testpackage', 'testpackage1']))
 
@@ -360,7 +368,7 @@ class TestRequirementsHandler(LoggedTestCase):
 
     def test_is_bucket_installed_multi_arch_current_arch(self):
         """Installed bucket should return True even if contains multi-arch part with current package"""
-        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
         self.assertTrue(self.handler.is_bucket_installed(["testpackage:{}".format(tools.get_current_arch())]))
 
@@ -372,16 +380,76 @@ class TestRequirementsHandler(LoggedTestCase):
         """Bucket isn't installed if some multiarch package are even not in the cache"""
         self.assertFalse(self.handler.is_bucket_installed(["testpackagedoesntexist:foo"]))
 
+    def test_is_bucket_installed_with_foreign_archs_package_not_installed(self):
+        """After adding a foreign arch, test that the package is not installed and report so"""
+        subprocess.call([self.dpkg, "--add-architecture", "foo"])
+        self.handler.cache.open()   # reopen the cache with the new added architecture
+
+        self.assertFalse(self.handler.is_bucket_installed(['testpackagefoo:foo']))
+
+    def test_is_bucket_uptodate_bucket_uptodate(self):
+        """Up to date bucket is reported as such"""
+        self.handler.install_bucket(["testpackage", "testpackage1"], lambda x: "", self.done_callback)
+        self.wait_for_callback(self.done_callback)
+        self.assertTrue(self.handler.is_bucket_uptodate(['testpackage', 'testpackage1']))
+
+    def test_is_bucket_uptodate_bucket_not_installed(self):
+        """Not installed bucket is not uptodate"""
+        self.assertFalse(self.handler.is_bucket_uptodate(['testpackage', 'testpackage1']))
+
+    def test_is_bucket_uptodate_bucket_half_installed(self):
+        """bucket shouldn't be considered up to date if not fully installed"""
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
+        self.wait_for_callback(self.done_callback)
+        self.assertFalse(self.handler.is_bucket_uptodate(['testpackage', 'testpackage1']))
+
+    def test_is_bucket_uptodate_multi_arch_current_arch(self):
+        """Installed bucket should return as being uptodate even if contains multi-arch part with current package"""
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
+        self.wait_for_callback(self.done_callback)
+        self.assertTrue(self.handler.is_bucket_uptodate(["testpackage:{}".format(tools.get_current_arch())]))
+
+    def test_is_bucket_uptodate_with_unavailable_package(self):
+        """Bucket isn't uptodate if some package are even not in the cache"""
+        self.assertFalse(self.handler.is_bucket_uptodate(["testpackagedoesntexist"]))
+
+    def test_is_bucket_uptodate_with_unavailable_multiarch_package(self):
+        """Bucket isn't uptodate if some multiarch package are even not in the cache"""
+        self.assertFalse(self.handler.is_bucket_uptodate(["testpackagedoesntexist:foo"]))
+
+    def test_is_bucket_uptodate_with_foreign_archs(self):
+        """After adding a foreign arch, test that the package is uptodate and report so"""
+        subprocess.call([self.dpkg, "--add-architecture", "foo"])
+        self.handler.cache.open()   # reopen the cache with the new added architecture
+        self.handler.install_bucket(["testpackagefoo:foo"], lambda x: "", self.done_callback)
+        self.wait_for_callback(self.done_callback)
+
+        self.assertTrue(self.handler.is_bucket_uptodate(['testpackagefoo:foo']))
+
+    def test_is_bucket_uptodate_with_foreign_archs_package_not_installed(self):
+        """After adding a foreign arch, test that the package is not uptodate and report so"""
+        subprocess.call([self.dpkg, "--add-architecture", "foo"])
+        self.handler.cache.open()   # reopen the cache with the new added architecture
+
+        self.assertFalse(self.handler.is_bucket_uptodate(['testpackagefoo:foo']))
+
+    def test_is_bucket_uptodate_with_possible_upgrade(self):
+        """If one package of the bucket can be upgraded, tell it's not up to date"""
+        shutil.copy(os.path.join(self.apt_status_dir, "testpackage_installed_dpkg_status"),
+                    os.path.join(self.dpkg_dir, "status"))
+        self.handler.cache.open()
+        self.assertFalse(self.handler.is_bucket_uptodate(["testpackage"]))
+
     def test_is_bucket_available(self):
-        """Test that an available bucket on that platform is reported"""
+        """An available bucket on that platform is reported"""
         self.assertTrue(self.handler.is_bucket_available(['testpackage', 'testpackage1']))
 
     def test_is_bucket_available_multi_arch_current_arch(self):
-        """Test that we return a package is available on the current platform"""
+        """We return a package is available on the current platform"""
         self.assertTrue(self.handler.is_bucket_available(['testpackage:{}'.format(tools.get_current_arch())]))
 
     def test_unavailable_bucket(self):
-        """Test that an unavailable bucket on that platform is reported"""
+        """An unavailable bucket on that platform is reported"""
         self.assertFalse(self.handler.is_bucket_available(['testpackage42', 'testpackage404']))
 
     def test_is_bucket_available_foreign_archs(self):
@@ -421,7 +489,7 @@ class TestRequirementsHandler(LoggedTestCase):
                 raise SystemError
 
         with patch.object(self.handler.cache, 'open', side_effect=cache_call) as openaptcache_mock:
-            self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+            self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
             self.wait_for_callback(self.done_callback)
             self.assertEquals(openaptcache_mock.call_count, 2)
 
@@ -432,7 +500,7 @@ class TestRequirementsHandler(LoggedTestCase):
         self.handler.cache.open()
         self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
         self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.0")
-        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertEqual(self.done_callback.call_args[0][0].bucket, ['testpackage'])
@@ -448,7 +516,7 @@ class TestRequirementsHandler(LoggedTestCase):
         self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
         self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.0")
         self.assertFalse(self.handler.is_bucket_installed(["testpackage0"]))
-        self.handler.install_bucket(["testpackage", "testpackage0"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage", "testpackage0"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertEqual(self.done_callback.call_args[0][0].bucket, ['testpackage', 'testpackage0'])
@@ -463,7 +531,7 @@ class TestRequirementsHandler(LoggedTestCase):
 
         bucket = ["testpackagefoo:foo", "testpackage1"]
         with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock:
-            self.handler.install_bucket(bucket, lambda x, y: "", self.done_callback)
+            self.handler.install_bucket(bucket, lambda x: "", self.done_callback)
             self.wait_for_callback(self.done_callback)
 
             self.assertFalse(subprocess_mock.call.called)
@@ -474,7 +542,7 @@ class TestRequirementsHandler(LoggedTestCase):
     def test_install_with_foreign_foreign_arch_not_added(self):
         """Install packages with a foreign arch, while the foreign arch wasn't added"""
         bucket = ["testpackagefoo:foo", "testpackage1"]
-        self.handler.install_bucket(bucket, lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(bucket, lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertEqual(self.done_callback.call_args[0][0].bucket, bucket)
@@ -486,7 +554,7 @@ class TestRequirementsHandler(LoggedTestCase):
         bucket = ["testpackagefoo:foo", "testpackage1"]
         with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock:
             subprocess_mock.call.return_value = 1
-            self.handler.install_bucket(bucket, lambda x, y: "", self.done_callback)
+            self.handler.install_bucket(bucket, lambda x: "", self.done_callback)
             self.wait_for_callback(self.done_callback)
 
             self.assertTrue(subprocess_mock.call.called)
@@ -496,7 +564,7 @@ class TestRequirementsHandler(LoggedTestCase):
     def test_cant_change_seteuid(self):
         """Not being able to change the euid to root returns an error"""
         os.seteuid = self._saved_seteuid_fn
-        self.handler.install_bucket(["testpackage"], lambda x, y: "", self.done_callback)
+        self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertEqual(self.done_callback.call_args[0][0].bucket, ['testpackage'])

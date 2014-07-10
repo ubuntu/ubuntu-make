@@ -34,7 +34,7 @@ import threading
 from ..tools import change_xdg_path, get_data_dir, LoggedTestCase
 from udtc import settings, tools
 from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
-    create_launcher, launcher_exists_and_is_pinned
+    create_launcher, launcher_exists_and_is_pinned, launcher_exists
 from unittest.mock import patch
 
 
@@ -424,6 +424,15 @@ class TestLauncherIcons(LoggedTestCase):
         create_launcher("foo.desktop", self.get_generic_desktop_content())
 
         self.assertEquals(open(result_file).read(), self.get_generic_desktop_content())
+
+    def test_desktop_file_exists(self):
+        """Launcher exists"""
+        self.write_desktop_file("foo.desktop")
+        self.assertTrue(launcher_exists("foo.desktop"))
+
+    def test_desktop_file_doesnt_exist(self):
+        """Launcher file doesn't exists"""
+        self.assertFalse(launcher_exists("foo.desktop"))
 
     @patch("udtc.tools.Gio.Settings")
     def test_launcher_exists_and_is_pinned(self, SettingsMock):

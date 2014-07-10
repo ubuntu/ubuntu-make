@@ -119,12 +119,9 @@ class MainLoop(object, metaclass=Singleton):
         def wrapper(*args, **kwargs):
             try:
                 function(*args, **kwargs)
-            except BaseException as e:
-                logger.error("Unhandled exception: {}".format(e))
-                try:
-                    raise
-                finally:
-                    GLib.idle_add(MainLoop().quit, 1)
+            except BaseException:
+                logger.exception("Unhandled exception")
+                GLib.idle_add(MainLoop().quit, 1)
 
         def inner(*args, **kwargs):
             return GLib.idle_add(wrapper, *args, **kwargs)
@@ -193,11 +190,18 @@ def is_completion_mode():
     return False
 
 
-def launcher_exists_and_is_pinned(desktop_filename):
-    """Return true if the desktop filename is pinned in the launcher"""
+def launcher_exists(desktop_filename):
+    """Return true if the desktop filename exists"""
     exists = os.path.exists(os.path.join(xdg_data_home, "applications", desktop_filename))
     if not exists:
         logger.debug("{} doesn't exists".format(desktop_filename))
+        return False
+    return True
+
+
+def launcher_exists_and_is_pinned(desktop_filename):
+    """Return true if the desktop filename is pinned in the launcher"""
+    if not launcher_exists(desktop_filename):
         return False
     if os.environ.get("XDG_CURRENT_DESKTOP") != "Unity":
         logger.debug("Don't check launcher as current environment isn't Unity")

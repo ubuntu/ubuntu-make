@@ -76,7 +76,9 @@ class DownloadCenter:
                 (url, md5sum) = url_request
             # switch between inline memory and temp file
             if download:
-                dest = tempfile.TemporaryFile()
+                # Named because the tar library crash if we don't have a named one.
+                # http://bugs.python.org/issue21044
+                dest = tempfile.NamedTemporaryFile()
                 logger.info("Start downloading {} as a temporary file".format(url))
             else:
                 dest = BytesIO()
@@ -98,7 +100,7 @@ class DownloadCenter:
             if total_size != -1:
                 current_size = min(current_size, total_size)
             self._download_progress[url] = {"current": current_size, "size": total_size}
-            logger.debug("Deliver download update: {}".format(self._download_progress))
+            logger.debug("Deliver download update: {} of {}".format(self._download_progress, total_size))
             self._wired_report(self._download_progress)
 
         # choose protocol

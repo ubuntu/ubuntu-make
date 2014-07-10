@@ -32,7 +32,7 @@ import subprocess
 from udtc.network.requirements_handler import RequirementsHandler
 from udtc.settings import DEFAULT_INSTALL_TOOLS_PATH
 from udtc.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
-    is_completion_mode, switch_to_current_user
+    is_completion_mode, switch_to_current_user, MainLoop
 from udtc.ui import UI
 
 
@@ -227,7 +227,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
             logger.debug("Requesting root access")
             cmd = ["sudo", "-E", "env", "PATH={}".format(os.getenv("PATH"))]
             cmd.extend(sys.argv)
-            sys.exit(subprocess.call(cmd))
+            MainLoop().quit(subprocess.call(cmd))
 
         # be a normal, kind user
         switch_to_current_user()

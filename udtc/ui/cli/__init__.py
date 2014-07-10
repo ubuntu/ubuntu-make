@@ -74,7 +74,6 @@ class CliUI(UI):
                     with suppress(StopIteration):
                         # pulse and add a timeout callback
                         contentType.bar(contentType._iterator()).next()
-                        #self._add_progress_timeout(contentType)
                         UI.delayed_display(contentType)
                     # don't recall the callback
                     return False

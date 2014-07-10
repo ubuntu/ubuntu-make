@@ -20,27 +20,21 @@
 
 """Downloader abstract module"""
 
-import abc
 from contextlib import suppress
-from gettext import gettext as _
 from io import StringIO
 import logging
 from progressbar import ProgressBar
 import os
-import re
 import shutil
-from textwrap import dedent
 import udtc.frameworks
 from udtc.decompressor import Decompressor
 from udtc.interactions import InputText, YesNo, LicenseAgreement, DisplayMessage, UnknownProgress
 from udtc.network.download_center import DownloadCenter
 from udtc.network.requirements_handler import RequirementsHandler
 from udtc.ui import UI
-from udtc.tools import MainLoop, strip_tags, create_launcher, get_application_desktop_file
+from udtc.tools import MainLoop, strip_tags, launcher_exists
 
 logger = logging.getLogger(__name__)
-
-_supported_archs = []
 
 
 class BaseInstaller(udtc.frameworks.BaseFramework):
@@ -54,24 +48,29 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
     def __init__(self, *args, **kwargs):
         """The Downloader framework isn't instantiated directly, but is useful to inherit from for all frameworks
 
-        having a set of downloads to proceed, some eventual supported_archs, """
+        having a set of downloads to proceed, some eventual supported_archs."""
+        self.expect_license = kwargs.get("expect_license", False)
+        self.download_page = kwargs["download_page"]
+        self.dir_to_decompress_in_tarball = kwargs.get("dir_to_decompress_in_tarball", None)
+        self.desktop_file_name = kwargs.get("desktop_file_name", None)
+        for extra_arg in ["expect_license", "download_page", "dir_to_decompress_in_tarball", "desktop_file_name"]:
+            with suppress(KeyError):
+                kwargs.pop(extra_arg)
         super().__init__(*args, **kwargs)
-        #name="BaseInstaller", description="Android Studio (default)", is_category_default=True,
-        #                 category=category, only_on_archs=_supported_archs)
+
         self._install_done = False
         self._reinstall = False
         self._arg_install_path = None
-        self.STUDIO_DOWNLOAD_PAGE = "http://developer.android.com/sdk/installing/studio.html"
+        self.download_requests = []
 
     @property
     def is_installed(self):
         # check path and requirements
         if not super().is_installed:
             return False
-        if not os.path.join(self.install_path, "bin", "studio.sh"):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        # check pre-requisites
+        if self.desktop_file_name:
+            return launcher_exists(self.desktop_file_name)
+        return True
 
     def setup(self, arg_install_path=None):
         self.arg_install_path = arg_install_path
@@ -79,8 +78,8 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
 
         # first step, check if installed
         if self.is_installed:
-            UI.display(YesNo("Android Studio is already installed on your system, do you want to reinstall "
-                             "it anyway?", self.reinstall, UI.return_main_screen))
+            UI.display(YesNo("{} is already installed on your system, do you want to reinstall "
+                             "it anyway?".format(self.name), self.reinstall, UI.return_main_screen))
         else:
             self.confirm_path(arg_install_path)
 
@@ -122,71 +121,79 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         # Mark nown known install place for later eventual reinstallation
         self.mark_in_config()
 
-        logger.debug("Download android app provider page")
-        DownloadCenter([(self.STUDIO_DOWNLOAD_PAGE, None)], self.get_metadata_and_check_license, download=False)
+        logger.debug("Download application provider page")
+        DownloadCenter([(self.download_page, None)], self.get_metadata_and_check_license, download=False)
+
+    def parse_license(self, line, license_txt, in_license):
+        """Parse license per line, eventually write to license_txt if it's in the license part.
+
+        A flag in_license that is returned by the same function helps to decide if we are in the license part"""
+        pass
+
+    def parse_download_link(self, line, in_download):
+        """Parse download_link per line. in_download is a helper that the function return to know if it's in the
+        download part.
+
+        return a tuple of (None, in_download=True/False) if no parsable is found or
+                          ((url, md5sum), in_download=True/False)"""
+        pass
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
         """Download files to download + license and check it"""
         logger.debug("Parse download metadata")
 
-        error_msg = result[self.STUDIO_DOWNLOAD_PAGE].error
+        error_msg = result[self.download_page].error
         if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.STUDIO_DOWNLOAD_PAGE, error_msg))
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen()
 
-        self.to_download = {}
+        url, md5sum = (None, None)
         with StringIO() as license_txt:
             in_license = False
             in_download = False
-            for line in result[self.STUDIO_DOWNLOAD_PAGE].buffer:
+            for line in result[self.download_page].buffer:
                 line_content = line.decode()
 
-                # license part
-                if line_content.startswith('<p class="sdk-terms-intro">'):
-                    in_license = True
-                if in_license:
-                    if line_content.startswith('</div>'):
-                        in_license = False
-                    else:
-                        license_txt.write(line_content)
+                if self.expect_license:
+                    in_license = self.parse_license(line_content, license_txt, in_license)
 
-                # download part
-                if 'id="linux-studio"' in line_content:
-                    in_download = True
-                if in_download:
-                    p = re.search(r'href="(.*)">', line_content)
-                    with suppress(AttributeError):
-                        self.to_download['url'] = p.group(1)
-                    p = re.search(r'<td>(\w+)</td>', line_content)
-                    with suppress(AttributeError):
-                        self.to_download['md5sum'] = p.group(1)
-                    if "</tr>" in line_content:
-                        in_download = False
+                (download, in_download) = self.parse_download_link(line_content, in_download)
+                if download is not None:
+                    (url, md5sum) = download
+                    logger.debug("Found download link for {}, md5sum: {}".format(url, md5sum))
 
-            if not "url" in self.to_download or not "md5sum" in self.to_download:
-                logger.error("Couldn't find any download page")
+            if url is None:
+                logger.error("Download page changed its syntax or is not parsable")
                 UI.return_main_screen()
+            self.download_requests.append((url, md5sum))
 
-            logger.debug("Check license agreement.")
-            UI.display(LicenseAgreement(strip_tags(license_txt.getvalue()).strip(),
-                                        self.start_download_and_install,
-                                        UI.return_main_screen))
+            if license_txt.getvalue() != "":
+                logger.debug("Check license agreement.")
+                UI.display(LicenseAgreement(strip_tags(license_txt.getvalue()).strip(),
+                                            self.start_download_and_install,
+                                            UI.return_main_screen))
+            elif self.expect_license:
+                logger.error("We were expecting to find a license on the download page, we didn't.")
+                UI.return_main_screen()
+            else:
+                self.start_download_and_install()
         return
 
     def start_download_and_install(self):
         self.last_progress_download = 0
         self.last_progress_requirement = 0
         self.balance_requirement_download = None
+        self.pkg_size_download = 0
         self.result_requirement = None
         self.result_download = None
+        self._download_done_callback_called = False
         UI.display(DisplayMessage("Downloading and installing requirements"))
         self.pbar = ProgressBar().start()
-        self.pkg_num_install, self.pkg_size_download =\
-            RequirementsHandler().install_bucket(self.packages_requirements, self.get_progress_requirement,
-                                                 self.requirement_done)
-        DownloadCenter(urls=[(self.to_download['url'], self.to_download['md5sum'])], on_done=self.download_done,
-                       report=self.get_progress_download)
+        self.pkg_to_install = RequirementsHandler().install_bucket(self.packages_requirements,
+                                                                   self.get_progress_requirement,
+                                                                   self.requirement_done)
+        DownloadCenter(urls=self.download_requests, on_done=self.download_done, report=self.get_progress_download)
 
     @MainLoop.in_mainloop_thread
     def get_progress(self, progress_download, progress_requirement):
@@ -198,24 +205,38 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
             self.last_progress_requirement = progress_requirement
 
         # we wait to have the file size to start getting progress proportion info
+
+        # try to compute balance requirement
         if self.balance_requirement_download is None:
-            return
+            if not self.pkg_to_install:
+                self.balance_requirement_download = 0
+            else:
+                # we only update if we got a progress from both sides
+                if self.last_progress_download is None or self.last_progress_requirement is None:
+                    return
+                else:
+                    # apply a minimum of 15% (no download or small download + install time)
+                    self.balance_requirement_download = max(self.pkg_size_download /
+                                                            (self.pkg_size_download + self.total_download_size),
+                                                            0.15)
 
         progress = self.balance_requirement_download * self.last_progress_requirement +\
             (1 - self.balance_requirement_download) * self.last_progress_download
-        self.pbar.update(progress)
-        #print("global progress: {}".format(progress))
+        if not self.pbar.finished:  # drawing is delayed, so ensure we are not done first
+            self.pbar.update(progress)
         return
 
-    def get_progress_requirement(self, step, percentage):
+    def get_progress_requirement(self, status):
         """Chain up to main get_progress, returning current value between 0 and 100"""
-        # only unpacking
-        if self.pkg_size_download == 0:
-            progress = percentage
+
+        percentage = status["percentage"]
+        # 60% is download, 40% is installing
+        if status["step"] == RequirementsHandler.STATUS_DOWNLOADING:
+            self.pkg_size_download = status["pkg_size_download"]
+            progress = 0.6 * percentage
         else:
-            # 60% is download, 40% is installing
-            if step == RequirementsHandler.STATUS_DOWNLOADING:
-                progress = 0.6 * percentage
+            if self.pkg_size_download == 0:
+                progress = percentage  # no download, only install
             else:
                 progress = 60 + 0.4 * percentage
         self.get_progress(None, progress)
@@ -229,14 +250,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         for download in downloads:
             total_size += downloads[download]["size"]
             total_current_size += downloads[download]["current"]
-
-        if self.balance_requirement_download is None:
-            if self.pkg_num_install == 0:
-                self.balance_requirement_download = 0
-            else:
-                # apply a minimum of 15% (no download or small download + install time)
-                self.balance_requirement_download = max(self.pkg_size_download / (self.pkg_size_download + total_size),
-                                                        0.15)
+        self.total_download_size = total_size
         self.get_progress(total_current_size / total_size * 100, None)
 
     def requirement_done(self, result):
@@ -252,8 +266,9 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
     @MainLoop.in_mainloop_thread
     def download_and_requirements_done(self):
         # wait for both side to be done
-        if not self.result_download or not self.result_requirement:
+        if self._download_done_callback_called or (not self.result_download or not self.result_requirement):
             return
+        self._download_done_callback_called = True
 
         self.pbar.finish()
         # display eventual errors
@@ -270,19 +285,22 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         if error_detected:
             UI.return_main_screen()
             return
-
         self.decompress_and_install(fd)
 
     def decompress_and_install(self, fd):
-        UI.display(DisplayMessage("Installing Android Studio"))
+        UI.display(DisplayMessage("Installing {}".format(self.name)))
         # empty destination directory if reinstall
         if self._reinstall:
             with suppress(FileNotFoundError):
                 shutil.rmtree(self.install_path)
 
-        Decompressor({fd: Decompressor.DecompressOrder(dir="android-studio", dest=self.install_path)},
+        Decompressor({fd: Decompressor.DecompressOrder(dir=self.dir_to_decompress_in_tarball, dest=self.install_path)},
                      self.decompress_and_install_done)
         UI.display(UnknownProgress(self.iterate_until_install_done))
+
+    def create_launcher(self):
+        """Call the tools to create a launcher"""
+        pass
 
     def decompress_and_install_done(self, result):
         self._install_done = True
@@ -291,17 +309,15 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
             if result[fd].error:
                 logger.error(result[fd].error)
                 error_detected = True
+            fd.close()
         if error_detected:
             UI.return_main_screen()
             return
 
         # install desktop file
-        create_launcher("android-studio.desktop", get_application_desktop_file(name=_("Android Studio"),
-                        icon_path=os.path.join(self.install_path, "bin", "idea.png"),
-                        exec='"{}" %f'.format(os.path.join(self.install_path, "bin", "studio.sh")),
-                        comment=_("Android Studio developer environment"),
-                        categories="Development;IDE;",
-                        extra="StartupWMClass=jetbrains-android-studio"))
+        if self.desktop_file_name:
+            self.create_launcher()
+
         UI.delayed_display(DisplayMessage("Installation done"))
         UI.return_main_screen()
 

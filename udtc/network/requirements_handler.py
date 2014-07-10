@@ -86,6 +86,27 @@ class RequirementsHandler(object, metaclass=Singleton):
                 all_in_cache = False
         return all_in_cache
 
+    def is_bucket_uptodate(self, bucket):
+        """Check if the bucket is installed and up to date
+
+        The bucket is a list of packages to check if installed."""
+        logger.debug("Check if {} is installed".format(bucket))
+        is_installed_and_uptodate = True
+        for pkg_name in bucket:
+            # /!\ danger: if current arch == ':appended_arch', on a non multiarch system, dpkg doesn't
+            # understand that. strip :arch then
+            if ":" in pkg_name:
+                (pkg_without_arch_name, arch) = pkg_name.split(":", -1)
+                if arch == get_current_arch():
+                    pkg_name = pkg_without_arch_name
+            if pkg_name not in self.cache or not self.cache[pkg_name].is_installed:
+                logger.info("{} isn't installed".format(pkg_name))
+                is_installed_and_uptodate = False
+            elif self.cache[pkg_name].is_upgradable:
+                logger.info("We can update {}".format(pkg_name))
+                is_installed_and_uptodate = False
+        return is_installed_and_uptodate
+
     def install_bucket(self, bucket, progress_callback, installed_callback):
         """Install a specific bucket. If any other bucket is in progress, queue the request
 
@@ -99,10 +120,12 @@ class RequirementsHandler(object, metaclass=Singleton):
             "installed_callback": installed_callback
         }
 
+        pkg_to_install = not self.is_bucket_uptodate(bucket)
+
         future = self.executor.submit(self._really_install_bucket, bucket_pack)
         future.tag_bucket = bucket_pack
         future.add_done_callback(self._on_done)
-        return (self.cache.install_count, self.cache.required_download)
+        return pkg_to_install
 
     def _really_install_bucket(self, current_bucket):
         """Really install current bucket and bind signals"""
@@ -113,24 +136,30 @@ class RequirementsHandler(object, metaclass=Singleton):
         self.apt_fd = tempfile.NamedTemporaryFile(delete=False)
         self.apt_fd.close()
 
+        if self.is_bucket_uptodate(bucket):
+            return True
+
         for pkg_name in bucket:
             if ":" in pkg_name:
                 arch = pkg_name.split(":", -1)[-1]
                 # try to add the arch
-                print(get_foreign_archs())
                 if arch not in get_foreign_archs() and arch != get_current_arch():
                     logger.info("Adding foreign arch: {}".format(arch))
                     with open(os.devnull, "w") as f:
-                        if subprocess.call(["dpkg", "--add-architecture", arch], stdout=f) != 0:
-                            msg = "Can't add foreign foreign architecture {}".format(arch)
-                            raise BaseException(msg)
+                        try:
+                            os.seteuid(0)
+                            os.setegid(0)
+                            if subprocess.call(["dpkg", "--add-architecture", arch], stdout=f) != 0:
+                                msg = "Can't add foreign foreign architecture {}".format(arch)
+                                raise BaseException(msg)
+                        finally:
+                            switch_to_current_user()
                         self._force_reload_apt_cache()
 
         # mark for install and so on
         for pkg_name in bucket:
             # /!\ danger: if current arch == ':appended_arch', on a non multiarch system, dpkg doesn't understand that
             # strip :arch then
-            # TODO: add tests
             if ":" in pkg_name:
                 (pkg_without_arch_name, arch) = pkg_name.split(":", -1)
                 if arch == get_current_arch():
@@ -176,6 +205,8 @@ class RequirementsHandler(object, metaclass=Singleton):
                         error_message = "{}\nSubprocess output: {}".format(error_message, subprocess_content)
             logger.error(error_message)
             result = result._replace(error=error_message)
+        else:
+            logger.debug("{} installed".format(future.tag_bucket["bucket"]))
         os.remove(self.apt_fd.name)
         future.tag_bucket["installed_callback"](result)
 
@@ -189,7 +220,7 @@ class RequirementsHandler(object, metaclass=Singleton):
 
     class _FetchProgress(apt.progress.base.AcquireProgress):
         """Progress handler for downloading a bucket"""
-        def __init__(self, bucket, status, progress_callback):
+        def __init__(self, bucket, status, progress_callback,):
             apt.progress.base.AcquireProgress.__init__(self)
             self._bucket = bucket
             self._status = status
@@ -198,8 +229,9 @@ class RequirementsHandler(object, metaclass=Singleton):
         def pulse(self, owner):
             percent = (((self.current_bytes + self.current_items) * 100.0) /
                        float(self.total_bytes + self.total_items))
-            logger.debug("{} download update: {}%".format(self._bucket['bucket'], percent))
-            self._progress_callback(self._status, percent)
+            logger.debug("{} download update: {}% of {}".format(self._bucket['bucket'], percent, self.total_bytes))
+            report = {"step": self._status, "percentage": percent, "pkg_size_download": self.total_bytes}
+            self._progress_callback(report)
 
     class _InstallProgress(apt.progress.base.InstallProgress):
         """Progress handler for installing a bucket"""
@@ -224,7 +256,7 @@ class RequirementsHandler(object, metaclass=Singleton):
 
         def status_change(self, pkg, percent, status):
             logger.debug("{} install update: {}".format(self._bucket['bucket'], percent))
-            self._progress_callback(self._status, percent)
+            self._progress_callback({"step": self._status, "percentage": percent})
 
         @staticmethod
         def _redirect_stdin():  # pragma: no cover (in a fork)
