@@ -90,7 +90,7 @@ class RequirementsHandler(object, metaclass=Singleton):
         """Check if the bucket is installed and up to date
 
         The bucket is a list of packages to check if installed."""
-        logger.debug("Check if {} is installed".format(bucket))
+        logger.debug("Check if {} is uptodate".format(bucket))
         is_installed_and_uptodate = True
         for pkg_name in bucket:
             # /!\ danger: if current arch == ':appended_arch', on a non multiarch system, dpkg doesn't

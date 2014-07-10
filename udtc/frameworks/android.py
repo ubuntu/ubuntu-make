@@ -22,20 +22,11 @@
 
 from contextlib import suppress
 from gettext import gettext as _
-from io import StringIO
 import logging
-from progressbar import ProgressBar
 import os
 import re
-import shutil
-from textwrap import dedent
 import udtc.frameworks.baseinstaller
-from udtc.decompressor import Decompressor
-from udtc.interactions import InputText, YesNo, LicenseAgreement, DisplayMessage, UnknownProgress
-from udtc.network.download_center import DownloadCenter
-from udtc.network.requirements_handler import RequirementsHandler
-from udtc.ui import UI
-from udtc.tools import MainLoop, strip_tags, create_launcher, get_application_desktop_file
+from udtc.tools import create_launcher, get_application_desktop_file
 
 logger = logging.getLogger(__name__)
 
