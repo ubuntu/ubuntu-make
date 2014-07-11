@@ -98,6 +98,34 @@ def run_command_for_args(args):
     target.run_for(args)
 
 
+def mangle_args_for_default_framework(args):
+    """return the potentially changed args_to_parse for the parser for handling default frameworks
+
+    "./<command> category [options from default framework]"
+    as subparsers can't define default options and are not optional: http://bugs.python.org/issue9253
+    """
+    arg_to_parse = args
+    if len(arg_to_parse) > 1:
+        # if the first argument isn't a category name, it should be the main category, parser handles it
+        if arg_to_parse[0] not in BaseCategory.categories.keys():
+            return arg_to_parse
+
+        potential_framework_name = arg_to_parse[1]
+        category_name = None
+        # check if the 3rd arg is a framework name and store the category name
+        for category in BaseCategory.categories.values():
+            if arg_to_parse[0] == category.prog_name:
+                category_name = category.prog_name
+            if potential_framework_name in category.frameworks.keys():
+                break
+        # we didn't find it, we insert the default framework for the found matching category if any
+        else:
+            if category_name is not None and BaseCategory.categories[category_name].default_framework:
+                arg_to_parse.insert(1, BaseCategory.categories[category_name].default_framework.prog_name)
+    print(arg_to_parse)
+    return arg_to_parse
+
+
 def main(parser):
     """Main entry point of the cli command"""
     categories_parser = parser.add_subparsers(help='Developer environment', dest="category")
@@ -105,7 +133,11 @@ def main(parser):
         category.install_category_parser(categories_parser)
 
     argcomplete.autocomplete(parser)
-    args = parser.parse_args()
+    # autocomplete will stop there. Can start more expensive operations now.
+
+    # manipulate sys.argv for default frameworks:
+    arg_to_parse = mangle_args_for_default_framework(sys.argv[1:])
+    args = parser.parse_args(arg_to_parse)
 
     if not args.category:
         parser.print_help()
