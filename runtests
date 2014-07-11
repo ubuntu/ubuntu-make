@@ -19,6 +19,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 import argparse
+import configparser
 import nose
 import os
 
@@ -27,6 +28,30 @@ config_dir = os.path.join(root_dir, 'confs')
 DEBUG_CONFIG_FILE = os.path.join(config_dir, "debug.nose")
 COVERAGE_CONFIG_FILE = os.path.join(config_dir, "prod.nose")
 TESTS_DIR = os.path.join(root_dir, 'tests')
+
+
+def transform_nose_config_to_cmd(filename):
+    """Manually transform a nose config file to a cmd parameters
+
+    This is needed in case the same parameter is repeated multiple times
+
+    This return the cmd line array parameters."""
+
+    cmd_line = []
+    config = configparser.ConfigParser()
+    config.read(filename)
+    for key in config["nosetests"]:
+        value = config["nosetests"][key]
+        if value == '1':
+            cmd_line.append('--' + key)
+        # multiple values (what the config parameter for nose doesn't support)
+        elif ',' in value:
+            for val in value.split(','):
+                cmd_line.append('--{}={}'.format(key, val))
+        else:
+            cmd_line.append('--{}={}'.format(key, value))
+    return cmd_line
+
 
 if __name__ == '__main__':
 
@@ -64,7 +89,7 @@ if __name__ == '__main__':
         nose_args.extend(["--config", DEBUG_CONFIG_FILE])
         specified_config = True
     elif args.coverage:
-        nose_args.extend(["--config", COVERAGE_CONFIG_FILE])
+        nose_args.extend(transform_nose_config_to_cmd(COVERAGE_CONFIG_FILE))
         specified_config = True
     elif args.no_config:
         specified_config = True
@@ -88,7 +113,7 @@ if __name__ == '__main__':
     else:
         # If no config is given, run with coverage
         if not specified_config:
-            nose_args.extend(["--config", COVERAGE_CONFIG_FILE])
+            nose_args.extend(transform_nose_config_to_cmd(COVERAGE_CONFIG_FILE))
             specified_config = True
 
     ## need a fake $0 argument

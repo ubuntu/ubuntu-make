@@ -13,7 +13,7 @@ build/
 *.egg-info
 
 # Tests coverage
-coverage-html/
+html-coverage/
 .coverage
 
 # Idea content

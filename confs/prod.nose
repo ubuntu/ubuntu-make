@@ -1,6 +1,5 @@
 [nosetests]
-with-coverage=1
-cover-erase=1
-cover-package=udtc
-cover-html=1
-cover-html-dir=coverage-html
+with-cov=1
+cov=udtc
+cov-report=term-missing,html
+cov-config=confs/coverage.cov

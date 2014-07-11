@@ -5,8 +5,8 @@ pyxdg
 -e bzr+lp:python-apt/@0.9.3.5#egg=apt
 
 # test tools
-coverage
 nose
+nose-cov
 pep8
 
 # setup only

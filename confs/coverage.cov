@@ -1,0 +1,3 @@
+# coverage shold export html to coverage-html
+[html]
+directory=html-coverage
