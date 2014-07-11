@@ -104,13 +104,13 @@ class BaseCategory():
             return
         # framework parser is directly category parser
         if self.is_main_category:
-            category_subparser = parser
+            framework_parser = parser
         else:
             category_parser = parser.add_parser(self.prog_name, help=self.description)
-            category_subparser = category_parser.add_subparsers(dest="framework")
+            framework_parser = category_parser.add_subparsers(dest="framework")
         for framework in self.frameworks.values():
-            framework.install_framework_parser(category_subparser)
-        return category_subparser
+            framework.install_framework_parser(framework_parser)
+        return framework_parser
 
     def has_frameworks(self):
         """Return if a category has at least one framework"""
@@ -255,9 +255,9 @@ class BaseFramework(metaclass=abc.ABCMeta):
 
     def install_framework_parser(self, parser):
         """Install framework parser"""
-        framework_parser = parser.add_parser(self.prog_name, help=self.description)
-        framework_parser.add_argument('destdir', nargs='?')
-        return framework_parser
+        this_framework_parser = parser.add_parser(self.prog_name, help=self.description)
+        this_framework_parser.add_argument('destdir', nargs='?')
+        return this_framework_parser
 
     def run_for(self, args):
         """Running commands from args namespace"""
