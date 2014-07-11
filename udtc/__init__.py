@@ -48,7 +48,7 @@ def _setup_logging(default_file='logging.yaml', env_key='LOG_CFG', level=_defaul
     """
     path = default_file
     value = os.getenv(env_key, None)
-    logging.basicConfig(level=level, format="[%(name)s] %(levelname)s: %(message)s")
+    logging.basicConfig(level=level, format="%(levelname)s: %(message)s")
     if level == _default_log_level:
         if value:
             path = value

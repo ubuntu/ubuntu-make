@@ -20,7 +20,10 @@
 from gi.repository import GLib, Gio
 import logging
 import os
+import re
+import signal
 import subprocess
+import sys
 from textwrap import dedent
 from udtc import settings
 from xdg.BaseDirectory import load_first_config, xdg_config_home, xdg_data_home
@@ -94,19 +97,50 @@ class MainLoop(object, metaclass=Singleton):
 
     def __init__(self):
         self.mainloop = GLib.MainLoop()
+        # Glib steals the SIGINT handler and so, causes issue in the callback
+        # https://bugzilla.gnome.org/show_bug.cgi?id=622084
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     def run(self):
         self.mainloop.run()
 
-    def quit(self):
+    def quit(self, status_code=0):
+        GLib.timeout_add(80, self._clean_up, status_code)
+
+    def _clean_up(self, exit_code):
         self.mainloop.quit()
+        sys.exit(exit_code)
 
     @staticmethod
     def in_mainloop_thread(function):
         """Decorator to run a function in a mainloop thread"""
+
+        # GLib.idle_add doesn't propagate try: except in the mainloop, so we handle it there for all functions
+        def wrapper(*args, **kwargs):
+            try:
+                function(*args, **kwargs)
+            except BaseException:
+                logger.exception("Unhandled exception")
+                GLib.idle_add(MainLoop().quit, 1)
+
         def inner(*args, **kwargs):
-            return GLib.idle_add(function, *args, **kwargs)
+            return GLib.idle_add(wrapper, *args, **kwargs)
         return inner
+
+
+class InputError(BaseException):
+    """Exception raised for errors in the input.
+
+    Attributes:
+        expr -- input expression in which the error occurred
+        msg  -- explanation of the error
+    """
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
 
 
 def get_current_arch():
@@ -156,11 +190,18 @@ def is_completion_mode():
     return False
 
 
-def launcher_exists_and_is_pinned(desktop_filename):
-    """Return true if the desktop filename is pinned in the launcher"""
+def launcher_exists(desktop_filename):
+    """Return true if the desktop filename exists"""
     exists = os.path.exists(os.path.join(xdg_data_home, "applications", desktop_filename))
     if not exists:
         logger.debug("{} doesn't exists".format(desktop_filename))
+        return False
+    return True
+
+
+def launcher_exists_and_is_pinned(desktop_filename):
+    """Return true if the desktop filename is pinned in the launcher"""
+    if not launcher_exists(desktop_filename):
         return False
     if os.environ.get("XDG_CURRENT_DESKTOP") != "Unity":
         logger.debug("Don't check launcher as current environment isn't Unity")
@@ -176,12 +217,6 @@ def launcher_exists_and_is_pinned(desktop_filename):
 def create_launcher(desktop_filename, content):
     """Create a desktop file and an unity launcher icon"""
 
-    if not "[Desktop Entry]" in content:
-        content = dedent("""\
-            [Desktop Entry]
-            Version=1.0
-            Type=Application
-            {}""").format(content)
     # Create file in standard location
     with open(os.path.join(xdg_data_home, "applications", desktop_filename), "w") as f:
         f.write(content)
@@ -195,3 +230,33 @@ def create_launcher(desktop_filename, content):
     if not launcher_tag in launcher_list:
         launcher_list.append(launcher_tag)
         gsettings.set_strv("favorites", launcher_list)
+
+
+def get_application_desktop_file(name="", icon_path="", exec="", comment="", categories="", extra=""):
+    """Get a desktop file string content"""
+    return dedent("""\
+                [Desktop Entry]
+                Version=1.0
+                Type=Application
+                Name={name}
+                Icon={icon_path}
+                Exec={exec}
+                Comment={comment}
+                Categories={categories}
+                Terminal=false
+                {extra}
+                """).format(name=name, icon_path=icon_path, exec=exec,
+                            comment=comment, categories=categories, extra=extra)
+
+
+def strip_tags(content):
+    """Strip all HTML tags from content"""
+    return re.sub('<[^<]+?>', '', content)
+
+
+def switch_to_current_user():
+    """Switch euid and guid to current user if current user is root"""
+    if os.geteuid() != 0:
+        return
+    os.setegid(int(os.getenv("SUDO_GID")))
+    os.seteuid(int(os.getenv("SUDO_UID")))

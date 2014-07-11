@@ -77,7 +77,7 @@ class CopyingMock(Mock):
     def __call__(self, *args, **kwargs):
         args = deepcopy(args)
         kwargs = deepcopy(kwargs)
-        return super(CopyingMock, self).__call__(*args, **kwargs)
+        return super().__call__(*args, **kwargs)
 
 
 def change_xdg_path(key, value=None, remove=False):
@@ -100,3 +100,13 @@ def patchelem(element, attr, value):
     setattr(element, attr, value)
     yield
     setattr(element, attr, old_value)
+
+
+def manipulate_path_env(value, remove=False):
+    """prepend value to PATH environment. If remove is true, remove it"""
+    path = os.environ["PATH"].split(os.pathsep)
+    if remove:
+        path.remove(value)
+    else:
+        path.insert(0, value)
+    os.environ["PATH"] = os.pathsep.join(path)

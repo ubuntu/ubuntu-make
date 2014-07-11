@@ -34,7 +34,7 @@ import threading
 from ..tools import change_xdg_path, get_data_dir, LoggedTestCase
 from udtc import settings, tools
 from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
-    create_launcher, launcher_exists_and_is_pinned
+    create_launcher, launcher_exists_and_is_pinned, launcher_exists
 from unittest.mock import patch
 
 
@@ -111,7 +111,7 @@ class TestConfigHandler(LoggedTestCase):
         self.assertEquals(len(os.listdir(self.config_dir)), 0)
 
 
-class TestTools(LoggedTestCase):
+class TestCompletionArchVersion(LoggedTestCase):
 
     def setUp(self):
         """Reset previously cached values"""
@@ -215,30 +215,43 @@ class TestToolsThreads(LoggedTestCase):
         self.mainloop_object = tools.MainLoop()
         self.mainloop_thread = None
         self.function_thread = None
-        self.parallel_function_thread = None
+        self.saved_stderr = sys.stderr
 
     def tearDown(self):
         Singleton._instances = {}
+        sys.stderr = self.saved_stderr
         super().tearDown()
+
+    def patch_stderr(self):
+        class writer(object):
+            def write(self, data):
+                print(data)
+        sys.stderr = writer()
 
     # function that will complete once the mainloop is started
     def wait_for_mainloop_function(self):
-        self.parallel_function_thread = threading.current_thread().ident
         timeout_time = time() + 5
         while not self.mainloop_object.mainloop.is_running():
             if time() > timeout_time:
                 raise(BaseException("Mainloop not started in 5 seconds"))
+
+    def wait_for_mainloop_shutdown(self):
+        timeout_time = time() + 5
+        while self.mainloop_object.mainloop.is_running():
+            if time() > timeout_time:
+                raise(BaseException("Mainloop not stopped in 5 seconds"))
 
     def get_mainloop_thread(self):
         self.mainloop_thread = threading.current_thread().ident
 
     def start_glib_mainloop(self):
         # quit after 5 seconds if nothing made the mainloop to end
-        GLib.timeout_add_seconds(5, self.mainloop_object.quit)
+        GLib.timeout_add_seconds(5, self.mainloop_object.mainloop.quit)
         GLib.idle_add(self.get_mainloop_thread)
         self.mainloop_object.run()
 
-    def test_run_function_in_mainloop_thread(self):
+    @patch("udtc.tools.sys")
+    def test_run_function_in_mainloop_thread(self, mocksys):
         """Decorated mainloop thread functions are really running in that thread"""
 
         # function supposed to run in the mainloop thread
@@ -251,14 +264,15 @@ class TestToolsThreads(LoggedTestCase):
         future = executor.submit(self.wait_for_mainloop_function)
         future.add_done_callback(_function_in_mainloop_thread)
         self.start_glib_mainloop()
+        self.wait_for_mainloop_shutdown()
 
         # mainloop and thread were started
         self.assertIsNotNone(self.mainloop_thread)
-        self.assertIsNotNone(self.parallel_function_thread)
+        self.assertIsNotNone(self.function_thread)
         self.assertEquals(self.mainloop_thread, self.function_thread)
-        self.assertNotEquals(self.mainloop_thread, self.parallel_function_thread)
 
-    def test_run_function_not_in_mainloop_thread(self):
+    @patch("udtc.tools.sys")
+    def test_run_function_not_in_mainloop_thread(self, mocksys):
         """Non decorated callback functions are not running in the mainloop thread"""
 
         # function not supposed to run in the mainloop thread
@@ -270,14 +284,12 @@ class TestToolsThreads(LoggedTestCase):
         future = executor.submit(self.wait_for_mainloop_function)
         future.add_done_callback(_function_not_in_mainloop_thread)
         self.start_glib_mainloop()
+        self.wait_for_mainloop_shutdown()
 
         # mainloop and thread were started
         self.assertIsNotNone(self.mainloop_thread)
-        self.assertIsNotNone(self.parallel_function_thread)
+        self.assertIsNotNone(self.function_thread)
         self.assertNotEquals(self.mainloop_thread, self.function_thread)
-        self.assertNotEquals(self.mainloop_thread, self.parallel_function_thread)
-        # the function parallel thread id was reused
-        self.assertEquals(self.function_thread, self.parallel_function_thread)
 
     def test_singleton(self):
         """Ensure we are delivering a singleton for RequirementsHandler"""
@@ -290,163 +302,271 @@ class TestToolsThreads(LoggedTestCase):
             self.mainloop_object.run()
             self.assertTrue(mockmainloop.run.called)
 
-    def test_mainloop_quit(self):
-        """We effectively executes the mainloop"""
-        with patch.object(self.mainloop_object, "mainloop") as mockmainloop:
-            self.mainloop_object.quit()
-            self.assertTrue(mockmainloop.quit.called)
+    @patch("udtc.tools.sys")
+    def test_mainloop_quit(self, mocksys):
+        """We quit the process"""
+        GLib.idle_add(self.mainloop_object.quit)
+        self.start_glib_mainloop()
+        self.wait_for_mainloop_shutdown()
+
+        mocksys.exit.assert_called_once_with(0)
+
+    @patch("udtc.tools.sys")
+    def test_mainloop_quit_with_exit_value(self, mocksys):
+        """We quit the process with a return code"""
+        GLib.idle_add(self.mainloop_object.quit, 42)
+        self.start_glib_mainloop()
+        self.wait_for_mainloop_shutdown()
+
+        mocksys.exit.assert_called_once_with(42)
+
+    @patch("udtc.tools.sys")
+    def test_unhandled_exception_in_mainloop_thead_exit(self, mocksys):
+        """We quit the process in error for any unhandled exception, logging it"""
+
+        @tools.MainLoop.in_mainloop_thread
+        def _function_raising_exception():
+            raise BaseException("foo bar")
+
+        _function_raising_exception()
+        self.patch_stderr()
+        self.start_glib_mainloop()
+        self.wait_for_mainloop_shutdown()
+
+        mocksys.exit.assert_called_once_with(1)
+        self.expect_warn_error = True
 
 
 class TestLauncherIcons(LoggedTestCase):
-        """Test module for launcher icons handling"""
+    """Test module for launcher icons handling"""
 
-        def setUp(self):
-            super().setUp()
-            self.local_dir = tempfile.mkdtemp()
-            os.mkdir(os.path.join(self.local_dir, "applications"))
-            change_xdg_path('XDG_DATA_HOME', self.local_dir)
-            self.current_desktop = os.environ.get("XDG_CURRENT_DESKTOP")
-            os.environ["XDG_CURRENT_DESKTOP"] = "Unity"
+    def setUp(self):
+        super().setUp()
+        self.local_dir = tempfile.mkdtemp()
+        os.mkdir(os.path.join(self.local_dir, "applications"))
+        change_xdg_path('XDG_DATA_HOME', self.local_dir)
+        self.current_desktop = os.environ.get("XDG_CURRENT_DESKTOP")
+        os.environ["XDG_CURRENT_DESKTOP"] = "Unity"
 
-        def tearDown(self):
-            change_xdg_path('XDG_DATA_HOME', remove=True)
-            shutil.rmtree(self.local_dir)
-            if self.current_desktop:
-                os.environ["XDG_CURRENT_DESKTOP"] = self.current_desktop
-            super().tearDown()
+    def tearDown(self):
+        change_xdg_path('XDG_DATA_HOME', remove=True)
+        shutil.rmtree(self.local_dir)
+        if self.current_desktop:
+            os.environ["XDG_CURRENT_DESKTOP"] = self.current_desktop
+        super().tearDown()
 
-        def get_generic_desktop_content(self):
-            """Return a generic desktop content to win spaces"""
-            return dedent("""\
-                   Name=Android Studio
-                   Icon=/home/didrocks/tools/android-studio/bin/idea.png
-                   Exec="/home/didrocks/tools/android-studio/bin/studio.sh" %f
-                   Comment=Develop with pleasure!
-                   Categories=Development;IDE;
-                   Terminal=false
-                   StartupWMClass=jetbrains-android-studio
-                   """)
+    def get_generic_desktop_content(self):
+        """Return a generic desktop content to win spaces"""
+        return dedent("""\
+               [Desktop Entry]
+               Version=1.0
+               Type=Application
+               Name=Android Studio
+               Icon=/home/didrocks/tools/android-studio/bin/idea.png
+               Exec="/home/didrocks/tools/android-studio/bin/studio.sh" %f
+               Comment=Develop with pleasure!
+               Categories=Development;IDE;
+               Terminal=false
+               StartupWMClass=jetbrains-android-studio
+               """)
 
-        def write_desktop_file(self, filename):
-            """Write a dummy filename to the applications dir and return filepath"""
-            result_file = os.path.join(self.local_dir, "applications", filename)
-            with open(result_file, 'w') as f:
-                f.write("Foo Bar Baz")
-            return result_file
+    def write_desktop_file(self, filename):
+        """Write a dummy filename to the applications dir and return filepath"""
+        result_file = os.path.join(self.local_dir, "applications", filename)
+        with open(result_file, 'w') as f:
+            f.write("Foo Bar Baz")
+        return result_file
 
-        @patch("udtc.tools.Gio.Settings")
-        def test_can_install(self, SettingsMock):
-            """Install a basic launcher icon"""
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
-            desktop_content = self.get_generic_desktop_content()
-            create_launcher("foo.desktop", desktop_content)
+    @patch("udtc.tools.Gio.Settings")
+    def test_can_install(self, SettingsMock):
+        """Install a basic launcher icon"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
+        create_launcher("foo.desktop", self.get_generic_desktop_content())
 
-            self.assertTrue(SettingsMock.list_schemas.called)
-            SettingsMock.return_value.get_strv.assert_called_with("favorites")
-            SettingsMock.return_value.set_strv.assert_called_with("favorites", ["application://bar.desktop",
-                                                                                "unity://running",
-                                                                                "application://foo.desktop"])
-            result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
-            self.assertTrue(os.path.exists(result_file))
-            self.assertEquals(open(result_file).read(),
-                              "[Desktop Entry]\nVersion=1.0\nType=Application\n" + desktop_content)
+        self.assertTrue(SettingsMock.list_schemas.called)
+        SettingsMock.return_value.get_strv.assert_called_with("favorites")
+        SettingsMock.return_value.set_strv.assert_called_with("favorites", ["application://bar.desktop",
+                                                                            "unity://running",
+                                                                            "application://foo.desktop"])
+        result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
+        self.assertTrue(os.path.exists(result_file))
+        self.assertEquals(open(result_file).read(), self.get_generic_desktop_content())
 
-        @patch("udtc.tools.Gio.Settings")
-        def test_can_install_whole_file(self, SettingsMock):
-            """Install a basic launcher icon containing the whole desktop content doesn't add the header"""
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
-            desktop_content = "[Desktop Entry]\nVersion=1.0\nType=Application\n" + self.get_generic_desktop_content()
-            create_launcher("foo.desktop", desktop_content)
+    @patch("udtc.tools.Gio.Settings")
+    def test_can_install_already_in_launcher(self, SettingsMock):
+        """A file listed in launcher still install the files, but the entry isn't changed"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
+                                                           "unity://running"]
+        create_launcher("foo.desktop", self.get_generic_desktop_content())
 
-            result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
-            self.assertEquals(open(result_file).read(), desktop_content)
+        self.assertFalse(SettingsMock.return_value.set_strv.called)
+        result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
+        self.assertTrue(os.path.exists(result_file))
 
-        @patch("udtc.tools.Gio.Settings")
-        def test_can_install_already_in_launcher(self, SettingsMock):
-            """A file listed in launcher still install the files, but the entry isn't changed"""
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
-                                                               "unity://running"]
-            create_launcher("foo.desktop", self.get_generic_desktop_content())
+    @patch("udtc.tools.Gio.Settings")
+    def test_install_no_schema_file(self, SettingsMock):
+        """No schema file still installs the file"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
+        create_launcher("foo.desktop", self.get_generic_desktop_content())
 
-            self.assertFalse(SettingsMock.return_value.set_strv.called)
-            result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
-            self.assertTrue(os.path.exists(result_file))
+        self.assertFalse(SettingsMock.return_value.get_strv.called)
+        self.assertFalse(SettingsMock.return_value.set_strv.called)
+        result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
+        self.assertTrue(os.path.exists(result_file))
 
-        @patch("udtc.tools.Gio.Settings")
-        def test_install_no_schema_file(self, SettingsMock):
-            """No schema file still installs the file"""
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
-            create_launcher("foo.desktop", self.get_generic_desktop_content())
+    @patch("udtc.tools.Gio.Settings")
+    def test_already_existing_file_different_content(self, SettingsMock):
+        """A file with a different file content already exists and is updated"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
+        result_file = self.write_desktop_file("foo.desktop")
+        create_launcher("foo.desktop", self.get_generic_desktop_content())
 
-            self.assertFalse(SettingsMock.return_value.get_strv.called)
-            self.assertFalse(SettingsMock.return_value.set_strv.called)
-            result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
-            self.assertTrue(os.path.exists(result_file))
+        self.assertEquals(open(result_file).read(), self.get_generic_desktop_content())
 
-        @patch("udtc.tools.Gio.Settings")
-        def test_already_existing_file_different_content(self, SettingsMock):
-            """A file with a different file content already exists and is updated"""
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
-            result_file = self.write_desktop_file("foo.desktop")
-            create_launcher("foo.desktop", self.get_generic_desktop_content())
+    def test_desktop_file_exists(self):
+        """Launcher exists"""
+        self.write_desktop_file("foo.desktop")
+        self.assertTrue(launcher_exists("foo.desktop"))
 
-            self.assertEquals(open(result_file).read(),
-                              "[Desktop Entry]\nVersion=1.0\nType=Application\n" + self.get_generic_desktop_content())
+    def test_desktop_file_doesnt_exist(self):
+        """Launcher file doesn't exists"""
+        self.assertFalse(launcher_exists("foo.desktop"))
 
-        @patch("udtc.tools.Gio.Settings")
-        def test_launcher_exists_and_is_pinned(self, SettingsMock):
-            """Launcher exists and is pinned if the file exists and is in favorites list"""
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
-                                                               "unity://running"]
-            self.write_desktop_file("foo.desktop")
+    @patch("udtc.tools.Gio.Settings")
+    def test_launcher_exists_and_is_pinned(self, SettingsMock):
+        """Launcher exists and is pinned if the file exists and is in favorites list"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
+                                                           "unity://running"]
+        self.write_desktop_file("foo.desktop")
 
-            self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
+        self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
 
-        @patch("udtc.tools.Gio.Settings")
-        def test_launcher_isnt_pinned(self, SettingsMock):
-            """Launcher doesn't exists and is pinned if the file exists but not in favorites list"""
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
-            self.write_desktop_file("foo.desktop")
+    @patch("udtc.tools.Gio.Settings")
+    def test_launcher_isnt_pinned(self, SettingsMock):
+        """Launcher doesn't exists and is pinned if the file exists but not in favorites list"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
+        self.write_desktop_file("foo.desktop")
 
-            self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
+        self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
 
-        @patch("udtc.tools.Gio.Settings")
-        def test_launcher_exists_but_isnt_pinned_in_none_unity(self, SettingsMock):
-            """Launcher exists return True if file exists, not pinned but not in Unity"""
-            os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
-            self.write_desktop_file("foo.desktop")
+    @patch("udtc.tools.Gio.Settings")
+    def test_launcher_exists_but_isnt_pinned_in_none_unity(self, SettingsMock):
+        """Launcher exists return True if file exists, not pinned but not in Unity"""
+        os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
+        self.write_desktop_file("foo.desktop")
 
-            self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
+        self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
 
-        @patch("udtc.tools.Gio.Settings")
-        def test_launcher_exists_but_not_schema_in_none_unity(self, SettingsMock):
-            """Launcher exists return True if file exists, even if Unity schema isn't installed"""
-            os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
-            self.write_desktop_file("foo.desktop")
+    @patch("udtc.tools.Gio.Settings")
+    def test_launcher_exists_but_not_schema_in_none_unity(self, SettingsMock):
+        """Launcher exists return True if file exists, even if Unity schema isn't installed"""
+        os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
+        self.write_desktop_file("foo.desktop")
 
-            self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
+        self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
 
-        @patch("udtc.tools.Gio.Settings")
-        def test_launcher_exists_but_not_schema_in_unity(self, SettingsMock):
-            """Launcher exists return False if file exists, but no Unity schema installed"""
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
-            self.write_desktop_file("foo.desktop")
+    @patch("udtc.tools.Gio.Settings")
+    def test_launcher_exists_but_not_schema_in_unity(self, SettingsMock):
+        """Launcher exists return False if file exists, but no Unity schema installed"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
+        self.write_desktop_file("foo.desktop")
 
-            self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
+        self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
 
-        @patch("udtc.tools.Gio.Settings")
-        def test_launcher_doesnt_exists_but_pinned(self, SettingsMock):
-            """Launcher doesn't exist if no file, even if pinned"""
-            SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-            SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
-                                                               "unity://running"]
+    @patch("udtc.tools.Gio.Settings")
+    def test_launcher_doesnt_exists_but_pinned(self, SettingsMock):
+        """Launcher doesn't exist if no file, even if pinned"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
+                                                           "unity://running"]
 
-            self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
+        self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
+
+
+class TestMiscTools(LoggedTestCase):
+
+    def test_get_application_desktop_file(self):
+        """We return expect results with normal content"""
+        self.assertEquals(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
+                                                             exec="/to/exec/path %f", comment="Comment for Name 1",
+                                                             categories="Cat1:Cat2"),
+                          dedent("""\
+                            [Desktop Entry]
+                            Version=1.0
+                            Type=Application
+                            Name=Name 1
+                            Icon=/to/icon/path
+                            Exec=/to/exec/path %f
+                            Comment=Comment for Name 1
+                            Categories=Cat1:Cat2
+                            Terminal=false
+
+                            """))
+
+    def test_get_application_desktop_file_with_extra(self):
+        """We return expect results with extra content"""
+        self.assertEquals(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
+                                                             exec="/to/exec/path %f", comment="Comment for Name 1",
+                                                             categories="Cat1:Cat2", extra="Extra=extra1\nFoo=foo"),
+                          dedent("""\
+                            [Desktop Entry]
+                            Version=1.0
+                            Type=Application
+                            Name=Name 1
+                            Icon=/to/icon/path
+                            Exec=/to/exec/path %f
+                            Comment=Comment for Name 1
+                            Categories=Cat1:Cat2
+                            Terminal=false
+                            Extra=extra1
+                            Foo=foo
+                            """))
+
+    def test_get_application_desktop_file_all_empty(self):
+        """We return expect results without any content"""
+        self.assertEquals(tools.get_application_desktop_file(),
+                          dedent("""\
+                            [Desktop Entry]
+                            Version=1.0
+                            Type=Application
+                            Name=
+                            Icon=
+                            Exec=
+                            Comment=
+                            Categories=
+                            Terminal=false
+
+                            """))
+
+    def test_strip_tags(self):
+        """We return strip tags from content"""
+        self.assertEquals(tools.strip_tags("content <a foo bar>content content content</a><b><c>content\n content</c>"
+                                           "\n</b>content content"),
+                          "content content content contentcontent\n content\ncontent content")
+
+    def test_strip_invalid_tags(self):
+        """We return trip tags even if invalid"""
+        self.assertEquals(tools.strip_tags("content <a foo bar>content content content</a><b>content\n content</c>"
+                                           "\n</b>content content"),
+                          "content content content contentcontent\n content\ncontent content")
+
+    def test_strip_without_tags(self):
+        """We return unmodified content if there is no tag"""
+        self.assertEquals(tools.strip_tags("content content content contentcontent\n content"
+                                           "\ncontent content"),
+                          "content content content contentcontent\n content\ncontent content")
+
+    def test_raise_inputerror(self):
+        def foo():
+            raise tools.InputError("Foo bar")
+        self.assertRaises(tools.InputError, foo)
+
+    def test_print_inputerror(self):
+        self.assertEquals(str(tools.InputError("Foo bar")), "'Foo bar'")

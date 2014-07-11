@@ -28,10 +28,12 @@ import logging
 import os
 import pkgutil
 import sys
+import subprocess
 from udtc.network.requirements_handler import RequirementsHandler
-from udtc.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
-    is_completion_mode
 from udtc.settings import DEFAULT_INSTALL_TOOLS_PATH
+from udtc.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
+    is_completion_mode, switch_to_current_user, MainLoop
+from udtc.ui import UI
 
 
 logger = logging.getLogger(__name__)
@@ -42,7 +44,6 @@ class BaseCategory():
 
     NOT_INSTALLED, PARTIALLY_INSTALLED, FULLY_INSTALLED = range(3)
     categories = NoneDict()
-    main_category = None
 
     def __init__(self, name, description="", logo_path=None, is_main_category=False, packages_requirements=None):
         self.name = name
@@ -217,8 +218,25 @@ class BaseFramework(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def setup(self, install_path=None):
         """Method call to setup the Framework"""
+        if not self.is_installable:
+            logger.error("You can't install that framework on that machine")
+            UI.return_main_screen()
+            return
+
+        if self.need_root_access and os.geteuid() != 0:
+            logger.debug("Requesting root access")
+            cmd = ["sudo", "-E", "env", "PATH={}".format(os.getenv("PATH"))]
+            cmd.extend(sys.argv)
+            MainLoop().quit(subprocess.call(cmd))
+
+        # be a normal, kind user
+        switch_to_current_user()
+
         if install_path:
             self.install_path = install_path
+
+    def mark_in_config(self):
+        """Mark the installation as installed in the config file"""
         config = ConfigHandler().config
         config.setdefault("frameworks", {})\
               .setdefault(self.category.prog_name, {})\
@@ -230,10 +248,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         """Method call to know if the framework is installed"""
         if not os.path.isdir(self.install_path):
             return False
-        try:
-            if not RequirementsHandler().is_bucket_installed(self.packages_requirements):
-                return False
-        except KeyError:
+        if not RequirementsHandler().is_bucket_installed(self.packages_requirements):
             return False
         logger.debug("{} is installed".format(self.name))
         return True
@@ -280,8 +295,8 @@ def load_frameworks():
             logger.debug("Found category: {}".format(category_name))
             current_category = CategoryClass()
         for framework_name, FrameworkClass in inspect.getmembers(module, _is_frameworkclass):
-            logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
             try:
-                FrameworkClass(current_category)
+                if FrameworkClass(current_category) is not None:
+                    logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
             except TypeError as e:
                 logger.error("Can't attach {} to {}: {}".format(framework_name, current_category.name, e))

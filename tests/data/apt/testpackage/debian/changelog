@@ -1,5 +1,8 @@
 testpackage (0.0.1) trusty; urgency=low
 
   * Initial release
+  * Note: to add foo architecture, add it to:
+    /usr/share/dpkg/cputable (copying your current arch line). And then:
+    $ debuild -afoo
 
  -- Didier Roche <didrocks@ubuntu.com>  Wed, 11 Jun 2014 14:00:13 +0200
