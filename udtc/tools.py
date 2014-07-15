@@ -17,6 +17,7 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+from contextlib import suppress
 from gi.repository import GLib, Gio
 import logging
 import os
@@ -190,9 +191,14 @@ def is_completion_mode():
     return False
 
 
+def get_launcher_path(desktop_filename):
+    """Return launcher path"""
+    return os.path.join(xdg_data_home, "applications", desktop_filename)
+
+
 def launcher_exists(desktop_filename):
     """Return true if the desktop filename exists"""
-    exists = os.path.exists(os.path.join(xdg_data_home, "applications", desktop_filename))
+    exists = os.path.exists(get_launcher_path(desktop_filename))
     if not exists:
         logger.debug("{} doesn't exists".format(desktop_filename))
         return False
@@ -228,7 +234,10 @@ def create_launcher(desktop_filename, content):
     launcher_list = gsettings.get_strv("favorites")
     launcher_tag = "application://{}".format(desktop_filename)
     if not launcher_tag in launcher_list:
-        launcher_list.append(launcher_tag)
+        index = len(launcher_list)
+        with suppress(ValueError):
+            index = launcher_list.index("unity://running-apps")
+        launcher_list.insert(index, launcher_tag)
         gsettings.set_strv("favorites", launcher_list)
 
 

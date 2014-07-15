@@ -34,7 +34,7 @@ import threading
 from ..tools import change_xdg_path, get_data_dir, LoggedTestCase
 from udtc import settings, tools
 from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
-    create_launcher, launcher_exists_and_is_pinned, launcher_exists
+    create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_launcher_path
 from unittest.mock import patch
 
 
@@ -379,31 +379,41 @@ class TestLauncherIcons(LoggedTestCase):
 
     @patch("udtc.tools.Gio.Settings")
     def test_can_install(self, SettingsMock):
-        """Install a basic launcher icon"""
+        """Install a basic launcher icon, default case with unity://running"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
+        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running-apps"]
         create_launcher("foo.desktop", self.get_generic_desktop_content())
 
         self.assertTrue(SettingsMock.list_schemas.called)
         SettingsMock.return_value.get_strv.assert_called_with("favorites")
         SettingsMock.return_value.set_strv.assert_called_with("favorites", ["application://bar.desktop",
-                                                                            "unity://running",
+                                                                            "application://foo.desktop",
+                                                                            "unity://running-apps"])
+        self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
+        self.assertEquals(open(get_launcher_path("foo.desktop")).read(), self.get_generic_desktop_content())
+
+    @patch("udtc.tools.Gio.Settings")
+    def test_can_install_without_unity_running(self, SettingsMock):
+        """Install a basic launcher icon, without a running apps entry (so will be last)"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://baz.desktop"]
+        create_launcher("foo.desktop", self.get_generic_desktop_content())
+
+        self.assertTrue(SettingsMock.list_schemas.called)
+        SettingsMock.return_value.set_strv.assert_called_with("favorites", ["application://bar.desktop",
+                                                                            "application://baz.desktop",
                                                                             "application://foo.desktop"])
-        result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
-        self.assertTrue(os.path.exists(result_file))
-        self.assertEquals(open(result_file).read(), self.get_generic_desktop_content())
 
     @patch("udtc.tools.Gio.Settings")
     def test_can_install_already_in_launcher(self, SettingsMock):
         """A file listed in launcher still install the files, but the entry isn't changed"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
         SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
-                                                           "unity://running"]
+                                                           "unity://running-apps"]
         create_launcher("foo.desktop", self.get_generic_desktop_content())
 
         self.assertFalse(SettingsMock.return_value.set_strv.called)
-        result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
-        self.assertTrue(os.path.exists(result_file))
+        self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
 
     @patch("udtc.tools.Gio.Settings")
     def test_install_no_schema_file(self, SettingsMock):
@@ -413,8 +423,7 @@ class TestLauncherIcons(LoggedTestCase):
 
         self.assertFalse(SettingsMock.return_value.get_strv.called)
         self.assertFalse(SettingsMock.return_value.set_strv.called)
-        result_file = os.path.join(self.local_dir, "applications", "foo.desktop")
-        self.assertTrue(os.path.exists(result_file))
+        self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
 
     @patch("udtc.tools.Gio.Settings")
     def test_already_existing_file_different_content(self, SettingsMock):
@@ -439,7 +448,7 @@ class TestLauncherIcons(LoggedTestCase):
         """Launcher exists and is pinned if the file exists and is in favorites list"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
         SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
-                                                           "unity://running"]
+                                                           "unity://running-apps"]
         self.write_desktop_file("foo.desktop")
 
         self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
@@ -448,7 +457,7 @@ class TestLauncherIcons(LoggedTestCase):
     def test_launcher_isnt_pinned(self, SettingsMock):
         """Launcher doesn't exists and is pinned if the file exists but not in favorites list"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
+        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running-apps"]
         self.write_desktop_file("foo.desktop")
 
         self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
@@ -458,7 +467,7 @@ class TestLauncherIcons(LoggedTestCase):
         """Launcher exists return True if file exists, not pinned but not in Unity"""
         os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running"]
+        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running-apps"]
         self.write_desktop_file("foo.desktop")
 
         self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
@@ -485,9 +494,13 @@ class TestLauncherIcons(LoggedTestCase):
         """Launcher doesn't exist if no file, even if pinned"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
         SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
-                                                           "unity://running"]
+                                                           "unity://running-apps"]
 
         self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
+
+    def test_get_launcher_path(self):
+        """Get correct launcher path"""
+        self.assertEquals(get_launcher_path("foo.desktop"), os.path.join(self.local_dir, "applications", "foo.desktop"))
 
 
 class TestMiscTools(LoggedTestCase):
