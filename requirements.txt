@@ -8,6 +8,7 @@ pyxdg
 nose
 nose-cov
 pep8
+pexpect
 
 # setup only
 babel
