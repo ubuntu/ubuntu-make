@@ -52,9 +52,6 @@ class CliUI(UI):
         # quit the shell
         MainLoop().quit()
 
-    def _add_progress_timeout(self, progress_bar):
-        GLib.timeout_add(50, self._display, progress_bar)
-
     def _display(self, contentType):
         # print depending on the content type
         while True:
@@ -122,7 +119,6 @@ def mangle_args_for_default_framework(args):
         else:
             if category_name is not None and BaseCategory.categories[category_name].default_framework:
                 arg_to_parse.insert(1, BaseCategory.categories[category_name].default_framework.prog_name)
-    print(arg_to_parse)
     return arg_to_parse
 
 
