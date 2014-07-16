@@ -98,28 +98,50 @@ def run_command_for_args(args):
 def mangle_args_for_default_framework(args):
     """return the potentially changed args_to_parse for the parser for handling default frameworks
 
-    "./<command> category [options from default framework]"
+    "./<command> [global_option] category [options from default framework]"
     as subparsers can't define default options and are not optional: http://bugs.python.org/issue9253
     """
-    arg_to_parse = args
-    if len(arg_to_parse) > 1:
-        # if the first argument isn't a category name, it should be the main category, parser handles it
-        if arg_to_parse[0] not in BaseCategory.categories.keys():
-            return arg_to_parse
 
-        potential_framework_name = arg_to_parse[1]
-        category_name = None
-        # check if the 3rd arg is a framework name and store the category name
-        for category in BaseCategory.categories.values():
-            if arg_to_parse[0] == category.prog_name:
-                category_name = category.prog_name
-            if potential_framework_name in category.frameworks.keys():
-                break
-        # we didn't find it, we insert the default framework for the found matching category if any
-        else:
-            if category_name is not None and BaseCategory.categories[category_name].default_framework:
-                arg_to_parse.insert(1, BaseCategory.categories[category_name].default_framework.prog_name)
-    return arg_to_parse
+    result_args = []
+    skip_all = False
+    pending_args = []
+    category_name = None
+    framework_completed = False
+
+    for arg in args:
+        if not arg.startswith('-') and not skip_all:
+            if not category_name:
+                if arg in BaseCategory.categories.keys():
+                    category_name = arg
+                    # file global options
+                    result_args.extend(pending_args)
+                    pending_args = []
+                    result_args.append(arg)
+                    continue
+                else:
+                    skip_all = True  # will just append everything at the end
+            elif not framework_completed:
+                # if we found a real framework or not, consider that one. pending_args will be then filed
+                framework_completed = True
+                if arg in BaseCategory.categories[category_name].frameworks.keys():
+                    result_args.append(arg)
+                    continue
+                # take default framework if any
+                elif BaseCategory.categories[category_name].default_framework is not None:
+                    result_args.append(BaseCategory.categories[category_name].default_framework.prog_name)
+                     # current arg will be appending in pending_args
+                else:
+                    skip_all = True  # will just append everything at the end
+        pending_args.append(arg)
+
+    # this happened only if there is no argument after the category name
+    if category_name and not framework_completed:
+        if BaseCategory.categories[category_name].default_framework is not None:
+            result_args.append(BaseCategory.categories[category_name].default_framework.prog_name)
+
+    # let the rest in
+    result_args.extend(pending_args)
+    return result_args
 
 
 def main(parser):
