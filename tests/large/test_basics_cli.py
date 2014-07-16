@@ -32,11 +32,22 @@ class BasicCLI(LoggedTestCase):
         self.assertNotEquals(result, "")
 
     def test_setup_info_logging(self):
-        """We display a global help message"""
+        """We display info logs"""
         result = subprocess.check_output(['./developer-tools-center', '-v', '--help'], stderr=subprocess.STDOUT)
         self.assertIn("INFO:", result.decode("utf-8"))
 
     def test_setup_debug_logging(self):
-        """We display a global help message"""
+        """We display debug logs"""
         result = subprocess.check_output(['./developer-tools-center', '-vv', '--help'], stderr=subprocess.STDOUT)
         self.assertIn("DEBUG:", result.decode("utf-8"))
+
+    def test_setup_with_option_logging(self):
+        """We don't mix info or debug logs with a -v<something> option"""
+        exception_raised = False
+        try:
+             subprocess.check_output(['./developer-tools-center', '-vouep', '--help'], stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError as e:
+            self.assertNotIn("INFO:", e.output.decode("utf-8"))
+            self.assertNotIn("DEBUG:", e.output.decode("utf-8"))
+            exception_raised = True
+        self.assertTrue(exception_raised)
