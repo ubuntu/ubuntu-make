@@ -32,7 +32,7 @@ class LargeFrameworkTests(TestCase):
     """This will test the Android Studio base"""
 
     def setUp(self):
-        super().__init__()
+        super().setUp()
         self.installed_path = ""
         self.exec_path = ""
         self.conf_path = os.path.expanduser("~/.config/udtc")
@@ -46,6 +46,7 @@ class LargeFrameworkTests(TestCase):
             os.remove(self.conf_path)
         with suppress(FileNotFoundError):
             os.remove(get_launcher_path(self.launcher_path))
+        super().tearDown()
 
     def pid_for(self, process_grep, wait_before=0):
         """Return pid matching the process_grep elements"""
@@ -84,3 +85,8 @@ class LargeFrameworkTests(TestCase):
     def wait_and_no_warn(self, expect_warn=False):
         """run wait and check that there is no warning or error"""
         self.expect_and_no_warn(pexpect.EOF, expect_warn=expect_warn)
+
+    def accept_default_and_wait(self, expect_warn=False):
+        """accept default and wait for exiting"""
+        self.child.sendline("")
+        self.wait_and_no_warn(expect_warn)
