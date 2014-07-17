@@ -34,7 +34,6 @@ class LargeFrameworkTests(TestCase):
     def setUp(self):
         super().setUp()
         self.installed_path = ""
-        self.exec_path = ""
         self.conf_path = os.path.expanduser("~/.config/udtc")
         self.launcher_path = ""
         self.child = None
@@ -90,3 +89,7 @@ class LargeFrameworkTests(TestCase):
         """accept default and wait for exiting"""
         self.child.sendline("")
         self.wait_and_no_warn(expect_warn)
+
+    @property
+    def exec_path(self):
+        return os.path.join(self.installed_path, "bin", "studio.sh")

@@ -38,7 +38,6 @@ class AndroidStudioTests(LargeFrameworkTests):
     def setUp(self):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/android/android-studio")
-        self.exec_path = os.path.join(self.installed_path, "bin", "studio.sh")
         self.launcher_path = "android-studio.desktop"
 
     def test_default_android_studio_install(self):
@@ -126,7 +125,6 @@ class AndroidStudioTests(LargeFrameworkTests):
     def test_start_install_on_empty_dir(self):
         """We try to install on an existing empty dir"""
         self.installed_path = tempfile.mkdtemp()
-        self.exec_path = os.path.join(self.installed_path, "bin", "studio.sh")
         self.child = pexpect.spawnu('./developer-tools-center android android-studio {}'.format(self.installed_path))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
@@ -137,7 +135,6 @@ class AndroidStudioTests(LargeFrameworkTests):
     def test_start_install_on_existing_dir(self):
         """We prompt if we try to install on an existing directory which isn't emtpy"""
         self.installed_path = tempfile.mkdtemp()
-        self.exec_path = os.path.join(self.installed_path, "bin", "studio.sh")
         open(os.path.join(self.installed_path, "bar"), 'w').write("foo")
         self.child = pexpect.spawnu('./developer-tools-center android android-studio {}'.format(self.installed_path))
         self.expect_and_no_warn("{} isn't an empty directory.*install there\? \[.*\] ".format(self.installed_path))
