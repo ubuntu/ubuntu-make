@@ -26,4 +26,4 @@ LSB_RELEASE_FILE = "/etc/lsb-release"
 # Those are for the tests
 DOCKER_USER = "user"
 DOCKER_PASSWORD = "user"
-DOCKER_TESTIMAGE = "b43f9b765d38"
+DOCKER_TESTIMAGE = "didrocks/docker-udtc"
