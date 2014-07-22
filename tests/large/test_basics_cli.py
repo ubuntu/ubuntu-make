@@ -26,26 +26,33 @@ from ..tools import LoggedTestCase
 class BasicCLI(LoggedTestCase):
     """This will test the basic cli command class"""
 
+    def command(self, commands_input):
+        # pass through
+        return commands_input
+
     def test_global_help(self):
         """We display a global help message"""
-        result = subprocess.check_output(['./developer-tools-center', '--help'])
+        result = subprocess.check_output(self.command(['./developer-tools-center', '--help']))
         self.assertNotEquals(result, "")
 
     def test_setup_info_logging(self):
         """We display info logs"""
-        result = subprocess.check_output(['./developer-tools-center', '-v', '--help'], stderr=subprocess.STDOUT)
+        result = subprocess.check_output(self.command(['./developer-tools-center', '-v', '--help']),
+                                         stderr=subprocess.STDOUT)
         self.assertIn("INFO:", result.decode("utf-8"))
 
     def test_setup_debug_logging(self):
         """We display debug logs"""
-        result = subprocess.check_output(['./developer-tools-center', '-vv', '--help'], stderr=subprocess.STDOUT)
+        result = subprocess.check_output(self.command(['./developer-tools-center', '-vv', '--help']),
+                                         stderr=subprocess.STDOUT)
         self.assertIn("DEBUG:", result.decode("utf-8"))
 
     def test_setup_with_option_logging(self):
         """We don't mix info or debug logs with a -v<something> option"""
         exception_raised = False
         try:
-             subprocess.check_output(['./developer-tools-center', '-vouep', '--help'], stderr=subprocess.STDOUT)
+             subprocess.check_output(self.command(['./developer-tools-center', '-vouep', '--help']),
+                                     stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
             self.assertNotIn("INFO:", e.output.decode("utf-8"))
             self.assertNotIn("DEBUG:", e.output.decode("utf-8"))
