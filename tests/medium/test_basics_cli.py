@@ -50,7 +50,8 @@ class BasicCLIInContainer(BasicCLI):
 
     def command(self, commands_to_run):
         """Run command in docker"""
-        return ["sshpass", "-p", settings.DOCKER_PASSWORD, "ssh", "-q",
-                "{}@{}".format(settings.DOCKER_USER, self.container_ip), '-oStrictHostKeyChecking=no',
+        return ["sshpass", "-p", settings.DOCKER_PASSWORD, "ssh", "-o", "UserKnownHostsFile=/dev/null", "-o",
+                "StrictHostKeyChecking=no", "-t", "-q",
+                "{}@{}".format(settings.DOCKER_USER, self.container_ip),
                 "bash -c '[ ! -f /tmp/dbus-file ] && dbus-launch > /tmp/dbus-file; export $(cat /tmp/dbus-file); "
                 "cd /udtc; source env/bin/activate; {}'".format(' '.join(commands_to_run))]
