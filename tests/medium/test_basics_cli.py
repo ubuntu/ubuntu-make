@@ -23,9 +23,5 @@ from ..large.test_basics_cli import BasicCLI
 from . import ContainerTests
 
 
-class BasicCLIInContainer(BasicCLI, ContainerTests):
+class BasicCLIInContainer(ContainerTests, BasicCLI):
     """This will test the basic cli command class inside a container"""
-
-    # BasicCli as no setUp() or tearDown(), so ContainerTests,
-    # which has the same inherit hierarchy is used
-
