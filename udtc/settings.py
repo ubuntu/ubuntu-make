@@ -24,6 +24,8 @@ CONFIG_FILENAME = "udtc"
 LSB_RELEASE_FILE = "/etc/lsb-release"
 
 # Those are for the tests
+DOCKER_EXEC_NAME = "docker"
 DOCKER_USER = "user"
 DOCKER_PASSWORD = "user"
 DOCKER_TESTIMAGE = "didrocks/docker-udtc-manual"
+UDTC_IN_CONTAINER = "/udtc"

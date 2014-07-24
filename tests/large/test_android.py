@@ -40,6 +40,10 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/android/android-studio")
         self.launcher_path = "android-studio.desktop"
 
+    @property
+    def exec_path(self):
+        return os.path.join(self.installed_path, "bin", "studio.sh")
+
     def test_default_android_studio_install(self):
         """Install android studio from scratch test case"""
         self.child = pexpect.spawnu('./developer-tools-center android android-studio')

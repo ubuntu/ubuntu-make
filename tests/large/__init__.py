@@ -25,11 +25,11 @@ import pexpect
 import shutil
 from time import sleep
 from udtc.tools import get_launcher_path
-from unittest import TestCase
+from ..tools import LoggedTestCase
 
 
-class LargeFrameworkTests(TestCase):
-    """This will test the Android Studio base"""
+class LargeFrameworkTests(LoggedTestCase):
+    """Large framework base utilities"""
 
     def setUp(self):
         super().setUp()
@@ -89,7 +89,3 @@ class LargeFrameworkTests(TestCase):
         """accept default and wait for exiting"""
         self.child.sendline("")
         self.wait_and_no_warn(expect_warn)
-
-    @property
-    def exec_path(self):
-        return os.path.join(self.installed_path, "bin", "studio.sh")
