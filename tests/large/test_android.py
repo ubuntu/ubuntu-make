@@ -131,7 +131,8 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.installed_path = tempfile.mkdtemp()
         else:  # we still give a path for the container
             self.installed_path = os.path.join(tempfile.gettempdir(), "tmptests")
-        self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio {}'.format(self.installed_path)))
+        self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio {}'
+                                                 .format(self.installed_path)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
 
@@ -145,7 +146,8 @@ class AndroidStudioTests(LargeFrameworkTests):
         else:  # we still give a path for the container
             self.installed_path = os.path.join(tempfile.gettempdir(), "tmptests")
         self.create_file(os.path.join(self.installed_path, "bar"), "foo")
-        self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio {}'.format(self.installed_path)))
+        self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio {}'
+                                                 .format(self.installed_path)))
         self.expect_and_no_warn("{} isn't an empty directory.*there\? \[.*\] ".format(self.installed_path))
         self.accept_default_and_wait()
 

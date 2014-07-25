@@ -68,8 +68,9 @@ class ContainerTests(LoggedTestCase):
                 "StrictHostKeyChecking=no", "-t", "-q",
                 "{}@{}".format(settings.DOCKER_USER, self.container_ip),
                 # echo foo is a workaround for now (first arg not taken by bash -c over ssh). I should miss something
-                "bash -c 'echo foo;[ ! -f /tmp/dbus-file ] && dbus-launch > /tmp/dbus-file; export $(cat /tmp/dbus-file); "
-                "cd {}; source env/bin/activate; {}'".format(settings.UDTC_IN_CONTAINER, commands_to_run)]
+                "bash -c 'echo foo;[ ! -f /tmp/dbus-file ] && dbus-launch > /tmp/dbus-file; "
+                "export $(cat /tmp/dbus-file); cd {}; source env/bin/activate; {}'".format(settings.UDTC_IN_CONTAINER,
+                                                                                           commands_to_run)]
 
     def _exec_command(self, command):
         """Exec the required command inside the container"""
@@ -96,5 +97,5 @@ class ContainerTests(LoggedTestCase):
         path = path.replace(os.getlogin(), settings.DOCKER_USER)
         dir_path = os.path.dirname(path)
         command = self.command_as_list(["mkdir", "-p", dir_path, ";", "echo", content, ">", path])
-        if self._exec_command(command) != True:
+        if not self._exec_command(command):
             raise BaseException("Couldn't create {} in container".format(path))

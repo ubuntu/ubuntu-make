@@ -51,8 +51,8 @@ class BasicCLI(LoggedTestCase):
         """We don't mix info or debug logs with a -v<something> option"""
         exception_raised = False
         try:
-             subprocess.check_output(self.command_as_list(['./developer-tools-center', '-vouep', '--help']),
-                                     stderr=subprocess.STDOUT)
+            subprocess.check_output(self.command_as_list(['./developer-tools-center', '-vouep', '--help']),
+                                    stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
             self.assertNotIn("INFO:", e.output.decode("utf-8"))
             self.assertNotIn("DEBUG:", e.output.decode("utf-8"))
