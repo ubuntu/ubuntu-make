@@ -107,6 +107,7 @@ class MainLoop(object, metaclass=Singleton):
 
     def quit(self, status_code=0):
         GLib.timeout_add(80, self._clean_up, status_code)
+        raise self.ReturnMainLoop()
 
     def _clean_up(self, exit_code):
         self.mainloop.quit()
@@ -120,6 +121,8 @@ class MainLoop(object, metaclass=Singleton):
         def wrapper(*args, **kwargs):
             try:
                 function(*args, **kwargs)
+            except MainLoop.ReturnMainLoop:
+                pass
             except BaseException:
                 logger.exception("Unhandled exception")
                 GLib.idle_add(MainLoop().quit, 1)
@@ -127,6 +130,9 @@ class MainLoop(object, metaclass=Singleton):
         def inner(*args, **kwargs):
             return GLib.idle_add(wrapper, *args, **kwargs)
         return inner
+
+    class ReturnMainLoop(BaseException):
+        """Exception raised only to return to MainLoop without finishing the function"""
 
 
 class InputError(BaseException):
