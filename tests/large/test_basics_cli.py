@@ -27,7 +27,7 @@ class BasicCLI(LoggedTestCase):
     """This will test the basic cli command class"""
 
     def command_as_list(self, commands_input):
-        # pass through
+        """passthrough, return args"""
         return commands_input
 
     def test_global_help(self):

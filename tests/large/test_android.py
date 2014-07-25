@@ -25,7 +25,6 @@ import pexpect
 import signal
 import subprocess
 import tempfile
-from udtc.tools import launcher_exists_and_is_pinned
 
 
 class AndroidStudioTests(LargeFrameworkTests):
@@ -46,7 +45,7 @@ class AndroidStudioTests(LargeFrameworkTests):
 
     def test_default_android_studio_install(self):
         """Install android studio from scratch test case"""
-        self.child = pexpect.spawnu('./developer-tools-center android android-studio')
+        self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio'))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
@@ -55,8 +54,8 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.wait_and_no_warn()
 
         # we have an installed launcher, added to the launcher
-        self.assertTrue(launcher_exists_and_is_pinned(self.launcher_path))
-        self.assertTrue(os.path.exists(self.exec_path))
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.launcher_path))
+        self.assertTrue(self.path_exists(self.exec_path))
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.exec_path, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
@@ -65,25 +64,25 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.assertEquals(proc.wait(self.TIMEOUT_STOP), 0)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu('./developer-tools-center android android-studio')
+        self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio'))
         self.expect_and_no_warn("Android Studio is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_no_warn()
 
     def test_no_license_accept_android_studio(self):
         """We don't accept the license (default)"""
-        self.child = pexpect.spawnu('./developer-tools-center android android-studio')
+        self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio'))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
         self.accept_default_and_wait()
 
-        self.assertFalse(launcher_exists_and_is_pinned("android-studio.desktop"))
-        self.assertFalse(os.path.exists(self.exec_path))
+        self.assertFalse(self.launcher_exists_and_is_pinned("android-studio.desktop"))
+        self.assertFalse(self.path_exists(self.exec_path))
 
     def test_doesnt_accept_wrong_path(self):
         """We don't accept a wrong path"""
-        self.child = pexpect.spawnu('./developer-tools-center android android-studio')
+        self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio'))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline(chr(127)*100)
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
@@ -92,13 +91,13 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.child.sendcontrol('C')
         self.wait_and_no_warn()
 
-        self.assertFalse(launcher_exists_and_is_pinned(self.launcher_path))
-        self.assertFalse(os.path.exists(self.exec_path))
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.launcher_path))
+        self.assertFalse(self.path_exists(self.exec_path))
 
     def test_android_studio_reinstall(self):
         """Reinstall android studio once installed"""
         for loop in ("install", "reinstall"):
-            self.child = pexpect.spawnu('./developer-tools-center android android-studio')
+            self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio'))
             if loop == "reinstall":
                 self.expect_and_no_warn("Android Studio is already installed.*\[.*\] ")
                 self.child.sendline("y")
@@ -110,8 +109,8 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.wait_and_no_warn()
 
             # we have an installed launcher, added to the launcher
-            self.assertTrue(launcher_exists_and_is_pinned(self.launcher_path))
-            self.assertTrue(os.path.exists(self.exec_path))
+            self.assertTrue(self.launcher_exists_and_is_pinned(self.launcher_path))
+            self.assertTrue(self.path_exists(self.exec_path))
 
             # launch it, send SIGTERM and check that it exits fine
             proc = subprocess.Popen(self.exec_path, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
@@ -122,34 +121,40 @@ class AndroidStudioTests(LargeFrameworkTests):
     def test_custom_install_path(self):
         """We install android studio in a custom path"""
         # We skip the existing directory prompt
-        self.child = pexpect.spawnu('./developer-tools-center android android-studio /tmp/foo')
+        self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio /tmp/foo'))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
 
     def test_start_install_on_empty_dir(self):
         """We try to install on an existing empty dir"""
-        self.installed_path = tempfile.mkdtemp()
-        self.child = pexpect.spawnu('./developer-tools-center android android-studio {}'.format(self.installed_path))
+        if not self.in_container:
+            self.installed_path = tempfile.mkdtemp()
+        else:  # we still give a name for the container
+            self.installed_path = os.path.join(tempfile.gettempdir(), "tmptests")
+        self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio {}'.format(self.installed_path)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
 
-        self.assertFalse(launcher_exists_and_is_pinned(self.launcher_path))
-        self.assertFalse(os.path.exists(self.exec_path))
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.launcher_path))
+        self.assertFalse(self.path_exists(self.exec_path))
 
     def test_start_install_on_existing_dir(self):
         """We prompt if we try to install on an existing directory which isn't emtpy"""
-        self.installed_path = tempfile.mkdtemp()
-        open(os.path.join(self.installed_path, "bar"), 'w').write("foo")
-        self.child = pexpect.spawnu('./developer-tools-center android android-studio {}'.format(self.installed_path))
-        self.expect_and_no_warn("{} isn't an empty directory.*install there\? \[.*\] ".format(self.installed_path))
+        if not self.in_container:
+            self.installed_path = tempfile.mkdtemp()
+        else:  # we still give a name for the container
+            self.installed_path = os.path.join(tempfile.gettempdir(), "tmptests")
+        self.create_file(os.path.join(self.installed_path, "bar"), "foo")
+        self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio {}'.format(self.installed_path)))
+        self.expect_and_no_warn("{} isn't an empty directory.*there\? \[.*\] ".format(self.installed_path))
         self.accept_default_and_wait()
 
-        self.assertFalse(launcher_exists_and_is_pinned(self.launcher_path))
-        self.assertFalse(os.path.exists(self.exec_path))
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.launcher_path))
+        self.assertFalse(self.path_exists(self.exec_path))
 
     def test_is_default_framework(self):
         """Android Studio is chosen as the default framework"""
-        self.child = pexpect.spawnu('./developer-tools-center android')
+        self.child = pexpect.spawnu(self.command('./developer-tools-center android'))
         # we ensure it thanks to installed_path being the android-studio one
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendcontrol('C')
@@ -157,6 +162,6 @@ class AndroidStudioTests(LargeFrameworkTests):
 
     def test_is_default_framework_with_options(self):
         """Android Studio options are sucked in as the default framework"""
-        self.child = pexpect.spawnu('./developer-tools-center android /tmp/foo')
+        self.child = pexpect.spawnu(self.command('./developer-tools-center android /tmp/foo'))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()

@@ -64,6 +64,11 @@ def get_root_dir():
     return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
+def get_tools_helper_dir():
+    """Return an absolute path to where the runner helpers are"""
+    return os.path.abspath(os.path.dirname(__file__))
+
+
 def assert_files_identicals(filename1, filename2):
     """Assert if the files content are identical"""
     if open(filename1).read() != open(filename2).read():

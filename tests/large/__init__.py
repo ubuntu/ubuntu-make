@@ -24,7 +24,7 @@ import os
 import pexpect
 import shutil
 from time import sleep
-from udtc.tools import get_launcher_path
+from udtc.tools import get_launcher_path, launcher_exists_and_is_pinned
 from ..tools import LoggedTestCase
 
 
@@ -33,18 +33,21 @@ class LargeFrameworkTests(LoggedTestCase):
 
     def setUp(self):
         super().setUp()
+        self.in_container = False
         self.installed_path = ""
         self.conf_path = os.path.expanduser("~/.config/udtc")
         self.launcher_path = ""
         self.child = None
 
     def tearDown(self):
-        with suppress(FileNotFoundError):
-            shutil.rmtree(self.installed_path)
-        with suppress(FileNotFoundError):
-            os.remove(self.conf_path)
-        with suppress(FileNotFoundError):
-            os.remove(get_launcher_path(self.launcher_path))
+        # don't remove on machine paths if running within a container
+        if not self.in_container:
+            with suppress(FileNotFoundError):
+                shutil.rmtree(self.installed_path)
+            with suppress(FileNotFoundError):
+                os.remove(self.conf_path)
+            with suppress(FileNotFoundError):
+                os.remove(get_launcher_path(self.launcher_path))
         super().tearDown()
 
     def pid_for(self, process_grep, wait_before=0):
@@ -89,3 +92,23 @@ class LargeFrameworkTests(LoggedTestCase):
         """accept default and wait for exiting"""
         self.child.sendline("")
         self.wait_and_no_warn(expect_warn)
+
+    def command(self, commands_to_run):
+        """passthrough, return args"""
+        return commands_to_run
+
+    def command_as_list(self, commands_input):
+        """passthrough, return args"""
+        return commands_input
+
+    def launcher_exists_and_is_pinned(self, launcher_path):
+        """passthrough to in process method"""
+        return launcher_exists_and_is_pinned(launcher_path)
+
+    def path_exists(self, path):
+        """passthrough to os.path.exists"""
+        return os.path.exists(path)
+
+    def create_file(self, path, content):
+        """passthrough to create a file on the disk"""
+        open(path, 'w').write(content)

@@ -26,8 +26,7 @@ import subprocess
 import tempfile
 from udtc.tools import launcher_exists_and_is_pinned
 import subprocess
-from ..tools import get_root_dir, LoggedTestCase
-from ..large.test_android import AndroidStudioTests
+from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase
 from udtc import settings
 
 
@@ -35,35 +34,33 @@ class ContainerTests(LoggedTestCase):
     """Container-based tests utilities"""
 
     def setUp(self):
-        super().setUp()
-        print("CALLLLLLLLLLLLLLLLLLED")
+        super().setUp()  # this will call other parents of ContainerTests ancestors, like LargeFrameworkTests
+        self.in_container = True
         self.udtc_path = get_root_dir()
         self.image_name = settings.DOCKER_TESTIMAGE
         self.container_id = subprocess.check_output([settings.DOCKER_EXEC_NAME, "run", "-d", "-v",
                                                      "{}:{}".format(self.udtc_path, settings.UDTC_IN_CONTAINER),
                                                      self.image_name,
                                                      'sh', '-c',
-                                                     'mkdir -p /home/didrocks/work/ubuntu-developer-tools-center && '
-                                                     'ln -s /udtc/env /home/didrocks/work/ubuntu-developer-tools-center'
+                                                     'mkdir -p /home/didrocks/work && '
+                                                     'ln -s /udtc /home/didrocks/work/ubuntu-developer-tools-center'
                                                      ' && /usr/sbin/sshd -D']).decode("utf-8").strip()
-        print(self.container_id)
         self.container_ip = subprocess.check_output(["docker", "inspect", "-f", "{{ .NetworkSettings.IPAddress }}",
                                                      self.container_id]).decode("utf-8").strip()
-        # override in container paths
-        self.installed_path = os.path.expanduser("/home/{}/tools/android/android-studio".format(settings.DOCKER_USER))
+        # override with container paths
         self.conf_path = os.path.expanduser("/home/{}/.config/udtc".format(settings.DOCKER_USER))
 
     def tearDown(self):
         subprocess.check_call([settings.DOCKER_EXEC_NAME, "stop", self.container_id], stdout=subprocess.DEVNULL)
         subprocess.check_call([settings.DOCKER_EXEC_NAME, "rm", self.container_id], stdout=subprocess.DEVNULL)
-        super().tearDown()
+        super().tearDown()  # this will call other parents of ContainerTests ancestors, like LargeFrameworkTests
 
     def command(self, commands_to_run):
-        """Run command in docker and return a string"""
+        """Return a string for a command line ready to run in docker"""
         return " ".join(self.command_as_list(commands_to_run))
 
     def command_as_list(self, commands_to_run):
-        """Run command in docker and return as a list"""
+        """Return a list for a command line ready to run in docker"""
 
         if isinstance(commands_to_run, list):
             commands_to_run = " ".join(commands_to_run)
@@ -72,3 +69,31 @@ class ContainerTests(LoggedTestCase):
                 "{}@{}".format(settings.DOCKER_USER, self.container_ip),
                 "bash -c '[ ! -f /tmp/dbus-file ] && dbus-launch > /tmp/dbus-file; export $(cat /tmp/dbus-file); "
                 "cd {}; source env/bin/activate; {}'".format(settings.UDTC_IN_CONTAINER, commands_to_run)]
+
+    def _exec_command(self, command):
+        """Exec the required command inside the container"""
+        return_code = subprocess.call(command)
+        if return_code == 0:
+            return True
+        elif return_code == 1:
+            return False
+        raise BaseException("Unknown return code from launcher_exists_and_is_pinned")
+
+    def launcher_exists_and_is_pinned(self, launcher_path):
+        """Check if launcher exists and is pinned inside the container"""
+        command = self.command_as_list([os.path.join(get_tools_helper_dir(), "check_launcher_exists_and_is_pinned"),
+                                        launcher_path])
+        return self._exec_command(command)
+
+    def path_exists(self, path):
+        """Check if a path exists inside the container"""
+        command = self.command_as_list([os.path.join(get_tools_helper_dir(), "path_exists"), path])
+        return self._exec_command(command)
+
+    def create_file(self, path, content):
+        """Create file inside the container.replace in path current user with the docker user"""
+        path = path.replace(os.getlogin(), settings.DOCKER_USER)
+        dir_path = os.path.dirname(path)
+        command = self.command_as_list(["mkdir", "-p", dir_path, ";", "echo", content, ">", path])
+        if self._exec_command(command) != True:
+            raise BaseException("Couldn't create {} in container".format(path))
