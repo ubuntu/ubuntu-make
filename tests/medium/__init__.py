@@ -67,7 +67,8 @@ class ContainerTests(LoggedTestCase):
         return ["sshpass", "-p", settings.DOCKER_PASSWORD, "ssh", "-o", "UserKnownHostsFile=/dev/null", "-o",
                 "StrictHostKeyChecking=no", "-t", "-q",
                 "{}@{}".format(settings.DOCKER_USER, self.container_ip),
-                "bash -c '[ ! -f /tmp/dbus-file ] && dbus-launch > /tmp/dbus-file; export $(cat /tmp/dbus-file); "
+                # echo foo is a workaround for now (first arg not taken by bash -c over ssh). I should miss something
+                "bash -c 'echo foo;[ ! -f /tmp/dbus-file ] && dbus-launch > /tmp/dbus-file; export $(cat /tmp/dbus-file); "
                 "cd {}; source env/bin/activate; {}'".format(settings.UDTC_IN_CONTAINER, commands_to_run)]
 
     def _exec_command(self, command):
