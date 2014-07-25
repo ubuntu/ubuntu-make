@@ -224,7 +224,6 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
             (1 - self.balance_requirement_download) * self.last_progress_download
         if not self.pbar.finished:  # drawing is delayed, so ensure we are not done first
             self.pbar.update(progress)
-        return
 
     def get_progress_requirement(self, status):
         """Chain up to main get_progress, returning current value between 0 and 100"""

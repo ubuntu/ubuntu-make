@@ -129,7 +129,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         """We try to install on an existing empty dir"""
         if not self.in_container:
             self.installed_path = tempfile.mkdtemp()
-        else:  # we still give a name for the container
+        else:  # we still give a path for the container
             self.installed_path = os.path.join(tempfile.gettempdir(), "tmptests")
         self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio {}'.format(self.installed_path)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
@@ -142,7 +142,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         """We prompt if we try to install on an existing directory which isn't emtpy"""
         if not self.in_container:
             self.installed_path = tempfile.mkdtemp()
-        else:  # we still give a name for the container
+        else:  # we still give a path for the container
             self.installed_path = os.path.join(tempfile.gettempdir(), "tmptests")
         self.create_file(os.path.join(self.installed_path, "bar"), "foo")
         self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio {}'.format(self.installed_path)))

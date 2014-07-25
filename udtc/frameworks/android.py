@@ -60,7 +60,7 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
         self.desktop_filename = "android-studio.desktop"
         super().__init__(name="Android Studio", description="Android Studio (default)", is_category_default=True,
                          category=category, only_on_archs=_supported_archs, expect_license=True,
-                         download_page="http://developer.android.com/sdk/installing/studio.html",
+                         download_page="https://developer.android.com/sdk/installing/studio.html",
                          dir_to_decompress_in_tarball="android-studio", desktop_file_name=self.desktop_filename)
 
     def parse_license(self, line, license_txt, in_license):
