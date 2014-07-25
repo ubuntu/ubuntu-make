@@ -40,6 +40,7 @@ class ContainerTests(LoggedTestCase):
         self.image_name = settings.DOCKER_TESTIMAGE
         self.container_id = subprocess.check_output([settings.DOCKER_EXEC_NAME, "run", "-d", "-v",
                                                      "{}:{}".format(self.udtc_path, settings.UDTC_IN_CONTAINER),
+                                                     "--dns=8.8.8.8", "--dns=8.8.4.4",  # suppress local DNS warning
                                                      self.image_name,
                                                      'sh', '-c',
                                                      'mkdir -p /home/didrocks/work && '
