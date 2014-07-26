@@ -32,6 +32,8 @@ RUN apt-get install python3.4 apt apt-utils libapt-pkg-dev gir1.2-glib-2.0 pytho
 # for running it as a daemon (and ssh requires the sshd directory)
 RUN apt-get install openssh-server -y
 RUN mkdir /var/run/sshd
+# disable DNS to not wait on host name resolution (delay when working offline)
+RUN echo "UseDNS no" >> /etc/ssh/sshd_config
 
 RUN echo 'EXTRA_GROUPS="adm cdrom sudo dip plugdev fuse"' >> /etc/adduser.conf
 RUN echo 'ADD_EXTRA_GROUPS=1' >> /etc/adduser.conf
