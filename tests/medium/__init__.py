@@ -52,7 +52,7 @@ class ContainerTests(LoggedTestCase):
         self.conf_path = os.path.expanduser("/home/{}/.config/udtc".format(settings.DOCKER_USER))
 
     def tearDown(self):
-        subprocess.check_call([settings.DOCKER_EXEC_NAME, "stop", self.container_id], stdout=subprocess.DEVNULL)
+        subprocess.check_call([settings.DOCKER_EXEC_NAME, "stop", "-t", "0", self.container_id], stdout=subprocess.DEVNULL)
         subprocess.check_call([settings.DOCKER_EXEC_NAME, "rm", self.container_id], stdout=subprocess.DEVNULL)
         super().tearDown()  # this will call other parents of ContainerTests ancestors, like LargeFrameworkTests
 
