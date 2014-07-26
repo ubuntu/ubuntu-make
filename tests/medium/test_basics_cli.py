@@ -19,9 +19,9 @@
 
 """Tests for basic CLI commands"""
 
-from ..large.test_basics_cli import BasicCLI
+from ..large import test_basics_cli
 from . import ContainerTests
 
 
-class BasicCLIInContainer(ContainerTests, BasicCLI):
+class BasicCLIInContainer(ContainerTests,  test_basics_cli.BasicCLI):
     """This will test the basic cli command class inside a container"""

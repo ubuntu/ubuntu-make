@@ -21,11 +21,11 @@
 
 from . import ContainerTests
 import os
-from ..large.test_android import AndroidStudioTests
+from ..large import test_android
 from udtc import settings
 
 
-class AndroidStudioInContainer(ContainerTests, AndroidStudioTests):
+class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
     """This will test the basic cli command class inside a container"""
 
     def setUp(self):
