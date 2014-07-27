@@ -32,14 +32,20 @@ import urllib.parse
 logger = logging.getLogger(__name__)
 
 
+# TO CREATE THE CERTIFICATES:
+# openssl req -new -x509 -nodes -out server.crt -keyout server.key (file the fqdn name)
+# cat server.key server.crt > server.pem
+# server loads the server.pem
+# put the .crt file in /usr/local/share/ca-certificates and run sudo update-ca-certificates
+
 class LocalHttp:
     """Local threaded http server. will be serving path content"""
 
-    def __init__(self, path, use_ssl=False):
+    def __init__(self, path, use_ssl=False, port=9876):
         """path is the local path to server
-        use_ssl turn on the use of the local certificate or not.
+        set use_ssl to a specific filename turn on the use of the local certificate
         """
-        self.port = 9876
+        self.port = port
         self.path = path
         self.use_ssl = use_ssl
         handler = RequestHandler
@@ -48,7 +54,7 @@ class LocalHttp:
         self.httpd = HTTPServer(("", self.port), RequestHandler)
         if self.use_ssl:
             self.httpd.socket = ssl.wrap_socket(self.httpd.socket,
-                                                certfile=os.path.join(get_data_dir(), 'local_cert.pem'),
+                                                certfile=os.path.join(get_data_dir(), self.use_ssl),
                                                 server_side=True)
         executor = futures.ThreadPoolExecutor(max_workers=1)
         self.future = executor.submit(self._serve)

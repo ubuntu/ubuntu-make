@@ -22,9 +22,6 @@ import logging
 import os
 import sys
 
-logging.basicConfig(level=logging.DEBUG,
-                    format="%(asctime)s [%(name)s] %(levelname)s: %(message)s")
-
 
 if os.path.exists(sys.argv[1]):
     sys.exit(0)

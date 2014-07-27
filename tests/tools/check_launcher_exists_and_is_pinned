@@ -25,10 +25,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 from udtc.tools import launcher_exists_and_is_pinned
 
 
-logging.basicConfig(level=logging.DEBUG,
-                    format="%(asctime)s [%(name)s] %(levelname)s: %(message)s")
-
-
 if launcher_exists_and_is_pinned(sys.argv[1]):
     sys.exit(0)
 sys.exit(1)

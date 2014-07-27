@@ -26,7 +26,8 @@ import subprocess
 import tempfile
 from udtc.tools import launcher_exists_and_is_pinned
 import subprocess
-from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase
+from time import sleep
+from ..tools import get_root_dir, get_tools_helper_dir, get_data_dir, LoggedTestCase
 from udtc import settings
 
 
@@ -38,15 +39,15 @@ class ContainerTests(LoggedTestCase):
         self.in_container = True
         self.udtc_path = get_root_dir()
         self.image_name = settings.DOCKER_TESTIMAGE
-        self.container_id = subprocess.check_output([settings.DOCKER_EXEC_NAME, "run", "-d", "-v",
-                                                     "{}:{}".format(self.udtc_path, settings.UDTC_IN_CONTAINER),
-                                                     "--dns=8.8.8.8", "--dns=8.8.4.4",  # suppress local DNS warning
-                                                     self.image_name,
-                                                     'sh', '-c',
-                                                     'mkdir -p /home/didrocks/work && '
-                                                     'ln -s /udtc {}'
-                                                     ' && /usr/sbin/sshd -D'.format(get_root_dir())])\
-            .decode("utf-8").strip()
+        command = [settings.DOCKER_EXEC_NAME, "run"]
+        if hasattr(self, "hostname"):
+            command.extend(["-h", self.hostname])
+        command.extend(["-d", "-v", "{}:{}".format(self.udtc_path, settings.UDTC_IN_CONTAINER),
+                        "--dns=8.8.8.8", "--dns=8.8.4.4",  # suppress local DNS warning
+                        self.image_name,
+                        'sh', '-c', 'mkdir -p {} && ln -s /udtc {} && /usr/sbin/sshd -D'
+                .format(os.path.dirname(get_root_dir()), get_root_dir())])
+        self.container_id = subprocess.check_output(command).decode("utf-8").strip()
         self.container_ip = subprocess.check_output(["docker", "inspect", "-f", "{{ .NetworkSettings.IPAddress }}",
                                                      self.container_id]).decode("utf-8").strip()
         # override with container paths
@@ -70,9 +71,8 @@ class ContainerTests(LoggedTestCase):
                 "StrictHostKeyChecking=no", "-t", "-q",
                 "{}@{}".format(settings.DOCKER_USER, self.container_ip),
                 # echo foo is a workaround for now (first arg not taken by bash -c over ssh). I should miss something
-                "bash -c 'echo foo;[ ! -f /tmp/dbus-file ] && dbus-launch > /tmp/dbus-file; "
-                "export $(cat /tmp/dbus-file); cd {}; source env/bin/activate; {}'".format(settings.UDTC_IN_CONTAINER,
-                                                                                           commands_to_run)]
+                "{} {} '{}'".format(os.path.join(get_tools_helper_dir(), "run_in_udtc_dir"), settings.UDTC_IN_CONTAINER,
+                                  commands_to_run)]
 
     def _exec_command(self, command):
         """Exec the required command inside the container"""
@@ -101,3 +101,21 @@ class ContainerTests(LoggedTestCase):
         command = self.command_as_list(["mkdir", "-p", dir_path, ";", "echo", content, ">", path])
         if not self._exec_command(command):
             raise BaseException("Couldn't create {} in container".format(path))
+
+    # TODO: build this into the container
+    def install_and_run_local_server(self, website_url, use_ssl=False):
+        """Install and run a local server in the container.
+
+        Spoof in the container the website url and use an eventual ssl certificate and run on 443 then"""
+        base_server_command = ["sudo", "-E", "env", "PATH={}".format(os.getenv("PATH")),
+                               os.path.join(get_tools_helper_dir(), "run_local_server")]
+        commands = []
+        if use_ssl:
+            commands = ["sudo", 'cp', os.path.join(get_data_dir(), use_ssl.replace('.pem', '.crt')),
+                        "/usr/local/share/ca-certificates/", ";", "sudo", "update-ca-certificates", ";"]
+            base_server_command.extend(["443", use_ssl])
+        else:
+            base_server_command.append("80")
+        commands.extend(base_server_command)
+        # this will get killed with the container
+        subprocess.Popen(self.command(commands), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True)
