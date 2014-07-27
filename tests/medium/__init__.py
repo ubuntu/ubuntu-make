@@ -44,8 +44,9 @@ class ContainerTests(LoggedTestCase):
                                                      self.image_name,
                                                      'sh', '-c',
                                                      'mkdir -p /home/didrocks/work && '
-                                                     'ln -s /udtc /home/didrocks/work/ubuntu-developer-tools-center'
-                                                     ' && /usr/sbin/sshd -D']).decode("utf-8").strip()
+                                                     'ln -s /udtc {}'
+                                                     ' && /usr/sbin/sshd -D'.format(get_root_dir())])\
+            .decode("utf-8").strip()
         self.container_ip = subprocess.check_output(["docker", "inspect", "-f", "{{ .NetworkSettings.IPAddress }}",
                                                      self.container_id]).decode("utf-8").strip()
         # override with container paths
