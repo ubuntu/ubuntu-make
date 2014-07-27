@@ -73,6 +73,7 @@ class ConfigHandler(metaclass=Singleton):
     def config(self, config):
         config_file = os.path.join(xdg_config_home, settings.CONFIG_FILENAME)
         logging.debug("Saving new configuration: {} in {}".format(config, config_file))
+        os.makedirs(os.path.dirname(config_file), exist_ok=True)
         with open(config_file, 'w') as f:
             yaml.dump(config, f, default_flow_style=False)
         self._config = config

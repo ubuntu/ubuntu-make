@@ -94,6 +94,11 @@ class TestConfigHandler(LoggedTestCase):
         with open(os.path.join(self.config_dir, settings.CONFIG_FILENAME)) as f:
             self.assertEquals(f.read(), 'foo: bar\n')
 
+    def test_save_config_without_xdg_dir(self):
+        """Save a new config file with an unexisting directory"""
+        os.removedirs(self.config_dir)
+        self.test_save_new_config()
+
     def test_save_config_existing(self):
         """Replace an existing config with a new one"""
         shutil.copy(os.path.join(self.config_dir_for_name('valid'), settings.CONFIG_FILENAME), self.config_dir)
