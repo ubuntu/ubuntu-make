@@ -30,8 +30,7 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
 
     def setUp(self):
         self.hostname = "developer.android.com"
+        self.port = "443"
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/android/android-studio".format(settings.DOCKER_USER))
-        # TODO: as we don't wait for an end (we juts start it), can be racy?
-        self.install_and_run_local_server(self.hostname, use_ssl="developer.android.com.pem")

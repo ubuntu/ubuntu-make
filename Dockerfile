@@ -41,3 +41,7 @@ RUN echo "user ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/bar
 RUN adduser --disabled-password --gecos "" user
 RUN echo user:user | chpasswd
 
+# add certificates
+ADD tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
+RUN update-ca-certificates
+

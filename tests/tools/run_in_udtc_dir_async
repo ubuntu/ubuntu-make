@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# setup dbus environment and launch a command, pwd being the udtc dir.
+# Start command in async mode
+[ ! -f /tmp/dbus-file ] && dbus-launch > /tmp/dbus-file
+export $(cat /tmp/dbus-file)
+cd $1
+shift
+. env/bin/activate
+$@ &

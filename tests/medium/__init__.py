@@ -40,13 +40,26 @@ class ContainerTests(LoggedTestCase):
         self.udtc_path = get_root_dir()
         self.image_name = settings.DOCKER_TESTIMAGE
         command = [settings.DOCKER_EXEC_NAME, "run"]
+        runner_cmd = "mkdir -p {}; ln -s {}/ {};".format(os.path.dirname(get_root_dir()), settings.UDTC_IN_CONTAINER,
+                                                         get_root_dir())
+
+        # start the local server at container startup
         if hasattr(self, "hostname"):
             command.extend(["-h", self.hostname])
+            runner_cmd += "{} {} 'sudo -E env PATH={} {} {} {}';".format(
+                os.path.join(get_tools_helper_dir(), "run_in_udtc_dir_async"),
+                settings.UDTC_IN_CONTAINER,
+                os.getenv("PATH"),
+                os.path.join(get_tools_helper_dir(), "run_local_server"),
+                self.port,
+                "{}.pem".format(self.hostname))
+        runner_cmd += "/usr/sbin/sshd -D"
+
         command.extend(["-d", "-v", "{}:{}".format(self.udtc_path, settings.UDTC_IN_CONTAINER),
                         "--dns=8.8.8.8", "--dns=8.8.4.4",  # suppress local DNS warning
                         self.image_name,
-                        'sh', '-c', 'mkdir -p {} && ln -s /udtc {} && /usr/sbin/sshd -D'
-                .format(os.path.dirname(get_root_dir()), get_root_dir())])
+                        'sh', '-c', runner_cmd])
+
         self.container_id = subprocess.check_output(command).decode("utf-8").strip()
         self.container_ip = subprocess.check_output(["docker", "inspect", "-f", "{{ .NetworkSettings.IPAddress }}",
                                                      self.container_id]).decode("utf-8").strip()
@@ -101,21 +114,3 @@ class ContainerTests(LoggedTestCase):
         command = self.command_as_list(["mkdir", "-p", dir_path, ";", "echo", content, ">", path])
         if not self._exec_command(command):
             raise BaseException("Couldn't create {} in container".format(path))
-
-    # TODO: build this into the container
-    def install_and_run_local_server(self, website_url, use_ssl=False):
-        """Install and run a local server in the container.
-
-        Spoof in the container the website url and use an eventual ssl certificate and run on 443 then"""
-        base_server_command = ["sudo", "-E", "env", "PATH={}".format(os.getenv("PATH")),
-                               os.path.join(get_tools_helper_dir(), "run_local_server")]
-        commands = []
-        if use_ssl:
-            commands = ["sudo", 'cp', os.path.join(get_data_dir(), use_ssl.replace('.pem', '.crt')),
-                        "/usr/local/share/ca-certificates/", ";", "sudo", "update-ca-certificates", ";"]
-            base_server_command.extend(["443", use_ssl])
-        else:
-            base_server_command.append("80")
-        commands.extend(base_server_command)
-        # this will get killed with the container
-        subprocess.Popen(self.command(commands), stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True)
