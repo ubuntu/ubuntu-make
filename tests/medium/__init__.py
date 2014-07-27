@@ -20,14 +20,8 @@
 """Tests for basic CLI commands"""
 
 import os
-import pexpect
-import signal
 import subprocess
-import tempfile
-from udtc.tools import launcher_exists_and_is_pinned
-import subprocess
-from time import sleep
-from ..tools import get_root_dir, get_tools_helper_dir, get_data_dir, LoggedTestCase
+from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase
 from udtc import settings
 
 
@@ -67,7 +61,8 @@ class ContainerTests(LoggedTestCase):
         self.conf_path = os.path.expanduser("/home/{}/.config/udtc".format(settings.DOCKER_USER))
 
     def tearDown(self):
-        subprocess.check_call([settings.DOCKER_EXEC_NAME, "stop", "-t", "0", self.container_id], stdout=subprocess.DEVNULL)
+        subprocess.check_call([settings.DOCKER_EXEC_NAME, "stop", "-t", "0", self.container_id],
+                              stdout=subprocess.DEVNULL)
         subprocess.check_call([settings.DOCKER_EXEC_NAME, "rm", self.container_id], stdout=subprocess.DEVNULL)
         super().tearDown()  # this will call other parents of ContainerTests ancestors, like LargeFrameworkTests
 
@@ -85,7 +80,7 @@ class ContainerTests(LoggedTestCase):
                 "{}@{}".format(settings.DOCKER_USER, self.container_ip),
                 # echo foo is a workaround for now (first arg not taken by bash -c over ssh). I should miss something
                 "{} {} '{}'".format(os.path.join(get_tools_helper_dir(), "run_in_udtc_dir"), settings.UDTC_IN_CONTAINER,
-                                  commands_to_run)]
+                                    commands_to_run)]
 
     def _exec_command(self, command):
         """Exec the required command inside the container"""
