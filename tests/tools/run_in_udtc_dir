@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright (C) 2014 Canonical
 #
 # Authors:
@@ -17,10 +17,8 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-# setup dbus environment and launch a command, pwd being the udtc dir
-[ ! -f /tmp/dbus-file ] && dbus-launch > /tmp/dbus-file
-export $(cat /tmp/dbus-file)
 cd $1
 shift
 . env/bin/activate
+export $(dbus-launch)
 $@
