@@ -181,8 +181,8 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         return
 
     def start_download_and_install(self):
-        self.last_progress_download = 0
-        self.last_progress_requirement = 0
+        self.last_progress_download = None
+        self.last_progress_requirement = None
         self.balance_requirement_download = None
         self.pkg_size_download = 0
         self.result_requirement = None
@@ -210,6 +210,9 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         if self.balance_requirement_download is None:
             if not self.pkg_to_install:
                 self.balance_requirement_download = 0
+                self.last_progress_requirement = 0
+                if self.last_progress_download is None:
+                    return
             else:
                 # we only update if we got a progress from both sides
                 if self.last_progress_download is None or self.last_progress_requirement is None:
@@ -301,6 +304,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         """Call the tools to create a launcher"""
         pass
 
+    @MainLoop.in_mainloop_thread
     def decompress_and_install_done(self, result):
         self._install_done = True
         error_detected = False
