@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2014 Canonical
 #
@@ -17,24 +18,24 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-"""Tests for basic CLI commands"""
-
-from . import ContainerTests
+from contextlib import suppress
 import os
-from ..large import test_android
-from udtc import settings
+import signal
+import sys
 
 
-class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
-    """This will test the basic cli command class inside a container"""
-
-    TIMEOUT_INSTALL = 200
-    TIMEOUT_START = 10
-    TIMEOUT_STOP = 10
-
-    def setUp(self):
-        self.hostname = "developer.android.com"
-        self.port = "443"
-        super().setUp()
-        # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/android/android-studio".format(settings.DOCKER_USER))
+process_grep = sys.argv[1:]
+for pid in os.listdir('/proc'):
+    if not pid.isdigit() or int(pid) == os.getpid():
+        continue
+    # ignore processes that are closed in between
+    with suppress(IOError):
+        cmdline = open(os.path.join('/proc', pid, 'cmdline'), 'r').read()
+        for process_elem in process_grep:
+            if process_elem not in cmdline or sys.argv[0] in cmdline:
+                break
+        # we found it
+        else:
+            os.kill(int(pid), signal.SIGTERM)
+            sys.exit(0)
+sys.exit(1)

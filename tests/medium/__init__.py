@@ -19,9 +19,11 @@
 
 """Tests for basic CLI commands"""
 
+from contextlib import suppress
 import os
 import subprocess
 from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase
+from time import sleep
 from udtc import settings
 
 
@@ -53,9 +55,9 @@ class ContainerTests(LoggedTestCase):
                         "--dns=8.8.8.8", "--dns=8.8.4.4",  # suppress local DNS warning
                         self.image_name,
                         'sh', '-c', runner_cmd])
-
         self.container_id = subprocess.check_output(command).decode("utf-8").strip()
-        self.container_ip = subprocess.check_output(["docker", "inspect", "-f", "{{ .NetworkSettings.IPAddress }}",
+        self.container_ip = subprocess.check_output([settings.DOCKER_EXEC_NAME, "inspect", "-f",
+                                                     "{{ .NetworkSettings.IPAddress }}",
                                                      self.container_id]).decode("utf-8").strip()
         # override with container paths
         self.conf_path = os.path.expanduser("/home/{}/.config/udtc".format(settings.DOCKER_USER))
@@ -82,14 +84,23 @@ class ContainerTests(LoggedTestCase):
                 "{} {} '{}'".format(os.path.join(get_tools_helper_dir(), "run_in_udtc_dir"), settings.UDTC_IN_CONTAINER,
                                     commands_to_run)]
 
+    def check_and_kill_process(self, process_grep, wait_before=0):
+        """Check a process matching process_grep exists and kill it"""
+        sleep(wait_before)
+        if not self._exec_command(self.command_as_list("{} {}".format(os.path.join(get_tools_helper_dir(),
+                                                                                   "check_and_kill_process"),
+                                                       " ".join(process_grep)))):
+            raise BaseException("The process we try to find and kill can't be found".format(process_grep))
+
     def _exec_command(self, command):
         """Exec the required command inside the container"""
-        return_code = subprocess.call(command)
+        return_code = subprocess.call(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                                      stderr=subprocess.DEVNULL)
         if return_code == 0:
             return True
         elif return_code == 1:
             return False
-        raise BaseException("Unknown return code from launcher_exists_and_is_pinned")
+        raise BaseException("Unknown return code from {}".format(command))
 
     def launcher_exists_and_is_pinned(self, launcher_path):
         """Check if launcher exists and is pinned inside the container"""
