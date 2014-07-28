@@ -23,6 +23,7 @@ from contextlib import suppress
 import os
 import pexpect
 import shutil
+import signal
 from time import sleep
 from udtc.tools import get_launcher_path, launcher_exists_and_is_pinned
 from ..tools import LoggedTestCase
@@ -50,9 +51,8 @@ class LargeFrameworkTests(LoggedTestCase):
                 os.remove(get_launcher_path(self.launcher_path))
         super().tearDown()
 
-    def pid_for(self, process_grep, wait_before=0):
+    def _pid_for(self, process_grep):
         """Return pid matching the process_grep elements"""
-        sleep(wait_before)
         for pid in os.listdir('/proc'):
             if not pid.isdigit():
                 continue
@@ -66,6 +66,12 @@ class LargeFrameworkTests(LoggedTestCase):
                 else:
                     return int(pid)
         raise BaseException("The process that we can find with {} isn't started".format(process_grep))
+
+    def check_and_kill_process(self, process_grep, wait_before=0):
+        """Check a process matching process_grep exists and kill it"""
+        sleep(wait_before)
+        pid = self._pid_for(process_grep)
+        os.kill(pid, signal.SIGTERM)
 
     def assert_for_warn(self, content, expect_warn=False):
         """assert if there is any warn"""

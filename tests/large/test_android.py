@@ -58,9 +58,9 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.assertTrue(self.path_exists(self.exec_path))
 
         # launch it, send SIGTERM and check that it exits fine
-        proc = subprocess.Popen(self.exec_path, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-        pid = self.pid_for(["java", self.installed_path], wait_before=self.TIMEOUT_START)
-        os.kill(pid, signal.SIGTERM)
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+        self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
         self.assertEquals(proc.wait(self.TIMEOUT_STOP), 0)
 
         # ensure that it's detected as installed:
@@ -113,9 +113,9 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.assertTrue(self.path_exists(self.exec_path))
 
             # launch it, send SIGTERM and check that it exits fine
-            proc = subprocess.Popen(self.exec_path, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-            pid = self.pid_for(["java", self.installed_path], wait_before=self.TIMEOUT_START)
-            os.kill(pid, signal.SIGTERM)
+            proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                    stderr=subprocess.DEVNULL)
+            self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
             self.assertEquals(proc.wait(self.TIMEOUT_STOP), 0)
 
     def test_custom_install_path(self):
@@ -140,7 +140,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.assertFalse(self.path_exists(self.exec_path))
 
     def test_start_install_on_existing_dir(self):
-        """We prompt if we try to install on an existing directory which isn't emtpy"""
+        """We prompt if we try to install on an existing directory which isn't empty"""
         if not self.in_container:
             self.installed_path = tempfile.mkdtemp()
         else:  # we still give a path for the container
