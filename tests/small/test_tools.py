@@ -34,7 +34,7 @@ import threading
 from ..tools import change_xdg_path, get_data_dir, LoggedTestCase
 from udtc import settings, tools
 from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
-    create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_launcher_path
+    create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_launcher_path, MainLoop
 from unittest.mock import patch
 
 
@@ -283,7 +283,8 @@ class TestToolsThreads(LoggedTestCase):
         # function not supposed to run in the mainloop thread
         def _function_not_in_mainloop_thread(future):
             self.function_thread = threading.current_thread().ident
-            self.mainloop_object.quit()
+            with suppress(MainLoop.ReturnMainLoop):
+                self.mainloop_object.quit()
 
         executor = futures.ThreadPoolExecutor(max_workers=1)
         future = executor.submit(self.wait_for_mainloop_function)
@@ -438,6 +439,15 @@ class TestLauncherIcons(LoggedTestCase):
         create_launcher("foo.desktop", self.get_generic_desktop_content())
 
         self.assertEquals(open(result_file).read(), self.get_generic_desktop_content())
+
+    @patch("udtc.tools.Gio.Settings")
+    def test_create_launcher_without_xdg_dir(self, SettingsMock):
+        """Save a new launcher in an unexisting directory"""
+        shutil.rmtree(self.local_dir)
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
+        create_launcher("foo.desktop", self.get_generic_desktop_content())
+
+        self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
 
     def test_desktop_file_exists(self):
         """Launcher exists"""
