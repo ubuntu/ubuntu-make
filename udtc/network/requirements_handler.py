@@ -152,6 +152,7 @@ class RequirementsHandler(object, metaclass=Singleton):
                             if subprocess.call(["dpkg", "--add-architecture", arch], stdout=f) != 0:
                                 msg = "Can't add foreign foreign architecture {}".format(arch)
                                 raise BaseException(msg)
+                            self.cache.update()
                         finally:
                             switch_to_current_user()
                         self._force_reload_apt_cache()
