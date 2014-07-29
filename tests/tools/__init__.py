@@ -115,3 +115,13 @@ def manipulate_path_env(value, remove=False):
     else:
         path.insert(0, value)
     os.environ["PATH"] = os.pathsep.join(path)
+
+
+@contextmanager
+def swap_file_and_restore(filepath):
+    """Let changing the file in the context manager and restore to original one if needed"""
+    try:
+        original_content = open(filepath).read()
+        yield original_content
+    finally:
+        open(filepath, 'w').write(original_content)
