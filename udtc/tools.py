@@ -106,9 +106,11 @@ class MainLoop(object, metaclass=Singleton):
     def run(self):
         self.mainloop.run()
 
-    def quit(self, status_code=0):
+    def quit(self, status_code=0, raise_exception=True):
         GLib.timeout_add(80, self._clean_up, status_code)
-        raise self.ReturnMainLoop()
+        # only raises exception if not turned down (like in tests, where we are not in the mainloop for sure)
+        if raise_exception:
+            raise self.ReturnMainLoop()
 
     def _clean_up(self, exit_code):
         self.mainloop.quit()
@@ -126,7 +128,7 @@ class MainLoop(object, metaclass=Singleton):
                 pass
             except BaseException:
                 logger.exception("Unhandled exception")
-                GLib.idle_add(MainLoop().quit, 1)
+                GLib.idle_add(MainLoop().quit, 1, False)
 
         def inner(*args, **kwargs):
             return GLib.idle_add(wrapper, *args, **kwargs)

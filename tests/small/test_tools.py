@@ -283,8 +283,7 @@ class TestToolsThreads(LoggedTestCase):
         # function not supposed to run in the mainloop thread
         def _function_not_in_mainloop_thread(future):
             self.function_thread = threading.current_thread().ident
-            with suppress(MainLoop.ReturnMainLoop):
-                self.mainloop_object.quit()
+            self.mainloop_object.quit(raise_exception=False)  # as we don't run that from the mainloop
 
         executor = futures.ThreadPoolExecutor(max_workers=1)
         future = executor.submit(self.wait_for_mainloop_function)
@@ -311,7 +310,10 @@ class TestToolsThreads(LoggedTestCase):
     @patch("udtc.tools.sys")
     def test_mainloop_quit(self, mocksys):
         """We quit the process"""
-        GLib.idle_add(self.mainloop_object.quit)
+        def _quit_ignoring_exception():
+            self.mainloop_object.quit(raise_exception=False)  # as we don't run that from the mainloop
+
+        GLib.idle_add(_quit_ignoring_exception)
         self.start_glib_mainloop()
         self.wait_for_mainloop_shutdown()
 
@@ -320,7 +322,10 @@ class TestToolsThreads(LoggedTestCase):
     @patch("udtc.tools.sys")
     def test_mainloop_quit_with_exit_value(self, mocksys):
         """We quit the process with a return code"""
-        GLib.idle_add(self.mainloop_object.quit, 42)
+        def _quit_ignoring_exception():
+            self.mainloop_object.quit(42, raise_exception=False)  # as we don't run that from the mainloop
+
+        GLib.idle_add(_quit_ignoring_exception)
         self.start_glib_mainloop()
         self.wait_for_mainloop_shutdown()
 
