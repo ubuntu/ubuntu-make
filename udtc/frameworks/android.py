@@ -61,6 +61,7 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Android Studio", description="Android Studio (default)", is_category_default=True,
                          category=category, only_on_archs=_supported_archs, expect_license=True,
                          download_page="https://developer.android.com/sdk/installing/studio.html",
+                         require_md5=True,
                          dir_to_decompress_in_tarball="android-studio", desktop_file_name=self.desktop_filename)
 
     def parse_license(self, line, license_txt, in_license):
@@ -89,7 +90,7 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
             if "</tr>" in line:
                 in_download = False
 
-        if url is None:
+        if url is None and md5sum is None:
             return (None, in_download)
         return ((url, md5sum), in_download)
 

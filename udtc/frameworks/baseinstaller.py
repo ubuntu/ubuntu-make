@@ -51,9 +51,11 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         having a set of downloads to proceed, some eventual supported_archs."""
         self.expect_license = kwargs.get("expect_license", False)
         self.download_page = kwargs["download_page"]
+        self.require_md5 = kwargs.get("require_md5", False)
         self.dir_to_decompress_in_tarball = kwargs.get("dir_to_decompress_in_tarball", None)
         self.desktop_file_name = kwargs.get("desktop_file_name", None)
-        for extra_arg in ["expect_license", "download_page", "dir_to_decompress_in_tarball", "desktop_file_name"]:
+        for extra_arg in ["expect_license", "download_page", "require_md5", "dir_to_decompress_in_tarball",
+                          "desktop_file_name"]:
             with suppress(KeyError):
                 kwargs.pop(extra_arg)
         super().__init__(*args, **kwargs)
@@ -160,10 +162,12 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
 
                 (download, in_download) = self.parse_download_link(line_content, in_download)
                 if download is not None:
-                    (url, md5sum) = download
+                    (newurl, newmd5sum) = download
+                    url = newurl if newurl is not None else url
+                    md5sum = newmd5sum if newmd5sum is not None else md5sum
                     logger.debug("Found download link for {}, md5sum: {}".format(url, md5sum))
 
-            if url is None:
+            if url is None or (self.require_md5 and md5sum is None):
                 logger.error("Download page changed its syntax or is not parsable")
                 UI.return_main_screen()
             self.download_requests.append((url, md5sum))
