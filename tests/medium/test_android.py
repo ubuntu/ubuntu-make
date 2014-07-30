@@ -37,6 +37,7 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
     def setUp(self):
         self.hostname = "developer.android.com"
         self.port = "443"
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android-studio')
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/android/android-studio".format(settings.DOCKER_USER))
