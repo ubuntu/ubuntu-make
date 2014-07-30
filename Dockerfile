@@ -44,3 +44,10 @@ RUN echo user:user | chpasswd
 # add certificates
 ADD tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
+
+# finally remove all ppas and add local repository
+RUN apt-get install -y dpkg-dev
+RUN rm /etc/apt/sources.list.d/*
+ADD docker/create_packages.sh /tmp/
+RUN /tmp/create_packages.sh /apt-fake-repo
+
