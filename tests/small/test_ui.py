@@ -75,7 +75,7 @@ class TestUI(LoggedTestCase):
         self.time_display_call = time()
         self.assertEquals(self.contentType, contentType)
         self.display_thread = threading.current_thread().ident
-        self.mainloop_object.quit()
+        self.mainloop_object.quit(raise_exception=False)
 
     def test_singleton(self):
         """Ensure we are delivering a singleton for UI"""
