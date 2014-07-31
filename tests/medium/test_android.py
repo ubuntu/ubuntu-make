@@ -31,7 +31,7 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
     """This will test the basic cli command class inside a container"""
 
     TIMEOUT_INSTALL = 200
-    TIMEOUT_START = 10
+    TIMEOUT_START = 20
     TIMEOUT_STOP = 10
 
     def setUp(self):
