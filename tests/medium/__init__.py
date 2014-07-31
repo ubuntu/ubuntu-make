@@ -120,6 +120,6 @@ class ContainerTests(LoggedTestCase):
         """Create file inside the container.replace in path current user with the docker user"""
         path = path.replace(os.getlogin(), settings.DOCKER_USER)
         dir_path = os.path.dirname(path)
-        command = self.command_as_list(["mkdir", "-p", dir_path, ";", "echo", content, ">", path])
+        command = self.command_as_list(["mkdir", "-p", dir_path, path])
         if not self._exec_command(command):
             raise BaseException("Couldn't create {} in container".format(path))
