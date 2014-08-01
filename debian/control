@@ -1,0 +1,32 @@
+Source: ubuntu-developer-tools-center
+Section: python
+Priority: optional
+Build-Depends: debhelper (>= 9),
+               dh-python,
+               gettext,
+               intltool,
+               python-setuptools,
+               python3-all,
+               python3-setuptools,
+               python3-distutils-extra,
+               python3-nose,
+               python3-mock,
+               python3-xdg,
+               python3-gi,
+               python3-piston-mini-client,
+               python3-dbus
+Maintainer: Didier Roche <didrocks@ubuntu.com>
+Standards-Version: 3.9.5
+X-Python3-Version: >= 3.4
+
+Package: ubuntu-developer-tools-center
+Architecture: all
+Depends: ${misc:Depends},
+         ${python3:Depends},
+Description: setup your development environment on ubuntu easily
+ Ubuntu Developer Tools Center provides a set of functionality to setup,
+ maintain and personalize your developer environment easily. It will handle
+ all dependencies, even those which aren't in Ubuntu itself, and install
+ latest versions of the desired and recommended tools.
+ .
+ For now, you can configure a complete android studio environment.

@@ -1,0 +1,13 @@
+#!/bin/sh
+# autopkgtest check: Run the upstream unittests.
+# (C) 2013 Canonical Ltd.
+# Author: Barry Warsaw <barry@ubuntu.com>
+
+set -e
+
+# Run the tests individually, since running them via the tests/run script does
+# not always complete.
+
+python3 setup.py nosetests -q --test test.test_mainfeatures
+python3 setup.py nosetests -q --test test.test_syncing
+xvfb-run python3 setup.py nosetests -q --test test.test_daemon

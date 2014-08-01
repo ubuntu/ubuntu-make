@@ -1,0 +1,7 @@
+Tests: unittests
+Depends: @, xvfb, python3-nose, python3-mock
+Restrictions: rw-build-tree build-needed
+
+# LP: #1102715
+Tests: version
+Depends: @
