@@ -603,3 +603,34 @@ class TestMiscTools(LoggedTestCase):
 
     def test_print_inputerror(self):
         self.assertEquals(str(tools.InputError("Foo bar")), "'Foo bar'")
+
+    @patch("udtc.tools.os")
+    def test_switch_user_from_sudo(self, osmock):
+        """Test switch user account from root to previous user under SUDO"""
+        osmock.getenv.return_value = 1234
+        osmock.geteuid.return_value = 0
+        tools.switch_to_current_user()
+
+        osmock.setegid.assert_called_once_with(1234)
+        osmock.seteuid.assert_called_once_with(1234)
+
+    @patch("udtc.tools.os")
+    def test_switch_user_from_non_sudo(self, osmock):
+        """Test switch user from a non sudo command (non root), dosen't call anything"""
+        osmock.getenv.return_value = 1234
+        osmock.geteuid.return_value = 1234
+        tools.switch_to_current_user()
+
+        self.assertFalse(osmock.setegid.called)
+        self.assertFalse(osmock.seteuid.called)
+        self.assertFalse(osmock.getenv.called)
+
+    @patch("udtc.tools.os")
+    def test_switch_user_from_root(self, osmock):
+        """Test switch user from root, let it as root"""
+        osmock.getenv.return_value = 0
+        osmock.geteuid.return_value = 0
+        tools.switch_to_current_user()
+
+        osmock.setegid.assert_called_once_with(0)
+        osmock.seteuid.assert_called_once_with(0)
