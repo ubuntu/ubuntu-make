@@ -38,6 +38,7 @@ def get_requirements(tag_to_detect=""):
                 continue
             if tag_detected:
                 requirements.append(line)
+    print(requirements)
     return requirements
 
 setup(
@@ -47,16 +48,11 @@ setup(
     package_data={},
     entry_points={
         'console_scripts': [
-            'developer-tools-center = udtc:main'
+            'udtc = udtc:main'
         ],
     },
 
-    data_files=[("share/developer-tools-center/log-confs", glob('log-confs/*.yaml'))],
-
-    # TODO: install_requires doesn't seem to be force on setup.py install
-    install_requires=get_requirements("# runtime"),
-    setup_requires=get_requirements(),
-    tests_require=get_requirements("# test"),
+    data_files=[("share/ubuntu-developer-tools-center/log-confs", glob('log-confs/*.yaml'))],
 
     # In addition to run all nose tests, that will as well show python warnings
     test_suite="nose.collector",
