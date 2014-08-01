@@ -121,7 +121,7 @@ class TestRequirementsHandler(LoggedTestCase):
 
         super().tearDown()
 
-    def _mock_get_env(self, env):
+    def _mock_get_env(self, env, default=None):
         if os.geteuid() == 0:
             if env == "SUDO_UID":
                 return str(self.user_uid)
@@ -180,7 +180,7 @@ class TestRequirementsHandler(LoggedTestCase):
 
     def test_install_return_error_if_no_perm(self):
         """Return an exception when we try to install and we can't switch to root"""
-        os.seteuid = self._saved_seteuid_fn
+        os.seteuid.side_effect = PermissionError()
         self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
@@ -563,7 +563,7 @@ class TestRequirementsHandler(LoggedTestCase):
 
     def test_cant_change_seteuid(self):
         """Not being able to change the euid to root returns an error"""
-        os.seteuid = self._saved_seteuid_fn
+        os.seteuid.side_effect = PermissionError()
         self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 

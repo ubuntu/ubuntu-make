@@ -534,8 +534,9 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
             self.assertFalse(self.CategoryHandler.categories["category-f"].frameworks["framework-a"].need_root_access)
 
     def test_root_needed_setup_call_root(self):
-        """Framework with unmatched requirements need root access"""
+        """Framework with root access needed call sudo"""
         with patch('udtc.frameworks.subprocess') as subprocess_mock,\
+                patch.object(udtc.frameworks.os, 'geteuid', return_value=1000) as geteuid,\
                 patch('udtc.frameworks.MainLoop') as mainloop_mock,\
                 patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
             requirement_mock.return_value.is_bucket_installed.return_value = False
@@ -547,8 +548,9 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
             self.assertTrue(mainloop_mock.return_value.quit.called)
 
     def test_no_root_needed_setup_doesnt_call_root(self):
-        """Framework with unmatched requirements need root access"""
+        """Framework without root access needed don't call sudo"""
         with patch('udtc.frameworks.subprocess') as subprocess_mock,\
+                patch.object(udtc.frameworks.os, 'geteuid', return_value=1000) as geteuid,\
                 patch.object(udtc.frameworks.sys, 'exit', return_value=True) as sys_exit_mock,\
                 patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
             requirement_mock.return_value.is_bucket_installed.return_value = True
