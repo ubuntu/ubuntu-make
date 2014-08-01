@@ -1,7 +1,6 @@
-Format-Specification: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Ubuntu Developer Tools Center
-Upstream-Maintainer: Didier Roche <didrocks@ubuntu.com>
-Upstream-Source: https://github.com/didrocks/ubuntu-developer-tools-center
+Source: https://github.com/didrocks/ubuntu-developer-tools-center
 
 Files: *
 Copyright: (C) 2014 Canonical
