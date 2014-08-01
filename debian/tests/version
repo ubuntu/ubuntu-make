@@ -1,9 +1,0 @@
-#!/bin/sh
-# autopkgtest check: Make sure --version succeeds.  LP: #1102715
-# (C) 2013 Canonical Ltd.
-# Author: Barry Warsaw <barry@ubuntu.com>
-
-set -e
-
-# It's enough that this doesn't fail.
-/usr/bin/oneconf-query --version

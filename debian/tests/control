@@ -1,7 +1,4 @@
-Tests: unittests
-Depends: @, xvfb, python3-nose, python3-mock
-Restrictions: rw-build-tree build-needed
+Tests: all
+Depends: @, docker, python3-nose, python3-nose-cov, python3-pep8, python3-pexpect
+Restrictions: rw-build-tree
 
-# LP: #1102715
-Tests: version
-Depends: @

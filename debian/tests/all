@@ -1,0 +1,9 @@
+#!/bin/sh
+# autopkgtest check: Run all udtc tests, including coverage
+# (C) 2014 Canonical Ltd.
+# Author: Didier Roche <didrocks@ubuntu.com>
+
+set -e
+
+# Run all tests, including docker, integration and unit ones, with coverage
+./runtests
