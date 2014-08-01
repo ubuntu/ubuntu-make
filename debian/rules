@@ -1,11 +1,11 @@
 #!/usr/bin/make -f
 
-#DH_VERBOSE=1
+DH_VERBOSE=1
 
 PYTHON3=$(shell py3versions -vr)
 
 %:
-	dh $@ --with python3
+	dh $@ --with python3 --buildsystem=pybuild
 
 override_dh_auto_test:
 	dh_auto_test
