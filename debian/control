@@ -3,18 +3,19 @@ Section: python
 Priority: optional
 Build-Depends: debhelper (>= 9),
                dh-python,
-               gettext,
-               intltool,
-               python-setuptools,
                python3-all,
-               python3-setuptools,
-               python3-distutils-extra,
-               python3-nose,
-               python3-mock,
-               python3-xdg,
+               python3-apt,
+               python3-argcomplete,
+               python3-babel,
                python3-gi,
-               python3-piston-mini-client,
-               python3-dbus
+               python3-setuptools,
+               python3-nose,
+               python3-nose-cov,
+               python3-pep8,
+               python3-pexpect,
+               python3-progressbar,
+               python3-yaml,
+               python3-xdg,
 Maintainer: Didier Roche <didrocks@ubuntu.com>
 Standards-Version: 3.9.5
 X-Python3-Version: >= 3.4

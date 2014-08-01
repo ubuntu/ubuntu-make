@@ -2,8 +2,6 @@
 
 #DH_VERBOSE=1
 
-PYTHON3=$(shell py3versions -vr)
-
 %:
 	dh $@ --with python3 --buildsystem=pybuild
 
