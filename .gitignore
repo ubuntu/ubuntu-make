@@ -11,6 +11,7 @@ env/
 # builds
 build/
 *.egg-info
+*.pybuild
 
 # Tests coverage
 html-coverage*/
