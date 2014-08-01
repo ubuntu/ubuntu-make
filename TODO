@@ -1,2 +1,21 @@
 - List all tests under nose and be able to shell complete to only run one test with debug infos, like:
 nosetests3 tests.small.test_download_center:TestDownloadCenter.test_download_with_progress -c log-confs/debug_test.cfg
+
+- test for downloading the google and local page, ensure there is a link and a md5sum
+
+- tests doesn't run in sudo runtests
+
+pep8:
+Ran 1 test in 0.898s
+
+small:
+Ran 251 tests in 41.094s
+
+medium:
+Ran 14 tests in 464.690s
+-> after local apt:
+Ran 14 tests in 108.708s
+
+large:
+Ran 13 tests in 832.659s
+
