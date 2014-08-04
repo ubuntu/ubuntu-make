@@ -51,7 +51,7 @@ class LocalHttp:
         handler = RequestHandler
         handler.root_path = path
         # can be TCPServer, but we don't have a self.httpd.server_name then
-        self.httpd = HTTPServer(("", self.port), RequestHandler)
+        self.httpd = HTTPServer(("localhost", self.port), RequestHandler)
         if self.use_ssl:
             self.httpd.socket = ssl.wrap_socket(self.httpd.socket,
                                                 certfile=os.path.join(get_data_dir(), self.use_ssl),
@@ -66,7 +66,7 @@ class LocalHttp:
     def get_address(self):
         """Get public address"""
         return "http{}://{}:{}".format("s" if self.use_ssl else "",
-                                       self.httpd.server_name, self.port)
+                                       "localhost", self.port)
 
     def stop(self):
         """Stop local server"""
