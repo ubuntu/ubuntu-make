@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright (C) 2014 Canonical
 #
 # Authors:
@@ -21,6 +21,6 @@
 # Start command in async mode
 cd $1
 shift
-. env/bin/activate
+[[ $(env | grep VIRTUAL_ENV) == *env ]] && . env/bin/activate
 export $(dbus-launch)
 $@ &

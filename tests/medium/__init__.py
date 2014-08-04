@@ -42,10 +42,10 @@ class ContainerTests(LoggedTestCase):
         # start the local server at container startup
         if hasattr(self, "hostname"):
             command.extend(["-h", self.hostname])
-            runner_cmd += "{} {} 'sudo -E env PATH={} {} {} {}';".format(
+            runner_cmd += "{} {} 'sudo -E env PATH={} VIRTUAL_ENV={} {} {} {}';".format(
                 os.path.join(get_tools_helper_dir(), "run_in_udtc_dir_async"),
                 settings.UDTC_IN_CONTAINER,
-                os.getenv("PATH"),
+                os.getenv("PATH"), os.getenv("VIRTUAL_ENV"),
                 os.path.join(get_tools_helper_dir(), "run_local_server"),
                 self.port,
                 "{}.pem".format(self.hostname))

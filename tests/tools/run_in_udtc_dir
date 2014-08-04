@@ -19,6 +19,6 @@
 
 cd $1
 shift
-. env/bin/activate
+[[ $(env | grep VIRTUAL_ENV) == *env ]] && . env/bin/activate
 export $(dbus-launch)
 $@
