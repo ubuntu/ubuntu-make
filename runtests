@@ -22,8 +22,9 @@ import argparse
 import configparser
 import nose
 import os
+import sys
 
-root_dir = os.path.dirname(__file__)
+root_dir = os.path.abspath(os.path.dirname(__file__))
 config_dir = os.path.join(root_dir, 'confs')
 DEBUG_CONFIG_FILE = os.path.join(config_dir, "debug.nose")
 COVERAGE_CONFIG_FILE = os.path.join(config_dir, "prod.nose")
@@ -58,6 +59,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Run udtc tests. Specified list of test run in debug mode. "
                                                  "Running a partial suite of tests is using a normal mode. "
                                                  "Running all tests is using coverage by default.")
+    parser.add_argument('-s', "--system", action="store_true", help="Use system udtc instead of local one")
 
     parser.add_argument("tests", nargs='*', help="Action to perform: all (or omitted) to run all tests. "
                                                  "small/medium/large/pep8 or nose syntax: "
@@ -115,6 +117,15 @@ if __name__ == '__main__':
         if not specified_config:
             nose_args.extend(transform_nose_config_to_cmd(COVERAGE_CONFIG_FILE))
             specified_config = True
+
+    # Check if we want to run those tests with the system code
+    if args.system:
+        nose_args.insert(0, '-P')
+        # let remove it from there as well
+        sys.path.remove(root_dir)
+    else:
+        import tests
+        tests.tools.set_local_udtc()
 
     ## need a fake $0 argument
     nose_args.insert(0, "")

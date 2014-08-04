@@ -23,7 +23,7 @@ from . import ContainerTests
 import os
 import pexpect
 from ..large import test_android
-from ..tools import get_data_dir, swap_file_and_restore
+from ..tools import get_data_dir, swap_file_and_restore, UDTC
 from udtc import settings
 
 
@@ -49,7 +49,7 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
         with swap_file_and_restore(android_studio_file_path) as content:
             with open(android_studio_file_path, "w") as newfile:
                 newfile.write(content.replace(settings.TEST_MD5_FAKE_DATA, "fakemd5sum"))
-            self.child = pexpect.spawnu(self.command('./developer-tools-center android android-studio'))
+            self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UDTC)))
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
             self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question

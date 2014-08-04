@@ -32,6 +32,8 @@ from unittest.mock import Mock
 
 logger = logging.getLogger(__name__)
 
+UDTC = "udtc"
+
 
 class LoggedTestCase(TestCase):
     """A base TestCase class which asserts if there is a warning or error unless self.expect_warn_error is True"""
@@ -125,3 +127,8 @@ def swap_file_and_restore(filepath):
         yield original_content
     finally:
         open(filepath, 'w').write(original_content)
+
+
+def set_local_udtc():
+    global UDTC
+    UDTC = "./bin/udtc"
