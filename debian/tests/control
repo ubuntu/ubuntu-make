@@ -1,4 +1,4 @@
 Tests: all
 Depends: @, docker, python3-nose, python3-nose-cov, python3-pep8, python3-pexpect
-Restrictions: rw-build-tree
+Restrictions: rw-build-tree isolation-machine
 
