@@ -6,4 +6,4 @@
 set -e
 
 # Run all tests, including docker, integration and unit ones, with coverage
-./runtests
+./runtests --coverage pep8 small
