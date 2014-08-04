@@ -30,6 +30,7 @@ Depends: ${misc:Depends},
          python3-pexpect,
          python3-progressbar,
          python3-yaml,
+         python3-xdg,
 Description: setup your development environment on ubuntu easily
  Ubuntu Developer Tools Center provides a set of functionality to setup,
  maintain and personalize your developer environment easily. It will handle
