@@ -1,5 +1,5 @@
-ubuntu-developer-tools-center (0.0.1) UNRELEASED; urgency=medium
+ubuntu-developer-tools-center (0.0.1~trusty1) trusty; urgency=medium
 
-  * 
+  * Initial release, supporting android-studio
 
  -- Didier Roche <didrocks@ubuntu.com>  Fri, 01 Aug 2014 09:37:20 +0200
