@@ -22,12 +22,13 @@ RUN apt-get -y install fuse
 # add didrocks ppa to ensure we have the correct fuse version (postinst)a
 RUN add-apt-repository -y ppa:didrocks/docker-ppa-udtc
 RUN add-apt-repository -y ppa:fkrull/deadsnakes
+RUN rm /etc/apt/sources.list.d/proposed.list
 RUN apt-get update
 RUN apt-get dist-upgrade -y
 RUN apt-get install ubuntu-desktop -y
 
-# udtc requirements
-RUN apt-get install python3.4 apt apt-utils libapt-pkg-dev gir1.2-glib-2.0 python3-gi python3-progressbar -y
+# udtc requirements for virtualenv or creating the package
+RUN apt-get install python3.4 apt apt-utils libapt-pkg-dev gir1.2-glib-2.0 python3-gi python3-progressbar devscripts equivs dpkg-dev -y
 
 # for running it as a daemon (and ssh requires the sshd directory)
 RUN apt-get install openssh-server -y
@@ -45,8 +46,13 @@ RUN echo user:user | chpasswd
 ADD tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
 
+# install udtc deps
+ADD debian/control /tmp/
+RUN add-apt-repository -y ppa:didrocks/ubuntu-developer-tools-center
+RUN apt-get update
+RUN mk-build-deps /tmp/control -i --tool 'apt-get --yes'
+
 # finally remove all ppas and add local repository
-RUN apt-get install -y dpkg-dev
 RUN rm /etc/apt/sources.list.d/*
 ADD docker/create_packages.sh /tmp/
 RUN /tmp/create_packages.sh /apt-fake-repo
