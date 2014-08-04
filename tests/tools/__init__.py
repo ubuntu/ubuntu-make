@@ -25,6 +25,7 @@ from copy import deepcopy
 import importlib
 import logging
 import os
+import shutil
 from udtc.tools import Singleton, ConfigHandler
 import xdg.BaseDirectory
 from unittest import TestCase
@@ -32,6 +33,7 @@ from unittest.mock import Mock
 
 logger = logging.getLogger(__name__)
 
+DOCKER = None
 UDTC = "udtc"
 
 
@@ -132,3 +134,12 @@ def swap_file_and_restore(filepath):
 def set_local_udtc():
     global UDTC
     UDTC = "./bin/udtc"
+
+
+def get_docker_path():
+    global DOCKER
+    if DOCKER is None:
+        DOCKER = shutil.which("docker.io")
+        if not DOCKER:
+            DOCKER = shutil.which("docker")
+    return DOCKER

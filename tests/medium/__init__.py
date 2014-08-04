@@ -22,7 +22,7 @@
 from contextlib import suppress
 import os
 import subprocess
-from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase
+from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path
 from time import sleep
 from udtc import settings
 
@@ -35,7 +35,7 @@ class ContainerTests(LoggedTestCase):
         self.in_container = True
         self.udtc_path = get_root_dir()
         self.image_name = settings.DOCKER_TESTIMAGE
-        command = [settings.DOCKER_EXEC_NAME, "run"]
+        command = [get_docker_path(), "run"]
         runner_cmd = "mkdir -p {}; ln -s {}/ {};".format(os.path.dirname(get_root_dir()), settings.UDTC_IN_CONTAINER,
                                                          get_root_dir())
 
@@ -60,16 +60,16 @@ class ContainerTests(LoggedTestCase):
                         self.image_name,
                         'sh', '-c', runner_cmd])
         self.container_id = subprocess.check_output(command).decode("utf-8").strip()
-        self.container_ip = subprocess.check_output([settings.DOCKER_EXEC_NAME, "inspect", "-f",
+        self.container_ip = subprocess.check_output([get_docker_path(), "inspect", "-f",
                                                      "{{ .NetworkSettings.IPAddress }}",
                                                      self.container_id]).decode("utf-8").strip()
         # override with container paths
         self.conf_path = os.path.expanduser("/home/{}/.config/udtc".format(settings.DOCKER_USER))
 
     def tearDown(self):
-        subprocess.check_call([settings.DOCKER_EXEC_NAME, "stop", "-t", "0", self.container_id],
+        subprocess.check_call([get_docker_path(), "stop", "-t", "0", self.container_id],
                               stdout=subprocess.DEVNULL)
-        subprocess.check_call([settings.DOCKER_EXEC_NAME, "rm", self.container_id], stdout=subprocess.DEVNULL)
+        subprocess.check_call([get_docker_path(), "rm", self.container_id], stdout=subprocess.DEVNULL)
         super().tearDown()  # this will call other parents of ContainerTests ancestors, like LargeFrameworkTests
 
     def command(self, commands_to_run):
