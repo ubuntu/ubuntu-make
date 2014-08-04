@@ -18,6 +18,12 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+import os
+import sys
+# Run local udtc from this helper
+root_dir = os.path.dirname(os.path.dirname(__file__))
+sys.path.insert(0, root_dir)
+
 from udtc import main
 
 if __name__ == '__main__':
