@@ -244,7 +244,7 @@ def create_launcher(desktop_filename, content):
     gsettings = Gio.Settings(schema="com.canonical.Unity.Launcher", path="/com/canonical/unity/launcher/")
     launcher_list = gsettings.get_strv("favorites")
     launcher_tag = "application://{}".format(desktop_filename)
-    if not launcher_tag in launcher_list:
+    if launcher_tag not in launcher_list:
         index = len(launcher_list)
         with suppress(ValueError):
             index = launcher_list.index("unity://running-apps")

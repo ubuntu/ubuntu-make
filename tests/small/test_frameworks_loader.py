@@ -403,7 +403,7 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
 
     def test_call_setup_save_and_then_mark_in_config_tweaked_path(self):
         """Calling mark_in_config with a custom install path save it in the configuration"""
-            # load custom framework-directory
+        # load custom framework-directory
         self.categoryA.frameworks["framework-b"].setup(install_path="/home/foo/bar")
         self.categoryA.frameworks["framework-b"].mark_in_config()
 

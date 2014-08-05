@@ -129,7 +129,7 @@ def mangle_args_for_default_framework(args):
                 # take default framework if any
                 elif BaseCategory.categories[category_name].default_framework is not None:
                     result_args.append(BaseCategory.categories[category_name].default_framework.prog_name)
-                     # current arg will be appending in pending_args
+                    # current arg will be appending in pending_args
                 else:
                     skip_all = True  # will just append everything at the end
         pending_args.append(arg)
