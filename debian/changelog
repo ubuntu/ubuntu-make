@@ -1,4 +1,4 @@
-ubuntu-developer-tools-center (0.0.1~trusty1) trusty; urgency=medium
+ubuntu-developer-tools-center (0.0.1) utopic; urgency=medium
 
   * Initial release, supporting android-studio
 
