@@ -73,11 +73,11 @@ class TextWithChoices:
         msg = _("No suitable answer provided")
         if choice_id is not None:
             msg = _("Your entry '{}' isn't an acceptable choice. choices are: {}")\
-                  .format(choice_id, [choice.id for choice in self.choices])
+                .format(choice_id, [choice.id for choice in self.choices])
         if answer is not None:
             msg = _("Your entry '{}' isn't an acceptable choice. choices are: {} and {}")\
-                  .format(answer, [choice.txt_shorcut for choice in self.choices if choice.txt_shorcut is not None],
-                          [choice.label for choice in self.choices])
+                .format(answer, [choice.txt_shorcut for choice in self.choices if choice.txt_shorcut is not None],
+                        [choice.label for choice in self.choices])
         if not choice_id and not answer:
             for choice in self.choices:
                 if choice.is_default:
