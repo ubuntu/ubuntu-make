@@ -860,7 +860,7 @@ class TestProductionFrameworkLoader(BaseFrameworkLoader):
         frameworks.load_frameworks()
         self.assertTrue(len(self.CategoryHandler.categories) > 0)
         self.assertIsNotNone(self.CategoryHandler.main_category)
-        self.assertEquals(len(self.CategoryHandler.categories["android"].frameworks), 2)
+        self.assertEquals(len(self.CategoryHandler.categories["android"].frameworks), 1)
 
     def test_ignored_frameworks(self):
         """Ignored frameworks aren't loaded"""
