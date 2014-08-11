@@ -1,3 +1,10 @@
+ubuntu-developer-tools-center (0.0.2) utopic; urgency=medium
+
+  * Adapt one test as we disabled the android eclipse framework
+    (not ready yet)
+
+ -- Didier Roche <didrocks@ubuntu.com>  Mon, 11 Aug 2014 17:44:12 +0200
+
 ubuntu-developer-tools-center (0.0.1) utopic; urgency=medium
 
   * Initial release, supporting android-studio
