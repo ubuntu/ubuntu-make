@@ -72,10 +72,10 @@ class TextWithChoices:
                 return choice.callback_fn()
         msg = _("No suitable answer provided")
         if choice_id is not None:
-            msg = "Your entry '{}' isn't an acceptable choice. choices are: {}"\
+            msg = _("Your entry '{}' isn't an acceptable choice. choices are: {}")\
                   .format(choice_id, [choice.id for choice in self.choices])
         if answer is not None:
-            msg = "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"\
+            msg = _("Your entry '{}' isn't an acceptable choice. choices are: {} and {}")\
                   .format(answer, [choice.txt_shorcut for choice in self.choices if choice.txt_shorcut is not None],
                           [choice.label for choice in self.choices])
         if not choice_id and not answer:
@@ -92,11 +92,14 @@ class TextWithChoices:
         for choice in self.choices:
             answer = choice.label
             if choice.txt_shorcut:
+                # NOTE: sum of answers
                 answer += _(" ({})").format((choice.txt_shorcut))
             possible_answers.append(answer)
         if self.newline_before_option:
+            # NOTE: first is prompt, newline and then set of answers
             prompt = _("{}\n[{}] ").format(self.content, '/'.join(possible_answers))
         else:
+                # NOTE: first is prompt, then set of answers:
             prompt = _("{} [{}] ").format(self.content, '/'.join(possible_answers))
         return prompt
 
@@ -114,8 +117,11 @@ class LicenseAgreement(TextWithChoices):
         """Text input prompt handling if we do have some shortcuts"""
         answers = []
         for choice in self.choices:
+            # NOTE: first element is choice, and then shortcut
+            _("{} ({})")
             answer = _("{} ({})").format(choice.label, choice.txt_shorcut)
             answers.append(answer)
+        # append different possible choices
         return _("[{}] ").format('/'.join(answers))
 
 

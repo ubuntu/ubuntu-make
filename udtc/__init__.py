@@ -120,8 +120,8 @@ def main():
                                          pointing to a log yaml profile.
                                          """)),
                                      add_help=False)
-    parser.add_argument('--help', action=_HelpAction, help='help for help if you need some help')  # add custom help
-    parser.add_argument("-v", "--verbose", action="count", default=0, help=_("increase output verbosity (2 levels)"))
+    parser.add_argument('--help', action=_HelpAction, help=_('Show this help'))  # add custom help
+    parser.add_argument("-v", "--verbose", action="count", default=0, help=_("Increase output verbosity (2 levels)"))
 
     # set logging ignoring unknown options
     set_logging_from_args(sys.argv, parser)
