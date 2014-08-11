@@ -10,7 +10,7 @@ As a first step, it's focusing on installing a full fledge android developer env
 ## Running command line tool
 To run the tool:
 
-    $ ./developer-tools-center
+    $ ./udtc
 
 You can of course use --help to get more information and change the verbosity of the output with -v, -vv.
 
@@ -40,7 +40,7 @@ On normal circumstances, we expect *error.log* to remain empty.
 
 To load one of those logging profile:
 
-    $ LOG_CFG=confs/testing.logcfg ./developer-tools-center
+    $ LOG_CFG=confs/testing.logcfg bin/udtc
 
 ## Development
 ### Style guide and checking
@@ -116,7 +116,7 @@ For an easier development workflow, we encourage the use of virtualenv to test a
     $ sudo apt-get install -qq python3-progressbar python3-gi python3-argcomplete
     $ env/bin/pip install -r requirements.txt
     $ source env/bin/activate
-    $ ./developer-tools-center
+    $ bin/udtc
 
 ## Release management
 Refresh .pot files:
