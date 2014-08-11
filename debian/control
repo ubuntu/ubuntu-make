@@ -1,5 +1,5 @@
 Source: ubuntu-developer-tools-center
-Section: python
+Section: devel
 Priority: optional
 Build-Depends: debhelper (>= 9),
                dh-python,
