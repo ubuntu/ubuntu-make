@@ -44,6 +44,7 @@ class AndroidCategory(udtc.frameworks.BaseCategory):
 class EclipseAdt(udtc.frameworks.BaseFramework):
 
     def __init__(self, category):
+        return  # TODO: no eclipse support yet
         super().__init__(name="ADT", description="Android Developer Tools (using eclipse)",
                          category=category, install_path_dir="android/adt-eclipse",
                          only_on_archs=_supported_archs)
