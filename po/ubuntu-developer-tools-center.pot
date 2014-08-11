@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ubuntu Developer Tools Center 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-06-06 13:11+0200\n"
+"POT-Creation-Date: 2014-08-11 13:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: udtc/__init__.py:77
+#: udtc/__init__.py:109
+msgid "* Command '{}':"
+msgstr ""
+
+#: udtc/__init__.py:117
 msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr ""
 
-#: udtc/__init__.py:78
+#: udtc/__init__.py:118
 msgid ""
 "                                         Note that you can also configure"
 " different debug logs behaviors using LOG_CFG\n"
@@ -30,7 +34,77 @@ msgid ""
 "                                         "
 msgstr ""
 
-#: udtc/__init__.py:82
+#: udtc/__init__.py:124
 msgid "increase output verbosity (2 levels)"
+msgstr ""
+
+#: udtc/frameworks/android.py:39
+msgid "Android"
+msgstr ""
+
+#: udtc/frameworks/android.py:39
+msgid "Android Developement Environment"
+msgstr ""
+
+#: udtc/frameworks/android.py:99
+msgid "Android Studio"
+msgstr ""
+
+#: udtc/frameworks/android.py:102
+msgid "Android Studio developer environment"
+msgstr ""
+
+#: udtc/interactions/__init__.py:73
+msgid "No suitable answer provided"
+msgstr ""
+
+#: udtc/interactions/__init__.py:95
+msgid " ({})"
+msgstr ""
+
+#: udtc/interactions/__init__.py:98
+msgid ""
+"{}\n"
+"[{}] "
+msgstr ""
+
+#: udtc/interactions/__init__.py:100
+msgid "{} [{}] "
+msgstr ""
+
+#: udtc/interactions/__init__.py:108
+msgid "I Accept"
+msgstr ""
+
+#: udtc/interactions/__init__.py:108
+msgid "a"
+msgstr ""
+
+#: udtc/interactions/__init__.py:109
+msgid "I don't accept"
+msgstr ""
+
+#: udtc/interactions/__init__.py:109 udtc/interactions/__init__.py:139
+msgid "N"
+msgstr ""
+
+#: udtc/interactions/__init__.py:117
+msgid "{} ({})"
+msgstr ""
+
+#: udtc/interactions/__init__.py:119
+msgid "[{}] "
+msgstr ""
+
+#: udtc/interactions/__init__.py:138
+msgid "Yes"
+msgstr ""
+
+#: udtc/interactions/__init__.py:138
+msgid "y"
+msgstr ""
+
+#: udtc/interactions/__init__.py:139
+msgid "No"
 msgstr ""
 
