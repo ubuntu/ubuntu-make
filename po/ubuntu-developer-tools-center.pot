@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ubuntu Developer Tools Center 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-11 13:09+0200\n"
+"POT-Creation-Date: 2014-08-11 14:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,8 +34,12 @@ msgid ""
 "                                         "
 msgstr ""
 
+#: udtc/__init__.py:123
+msgid "Show this help"
+msgstr ""
+
 #: udtc/__init__.py:124
-msgid "increase output verbosity (2 levels)"
+msgid "Increase output verbosity (2 levels)"
 msgstr ""
 
 #: udtc/frameworks/android.py:39
@@ -58,53 +62,61 @@ msgstr ""
 msgid "No suitable answer provided"
 msgstr ""
 
-#: udtc/interactions/__init__.py:95
+#: udtc/interactions/__init__.py:75
+msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
+msgstr ""
+
+#: udtc/interactions/__init__.py:78
+msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
+msgstr ""
+
+#: udtc/interactions/__init__.py:96
 msgid " ({})"
 msgstr ""
 
-#: udtc/interactions/__init__.py:98
+#: udtc/interactions/__init__.py:100
 msgid ""
 "{}\n"
 "[{}] "
 msgstr ""
 
-#: udtc/interactions/__init__.py:100
+#: udtc/interactions/__init__.py:103
 msgid "{} [{}] "
 msgstr ""
 
-#: udtc/interactions/__init__.py:108
+#: udtc/interactions/__init__.py:111
 msgid "I Accept"
 msgstr ""
 
-#: udtc/interactions/__init__.py:108
+#: udtc/interactions/__init__.py:111
 msgid "a"
 msgstr ""
 
-#: udtc/interactions/__init__.py:109
+#: udtc/interactions/__init__.py:112
 msgid "I don't accept"
 msgstr ""
 
-#: udtc/interactions/__init__.py:109 udtc/interactions/__init__.py:139
+#: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:145
 msgid "N"
 msgstr ""
 
-#: udtc/interactions/__init__.py:117
+#: udtc/interactions/__init__.py:121 udtc/interactions/__init__.py:122
 msgid "{} ({})"
 msgstr ""
 
-#: udtc/interactions/__init__.py:119
+#: udtc/interactions/__init__.py:125
 msgid "[{}] "
 msgstr ""
 
-#: udtc/interactions/__init__.py:138
+#: udtc/interactions/__init__.py:144
 msgid "Yes"
 msgstr ""
 
-#: udtc/interactions/__init__.py:138
+#: udtc/interactions/__init__.py:144
 msgid "y"
 msgstr ""
 
-#: udtc/interactions/__init__.py:139
+#: udtc/interactions/__init__.py:145
 msgid "No"
 msgstr ""
 
