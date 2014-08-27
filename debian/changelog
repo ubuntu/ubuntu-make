@@ -1,3 +1,10 @@
+ubuntu-developer-tools-center (0.0.2.1) utopic; urgency=medium
+
+  * Rebuild to run autopkgtests
+  * Fix some pep8 issues on utopic and enable them during package build
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 27 Aug 2014 15:00:29 +0200
+
 ubuntu-developer-tools-center (0.0.2) utopic; urgency=medium
 
   * Adapt one test as we disabled the android eclipse framework
