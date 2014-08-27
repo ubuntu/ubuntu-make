@@ -1,3 +1,10 @@
+ubuntu-developer-tools-center (0.0.2.2) utopic; urgency=medium
+
+  * debian/control:
+    - add XS-Testsuite as some uploads may happen from trusty
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 27 Aug 2014 15:24:18 +0200
+
 ubuntu-developer-tools-center (0.0.2.1) utopic; urgency=medium
 
   * Rebuild to run autopkgtests
