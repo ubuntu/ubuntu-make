@@ -31,6 +31,7 @@ import udtc  # that initialiazes the gettext domain
 I18N_DOMAIN = gettext.textdomain()
 PO_DIR = os.path.join(os.path.dirname(os.curdir), 'po')
 
+
 def get_requirements(tag_to_detect=""):
     """Gather a list line per line of requirements from tag_to_detect to next tag.
 
@@ -49,11 +50,13 @@ def get_requirements(tag_to_detect=""):
     print(requirements)
     return requirements
 
+
 #
 # add translation support
 #
 class build(_build):
     sub_commands = _build.sub_commands + [('build_trans', None)]
+
     def run(self):
         _build.run(self)
 
@@ -61,12 +64,13 @@ class build(_build):
 class build_trans(cmd.Command):
     description = 'Compile .po files into .mo files'
     user_options = []
+
     def initialize_options(self):
         pass
- 
+
     def finalize_options(self):
         pass
- 
+
     def run(self):
         for filename in os.listdir(PO_DIR):
             if not filename.endswith('.po'):
@@ -89,7 +93,7 @@ class build_trans(cmd.Command):
 
 
 class install_data(_install_data):
- 
+
     def run(self):
         for filename in os.listdir(PO_DIR):
             if not filename.endswith('.po'):
@@ -97,20 +101,20 @@ class install_data(_install_data):
             lang = filename[:-3]
             lang_dir = os.path.join('share', 'locale', lang, 'LC_MESSAGES')
             lang_file = os.path.join('build', 'locale', lang, 'LC_MESSAGES', I18N_DOMAIN + '.mo')
-            self.data_files.append( (lang_dir, [lang_file]) )
+            self.data_files.append((lang_dir, [lang_file]))
         _install_data.run(self)
 
 
 class update_pot(cmd.Command):
     description = 'Update template for translators'
     user_options = []
- 
+
     def initialize_options(self):
         pass
 
     def finalize_options(self):
         pass
- 
+
     def run(self):
         cmd = ['xgettext', '--language=Python', '--keyword=_', '--package-name', I18N_DOMAIN,
                '-j', '--output', 'po/{}.pot'.format(I18N_DOMAIN)]
@@ -137,7 +141,7 @@ setup(
     # In addition to run all nose tests, that will as well show python warnings
     test_suite="nose.collector",
 
-    cmdclass = {
+    cmdclass={
         'build': build,
         'build_trans': build_trans,
         'install_data': install_data,
