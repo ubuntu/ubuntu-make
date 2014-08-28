@@ -26,11 +26,11 @@ import shutil
 import sys
 import tempfile
 from ..data.testframeworks.uninstantiableframework import Uninstantiable, InheritedFromUninstantiable
-from ..tools import get_data_dir, change_xdg_path, patchelem, LoggedTestCase, ConfigHandler
+from ..tools import get_data_dir, change_xdg_path, patchelem, LoggedTestCase
 import udtc
 from udtc import frameworks
 from udtc.frameworks.baseinstaller import BaseInstaller
-from udtc.tools import NoneDict
+from udtc.tools import NoneDict, ConfigHandler
 from unittest.mock import Mock, patch, call
 
 

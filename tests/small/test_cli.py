@@ -21,6 +21,7 @@
 
 from concurrent import futures
 from gi.repository import GLib
+import importlib
 from time import time
 from unittest.mock import Mock, patch
 from ..tools import LoggedTestCase
@@ -41,6 +42,8 @@ class TestCLIFromFrameworks(LoggedTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        importlib.reload(udtc.frameworks)
+
         change_xdg_path('XDG_CONFIG_HOME', os.path.join(get_data_dir(), 'configs', "foo"))
 
         sys.path.append(get_data_dir())
@@ -49,6 +52,8 @@ class TestCLIFromFrameworks(LoggedTestCase):
         with patchelem(udtc.frameworks, '__file__', os.path.join(cls.testframeworks_dir, '__init__.py')),\
                 patchelem(udtc.frameworks, '__package__', "testframeworks"):
             frameworks.load_frameworks()
+        # patch the BaseCategory dictionary from the udtc.ui.cli one
+        udtc.ui.cli.BaseCategory = frameworks.BaseCategory
 
     @classmethod
     def tearDownClass(cls):

@@ -19,6 +19,8 @@
 
 """Common tools between tests"""
 
+# DO NOT IMPORT HERE udtc.* directly, only lazy import it in function.
+# This file is imported by runtests, before the coverage is enabled.
 from io import StringIO
 from contextlib import contextmanager, suppress
 from copy import deepcopy
@@ -26,7 +28,6 @@ import importlib
 import logging
 import os
 import shutil
-from udtc.tools import Singleton, ConfigHandler
 import xdg.BaseDirectory
 from unittest import TestCase
 from unittest.mock import Mock
@@ -98,7 +99,7 @@ def change_xdg_path(key, value=None, remove=False):
     import udtc.tools
     importlib.reload(xdg.BaseDirectory)
     with suppress(KeyError):
-        Singleton._instances.pop(ConfigHandler)
+        udtc.tools.Singleton._instances.pop(udtc.tools.ConfigHandler)
     udtc.tools.xdg_config_home = xdg.BaseDirectory.xdg_config_home
     udtc.tools.xdg_data_home = xdg.BaseDirectory.xdg_data_home
 
