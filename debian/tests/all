@@ -5,5 +5,8 @@
 
 set -e
 
+# add to docker groups and log in as such
+sudo addgroup ubuntu docker
+
 # Run all tests, including docker, integration and unit ones, with coverage
-./runtests --coverage pep8 small
+sudo su ubuntu -c "./runtests --coverage small medium"
