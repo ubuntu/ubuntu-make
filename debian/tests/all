@@ -9,4 +9,4 @@ set -e
 sudo addgroup ubuntu docker
 
 # Run all tests, including docker, integration and unit ones, with coverage
-sudo su ubuntu -c "./runtests --coverage small medium"
+sudo su ubuntu -c "./runtests --coverage small"
