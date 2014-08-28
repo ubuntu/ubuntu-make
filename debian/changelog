@@ -1,3 +1,18 @@
+ubuntu-developer-tools-center (0.0.4) utopic; urgency=medium
+
+  * Enhance some tests by adding more info in case of failure and decouple
+    some concerns.
+  * Fix medium tests in using server name back as sbuild supports it again.
+  * Refreshed certificates which expired and document how to get longer
+    ones.
+  * First trial to get medium tests running as autopkgtests, but disabled
+    for now (Docker permission error inside the autopkg chroot)
+  * Refactor i18n support with dropping babel and automatically run the
+    commands when setuptools is building.
+  * Add fr and zh_CN translations.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 28 Aug 2014 11:03:09 +0200
+
 ubuntu-developer-tools-center (0.0.3) utopic; urgency=medium
 
   * Fix coverage reports by importing tested modules only when needed and
