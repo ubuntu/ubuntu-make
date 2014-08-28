@@ -163,7 +163,7 @@ class TestDownloadCenter(LoggedTestCase):
         # ensure that first call only contains one file
         callback_args, callback_kwargs = report.call_args_list[0]
         map_result = callback_args[0]
-        self.assertTrue(len(map_result) == 1)
+        self.assertEqual(len(map_result), 1, str(map_result))
         # ensure that last call is what we expect
         result_dict = {}
         for filename in ("biggerfile", "simplefile"):
@@ -195,7 +195,7 @@ class TestDownloadCenter(LoggedTestCase):
         # we should have the two content, one in error
         callback_args, callback_kwargs = self.callback.call_args
         map_result = callback_args[0]
-        self.assertEqual(len(map_result), 2)
+        self.assertEqual(len(map_result), 2, str(map_result))
         self.assertIsNotNone(map_result[self.build_server_address("does_not_exist")].error)
         self.assertIsNotNone(map_result[self.build_server_address("simplefile")].fd)
         self.expect_warn_error = True
@@ -210,7 +210,7 @@ class TestDownloadCenter(LoggedTestCase):
         # ensure we only have one file downloaded and mapped back as a result)
         callback_args, callback_kwargs = self.callback.call_args
         map_result = callback_args[0]
-        self.assertEqual(len(map_result), 1)
+        self.assertEqual(len(map_result), 1, str(map_result))
         # ensure we only downloaded one file (didn't send multiple parallel requests)
         self.assertEqual(report.call_count, 2)
 

@@ -60,7 +60,7 @@ class TestDecompressor(LoggedTestCase):
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
-        self.assertEquals(len(results), 1)
+        self.assertEquals(len(results), 1, str(results))
         for fd in results:
             self.assertIsNone(results[fd].error)
         self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content')))
@@ -77,7 +77,7 @@ class TestDecompressor(LoggedTestCase):
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
-        self.assertEquals(len(results), 1)
+        self.assertEquals(len(results), 1, str(results))
         for fd in results:
             self.assertIsNone(results[fd].error)
         self.assertTrue(os.path.isdir(self.tempdir))
@@ -93,6 +93,6 @@ class TestDecompressor(LoggedTestCase):
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
-        self.assertEquals(len(results), 1)
+        self.assertEquals(len(results), 1, str(results))
         for fd in results:
             self.assertIsNotNone(results[fd].error)

@@ -215,7 +215,7 @@ class TestInteractions(LoggedTestCase):
         callback_no = Mock()
         inter = LicenseAgreement("License content", callback_yes, callback_no)
         self.assertEquals(inter.content, "License content")
-        self.assertEquals(len(inter.choices), 2)
+        self.assertEquals(len(inter.choices), 2, str(inter.choices))
 
     def test_license_agreement_choice(self):
         """We have right callbacks called in license choices"""
@@ -260,7 +260,7 @@ class TestInteractions(LoggedTestCase):
         inter = YesNo("Content?", lambda: "", lambda: "")
 
         self.assertEquals(inter.content, "Content?")
-        self.assertEquals(len(inter.choices), 2)
+        self.assertEquals(len(inter.choices), 2, str(inter.choices))
         self.assertEquals(inter.prompt, "Content? [Yes (y)/No (N)] ")
 
     def test_yesno_choose_default(self):
