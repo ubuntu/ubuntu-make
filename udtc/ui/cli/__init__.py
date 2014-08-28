@@ -21,7 +21,6 @@
 
 import argcomplete
 from contextlib import suppress
-from gi.repository import GLib
 import logging
 from progressbar import ProgressBar, BouncingBar
 import readline

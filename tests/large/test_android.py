@@ -22,7 +22,6 @@
 from . import LargeFrameworkTests
 import os
 import pexpect
-import signal
 import subprocess
 import tempfile
 from ..tools import UDTC

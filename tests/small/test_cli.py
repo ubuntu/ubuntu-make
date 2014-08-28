@@ -19,21 +19,14 @@
 
 """Tests for the cli module"""
 
-from concurrent import futures
-from gi.repository import GLib
 import importlib
-from time import time
-from unittest.mock import Mock, patch
 from ..tools import LoggedTestCase
-import threading
 from udtc.ui.cli import mangle_args_for_default_framework
 import os
 import sys
-from .test_frameworks_loader import BaseFrameworkLoader
 from ..tools import get_data_dir, change_xdg_path, patchelem
 import udtc
 from udtc import frameworks
-from udtc.tools import NoneDict
 
 
 class TestCLIFromFrameworks(LoggedTestCase):
