@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 
 # TO CREATE THE CERTIFICATES:
-# openssl req -new -x509 -nodes -out server.crt -keyout server.key (file the fqdn name)
+# openssl req -new -x509 -nodes -days 3600 -out server.crt -keyout server.key (file the fqdn name)
 # cat server.key server.crt > server.pem
 # server loads the server.pem
 # put the .crt file in /usr/local/share/ca-certificates and run sudo update-ca-certificates
@@ -51,7 +51,7 @@ class LocalHttp:
         handler = RequestHandler
         handler.root_path = path
         # can be TCPServer, but we don't have a self.httpd.server_name then
-        self.httpd = HTTPServer(("localhost", self.port), RequestHandler)
+        self.httpd = HTTPServer(("", self.port), RequestHandler)
         if self.use_ssl:
             self.httpd.socket = ssl.wrap_socket(self.httpd.socket,
                                                 certfile=os.path.join(get_data_dir(), self.use_ssl),
@@ -66,7 +66,7 @@ class LocalHttp:
     def get_address(self):
         """Get public address"""
         return "http{}://{}:{}".format("s" if self.use_ssl else "",
-                                       "localhost", self.port)
+                                       self.httpd.server_name, self.port)
 
     def stop(self):
         """Stop local server"""
