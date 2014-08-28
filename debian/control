@@ -3,10 +3,10 @@ Section: devel
 Priority: optional
 Build-Depends: debhelper (>= 9),
                dh-python,
+               gettext,
                python3-all,
                python3-apt,
                python3-argcomplete,
-               python3-babel,
                python3-gi,
                python3-setuptools,
                python3-nose,
