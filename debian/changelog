@@ -1,3 +1,14 @@
+ubuntu-developer-tools-center (0.0.3) utopic; urgency=medium
+
+  * Fix coverage reports by importing tested modules only when needed and
+    when overriding "packages" and "__files__", by reloading the module
+  * Some cleanups (removed unused imports)
+  * Add allow-stderr for adt tests: as nose-cov print some debug output
+    at start which makes adt failing then. As we control,
+    stderr and warnings during tests, disable this check.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 28 Aug 2014 08:12:31 +0200
+
 ubuntu-developer-tools-center (0.0.2.2) utopic; urgency=medium
 
   * debian/control:
