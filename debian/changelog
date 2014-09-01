@@ -1,3 +1,10 @@
+ubuntu-developer-tools-center (0.0.4.1) utopic; urgency=medium
+
+  * GSettings:schema has been deprecated and glib shows a warning about it.
+  Fix the deprecation by switching to schema-id which is supported in 14.04.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Mon, 01 Sep 2014 17:14:06 +0200
+
 ubuntu-developer-tools-center (0.0.4) utopic; urgency=medium
 
   * Enhance some tests by adding more info in case of failure and decouple
