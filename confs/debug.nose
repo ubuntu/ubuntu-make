@@ -1,6 +1,4 @@
 [nosetests]
 nocapture=1
 nologcapture=1
-verbosity=2
-
 

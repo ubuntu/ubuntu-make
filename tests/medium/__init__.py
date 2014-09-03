@@ -19,7 +19,6 @@
 
 """Tests for basic CLI commands"""
 
-from contextlib import suppress
 import os
 import subprocess
 from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path

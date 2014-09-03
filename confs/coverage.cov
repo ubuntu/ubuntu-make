@@ -1,3 +1,3 @@
-# coverage shold export html to coverage-html
+# coverage should export html to coverage-html
 [html]
 directory=html-coverage
