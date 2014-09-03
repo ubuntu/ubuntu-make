@@ -29,18 +29,18 @@ To enable shell completion on bash or zsh, just run:
 
 Multiple logging profiles are available in *confs/* to be able to have different traces of your execution (useful when debugging in particular). For instance, you will find:
 
-* **debug.logcfg**: Similar than using -vv, but will put logs to a *debug.log*.
+* **debug.logcfg**: Similar than using -vv, but will also put logs to a *debug.log*.
 * **debug_network.logcfg**: The root logging level is INFO (-v), the network activities are in DEBUG mode and will be logged in *debug_network.log*.
-* **testing.logcfg**: Mostly for tests, similar than using -vv, but:
+* **testing.logcfg**: Mostly for coverage tests, do not set any logging config on stdout, but:
  * DEBUG logs and above are available in *debug.log*.
  * INFO logs and above are available in *info.log*.
  * WARNING and ERROR logs are available in *error.log*.
 
-On normal circumstances, we expect *error.log* to remain empty.
+On normal circumstances, we expect *error.log* to remain empty../
 
 To load one of those logging profile:
 
-    $ LOG_CFG=confs/testing.logcfg bin/udtc
+    $ LOG_CFG=confs/debug.logcfg bin/udtc
 
 ## Development
 ### Style guide and checking

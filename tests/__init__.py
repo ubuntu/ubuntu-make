@@ -17,16 +17,12 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-"""Enable logging with a sane formatting syntax when tests are run."""
+"""Ensure we keep a sane formatting syntax"""
 
-import logging
 import os
 import pep8
 from .tools import get_root_dir
 from unittest import TestCase
-
-logging.basicConfig(level=logging.DEBUG,
-                    format="%(asctime)s [%(name)s] %(levelname)s: %(message)s")
 
 
 class CodeCheck(TestCase):

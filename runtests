@@ -20,8 +20,11 @@
 
 import argparse
 import configparser
+import logging
+import logging.config
 import nose
 import os
+import yaml
 import sys
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
@@ -29,6 +32,8 @@ config_dir = os.path.join(root_dir, 'confs')
 DEBUG_CONFIG_FILE = os.path.join(config_dir, "debug.nose")
 COVERAGE_CONFIG_FILE = os.path.join(config_dir, "prod.nose")
 TESTS_DIR = os.path.join(root_dir, 'tests')
+DEBUG_LOG_CONFIG =os.path.join(config_dir, "debug.logcfg")
+TESTING_LOG_CONFIG =os.path.join(config_dir, "testing.logcfg")
 
 
 def transform_nose_config_to_cmd(filename):
@@ -54,6 +59,14 @@ def transform_nose_config_to_cmd(filename):
     return cmd_line
 
 
+def set_logging_profile(log_config_file):
+    """Set logging profile for current process and subprocesses"""
+    with open(log_config_file, 'rt') as f:
+        logging_config = yaml.load(f.read())
+    logging.config.dictConfig(logging_config)
+    os.putenv("LOG_CFG", log_config_file)
+
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Run udtc tests. Specified list of test run in debug mode. "
@@ -71,7 +84,7 @@ if __name__ == '__main__':
                                                          "selected when running some suites of tests and coverage "
                                                          "profile when selecting all tests.")\
         .add_mutually_exclusive_group()
-    config_group.add_argument("-c", "--config", help="Force using debug profile even when running all tests")
+    config_group.add_argument("-c", "--config", help="Force using a particular nose profile, disable autoselection")
     config_group.add_argument("--coverage", action="store_true", help="Force using coverage profile even when some "
                                                                       "tests or tessuite")
     config_group.add_argument("--debug", action="store_true", help="Force using debug profile even when running "
@@ -81,17 +94,22 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    ## handle config first
     nose_args = []
+    # nosetests captured logs format
+    nose_args.extend(["--logging-format", "%(asctime)s [%(name)s] %(levelname)s: %(message)s"])
+
+    ## handle config first
     specified_config = False
     if args.config:
         nose_args.extend(["--config", args.config])
         specified_config = True
     elif args.debug:
         nose_args.extend(["--config", DEBUG_CONFIG_FILE])
+        set_logging_profile(DEBUG_LOG_CONFIG)
         specified_config = True
     elif args.coverage:
         nose_args.extend(transform_nose_config_to_cmd(COVERAGE_CONFIG_FILE))
+        set_logging_profile(TESTING_LOG_CONFIG)
         specified_config = True
     elif args.no_config:
         specified_config = True
@@ -111,11 +129,13 @@ if __name__ == '__main__':
                 # If no config is given, choose debug by default for partial run
                 if not specified_config:
                     nose_args.extend(["--config", DEBUG_CONFIG_FILE])
+                    set_logging_profile(DEBUG_LOG_CONFIG)
                     specified_config = True
     else:
         # If no config is given, run with coverage
         if not specified_config:
             nose_args.extend(transform_nose_config_to_cmd(COVERAGE_CONFIG_FILE))
+            set_logging_profile(TESTING_LOG_CONFIG)
             specified_config = True
 
     # Check if we want to run those tests with the system code
