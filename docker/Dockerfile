@@ -57,6 +57,6 @@ RUN mk-build-deps /tmp/control -i --tool 'apt-get --yes'
 
 # finally remove all ppas and add local repository
 RUN rm /etc/apt/sources.list.d/*
-ADD docker/create_packages.sh /tmp/
+ADD ./create_packages.sh /tmp/
 RUN /tmp/create_packages.sh /apt-fake-repo
 
