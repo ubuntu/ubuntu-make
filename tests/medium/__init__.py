@@ -64,6 +64,7 @@ class ContainerTests(LoggedTestCase):
                                                      self.container_id]).decode("utf-8").strip()
         # override with container paths
         self.conf_path = os.path.expanduser("/home/{}/.config/udtc".format(settings.DOCKER_USER))
+        sleep(5)  # let the container and service starts
 
     def tearDown(self):
         subprocess.check_call([get_docker_path(), "stop", "-t", "0", self.container_id],
