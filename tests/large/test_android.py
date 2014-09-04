@@ -30,7 +30,7 @@ from ..tools import UDTC
 class AndroidStudioTests(LargeFrameworkTests):
     """This will test the Android Studio base"""
 
-    TIMEOUT_INSTALL = 300
+    TIMEOUT_INSTALL = 700
     TIMEOUT_START = 60
     TIMEOUT_STOP = 60
 
