@@ -86,8 +86,20 @@ class LargeFrameworkTests(LoggedTestCase):
                 raise BaseException("We didn't find an expected WARNING or ERROR in {}".format(content))
 
     def expect_and_no_warn(self, expect_query, timeout=-1, expect_warn=False):
-        """run the expect query and check that there is no warning or error"""
-        self.child.expect(expect_query, timeout=timeout)
+        """run the expect query and check that there is no warning or error
+
+        It doesn't fail on the given timeout if stdout is progressing"""
+        output = ""
+        continue_expect = True
+        while(continue_expect):
+            try:
+                self.child.expect(expect_query, timeout=timeout)
+                continue_expect = False
+            except pexpect.TIMEOUT:
+                # stalled during timeout period
+                if output == self.child.before:
+                    raise
+                output = self.child.before
         self.assert_for_warn(self.child.before, expect_warn)
 
     def wait_and_no_warn(self, expect_warn=False):

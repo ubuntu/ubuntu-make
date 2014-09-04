@@ -30,7 +30,7 @@ from ..tools import UDTC
 class AndroidStudioTests(LargeFrameworkTests):
     """This will test the Android Studio base"""
 
-    TIMEOUT_INSTALL = 700
+    TIMEOUT_INSTALL_PROGRESS = 60
     TIMEOUT_START = 60
     TIMEOUT_STOP = 60
 
@@ -50,7 +50,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.child.sendline("")
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
         self.child.sendline("a")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL)
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_no_warn()
 
         # we have an installed launcher, added to the launcher
@@ -105,7 +105,7 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.child.sendline("")
             self.expect_and_no_warn("\[.*\] ")
             self.child.sendline("a")
-            self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL)
+            self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
             self.wait_and_no_warn()
 
             # we have an installed launcher, added to the launcher

@@ -30,7 +30,6 @@ from udtc import settings
 class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
     """This will test the basic cli command class inside a container"""
 
-    TIMEOUT_INSTALL = 200
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
 
@@ -54,8 +53,8 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
             self.child.sendline("")
             self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
             self.child.sendline("a")
-            self.expect_and_no_warn([pexpect.EOF, "Corrupted download? Aborting."], timeout=self.TIMEOUT_INSTALL,
-                                    expect_warn=True)
+            self.expect_and_no_warn([pexpect.EOF, "Corrupted download? Aborting."],
+                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
 
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.launcher_path))
