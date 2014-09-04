@@ -6,4 +6,4 @@
 	dh $@ --with python3 --buildsystem=pybuild
 
 override_dh_auto_test:
-	./runtests --no-config pep8 small
+	./runtests pep8 small
