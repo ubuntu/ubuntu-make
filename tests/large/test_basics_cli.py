@@ -30,6 +30,10 @@ class BasicCLI(LoggedTestCase):
         """passthrough, return args"""
         return commands_input
 
+    def return_without_first_output(self, stdout):
+        """We return ignoring the first line which is INFO: set logging level to"""
+        return "\n".join(stdout.split('\n')[1:])
+
     def test_global_help(self):
         """We display a global help message"""
         result = subprocess.check_output(self.command_as_list([UDTC, '--help']))
@@ -39,13 +43,13 @@ class BasicCLI(LoggedTestCase):
         """We display info logs"""
         result = subprocess.check_output(self.command_as_list([UDTC, '-v', '--help']),
                                          stderr=subprocess.STDOUT)
-        self.assertIn("INFO:", result.decode("utf-8"))
+        self.assertIn("INFO:", self.return_without_first_output(result.decode("utf-8")))
 
     def test_setup_debug_logging(self):
         """We display debug logs"""
         result = subprocess.check_output(self.command_as_list([UDTC, '-vv', '--help']),
                                          stderr=subprocess.STDOUT)
-        self.assertIn("DEBUG:", result.decode("utf-8"))
+        self.assertIn("DEBUG:", self.return_without_first_output(result.decode("utf-8")))
 
     def test_setup_with_option_logging(self):
         """We don't mix info or debug logs with a -v<something> option"""
@@ -54,7 +58,7 @@ class BasicCLI(LoggedTestCase):
             subprocess.check_output(self.command_as_list([UDTC, '-vouep', '--help']),
                                     stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
-            self.assertNotIn("INFO:", e.output.decode("utf-8"))
-            self.assertNotIn("DEBUG:", e.output.decode("utf-8"))
+            self.assertNotIn("INFO:", self.return_without_first_output(e.output.decode("utf-8")))
+            self.assertNotIn("DEBUG:", self.return_without_first_output(e.output.decode("utf-8")))
             exception_raised = True
         self.assertTrue(exception_raised)

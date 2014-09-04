@@ -32,8 +32,11 @@ config_dir = os.path.join(root_dir, 'confs')
 DEBUG_CONFIG_FILE = os.path.join(config_dir, "debug.nose")
 COVERAGE_CONFIG_FILE = os.path.join(config_dir, "prod.nose")
 TESTS_DIR = os.path.join(root_dir, 'tests')
-DEBUG_LOG_CONFIG =os.path.join(config_dir, "debug.logcfg")
-TESTING_LOG_CONFIG =os.path.join(config_dir, "testing.logcfg")
+DEBUG_LOG_CONFIG = os.path.join(config_dir, "debug.logcfg")
+TESTING_LOG_CONFIG = os.path.join(config_dir, "testing.logcfg")
+# subprocess need to output on stdout the logs to be monitored
+# the profile is the testing one + console output in warning mode
+TESTING_SUBPROCESS_LOG_CONFIG = os.path.join(config_dir, "testing.subprocess.logcfg")
 
 
 def transform_nose_config_to_cmd(filename):
@@ -64,7 +67,9 @@ def set_logging_profile(log_config_file):
     with open(log_config_file, 'rt') as f:
         logging_config = yaml.load(f.read())
     logging.config.dictConfig(logging_config)
-    os.putenv("LOG_CFG", log_config_file)
+    os.putenv("LOG_CFG", TESTING_LOG_CONFIG)
+    if log_config_file == TESTING_LOG_CONFIG:
+        os.putenv("LOG_CFG", TESTING_SUBPROCESS_LOG_CONFIG)
 
 
 if __name__ == '__main__':
