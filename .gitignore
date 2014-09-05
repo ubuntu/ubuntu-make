@@ -16,6 +16,7 @@ build/
 # Tests results
 html-coverage*/
 .coverage
+coverage.xml
 nosetests*
 
 # Idea content
