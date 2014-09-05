@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2014 Canonical
+#
+# Authors:
+#  Didier Roche
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; version 3.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+import argparse
+import sys
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description="Parse debian/control for provided binary package and echo all "
+                                                 "dependencies.")
+    parser.add_argument("binary", help="binary package name to grab dependencies")
+
+    args = parser.parse_args()
+
+    try:
+        in_binary_section = False
+        in_depends_section = False
+        depends = []
+        with open("debian/control") as f:
+            for line in f.readlines():
+                line = line.rstrip()
+                if line == "Package: {}".format(args.binary):
+                    in_binary_section = True
+                if not in_binary_section:
+                    continue
+                if line.startswith("Depends: "):
+                    line = line.replace("Depends: ", "")
+                    in_depends_section = True
+                elif line.startswith("Recommends: "):
+                    line = line.replace("Recommends: ", "")
+                    in_depends_section = True
+                else:
+                    # we are getting out of the depends section parts
+                    if line[0] != " ":
+                        in_depends_section = False
+                if not in_depends_section:
+                    continue
+                line_deps = line.split(",")
+                depends.extend([dep.strip() for dep in line_deps if (dep.strip() != "" and dep.strip()[0] != "$")])
+    except OSError:
+        print("Can't find debian/control")
+        sys.exit(1)
+
+    print(" ".join(depends))
