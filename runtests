@@ -124,6 +124,15 @@ if __name__ == '__main__':
     if args.publish:
         nose_args.append("--with-xunit")
 
+    ## check if we want to run those tests with the system code
+    if args.system:
+        nose_args.append("-P")
+        # let remove it from there as well
+        sys.path.remove(root_dir)
+    else:
+        import tests
+        tests.tools.set_local_udtc()
+
     if not "all" in args.tests and len(args.tests) > 0:
         for test_type in args.tests:
             for named_test_type in ("small", "medium", "large", "pep8"):
@@ -147,15 +156,6 @@ if __name__ == '__main__':
             nose_args.extend(transform_nose_config_to_cmd(COVERAGE_CONFIG_FILE))
             set_logging_profile(TESTING_LOG_CONFIG)
             specified_config = True
-
-    # Check if we want to run those tests with the system code
-    if args.system:
-        nose_args.insert(0, '-P')
-        # let remove it from there as well
-        sys.path.remove(root_dir)
-    else:
-        import tests
-        tests.tools.set_local_udtc()
 
     ## need a fake $0 argument
     nose_args.insert(0, "")
