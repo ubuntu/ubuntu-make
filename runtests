@@ -78,6 +78,7 @@ if __name__ == '__main__':
                                                  "Running a partial suite of tests is using a normal mode. "
                                                  "Running all tests is using coverage by default.")
     parser.add_argument('-s', "--system", action="store_true", help="Use system udtc instead of local one")
+    parser.add_argument("--publish", action="store_true", help="Publish xunit results format")
 
     parser.add_argument("tests", nargs='*', help="Action to perform: all (or omitted) to run all tests. "
                                                  "small/medium/large/pep8 or nose syntax: "
@@ -118,6 +119,10 @@ if __name__ == '__main__':
         specified_config = True
     elif args.no_config:
         specified_config = True
+
+    ## output xunit if requested
+    if args.publish:
+        nose_args.append("--with-xunit")
 
     if not "all" in args.tests and len(args.tests) > 0:
         for test_type in args.tests:

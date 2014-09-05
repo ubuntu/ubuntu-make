@@ -13,9 +13,10 @@ build/
 *.egg-info
 *.pybuild
 
-# Tests coverage
+# Tests results
 html-coverage*/
 .coverage
+nosetests*
 
 # Idea content
 .idea/workspace.xml
