@@ -328,8 +328,9 @@ class TestRequirementsHandler(LoggedTestCase):
         self.wait_for_callback(self.done_callback)
 
         self.assertIsNotNone(self.done_callback.call_args[0][0].error)
-        self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
-        self.assertFalse(self.handler.is_bucket_installed(["testpackage2"]))
+        both_package_installed = self.handler.is_bucket_installed(["testpackage"]) and \
+            self.handler.is_bucket_installed(["testpackage2"])
+        self.assertFalse(both_package_installed)
         self.expect_warn_error = True
 
     def test_install_shadow_pkg(self):
