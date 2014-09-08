@@ -22,6 +22,7 @@
 import os
 import pep8
 from .tools import get_root_dir
+import udtc
 from unittest import TestCase
 
 
@@ -33,5 +34,8 @@ class CodeCheck(TestCase):
         Note that we have a .pep8 config file for maximum line length tweak
         and excluding the virtualenv dir."""
         pep8style = pep8.StyleGuide(config_file=os.path.join(get_root_dir(), '.pep8'))
-        results = pep8style.check_files([get_root_dir()])
+
+        # we want to use either local or system udtc, but always local tests files
+        udtc_dir = os.path.dirname(udtc.__file__)
+        results = pep8style.check_files([udtc_dir, os.path.join(get_root_dir(), "tests")])
         self.assertEqual(results.get_statistics(), [])
