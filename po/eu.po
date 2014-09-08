@@ -1,0 +1,124 @@
+# Basque translation for ubuntu-developer-tools-center
+# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
+# This file is distributed under the same license as the ubuntu-developer-tools-center package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ubuntu-developer-tools-center\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2014-08-28 16:27+0200\n"
+"PO-Revision-Date: 2014-09-07 11:34+0000\n"
+"Last-Translator: Ibai Oihanguren Sala <Unknown>\n"
+"Language-Team: Basque <eu@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2014-09-08 13:36+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
+
+#: udtc/__init__.py:109 udtc/__init__.py:109
+msgid "* Command '{}':"
+msgstr ""
+
+#: udtc/__init__.py:117 udtc/__init__.py:117
+msgid "Deploy and setup developers environment easily on ubuntu"
+msgstr ""
+
+#: udtc/__init__.py:118 udtc/__init__.py:118
+msgid ""
+"                                         Note that you can also configure "
+"different debug logs behaviors using LOG_CFG\n"
+"                                         pointing to a log yaml profile.\n"
+"                                         "
+msgstr ""
+
+#: udtc/__init__.py:123 udtc/__init__.py:123
+msgid "Show this help"
+msgstr "Erakutsi laguntza hau"
+
+#: udtc/__init__.py:124 udtc/__init__.py:124
+msgid "Increase output verbosity (2 levels)"
+msgstr ""
+
+#: udtc/frameworks/android.py:39 udtc/frameworks/android.py:39
+msgid "Android"
+msgstr "Android"
+
+#: udtc/frameworks/android.py:39 udtc/frameworks/android.py:39
+msgid "Android Developement Environment"
+msgstr "Androiderako garapen-ingurunea"
+
+#: udtc/frameworks/android.py:99 udtc/frameworks/android.py:100
+msgid "Android Studio"
+msgstr "Android Studio"
+
+#: udtc/frameworks/android.py:102 udtc/frameworks/android.py:103
+msgid "Android Studio developer environment"
+msgstr "Android Studio garapen-ingurunea"
+
+#: udtc/interactions/__init__.py:73 udtc/interactions/__init__.py:73
+msgid "No suitable answer provided"
+msgstr ""
+
+#: udtc/interactions/__init__.py:75 udtc/interactions/__init__.py:75
+msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
+msgstr ""
+
+#: udtc/interactions/__init__.py:78 udtc/interactions/__init__.py:78
+msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
+msgstr ""
+
+#: udtc/interactions/__init__.py:96 udtc/interactions/__init__.py:96
+msgid " ({})"
+msgstr " ({})"
+
+#: udtc/interactions/__init__.py:100 udtc/interactions/__init__.py:100
+msgid ""
+"{}\n"
+"[{}] "
+msgstr ""
+"{}\n"
+"[{}] "
+
+#: udtc/interactions/__init__.py:103 udtc/interactions/__init__.py:103
+msgid "{} [{}] "
+msgstr "{} [{}] "
+
+#: udtc/interactions/__init__.py:111 udtc/interactions/__init__.py:111
+msgid "I Accept"
+msgstr "Onartzen dut"
+
+#: udtc/interactions/__init__.py:111 udtc/interactions/__init__.py:111
+msgid "a"
+msgstr "o"
+
+#: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:112
+msgid "I don't accept"
+msgstr "Ez dut onartzen"
+
+#: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:145
+#: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:145
+msgid "N"
+msgstr "E"
+
+#: udtc/interactions/__init__.py:121 udtc/interactions/__init__.py:122
+#: udtc/interactions/__init__.py:121 udtc/interactions/__init__.py:122
+msgid "{} ({})"
+msgstr "{} ({})"
+
+#: udtc/interactions/__init__.py:125 udtc/interactions/__init__.py:125
+msgid "[{}] "
+msgstr "[{}] "
+
+#: udtc/interactions/__init__.py:144 udtc/interactions/__init__.py:144
+msgid "Yes"
+msgstr "Bai"
+
+#: udtc/interactions/__init__.py:144 udtc/interactions/__init__.py:144
+msgid "y"
+msgstr "b"
+
+#: udtc/interactions/__init__.py:145 udtc/interactions/__init__.py:145
+msgid "No"
+msgstr "Ez"
