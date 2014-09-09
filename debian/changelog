@@ -1,3 +1,39 @@
+ubuntu-developer-tools-center (0.0.5) utopic; urgency=medium
+
+  * Addition for the test jenkins server:
+    - Add helper to display binary depends
+    - Output xml tests and coverage report
+    - Add xunit artefacts support in runtests
+  * Some tests enhancement for working in the daily jenkins environment:
+    - Change installing in conflict package prediction.
+    - Give some time for the container in medium tests to start
+    - Remove full install timeout logic. Instead, have a timeout if there
+      is no new stdout/progress report change for a while. This ensure
+      less flakyness in case of really slow network.
+    - Remove on output testing first INFO message detection as it's a false
+      positive.
+  * No output by default when running tests:
+    - Coverage tests doesn't print any stdout or logging info unless a tests
+      is failing.
+    - Debug profile is using the debug logging configuraiton as well.
+    - Don't rely on importing tests/__init__.py to define logging format for
+      nose.
+    - Ensure subprocess (medium/large tests) set the same logging level as well.
+    - Add a stdout hanlder in subprocess as well while testing (using
+      the correct profile and be able to detect warning/errors)
+  * debian/rules:
+    - no need for --no-config for running tests anymore
+  * Misc cleanups:
+    - some refactoring of runtests
+    - remove unusued imports
+    - removed unused profile options
+    - update documentation for the new logging profiles change.
+  * Have pep8 tests passing on system version as well.
+  * Add Spanish, Basque and Chinese (Hong Kong) translations. Thanks to all
+    translators!
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 09 Sep 2014 16:48:12 +0200
+
 ubuntu-developer-tools-center (0.0.4.1) utopic; urgency=medium
 
   * GSettings:schema has been deprecated and glib shows a warning about it.
