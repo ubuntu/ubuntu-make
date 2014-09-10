@@ -46,7 +46,7 @@ RUN adduser --disabled-password --gecos "" user
 RUN echo user:user | chpasswd
 
 # add certificates
-ADD ../tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
+ADD tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
 
 # install udtc deps
@@ -57,6 +57,6 @@ RUN mk-build-deps /tmp/control -i --tool 'apt-get --yes'
 
 # finally remove all ppas and add local repository
 RUN rm /etc/apt/sources.list.d/*
-ADD ./create_packages.sh /tmp/
+ADD docker/create_packages.sh /tmp/
 RUN /tmp/create_packages.sh /apt-fake-repo
 
