@@ -46,7 +46,7 @@ RUN adduser --disabled-password --gecos "" user
 RUN echo user:user | chpasswd
 
 # add certificates
-ADD tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
+ADD ../tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
 
 # install udtc deps
