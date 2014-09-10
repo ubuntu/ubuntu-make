@@ -121,5 +121,5 @@ For an easier development workflow, we encourage the use of virtualenv to test a
 ## Release management
 Refresh .pot files:
 
-   $ ./setup.py extract_messages --output po/ubuntu-developer-tools-center.pot
+    $ ./setup.py extract_messages --output po/ubuntu-developer-tools-center.pot
 
