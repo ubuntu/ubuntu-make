@@ -23,6 +23,7 @@ import os
 from time import time
 from unittest.mock import Mock
 import shutil
+import stat
 import tempfile
 from ..tools import get_data_dir, LoggedTestCase
 from udtc.decompressor import Decompressor
@@ -53,7 +54,7 @@ class TestDecompressor(LoggedTestCase):
                 raise(BaseException("Function not called within {} seconds".format(timeout)))
 
     def test_decompress(self):
-        """We decompress a valid file successfully"""
+        """We decompress a valid .tgz file successfully"""
         filepath = os.path.join(self.compressfiles_dir, "valid.tgz")
         self.tempdir = tempfile.mkdtemp()
         Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
@@ -113,3 +114,39 @@ class TestDecompressor(LoggedTestCase):
         self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'simplefile')))
         self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'subdir')))
         self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'subdir', 'otherfile')))
+
+    def test_decompress_zip(self):
+        """We decompress a valid zip file successfully"""
+        filepath = os.path.join(self.compressfiles_dir, "valid.zip")
+        self.tempdir = tempfile.mkdtemp()
+        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
+        self.wait_for_callback(self.on_done)
+
+        results = self.on_done.call_args[0][0]
+        self.assertEquals(len(results), 1, str(results))
+        for fd in results:
+            self.assertIsNone(results[fd].error)
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'simplefile')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'executablefile')))
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content', 'subdir')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'subdir', 'otherfile')))
+
+    def test_decompress_zip_good_permission(self):
+        """We decompress a valid zip file successfully, retaining the right permissions"""
+        filepath = os.path.join(self.compressfiles_dir, "valid.zip")
+        self.tempdir = tempfile.mkdtemp()
+        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
+        self.wait_for_callback(self.on_done)
+
+        results = self.on_done.call_args[0][0]
+        self.assertEquals(len(results), 1, str(results))
+        for fd in results:
+            self.assertIsNone(results[fd].error)
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content')))
+        simplefile = os.path.join(self.tempdir, 'server-content', 'simplefile')
+        self.assertTrue(os.path.isfile(simplefile))
+        execfile = os.path.join(self.tempdir, 'server-content', 'executablefile')
+        self.assertTrue(os.path.isfile(execfile))
+        self.assertEquals(oct(stat.S_IMODE(os.lstat(simplefile).st_mode)), '0o664')
+        self.assertEquals(oct(stat.S_IMODE(os.lstat(execfile).st_mode)), '0o775')

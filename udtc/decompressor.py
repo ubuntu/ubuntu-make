@@ -24,6 +24,7 @@ import logging
 import os
 import shutil
 import tarfile
+import zipfile
 
 
 logger = logging.getLogger(__name__)
@@ -34,6 +35,15 @@ class Decompressor:
 
     DecompressOrder = namedtuple("DecompressOrder", ["dir", "dest"])
     DecompressResult = namedtuple("DecompressResult", ["error"])
+
+    # override _extract_member to preserve file permissions:
+    # http://bugs.python.org/issue15795
+    class ZipFileWithPerm(zipfile.ZipFile):
+        def _extract_member(self, member, targetpath, pwd):
+            targetpath = super()._extract_member(member, targetpath, pwd)
+            mode = member.external_attr >> 16 & 0x1FF
+            os.chmod(targetpath, mode)
+            return targetpath
 
     def __init__(self, orders, on_done):
         """Decompress all fds in threads and send on_done callback once finished
@@ -70,8 +80,14 @@ class Decompressor:
 
         dir can be a regexp"""
         logger.debug("Extracting to {}".format(dest))
-        tfile = tarfile.open(fileobj=fd)
-        tfile.extractall(dest)
+        # We don't use shutil to automatically select the right codec as we need to ensure that zipfile
+        # will keep the original perms.
+        archive = None
+        try:
+            archive = tarfile.open(fileobj=fd)
+        except tarfile.ReadError:
+            archive = self.ZipFileWithPerm(fd.name)
+        archive.extractall(dest)
 
         # we want the content of dir to be the root of dest, rename and move content
         if dir is not None:
