@@ -96,3 +96,20 @@ class TestDecompressor(LoggedTestCase):
         self.assertEquals(len(results), 1, str(results))
         for fd in results:
             self.assertIsNotNone(results[fd].error)
+
+    def test_decompress_content_glob(self):
+        """We decompress a valid file decompressing one subdir content with a glob schema"""
+        filepath = os.path.join(self.compressfiles_dir, "valid.tgz")
+        self.tempdir = tempfile.mkdtemp()
+        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='server-*')},
+                     self.on_done)
+        self.wait_for_callback(self.on_done)
+
+        results = self.on_done.call_args[0][0]
+        self.assertEquals(len(results), 1, str(results))
+        for fd in results:
+            self.assertIsNone(results[fd].error)
+        self.assertTrue(os.path.isdir(self.tempdir))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'simplefile')))
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'subdir')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'subdir', 'otherfile')))

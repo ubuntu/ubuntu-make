@@ -19,6 +19,7 @@
 
 from collections import namedtuple
 from concurrent import futures
+from glob import glob
 import logging
 import os
 import shutil
@@ -65,15 +66,20 @@ class Decompressor:
             future.add_done_callback(self._one_done)
 
     def _decompress(self, fd, dir, dest):
-        """decompress one entry"""
+        """decompress one entry
+
+        dir can be a regexp"""
         logger.debug("Extracting to {}".format(dest))
         tfile = tarfile.open(fileobj=fd)
         tfile.extractall(dest)
 
         # we want the content of dir to be the root of dest, rename and move content
         if dir is not None:
+            dir_path = glob(os.path.join(dest, dir))[0]
+            if not dir_path:
+                raise BaseException("Couldn't find {} in tarball".format(dir_path))
             tempdir = os.path.join(dest, "footemp")
-            os.rename(os.path.join(dest, dir), tempdir)
+            os.rename(dir_path, tempdir)
             for filename in os.listdir(tempdir):
                 shutil.move(os.path.join(tempdir, filename), os.path.join(dest, filename))
             os.rmdir(tempdir)
