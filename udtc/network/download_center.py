@@ -26,6 +26,7 @@ import hashlib
 from http.client import HTTPSConnection, HTTPConnection
 from io import BytesIO
 import logging
+import os
 import ssl
 import tempfile
 from urllib.parse import urlparse
@@ -76,9 +77,11 @@ class DownloadCenter:
                 (url, md5sum) = url_request
             # switch between inline memory and temp file
             if download:
-                # Named because the tar library crash if we don't have a named one.
+                # Named because shutils and tarfile library needs a .name property
                 # http://bugs.python.org/issue21044
-                dest = tempfile.NamedTemporaryFile()
+                # also, ensure we keep the same suffix
+                path, ext = os.path.splitext(url)
+                dest = tempfile.NamedTemporaryFile(suffix=ext)
                 logger.info("Start downloading {} as a temporary file".format(url))
             else:
                 dest = BytesIO()

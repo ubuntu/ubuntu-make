@@ -86,8 +86,22 @@ class TestDownloadCenter(LoggedTestCase):
         with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
                              result.fd.read())
+            self.assertTrue('.' not in result.fd.name, result.fd.name)
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.error)
+
+    def test_download_keep_extensions(self):
+        """we deliver successful downloads keeping the extension"""
+        filename = "android-studio-fake.tgz"
+        request = self.build_server_address(filename)
+        DownloadCenter([request], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertTrue(result.fd.name.endswith('.tgz'), result.fd.name)
 
     def test_download_with_md5(self):
         """we deliver once successful download, matching md5sum"""
