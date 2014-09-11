@@ -3,7 +3,7 @@ Ubuntu Developer Tools Center is a project to enable quick and easy setup of com
 
 <!---[![Build Status](https://api.travis-ci.org/didrocks/ubuntu-developer-tools-center.svg?branch=master)](https://travis-ci.org/didrocks/ubuntu-developer-tools-center) TRAVIS disabled until they support 14.04 (need python 3.4 with platform gi.repository)-->
 
-As a first step, it's focusing on installing a full fledge android developer environment on latest Ubuntu LTS (14.04).
+As a first step, it's focusing on installing a full-fledged android developer environment on latest Ubuntu LTS (14.04).
 
 **/!\ WIP, not ready for consumption yet**
 
@@ -121,5 +121,5 @@ For an easier development workflow, we encourage the use of virtualenv to test a
 ## Release management
 Refresh .pot files:
 
-   $ ./setup.py extract_messages --output po/ubuntu-developer-tools-center.pot
+    $ ./setup.py extract_messages --output po/ubuntu-developer-tools-center.pot
 
