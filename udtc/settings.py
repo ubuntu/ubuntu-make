@@ -26,7 +26,7 @@ LSB_RELEASE_FILE = "/etc/lsb-release"
 # Those are for the tests
 DOCKER_USER = "user"
 DOCKER_PASSWORD = "user"
-DOCKER_TESTIMAGE = "didrocks/docker-udtc-manual"
+DOCKER_TESTIMAGE = "didrocks/docker-udtc"
 UDTC_IN_CONTAINER = "/udtc"
 TEST_MD5_FAKE_DATA = "f55cc96c8ffda42ee151e71e313b6bf9"
 APT_FAKE_REPO_PATH = "/apt-fake-repo"
