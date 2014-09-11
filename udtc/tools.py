@@ -200,6 +200,11 @@ def is_completion_mode():
     return False
 
 
+def get_icon_path(icon_filename):
+    """Return local icon path"""
+    return os.path.join(xdg_data_home, "icons", icon_filename)
+
+
 def get_launcher_path(desktop_filename):
     """Return launcher path"""
     return os.path.join(xdg_data_home, "applications", desktop_filename)

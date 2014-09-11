@@ -34,7 +34,7 @@ import threading
 from ..tools import change_xdg_path, get_data_dir, LoggedTestCase
 from udtc import settings, tools
 from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
-    create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_launcher_path, MainLoop
+    create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_icon_path, get_launcher_path, MainLoop
 from unittest.mock import patch
 
 
@@ -517,6 +517,10 @@ class TestLauncherIcons(LoggedTestCase):
                                                            "unity://running-apps"]
 
         self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
+
+    def test_get_icon_path(self):
+        """Get correct launcher path"""
+        self.assertEquals(get_icon_path("foo.png"), os.path.join(self.local_dir, "icons", "foo.png"))
 
     def test_get_launcher_path(self):
         """Get correct launcher path"""
