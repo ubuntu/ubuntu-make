@@ -40,6 +40,36 @@ class AndroidCategory(udtc.frameworks.BaseCategory):
                          logo_path=None,
                          packages_requirements=["openjdk-7-jdk", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386"])
 
+    def parse_license(self, line, license_txt, in_license):
+        """Parse Android download page for license"""
+        if line.startswith('<p class="sdk-terms-intro">'):
+            in_license = True
+        if in_license:
+            if line.startswith('</div>'):
+                in_license = False
+            else:
+                license_txt.write(line)
+        return in_license
+
+    def parse_download_link(self, tag, line, in_download):
+        """Parse Android download links, expect to find a md5sum and a url"""
+        url, md5sum = (None, None)
+        if tag in line:
+            in_download = True
+        if in_download:
+            p = re.search(r'href="(.*)">', line)
+            with suppress(AttributeError):
+                url = p.group(1)
+            p = re.search(r'<td>(\w+)</td>', line)
+            with suppress(AttributeError):
+                md5sum = p.group(1)
+            if "</tr>" in line:
+                in_download = False
+
+        if url is None and md5sum is None:
+            return (None, in_download)
+        return ((url, md5sum), in_download)
+
 
 class EclipseAdt(udtc.frameworks.BaseFramework):
 
@@ -67,33 +97,11 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
-        if line.startswith('<p class="sdk-terms-intro">'):
-            in_license = True
-        if in_license:
-            if line.startswith('</div>'):
-                in_license = False
-            else:
-                license_txt.write(line)
-        return in_license
+        return self.category.parse_license(line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
         """Parse Android Studio download link, expect to find a md5sum and a url"""
-        url, md5sum = (None, None)
-        if 'id="linux-studio"' in line:
-            in_download = True
-        if in_download:
-            p = re.search(r'href="(.*)">', line)
-            with suppress(AttributeError):
-                url = p.group(1)
-            p = re.search(r'<td>(\w+)</td>', line)
-            with suppress(AttributeError):
-                md5sum = p.group(1)
-            if "</tr>" in line:
-                in_download = False
-
-        if url is None and md5sum is None:
-            return (None, in_download)
-        return ((url, md5sum), in_download)
+        return self.category.parse_download_link('id="linux-studio"', line, in_download)
 
     def create_launcher(self):
         """Create the Android Studio launcher"""
