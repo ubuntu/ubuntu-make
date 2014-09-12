@@ -57,5 +57,5 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
                                     timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
 
             # we have nothing installed
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.launcher_path))
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
             self.assertFalse(self.path_exists(self.exec_path))
