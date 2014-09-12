@@ -59,3 +59,39 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
             self.assertFalse(self.path_exists(self.exec_path))
+
+
+class EclipseADTInContainer(ContainerTests, test_android.EclipseADTTests):
+    """This will test the basic cli command class inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "developer.android.com"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/android/eclipse-adt".format(settings.DOCKER_USER))
+
+    # additional test with fake md5sum
+    def test_eclipse_adt_install_with_wrong_md5sum(self):
+        """Install eclipse adt requires a md5sum, and a wrong one is rejected"""
+        eclipse_adt_file_path = os.path.join(get_data_dir(), "server-content", "sdk", "index.html")
+        with swap_file_and_restore(eclipse_adt_file_path) as content:
+            with open(eclipse_adt_file_path, "w") as newfile:
+                newfile.write(content.replace(settings.TEST_MD5_ECLIPSE_ADT_32_FAKE_DATA, "fakemd5sum")
+                                     .replace(settings.TEST_MD5_ECLIPSE_ADT_64_FAKE_DATA, "fakemd5sum"))
+            self.child = pexpect.spawnu(self.command('{} android eclipse-adt'.format(UDTC)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
+            self.child.sendline("a")
+            self.expect_and_no_warn([pexpect.EOF, "Corrupted download? Aborting."],
+                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+
+            # we have nothing installed
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertFalse(self.path_exists(self.exec_path))

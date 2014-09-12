@@ -213,9 +213,12 @@ class EclipseADTTests(LargeFrameworkTests):
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process(["java", self.arch_option, self.installed_path],
                                     wait_before=self.TIMEOUT_START)
-        self.check_and_kill_process([self.installed_path])  # we need to stop the parent as well for eclipse
-        # android eclipse exits with 143 on SIGTERM, translated to -15
-        self.assertEquals(proc.wait(self.TIMEOUT_STOP), -15)
+        if not self.in_container:
+            self.check_and_kill_process([self.installed_path])  # we need to stop the parent as well for eclipse
+            # android eclipse exits with 143 on SIGTERM, translated to -15
+            self.assertEquals(proc.wait(self.TIMEOUT_STOP), -15)
+        else:
+            self.assertEquals(proc.wait(self.TIMEOUT_STOP), 143)
 
         # ensure that it's detected as installed:
         self.child = pexpect.spawnu(self.command('{} android eclipse-adt'.format(UDTC)))
@@ -274,9 +277,12 @@ class EclipseADTTests(LargeFrameworkTests):
                                     stderr=subprocess.DEVNULL)
             self.check_and_kill_process(["java", self.arch_option, self.installed_path],
                                         wait_before=self.TIMEOUT_START)
-            self.check_and_kill_process([self.installed_path])  # we need to stop the parent as well for eclipse
-            # android eclipse exits with 143 on SIGTERM, translated to -15
-            self.assertEquals(proc.wait(self.TIMEOUT_STOP), -15)
+            if not self.in_container:
+                self.check_and_kill_process([self.installed_path])  # we need to stop the parent as well for eclipse
+                # android eclipse exits with 143 on SIGTERM, translated to -15
+                self.assertEquals(proc.wait(self.TIMEOUT_STOP), -15)
+            else:
+                self.assertEquals(proc.wait(self.TIMEOUT_STOP), 143)
 
     def test_custom_install_path(self):
         """We install eclipse adt in a custom path"""
