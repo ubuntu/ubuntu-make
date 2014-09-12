@@ -42,9 +42,9 @@ version=$(extract_version $package_name)
 generate_package $package_name $version $arch
 }
 
-# android studio deps
-mkdir -p $repo_root_dir/android-studio
-cd $repo_root_dir/android-studio
+# android studio and adt deps
+mkdir -p $repo_root_dir/android
+cd $repo_root_dir/android
 create_package openjdk-7-jdk
 create_package libncurses5 i386
 create_package libstdc++6 i386
