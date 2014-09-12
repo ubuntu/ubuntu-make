@@ -25,7 +25,7 @@ import pexpect
 import shutil
 import signal
 from time import sleep
-from udtc.tools import get_launcher_path, launcher_exists_and_is_pinned
+from udtc.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned
 from ..tools import LoggedTestCase
 
 
@@ -38,6 +38,7 @@ class LargeFrameworkTests(LoggedTestCase):
         self.installed_path = ""
         self.conf_path = os.path.expanduser("~/.config/udtc")
         self.desktop_filename = ""
+        self.icon_filename = ""
         self.child = None
 
     def tearDown(self):
@@ -49,6 +50,9 @@ class LargeFrameworkTests(LoggedTestCase):
                 os.remove(self.conf_path)
             with suppress(FileNotFoundError):
                 os.remove(get_launcher_path(self.desktop_filename))
+            with suppress(FileNotFoundError):
+                if self.icon_filename:
+                    os.remove(get_icon_path(self.icon_filename))
         super().tearDown()
 
     def _pid_for(self, process_grep):
