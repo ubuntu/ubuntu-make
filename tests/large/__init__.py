@@ -37,7 +37,7 @@ class LargeFrameworkTests(LoggedTestCase):
         self.in_container = False
         self.installed_path = ""
         self.conf_path = os.path.expanduser("~/.config/udtc")
-        self.launcher_path = ""
+        self.desktop_filename = ""
         self.child = None
 
     def tearDown(self):
@@ -48,7 +48,7 @@ class LargeFrameworkTests(LoggedTestCase):
             with suppress(FileNotFoundError):
                 os.remove(self.conf_path)
             with suppress(FileNotFoundError):
-                os.remove(get_launcher_path(self.launcher_path))
+                os.remove(get_launcher_path(self.desktop_filename))
         super().tearDown()
 
     def _pid_for(self, process_grep):
@@ -122,9 +122,9 @@ class LargeFrameworkTests(LoggedTestCase):
         """passthrough, return args"""
         return commands_input
 
-    def launcher_exists_and_is_pinned(self, launcher_path):
+    def launcher_exists_and_is_pinned(self, desktop_filename):
         """passthrough to in process method"""
-        return launcher_exists_and_is_pinned(launcher_path)
+        return launcher_exists_and_is_pinned(desktop_filename)
 
     def path_exists(self, path):
         """passthrough to os.path.exists"""

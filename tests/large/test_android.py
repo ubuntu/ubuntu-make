@@ -37,7 +37,7 @@ class AndroidStudioTests(LargeFrameworkTests):
     def setUp(self):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/android/android-studio")
-        self.launcher_path = "android-studio.desktop"
+        self.desktop_filename = "android-studio.desktop"
 
     @property
     def exec_path(self):
@@ -54,7 +54,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.wait_and_no_warn()
 
         # we have an installed launcher, added to the launcher
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.launcher_path))
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
 
         # launch it, send SIGTERM and check that it exits fine
@@ -77,7 +77,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
         self.accept_default_and_wait()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.launcher_path))
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.exec_path))
 
     def test_doesnt_accept_wrong_path(self):
@@ -91,7 +91,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.child.sendcontrol('C')
         self.wait_and_no_warn()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.launcher_path))
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.exec_path))
 
     def test_android_studio_reinstall(self):
@@ -109,7 +109,7 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.wait_and_no_warn()
 
             # we have an installed launcher, added to the launcher
-            self.assertTrue(self.launcher_exists_and_is_pinned(self.launcher_path))
+            self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
             self.assertTrue(self.path_exists(self.exec_path))
 
             # launch it, send SIGTERM and check that it exits fine
@@ -136,7 +136,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.launcher_path))
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.exec_path))
 
     def test_start_install_on_existing_dir(self):
@@ -151,7 +151,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.expect_and_no_warn("{} isn't an empty directory.*there\? \[.*\] ".format(self.installed_path))
         self.accept_default_and_wait()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.launcher_path))
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.exec_path))
 
     def test_is_default_framework(self):
