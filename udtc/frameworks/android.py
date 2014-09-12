@@ -26,7 +26,7 @@ import logging
 import os
 import re
 import udtc.frameworks.baseinstaller
-from udtc.tools import create_launcher, get_application_desktop_file
+from udtc.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +104,50 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
         if not super().is_installed:
             return False
         if not os.path.join(self.install_path, "bin", "studio.sh"):
+            logger.debug("{} binary isn't installed".format(self.name))
+            return False
+        return True
+
+
+class EclipseAdt(udtc.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        self.desktop_filename = "adt.desktop"
+        super().__init__(name="Eclipse ADT", description="Android Developer Tools (using eclipse)",
+                         category=category, only_on_archs=_supported_archs, expect_license=True,
+                         download_page="https://developer.android.com/sdk/index.html",
+                         require_md5=True,
+                         dir_to_decompress_in_tarball="adt-bundle-linux-*", desktop_file_name=self.desktop_filename)
+
+    def parse_license(self, line, license_txt, in_license):
+        """Parse ADT download page for license"""
+        return self.category.parse_license(line, license_txt, in_license)
+
+    def parse_download_link(self, line, in_download):
+        """Parse ADT download link, expect to find a md5sum and a url"""
+        if get_current_arch() == "i386":
+            tag = 'id="linux-bundle32"'
+        else:
+            tag = 'id="linux-bundle64"'
+        return self.category.parse_download_link(tag, line, in_download)
+
+    def create_launcher(self):
+        """Create the ADT launcher"""
+        # copy the adt icon to local folder (as the icon is in a .*version folder, not stable)
+        copy_icon(os.path.join(self.install_path,
+                               'eclipse/plugins/com.android.ide.eclipse.adt.package*/icons/adt48.png'), "adt.png")
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("ADT Eclipse"),
+                        icon_path="adt",
+                        exec='"{}" %f'.format(os.path.join(self.install_path, "eclipse", "eclipse")),
+                        comment=_("Android Developer Tools (using eclipse)"),
+                        categories="Development;IDE;"))
+
+    @property
+    def is_installed(self):
+        # check path and requirements
+        if not super().is_installed:
+            return False
+        if not os.path.join(self.install_path, "eclipse", "eclipse"):
             logger.debug("{} binary isn't installed".format(self.name))
             return False
         return True
