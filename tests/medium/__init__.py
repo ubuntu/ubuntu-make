@@ -113,6 +113,8 @@ class ContainerTests(LoggedTestCase):
 
     def path_exists(self, path):
         """Check if a path exists inside the container"""
+        # replace current user home dir with container one.
+        path = path.replace(os.environ['HOME'], "/home/{}".format(settings.DOCKER_USER))
         command = self.command_as_list([os.path.join(get_tools_helper_dir(), "path_exists"), path])
         return self._exec_command(command)
 
