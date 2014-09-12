@@ -34,7 +34,7 @@ import threading
 from ..tools import change_xdg_path, get_data_dir, LoggedTestCase
 from udtc import settings, tools
 from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
-    create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_icon_path, get_launcher_path, MainLoop
+    create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_icon_path, get_launcher_path, copy_icon
 from unittest.mock import patch
 
 
@@ -351,10 +351,16 @@ class TestToolsThreads(LoggedTestCase):
 class TestLauncherIcons(LoggedTestCase):
     """Test module for launcher icons handling"""
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.server_dir = os.path.join(get_data_dir(), "server-content")
+
     def setUp(self):
         super().setUp()
         self.local_dir = tempfile.mkdtemp()
         os.mkdir(os.path.join(self.local_dir, "applications"))
+        os.mkdir(os.path.join(self.local_dir, "icons"))
         change_xdg_path('XDG_DATA_HOME', self.local_dir)
         self.current_desktop = os.environ.get("XDG_CURRENT_DESKTOP")
         os.environ["XDG_CURRENT_DESKTOP"] = "Unity"
@@ -517,6 +523,40 @@ class TestLauncherIcons(LoggedTestCase):
                                                            "unity://running-apps"]
 
         self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
+
+    def test_can_copy_icon(self):
+        """Copy a basic icon"""
+        # we copy any file and treat it as an icon
+        copy_icon(os.path.join(self.server_dir, "simplefile"), "foo.png")
+
+        self.assertTrue(os.path.exists(get_icon_path("foo.png")))
+        self.assertEquals(open(os.path.join(self.server_dir, "simplefile")).read(),
+                          open(get_icon_path("foo.png")).read())
+
+    def test_can_update_icon(self):
+        """Update a basic icon with a new content"""
+        copy_icon(os.path.join(self.server_dir, "simplefile"), "foo.png")
+        copy_icon(os.path.join(self.server_dir, "biggerfile"), "foo.png")
+
+        self.assertTrue(os.path.exists(get_icon_path("foo.png")))
+        self.assertEquals(open(os.path.join(self.server_dir, "biggerfile")).read(),
+                          open(get_icon_path("foo.png")).read())
+
+    def test_can_copy_icon_with_glob(self):
+        """Copy an icon with glob pattern matching"""
+        # we copy any file and treat it as an icon
+        copy_icon(os.path.join(self.server_dir, "sim*file"), "foo.png")
+
+        self.assertTrue(os.path.exists(get_icon_path("foo.png")))
+        self.assertEquals(open(os.path.join(self.server_dir, "simplefile")).read(),
+                          open(get_icon_path("foo.png")).read())
+
+    def test_create_icon_without_xdg_dir(self):
+        """Save a new icon in an unexisting directory"""
+        shutil.rmtree(self.local_dir)
+        copy_icon(os.path.join(self.server_dir, "simplefile"), "foo.png")
+
+        self.assertTrue(os.path.exists(get_icon_path("foo.png")))
 
     def test_get_icon_path(self):
         """Get correct launcher path"""

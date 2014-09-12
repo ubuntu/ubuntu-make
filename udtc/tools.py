@@ -19,9 +19,11 @@
 
 from contextlib import suppress
 from gi.repository import GLib, Gio
+from glob import glob
 import logging
 import os
 import re
+import shutil
 import signal
 import subprocess
 import sys
@@ -232,6 +234,20 @@ def launcher_exists_and_is_pinned(desktop_filename):
     gsettings = Gio.Settings(schema_id="com.canonical.Unity.Launcher", path="/com/canonical/unity/launcher/")
     launcher_list = gsettings.get_strv("favorites")
     return "application://" + desktop_filename in launcher_list
+
+
+def copy_icon(source_icon_filepath, icon_filename):
+    """copy icon from source filepath to xdg destination as icon_filename
+
+    globs are accepted in the filepath"""
+    icon_path = get_icon_path(icon_filename)
+    os.makedirs(os.path.dirname(icon_path), exist_ok=True)
+    for file_path in glob(source_icon_filepath):
+        logger.debug("Copy icon from {} to {}".format(file_path, icon_path))
+        shutil.copy(file_path, icon_path)
+        break
+    else:
+        logger.warning("Didn't find any icon for the launcher.")
 
 
 def create_launcher(desktop_filename, content):
