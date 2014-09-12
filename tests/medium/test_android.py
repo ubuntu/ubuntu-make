@@ -47,7 +47,7 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
         android_studio_file_path = os.path.join(get_data_dir(), "server-content", "sdk", "installing", "studio.html")
         with swap_file_and_restore(android_studio_file_path) as content:
             with open(android_studio_file_path, "w") as newfile:
-                newfile.write(content.replace(settings.TEST_MD5_FAKE_DATA, "fakemd5sum"))
+                newfile.write(content.replace(settings.TEST_MD5_ANDROID_STUDIO_FAKE_DATA, "fakemd5sum"))
             self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UDTC)))
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
