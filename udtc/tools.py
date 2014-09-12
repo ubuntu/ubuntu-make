@@ -254,10 +254,10 @@ def create_launcher(desktop_filename, content):
     """Create a desktop file and an unity launcher icon"""
 
     # Create file in standard location
-    application_dir = os.path.join(xdg_data_home, "applications")
-    os.makedirs(application_dir, exist_ok=True)
-    logger.debug("Create launcher as {}".format(os.path.join(application_dir, desktop_filename)))
-    with open(os.path.join(application_dir, desktop_filename), "w") as f:
+    launcher_path = get_launcher_path(desktop_filename)
+    os.makedirs(os.path.dirname(launcher_path), exist_ok=True)
+    logger.debug("Create launcher as {}".format(launcher_path))
+    with open(launcher_path, "w") as f:
         f.write(content)
 
     if "com.canonical.Unity.Launcher" not in Gio.Settings.list_schemas():
