@@ -56,7 +56,7 @@ def _setup_logging(default_file='logging.yaml', env_key='LOG_CFG', level=_defaul
             with open(path, 'rt') as f:
                 config = yaml.load(f.read())
             logging.config.dictConfig(config)
-    logger.info("Logging level set to {}".format(logging.getLevelName(level)))
+    logger.info("Logging level set to {}".format(logging.getLevelName(logging.root.getEffectiveLevel())))
 
 
 def get_data_dir():

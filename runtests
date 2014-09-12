@@ -67,7 +67,7 @@ def set_logging_profile(log_config_file):
     with open(log_config_file, 'rt') as f:
         logging_config = yaml.load(f.read())
     logging.config.dictConfig(logging_config)
-    os.putenv("LOG_CFG", TESTING_LOG_CONFIG)
+    os.putenv("LOG_CFG", log_config_file)
     if log_config_file == TESTING_LOG_CONFIG:
         os.putenv("LOG_CFG", TESTING_SUBPROCESS_LOG_CONFIG)
 

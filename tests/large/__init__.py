@@ -76,6 +76,9 @@ class LargeFrameworkTests(LoggedTestCase):
     def assert_for_warn(self, content, expect_warn=False):
         """assert if there is any warn"""
         if not expect_warn:
+            # We need to remove the first expected message, which is "Logging level set to "
+            # (can be WARNING or ERROR)
+            content = content.replace("Logging level set to WARNING", "").replace("Logging level set to ERROR", "")
             self.assertNotIn("WARNING", content)
             self.assertNotIn("ERROR", content)
         else:
