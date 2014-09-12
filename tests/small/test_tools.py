@@ -396,7 +396,7 @@ class TestLauncherIcons(LoggedTestCase):
 
     @patch("udtc.tools.Gio.Settings")
     def test_can_install(self, SettingsMock):
-        """Install a basic launcher icon, default case with unity://running"""
+        """Install a basic launcher, default case with unity://running"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
         SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running-apps"]
         create_launcher("foo.desktop", self.get_generic_desktop_content())
@@ -408,6 +408,29 @@ class TestLauncherIcons(LoggedTestCase):
                                                                             "unity://running-apps"])
         self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
         self.assertEquals(open(get_launcher_path("foo.desktop")).read(), self.get_generic_desktop_content())
+
+    @patch("udtc.tools.Gio.Settings")
+    def test_can_update_launcher(self, SettingsMock):
+        """Update a launcher file"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running-apps"]
+        create_launcher("foo.desktop", self.get_generic_desktop_content())
+        new_content = dedent("""\
+               [Desktop Entry]
+               Version=1.0
+               Type=Application
+               Name=Android Studio 2
+               Icon=/home/didrocks/tools/android-studio/bin/idea2.png
+               Exec="/home/didrocks/tools/android-studio/bin/studio2.sh" %f
+               Comment=Develop with pleasure!
+               Categories=Development;IDE;
+               Terminal=false
+               StartupWMClass=jetbrains-android-studio
+               """)
+        create_launcher("foo.desktop", new_content)
+
+        self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
+        self.assertEquals(open(get_launcher_path("foo.desktop")).read(), new_content)
 
     @patch("udtc.tools.Gio.Settings")
     def test_can_install_without_unity_running(self, SettingsMock):
