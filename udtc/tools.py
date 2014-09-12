@@ -240,6 +240,7 @@ def create_launcher(desktop_filename, content):
     # Create file in standard location
     application_dir = os.path.join(xdg_data_home, "applications")
     os.makedirs(application_dir, exist_ok=True)
+    logger.debug("Create launcher as {}".format(os.path.join(application_dir, desktop_filename)))
     with open(os.path.join(application_dir, desktop_filename), "w") as f:
         f.write(content)
 

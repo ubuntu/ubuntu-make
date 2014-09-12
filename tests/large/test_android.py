@@ -77,7 +77,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
         self.accept_default_and_wait()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned("android-studio.desktop"))
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.launcher_path))
         self.assertFalse(self.path_exists(self.exec_path))
 
     def test_doesnt_accept_wrong_path(self):
