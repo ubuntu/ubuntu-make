@@ -37,21 +37,17 @@ _default_log_level = logging.WARNING
 _datadir = None
 
 
-def _setup_logging(default_file='logging.yaml', env_key='LOG_CFG', level=_default_log_level):
+def _setup_logging(env_key='LOG_CFG', level=_default_log_level):
     """Setup logging configuration
 
     Order of preference:
     - manually define level
     - env_key env variable if set (logging config file)
-    - default_file path if present (logging config file)
     - fallback to _default_log_level
     """
-    path = default_file
-    value = os.getenv(env_key, None)
+    path = os.getenv(env_key, '')
     logging.basicConfig(level=level, format="%(levelname)s: %(message)s")
     if level == _default_log_level:
-        if value:
-            path = value
         if os.path.exists(path):
             with open(path, 'rt') as f:
                 config = yaml.load(f.read())
