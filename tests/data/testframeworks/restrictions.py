@@ -36,7 +36,7 @@ class FrameworkA(udtc.frameworks.BaseFramework):
                          category=category, only_on_archs=["foo", "baz"])
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()
 
 
 class FrameworkB(udtc.frameworks.BaseFramework):
@@ -46,7 +46,7 @@ class FrameworkB(udtc.frameworks.BaseFramework):
                          category=category, only_ubuntu_version=["9.10", "10.04"])
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()
 
 
 class FrameworkC(udtc.frameworks.BaseFramework):
@@ -57,4 +57,4 @@ class FrameworkC(udtc.frameworks.BaseFramework):
                          only_ubuntu_version=["9.10", "10.04", "10.10.10"])
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()

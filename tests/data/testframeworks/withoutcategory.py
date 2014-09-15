@@ -30,7 +30,7 @@ class FrameworkFreeA(udtc.frameworks.BaseFramework):
                          category=category, install_path_dir="custom/frameworka")
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()
 
 
 class FrameworkFreeB(udtc.frameworks.BaseFramework):
@@ -40,4 +40,4 @@ class FrameworkFreeB(udtc.frameworks.BaseFramework):
                          category=category)
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()

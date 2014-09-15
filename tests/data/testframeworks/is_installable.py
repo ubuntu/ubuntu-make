@@ -36,7 +36,7 @@ class FrameworkA(udtc.frameworks.BaseFramework):
                          category=category)
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()
 
     @property
     def is_installable(self):
@@ -52,7 +52,7 @@ class FrameworkB(udtc.frameworks.BaseFramework):
                          only_ubuntu_version=["versionwhichdontexist"])
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()
 
     @property
     def is_installable(self):
@@ -68,7 +68,7 @@ class FrameworkC(udtc.frameworks.BaseFramework):
                          category=category)
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()
 
     @property
     def is_installable(self):

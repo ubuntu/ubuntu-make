@@ -77,7 +77,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
 
     def setup(self, arg_install_path=None):
         self.arg_install_path = arg_install_path
-        super().setup(arg_install_path)
+        super().setup()
 
         # first step, check if installed
         if self.is_installed:

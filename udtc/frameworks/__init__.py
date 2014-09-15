@@ -216,7 +216,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         return self.name.lower().replace('/', '-').replace(' ', '-')
 
     @abc.abstractmethod
-    def setup(self, install_path=None):
+    def setup(self):
         """Method call to setup the Framework"""
         if not self.is_installable:
             logger.error("You can't install that framework on that machine")

@@ -36,7 +36,7 @@ class FrameworkA(udtc.frameworks.BaseFramework):
                          category=category)
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()
 
     @property
     def is_installed(self):
@@ -50,7 +50,7 @@ class FrameworkB(udtc.frameworks.BaseFramework):
                          category=category)
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()
 
     @property
     def is_installed(self):
