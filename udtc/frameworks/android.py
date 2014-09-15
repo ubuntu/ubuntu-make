@@ -111,12 +111,12 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
 class EclipseAdt(udtc.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
-        self.desktop_filename = "adt.desktop"
         super().__init__(name="Eclipse ADT", description="Android Developer Tools (using eclipse)",
                          category=category, only_on_archs=_supported_archs, expect_license=True,
                          download_page="https://developer.android.com/sdk/index.html",
                          require_md5=True,
-                         dir_to_decompress_in_tarball="adt-bundle-linux-*", desktop_file_name=self.desktop_filename)
+                         dir_to_decompress_in_tarball="adt-bundle-linux-*", desktop_filename="adt.desktop",
+                         icon_filename="adt.png")
 
     def parse_license(self, line, license_txt, in_license):
         """Parse ADT download page for license"""
@@ -134,9 +134,10 @@ class EclipseAdt(udtc.frameworks.baseinstaller.BaseInstaller):
         """Create the ADT launcher"""
         # copy the adt icon to local folder (as the icon is in a .*version folder, not stable)
         copy_icon(os.path.join(self.install_path,
-                               'eclipse/plugins/com.android.ide.eclipse.adt.package*/icons/adt48.png'), "adt.png")
+                               'eclipse/plugins/com.android.ide.eclipse.adt.package*/icons/adt48.png'),
+                  self.icon_filename)
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("ADT Eclipse"),
-                        icon_path="adt",
+                        icon_path=os.path.splitext(self.icon_filename)[0],
                         exec='"{}" %f'.format(os.path.join(self.install_path, "eclipse", "eclipse")),
                         comment=_("Android Developer Tools (using eclipse)"),
                         categories="Development;IDE;"))
