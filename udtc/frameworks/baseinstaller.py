@@ -62,7 +62,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         super().__init__(*args, **kwargs)
 
         self._install_done = False
-        self._paths_to_clean = []
+        self._paths_to_clean = set()
         self._arg_install_path = None
         self.download_requests = []
 
@@ -88,7 +88,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
 
     def reinstall(self):
         logger.debug("Mark previous installation path for cleaning.")
-        self._paths_to_clean.append(self.install_path)  # remove previous installation path
+        self._paths_to_clean.add(self.install_path)  # remove previous installation path
         self.confirm_path(self.arg_install_path)
 
     def confirm_path(self, path_dir=""):
@@ -117,7 +117,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
 
     def set_installdir_to_clean(self):
         logger.debug("Mark non empty new installation path for cleaning.")
-        self._paths_to_clean.append(self.install_path)
+        self._paths_to_clean.add(self.install_path)
         self.download_provider_page()
 
     def download_provider_page(self):
