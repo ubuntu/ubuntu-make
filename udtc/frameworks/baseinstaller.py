@@ -62,7 +62,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         super().__init__(*args, **kwargs)
 
         self._install_done = False
-        self._reinstall = False
+        self._paths_to_clean = []
         self._arg_install_path = None
         self.download_requests = []
 
@@ -87,7 +87,8 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
             self.confirm_path(arg_install_path)
 
     def reinstall(self):
-        self._reinstall = True
+        logger.debug("Mark previous installation path for cleaning.")
+        self._paths_to_clean.append(self.install_path)  # remove previous installation path
         self.confirm_path(self.arg_install_path)
 
     def confirm_path(self, path_dir=""):
@@ -101,29 +102,25 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         logger.debug("Installation path provided. Checking if exists.")
         with suppress(FileNotFoundError):
             if os.listdir(path_dir):
-                if self._reinstall:
-                    self.set_dir_to_clean()
-                else:
+                # we already told we were ok to overwrite as it was the previous install path
+                if path_dir not in self._paths_to_clean:
                     if path_dir == "/":
                         logger.error("This doesn't seem wise. We won't let you shoot in your feet.")
                         self.confirm_path()
                         return
+                    self.install_path = path_dir  # we don't set it before to not repropose / as installation path
                     UI.display(YesNo("{} isn't an empty directory, do you want to remove its content and install "
-                                     "there?".format(path_dir), self.set_dir_to_clean, UI.return_main_screen))
-                self.install_path = path_dir
-                return
+                                     "there?".format(path_dir), self.set_installdir_to_clean, UI.return_main_screen))
+                    return
         self.install_path = path_dir
         self.download_provider_page()
 
-    def set_dir_to_clean(self):
-        logger.debug("Mark existing installation path for cleaning.")
-        self._reinstall = True
+    def set_installdir_to_clean(self):
+        logger.debug("Mark non empty new installation path for cleaning.")
+        self._paths_to_clean.append(self.install_path)
         self.download_provider_page()
 
     def download_provider_page(self):
-        # Mark nown known install place for later eventual reinstallation
-        self.mark_in_config()
-
         logger.debug("Download application provider page")
         DownloadCenter([(self.download_page, None)], self.get_metadata_and_check_license, download=False)
 
@@ -297,9 +294,9 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
     def decompress_and_install(self, fd):
         UI.display(DisplayMessage("Installing {}".format(self.name)))
         # empty destination directory if reinstall
-        if self._reinstall:
+        for dir_to_remove in self._paths_to_clean:
             with suppress(FileNotFoundError):
-                shutil.rmtree(self.install_path)
+                shutil.rmtree(dir_to_remove)
 
         Decompressor({fd: Decompressor.DecompressOrder(dir=self.dir_to_decompress_in_tarball, dest=self.install_path)},
                      self.decompress_and_install_done)
@@ -325,6 +322,9 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         # install desktop file
         if self.desktop_filename:
             self.create_launcher()
+
+        # Mark as installation done in configuration
+        self.mark_in_config()
 
         UI.delayed_display(DisplayMessage("Installation done"))
         UI.return_main_screen()

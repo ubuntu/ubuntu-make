@@ -232,8 +232,6 @@ class BaseFramework(metaclass=abc.ABCMeta):
         # be a normal, kind user
         switch_to_current_user()
 
-        if install_path:
-            self.install_path = install_path
 
     def mark_in_config(self):
         """Mark the installation as installed in the config file"""
