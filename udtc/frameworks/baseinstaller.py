@@ -53,9 +53,10 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         self.download_page = kwargs["download_page"]
         self.require_md5 = kwargs.get("require_md5", False)
         self.dir_to_decompress_in_tarball = kwargs.get("dir_to_decompress_in_tarball", None)
-        self.desktop_file_name = kwargs.get("desktop_file_name", None)
+        self.desktop_filename = kwargs.get("desktop_filename", None)
+        self.icon_filename = kwargs.get("icon_filename", None)
         for extra_arg in ["expect_license", "download_page", "require_md5", "dir_to_decompress_in_tarball",
-                          "desktop_file_name"]:
+                          "desktop_filename", "icon_filename"]:
             with suppress(KeyError):
                 kwargs.pop(extra_arg)
         super().__init__(*args, **kwargs)
@@ -70,8 +71,8 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         # check path and requirements
         if not super().is_installed:
             return False
-        if self.desktop_file_name:
-            return launcher_exists(self.desktop_file_name)
+        if self.desktop_filename:
+            return launcher_exists(self.desktop_filename)
         return True
 
     def setup(self, arg_install_path=None):
@@ -322,7 +323,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
             return
 
         # install desktop file
-        if self.desktop_file_name:
+        if self.desktop_filename:
             self.create_launcher()
 
         UI.delayed_display(DisplayMessage("Installation done"))
