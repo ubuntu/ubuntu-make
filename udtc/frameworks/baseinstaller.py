@@ -54,8 +54,9 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         self.require_md5 = kwargs.get("require_md5", False)
         self.dir_to_decompress_in_tarball = kwargs.get("dir_to_decompress_in_tarball", None)
         self.desktop_filename = kwargs.get("desktop_filename", None)
+        self.icon_filename = kwargs.get("icon_filename", None)
         for extra_arg in ["expect_license", "download_page", "require_md5", "dir_to_decompress_in_tarball",
-                          "desktop_filename"]:
+                          "desktop_filename", "icon_filename"]:
             with suppress(KeyError):
                 kwargs.pop(extra_arg)
         super().__init__(*args, **kwargs)
