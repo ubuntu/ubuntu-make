@@ -241,6 +241,12 @@ class BaseFramework(metaclass=abc.ABCMeta):
               .setdefault(self.prog_name, {})["path"] = self.install_path
         ConfigHandler().config = config
 
+    def remove_from_config(self):
+        """Remove current framework from config"""
+        config = ConfigHandler().config
+        del(config["frameworks"][self.category.prog_name][self.prog_name])
+        ConfigHandler().config = config
+
     @property
     def is_installed(self):
         """Method call to know if the framework is installed"""

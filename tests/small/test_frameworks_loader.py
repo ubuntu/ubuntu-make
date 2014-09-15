@@ -415,6 +415,37 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
                                   'framework-b': {'path': '/home/foo/bar'}
                               }}})
 
+    def test_call_remove_from_config(self):
+        """Calling remove_from_config remove a framework from the config"""
+        ConfigHandler().config = {'frameworks': {
+            'category-a': {
+                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+            }}}
+        self.categoryA.frameworks["framework-b"].remove_from_config()
+
+        self.assertEquals(ConfigHandler().config, {'frameworks': {'category-a': {}}})
+
+    def test_call_remove_from_config_keep_other(self):
+        """Calling remove_from_config remove a framework from the config but keep others"""
+        ConfigHandler().config = {'frameworks': {
+            'category-a': {
+                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')},
+                'framework-c': {'path': os.path.expanduser('~/tools/category-a/framework-c')}
+            },
+            'category-b': {
+                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+            }}}
+        self.categoryA.frameworks["framework-b"].remove_from_config()
+
+        self.assertEquals(ConfigHandler().config,
+                          {'frameworks': {
+                              'category-a': {
+                                  'framework-c': {'path': os.path.expanduser('~/tools/category-a/framework-c')}
+                              },
+                              'category-b': {
+                                  'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+                              }}})
+
 
 class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity. This class doesn't load frameworks before the tests does"""
