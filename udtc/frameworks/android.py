@@ -93,7 +93,7 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=_supported_archs, expect_license=True,
                          download_page="https://developer.android.com/sdk/installing/studio.html",
                          require_md5=True,
-                         dir_to_decompress_in_tarball="android-studio", desktop_file_name=self.desktop_filename)
+                         dir_to_decompress_in_tarball="android-studio", desktop_filename=self.desktop_filename)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
