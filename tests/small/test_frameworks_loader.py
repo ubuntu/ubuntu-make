@@ -274,6 +274,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args = Mock()
         args.category = "category-a"
         args.framework = "framework-b"
+        args.remove = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "setup")\
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
@@ -286,6 +287,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args = Mock()
         args.category = "category-a"
         args.framework = None
+        args.remove = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "setup")\
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
@@ -298,6 +300,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args = Mock()
         args.category = "category-b"
         args.framework = None
+        args.remove = False
         self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
         self.expect_warn_error = True
 
@@ -918,6 +921,9 @@ class TestCustomFrameworkCantLoad(BaseFrameworkLoader):
 
         def setup(self):
             super().setup()
+
+        def remove(self):
+            super().remove()
 
         @property
         def is_installable(self):

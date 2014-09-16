@@ -38,6 +38,9 @@ class FrameworkA(udtc.frameworks.BaseFramework):
     def setup(self, install_path=None):
         super().setup()
 
+    def remove(self):
+        super().remove()
+
     @property
     def is_installable(self):
         return super().is_installable
@@ -54,6 +57,9 @@ class FrameworkB(udtc.frameworks.BaseFramework):
     def setup(self, install_path=None):
         super().setup()
 
+    def remove(self):
+        super().remove()
+
     @property
     def is_installable(self):
         """overridden to say True"""
@@ -69,6 +75,9 @@ class FrameworkC(udtc.frameworks.BaseFramework):
 
     def setup(self, install_path=None):
         super().setup()
+
+    def remove(self):
+        super().remove()
 
     @property
     def is_installable(self):

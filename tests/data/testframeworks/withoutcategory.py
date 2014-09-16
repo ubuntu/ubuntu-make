@@ -32,6 +32,9 @@ class FrameworkFreeA(udtc.frameworks.BaseFramework):
     def setup(self, install_path=None):
         super().setup()
 
+    def remove(self):
+        super().remove()
+
 
 class FrameworkFreeB(udtc.frameworks.BaseFramework):
 
@@ -41,3 +44,6 @@ class FrameworkFreeB(udtc.frameworks.BaseFramework):
 
     def setup(self, install_path=None):
         super().setup()
+
+    def remove(self):
+        super().remove()

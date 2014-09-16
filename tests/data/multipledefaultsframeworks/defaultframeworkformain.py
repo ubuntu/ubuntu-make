@@ -31,3 +31,6 @@ class FrameworkA(udtc.frameworks.BaseFramework):
 
     def setup(self, install_path=None):
         super().setup()
+
+    def remove(self):
+        super().remove()

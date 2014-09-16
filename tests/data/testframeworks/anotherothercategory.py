@@ -38,6 +38,9 @@ class FrameworkA(udtc.frameworks.BaseFramework):
     def setup(self, install_path=None):
         super().setup()
 
+    def remove(self):
+        super().remove()
+
     @property
     def is_installed(self):
         return False
@@ -51,6 +54,9 @@ class FrameworkB(udtc.frameworks.BaseFramework):
 
     def setup(self, install_path=None):
         super().setup()
+
+    def remove(self):
+        super().remove()
 
     @property
     def is_installed(self):
