@@ -295,12 +295,49 @@ class TestFrameworkLoader(BaseFrameworkLoader):
             self.assertTrue(setup_call.called)
             self.assertEquals(setup_call.call_args, call(args.destdir))
 
+    def test_parse_category_and_framework_run_correct_remove_framework(self):
+        """Parsing category and frameworkwwith --remove run remove on right category and framework"""
+        args = Mock()
+        args.category = "category-a"
+        args.framework = "framework-b"
+        args.remove = True
+        args.destdir = None
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "remove")\
+                as remove_call:
+            self.CategoryHandler.categories[args.category].run_for(args)
+
+            self.assertTrue(remove_call.called)
+            remove_call.assert_called_with()
+
+    def test_parse_no_framework_run_default_remove_for_category(self):
+        """Parsing category with --remove will run default framework removal action"""
+        args = Mock()
+        args.category = "category-a"
+        args.framework = None
+        args.remove = True
+        args.destdir = None
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "remove")\
+                as remove_call:
+            self.CategoryHandler.categories[args.category].run_for(args)
+
+            self.assertTrue(remove_call.called)
+            remove_call.assert_called_with()
+
     def test_parse_no_framework_with_no_default_returns_errors(self):
         """Parsing a category with no default returns an error when calling run"""
         args = Mock()
         args.category = "category-b"
         args.framework = None
         args.remove = False
+        self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
+        self.expect_warn_error = True
+
+    def test_parse_category_and_framework_cannot_run_remove_with_destdir_framework(self):
+        """Parsing category and framework with remove and destdir raises an error"""
+        args = Mock()
+        args.category = "category-a"
+        args.framework = "framework-b"
+        args.remove = True
         self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
         self.expect_warn_error = True
 
