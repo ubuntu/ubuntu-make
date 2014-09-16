@@ -54,9 +54,10 @@ class TestDownloadCenter(LoggedTestCase):
         for fd in self.fd_to_close:
             fd.close()
 
-    def build_server_address(self, path):
+    def build_server_address(self, path, localhost=False):
         """build server address to path to get requested"""
-        return "{}/{}".format(self.server.get_address(), path)
+        return "{}/{}".format(self.server.get_address(localhost=localhost),
+                              path)
 
     def wait_for_callback(self, mock_function_to_be_called):
         """wait for the callback to be called until a timeout.
@@ -77,6 +78,24 @@ class TestDownloadCenter(LoggedTestCase):
         """we deliver one successful download"""
         filename = "simplefile"
         request = self.build_server_address(filename)
+        DownloadCenter([request], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result.fd.read())
+            self.assertTrue('.' not in result.fd.name, result.fd.name)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.error)
+
+    def test_redirect_download(self):
+        """we deliver one successful download after being redirected"""
+        filename = "simplefile"
+        # We add a suffix to make the server redirect us.
+        request = self.build_server_address(filename + "-redirect")
         DownloadCenter([request], self.callback)
         self.wait_for_callback(self.callback)
 
@@ -195,7 +214,8 @@ class TestDownloadCenter(LoggedTestCase):
         # no download means the file isn't in the result
         callback_args, callback_kwargs = self.callback.call_args
         result = callback_args[0][self.build_server_address("does_not_exist")]
-        self.assertIn("Error 404", result.error)
+        self.assertIn("404", result.error)
+        self.assertIn("File not found", result.error)
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.fd)
         self.expect_warn_error = True
@@ -252,13 +272,13 @@ class TestDownloadCenter(LoggedTestCase):
         self.wait_for_callback(self.callback)
 
         result = self.callback.call_args[0][0][request]
-        self.assertIn("Protocol not supported", result.error)
+        self.assertIn("No connection adapters were found", result.error)
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.fd)
         self.expect_warn_error = True
 
     def test_download_with_wrong_md5(self):
-        """we raises an error if we don't have the correct md5sum"""
+        """we raise an error if we don't have the correct md5sum"""
         filename = "simplefile"
         request = self.build_server_address(filename)
         DownloadCenter([(request, 'AAAAA')], self.callback)
@@ -301,7 +321,7 @@ class TestDownloadCenterSecure(LoggedTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.server_dir = os.path.join(get_data_dir(), "server-content")
-        cls.server = LocalHttp(cls.server_dir, use_ssl="local_cert.pem")
+        cls.server = LocalHttp(cls.server_dir, use_ssl="localhost.pem")
 
     @classmethod
     def tearDownClass(cls):
@@ -318,25 +338,50 @@ class TestDownloadCenterSecure(LoggedTestCase):
         for fd in self.fd_to_close:
             fd.close()
 
-    @patch('udtc.network.download_center.ssl')
-    def test_download(self, mockssl):
+    def test_download(self):
         """we deliver one successful download under ssl with known cert"""
         filename = "simplefile"
-        request = TestDownloadCenter.build_server_address(self, filename)
+        # The host name is important here, since we verify it, so request
+        # the localhost address.
+        request = TestDownloadCenter.build_server_address(self, filename, True)
         # prepare the cert and set it as the trusted system context
-        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
-        context.verify_mode = ssl.CERT_REQUIRED
-        mockssl.create_default_context.return_value = context.load_verify_locations(os.path.join(get_data_dir(),
-                                                                                                 'local_cert.pem'))
-        DownloadCenter([request], self.callback)
-        TestDownloadCenter.wait_for_callback(self, self.callback)
+        os.environ['REQUESTS_CA_BUNDLE'] = 'tests/data/localhost.pem'
+        try:
+            DownloadCenter([request], self.callback)
+            TestDownloadCenter.wait_for_callback(self, self.callback)
 
-        result = self.callback.call_args[0][0][request]
-        self.assertTrue(self.callback.called)
-        self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
-            self.assertEqual(file_on_disk.read(),
-                             result.fd.read())
+            result = self.callback.call_args[0][0][request]
+            self.assertTrue(self.callback.called)
+            self.assertEqual(self.callback.call_count, 1)
+            with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+                self.assertEqual(file_on_disk.read(),
+                                 result.fd.read())
+        finally:
+            del os.environ['REQUESTS_CA_BUNDLE']
+
+    def test_redirect_download(self):
+        """we deliver one successful download after being redirected"""
+        filename = "simplefile"
+        # We add a suffix to make the server redirect us.
+        request = TestDownloadCenter.build_server_address(self,
+                                                          filename + "-redirect",
+                                                          localhost=True)
+        os.environ['REQUESTS_CA_BUNDLE'] = 'tests/data/localhost.pem'
+        try:
+            DownloadCenter([request], self.callback)
+            TestDownloadCenter.wait_for_callback(self, self.callback)
+
+            result = self.callback.call_args[0][0][request]
+            self.assertTrue(self.callback.called)
+            self.assertEqual(self.callback.call_count, 1)
+            with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+                self.assertEqual(file_on_disk.read(),
+                                 result.fd.read())
+                self.assertTrue('.' not in result.fd.name, result.fd.name)
+            self.assertIsNone(result.buffer)
+            self.assertIsNone(result.error)
+        finally:
+            del os.environ['REQUESTS_CA_BUNDLE']
 
     def test_with_invalid_certificate(self):
         """we error on invalid ssl certificate"""
