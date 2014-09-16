@@ -22,6 +22,7 @@
 
 import abc
 from contextlib import suppress
+from gettext import gettext as _
 from importlib import import_module, reload
 import inspect
 import logging
@@ -232,6 +233,13 @@ class BaseFramework(metaclass=abc.ABCMeta):
         # be a normal, kind user
         switch_to_current_user()
 
+    @abc.abstractmethod
+    def remove(self):
+        """Method call to remove the current framework"""
+        if not self.is_installed:
+            logger.error("You can't remove a framework that isn't installed")
+            UI.return_main_screen()
+            return
 
     def mark_in_config(self):
         """Mark the installation as installed in the config file"""
@@ -261,12 +269,21 @@ class BaseFramework(metaclass=abc.ABCMeta):
         """Install framework parser"""
         this_framework_parser = parser.add_parser(self.prog_name, help=self.description)
         this_framework_parser.add_argument('destdir', nargs='?')
+        this_framework_parser.add_argument('-r', '--remove', action="store_true",
+                                           help=_("Remove framework if installed"))
         return this_framework_parser
 
     def run_for(self, args):
         """Running commands from args namespace"""
         logger.debug("Call run_for on {}".format(self.name))
-        self.setup(args.destdir)
+        if args.remove:
+            if args.destdir:
+                message = "You can't specify a destination dir while removing a framework"
+                logger.error(message)
+                raise BaseException(message)
+            self.remove()
+        else:
+            self.setup(args.destdir)
 
 
 class MainCategory(BaseCategory):

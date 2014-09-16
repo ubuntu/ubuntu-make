@@ -32,7 +32,7 @@ from udtc.interactions import InputText, YesNo, LicenseAgreement, DisplayMessage
 from udtc.network.download_center import DownloadCenter
 from udtc.network.requirements_handler import RequirementsHandler
 from udtc.ui import UI
-from udtc.tools import MainLoop, strip_tags, launcher_exists
+from udtc.tools import MainLoop, strip_tags, launcher_exists, get_icon_path, get_launcher_path
 
 logger = logging.getLogger(__name__)
 
@@ -90,6 +90,28 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         logger.debug("Mark previous installation path for cleaning.")
         self._paths_to_clean.add(self.install_path)  # remove previous installation path
         self.confirm_path(self.arg_install_path)
+
+    def remove(self):
+        """Remove current framework if installed
+
+        Not that we only remove desktop file, launcher icon and dir content, we do not remove
+        packages as they might be in used for other framework"""
+        # check if it's installed and so on.
+        super().remove()
+
+        UI.display(DisplayMessage("Removing {}".format(self.name)))
+        if self.desktop_filename:
+            with suppress(FileNotFoundError):
+                os.remove(get_launcher_path(self.desktop_filename))
+        if self.icon_filename:
+            with suppress(FileNotFoundError):
+                os.remove(get_icon_path(self.icon_filename))
+        with suppress(FileNotFoundError):
+            shutil.rmtree(self.install_path)
+        self.remove_from_config()
+
+        UI.delayed_display(DisplayMessage("Suppression done"))
+        UI.return_main_screen()
 
     def confirm_path(self, path_dir=""):
         """Confirm path dir"""

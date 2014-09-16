@@ -167,3 +167,40 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} android /tmp/foo'.format(UDTC)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
+
+    def test_removal(self):
+        """Remove android studio with default path"""
+        self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UDTC)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("\[.*\] ")
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.installed_path))
+
+        # now, remove it
+        self.child = pexpect.spawnu(self.command('{} android android-studio --remove'.format(UDTC)))
+        self.wait_and_no_warn()
+
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.path_exists(self.installed_path))
+
+    def test_removal_non_default_path(self):
+        """Remove android studio with default path"""
+        self.installed_path = "/tmp/foo"
+        self.child = pexpect.spawnu(self.command('{} android android-studio {}'.format(UDTC, self.installed_path)))
+        self.expect_and_no_warn("\[.*\] ")
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.installed_path))
+
+        # now, remove it
+        self.child = pexpect.spawnu(self.command('{} android android-studio --remove'.format(UDTC)))
+        self.wait_and_no_warn()
+
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.path_exists(self.installed_path))
