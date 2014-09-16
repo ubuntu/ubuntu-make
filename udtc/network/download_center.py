@@ -68,28 +68,28 @@ class DownloadCenter:
 
         self._download_progress = {}
 
-        executor = futures.ThreadPoolExecutor(max_workers=3)
-        for url_request in self._urls:
-            url, md5sum = (url_request, None)
-            # grab the md5sum if any
-            with suppress(ValueError):
-                (url, md5sum) = url_request
-            # switch between inline memory and temp file
-            if download:
-                # Named because shutils and tarfile library needs a .name property
-                # http://bugs.python.org/issue21044
-                # also, ensure we keep the same suffix
-                path, ext = os.path.splitext(url)
-                dest = tempfile.NamedTemporaryFile(suffix=ext)
-                logger.info("Start downloading {} as a temporary file".format(url))
-            else:
-                dest = BytesIO()
-                logger.info("Start downloading {} in memory".format(url))
-            future = executor.submit(self._fetch, url, md5sum, dest)
-            future.tag_url = url
-            future.tag_download = download
-            future.tag_dest = dest
-            future.add_done_callback(self._one_done)
+        with futures.ThreadPoolExecutor(max_workers=3) as executor:
+            for url_request in self._urls:
+                url, md5sum = (url_request, None)
+                # grab the md5sum if any
+                with suppress(ValueError):
+                    (url, md5sum) = url_request
+                # switch between inline memory and temp file
+                if download:
+                    # Named because shutils and tarfile library needs a .name property
+                    # http://bugs.python.org/issue21044
+                    # also, ensure we keep the same suffix
+                    path, ext = os.path.splitext(url)
+                    dest = tempfile.NamedTemporaryFile(suffix=ext)
+                    logger.info("Start downloading {} as a temporary file".format(url))
+                else:
+                    dest = BytesIO()
+                    logger.info("Start downloading {} in memory".format(url))
+                future = executor.submit(self._fetch, url, md5sum, dest)
+                future.tag_url = url
+                future.tag_download = download
+                future.tag_dest = dest
+                future.add_done_callback(self._one_done)
 
     def _fetch(self, url, md5sum, dest):
         """Get an url content and close the connexion.
@@ -108,7 +108,7 @@ class DownloadCenter:
         # Requests support redirection out of the box.
         with closing(requests.get(url, stream=True)) as r:
             if r.status_code != 200:
-                raise(BaseException("Error {}: {}".format(r.status_code, r.reason)))
+                raise(BaseException("Can't download ({}): {}".format(r.status_code, r.reason)))
             content_size = int(r.headers.get('content-length', -1))
 
             # read in chunk and send report updates
