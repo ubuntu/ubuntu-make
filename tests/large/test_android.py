@@ -118,6 +118,65 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
             self.assertEquals(proc.wait(self.TIMEOUT_STOP), 0)
 
+    def test_android_studio_reinstall_other_path(self):
+        """Reinstall android studio on another path once installed should remove the first version"""
+        original_install_path = self.installed_path
+        for loop in ("install", "reinstall"):
+            if loop == "reinstall":
+                self.installed_path = "/tmp/foo"
+                self.child = pexpect.spawnu(self.command('{} android android-studio {}'.format(UDTC,
+                                                                                               self.installed_path)))
+                self.expect_and_no_warn("Android Studio is already installed.*\[.*\] ")
+                self.child.sendline("y")
+            else:
+                self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UDTC)))
+                self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+                self.child.sendline("")
+            self.expect_and_no_warn("\[.*\] ")
+            self.child.sendline("a")
+            self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+            self.wait_and_no_warn()
+
+            # we have an installed launcher, added to the launcher
+            self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertTrue(self.path_exists(self.exec_path))
+
+        # ensure that version first isn't installed anymore
+        self.assertFalse(self.path_exists(original_install_path))
+
+    def test_android_studio_reinstall_other_non_empty_path(self):
+        """Reinstall android studio on another path (non empty) once installed should remove the first version"""
+        original_install_path = self.installed_path
+        if not self.in_container:
+            self.reinstalled_path = tempfile.mkdtemp()
+        else:  # we still give a path for the container
+            self.reinstalled_path = os.path.join(tempfile.gettempdir(), "tmptests")
+        self.create_file(os.path.join(self.reinstalled_path, "bar"), "foo")
+        for loop in ("install", "reinstall"):
+            if loop == "reinstall":
+                self.installed_path = self.reinstalled_path
+                self.child = pexpect.spawnu(self.command('{} android android-studio {}'.format(UDTC,
+                                                                                               self.installed_path)))
+                self.expect_and_no_warn("Android Studio is already installed.*\[.*\] ")
+                self.child.sendline("y")
+                self.expect_and_no_warn("{} isn't an empty directory.*there\? \[.*\] ".format(self.installed_path))
+                self.child.sendline("y")
+            else:
+                self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UDTC)))
+                self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+                self.child.sendline("")
+            self.expect_and_no_warn("\[.*\] ")
+            self.child.sendline("a")
+            self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+            self.wait_and_no_warn()
+
+            # we have an installed launcher, added to the launcher
+            self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertTrue(self.path_exists(self.exec_path))
+
+        # ensure that version first isn't installed anymore
+        self.assertFalse(self.path_exists(original_install_path))
+
     def test_custom_install_path(self):
         """We install android studio in a custom path"""
         # We skip the existing directory prompt
