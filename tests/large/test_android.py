@@ -99,6 +99,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         for loop in ("install", "reinstall"):
             self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UDTC)))
             if loop == "reinstall":
+                # we only have one question, not the one about existing dir.
                 self.expect_and_no_warn("Android Studio is already installed.*\[.*\] ")
                 self.child.sendline("y")
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
@@ -198,6 +199,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.exec_path))
 
+    # FIXME: should do a real install to check everything's fine
     def test_start_install_on_existing_dir(self):
         """We prompt if we try to install on an existing directory which isn't empty"""
         if not self.in_container:

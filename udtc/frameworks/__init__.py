@@ -230,7 +230,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
             cmd.extend(sys.argv)
             MainLoop().quit(subprocess.call(cmd))
 
-        # be a normal, kind user
+        # be a normal, kind user as we don't want normal files to be written as root
         switch_to_current_user()
 
     @abc.abstractmethod
