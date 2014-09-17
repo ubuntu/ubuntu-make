@@ -8,6 +8,7 @@ requests
 # test tools
 nose
 nose-cov
+nose-json
 pep8
 pexpect
 

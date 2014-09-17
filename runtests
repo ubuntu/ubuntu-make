@@ -120,9 +120,10 @@ if __name__ == '__main__':
     elif args.no_config:
         specified_config = True
 
-    ## output xunit if requested
+    ## output xunit and json if requested
     if args.publish:
         nose_args.append("--with-xunit")
+        nose_args.append("--with-json")
 
     ## check if we want to run those tests with the system code
     if args.system:
