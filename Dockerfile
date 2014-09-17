@@ -10,28 +10,25 @@ MAINTAINER	Didier Roche <didrocks@ubuntu.com>
 # Set the env variable DEBIAN_FRONTEND to noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update
-RUN apt-get install -y software-properties-common
-
-# Installing fuse package is trying to create a fuse device without success
-# due the container permissions. Remove postinst
-RUN apt-get -y install fuse  || :
-RUN rm -rf /var/lib/dpkg/info/fuse.postinst
-RUN apt-get -y install fuse
-
-# add didrocks ppa to ensure we have the correct fuse version (postinst)
-RUN add-apt-repository -y ppa:didrocks/docker-ppa-udtc
-RUN add-apt-repository -y ppa:fkrull/deadsnakes
-RUN apt-get update
-RUN apt-get dist-upgrade -y
-RUN apt-get install ubuntu-desktop -y
-
-# udtc requirements for virtualenv or creating the package
-RUN apt-get install python3.4 apt apt-utils libapt-pkg-dev gir1.2-glib-2.0 python3-gi python3-progressbar devscripts equivs dpkg-dev -y
-
 # remove proposed (but used in the base system, so needed if apt has an update and so on…)
+# and be up to date.
 RUN rm /etc/apt/sources.list.d/proposed.list
 RUN apt-get update
+RUN apt-get dist-upgrade -y
+
+# install add-apt-respository and tools to create build-deps
+RUN apt-get install -y software-properties-common devscripts equivs dpkg-dev
+
+# add didrocks ppa to ensure we have the correct fuse version (postinst)
+RUN add-apt-repository -y ppa:didrocks/ubuntu-developer-tools-center
+RUN apt-get update
+
+# install system udtc (from latest released version)
+#RUN apt-get install -y ubuntu-developer-tools-center
+
+# install udtc build-deps
+ADD debian/control /tmp/
+RUN mk-build-deps /tmp/control -i --tool 'apt-get --yes'
 
 # for running it as a daemon (and ssh requires the sshd directory)
 RUN apt-get install openssh-server -y
@@ -48,12 +45,6 @@ RUN echo user:user | chpasswd
 # add certificates
 ADD tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
-
-# install udtc deps
-RUN add-apt-repository -y ppa:didrocks/ubuntu-developer-tools-center
-RUN apt-get update
-ADD debian/control /tmp/
-RUN mk-build-deps /tmp/control -i --tool 'apt-get --yes'
 
 # finally remove all ppas and add local repository
 RUN rm /etc/apt/sources.list.d/*
