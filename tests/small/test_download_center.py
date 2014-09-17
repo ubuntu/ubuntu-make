@@ -20,9 +20,9 @@
 """Tests for the download center module using a local server"""
 
 import os
-import ssl
+from os.path import join, getsize
 from time import time
-from unittest.mock import Mock, call, patch
+from unittest.mock import Mock, call
 from ..tools import get_data_dir, CopyingMock, LoggedTestCase
 from ..tools.local_server import LocalHttp
 from udtc.network.download_center import DownloadCenter
@@ -36,7 +36,7 @@ class TestDownloadCenter(LoggedTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.server_dir = os.path.join(get_data_dir(), "server-content")
+        cls.server_dir = join(get_data_dir(), "server-content")
         cls.server = LocalHttp(cls.server_dir)
 
     @classmethod
@@ -84,7 +84,7 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
                              result.fd.read())
             self.assertTrue('.' not in result.fd.name, result.fd.name)
@@ -102,10 +102,9 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
                              result.fd.read())
-            self.assertTrue('.' not in result.fd.name, result.fd.name)
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.error)
 
@@ -119,7 +118,7 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+        with open(join(self.server_dir, filename), 'rb'):
             self.assertTrue(result.fd.name.endswith('.tgz'), result.fd.name)
 
     def test_download_with_md5(self):
@@ -132,7 +131,7 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
                              result.fd.read())
         self.assertIsNone(result.buffer)
@@ -141,7 +140,7 @@ class TestDownloadCenter(LoggedTestCase):
     def test_download_with_progress(self):
         """we deliver progress hook while downloading"""
         filename = "simplefile"
-        filesize = os.path.getsize(os.path.join(self.server_dir, filename))
+        filesize = getsize(join(self.server_dir, filename))
         report = CopyingMock()
         request = self.build_server_address(filename)
         DownloadCenter([request], self.callback, report=report)
@@ -155,7 +154,7 @@ class TestDownloadCenter(LoggedTestCase):
     def test_download_with_multiple_progress(self):
         """we deliver multiple progress hooks on bigger files"""
         filename = "biggerfile"
-        filesize = os.path.getsize(os.path.join(self.server_dir, filename))
+        filesize = getsize(join(self.server_dir, filename))
         report = CopyingMock()
         request = self.build_server_address(filename)
         dl_center = DownloadCenter([request], self.callback, report=report)
@@ -181,7 +180,7 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIn(self.build_server_address("simplefile"), map_result)
         # ensure each temp file corresponds to the source content
         for filename in ("biggerfile", "simplefile"):
-            with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+            with open(join(self.server_dir, filename), 'rb') as file_on_disk:
                 self.assertEqual(file_on_disk.read(),
                                  map_result[self.build_server_address(filename)].fd.read())
 
@@ -200,7 +199,7 @@ class TestDownloadCenter(LoggedTestCase):
         # ensure that last call is what we expect
         result_dict = {}
         for filename in ("biggerfile", "simplefile"):
-            file_size = os.path.getsize(os.path.join(self.server_dir, filename))
+            file_size = getsize(join(self.server_dir, filename))
             result_dict[self.build_server_address(filename)] = {'size': file_size,
                                                                 'current': file_size}
         self.assertEqual(report.call_args, call(result_dict))
@@ -258,7 +257,7 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
                              result.buffer.read())
         self.assertIsNone(result.fd)
@@ -272,7 +271,7 @@ class TestDownloadCenter(LoggedTestCase):
         self.wait_for_callback(self.callback)
 
         result = self.callback.call_args[0][0][request]
-        self.assertIn("No connection adapters were found", result.error)
+        self.assertIn("Protocol not supported", result.error)
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.fd)
         self.expect_warn_error = True
@@ -301,7 +300,7 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
                              result.fd.read())
         self.assertIsNone(result.buffer)
@@ -320,7 +319,7 @@ class TestDownloadCenterSecure(LoggedTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.server_dir = os.path.join(get_data_dir(), "server-content")
+        cls.server_dir = join(get_data_dir(), "server-content")
         cls.server = LocalHttp(cls.server_dir, use_ssl="localhost.pem")
 
     @classmethod
@@ -345,7 +344,7 @@ class TestDownloadCenterSecure(LoggedTestCase):
         # the localhost address.
         request = TestDownloadCenter.build_server_address(self, filename, True)
         # prepare the cert and set it as the trusted system context
-        os.environ['REQUESTS_CA_BUNDLE'] = 'tests/data/localhost.pem'
+        os.environ['REQUESTS_CA_BUNDLE'] = join(get_data_dir(), 'localhost.pem')
         try:
             DownloadCenter([request], self.callback)
             TestDownloadCenter.wait_for_callback(self, self.callback)
@@ -366,7 +365,7 @@ class TestDownloadCenterSecure(LoggedTestCase):
         request = TestDownloadCenter.build_server_address(self,
                                                           filename + "-redirect",
                                                           localhost=True)
-        os.environ['REQUESTS_CA_BUNDLE'] = 'tests/data/localhost.pem'
+        os.environ['REQUESTS_CA_BUNDLE'] = join(get_data_dir(), 'localhost.pem')
         try:
             DownloadCenter([request], self.callback)
             TestDownloadCenter.wait_for_callback(self, self.callback)
@@ -377,7 +376,6 @@ class TestDownloadCenterSecure(LoggedTestCase):
             with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
                 self.assertEqual(file_on_disk.read(),
                                  result.fd.read())
-                self.assertTrue('.' not in result.fd.name, result.fd.name)
             self.assertIsNone(result.buffer)
             self.assertIsNone(result.error)
         finally:
