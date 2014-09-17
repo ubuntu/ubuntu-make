@@ -63,10 +63,11 @@ class LocalHttp:
         logger.info("Serving locally from {} on {}".format(self.path, self.get_address()))
         self.httpd.serve_forever()
 
-    def get_address(self):
+    def get_address(self, localhost=False):
         """Get public address"""
+        server_name = 'localhost' if localhost else self.httpd.server_name
         return "http{}://{}:{}".format("s" if self.use_ssl else "",
-                                       self.httpd.server_name, self.port)
+                                       server_name, self.port)
 
     def stop(self):
         """Stop local server"""
@@ -114,6 +115,15 @@ class RequestHandler(SimpleHTTPRequestHandler):
         if trailing_slash:
             path += '/'
         return path
+
+    def do_GET(self):
+        """Override this to enable redirecting paths that end in -redirect."""
+        if self.path.endswith('-redirect'):
+            self.send_response(302)
+            self.send_header('Location', self.path[:-len('-redirect')])
+            self.end_headers()
+        else:
+            super().do_GET()
 
     def log_message(self, fmt, *args):
         """Log an arbitrary message.
