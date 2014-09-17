@@ -21,15 +21,14 @@
 
 from collections import namedtuple
 from concurrent import futures
-from contextlib import suppress
+from contextlib import suppress, closing
 import hashlib
-from http.client import HTTPSConnection, HTTPConnection
 from io import BytesIO
 import logging
 import os
-import ssl
 import tempfile
-from urllib.parse import urlparse
+
+import requests
 
 
 logger = logging.getLogger(__name__)
@@ -69,28 +68,28 @@ class DownloadCenter:
 
         self._download_progress = {}
 
-        executor = futures.ThreadPoolExecutor(max_workers=3)
-        for url_request in self._urls:
-            url, md5sum = (url_request, None)
-            # grab the md5sum if any
-            with suppress(ValueError):
-                (url, md5sum) = url_request
-            # switch between inline memory and temp file
-            if download:
-                # Named because shutils and tarfile library needs a .name property
-                # http://bugs.python.org/issue21044
-                # also, ensure we keep the same suffix
-                path, ext = os.path.splitext(url)
-                dest = tempfile.NamedTemporaryFile(suffix=ext)
-                logger.info("Start downloading {} as a temporary file".format(url))
-            else:
-                dest = BytesIO()
-                logger.info("Start downloading {} in memory".format(url))
-            future = executor.submit(self._fetch, url, md5sum, dest)
-            future.tag_url = url
-            future.tag_download = download
-            future.tag_dest = dest
-            future.add_done_callback(self._one_done)
+        with futures.ThreadPoolExecutor(max_workers=3) as executor:
+            for url_request in self._urls:
+                url, md5sum = (url_request, None)
+                # grab the md5sum if any
+                with suppress(ValueError):
+                    (url, md5sum) = url_request
+                # switch between inline memory and temp file
+                if download:
+                    # Named because shutils and tarfile library needs a .name property
+                    # http://bugs.python.org/issue21044
+                    # also, ensure we keep the same suffix
+                    path, ext = os.path.splitext(url)
+                    dest = tempfile.NamedTemporaryFile(suffix=ext)
+                    logger.info("Start downloading {} as a temporary file".format(url))
+                else:
+                    dest = BytesIO()
+                    logger.info("Start downloading {} in memory".format(url))
+                future = executor.submit(self._fetch, url, md5sum, dest)
+                future.tag_url = url
+                future.tag_download = download
+                future.tag_dest = dest
+                future.add_done_callback(self._one_done)
 
     def _fetch(self, url, md5sum, dest):
         """Get an url content and close the connexion.
@@ -106,39 +105,19 @@ class DownloadCenter:
             logger.debug("Deliver download update: {} of {}".format(self._download_progress, total_size))
             self._wired_report(self._download_progress)
 
-        # choose protocol
-        url_details = urlparse(url)
-        if url_details.scheme == 'http':
-            conn = HTTPConnection(url_details.hostname, url_details.port)
-        elif url_details.scheme == 'https':
-            context = ssl.create_default_context()
-            conn = HTTPSConnection(url_details.hostname, url_details.port, context=context)
-        else:
-            raise(BaseException("Protocol not supported: {}".format(url_details.scheme)))
+        # Requests support redirection out of the box.
+        with closing(requests.get(url, stream=True)) as r:
+            if r.status_code != 200:
+                raise(BaseException("Can't download ({}): {}".format(r.status_code, r.reason)))
+            content_size = int(r.headers.get('content-length', -1))
 
-        conn.request("GET", url_details.path)
-        resp = conn.getresponse()
-
-        # TODO: support redirection: 301 and 302
-        if resp.status != 200:
-            conn.close()
-            raise(BaseException("Error {}: {}".format(resp.status, resp.reason)))
-
-        try:
-            content_size = int(resp.headers["Content-Length"])
-        except TypeError:
-            content_size = -1
-        # read in chunk and send report updates
-        block_num = 0
-        _report(block_num, self.BLOCK_SIZE, content_size)
-        while True:
-            data = resp.read(self.BLOCK_SIZE)
-            if not data:
-                break
-            dest.write(data)
-            block_num += 1
+            # read in chunk and send report updates
+            block_num = 0
             _report(block_num, self.BLOCK_SIZE, content_size)
-        conn.close()
+            for data in r.iter_content(chunk_size=self.BLOCK_SIZE):
+                dest.write(data)
+                block_num += 1
+                _report(block_num, self.BLOCK_SIZE, content_size)
 
         if md5sum:
             logger.debug("Checking md5sum")
