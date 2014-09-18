@@ -933,12 +933,12 @@ class TestInvalidFrameworkLoader(BaseFrameworkLoader):
 class TestProductionFrameworkLoader(BaseFrameworkLoader):
     """Load production framework-and ensure there is no warning and no error"""
 
-    def test_load(self):
+    def test_load_android(self):
         """Can load production frameworks"""
         frameworks.load_frameworks()
         self.assertTrue(len(self.CategoryHandler.categories) > 0, str(self.CategoryHandler.categories))
         self.assertIsNotNone(self.CategoryHandler.main_category)
-        self.assertEquals(len(self.CategoryHandler.categories["android"].frameworks), 1,
+        self.assertEquals(len(self.CategoryHandler.categories["android"].frameworks), 2,
                           str(self.CategoryHandler.categories["android"].frameworks))
 
     def test_ignored_frameworks(self):
