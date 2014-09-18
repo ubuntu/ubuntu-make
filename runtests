@@ -123,7 +123,9 @@ if __name__ == '__main__':
     ## output xunit and json if requested
     if args.publish:
         nose_args.append("--with-xunit")
-        nose_args.append("--with-json")
+        # FIXME: disable nose-json for now, incompatible with coverage reporting when an exception is raised.
+        # we are going to switch to nose2 anyway.
+        #nose_args.append("--with-json")
 
     ## check if we want to run those tests with the system code
     if args.system:
