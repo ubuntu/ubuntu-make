@@ -274,6 +274,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args = Mock()
         args.category = "category-a"
         args.framework = "framework-b"
+        args.remove = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "setup")\
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
@@ -286,6 +287,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args = Mock()
         args.category = "category-a"
         args.framework = None
+        args.remove = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "setup")\
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
@@ -293,11 +295,49 @@ class TestFrameworkLoader(BaseFrameworkLoader):
             self.assertTrue(setup_call.called)
             self.assertEquals(setup_call.call_args, call(args.destdir))
 
+    def test_parse_category_and_framework_run_correct_remove_framework(self):
+        """Parsing category and frameworkwwith --remove run remove on right category and framework"""
+        args = Mock()
+        args.category = "category-a"
+        args.framework = "framework-b"
+        args.remove = True
+        args.destdir = None
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "remove")\
+                as remove_call:
+            self.CategoryHandler.categories[args.category].run_for(args)
+
+            self.assertTrue(remove_call.called)
+            remove_call.assert_called_with()
+
+    def test_parse_no_framework_run_default_remove_for_category(self):
+        """Parsing category with --remove will run default framework removal action"""
+        args = Mock()
+        args.category = "category-a"
+        args.framework = None
+        args.remove = True
+        args.destdir = None
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "remove")\
+                as remove_call:
+            self.CategoryHandler.categories[args.category].run_for(args)
+
+            self.assertTrue(remove_call.called)
+            remove_call.assert_called_with()
+
     def test_parse_no_framework_with_no_default_returns_errors(self):
         """Parsing a category with no default returns an error when calling run"""
         args = Mock()
         args.category = "category-b"
         args.framework = None
+        args.remove = False
+        self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
+        self.expect_warn_error = True
+
+    def test_parse_category_and_framework_cannot_run_remove_with_destdir_framework(self):
+        """Parsing category and framework with remove and destdir raises an error"""
+        args = Mock()
+        args.category = "category-a"
+        args.framework = "framework-b"
+        args.remove = True
         self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
         self.expect_warn_error = True
 
@@ -404,13 +444,46 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
     def test_call_setup_save_and_then_mark_in_config_tweaked_path(self):
         """Calling mark_in_config with a custom install path save it in the configuration"""
         # load custom framework-directory
-        self.categoryA.frameworks["framework-b"].setup(install_path="/home/foo/bar")
+        fw = self.categoryA.frameworks["framework-b"]
+        fw.setup()
+        fw.install_path = "/home/foo/bar"
         self.categoryA.frameworks["framework-b"].mark_in_config()
 
         self.assertEquals(ConfigHandler().config,
                           {'frameworks': {
                               'category-a': {
                                   'framework-b': {'path': '/home/foo/bar'}
+                              }}})
+
+    def test_call_remove_from_config(self):
+        """Calling remove_from_config remove a framework from the config"""
+        ConfigHandler().config = {'frameworks': {
+            'category-a': {
+                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+            }}}
+        self.categoryA.frameworks["framework-b"].remove_from_config()
+
+        self.assertEquals(ConfigHandler().config, {'frameworks': {'category-a': {}}})
+
+    def test_call_remove_from_config_keep_other(self):
+        """Calling remove_from_config remove a framework from the config but keep others"""
+        ConfigHandler().config = {'frameworks': {
+            'category-a': {
+                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')},
+                'framework-c': {'path': os.path.expanduser('~/tools/category-a/framework-c')}
+            },
+            'category-b': {
+                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+            }}}
+        self.categoryA.frameworks["framework-b"].remove_from_config()
+
+        self.assertEquals(ConfigHandler().config,
+                          {'frameworks': {
+                              'category-a': {
+                                  'framework-c': {'path': os.path.expanduser('~/tools/category-a/framework-c')}
+                              },
+                              'category-b': {
+                                  'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
                               }}})
 
 
@@ -885,6 +958,9 @@ class TestCustomFrameworkCantLoad(BaseFrameworkLoader):
 
         def setup(self):
             super().setup()
+
+        def remove(self):
+            super().remove()
 
         @property
         def is_installable(self):

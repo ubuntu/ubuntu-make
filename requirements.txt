@@ -2,11 +2,13 @@
 argcomplete
 pyyaml
 pyxdg
+requests
 -e bzr+lp:python-apt/@0.9.3.5#egg=apt
 
 # test tools
 nose
 nose-cov
+nose-json
 pep8
 pexpect
 

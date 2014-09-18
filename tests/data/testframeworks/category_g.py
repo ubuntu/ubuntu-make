@@ -37,7 +37,10 @@ class FrameworkA(udtc.frameworks.BaseFramework):
                          category=category, install_path_dir="/", packages_requirements=["buz", "biz"])
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()
+
+    def remove(self):
+        super().remove()
 
 
 class FrameworkB(udtc.frameworks.BaseFramework):
@@ -47,4 +50,7 @@ class FrameworkB(udtc.frameworks.BaseFramework):
                          category=category, install_path_dir="/")
 
     def setup(self, install_path=None):
-        super().setup(install_path=install_path)
+        super().setup()
+
+    def remove(self):
+        super().remove()

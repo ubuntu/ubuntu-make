@@ -22,6 +22,7 @@
 
 import abc
 from contextlib import suppress
+from gettext import gettext as _
 from importlib import import_module, reload
 import inspect
 import logging
@@ -216,7 +217,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         return self.name.lower().replace('/', '-').replace(' ', '-')
 
     @abc.abstractmethod
-    def setup(self, install_path=None):
+    def setup(self):
         """Method call to setup the Framework"""
         if not self.is_installable:
             logger.error("You can't install that framework on that machine")
@@ -229,11 +230,16 @@ class BaseFramework(metaclass=abc.ABCMeta):
             cmd.extend(sys.argv)
             MainLoop().quit(subprocess.call(cmd))
 
-        # be a normal, kind user
+        # be a normal, kind user as we don't want normal files to be written as root
         switch_to_current_user()
 
-        if install_path:
-            self.install_path = install_path
+    @abc.abstractmethod
+    def remove(self):
+        """Method call to remove the current framework"""
+        if not self.is_installed:
+            logger.error("You can't remove a framework that isn't installed")
+            UI.return_main_screen()
+            return
 
     def mark_in_config(self):
         """Mark the installation as installed in the config file"""
@@ -241,6 +247,12 @@ class BaseFramework(metaclass=abc.ABCMeta):
         config.setdefault("frameworks", {})\
               .setdefault(self.category.prog_name, {})\
               .setdefault(self.prog_name, {})["path"] = self.install_path
+        ConfigHandler().config = config
+
+    def remove_from_config(self):
+        """Remove current framework from config"""
+        config = ConfigHandler().config
+        del(config["frameworks"][self.category.prog_name][self.prog_name])
         ConfigHandler().config = config
 
     @property
@@ -257,12 +269,21 @@ class BaseFramework(metaclass=abc.ABCMeta):
         """Install framework parser"""
         this_framework_parser = parser.add_parser(self.prog_name, help=self.description)
         this_framework_parser.add_argument('destdir', nargs='?')
+        this_framework_parser.add_argument('-r', '--remove', action="store_true",
+                                           help=_("Remove framework if installed"))
         return this_framework_parser
 
     def run_for(self, args):
         """Running commands from args namespace"""
         logger.debug("Call run_for on {}".format(self.name))
-        self.setup(args.destdir)
+        if args.remove:
+            if args.destdir:
+                message = "You can't specify a destination dir while removing a framework"
+                logger.error(message)
+                raise BaseException(message)
+            self.remove()
+        else:
+            self.setup(args.destdir)
 
 
 class MainCategory(BaseCategory):
