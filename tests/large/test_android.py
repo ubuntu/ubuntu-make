@@ -310,8 +310,8 @@ class EclipseADTTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
 
-        # FIXME: disable on jenkins for now (doesn't launch the java subprocess). Need kvm investigation
-        if os.environ["USER"] != "ubuntu":
+        # FIXME: disable on i386 jenkins for now (doesn't launch the java subprocess). Need kvm investigation
+        if not (os.environ["USER"] == "ubuntu" and self.arch_option == "i686"):
             self.check_and_kill_process(["java", self.arch_option, self.installed_path],
                                         wait_before=self.TIMEOUT_START)
         if not self.in_container:
@@ -376,8 +376,8 @@ class EclipseADTTests(LargeFrameworkTests):
             # launch it, send SIGTERM and check that it exits fine
             proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                     stderr=subprocess.DEVNULL)
-            # FIXME: disable on jenkins for now (doesn't launch the java subprocess). Need kvm investigation
-            if os.environ["USER"] != "ubuntu":
+            # FIXME: disable on i386 jenkins for now (doesn't launch the java subprocess). Need kvm investigation
+            if not (os.environ["USER"] == "ubuntu" and self.arch_option == "i686"):
                 self.check_and_kill_process(["java", self.arch_option, self.installed_path],
                                             wait_before=self.TIMEOUT_START)
             if not self.in_container:
