@@ -20,9 +20,9 @@
 """Tests for the download center module using a local server"""
 
 import os
-import ssl
+from os.path import join, getsize
 from time import time
-from unittest.mock import Mock, call, patch
+from unittest.mock import Mock, call
 from ..tools import get_data_dir, CopyingMock, LoggedTestCase
 from ..tools.local_server import LocalHttp
 from udtc.network.download_center import DownloadCenter
@@ -36,7 +36,7 @@ class TestDownloadCenter(LoggedTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.server_dir = os.path.join(get_data_dir(), "server-content")
+        cls.server_dir = join(get_data_dir(), "server-content")
         cls.server = LocalHttp(cls.server_dir)
 
     @classmethod
@@ -54,9 +54,10 @@ class TestDownloadCenter(LoggedTestCase):
         for fd in self.fd_to_close:
             fd.close()
 
-    def build_server_address(self, path):
+    def build_server_address(self, path, localhost=False):
         """build server address to path to get requested"""
-        return "{}/{}".format(self.server.get_address(), path)
+        return "{}/{}".format(self.server.get_address(localhost=localhost),
+                              path)
 
     def wait_for_callback(self, mock_function_to_be_called):
         """wait for the callback to be called until a timeout.
@@ -83,10 +84,27 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
                              result.fd.read())
             self.assertTrue('.' not in result.fd.name, result.fd.name)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.error)
+
+    def test_redirect_download(self):
+        """we deliver one successful download after being redirected"""
+        filename = "simplefile"
+        # We add a suffix to make the server redirect us.
+        request = self.build_server_address(filename + "-redirect")
+        DownloadCenter([request], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result.fd.read())
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.error)
 
@@ -100,7 +118,7 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+        with open(join(self.server_dir, filename), 'rb'):
             self.assertTrue(result.fd.name.endswith('.tgz'), result.fd.name)
 
     def test_download_with_md5(self):
@@ -113,7 +131,7 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
                              result.fd.read())
         self.assertIsNone(result.buffer)
@@ -122,7 +140,7 @@ class TestDownloadCenter(LoggedTestCase):
     def test_download_with_progress(self):
         """we deliver progress hook while downloading"""
         filename = "simplefile"
-        filesize = os.path.getsize(os.path.join(self.server_dir, filename))
+        filesize = getsize(join(self.server_dir, filename))
         report = CopyingMock()
         request = self.build_server_address(filename)
         DownloadCenter([request], self.callback, report=report)
@@ -136,7 +154,7 @@ class TestDownloadCenter(LoggedTestCase):
     def test_download_with_multiple_progress(self):
         """we deliver multiple progress hooks on bigger files"""
         filename = "biggerfile"
-        filesize = os.path.getsize(os.path.join(self.server_dir, filename))
+        filesize = getsize(join(self.server_dir, filename))
         report = CopyingMock()
         request = self.build_server_address(filename)
         dl_center = DownloadCenter([request], self.callback, report=report)
@@ -162,7 +180,7 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIn(self.build_server_address("simplefile"), map_result)
         # ensure each temp file corresponds to the source content
         for filename in ("biggerfile", "simplefile"):
-            with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+            with open(join(self.server_dir, filename), 'rb') as file_on_disk:
                 self.assertEqual(file_on_disk.read(),
                                  map_result[self.build_server_address(filename)].fd.read())
 
@@ -181,7 +199,7 @@ class TestDownloadCenter(LoggedTestCase):
         # ensure that last call is what we expect
         result_dict = {}
         for filename in ("biggerfile", "simplefile"):
-            file_size = os.path.getsize(os.path.join(self.server_dir, filename))
+            file_size = getsize(join(self.server_dir, filename))
             result_dict[self.build_server_address(filename)] = {'size': file_size,
                                                                 'current': file_size}
         self.assertEqual(report.call_args, call(result_dict))
@@ -195,7 +213,8 @@ class TestDownloadCenter(LoggedTestCase):
         # no download means the file isn't in the result
         callback_args, callback_kwargs = self.callback.call_args
         result = callback_args[0][self.build_server_address("does_not_exist")]
-        self.assertIn("Error 404", result.error)
+        self.assertIn("404", result.error)
+        self.assertIn("File not found", result.error)
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.fd)
         self.expect_warn_error = True
@@ -238,7 +257,7 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
                              result.buffer.read())
         self.assertIsNone(result.fd)
@@ -258,7 +277,7 @@ class TestDownloadCenter(LoggedTestCase):
         self.expect_warn_error = True
 
     def test_download_with_wrong_md5(self):
-        """we raises an error if we don't have the correct md5sum"""
+        """we raise an error if we don't have the correct md5sum"""
         filename = "simplefile"
         request = self.build_server_address(filename)
         DownloadCenter([(request, 'AAAAA')], self.callback)
@@ -281,7 +300,7 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][request]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
                              result.fd.read())
         self.assertIsNone(result.buffer)
@@ -300,8 +319,8 @@ class TestDownloadCenterSecure(LoggedTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.server_dir = os.path.join(get_data_dir(), "server-content")
-        cls.server = LocalHttp(cls.server_dir, use_ssl="local_cert.pem")
+        cls.server_dir = join(get_data_dir(), "server-content")
+        cls.server = LocalHttp(cls.server_dir, use_ssl="localhost.pem")
 
     @classmethod
     def tearDownClass(cls):
@@ -318,25 +337,49 @@ class TestDownloadCenterSecure(LoggedTestCase):
         for fd in self.fd_to_close:
             fd.close()
 
-    @patch('udtc.network.download_center.ssl')
-    def test_download(self, mockssl):
+    def test_download(self):
         """we deliver one successful download under ssl with known cert"""
         filename = "simplefile"
-        request = TestDownloadCenter.build_server_address(self, filename)
+        # The host name is important here, since we verify it, so request
+        # the localhost address.
+        request = TestDownloadCenter.build_server_address(self, filename, True)
         # prepare the cert and set it as the trusted system context
-        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
-        context.verify_mode = ssl.CERT_REQUIRED
-        mockssl.create_default_context.return_value = context.load_verify_locations(os.path.join(get_data_dir(),
-                                                                                                 'local_cert.pem'))
-        DownloadCenter([request], self.callback)
-        TestDownloadCenter.wait_for_callback(self, self.callback)
+        os.environ['REQUESTS_CA_BUNDLE'] = join(get_data_dir(), 'localhost.pem')
+        try:
+            DownloadCenter([request], self.callback)
+            TestDownloadCenter.wait_for_callback(self, self.callback)
 
-        result = self.callback.call_args[0][0][request]
-        self.assertTrue(self.callback.called)
-        self.assertEqual(self.callback.call_count, 1)
-        with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
-            self.assertEqual(file_on_disk.read(),
-                             result.fd.read())
+            result = self.callback.call_args[0][0][request]
+            self.assertTrue(self.callback.called)
+            self.assertEqual(self.callback.call_count, 1)
+            with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+                self.assertEqual(file_on_disk.read(),
+                                 result.fd.read())
+        finally:
+            del os.environ['REQUESTS_CA_BUNDLE']
+
+    def test_redirect_download(self):
+        """we deliver one successful download after being redirected"""
+        filename = "simplefile"
+        # We add a suffix to make the server redirect us.
+        request = TestDownloadCenter.build_server_address(self,
+                                                          filename + "-redirect",
+                                                          localhost=True)
+        os.environ['REQUESTS_CA_BUNDLE'] = join(get_data_dir(), 'localhost.pem')
+        try:
+            DownloadCenter([request], self.callback)
+            TestDownloadCenter.wait_for_callback(self, self.callback)
+
+            result = self.callback.call_args[0][0][request]
+            self.assertTrue(self.callback.called)
+            self.assertEqual(self.callback.call_count, 1)
+            with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+                self.assertEqual(file_on_disk.read(),
+                                 result.fd.read())
+            self.assertIsNone(result.buffer)
+            self.assertIsNone(result.error)
+        finally:
+            del os.environ['REQUESTS_CA_BUNDLE']
 
     def test_with_invalid_certificate(self):
         """we error on invalid ssl certificate"""
