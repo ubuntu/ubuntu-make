@@ -71,11 +71,14 @@ class LargeFrameworkTests(LoggedTestCase):
                     return int(pid)
         raise BaseException("The process that we can find with {} isn't started".format(process_grep))
 
-    def check_and_kill_process(self, process_grep, wait_before=0):
+    def check_and_kill_process(self, process_grep, wait_before=0, send_sigkill=False):
         """Check a process matching process_grep exists and kill it"""
         sleep(wait_before)
         pid = self._pid_for(process_grep)
-        os.kill(pid, signal.SIGTERM)
+        if send_sigkill:
+            os.kill(pid, signal.SIGKILL)
+        else:
+            os.kill(pid, signal.SIGTERM)
 
     def assert_for_warn(self, content, expect_warn=False):
         """assert if there is any warn"""

@@ -87,12 +87,13 @@ class ContainerTests(LoggedTestCase):
                 "{} {} '{}'".format(os.path.join(get_tools_helper_dir(), "run_in_udtc_dir"), settings.UDTC_IN_CONTAINER,
                                     commands_to_run)]
 
-    def check_and_kill_process(self, process_grep, wait_before=0):
+    def check_and_kill_process(self, process_grep, wait_before=0, send_sigkill=False):
         """Check a process matching process_grep exists and kill it"""
         sleep(wait_before)
-        if not self._exec_command(self.command_as_list("{} {}".format(os.path.join(get_tools_helper_dir(),
-                                                                                   "check_and_kill_process"),
-                                                       " ".join(process_grep)))):
+        if not self._exec_command(self.command_as_list("{} {} {}".format(os.path.join(get_tools_helper_dir(),
+                                                                                      "check_and_kill_process"),
+                                                                         send_sigkill,
+                                                                         " ".join(process_grep)))):
             raise BaseException("The process we try to find and kill can't be found".format(process_grep))
 
     def _exec_command(self, command):
