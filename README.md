@@ -12,7 +12,7 @@ To run the tool:
 
     $ ./udtc
 
-You can of course use --help to get more information and change the verbosity of the output with -v, -vv.
+You can of course use `--help` to get more information and change the verbosity of the output with `-v`, `-vv`.
 
 ## Requirements
 
@@ -69,14 +69,14 @@ To run all those tests, with coverage report (like in Travis CI):
 
     $ ./runtests
 
-You can use --no-config to disable the coverage report selection.
+You can use `--no-config` to disable the coverage report selection.
 
 #### Running some tests with all debug infos
 By default, **runtests** will not display any debug output of the passing tests like in nose. However, if you select only some tests to run manually, runtests will then switch to display full debug log,
 
     $  ./runtests tests/small/test_tools.py:TestConfigHandler
 
-You can use --no-config to disable the debug output selection.
+You can use `--no-config` to disable the debug output selection.
 
 #### More information on runtests
 **runtests** is a small nose wrapper used to ease the run of tests. By default runtests without any argument or with "all" will run all available tests on the projects, using the production nose config.
@@ -92,7 +92,7 @@ Finally, you can run, as seen in the previous paragraph, a selection of one or m
 
 This enables by default the debug profile to display all outputs and logging information (in debug level).
 
-You can activate/disable/change any of those default selected configuration with **--config/--coverage/--debug/--no-config** (see runtests --help for more information)
+You can activate/disable/change any of those default selected configuration with **--config/--coverage/--debug/--no-config** (see `runtests --help` for more information)
 
 #### Nose configurations
 
