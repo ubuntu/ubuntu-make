@@ -521,3 +521,24 @@ class EclipseADTTests(LargeFrameworkTests):
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
         self.assertFalse(self.path_exists(get_icon_path(self.icon_filename)))
+
+    def test_removal_as_common_option(self):
+        """Remove eclipse adt using the common option (before the category/framework)"""
+        self.child = pexpect.spawnu(self.command('{} android eclipse-adt'.format(UDTC)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("\[.*\] ")
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.installed_path))
+        self.assertTrue(self.path_exists(get_icon_path(self.icon_filename)))
+
+        # now, remove it
+        self.child = pexpect.spawnu(self.command('{} --remove android eclipse-adt'.format(UDTC)))
+        self.wait_and_no_warn()
+
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.path_exists(self.installed_path))
+        self.assertFalse(self.path_exists(get_icon_path(self.icon_filename)))
