@@ -43,6 +43,18 @@ To load one of those logging profiles:
     $ LOG_CFG=confs/debug.logcfg bin/udtc
 
 ## Development
+### Providing user's framework
+
+It's possible for anyone to have local frameworks for either development purpose or for special local or team use-case.
+* Any files in a directory set with the "UDTC_FRAMEWORKS" environment variable will be loaded first.
+* Any files inside ~/.udtc/frameworks will be loaded next.
+
+Any file should contain eventually a category or frameworks like the ones in udtc/frameworks/*.
+
+If categories name are duplicated only one will be loaded. Ubuntu Developer Tools Center will first load the one controlled by the environment variable, then in home based directory, and finally, the system one.
+Note that duplicate filenames aren't encouraged, but supported.
+
+
 ### Style guide and checking
 We are running pep8 relaxing in .pep8 the max line length to 120. env/ is excluded as well from the pep8 check.
 
