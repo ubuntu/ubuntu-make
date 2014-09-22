@@ -231,6 +231,19 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
 
+    def test_not_default_framework_with_path_without_path_separator(self):
+        """Android Studio isn't selected for default framework with path without separator"""
+        self.child = pexpect.spawnu(self.command('{} android foo'.format(UDTC)))
+        self.expect_and_no_warn("error: argument framework: invalid choice")
+        self.accept_default_and_wait()
+
+    def test_is_default_framework_with_user_path(self):
+        """Android Studio isn't selected for default framework with path without separator"""
+        # TODO: once a baseinstaller test: do a real install to check the path
+        self.child = pexpect.spawnu(self.command('{} android ~/foo'.format(UDTC)))
+        self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
+        self.accept_default_and_wait()
+
     def test_removal(self):
         """Remove android studio with default path"""
         self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UDTC)))
