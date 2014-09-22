@@ -268,7 +268,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
     def install_framework_parser(self, parser):
         """Install framework parser"""
         this_framework_parser = parser.add_parser(self.prog_name, help=self.description)
-        this_framework_parser.add_argument('destdir', nargs='?')
+        this_framework_parser.add_argument('destdir', nargs='?', help=_("If the default framework name isn't provided, "
+                                                                        "destdir should contain a /"))
         this_framework_parser.add_argument('-r', '--remove', action="store_true",
                                            help=_("Remove framework if installed"))
         return this_framework_parser
