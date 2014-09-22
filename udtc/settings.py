@@ -22,6 +22,7 @@ import os
 DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join("~", "tools"))
 CONFIG_FILENAME = "udtc"
 LSB_RELEASE_FILE = "/etc/lsb-release"
+UDTC_FRAMEWORKS_ENVIRON_VARIABLE = "UDTC_FRAMEWORKS"
 
 # Those are for the tests
 DOCKER_USER = "user"
