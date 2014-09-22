@@ -237,7 +237,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
     def remove(self):
         """Method call to remove the current framework"""
         if not self.is_installed:
-            logger.error("You can't remove a framework that isn't installed")
+            logger.error(_("You can't remove {} as it isn't installed".format(self.name)))
             UI.return_main_screen()
             return
 

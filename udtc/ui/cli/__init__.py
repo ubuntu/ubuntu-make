@@ -97,7 +97,7 @@ def run_command_for_args(args):
 def mangle_args_for_default_framework(args):
     """return the potentially changed args_to_parse for the parser for handling default frameworks
 
-    "./<command> [global_option] category [options from default framework]"
+    "./<command> [global_or_common_options] category [options from default framework]"
     as subparsers can't define default options and are not optional: http://bugs.python.org/issue9253
     """
 

@@ -119,6 +119,8 @@ def main():
     parser.add_argument('--help', action=_HelpAction, help=_('Show this help'))  # add custom help
     parser.add_argument("-v", "--verbose", action="count", default=0, help=_("Increase output verbosity (2 levels)"))
 
+    parser.add_argument('-r', '--remove', action="store_true", help=_("Remove specified framework if installed"))
+
     # set logging ignoring unknown options
     set_logging_from_args(sys.argv, parser)
 
