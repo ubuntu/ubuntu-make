@@ -284,7 +284,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
                 raise BaseException(message)
             self.remove()
         else:
-            self.setup(args.destdir)
+            install_path = os.path.abspath(os.path.expanduser(args.destdir))
+            self.setup(install_path)
 
 
 class MainCategory(BaseCategory):
