@@ -20,6 +20,7 @@
 """Tests the framework loader"""
 
 import argparse
+from contextlib import suppress
 import importlib
 import os
 import shutil
@@ -30,6 +31,7 @@ from ..tools import get_data_dir, change_xdg_path, patchelem, LoggedTestCase
 import udtc
 from udtc import frameworks
 from udtc.frameworks.baseinstaller import BaseInstaller
+from udtc.settings import UDTC_FRAMEWORKS_ENVIRON_VARIABLE
 from udtc.tools import NoneDict, ConfigHandler
 from unittest.mock import Mock, patch, call
 
@@ -50,6 +52,7 @@ class BaseFrameworkLoader(LoggedTestCase):
 
     def tearDown(self):
         change_xdg_path('XDG_CONFIG_HOME', remove=True)
+        # we reset the loaded categories
         self.CategoryHandler.categories = NoneDict()
         super().tearDown()
 
@@ -100,8 +103,6 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         self.categoryA = self.CategoryHandler.categories["category-a"]
 
     def tearDown(self):
-        # we reset the loaded categories
-        self.CategoryHandler.categories = NoneDict()
         self.restore_arch_version()
         super().tearDown()
 
@@ -383,8 +384,6 @@ class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
         self.categoryA = self.CategoryHandler.categories["category-a"]
 
     def tearDown(self):
-        # we reset the loaded categories
-        self.CategoryHandler.categories = NoneDict()
         change_xdg_path('XDG_CONFIG_HOME', remove=True)
         super().tearDown()
 
@@ -426,8 +425,6 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         change_xdg_path('XDG_CONFIG_HOME', self.config_dir)
 
     def tearDown(self):
-        # we reset the loaded categories
-        self.CategoryHandler.categories = NoneDict()
         change_xdg_path('XDG_CONFIG_HOME', remove=True)
         shutil.rmtree(self.config_dir)
         super().tearDown()
@@ -509,8 +506,6 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         self.fake_arch_version("foo", "10.04")
 
     def tearDown(self):
-        # we reset the loaded categories
-        self.CategoryHandler.categories = NoneDict()
         self.restore_arch_version()
         super().tearDown()
 
@@ -788,11 +783,6 @@ class TestEmptyFrameworkLoader(BaseFrameworkLoader):
                 patchelem(udtc.frameworks, '__package__', "testframeworksdoesntexist"):
             frameworks.load_frameworks()
 
-    def tearDown(self):
-        # we reset the loaded categories
-        frameworks.BaseCategory.categories = NoneDict()
-        super().tearDown()
-
     def test_invalid_framework(self):
         """There is one main category, but nothing else"""
         main_category = [category for category in self.CategoryHandler.categories.values()
@@ -822,11 +812,6 @@ class TestDuplicatedFrameworkLoader(BaseFrameworkLoader):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["category-a"]
         self.expect_warn_error = True  # as we load multiple duplicate categories and frameworks
-
-    def tearDown(self):
-        # we reset the loaded categories
-        frameworks.BaseCategory.categories = NoneDict()
-        super().tearDown()
 
     def test_duplicated_categories(self):
         """We only load one category when a second with same name is met"""
@@ -865,11 +850,6 @@ class TestMultipleDefaultFrameworkLoader(BaseFrameworkLoader):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["category-a"]
         self.expect_warn_error = True  # as we load multiple default frameworks in a category
-
-    def tearDown(self):
-        # we reset the loaded categories
-        frameworks.BaseCategory.categories = NoneDict()
-        super().tearDown()
 
     def test_multiple_defaults(self):
         """Setting multiple defaults frameworks to a category should void any default"""
@@ -921,15 +901,158 @@ class TestInvalidFrameworkLoader(BaseFrameworkLoader):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["category-a"]
 
-    def tearDown(self):
-        # we reset the loaded categories
-        frameworks.BaseCategory.categories = NoneDict()
-        super().tearDown()
-
     def test_load(self):
         """Previous loading should have been successful"""
         self.assertFalse(self.categoryA.has_frameworks())
         self.expect_warn_error = True  # It errors the fact that it ignores one invalid framework
+
+
+class TestFrameworkLoaderCustom(BaseFrameworkLoader):
+    """This will test the dynamic framework loader activity with custom path"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        sys.path.append(get_data_dir())
+        cls.testframeworks_dir = os.path.join(get_data_dir(), 'testframeworks')
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.path.remove(get_data_dir())
+        super().tearDownClass()
+
+    def setUp(self):
+        super().setUp()
+        # fake versions and archs
+        self.fake_arch_version("bar", "10.10.10")
+        self.dirs_to_remove = []
+
+    def tearDown(self):
+        self.restore_arch_version()
+        with suppress(KeyError):
+            os.environ.pop(UDTC_FRAMEWORKS_ENVIRON_VARIABLE)
+        for path in self.dirs_to_remove:
+            sys.path.remove(path)
+            with suppress(FileNotFoundError):
+                shutil.rmtree(path)
+            with suppress(ValueError):
+                sys.path.remove(path)
+        super().tearDown()
+
+    @patch("udtc.frameworks.get_user_frameworks_path")
+    def test_load_additional_frameworks_in_home_dir(self, get_user_frameworks_path):
+        """Ensure we load additional frameworks from home directory"""
+        temp_path = tempfile.mkdtemp()
+        self.dirs_to_remove.append(temp_path)
+        shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "overlayframeworks.py"), temp_path)
+        get_user_frameworks_path.return_value = temp_path
+        # load home framework-directory
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+            frameworks.load_frameworks()
+
+        # ensure that the overlay is loaded
+        self.assertEquals(self.CategoryHandler.categories["category-a-overlay"].name, "Category A overlay")
+        # ensure that the other frameworks are still loaded
+        self.assertEquals(self.CategoryHandler.categories["category-a"].name, "Category A")
+
+    def test_load_additional_frameworks_with_env_var(self):
+        """Ensure we load additional frameworks set in an environment variable"""
+        temp_path = tempfile.mkdtemp()
+        self.dirs_to_remove.append(temp_path)
+        os.environ[UDTC_FRAMEWORKS_ENVIRON_VARIABLE] = temp_path
+        shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "overlayframeworks.py"), temp_path)
+        # load env framework-directory
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+            frameworks.load_frameworks()
+
+        # ensure that the overlay is loaded
+        self.assertEquals(self.CategoryHandler.categories["category-a-overlay"].name, "Category A overlay")
+        # ensure that the other frameworks are still loaded
+        self.assertEquals(self.CategoryHandler.categories["category-a"].name, "Category A")
+
+    @patch("udtc.frameworks.get_user_frameworks_path")
+    def test_load_additional_frameworks_with_two_categories(self, get_user_frameworks_path):
+        """Ensure we load additional frameworks in a path with two categories"""
+        temp_path = tempfile.mkdtemp()
+        self.dirs_to_remove.append(temp_path)
+        shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "overlayframeworks.py"), temp_path)
+        shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "withcategory2.py"), temp_path)
+        get_user_frameworks_path.return_value = temp_path
+        # load home framework-directory
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+            frameworks.load_frameworks()
+
+        # ensure that both overlay are loaded
+        self.assertEquals(self.CategoryHandler.categories["category-a-overlay"].name, "Category A overlay")
+        self.assertEquals(self.CategoryHandler.categories["category-a2-overlay"].name, "Category A2 overlay")
+        # ensure that the other frameworks are still loaded
+        self.assertEquals(self.CategoryHandler.categories["category-a"].name, "Category A")
+
+    @patch("udtc.frameworks.get_user_frameworks_path")
+    def test_load_additional_frameworks_with_same_filename(self, get_user_frameworks_path):
+        """Ensure we load additional frameworks in a path with same filename"""
+        temp_path = tempfile.mkdtemp()
+        self.dirs_to_remove.append(temp_path)
+        shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "withcategory.py"), temp_path)
+        get_user_frameworks_path.return_value = temp_path
+        # load home framework-directory
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+            frameworks.load_frameworks()
+
+        # ensure that the duplicated filename (but not category) is loaded
+        self.assertEquals(self.CategoryHandler.categories["category-a-overlay"].name, "Category A overlay")
+        # ensure that the other frameworks with the same name is still loaded
+        self.assertEquals(self.CategoryHandler.categories["category-a"].name, "Category A")
+
+    @patch("udtc.frameworks.get_user_frameworks_path")
+    def test_load_additional_frameworks_with_duphome_before_system(self, get_user_frameworks_path):
+        """Ensure we load additional frameworks from home before system if they have the same names"""
+        temp_path = tempfile.mkdtemp()
+        self.dirs_to_remove.append(temp_path)
+        shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "duplicatedcategory.py"), temp_path)
+        get_user_frameworks_path.return_value = temp_path
+        # load home framework-directory
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+            frameworks.load_frameworks()
+
+        # ensure that the overlay one is loaded
+        categoryA = self.CategoryHandler.categories["category-a"]
+        self.assertEquals(categoryA.name, "Category A")
+        self.assertEquals(categoryA.frameworks["framework-a-from-overlay"].name, "Framework A from overlay")
+        # ensure that the other frameworks are still loaded
+        self.assertEquals(self.CategoryHandler.categories["category-b"].name, "Category/B")
+        self.expect_warn_error = True  # expect warning due to duplication
+
+    @patch("udtc.frameworks.get_user_frameworks_path")
+    def test_load_additional_frameworks_with_dup_progname_env_before_home_before_system(self, get_user_frameworks_path):
+        """Ensure we load additional frameworks from env before home and system if they have the same names"""
+        # env var
+        temp_path = tempfile.mkdtemp()
+        self.dirs_to_remove.append(temp_path)
+        os.environ[UDTC_FRAMEWORKS_ENVIRON_VARIABLE] = temp_path
+        shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "duplicatedcategory2.py"), temp_path)
+        # home dir
+        temp_path = tempfile.mkdtemp()
+        self.dirs_to_remove.append(temp_path)
+        shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "duplicatedcategory.py"), temp_path)
+        get_user_frameworks_path.return_value = temp_path
+        # load env and home framework-directory
+        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+            frameworks.load_frameworks()
+
+        # ensure that the env overlay one is loaded
+        categoryA = self.CategoryHandler.categories["category-a"]
+        self.assertEquals(categoryA.name, "Category A")
+        self.assertEquals(categoryA.frameworks["framework-a-from-overlay-2"].name, "Framework A from overlay 2")
+        # ensure that the other frameworks are still loaded
+        self.assertEquals(self.CategoryHandler.categories["category-b"].name, "Category/B")
+        self.expect_warn_error = True  # expect warning due to duplication
 
 
 class TestProductionFrameworkLoader(BaseFrameworkLoader):
