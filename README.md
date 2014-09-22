@@ -12,11 +12,11 @@ To run the tool:
 
     $ ./udtc
 
-You can of course use --help to get more information and change the verbosity of the output with -v, -vv.
+You can of course use `--help` to get more information and change the verbosity of the output with `-v`, `-vv`.
 
 ## Requirements
 
-> Note that this project is using python3 and requires at least python 3.3. All commands are using the python 3 version. See later on how installing the corresponding virtualenv.
+> Note that this project is using python3 and requires at least python 3.3. All commands are using the python 3 version. See later on how to install the corresponding virtualenv.
 
 
 ## Shell completion
@@ -36,9 +36,9 @@ Multiple logging profiles are available in *confs/* to be able to have different
  * INFO logs and above are available in *info.log*.
  * WARNING and ERROR logs are available in *error.log*.
 
-On normal circumstances, we expect *error.log* to remain empty../
+Under normal circumstances, we expect *error.log* to remain empty../
 
-To load one of those logging profile:
+To load one of those logging profiles:
 
     $ LOG_CFG=confs/debug.logcfg bin/udtc
 
@@ -46,13 +46,13 @@ To load one of those logging profile:
 ### Style guide and checking
 We are running pep8 relaxing in .pep8 the max line length to 120. env/ is excluded as well from the pep8 check.
 
-Running this tests, in particular:
+Running this test, in particular:
 
     $ ./runtests pep8
 
-is running those pep8 checks on the code.
+will run those pep8 checks on the code.
 
-You can run as well the pep8 tool directly from the project directory:
+You can also run the pep8 tool directly from the project directory:
 
     $ pep8 .
 
@@ -63,37 +63,36 @@ There are four kinds of tests that can be combined in runtests:
 * **pep8**: Run the pep8 tests on all the udtc and tests code.
 * **small**: mostly testing modules and component with mocks around it. Note that it's using as well a local webserver (http and https) to serve mock content
 * **medium**: testing the whole workflow, directly calling end user tool from the command line, but without any effect on the system. Requirements like installing packages are mocked, as well as the usage of a local webserver serving (smaller) content similar that what will be fetched in a real use case. The assets have the same formats and layout.
-* **large**: same tests are run than for the medium tests, but with real server download and installation of dpkg packages. Most of those tests needs root rights. However, be aware than those tests only run on a graphical environment, will interfere with it and will install/remove packages on your system.
+* **large**: same tests are run as for the medium tests, but with real server download and installation of dpkg packages. Most of those tests need root rights. However, be aware that those tests only run on a graphical environment, will interfere with it and will install/remove packages on your system.
 
 To run all those tests, with coverage report (like in Travis CI):
 
     $ ./runtests
-    
-You can use --no-config to disable the coverage report selection.
+
+You can use `--no-config` to disable the coverage report selection.
 
 #### Running some tests with all debug infos
-By default, **runtests** will not display any debug output of the passing tests like in nose. However, if you select only some tests to run manually, runtests will then switch
-to display full debug log,
+By default, **runtests** will not display any debug output of the passing tests like in nose. However, if you select only some tests to run manually, runtests will then switch to display full debug log,
 
     $  ./runtests tests/small/test_tools.py:TestConfigHandler
 
-You can use --no-config to disable the debug output selection.
+You can use `--no-config` to disable the debug output selection.
 
 #### More information on runtests
-**runtests** is a small nose wrapper used to ease the run of tests. By default runtests withtout any argument or with "all" will run all available tests on the projects, using the production nose config.
-You can run as well only some test types if wanted:
+**runtests** is a small nose wrapper used to ease the run of tests. By default runtests without any argument or with "all" will run all available tests on the projects, using the production nose config.
+You can also run only some test types if wanted:
 
     $ ./runtests small medium
-    
+
 This will only run small and medium tests, with all nose defaults (no profile is selected).
 
 Finally, you can run, as seen in the previous paragraph, a selection of one or more tests:
 
     $ ./runtests tests/small/test_tools.py:TestConfigHandler
-    
+
 This enables by default the debug profile to display all outputs and logging information (in debug level).
 
-You can active/disable/change any of those default selected configuration with **--config/--coverage/--debug/--no-config** (see runtests --help for more information)
+You can activate/disable/change any of those default selected configuration with **--config/--coverage/--debug/--no-config** (see `runtests --help` for more information)
 
 #### Nose configurations
 
