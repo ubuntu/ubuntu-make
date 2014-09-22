@@ -273,6 +273,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Parsing category and framework return right category and framework"""
         args = Mock()
         args.category = "category-a"
+        args.destdir = None
         args.framework = "framework-b"
         args.remove = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "setup")\
@@ -286,6 +287,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Parsing category will run default framework"""
         args = Mock()
         args.category = "category-a"
+        args.destdir = None
         args.framework = None
         args.remove = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "setup")\
@@ -299,9 +301,9 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Parsing category and frameworkwwith --remove run remove on right category and framework"""
         args = Mock()
         args.category = "category-a"
+        args.destdir = None
         args.framework = "framework-b"
         args.remove = True
-        args.destdir = None
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "remove")\
                 as remove_call:
             self.CategoryHandler.categories[args.category].run_for(args)
