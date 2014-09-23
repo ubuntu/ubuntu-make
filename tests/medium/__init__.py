@@ -119,6 +119,10 @@ class ContainerTests(LoggedTestCase):
         command = self.command_as_list([os.path.join(get_tools_helper_dir(), "path_exists"), path])
         return self._exec_command(command)
 
+    def is_in_path(self, filename):
+        """Check inside the container if filename is in PATH thanks to which"""
+        return self._exec_command(self.command_as_list(["bash", "-i", "which", filename]))
+
     def create_file(self, path, content):
         """Create file inside the container.replace in path current user with the docker user"""
         path = path.replace(os.getlogin(), settings.DOCKER_USER)

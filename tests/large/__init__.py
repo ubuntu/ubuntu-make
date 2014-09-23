@@ -26,7 +26,7 @@ import shutil
 import signal
 from time import sleep
 from udtc.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned
-from ..tools import LoggedTestCase
+from ..tools import LoggedTestCase, local_which
 
 
 class LargeFrameworkTests(LoggedTestCase):
@@ -136,6 +136,10 @@ class LargeFrameworkTests(LoggedTestCase):
     def path_exists(self, path):
         """passthrough to os.path.exists"""
         return os.path.exists(path)
+
+    def is_in_path(self, filename):
+        """check directly in os.environ"""
+        return local_which(filename) is not None
 
     def create_file(self, path, content):
         """passthrough to create a file on the disk"""
