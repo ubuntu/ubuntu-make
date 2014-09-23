@@ -140,12 +140,14 @@ $ PYTHONWARNINGS=d ./runtests
 ### Create your own environment and run from it
 For an easier development workflow, we encourage the use of virtualenv to test and iterate on the project in contrast of installing all requirements on your machine. In the project root directory (env/ is already in .gitignore and excluded for pep8 checking):
 
-    $ virtualenv --python=python3 --system-site-packages env
-    $ sudo apt-get install -qq apt apt-utils libapt-pkg-dev # those are the requirements to compile python-apt
-    $ sudo apt-get install -qq python3-progressbar python3-gi python3-argcomplete
-    $ env/bin/pip install -r requirements.txt
-    $ source env/bin/activate
-    $ bin/udtc
+```sh
+$ virtualenv --python=python3 --system-site-packages env
+$ sudo apt-get install -qq apt apt-utils libapt-pkg-dev # those are the requirements to compile python-apt
+$ sudo apt-get install -qq python3-progressbar python3-gi python3-argcomplete
+$ env/bin/pip install -r requirements.txt
+$ source env/bin/activate
+$ bin/udtc
+```
 
 ## Release management
 Refresh .pot files:
@@ -153,3 +155,4 @@ Refresh .pot files:
 ```sh
 $ ./setup.py update_pot
 ```
+
