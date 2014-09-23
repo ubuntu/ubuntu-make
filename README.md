@@ -10,7 +10,9 @@ As a first step, it's focusing on installing a full-fledged android developer en
 ## Running command line tool
 To run the tool:
 
-    $ ./udtc
+```sh
+$ ./udtc
+```
 
 You can of course use `--help` to get more information and change the verbosity of the output with `-v`, `-vv`.
 
@@ -23,7 +25,9 @@ You can of course use `--help` to get more information and change the verbosity 
 
 To enable shell completion on bash or zsh, just run:
 
-    $ . enable_completion
+```sh
+$ . enable_completion
+```
 
 ## Different level of logging
 
@@ -40,7 +44,9 @@ Under normal circumstances, we expect *error.log* to remain empty../
 
 To load one of those logging profiles:
 
-    $ LOG_CFG=confs/debug.logcfg bin/udtc
+```sh
+$ LOG_CFG=confs/debug.logcfg bin/udtc
+```
 
 ## Development
 ### Providing user's framework
@@ -60,13 +66,17 @@ We are running pep8 relaxing in .pep8 the max line length to 120. env/ is exclud
 
 Running this test, in particular:
 
-    $ ./runtests pep8
+```sh
+$ ./runtests pep8
+```
 
 will run those pep8 checks on the code.
 
 You can also run the pep8 tool directly from the project directory:
 
-    $ pep8 .
+```sh
+$ pep8 .
+```
 
 ### Tests
 #### Types of tests
@@ -79,14 +89,18 @@ There are four kinds of tests that can be combined in runtests:
 
 To run all those tests, with coverage report (like in Travis CI):
 
-    $ ./runtests
+```sh
+$ ./runtests
+```
 
 You can use `--no-config` to disable the coverage report selection.
 
 #### Running some tests with all debug infos
 By default, **runtests** will not display any debug output of the passing tests like in nose. However, if you select only some tests to run manually, runtests will then switch to display full debug log,
 
-    $  ./runtests tests/small/test_tools.py:TestConfigHandler
+```sh
+$  ./runtests tests/small/test_tools.py:TestConfigHandler
+```
 
 You can use `--no-config` to disable the debug output selection.
 
@@ -94,13 +108,17 @@ You can use `--no-config` to disable the debug output selection.
 **runtests** is a small nose wrapper used to ease the run of tests. By default runtests without any argument or with "all" will run all available tests on the projects, using the production nose config.
 You can also run only some test types if wanted:
 
-    $ ./runtests small medium
+```sh
+$ ./runtests small medium
+```
 
 This will only run small and medium tests, with all nose defaults (no profile is selected).
 
 Finally, you can run, as seen in the previous paragraph, a selection of one or more tests:
 
-    $ ./runtests tests/small/test_tools.py:TestConfigHandler
+```sh
+$ ./runtests tests/small/test_tools.py:TestConfigHandler
+```
 
 This enables by default the debug profile to display all outputs and logging information (in debug level).
 
@@ -117,20 +135,26 @@ Some nose configurations are available in **confs/**. You will find:
 
 **runtests** is compatible with showing the python warnings:
 
-     $ PYTHONWARNINGS=d ./runtests
+```sh
+$ PYTHONWARNINGS=d ./runtests
+```
 
 ### Create your own environment and run from it
 For an easier development workflow, we encourage the use of virtualenv to test and iterate on the project in contrast of installing all requirements on your machine. In the project root directory (env/ is already in .gitignore and excluded for pep8 checking):
 
-    $ virtualenv --python=python3 --system-site-packages env
-    $ sudo apt-get install -qq apt apt-utils libapt-pkg-dev # those are the requirements to compile python-apt
-    $ sudo apt-get install -qq python3-progressbar python3-gi python3-argcomplete
-    $ env/bin/pip install -r requirements.txt
-    $ source env/bin/activate
-    $ bin/udtc
+```sh
+$ virtualenv --python=python3 --system-site-packages env
+$ sudo apt-get install -qq apt apt-utils libapt-pkg-dev # those are the requirements to compile python-apt
+$ sudo apt-get install -qq python3-progressbar python3-gi python3-argcomplete
+$ env/bin/pip install -r requirements.txt
+$ source env/bin/activate
+$ bin/udtc
+```
 
 ## Release management
 Refresh .pot files:
 
-    $ ./setup.py update_pot
+```sh
+$ ./setup.py update_pot
+```
 
