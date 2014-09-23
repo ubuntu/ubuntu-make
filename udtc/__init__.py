@@ -110,9 +110,8 @@ def main():
     """Main entry point of the program"""
 
     parser = argparse.ArgumentParser(description=_("Deploy and setup developers environment easily on ubuntu"),
-                                     epilog=_(""
-                                         "Note that you can also configure different debug logs behaviors using "
-                                         "LOG_CFG pointing to a log yaml profile."),
+                                     epilog=_("Note that you can also configure different debug logs behaviors using "
+                                              "LOG_CFG pointing to a log yaml profile."),
                                      add_help=False)
     parser.add_argument('--help', action=_HelpAction, help=_('Show this help'))  # add custom help
     parser.add_argument("-v", "--verbose", action="count", default=0, help=_("Increase output verbosity (2 levels)"))
