@@ -8,115 +8,140 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ubuntu-developer-tools-center\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-28 16:27+0200\n"
+"POT-Creation-Date: 2014-09-23 08:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: udtc/__init__.py:109 udtc/__init__.py:109
+#: udtc/__init__.py:104
 msgid "* Command '{}':"
 msgstr ""
 
-#: udtc/__init__.py:117 udtc/__init__.py:117
+#: udtc/__init__.py:112
 msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr ""
 
-#: udtc/__init__.py:118 udtc/__init__.py:118
+#: udtc/__init__.py:113
 msgid ""
-"                                         Note that you can also configure "
-"different debug logs behaviors using LOG_CFG\n"
-"                                         pointing to a log yaml profile.\n"
-"                                         "
+"Note that you can also configure different debug logs behaviors using "
+"LOG_CFG pointing to a log yaml profile."
 msgstr ""
 
-#: udtc/__init__.py:123 udtc/__init__.py:123
+#: udtc/__init__.py:116
 msgid "Show this help"
 msgstr ""
 
-#: udtc/__init__.py:124 udtc/__init__.py:124
+#: udtc/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
 msgstr ""
 
-#: udtc/frameworks/android.py:39 udtc/frameworks/android.py:39
-msgid "Android"
+#: udtc/__init__.py:119
+msgid "Remove specified framework if installed"
 msgstr ""
 
-#: udtc/frameworks/android.py:39 udtc/frameworks/android.py:39
-msgid "Android Developement Environment"
+#: udtc/tools.py:329
+msgid "# UDTC installation of {}\n"
 msgstr ""
 
-#: udtc/frameworks/android.py:99 udtc/frameworks/android.py:100
-msgid "Android Studio"
-msgstr ""
-
-#: udtc/frameworks/android.py:102 udtc/frameworks/android.py:103
-msgid "Android Studio developer environment"
-msgstr ""
-
-#: udtc/interactions/__init__.py:73 udtc/interactions/__init__.py:73
+#: udtc/interactions/__init__.py:73
 msgid "No suitable answer provided"
 msgstr ""
 
-#: udtc/interactions/__init__.py:75 udtc/interactions/__init__.py:75
+#: udtc/interactions/__init__.py:75
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
 msgstr ""
 
-#: udtc/interactions/__init__.py:78 udtc/interactions/__init__.py:78
+#: udtc/interactions/__init__.py:78
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
 msgstr ""
 
-#: udtc/interactions/__init__.py:96 udtc/interactions/__init__.py:96
+#: udtc/interactions/__init__.py:96
 msgid " ({})"
 msgstr ""
 
-#: udtc/interactions/__init__.py:100 udtc/interactions/__init__.py:100
+#: udtc/interactions/__init__.py:100
 msgid ""
 "{}\n"
 "[{}] "
 msgstr ""
 
-#: udtc/interactions/__init__.py:103 udtc/interactions/__init__.py:103
+#: udtc/interactions/__init__.py:103
 msgid "{} [{}] "
 msgstr ""
 
-#: udtc/interactions/__init__.py:111 udtc/interactions/__init__.py:111
+#: udtc/interactions/__init__.py:111
 msgid "I Accept"
 msgstr ""
 
-#: udtc/interactions/__init__.py:111 udtc/interactions/__init__.py:111
+#: udtc/interactions/__init__.py:111
 msgid "a"
 msgstr ""
 
-#: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:112
+#: udtc/interactions/__init__.py:112
 msgid "I don't accept"
 msgstr ""
 
-#: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:145
 #: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:145
 msgid "N"
 msgstr ""
 
 #: udtc/interactions/__init__.py:121 udtc/interactions/__init__.py:122
-#: udtc/interactions/__init__.py:121 udtc/interactions/__init__.py:122
 msgid "{} ({})"
 msgstr ""
 
-#: udtc/interactions/__init__.py:125 udtc/interactions/__init__.py:125
+#: udtc/interactions/__init__.py:125
 msgid "[{}] "
 msgstr ""
 
-#: udtc/interactions/__init__.py:144 udtc/interactions/__init__.py:144
+#: udtc/interactions/__init__.py:144
 msgid "Yes"
 msgstr ""
 
-#: udtc/interactions/__init__.py:144 udtc/interactions/__init__.py:144
+#: udtc/interactions/__init__.py:144
 msgid "y"
 msgstr ""
 
-#: udtc/interactions/__init__.py:145 udtc/interactions/__init__.py:145
+#: udtc/interactions/__init__.py:145
 msgid "No"
+msgstr ""
+
+#: udtc/frameworks/__init__.py:240
+msgid "You can't remove {} as it isn't installed"
+msgstr ""
+
+#: udtc/frameworks/__init__.py:271
+msgid ""
+"If the default framework name isn't provided, destdir should contain a /"
+msgstr ""
+
+#: udtc/frameworks/__init__.py:274
+msgid "Remove framework if installed"
+msgstr ""
+
+#: udtc/frameworks/android.py:39
+msgid "Android"
+msgstr ""
+
+#: udtc/frameworks/android.py:39
+msgid "Android Developement Environment"
+msgstr ""
+
+#: udtc/frameworks/android.py:93
+msgid "Android Studio"
+msgstr ""
+
+#: udtc/frameworks/android.py:96
+msgid "Android Studio developer environment"
+msgstr ""
+
+#: udtc/frameworks/android.py:143
+msgid "ADT Eclipse"
+msgstr ""
+
+#: udtc/frameworks/android.py:146
+msgid "Android Developer Tools (using eclipse)"
 msgstr ""
