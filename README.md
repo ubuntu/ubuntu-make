@@ -98,7 +98,9 @@ You can use `--no-config` to disable the coverage report selection.
 #### Running some tests with all debug infos
 By default, **runtests** will not display any debug output of the passing tests like in nose. However, if you select only some tests to run manually, runtests will then switch to display full debug log,
 
-    $  ./runtests tests/small/test_tools.py:TestConfigHandler
+```sh
+$  ./runtests tests/small/test_tools.py:TestConfigHandler
+```
 
 You can use `--no-config` to disable the debug output selection.
 
