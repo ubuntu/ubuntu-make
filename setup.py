@@ -35,7 +35,7 @@ PO_DIR = os.path.join(os.path.dirname(os.curdir), 'po')
 def get_requirements(tag_to_detect=""):
     """Gather a list line per line of requirements from tag_to_detect to next tag.
 
-    if tag_to_detect is empty, it will gather every requirements"""
+    if tag_to_detect is empty, it will gather every requirement"""
     requirements = []
     with open("requirements.txt") as f:
         for line in f.read().splitlines():
