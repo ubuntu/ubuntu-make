@@ -18,6 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 from contextlib import suppress
+from gettext import gettext as _
 from gi.repository import GLib, Gio
 from glob import glob
 import logging
@@ -308,3 +309,22 @@ def switch_to_current_user():
     # fallback to root user if no SUDO_GID (should be su - root)
     os.setegid(int(os.getenv("SUDO_GID", default=0)))
     os.seteuid(int(os.getenv("SUDO_UID", default=0)))
+
+
+def add_to_user_path(paths, framework_tag):
+    """Add paths to user path in .bashrc if path isn't already in PATH"""
+    paths_to_add = []
+    for path in paths:
+        if path not in os.environ['PATH']:  # we don't care how, but the path already covers it
+            paths_to_add.append(path)
+    path_string = os.pathsep.join(paths_to_add)
+
+    if not path_string:
+        return
+
+    os.environ['PATH'] = path_string + os.pathsep + os.environ['PATH']
+    logger.debug("Adding {} to user PATH for {}".format(path_string, framework_tag))
+    with open(os.path.join(os.path.expanduser('~'), ".bashrc"), "a", encoding='utf-8') as f:
+        f.write("\n")
+        f.write(_("# UDTC installation of {}\n").format(framework_tag))
+        f.write("PATH={}:$PATH\n".format(path_string))
