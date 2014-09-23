@@ -117,7 +117,7 @@ class update_pot(cmd.Command):
 
     def run(self):
         cmd = ['xgettext', '--language=Python', '--keyword=_', '--package-name', I18N_DOMAIN,
-               '-j', '--output', 'po/{}.pot'.format(I18N_DOMAIN)]
+               '--output', 'po/{}.pot'.format(I18N_DOMAIN)]
         for path, names, filenames in os.walk(os.path.join(os.curdir, 'udtc')):
             for f in filenames:
                 if f.endswith('.py'):
