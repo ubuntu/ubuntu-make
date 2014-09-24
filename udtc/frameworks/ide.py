@@ -65,7 +65,7 @@ class Eclipse(udtc.frameworks.baseinstaller.BaseInstaller):
         logger.debug("Preparing to download MD5.")
 
         arch = platform.machine()
-        if arch == 'i386':
+        if arch == 'i686':
             md5_url = self.DOWNLOAD_URL_PAT.format(arch='', suf='.md5')
         elif arch == 'x86_64':
             md5_url = self.DOWNLOAD_URL_PAT.format(arch='-x86_64', suf='.md5')
@@ -86,7 +86,7 @@ class Eclipse(udtc.frameworks.baseinstaller.BaseInstaller):
             logger.debug("Downloaded MD5 is {}".format(md5))
 
             logger.debug("Preparing to download the main archive.")
-            if arch == 'i386':
+            if arch == 'i686':
                 download_url = self.DOWNLOAD_URL_PAT.format(arch='', suf='')
             elif arch == 'x86_64':
                 download_url = self.DOWNLOAD_URL_PAT.format(arch='-x86_64',
@@ -117,6 +117,3 @@ class Eclipse(udtc.frameworks.baseinstaller.BaseInstaller):
             return False
         return True
 
-    def download_done(self, result):
-        super().download_done(result)
-        self.mark_in_config()
