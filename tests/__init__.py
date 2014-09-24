@@ -37,5 +37,6 @@ class CodeCheck(TestCase):
 
         # we want to use either local or system udtc, but always local tests files
         udtc_dir = os.path.dirname(udtc.__file__)
-        results = pep8style.check_files([udtc_dir, os.path.join(get_root_dir(), "tests")])
+        results = pep8style.check_files([udtc_dir, os.path.join(get_root_dir(), "tests"),
+                                         os.path.join(get_root_dir(), "bin")])
         self.assertEqual(results.get_statistics(), [])
