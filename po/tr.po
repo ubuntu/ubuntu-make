@@ -1,4 +1,4 @@
-# Basque translation for ubuntu-developer-tools-center
+# Turkish translation for ubuntu-developer-tools-center
 # Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
 # This file is distributed under the same license as the ubuntu-developer-tools-center package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: ubuntu-developer-tools-center\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-23 08:44+0200\n"
-"PO-Revision-Date: 2014-09-07 11:34+0000\n"
-"Last-Translator: Ibai Oihanguren Sala <Unknown>\n"
-"Language-Team: Basque <eu@li.org>\n"
+"PO-Revision-Date: 2014-09-10 15:43+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -33,7 +33,7 @@ msgstr ""
 
 #: udtc/__init__.py:116
 msgid "Show this help"
-msgstr "Erakutsi laguntza hau"
+msgstr ""
 
 #: udtc/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
@@ -61,55 +61,53 @@ msgstr ""
 
 #: udtc/interactions/__init__.py:96
 msgid " ({})"
-msgstr " ({})"
+msgstr ""
 
 #: udtc/interactions/__init__.py:100
 msgid ""
 "{}\n"
 "[{}] "
 msgstr ""
-"{}\n"
-"[{}] "
 
 #: udtc/interactions/__init__.py:103
 msgid "{} [{}] "
-msgstr "{} [{}] "
+msgstr ""
 
 #: udtc/interactions/__init__.py:111
 msgid "I Accept"
-msgstr "Onartzen dut"
+msgstr ""
 
 #: udtc/interactions/__init__.py:111
 msgid "a"
-msgstr "o"
+msgstr ""
 
 #: udtc/interactions/__init__.py:112
 msgid "I don't accept"
-msgstr "Ez dut onartzen"
+msgstr ""
 
 #: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:145
 msgid "N"
-msgstr "E"
+msgstr ""
 
 #: udtc/interactions/__init__.py:121 udtc/interactions/__init__.py:122
 msgid "{} ({})"
-msgstr "{} ({})"
+msgstr ""
 
 #: udtc/interactions/__init__.py:125
 msgid "[{}] "
-msgstr "[{}] "
+msgstr ""
 
 #: udtc/interactions/__init__.py:144
 msgid "Yes"
-msgstr "Bai"
+msgstr ""
 
 #: udtc/interactions/__init__.py:144
 msgid "y"
-msgstr "b"
+msgstr ""
 
 #: udtc/interactions/__init__.py:145
 msgid "No"
-msgstr "Ez"
+msgstr ""
 
 #: udtc/frameworks/__init__.py:240
 msgid "You can't remove {} as it isn't installed"
@@ -126,19 +124,19 @@ msgstr ""
 
 #: udtc/frameworks/android.py:39
 msgid "Android"
-msgstr "Android"
+msgstr ""
 
 #: udtc/frameworks/android.py:39
 msgid "Android Developement Environment"
-msgstr "Androiderako garapen-ingurunea"
+msgstr ""
 
 #: udtc/frameworks/android.py:93
 msgid "Android Studio"
-msgstr "Android Studio"
+msgstr ""
 
 #: udtc/frameworks/android.py:96
 msgid "Android Studio developer environment"
-msgstr "Android Studio garapen-ingurunea"
+msgstr ""
 
 #: udtc/frameworks/android.py:143
 msgid "ADT Eclipse"

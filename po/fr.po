@@ -7,60 +7,49 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ubuntu-developer-tools-center\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-08-11 14:19+0200\n"
-"PO-Revision-Date: 2014-08-11 12:32+0000\n"
+"POT-Creation-Date: 2014-09-23 08:44+0200\n"
+"PO-Revision-Date: 2014-09-23 06:36+0000\n"
 "Last-Translator: Didier Roche <didrocks@ubuntu.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-28 06:01+0000\n"
-"X-Generator: Launchpad (build 17174)\n"
+"X-Launchpad-Export-Date: 2014-09-24 16:50+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
 
-#: udtc/__init__.py:109
+#: udtc/__init__.py:104
 msgid "* Command '{}':"
 msgstr "* Commande '{}':"
 
-#: udtc/__init__.py:117
+#: udtc/__init__.py:112
 msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr ""
 "Installez et déployez un environnement de développement facilement sur ubuntu"
 
-#: udtc/__init__.py:118
+#: udtc/__init__.py:113
 msgid ""
-"                                         Note that you can also configure "
-"different debug logs behaviors using LOG_CFG\n"
-"                                         pointing to a log yaml profile.\n"
-"                                         "
+"Note that you can also configure different debug logs behaviors using "
+"LOG_CFG pointing to a log yaml profile."
 msgstr ""
-"                                         Il est également possible de "
-"configure différents comportements et niveaux de logs en faisant pointer la "
-"variable d'environnement LOG_CFG vers un fichier de profile de log yaml.\n"
-"                                         "
+"Il est également possible de configurer différents comportements et niveaux "
+"de logs en faisant pointer la variable d'environnement LOG_CFG vers un "
+"fichier de profile de log yaml."
 
-#: udtc/__init__.py:123
+#: udtc/__init__.py:116
 msgid "Show this help"
 msgstr "Afficher cette aide"
 
-#: udtc/__init__.py:124
+#: udtc/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
 msgstr "Augmenter la verbosité de la sortie (2 niveaux)"
 
-#: udtc/frameworks/android.py:39
-msgid "Android"
-msgstr "Android"
+#: udtc/__init__.py:119
+msgid "Remove specified framework if installed"
+msgstr "Supprimer un environnement spécifique si installé"
 
-#: udtc/frameworks/android.py:39
-msgid "Android Developement Environment"
-msgstr "Environnement de développement Android"
-
-#: udtc/frameworks/android.py:99
-msgid "Android Studio"
-msgstr "Android Studio"
-
-#: udtc/frameworks/android.py:102
-msgid "Android Studio developer environment"
-msgstr "Environnement de développement Android Studio"
+#: udtc/tools.py:329
+msgid "# UDTC installation of {}\n"
+msgstr "# Ajouté par UDTC de {}\n"
 
 #: udtc/interactions/__init__.py:73
 msgid "No suitable answer provided"
@@ -127,3 +116,53 @@ msgstr "o"
 #: udtc/interactions/__init__.py:145
 msgid "No"
 msgstr "Non"
+
+#: udtc/frameworks/__init__.py:240
+msgid "You can't remove {} as it isn't installed"
+msgstr "Vous ne pouvez supprimer {} puisqu'il n'est pas installé"
+
+#: udtc/frameworks/__init__.py:271
+msgid ""
+"If the default framework name isn't provided, destdir should contain a /"
+msgstr ""
+"Si l'environnement par défaut n'est pas spécificié, destdir doit contenir un "
+"/"
+
+#: udtc/frameworks/__init__.py:274
+msgid "Remove framework if installed"
+msgstr "Supprime l'environnement si installé"
+
+#: udtc/frameworks/android.py:39
+msgid "Android"
+msgstr "Android"
+
+#: udtc/frameworks/android.py:39
+msgid "Android Developement Environment"
+msgstr "Environnement de développement Android"
+
+#: udtc/frameworks/android.py:93
+msgid "Android Studio"
+msgstr "Android Studio"
+
+#: udtc/frameworks/android.py:96
+msgid "Android Studio developer environment"
+msgstr "Environnement de développement Android Studio"
+
+#: udtc/frameworks/android.py:143
+msgid "ADT Eclipse"
+msgstr "Eclipse ADT"
+
+#: udtc/frameworks/android.py:146
+msgid "Android Developer Tools (using eclipse)"
+msgstr "Android Developer Tools (version Eclipse)"
+
+#~ msgid ""
+#~ "                                         Note that you can also configure "
+#~ "different debug logs behaviors using LOG_CFG\n"
+#~ "                                         pointing to a log yaml profile.\n"
+#~ "                                         "
+#~ msgstr ""
+#~ "                                         Il est également possible de "
+#~ "configure différents comportements et niveaux de logs en faisant pointer la "
+#~ "variable d'environnement LOG_CFG vers un fichier de profile de log yaml.\n"
+#~ "                                         "

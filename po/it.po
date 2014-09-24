@@ -1,4 +1,4 @@
-# Basque translation for ubuntu-developer-tools-center
+# Italian translation for ubuntu-developer-tools-center
 # Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
 # This file is distributed under the same license as the ubuntu-developer-tools-center package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: ubuntu-developer-tools-center\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-23 08:44+0200\n"
-"PO-Revision-Date: 2014-09-07 11:34+0000\n"
-"Last-Translator: Ibai Oihanguren Sala <Unknown>\n"
-"Language-Team: Basque <eu@li.org>\n"
+"PO-Revision-Date: 2014-09-23 06:39+0000\n"
+"Last-Translator: Didier Roche <didrocks@ubuntu.com>\n"
+"Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: udtc/__init__.py:104
 msgid "* Command '{}':"
-msgstr ""
+msgstr "* Comando '{}'"
 
 #: udtc/__init__.py:112
 msgid "Deploy and setup developers environment easily on ubuntu"
@@ -30,14 +30,16 @@ msgid ""
 "Note that you can also configure different debug logs behaviors using "
 "LOG_CFG pointing to a log yaml profile."
 msgstr ""
+"Nota che è anche possibile configurare diversi schemi di debug utilizzando "
+"LOG_CFG puntando ad un profilo di log yaml."
 
 #: udtc/__init__.py:116
 msgid "Show this help"
-msgstr "Erakutsi laguntza hau"
+msgstr "Mostra questo aiuto"
 
 #: udtc/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
-msgstr ""
+msgstr "Aumenta la verbosità dell'output (2 livelli)"
 
 #: udtc/__init__.py:119
 msgid "Remove specified framework if installed"
@@ -54,10 +56,12 @@ msgstr ""
 #: udtc/interactions/__init__.py:75
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
 msgstr ""
+"La tua scelta '{}' non è una scielta accettabile. Le scielte sono: {}"
 
 #: udtc/interactions/__init__.py:78
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
 msgstr ""
+"La tua scelta '{}' non è una scielta accettabile. Le scielte sono: {} e {}"
 
 #: udtc/interactions/__init__.py:96
 msgid " ({})"
@@ -77,19 +81,19 @@ msgstr "{} [{}] "
 
 #: udtc/interactions/__init__.py:111
 msgid "I Accept"
-msgstr "Onartzen dut"
+msgstr "Accetto"
 
 #: udtc/interactions/__init__.py:111
 msgid "a"
-msgstr "o"
+msgstr "un"
 
 #: udtc/interactions/__init__.py:112
 msgid "I don't accept"
-msgstr "Ez dut onartzen"
+msgstr "Non accetto"
 
 #: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:145
 msgid "N"
-msgstr "E"
+msgstr "N"
 
 #: udtc/interactions/__init__.py:121 udtc/interactions/__init__.py:122
 msgid "{} ({})"
@@ -101,15 +105,15 @@ msgstr "[{}] "
 
 #: udtc/interactions/__init__.py:144
 msgid "Yes"
-msgstr "Bai"
+msgstr "Sì"
 
 #: udtc/interactions/__init__.py:144
 msgid "y"
-msgstr "b"
+msgstr "y"
 
 #: udtc/interactions/__init__.py:145
 msgid "No"
-msgstr "Ez"
+msgstr "No"
 
 #: udtc/frameworks/__init__.py:240
 msgid "You can't remove {} as it isn't installed"
@@ -130,7 +134,7 @@ msgstr "Android"
 
 #: udtc/frameworks/android.py:39
 msgid "Android Developement Environment"
-msgstr "Androiderako garapen-ingurunea"
+msgstr "Android Developement Environment"
 
 #: udtc/frameworks/android.py:93
 msgid "Android Studio"
@@ -138,7 +142,7 @@ msgstr "Android Studio"
 
 #: udtc/frameworks/android.py:96
 msgid "Android Studio developer environment"
-msgstr "Android Studio garapen-ingurunea"
+msgstr "Ambiente di sviluppo Android Studio"
 
 #: udtc/frameworks/android.py:143
 msgid "ADT Eclipse"
