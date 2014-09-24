@@ -24,6 +24,7 @@ import os
 import pexpect
 import shutil
 import signal
+import subprocess
 from time import sleep
 from udtc.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned
 from ..tools import LoggedTestCase, local_which
@@ -138,8 +139,14 @@ class LargeFrameworkTests(LoggedTestCase):
         return os.path.exists(path)
 
     def is_in_path(self, filename):
-        """check directly in os.environ"""
-        return local_which(filename) is not None
+        """check that we have a directory in path"""
+        return_code = subprocess.call(["bash", "-i", "which", filename], stdin=subprocess.DEVNULL,
+                                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if return_code == 0:
+            return True
+        elif return_code == 1:
+            return False
+        raise BaseException("Unknown return code for looking if {} is in path".format(filename))
 
     def create_file(self, path, content):
         """passthrough to create a file on the disk"""
