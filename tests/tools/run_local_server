@@ -32,6 +32,5 @@ logging.basicConfig(level=logging.DEBUG,
 
 
 # start a connection
-server_dir=os.path.join(get_data_dir(), "server-content")
+server_dir = os.path.join(get_data_dir(), "server-content")
 LocalHttp(server_dir, port=int(sys.argv[1]), use_ssl=sys.argv[2])
-
