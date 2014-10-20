@@ -28,7 +28,7 @@ import platform
 from os.path import join
 import udtc.frameworks.baseinstaller
 from udtc.network.download_center import DownloadCenter
-from udtc.tools import create_launcher, get_application_desktop_file
+from udtc.tools import create_launcher, get_application_desktop_file, copy_icon
 from udtc.ui import UI
 
 
@@ -98,11 +98,14 @@ class Eclipse(udtc.frameworks.baseinstaller.BaseInstaller):
 
     def create_launcher(self):
         """Create the Luna launcher"""
-        icon_path = join(self.install_path, "icon.xpm")
+        icon_filename = "icon.xpm"
+        copied_filename = 'eclipse-luna.xpm'
+        icon_path = join(self.install_path, icon_filename)
+        copy_icon(icon_path, 'eclipse-luna.xpm')
         exec_path = '"{}" %f'.format(join(self.install_path, "eclipse"))
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=_("Eclipse Luna"),
-                                                     icon_path=icon_path,
+                                                     icon_path=copied_filename,
                                                      exec=exec_path,
                                                      comment=_("The Eclipse Luna Integrated Development Environment"),
                                                      categories="Development;IDE;"))

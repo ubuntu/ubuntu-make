@@ -216,7 +216,7 @@ def launcher_exists(desktop_filename):
     """Return true if the desktop filename exists"""
     exists = os.path.exists(get_launcher_path(desktop_filename))
     if not exists:
-        logger.debug("{} doesn't exists".format(desktop_filename))
+        logger.debug("{} doesn't exist".format(desktop_filename))
         return False
     return True
 
@@ -233,7 +233,10 @@ def launcher_exists_and_is_pinned(desktop_filename):
         return False
     gsettings = Gio.Settings(schema_id="com.canonical.Unity.Launcher", path="/com/canonical/unity/launcher/")
     launcher_list = gsettings.get_strv("favorites")
-    return "application://" + desktop_filename in launcher_list
+    res = "application://" + desktop_filename in launcher_list
+    if not res:
+        logger.debug("Launcher exists but is not pinned (pinned: {}).".format(launcher_list))
+    return res
 
 
 def copy_icon(source_icon_filepath, icon_filename):
