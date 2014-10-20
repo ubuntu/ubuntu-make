@@ -1,8 +1,8 @@
 # Docker container for ubuntu developer tools center
-# this install a full ubuntu desktop environment in an
-# unpriviledge container, add a passwordless sudo user.
+# this installs a full ubuntu desktop environment in an
+# unprivileged container, and adds a passwordless sudo user.
 
-# This is to enable running medium tests of udtc.
+# This enables running medium tests of udtc.
 
 FROM	ubuntu:14.04
 MAINTAINER	Didier Roche <didrocks@ubuntu.com>
@@ -21,7 +21,7 @@ RUN \
   apt-get update && \
   apt-get dist-upgrade -y && \
 
-# install add-apt-respository and tools to create build-deps
+# install add-apt-repository and tools to create build-deps
   apt-get install -y software-properties-common devscripts equivs dpkg-dev && \
 
 # add udtc ppa
