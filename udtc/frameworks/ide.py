@@ -99,13 +99,11 @@ class Eclipse(udtc.frameworks.baseinstaller.BaseInstaller):
     def create_launcher(self):
         """Create the Luna launcher"""
         icon_filename = "icon.xpm"
-        copied_filename = 'eclipse-luna.xpm'
         icon_path = join(self.install_path, icon_filename)
-        copy_icon(icon_path, 'eclipse-luna.xpm')
         exec_path = '"{}" %f'.format(join(self.install_path, "eclipse"))
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=_("Eclipse Luna"),
-                                                     icon_path=copied_filename,
+                                                     icon_path=icon_path,
                                                      exec=exec_path,
                                                      comment=_("The Eclipse Luna Integrated Development Environment"),
                                                      categories="Development;IDE;"))

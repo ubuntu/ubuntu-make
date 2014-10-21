@@ -24,10 +24,10 @@ import platform
 import subprocess
 import tempfile
 import os
+from os.path import join
 import pexpect
 from tests.large import LargeFrameworkTests
 from tests.tools import UDTC
-from udtc.tools import get_icon_path
 
 
 class EclipseIDETests(LargeFrameworkTests):
@@ -41,7 +41,11 @@ class EclipseIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/eclipse")
         self.desktop_filename = "eclipse-luna.desktop"
-        self.icon_filename = "eclipse-luna.xpm"
+        self.icon_filename = "icon.xpm"
+
+    @property
+    def full_icon_path(self):
+        return join(self.installed_path, self.icon_filename)
 
     @property
     def exec_path(self):
@@ -63,7 +67,7 @@ class EclipseIDETests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(get_icon_path(self.icon_filename)))
+        self.assertTrue(self.path_exists(self.full_icon_path))
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -99,7 +103,7 @@ class EclipseIDETests(LargeFrameworkTests):
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.exec_path))
-        self.assertFalse(self.path_exists(get_icon_path(self.icon_filename)))
+        self.assertFalse(self.path_exists(self.full_icon_path))
 
     def test_eclipse_ide_reinstall(self):
         """Reinstall eclipse once installed"""
@@ -116,7 +120,7 @@ class EclipseIDETests(LargeFrameworkTests):
             # we have an installed launcher, added to the launcher
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
             self.assertTrue(self.path_exists(self.exec_path))
-            self.assertTrue(self.path_exists(get_icon_path(self.icon_filename)))
+            self.assertTrue(self.path_exists(self.full_icon_path))
 
             # launch it, send SIGTERM and check that it exits fine
             proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -151,7 +155,7 @@ class EclipseIDETests(LargeFrameworkTests):
             # we have an installed launcher, added to the launcher
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
             self.assertTrue(self.path_exists(self.exec_path))
-            self.assertTrue(self.path_exists(get_icon_path(self.icon_filename)))
+            self.assertTrue(self.path_exists(self.full_icon_path))
 
         # ensure that version first isn't installed anymore
         self.assertFalse(self.path_exists(original_install_path))
@@ -182,7 +186,7 @@ class EclipseIDETests(LargeFrameworkTests):
             # we have an installed launcher, added to the launcher
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
             self.assertTrue(self.path_exists(self.exec_path))
-            self.assertTrue(self.path_exists(get_icon_path(self.icon_filename)))
+            self.assertTrue(self.path_exists(self.full_icon_path))
 
         # ensure that version first isn't installed anymore
         self.assertFalse(self.path_exists(original_install_path))
@@ -205,7 +209,7 @@ class EclipseIDETests(LargeFrameworkTests):
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.exec_path))
-        self.assertFalse(self.path_exists(get_icon_path(self.icon_filename)))
+        self.assertFalse(self.path_exists(self.full_icon_path))
 
     def test_start_install_on_existing_dir(self):
         """We prompt if we try to install on an existing directory which isn't empty"""
@@ -221,7 +225,7 @@ class EclipseIDETests(LargeFrameworkTests):
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.exec_path))
-        self.assertFalse(self.path_exists(get_icon_path(self.icon_filename)))
+        self.assertFalse(self.path_exists(self.full_icon_path))
 
     def test_removal(self):
         """Remove eclipse with default path"""
@@ -232,7 +236,7 @@ class EclipseIDETests(LargeFrameworkTests):
         self.wait_and_no_warn()
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.installed_path))
-        self.assertTrue(self.path_exists(get_icon_path(self.icon_filename)))
+        self.assertTrue(self.path_exists(self.full_icon_path))
 
         # now, remove it
         self.child = pexpect.spawnu(self.command('{} ide eclipse --remove'.format(UDTC)))
@@ -240,7 +244,7 @@ class EclipseIDETests(LargeFrameworkTests):
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
-        self.assertFalse(self.path_exists(get_icon_path(self.icon_filename)))
+        self.assertFalse(self.path_exists(self.full_icon_path))
 
     def test_removal_non_default_path(self):
         """Remove eclipse with non default path"""
@@ -250,7 +254,7 @@ class EclipseIDETests(LargeFrameworkTests):
         self.wait_and_no_warn()
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.installed_path))
-        self.assertTrue(self.path_exists(get_icon_path(self.icon_filename)))
+        self.assertTrue(self.path_exists(self.full_icon_path))
 
         # now, remove it
         self.child = pexpect.spawnu(self.command('{} ide eclipse --remove'.format(UDTC)))
@@ -258,5 +262,5 @@ class EclipseIDETests(LargeFrameworkTests):
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
-        self.assertFalse(self.path_exists(get_icon_path(self.icon_filename)))
+        self.assertFalse(self.path_exists(self.full_icon_path))
 
