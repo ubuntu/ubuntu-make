@@ -57,3 +57,40 @@ cd $repo_root_dir/eclipse
 create_package openjdk-7-jdk
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 
+# stencyl deps
+mkdir -p $repo_root_dir/stencyl
+cd $repo_root_dir/stencyl
+create_package libxtst6 i386
+create_package libxext6 i386
+create_package libxi6 i386
+create_package libncurses5 i386
+create_package libxt6 i386
+create_package libxpm4 i386
+create_package libxmu6 i386
+create_package libxp6 i386
+create_package libgtk2.0-0 i386
+create_package libatk1.0-0 i386
+create_package libc6 i386
+create_package libcairo2 i386
+create_package libexpat1 i386
+create_package libfontconfig1 i386
+create_package libfreetype6 i386
+create_package libglib2.0-0 i386
+create_package libice6 i386
+create_package libpango1.0-0 i386
+create_package libpng12-0 i386
+create_package libsm6 i386
+create_package libxau6 i386
+create_package libxcursor1 i386
+create_package libxdmcp6 i386
+create_package libxfixes3 i386
+create_package libx11-6 i386
+create_package libxinerama1 i386
+create_package libxrandr2 i386
+create_package libxrender1 i386
+create_package zlib1g i386
+create_package libnss3-1d i386
+create_package libnspr4-0d i386
+create_package libcurl3 i386
+create_package libasound2 i386
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
