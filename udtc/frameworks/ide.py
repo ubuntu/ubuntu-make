@@ -117,4 +117,3 @@ class Eclipse(udtc.frameworks.baseinstaller.BaseInstaller):
             logger.debug("{} binary isn't installed".format(self.name))
             return False
         return True
-
