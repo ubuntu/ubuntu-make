@@ -22,7 +22,6 @@
 """Tests for the IDE category"""
 import platform
 import subprocess
-import tempfile
 import os
 from os.path import join
 import pexpect
