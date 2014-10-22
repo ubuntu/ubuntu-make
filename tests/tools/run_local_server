@@ -23,6 +23,7 @@ import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import sys
 from tools import get_data_dir
 from tools.local_server import LocalHttp
 
@@ -32,5 +33,10 @@ logging.basicConfig(level=logging.DEBUG,
 
 
 # start a connection
-server_dir = os.path.join(get_data_dir(), "server-content")
-LocalHttp(server_dir, port=int(sys.argv[1]), use_ssl=sys.argv[2])
+hostname = sys.argv[2]
+server_dir = os.path.join(get_data_dir(), "server-content", hostname)
+use_ssl = "{}.pem".format(hostname)
+if not os.path.isfile(os.path.join(get_data_dir(), use_ssl)):
+    use_ssl = False
+
+LocalHttp(server_dir, port=int(sys.argv[1]), use_ssl=use_ssl)

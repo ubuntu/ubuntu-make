@@ -47,7 +47,7 @@ class ContainerTests(LoggedTestCase):
                 os.getenv("PATH"), os.getenv("VIRTUAL_ENV"),
                 os.path.join(get_tools_helper_dir(), "run_local_server"),
                 self.port,
-                "{}.pem".format(self.hostname))
+                self.hostname)
 
         if hasattr(self, "apt_repo_override_path"):
             runner_cmd += "sudo sh -c 'echo deb file:{} / > /etc/apt/sources.list';sudo apt-get update;".format(
