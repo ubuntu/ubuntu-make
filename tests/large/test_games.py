@@ -53,10 +53,12 @@ class StencylTests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-
         # launch it, send SIGTERM and check that it exits fine
+        use_cwd = self.installed_path
+        if self.in_container:
+            use_cwd = None
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
-                                stderr=subprocess.DEVNULL, cwd=self.installed_path)
+                                stderr=subprocess.DEVNULL, cwd=use_cwd)
         self.check_and_kill_process(["./runtimes/jre-linux/bin/java"], wait_before=self.TIMEOUT_START)
         proc.wait(self.TIMEOUT_STOP)
 
