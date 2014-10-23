@@ -51,3 +51,9 @@ create_package libstdc++6 i386
 create_package zlib1g i386
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 
+# eclipse deps
+mkdir -p $repo_root_dir/eclipse
+cd $repo_root_dir/eclipse
+create_package openjdk-7-jdk
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
