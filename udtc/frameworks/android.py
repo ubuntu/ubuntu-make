@@ -36,7 +36,7 @@ _supported_archs = ['i386', 'amd64']
 class AndroidCategory(udtc.frameworks.BaseCategory):
 
     def __init__(self):
-        super().__init__(name=_("Android"), description=_("Android Developement Environment"),
+        super().__init__(name=_("Android"), description=_("Android Development Environment"),
                          logo_path=None,
                          packages_requirements=["openjdk-7-jdk", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386"])
 
