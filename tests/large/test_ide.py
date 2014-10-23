@@ -39,7 +39,7 @@ class EclipseIDETests(LargeFrameworkTests):
     def setUp(self):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/eclipse")
-        self.desktop_filename = "eclipse-luna.desktop"
+        self.desktop_filename = "eclipse.desktop"
         self.icon_filename = "icon.xpm"
 
     @property

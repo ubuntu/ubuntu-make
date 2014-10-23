@@ -54,7 +54,7 @@ class Eclipse(udtc.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=None,
                          dir_to_decompress_in_tarball='eclipse',
-                         desktop_filename='eclipse-luna.desktop',
+                         desktop_filename='eclipse.desktop',
                          packages_requirements=['openjdk-7-jdk'])
 
     def download_provider_page(self):
