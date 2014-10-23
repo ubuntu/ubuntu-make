@@ -24,9 +24,10 @@ import os
 import pexpect
 import shutil
 import signal
+import subprocess
 from time import sleep
 from udtc.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned
-from ..tools import LoggedTestCase
+from ..tools import LoggedTestCase, local_which
 
 
 class LargeFrameworkTests(LoggedTestCase):
@@ -71,11 +72,14 @@ class LargeFrameworkTests(LoggedTestCase):
                     return int(pid)
         raise BaseException("The process that we can find with {} isn't started".format(process_grep))
 
-    def check_and_kill_process(self, process_grep, wait_before=0):
+    def check_and_kill_process(self, process_grep, wait_before=0, send_sigkill=False):
         """Check a process matching process_grep exists and kill it"""
         sleep(wait_before)
         pid = self._pid_for(process_grep)
-        os.kill(pid, signal.SIGTERM)
+        if send_sigkill:
+            os.kill(pid, signal.SIGKILL)
+        else:
+            os.kill(pid, signal.SIGTERM)
 
     def assert_for_warn(self, content, expect_warn=False):
         """assert if there is any warn"""
@@ -133,6 +137,16 @@ class LargeFrameworkTests(LoggedTestCase):
     def path_exists(self, path):
         """passthrough to os.path.exists"""
         return os.path.exists(path)
+
+    def is_in_path(self, filename):
+        """check that we have a directory in path"""
+        return_code = subprocess.call(["bash", "-i", "which", filename], stdin=subprocess.DEVNULL,
+                                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if return_code == 0:
+            return True
+        elif return_code == 1:
+            return False
+        raise BaseException("Unknown return code for looking if {} is in path".format(filename))
 
     def create_file(self, path, content):
         """passthrough to create a file on the disk"""

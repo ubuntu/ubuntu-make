@@ -26,7 +26,7 @@ import logging
 import os
 import re
 import udtc.frameworks.baseinstaller
-from udtc.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon
+from udtc.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon, add_to_user_path
 
 logger = logging.getLogger(__name__)
 
@@ -96,6 +96,10 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
                         comment=_("Android Studio developer environment"),
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-android-studio"))
+        # add adb and other android tools to PATH
+        paths_to_add = [os.path.join(self.install_path, "sdk", "platform-tools"),
+                        os.path.join(self.install_path, "sdk", "tools")]
+        add_to_user_path(paths_to_add, self.name)
 
     @property
     def is_installed(self):
@@ -141,6 +145,10 @@ class EclipseAdt(udtc.frameworks.baseinstaller.BaseInstaller):
                         exec='"{}" %f'.format(os.path.join(self.install_path, "eclipse", "eclipse")),
                         comment=_("Android Developer Tools (using eclipse)"),
                         categories="Development;IDE;"))
+        # add adb and other android tools to PATH
+        paths_to_add = [os.path.join(self.install_path, "sdk", "platform-tools"),
+                        os.path.join(self.install_path, "sdk", "tools")]
+        add_to_user_path(paths_to_add, self.name)
 
     @property
     def is_installed(self):

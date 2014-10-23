@@ -701,3 +701,102 @@ class TestMiscTools(LoggedTestCase):
 
         osmock.setegid.assert_called_once_with(0)
         osmock.seteuid.assert_called_once_with(0)
+
+
+class TestAppendPATH(LoggedTestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.local_dir = tempfile.mkdtemp()
+        self.initial_path = os.environ['PATH']
+
+    def tearDown(self):
+        shutil.rmtree(self.local_dir)
+        os.environ['PATH'] = self.initial_path
+        super().tearDown()
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_add_to_user_path(self, expanderusermock):
+        """Test that adding to user path append to an existing .bashrc file"""
+        expanderusermock.return_value = self.local_dir
+        bashrc_file = os.path.join(self.local_dir, ".bashrc")
+        open(bashrc_file, 'w').write("Foo\nBar\n")
+        tools.add_to_user_path(["/tmp/foo"], "one path addition")
+
+        expanderusermock.assert_called_once_with('~')
+        bashrc_content = open(bashrc_file).read()
+        self.assertTrue("Foo\nBar\n" in bashrc_content, bashrc_content)  # we kept previous content
+        self.assertTrue("PATH=/tmp/foo:$PATH" in bashrc_content, bashrc_content)
+        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_add_to_user_path_multiple_paths(self, expanderusermock):
+        """Test that adding multiple paths to user path append to an existing .bashrc file"""
+        expanderusermock.return_value = self.local_dir
+        bashrc_file = os.path.join(self.local_dir, ".bashrc")
+        open(bashrc_file, 'w').write("Foo\nBar\n")
+        tools.add_to_user_path(["/tmp/foo", "/tmp/bar"], "one path addition")
+
+        expanderusermock.assert_called_once_with('~')
+        bashrc_content = open(bashrc_file).read()
+        self.assertTrue("Foo\nBar\n" in bashrc_content, bashrc_content)  # we kept previous content
+        self.assertTrue("PATH=/tmp/foo:/tmp/bar:$PATH" in bashrc_content, bashrc_content)
+        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+        self.assertTrue("/tmp/bar" in os.environ["PATH"], os.environ["PATH"])
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_add_to_user_path_empty_file(self, expanderusermock):
+        """Test that adding to user path append to an non existing .bashrc file"""
+        expanderusermock.return_value = self.local_dir
+        bashrc_file = os.path.join(self.local_dir, ".bashrc")
+        tools.add_to_user_path(["/tmp/foo"], "one path addition")
+
+        expanderusermock.assert_called_once_with('~')
+        bashrc_content = open(bashrc_file).read()
+        self.assertTrue("PATH=/tmp/foo:$PATH" in bashrc_content, bashrc_content)
+        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_add_to_user_path_twice(self, expanderusermock):
+        """Test that adding to user path twice doesn't add it twice in the file"""
+        expanderusermock.return_value = self.local_dir
+        bashrc_file = os.path.join(self.local_dir, ".bashrc")
+        open(bashrc_file, 'w').write("Foo\nBar\n")
+        tools.add_to_user_path(["/tmp/foo"], "one path addition")
+
+        expanderusermock.assert_called_once_with('~')
+        bashrc_content = open(bashrc_file).read()
+        self.assertTrue("Foo\nBar\n" in bashrc_content, bashrc_content)  # we kept previous content
+        self.assertTrue("PATH=/tmp/foo:$PATH" in bashrc_content, bashrc_content)
+        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+
+        tools.add_to_user_path(["/tmp/foo"], "one path addition")
+
+        # ensure, it's only there once
+        bashrc_content = open(bashrc_file).read()
+        self.assertEquals(bashrc_content.count("PATH=/tmp/foo:$PATH"), 1, bashrc_content)
+        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_add_to_user_path_twice_with_new_content(self, expanderusermock):
+        """Test that adding to user path twice but with new paths add only the new path to the file"""
+        expanderusermock.return_value = self.local_dir
+        bashrc_file = os.path.join(self.local_dir, ".bashrc")
+        open(bashrc_file, 'w').write("Foo\nBar\n")
+        tools.add_to_user_path(["/tmp/foo"], "one path addition")
+
+        expanderusermock.assert_called_once_with('~')
+        bashrc_content = open(bashrc_file).read()
+        self.assertTrue("Foo\nBar\n" in bashrc_content, bashrc_content)  # we kept previous content
+        self.assertTrue("PATH=/tmp/foo:$PATH" in bashrc_content, bashrc_content)
+        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+
+        tools.add_to_user_path(["/tmp/foo", "/tmp/bar"], "even more addition")
+
+        # we only added the new element
+        bashrc_content = open(bashrc_file).read()
+        self.assertEquals(bashrc_content.count("PATH=/tmp/foo:$PATH"), 1, bashrc_content)
+        self.assertEquals(bashrc_content.count("/tmp/foo"), 1, bashrc_content)
+        self.assertTrue("PATH=/tmp/bar:$PATH" in bashrc_content, bashrc_content)
+        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+        self.assertTrue("/tmp/bar" in os.environ["PATH"], os.environ["PATH"])

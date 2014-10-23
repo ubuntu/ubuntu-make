@@ -22,6 +22,7 @@
 import argcomplete
 from contextlib import suppress
 import logging
+import os
 from progressbar import ProgressBar, BouncingBar
 import readline
 import sys
@@ -97,7 +98,7 @@ def run_command_for_args(args):
 def mangle_args_for_default_framework(args):
     """return the potentially changed args_to_parse for the parser for handling default frameworks
 
-    "./<command> [global_option] category [options from default framework]"
+    "./<command> [global_or_common_options] category [options from default framework]"
     as subparsers can't define default options and are not optional: http://bugs.python.org/issue9253
     """
 
@@ -112,7 +113,7 @@ def mangle_args_for_default_framework(args):
             if not category_name:
                 if arg in BaseCategory.categories.keys():
                     category_name = arg
-                    # file global options
+                    # file global and common options
                     result_args.extend(pending_args)
                     pending_args = []
                     result_args.append(arg)
@@ -125,9 +126,13 @@ def mangle_args_for_default_framework(args):
                 if arg in BaseCategory.categories[category_name].frameworks.keys():
                     result_args.append(arg)
                     continue
-                # take default framework if any
+                # take default framework if any after some sanitization check
                 elif BaseCategory.categories[category_name].default_framework is not None:
-                    result_args.append(BaseCategory.categories[category_name].default_framework.prog_name)
+                    # before considering automatically inserting default framework, check that this argument has
+                    # some path separator into it. This is to avoid typos in framework selection and selecting default
+                    # framework with installation path where we didn't want to.
+                    if os.path.sep in arg:
+                        result_args.append(BaseCategory.categories[category_name].default_framework.prog_name)
                     # current arg will be appending in pending_args
                 else:
                     skip_all = True  # will just append everything at the end

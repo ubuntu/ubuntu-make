@@ -7,78 +7,66 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ubuntu-developer-tools-center\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-08-28 16:27+0200\n"
-"PO-Revision-Date: 2014-09-08 13:34+0000\n"
+"POT-Creation-Date: 2014-09-23 08:44+0200\n"
+"PO-Revision-Date: 2014-09-23 19:36+0000\n"
 "Last-Translator: Darío Piemonte <dariopiemonte@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-09-08 13:36+0000\n"
+"X-Launchpad-Export-Date: 2014-09-24 16:50+0000\n"
 "X-Generator: Launchpad (build 17196)\n"
 
-#: udtc/__init__.py:109 udtc/__init__.py:109
+#: udtc/__init__.py:104
 msgid "* Command '{}':"
 msgstr "* Orden «{}»:"
 
-#: udtc/__init__.py:117 udtc/__init__.py:117
+#: udtc/__init__.py:112
 msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr "Instalar y configurar entornos de desarrollo fácilmente en Ubuntu"
 
-#: udtc/__init__.py:118 udtc/__init__.py:118
+#: udtc/__init__.py:113
 msgid ""
-"                                         Note that you can also configure "
-"different debug logs behaviors using LOG_CFG\n"
-"                                         pointing to a log yaml profile.\n"
-"                                         "
+"Note that you can also configure different debug logs behaviors using "
+"LOG_CFG pointing to a log yaml profile."
 msgstr ""
-"                                         También puede configurar distintos "
-"comportamientos para los registros de depuración usando LOG_CFG\n"
-"apuntando a un perfil yaml.\n"
-"                                         "
+"También puede configurar distintos comportamientos para los registros de "
+"depuración usando LOG_CFG apuntando a un perfil yaml."
 
-#: udtc/__init__.py:123 udtc/__init__.py:123
+#: udtc/__init__.py:116
 msgid "Show this help"
 msgstr "Muestra esta ayuda"
 
-#: udtc/__init__.py:124 udtc/__init__.py:124
+#: udtc/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
 msgstr "Aumentar verbosidad de la salida (2 niveles)"
 
-#: udtc/frameworks/android.py:39 udtc/frameworks/android.py:39
-msgid "Android"
-msgstr "Android"
+#: udtc/__init__.py:119
+msgid "Remove specified framework if installed"
+msgstr "Eliminar el framework especificado si está instalado"
 
-#: udtc/frameworks/android.py:39 udtc/frameworks/android.py:39
-msgid "Android Developement Environment"
-msgstr "Entorno de desarrollo de Android"
+#: udtc/tools.py:329
+msgid "# UDTC installation of {}\n"
+msgstr "# Instalación de {} con UDTC\n"
 
-#: udtc/frameworks/android.py:99 udtc/frameworks/android.py:100
-msgid "Android Studio"
-msgstr "Android Studio"
-
-#: udtc/frameworks/android.py:102 udtc/frameworks/android.py:103
-msgid "Android Studio developer environment"
-msgstr "Entorno de desarrollo Android Studio"
-
-#: udtc/interactions/__init__.py:73 udtc/interactions/__init__.py:73
+#: udtc/interactions/__init__.py:73
 msgid "No suitable answer provided"
 msgstr "No se ha provisto una respuesta adecuada"
 
-#: udtc/interactions/__init__.py:75 udtc/interactions/__init__.py:75
+#: udtc/interactions/__init__.py:75
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
 msgstr "Su entrada '{}' no es una opción aceptable. Las opciones son: {}"
 
-#: udtc/interactions/__init__.py:78 udtc/interactions/__init__.py:78
+#: udtc/interactions/__init__.py:78
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
 msgstr ""
 "Su entrada '{}' no es una opción aceptable. Las opciones son: {} y {}"
 
-#: udtc/interactions/__init__.py:96 udtc/interactions/__init__.py:96
+#: udtc/interactions/__init__.py:96
 msgid " ({})"
 msgstr " ({})"
 
-#: udtc/interactions/__init__.py:100 udtc/interactions/__init__.py:100
+#: udtc/interactions/__init__.py:100
 msgid ""
 "{}\n"
 "[{}] "
@@ -86,44 +74,90 @@ msgstr ""
 "{}\n"
 "[{}] "
 
-#: udtc/interactions/__init__.py:103 udtc/interactions/__init__.py:103
+#: udtc/interactions/__init__.py:103
 msgid "{} [{}] "
 msgstr "{} [{}] "
 
-#: udtc/interactions/__init__.py:111 udtc/interactions/__init__.py:111
+#: udtc/interactions/__init__.py:111
 msgid "I Accept"
 msgstr "Acepto"
 
-#: udtc/interactions/__init__.py:111 udtc/interactions/__init__.py:111
+#: udtc/interactions/__init__.py:111
 msgid "a"
 msgstr "a"
 
-#: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:112
+#: udtc/interactions/__init__.py:112
 msgid "I don't accept"
 msgstr "No acepto"
 
-#: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:145
 #: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:145
 msgid "N"
 msgstr "N"
 
 #: udtc/interactions/__init__.py:121 udtc/interactions/__init__.py:122
-#: udtc/interactions/__init__.py:121 udtc/interactions/__init__.py:122
 msgid "{} ({})"
 msgstr "{} ({})"
 
-#: udtc/interactions/__init__.py:125 udtc/interactions/__init__.py:125
+#: udtc/interactions/__init__.py:125
 msgid "[{}] "
 msgstr "[{}] "
 
-#: udtc/interactions/__init__.py:144 udtc/interactions/__init__.py:144
+#: udtc/interactions/__init__.py:144
 msgid "Yes"
 msgstr "Sí"
 
-#: udtc/interactions/__init__.py:144 udtc/interactions/__init__.py:144
+#: udtc/interactions/__init__.py:144
 msgid "y"
 msgstr "y"
 
-#: udtc/interactions/__init__.py:145 udtc/interactions/__init__.py:145
+#: udtc/interactions/__init__.py:145
 msgid "No"
 msgstr "No"
+
+#: udtc/frameworks/__init__.py:240
+msgid "You can't remove {} as it isn't installed"
+msgstr "No puedes eliminar {} ya que no está instalado"
+
+#: udtc/frameworks/__init__.py:271
+msgid ""
+"If the default framework name isn't provided, destdir should contain a /"
+msgstr ""
+
+#: udtc/frameworks/__init__.py:274
+msgid "Remove framework if installed"
+msgstr "Eliminar framework si está instalado"
+
+#: udtc/frameworks/android.py:39
+msgid "Android"
+msgstr "Android"
+
+#: udtc/frameworks/android.py:39
+msgid "Android Developement Environment"
+msgstr "Entorno de desarrollo de Android"
+
+#: udtc/frameworks/android.py:93
+msgid "Android Studio"
+msgstr "Android Studio"
+
+#: udtc/frameworks/android.py:96
+msgid "Android Studio developer environment"
+msgstr "Entorno de desarrollo Android Studio"
+
+#: udtc/frameworks/android.py:143
+msgid "ADT Eclipse"
+msgstr ""
+
+#: udtc/frameworks/android.py:146
+msgid "Android Developer Tools (using eclipse)"
+msgstr "Android Developer Tools (usando Eclipse)"
+
+#~ msgid ""
+#~ "                                         Note that you can also configure "
+#~ "different debug logs behaviors using LOG_CFG\n"
+#~ "                                         pointing to a log yaml profile.\n"
+#~ "                                         "
+#~ msgstr ""
+#~ "                                         También puede configurar distintos "
+#~ "comportamientos para los registros de depuración usando LOG_CFG\n"
+#~ "apuntando a un perfil yaml.\n"
+#~ "                                         "

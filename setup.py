@@ -26,16 +26,16 @@ from glob import glob
 import os
 from setuptools import setup, find_packages
 import subprocess
-import udtc  # that initialiazes the gettext domain
+import udtc  # that initializes the gettext domain
 
 I18N_DOMAIN = gettext.textdomain()
 PO_DIR = os.path.join(os.path.dirname(os.curdir), 'po')
 
 
 def get_requirements(tag_to_detect=""):
-    """Gather a list line per line of requirements from tag_to_detect to next tag.
+    """Gather a list of requirements line per line from tag_to_detect to next tag.
 
-    if tag_to_detect is empty, it will gather every requirements"""
+    if tag_to_detect is empty, it will gather every requirement"""
     requirements = []
     tag_detected = False
     with open("requirements.txt") as f:
@@ -117,7 +117,7 @@ class update_pot(cmd.Command):
 
     def run(self):
         cmd = ['xgettext', '--language=Python', '--keyword=_', '--package-name', I18N_DOMAIN,
-               '-j', '--output', 'po/{}.pot'.format(I18N_DOMAIN)]
+               '--output', 'po/{}.pot'.format(I18N_DOMAIN)]
         for path, names, filenames in os.walk(os.path.join(os.curdir, 'udtc')):
             for f in filenames:
                 if f.endswith('.py'):
