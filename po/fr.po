@@ -137,7 +137,7 @@ msgid "Android"
 msgstr "Android"
 
 #: udtc/frameworks/android.py:39
-msgid "Android Developement Environment"
+msgid "Android Development Environment"
 msgstr "Environnement de développement Android"
 
 #: udtc/frameworks/android.py:93
