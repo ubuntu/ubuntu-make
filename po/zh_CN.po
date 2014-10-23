@@ -7,58 +7,45 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ubuntu-developer-tools-center\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-08-11 14:19+0200\n"
-"PO-Revision-Date: 2014-08-28 09:37+0000\n"
-"Last-Translator: shijing <jingshi@ubuntukylin.com>\n"
+"POT-Creation-Date: 2014-09-23 08:44+0200\n"
+"PO-Revision-Date: 2014-09-23 06:34+0000\n"
+"Last-Translator: Didier Roche <didrocks@ubuntu.com>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-28 14:24+0000\n"
-"X-Generator: Launchpad (build 17174)\n"
+"X-Launchpad-Export-Date: 2014-09-24 16:50+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
 
-#: udtc/__init__.py:109
+#: udtc/__init__.py:104
 msgid "* Command '{}':"
 msgstr "* 命令 '{}'："
 
-#: udtc/__init__.py:117
+#: udtc/__init__.py:112
 msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr "在 Ubuntu 上轻松部署和设置开发环境"
 
-#: udtc/__init__.py:118
+#: udtc/__init__.py:113
 msgid ""
-"                                         Note that you can also configure "
-"different debug logs behaviors using LOG_CFG\n"
-"                                         pointing to a log yaml profile.\n"
-"                                         "
-msgstr ""
-"                                         请注意，您还可以通过 LOG_CFG 指向的 yaml "
-"配置文件来设置不同的调试日志行为。\n"
-"                                         "
+"Note that you can also configure different debug logs behaviors using "
+"LOG_CFG pointing to a log yaml profile."
+msgstr "请注意，您还可以通过 LOG_CFG 指向的 yaml 配置文件来设置不同的调试日志行为。"
 
-#: udtc/__init__.py:123
+#: udtc/__init__.py:116
 msgid "Show this help"
 msgstr "显示本帮助"
 
-#: udtc/__init__.py:124
+#: udtc/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
 msgstr "提升输出的级别 (2级)"
 
-#: udtc/frameworks/android.py:39
-msgid "Android"
-msgstr "Android"
+#: udtc/__init__.py:119
+msgid "Remove specified framework if installed"
+msgstr ""
 
-#: udtc/frameworks/android.py:39
-msgid "Android Developement Environment"
-msgstr "Android 开发环境"
-
-#: udtc/frameworks/android.py:99
-msgid "Android Studio"
-msgstr "Android Studio"
-
-#: udtc/frameworks/android.py:102
-msgid "Android Studio developer environment"
-msgstr "Android Studio 开发者环境"
+#: udtc/tools.py:329
+msgid "# UDTC installation of {}\n"
+msgstr ""
 
 #: udtc/interactions/__init__.py:73
 msgid "No suitable answer provided"
@@ -123,3 +110,50 @@ msgstr "y"
 #: udtc/interactions/__init__.py:145
 msgid "No"
 msgstr "否"
+
+#: udtc/frameworks/__init__.py:240
+msgid "You can't remove {} as it isn't installed"
+msgstr ""
+
+#: udtc/frameworks/__init__.py:271
+msgid ""
+"If the default framework name isn't provided, destdir should contain a /"
+msgstr ""
+
+#: udtc/frameworks/__init__.py:274
+msgid "Remove framework if installed"
+msgstr ""
+
+#: udtc/frameworks/android.py:39
+msgid "Android"
+msgstr "Android"
+
+#: udtc/frameworks/android.py:39
+msgid "Android Developement Environment"
+msgstr "Android 开发环境"
+
+#: udtc/frameworks/android.py:93
+msgid "Android Studio"
+msgstr "Android Studio"
+
+#: udtc/frameworks/android.py:96
+msgid "Android Studio developer environment"
+msgstr "Android Studio 开发者环境"
+
+#: udtc/frameworks/android.py:143
+msgid "ADT Eclipse"
+msgstr ""
+
+#: udtc/frameworks/android.py:146
+msgid "Android Developer Tools (using eclipse)"
+msgstr ""
+
+#~ msgid ""
+#~ "                                         Note that you can also configure "
+#~ "different debug logs behaviors using LOG_CFG\n"
+#~ "                                         pointing to a log yaml profile.\n"
+#~ "                                         "
+#~ msgstr ""
+#~ "                                         请注意，您还可以通过 LOG_CFG 指向的 yaml "
+#~ "配置文件来设置不同的调试日志行为。\n"
+#~ "                                         "

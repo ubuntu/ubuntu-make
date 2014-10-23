@@ -24,7 +24,8 @@ import signal
 import sys
 
 
-process_grep = sys.argv[1:]
+kill_process = sys.argv[1] == "True"
+process_grep = sys.argv[2:]
 for pid in os.listdir('/proc'):
     if not pid.isdigit() or int(pid) == os.getpid():
         continue
@@ -36,6 +37,9 @@ for pid in os.listdir('/proc'):
                 break
         # we found it
         else:
-            os.kill(int(pid), signal.SIGTERM)
+            signal_to_send = signal.SIGTERM
+            if kill_process:
+                signal_to_send = signal.SIGKILL
+            os.kill(int(pid), signal_to_send)
             sys.exit(0)
 sys.exit(1)

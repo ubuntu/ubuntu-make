@@ -97,6 +97,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
         # abandon query parameters
         path = path.split('?', 1)[0]
         path = path.split('#', 1)[0]
+        path = path.split('&', 1)[0]
         # Don't forget explicit trailing slash when normalizing. Issue17324
         trailing_slash = path.rstrip().endswith('/')
         path = posixpath.normpath(urllib.parse.unquote(path))
@@ -117,12 +118,15 @@ class RequestHandler(SimpleHTTPRequestHandler):
         return path
 
     def do_GET(self):
-        """Override this to enable redirecting paths that end in -redirect."""
+        """Override this to enable redirecting paths that end in -redirect or rewrite in presence of ?file="""
         if self.path.endswith('-redirect'):
             self.send_response(302)
             self.send_header('Location', self.path[:-len('-redirect')])
             self.end_headers()
         else:
+            # keep special ?file= to redirect the query
+            if '?file=' in self.path:
+                self.path = self.path.split('?file=', 1)[1]
             super().do_GET()
 
     def log_message(self, fmt, *args):

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2014 Canonical
 #
@@ -18,25 +17,25 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-import logging
+"""Tests for ides"""
+
+from . import ContainerTests
 import os
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import sys
-from tools import get_data_dir
-from tools.local_server import LocalHttp
+from ..large import test_ide
+from udtc import settings
 
 
-logging.basicConfig(level=logging.DEBUG,
-                    format="%(asctime)s [%(name)s] %(levelname)s: %(message)s")
+class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
+    """This will test the eclipse IDE integration inside a container"""
 
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
 
-# start a connection
-hostname = sys.argv[2]
-server_dir = os.path.join(get_data_dir(), "server-content", hostname)
-use_ssl = "{}.pem".format(hostname)
-if not os.path.isfile(os.path.join(get_data_dir(), use_ssl)):
-    use_ssl = False
-
-LocalHttp(server_dir, port=int(sys.argv[1]), use_ssl=use_ssl)
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'eclipse')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(settings.DOCKER_USER))

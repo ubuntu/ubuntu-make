@@ -18,6 +18,7 @@ Build-Depends: debhelper (>= 9),
                python3-yaml,
                python3-requests,
                python3-xdg,
+               dbus-x11,
                fakeroot,
 Maintainer: Didier Roche <didrocks@ubuntu.com>
 Standards-Version: 3.9.5

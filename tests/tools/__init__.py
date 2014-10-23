@@ -144,3 +144,12 @@ def get_docker_path():
         if not DOCKER:
             DOCKER = shutil.which("docker")
     return DOCKER
+
+
+def local_which(filename):
+    """Find filename in $PATH and return it if present"""
+    for dir in os.environ["PATH"].split(os.pathsep):
+        file_path = os.path.join(dir, filename)
+        if os.path.isfile(file_path):
+            return file_path
+    return None

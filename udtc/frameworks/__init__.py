@@ -31,9 +31,9 @@ import pkgutil
 import sys
 import subprocess
 from udtc.network.requirements_handler import RequirementsHandler
-from udtc.settings import DEFAULT_INSTALL_TOOLS_PATH
+from udtc.settings import DEFAULT_INSTALL_TOOLS_PATH, UDTC_FRAMEWORKS_ENVIRON_VARIABLE
 from udtc.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
-    is_completion_mode, switch_to_current_user, MainLoop
+    is_completion_mode, switch_to_current_user, MainLoop, get_user_frameworks_path
 from udtc.ui import UI
 
 
@@ -55,8 +55,8 @@ class BaseCategory():
         self.frameworks = NoneDict()
         self.packages_requirements = [] if packages_requirements is None else packages_requirements
         if self.prog_name in self.categories:
-            logger.error("There is already a registered category with {} as a name. Don't register the second one."
-                         .format(name))
+            logger.warning("There is already a registered category with {} as a name. Don't register the second one."
+                           .format(name))
         else:
             self.categories[self.prog_name] = self
 
@@ -237,7 +237,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
     def remove(self):
         """Method call to remove the current framework"""
         if not self.is_installed:
-            logger.error("You can't remove a framework that isn't installed")
+            logger.error(_("You can't remove {} as it isn't installed".format(self.name)))
             UI.return_main_screen()
             return
 
@@ -268,7 +268,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
     def install_framework_parser(self, parser):
         """Install framework parser"""
         this_framework_parser = parser.add_parser(self.prog_name, help=self.description)
-        this_framework_parser.add_argument('destdir', nargs='?')
+        this_framework_parser.add_argument('destdir', nargs='?', help=_("If the default framework name isn't provided, "
+                                                                        "destdir should contain a /"))
         this_framework_parser.add_argument('-r', '--remove', action="store_true",
                                            help=_("Remove framework if installed"))
         return this_framework_parser
@@ -283,7 +284,10 @@ class BaseFramework(metaclass=abc.ABCMeta):
                 raise BaseException(message)
             self.remove()
         else:
-            self.setup(args.destdir)
+            install_path = None
+            if args.destdir:
+                install_path = os.path.abspath(os.path.expanduser(args.destdir))
+            self.setup(install_path)
 
 
 class MainCategory(BaseCategory):
@@ -300,24 +304,43 @@ def _is_frameworkclass(o):
     return inspect.isclass(o) and issubclass(o, BaseFramework)
 
 
+def load_module(module_abs_name, main_category):
+    logger.debug("New framework module: {}".format(module_abs_name))
+    if module_abs_name not in sys.modules:
+        import_module(module_abs_name)
+    else:
+        reload(sys.modules[module_abs_name])
+    module = sys.modules[module_abs_name]
+    current_category = main_category  # if no category found -> we assign to main category
+    for category_name, CategoryClass in inspect.getmembers(module, _is_categoryclass):
+        logger.debug("Found category: {}".format(category_name))
+        current_category = CategoryClass()
+    # if we didn't register the category: escape the framework registration
+    if current_category not in BaseCategory.categories.values():
+        return
+    for framework_name, FrameworkClass in inspect.getmembers(module, _is_frameworkclass):
+        try:
+            if FrameworkClass(current_category) is not None:
+                logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
+        except TypeError as e:
+            logger.error("Can't attach {} to {}: {}".format(framework_name, current_category.name, e))
+
+
 def load_frameworks():
     """Load all modules and assign to correct category"""
     main_category = MainCategory()
+
+    # Prepare local paths (1. environment path, 2. local path, 3. system paths).
+    # If we have duplicated categories, only consider the first loaded one.
+    local_paths = [get_user_frameworks_path()]
+    sys.path.insert(0, get_user_frameworks_path())
+    environment_path = os.environ.get(UDTC_FRAMEWORKS_ENVIRON_VARIABLE)
+    if environment_path:
+        sys.path.insert(0, environment_path)
+        local_paths.insert(0, environment_path)
+
+    for loader, module_name, ispkg in pkgutil.iter_modules(path=local_paths):
+        load_module(module_name, main_category)
     for loader, module_name, ispkg in pkgutil.iter_modules(path=[os.path.dirname(__file__)]):
         module_name = "{}.{}".format(__package__, module_name)
-        logger.debug("New framework module: {}".format(module_name))
-        if module_name not in sys.modules:
-            import_module(module_name)
-        else:
-            reload(sys.modules[module_name])
-        module = sys.modules[module_name]
-        current_category = main_category  # if no category found -> we assign to main category
-        for category_name, CategoryClass in inspect.getmembers(module, _is_categoryclass):
-            logger.debug("Found category: {}".format(category_name))
-            current_category = CategoryClass()
-        for framework_name, FrameworkClass in inspect.getmembers(module, _is_frameworkclass):
-            try:
-                if FrameworkClass(current_category) is not None:
-                    logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
-            except TypeError as e:
-                logger.error("Can't attach {} to {}: {}".format(framework_name, current_category.name, e))
+        load_module(module_name, main_category)

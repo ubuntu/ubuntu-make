@@ -58,6 +58,8 @@ class AndroidStudioTests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
+        self.assertTrue(self.is_in_path("adb"))
+        self.assertTrue(self.is_in_path("ddms"))
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -231,6 +233,19 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
 
+    def test_not_default_framework_with_path_without_path_separator(self):
+        """Android Studio isn't selected for default framework with path without separator"""
+        self.child = pexpect.spawnu(self.command('{} android foo'.format(UDTC)))
+        self.expect_and_no_warn("error: argument framework: invalid choice")
+        self.accept_default_and_wait()
+
+    def test_is_default_framework_with_user_path(self):
+        """Android Studio isn't selected for default framework with path without separator"""
+        # TODO: once a baseinstaller test: do a real install to check the path
+        self.child = pexpect.spawnu(self.command('{} android ~/foo'.format(UDTC)))
+        self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
+        self.accept_default_and_wait()
+
     def test_removal(self):
         """Remove android studio with default path"""
         self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UDTC)))
@@ -305,21 +320,21 @@ class EclipseADTTests(LargeFrameworkTests):
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
         self.assertTrue(self.path_exists(get_icon_path(self.icon_filename)))
+        self.assertTrue(self.is_in_path("adb"))
+        self.assertTrue(self.is_in_path("ddms"))
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
 
-        # FIXME: disable on i386 jenkins for now (doesn't launch the java subprocess). Need kvm investigation
-        if not (os.environ["USER"] == "ubuntu" and self.arch_option == "i686"):
+        # on 64 bits, there is a java subprocess, we kill that one with SIGKILL (eclipse isn't reliable on SIGTERM)
+        if self.arch_option == "x86_64":
             self.check_and_kill_process(["java", self.arch_option, self.installed_path],
-                                        wait_before=self.TIMEOUT_START)
-        if not self.in_container:
-            self.check_and_kill_process([self.installed_path])  # we need to stop the parent as well for eclipse
-            # android eclipse exits with 143 on SIGTERM, translated to -15
-            self.assertEquals(proc.wait(self.TIMEOUT_STOP), -15)
+                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
         else:
-            self.assertEquals(proc.wait(self.TIMEOUT_STOP), 143)
+            self.check_and_kill_process([self.exec_path],
+                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = pexpect.spawnu(self.command('{} android eclipse-adt'.format(UDTC)))
@@ -376,16 +391,15 @@ class EclipseADTTests(LargeFrameworkTests):
             # launch it, send SIGTERM and check that it exits fine
             proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                     stderr=subprocess.DEVNULL)
-            # FIXME: disable on i386 jenkins for now (doesn't launch the java subprocess). Need kvm investigation
-            if not (os.environ["USER"] == "ubuntu" and self.arch_option == "i686"):
+
+            # on 64 bits, there is a java subprocess, we kill that one with SIGKILL (eclipse isn't reliable on SIGTERM)
+            if self.arch_option == "x86_64":
                 self.check_and_kill_process(["java", self.arch_option, self.installed_path],
-                                            wait_before=self.TIMEOUT_START)
-            if not self.in_container:
-                self.check_and_kill_process([self.installed_path])  # we need to stop the parent as well for eclipse
-                # android eclipse exits with 143 on SIGTERM, translated to -15
-                self.assertEquals(proc.wait(self.TIMEOUT_STOP), -15)
+                                            wait_before=self.TIMEOUT_START, send_sigkill=True)
             else:
-                self.assertEquals(proc.wait(self.TIMEOUT_STOP), 143)
+                self.check_and_kill_process([self.exec_path],
+                                            wait_before=self.TIMEOUT_START, send_sigkill=True)
+            proc.wait(self.TIMEOUT_STOP)
 
     def test_adt_reinstall_other_path(self):
         """Reinstall eclipse adt on another path once installed should remove the first version"""
@@ -519,6 +533,27 @@ class EclipseADTTests(LargeFrameworkTests):
 
         # now, remove it
         self.child = pexpect.spawnu(self.command('{} android eclipse-adt --remove'.format(UDTC)))
+        self.wait_and_no_warn()
+
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.path_exists(self.installed_path))
+        self.assertFalse(self.path_exists(get_icon_path(self.icon_filename)))
+
+    def test_removal_as_common_option(self):
+        """Remove eclipse adt using the common option (before the category/framework)"""
+        self.child = pexpect.spawnu(self.command('{} android eclipse-adt'.format(UDTC)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("\[.*\] ")
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.installed_path))
+        self.assertTrue(self.path_exists(get_icon_path(self.icon_filename)))
+
+        # now, remove it
+        self.child = pexpect.spawnu(self.command('{} --remove android eclipse-adt'.format(UDTC)))
         self.wait_and_no_warn()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
