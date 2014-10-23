@@ -72,16 +72,14 @@ class EclipseIDETests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
 
-        # FIXME: disable on i386 jenkins for now (doesn't launch the java subprocess). Need kvm investigation
-        if not (os.environ["USER"] == "ubuntu" and self.arch_option == "i686"):
+        # on 64 bits, there is a java subprocess, we kill that one with SIGKILL (eclipse isn't reliable on SIGTERM)
+        if self.arch_option == "x86_64":
             self.check_and_kill_process(["java", self.arch_option, self.installed_path],
-                                        wait_before=self.TIMEOUT_START)
-        if not self.in_container:
-            self.check_and_kill_process([self.installed_path])  # we need to stop the parent as well for eclipse
-            # eclipse exits with 143 on SIGTERM, translated to -15
-            self.assertEquals(proc.wait(self.TIMEOUT_STOP), -15)
+                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
         else:
-            self.assertEquals(proc.wait(self.TIMEOUT_STOP), 143)
+            self.check_and_kill_process([self.exec_path],
+                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = pexpect.spawnu(self.command('{} ide eclipse'.format(UDTC)))
