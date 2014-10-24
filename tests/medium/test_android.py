@@ -28,7 +28,7 @@ from udtc import settings
 
 
 class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
-    """This will test the basic cli command class inside a container"""
+    """This will install Android Studio inside a container"""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
@@ -62,7 +62,7 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
 
 
 class EclipseADTInContainer(ContainerTests, test_android.EclipseADTTests):
-    """This will test the basic cli command class inside a container"""
+    """This will inside eclipse ADT inside a container"""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
