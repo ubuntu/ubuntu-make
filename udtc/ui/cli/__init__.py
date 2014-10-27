@@ -48,9 +48,9 @@ class CliUI(UI):
         # This this UI as current
         super().__init__(self)
 
-    def _return_main_screen(self):
+    def _return_main_screen(self, status_code=0):
         # quit the shell
-        MainLoop().quit()
+        MainLoop().quit(status_code=status_code)
 
     def _display(self, contentType):
         # print depending on the content type

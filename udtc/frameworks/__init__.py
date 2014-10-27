@@ -128,7 +128,7 @@ class BaseCategory():
             if not self.default_framework:
                 message = "A default framework for category {} was requested where there is none".format(self.name)
                 logger.error(message)
-                raise BaseException(message)
+                UI.return_main_screen(status_code=1)
             self.default_framework.run_for(args)
             return
         self.frameworks[args.framework].run_for(args)
@@ -238,7 +238,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         """Method call to remove the current framework"""
         if not self.is_installed:
             logger.error(_("You can't remove {} as it isn't installed".format(self.name)))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
             return
 
     def mark_in_config(self):
@@ -281,7 +281,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
             if args.destdir:
                 message = "You can't specify a destination dir while removing a framework"
                 logger.error(message)
-                raise BaseException(message)
+                UI.return_main_screen()
             self.remove()
         else:
             install_path = None

@@ -31,8 +31,8 @@ class UI(object, metaclass=Singleton):
         UI.currentUI = current_UI
 
     @classmethod
-    def return_main_screen(cls):
-        cls.currentUI._return_main_screen()
+    def return_main_screen(cls, status_code=0):
+        cls.currentUI._return_main_screen(status_code=status_code)
 
     @classmethod
     @MainLoop.in_mainloop_thread
