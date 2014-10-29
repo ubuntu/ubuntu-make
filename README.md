@@ -120,7 +120,7 @@ Finally, you can run, as seen in the previous paragraph, a selection of one or m
 $ ./runtests tests/small/test_tools.py:TestConfigHandler
 ```
 
-This by default enables the debug profile, to display all outputs and logging information (in debug level).
+This enables the debug profile by default, to display all outputs and logging information (in debug level).
 
 You can activate/disable/change any of those default selected configurations with **--config/--coverage/--debug/--no-config** (see `runtests --help` for more information)
 
