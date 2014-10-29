@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: ubuntu-developer-tools-center\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-23 08:44+0200\n"
-"PO-Revision-Date: 2014-09-23 06:39+0000\n"
-"Last-Translator: Didier Roche <didrocks@ubuntu.com>\n"
+"PO-Revision-Date: 2014-10-28 21:19+0000\n"
+"Last-Translator: Francesco <fgiardo@gmail.com>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-09-24 16:50+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2014-10-29 09:16+0000\n"
+"X-Generator: Launchpad (build 17203)\n"
 
 #: udtc/__init__.py:104
 msgid "* Command '{}':"
@@ -24,6 +24,7 @@ msgstr "* Comando '{}'"
 #: udtc/__init__.py:112
 msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr ""
+"Installa e configura facilmente un ambiente per sviluppatori su Ubuntu"
 
 #: udtc/__init__.py:113
 msgid ""
@@ -43,25 +44,24 @@ msgstr "Aumenta la verbosità dell'output (2 livelli)"
 
 #: udtc/__init__.py:119
 msgid "Remove specified framework if installed"
-msgstr ""
+msgstr "Rimuovi il framework specificato se installato"
 
 #: udtc/tools.py:329
 msgid "# UDTC installation of {}\n"
-msgstr ""
+msgstr "# UDTC installazione di {}\n"
 
 #: udtc/interactions/__init__.py:73
 msgid "No suitable answer provided"
-msgstr ""
+msgstr "Nessuna risposta adeguata fornita"
 
 #: udtc/interactions/__init__.py:75
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
-msgstr ""
-"La tua scelta '{}' non è una scielta accettabile. Le scielte sono: {}"
+msgstr "La tua scelta '{}' non è una scelta accettabile. Le scelte sono: {}"
 
 #: udtc/interactions/__init__.py:78
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
 msgstr ""
-"La tua scelta '{}' non è una scielta accettabile. Le scielte sono: {} e {}"
+"La tua scelta '{}' non è una scelta accettabile. Le scelte sono: {} e {}"
 
 #: udtc/interactions/__init__.py:96
 msgid " ({})"
@@ -117,16 +117,18 @@ msgstr "No"
 
 #: udtc/frameworks/__init__.py:240
 msgid "You can't remove {} as it isn't installed"
-msgstr ""
+msgstr "Non puoi rimuovere {} perchè non è installato"
 
 #: udtc/frameworks/__init__.py:271
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
 msgstr ""
+"Se non viene fornito il nome predefinito del framework, destdir dovrebbe "
+"contenere /"
 
 #: udtc/frameworks/__init__.py:274
 msgid "Remove framework if installed"
-msgstr ""
+msgstr "RImuovi il framework se installato"
 
 #: udtc/frameworks/android.py:39
 msgid "Android"
@@ -146,8 +148,8 @@ msgstr "Ambiente di sviluppo Android Studio"
 
 #: udtc/frameworks/android.py:143
 msgid "ADT Eclipse"
-msgstr ""
+msgstr "ADT Eclipse"
 
 #: udtc/frameworks/android.py:146
 msgid "Android Developer Tools (using eclipse)"
-msgstr ""
+msgstr "Android Developer Tools (usando Eclipse)"

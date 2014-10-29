@@ -1,4 +1,4 @@
-# German translation for ubuntu-developer-tools-center
+# Polish translation for ubuntu-developer-tools-center
 # Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
 # This file is distributed under the same license as the ubuntu-developer-tools-center package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: ubuntu-developer-tools-center\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-23 08:44+0200\n"
-"PO-Revision-Date: 2014-10-24 20:48+0000\n"
+"PO-Revision-Date: 2014-10-24 19:40+0000\n"
 "Last-Translator: destiriser <destiriser@me.com>\n"
-"Language-Team: German <de@li.org>\n"
+"Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,46 +19,47 @@ msgstr ""
 
 #: udtc/__init__.py:104
 msgid "* Command '{}':"
-msgstr "* Befehl '{}':"
+msgstr "* Komenda '{}':"
 
 #: udtc/__init__.py:112
 msgid "Deploy and setup developers environment easily on ubuntu"
-msgstr "Entwicklerumgebungen einfach auf Ubuntu Aufspielen und Konfigurieren"
+msgstr "Łatwo wdróż i skonfiguruj środowisko programistyczne na Ubuntu"
 
 #: udtc/__init__.py:113
 msgid ""
 "Note that you can also configure different debug logs behaviors using "
 "LOG_CFG pointing to a log yaml profile."
 msgstr ""
+"Możesz również skonfigurować różne zachowania debug logów używając LOG_CFG "
+"wskazujących na profile logów yaml."
 
 #: udtc/__init__.py:116
 msgid "Show this help"
-msgstr "Hilfe anzeigen"
+msgstr "Wyświetl tę pomoc"
 
 #: udtc/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
-msgstr ""
+msgstr "Zwiększ dokładność wyniku (2 stopnie)"
 
 #: udtc/__init__.py:119
 msgid "Remove specified framework if installed"
-msgstr ""
+msgstr "Usuń wskazany framework, jeśli jest zainstalowany"
 
 #: udtc/tools.py:329
 msgid "# UDTC installation of {}\n"
-msgstr ""
+msgstr "# Instalacja {} przez UDTC\n"
 
 #: udtc/interactions/__init__.py:73
 msgid "No suitable answer provided"
-msgstr "Keine rightige Antwort gegeben"
+msgstr "Nie podano właściwej odpowiedzi"
 
 #: udtc/interactions/__init__.py:75
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
-msgstr "Ihre Eingabe '{}' ist nicht erlaubt. Mögliche Eingaben sind: {}"
+msgstr "Twój wybór '{}' nie jest dopuszczalny. Możliwe wybory to: {}"
 
 #: udtc/interactions/__init__.py:78
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
-msgstr ""
-"Ihre Eingabe '{}' ist nicht erlaubt. Mögliche Eingaben sind {} oder {}"
+msgstr "Twój wybór '{}' nie jest dopuszczalny. Możliwe wybory to: {} and {}"
 
 #: udtc/interactions/__init__.py:96
 msgid " ({})"
@@ -78,7 +79,7 @@ msgstr "{} [{}] "
 
 #: udtc/interactions/__init__.py:111
 msgid "I Accept"
-msgstr "Ich akzeptiere"
+msgstr "Zgadzam się"
 
 #: udtc/interactions/__init__.py:111
 msgid "a"
@@ -86,7 +87,7 @@ msgstr "a"
 
 #: udtc/interactions/__init__.py:112
 msgid "I don't accept"
-msgstr "Ich akzeptiere nicht"
+msgstr "Nie zgadzam się"
 
 #: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:145
 msgid "N"
@@ -102,28 +103,30 @@ msgstr "[{}] "
 
 #: udtc/interactions/__init__.py:144
 msgid "Yes"
-msgstr "Ja"
+msgstr "Tak"
 
 #: udtc/interactions/__init__.py:144
 msgid "y"
-msgstr "j"
+msgstr "t"
 
 #: udtc/interactions/__init__.py:145
 msgid "No"
-msgstr "Nein"
+msgstr "Nie"
 
 #: udtc/frameworks/__init__.py:240
 msgid "You can't remove {} as it isn't installed"
-msgstr ""
+msgstr "Nie możesz usunąć {}, ponieważ nie jest zainstalowane"
 
 #: udtc/frameworks/__init__.py:271
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
 msgstr ""
+"Jeśli nazwa domyślnego frameworka nie jest określona, destdir powinien "
+"zawierać a /"
 
 #: udtc/frameworks/__init__.py:274
 msgid "Remove framework if installed"
-msgstr ""
+msgstr "Usuń framework, jeśli jest zainstalowany"
 
 #: udtc/frameworks/android.py:39
 msgid "Android"
@@ -131,7 +134,7 @@ msgstr "Android"
 
 #: udtc/frameworks/android.py:39
 msgid "Android Development Environment"
-msgstr "Android Entwicklungsumgebung"
+msgstr "Środowisko Programistyczne Android"
 
 #: udtc/frameworks/android.py:93
 msgid "Android Studio"
@@ -139,12 +142,12 @@ msgstr "Android Studio"
 
 #: udtc/frameworks/android.py:96
 msgid "Android Studio developer environment"
-msgstr "Android Studio Entwicklungsumgebung"
+msgstr "środowisko programistyczne Android Studio"
 
 #: udtc/frameworks/android.py:143
 msgid "ADT Eclipse"
-msgstr ""
+msgstr "Narzędzia Programistyczne Android ADT Eclipse"
 
 #: udtc/frameworks/android.py:146
 msgid "Android Developer Tools (using eclipse)"
-msgstr ""
+msgstr "Narzędzia Programistyczne Android (używając Eclipse)"

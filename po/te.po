@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: ubuntu-developer-tools-center\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-23 08:44+0200\n"
-"PO-Revision-Date: 2014-09-23 06:41+0000\n"
+"PO-Revision-Date: 2014-10-24 05:16+0000\n"
 "Last-Translator: Didier Roche <didrocks@ubuntu.com>\n"
 "Language-Team: Telugu <te@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-09-24 16:50+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2014-10-29 09:16+0000\n"
+"X-Generator: Launchpad (build 17203)\n"
 
 #: udtc/__init__.py:104
 msgid "* Command '{}':"
-msgstr "* ఆదేశం '{}'"
+msgstr "* ఆదేశం '{}':"
 
 #: udtc/__init__.py:112
 msgid "Deploy and setup developers environment easily on ubuntu"
@@ -39,15 +39,15 @@ msgstr "ఈ సహాయాన్ని చూపించు"
 
 #: udtc/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
-msgstr "ఎక్కువ సమాచారాన్ని చూపించు"
+msgstr "ఎక్కువ సమాచారాన్ని చూపించు (రెండు రెట్లు)"
 
 #: udtc/__init__.py:119
 msgid "Remove specified framework if installed"
-msgstr ""
+msgstr "ఫ్రేమ్‌వర్క్ ఇన్స్టాల్ అయి వుంటే తొలగించండి"
 
 #: udtc/tools.py:329
 msgid "# UDTC installation of {}\n"
-msgstr ""
+msgstr "# {} యొక్క UDTC ఇన్స్టాలేషన్\n"
 
 #: udtc/interactions/__init__.py:73
 msgid "No suitable answer provided"
@@ -79,7 +79,7 @@ msgstr "{} [{}] "
 
 #: udtc/interactions/__init__.py:111
 msgid "I Accept"
-msgstr "నేను సమ్మతిస్తున్నాను"
+msgstr "నాకు అంగీకారమే"
 
 #: udtc/interactions/__init__.py:111
 msgid "a"
@@ -115,7 +115,7 @@ msgstr "కాదు"
 
 #: udtc/frameworks/__init__.py:240
 msgid "You can't remove {} as it isn't installed"
-msgstr ""
+msgstr "{} ఇన్స్టాల్ అయి లేదు కాబట్టి దానిని తొలగించలేము"
 
 #: udtc/frameworks/__init__.py:271
 msgid ""
@@ -124,7 +124,7 @@ msgstr ""
 
 #: udtc/frameworks/__init__.py:274
 msgid "Remove framework if installed"
-msgstr ""
+msgstr "ఫ్రేమ్‌వర్క్ ఇన్స్టాల్ అయి వుంటే దానిని తొలగించు"
 
 #: udtc/frameworks/android.py:39
 msgid "Android"
@@ -144,20 +144,8 @@ msgstr "ఆండ్రాయిడ్ స్తూడియో డెవలప�
 
 #: udtc/frameworks/android.py:143
 msgid "ADT Eclipse"
-msgstr ""
+msgstr "ఎడిటి ఎక్లిప్స్"
 
 #: udtc/frameworks/android.py:146
 msgid "Android Developer Tools (using eclipse)"
-msgstr ""
-
-#~ msgid ""
-#~ "                                         Note that you can also configure "
-#~ "different debug logs behaviors using LOG_CFG\n"
-#~ "                                         pointing to a log yaml profile.\n"
-#~ "                                         "
-#~ msgstr ""
-#~ "                                         LOG_CFG ని ఏదైనా ఒక yaml "
-#~ "ప్రొఫైల్‌ని సూచించేటట్టు చేయడం ద్వారా\n"
-#~ "                                         డీబగ్గింగ్ లాగ్‌ల పని విధానాన్ని "
-#~ "మార్చవచ్చు\n"
-#~ "                                         "
+msgstr "ఆండ్రాయిడ్ డెవలపర్ టూల్స్ (ఎక్లిప్స్ ఉపయోగించి)"

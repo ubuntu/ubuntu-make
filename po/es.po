@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: ubuntu-developer-tools-center\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-23 08:44+0200\n"
-"PO-Revision-Date: 2014-09-23 19:36+0000\n"
+"PO-Revision-Date: 2014-10-24 05:16+0000\n"
 "Last-Translator: Darío Piemonte <dariopiemonte@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-09-24 16:50+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2014-10-29 09:16+0000\n"
+"X-Generator: Launchpad (build 17203)\n"
 
 #: udtc/__init__.py:104
 msgid "* Command '{}':"
@@ -39,11 +39,11 @@ msgstr "Muestra esta ayuda"
 
 #: udtc/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
-msgstr "Aumentar verbosidad de la salida (2 niveles)"
+msgstr "Aumentar detalles en la salida (2 niveles)"
 
 #: udtc/__init__.py:119
 msgid "Remove specified framework if installed"
-msgstr "Eliminar el framework especificado si está instalado"
+msgstr "Eliminar el marco especificado si está instalado"
 
 #: udtc/tools.py:329
 msgid "# UDTC installation of {}\n"
@@ -104,7 +104,7 @@ msgstr "[{}] "
 
 #: udtc/interactions/__init__.py:144
 msgid "Yes"
-msgstr "Sí"
+msgstr "Sí"
 
 #: udtc/interactions/__init__.py:144
 msgid "y"
@@ -150,14 +150,3 @@ msgstr ""
 #: udtc/frameworks/android.py:146
 msgid "Android Developer Tools (using eclipse)"
 msgstr "Android Developer Tools (usando Eclipse)"
-
-#~ msgid ""
-#~ "                                         Note that you can also configure "
-#~ "different debug logs behaviors using LOG_CFG\n"
-#~ "                                         pointing to a log yaml profile.\n"
-#~ "                                         "
-#~ msgstr ""
-#~ "                                         También puede configurar distintos "
-#~ "comportamientos para los registros de depuración usando LOG_CFG\n"
-#~ "apuntando a un perfil yaml.\n"
-#~ "                                         "
