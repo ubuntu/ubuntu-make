@@ -1,3 +1,33 @@
+ubuntu-developer-tools-center (0.1-0ubuntu1) vivid; urgency=medium
+
+  * Add eclipse support as a standalone IDE. Usage is: udtc ide eclipse. Thanks
+    to Tin Tvrtković for his excellent work and tests implementation.
+  * Add android adt support (through eclipse). Usage is:
+    udtc android eclipse-adt. Added tests for it as well
+  * adb and other android tools are now added to user path while installing an
+    android framework
+  * Support removal of framework. If you installed a framework and want to
+    remove it, just use: udtc android android-studio --remove
+  * Numerous typo fixes thanks to Igor Vuk
+  * Enable loading of local framework. They are controlled by UDTC_FRAMEWORKS
+    env variable which can point to any path containing local frameworks
+  * Support reinstallation in different folder than the origin one, cleaning
+    the original directory.
+  * DownloadCenter now support redirections. Thanks Tin Tvrtković for this
+    work
+  * Add support for decompressing zip files in Decompressor
+  * New and refresh translations: de, en_AU, en_CA, en_GB, es, eu, fr, hr, it,
+    pl, ru, te, zh_CN, zh_HK. Thanks to all translators for their hard work!
+  * Improve i18n support
+  * Protect against mistyping with multiple frameworks
+  * Framework support refactoring to avoid code duplication
+  * Tests fixes and refactoring for better scalability
+  * Fix logging support during test runs
+  * Reshape docker files to have fewer layers
+  * Don't raise any Exception for unexpected CLI args
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 29 Oct 2014 10:21:01 +0100
+
 ubuntu-developer-tools-center (0.0.5) utopic; urgency=medium
 
   * Addition for the test jenkins server:
