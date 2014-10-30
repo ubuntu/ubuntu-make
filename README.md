@@ -55,14 +55,14 @@ It's possible for anyone to have local frameworks for either development purpose
 * Any files in a directory set with the "UDTC_FRAMEWORKS" environment variable will be loaded first.
 * Any files inside ~/.udtc/frameworks will be loaded next.
 
-Any file should contain eventually a category or frameworks like the ones in udtc/frameworks/*.
+Any file should eventually contain a category or frameworks like the ones in udtc/frameworks/*.
 
 If categories name are duplicated only one will be loaded. Ubuntu Developer Tools Center will first load the one controlled by the environment variable, then in home based directory, and finally, the system one.
 Note that duplicate filenames aren't encouraged, but supported.
 
 
 ### Style guide and checking
-We are running pep8 relaxing in .pep8 the max line length to 120. env/ is excluded as well from the pep8 check.
+We are running pep8 relaxing in .pep8 the max line length to 120. env/ is excluded from the pep8 check as well.
 
 Running this test, in particular:
 
@@ -83,7 +83,7 @@ $ pep8 .
 There are four kinds of tests that can be combined in runtests:
 
 * **pep8**: Run the pep8 tests on all the udtc and tests code.
-* **small**: mostly testing modules and component with mocks around it. Note that it's using as well a local webserver (http and https) to serve mock content
+* **small**: mostly testing modules and component with mocks around it. Note that it's using a local webserver (http and https) to serve mock content
 * **medium**: testing the whole workflow, directly calling end user tool from the command line, but without any effect on the system. Requirements like installing packages are mocked, as well as the usage of a local webserver serving (smaller) content similar that what will be fetched in a real use case. The assets have the same formats and layout.
 * **large**: same tests are run as for the medium tests, but with real server download and installation of dpkg packages. Most of those tests need root rights. However, be aware that those tests only run on a graphical environment, will interfere with it and will install/remove packages on your system.
 
@@ -120,9 +120,9 @@ Finally, you can run, as seen in the previous paragraph, a selection of one or m
 $ ./runtests tests/small/test_tools.py:TestConfigHandler
 ```
 
-This enables by default the debug profile to display all outputs and logging information (in debug level).
+This enables the debug profile by default, to display all outputs and logging information (in debug level).
 
-You can activate/disable/change any of those default selected configuration with **--config/--coverage/--debug/--no-config** (see `runtests --help` for more information)
+You can activate/disable/change any of those default selected configurations with **--config/--coverage/--debug/--no-config** (see `runtests --help` for more information)
 
 #### Nose configurations
 
@@ -140,7 +140,7 @@ $ PYTHONWARNINGS=d ./runtests
 ```
 
 ### Create your own environment and run from it
-For an easier development workflow, we encourage the use of virtualenv to test and iterate on the project in contrast of installing all requirements on your machine. In the project root directory (env/ is already in .gitignore and excluded for pep8 checking):
+For an easier development workflow, we encourage the use of virtualenv to test and iterate on the project in contrast to installing all requirements on your machine. In the project root directory (env/ is already in .gitignore and excluded from pep8 checking):
 
 ```sh
 $ virtualenv --python=python3 --system-site-packages env
