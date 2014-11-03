@@ -354,21 +354,30 @@ def remove_framework_envs_from_user(framework_tag):
     os.rename(profile_filepath + ".new", profile_filepath)
 
 
-def add_env_to_user(framework_tag, env, args, keep=True):
+def add_env_to_user(framework_tag, env_dict):
     """Add args to user env in .profile if the user doesn't have that env with those args
 
-    If keep is set to True, we keep previous values with :$OLDERENV"""
+    env_dict is a dictionary of:
+    { env_variable: { value: value,
+                      keep: True/False }
+    If keep is set to True, we keep previous values with :$OLDERENV."""
 
     remove_framework_envs_from_user(framework_tag)
 
-    if keep and os.environ.get(env):
-        args = "{}{}${}".format(args, os.pathsep, env)
-        os.environ[env] = args + os.environ[env]
-    else:
-        os.environ[env] = args
+    envs_to_insert = {}
+    for env in env_dict:
+        value = env_dict[env]["value"]
+        if env_dict[env].get("keep", True) and os.environ.get(env):
+            os.environ[env] = value + os.pathsep + os.environ[env]
+            value = "{}{}${}".format(value, os.pathsep, env)
+        else:
+            os.environ[env] = value
+        envs_to_insert[env] = value
 
-    logger.debug("Adding {} to user {} for {}".format(args, env, framework_tag))
     with open(os.path.join(os.path.expanduser('~'), ".profile"), "a", encoding='utf-8') as f:
         f.write(profile_tag.format(framework_tag))
-        f.write("{}={}\n".format(env, args))
+        for env in envs_to_insert:
+            value = envs_to_insert[env]
+            logger.debug("Adding {} to user {} for {}".format(value, env, framework_tag))
+            f.write("{}={}\n".format(env, value))
         f.write("\n")
