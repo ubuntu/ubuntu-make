@@ -33,7 +33,7 @@ from udtc.network.download_center import DownloadCenter, DownloadItem
 from udtc.network.requirements_handler import RequirementsHandler
 from udtc.ui import UI
 from udtc.tools import MainLoop, strip_tags, launcher_exists, get_icon_path, get_launcher_path, \
-    Checksum
+    Checksum, remove_framework_envs_from_user
 
 logger = logging.getLogger(__name__)
 
@@ -91,6 +91,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         logger.debug("Mark previous installation path for cleaning.")
         self._paths_to_clean.add(self.install_path)  # remove previous installation path
         self.confirm_path(self.arg_install_path)
+        remove_framework_envs_from_user(self.name)
 
     def remove(self):
         """Remove current framework if installed
@@ -109,6 +110,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
                 os.remove(get_icon_path(self.icon_filename))
         with suppress(FileNotFoundError):
             shutil.rmtree(self.install_path)
+        remove_framework_envs_from_user(self.name)
         self.remove_from_config()
 
         UI.delayed_display(DisplayMessage("Suppression done"))
