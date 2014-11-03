@@ -325,8 +325,8 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
                      self.decompress_and_install_done)
         UI.display(UnknownProgress(self.iterate_until_install_done))
 
-    def create_launcher(self):
-        """Call the tools to create a launcher"""
+    def post_install(self):
+        """Call the post_install process, like creating a launcher, adding env variables…"""
         pass
 
     @MainLoop.in_mainloop_thread
@@ -342,9 +342,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
             UI.return_main_screen()
             return
 
-        # install desktop file
-        if self.desktop_filename:
-            self.create_launcher()
+        self.post_install()
 
         # Mark as installation done in configuration
         self.mark_in_config()

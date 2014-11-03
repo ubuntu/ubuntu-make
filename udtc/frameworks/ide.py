@@ -96,7 +96,7 @@ class Eclipse(udtc.frameworks.baseinstaller.BaseInstaller):
 
         DownloadCenter(urls=[DownloadItem(md5_url, None)], on_done=done, download=False)
 
-    def create_launcher(self):
+    def post_install(self):
         """Create the Luna launcher"""
         icon_filename = "icon.xpm"
         icon_path = join(self.install_path, icon_filename)

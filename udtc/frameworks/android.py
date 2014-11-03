@@ -89,7 +89,7 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
         """Parse Android Studio download link, expect to find a md5sum and a url"""
         return self.category.parse_download_link('id="linux-studio"', line, in_download)
 
-    def create_launcher(self):
+    def post_install(self):
         """Create the Android Studio launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Android Studio"),
                         icon_path=os.path.join(self.install_path, "bin", "idea.png"),
@@ -131,7 +131,7 @@ class EclipseAdt(udtc.frameworks.baseinstaller.BaseInstaller):
             tag = 'id="linux-bundle64"'
         return self.category.parse_download_link(tag, line, in_download)
 
-    def create_launcher(self):
+    def post_install(self):
         """Create the ADT launcher"""
         # copy the adt icon to local folder (as the icon is in a .*version folder, not stable)
         copy_icon(os.path.join(self.install_path,
