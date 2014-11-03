@@ -726,7 +726,7 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=bar" in profile_content, profile_content)
+        self.assertTrue("FOOO=bar\n" in profile_content, profile_content)
         self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
 
     @patch("udtc.tools.os.path.expanduser")
@@ -741,9 +741,8 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=bar:$FOOO" in profile_content, profile_content)
-        self.assertTrue("foo" in os.environ["FOOO"], os.environ["FOOO"])
-        self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
+        self.assertTrue("FOOO=bar:$FOOO\n" in profile_content, profile_content)
+        self.assertEquals(os.environ["FOOO"], "bar:foo")
 
     @patch("udtc.tools.os.path.expanduser")
     def test_add_env_to_user_not_keep(self, expanderusermock):
@@ -757,9 +756,10 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=bar" in profile_content, profile_content)
+        self.assertTrue("FOOO=bar\n" in profile_content, profile_content)
         self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
         self.assertFalse("foo" in os.environ["FOOO"], os.environ["FOOO"])
+        self.assertEquals(os.environ["FOOO"], "bar")
 
     @patch("udtc.tools.os.path.expanduser")
     def test_add_env_to_user_empty_file(self, expanderusermock):
@@ -770,7 +770,7 @@ class TestUserENV(LoggedTestCase):
 
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
-        self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
+        self.assertTrue("FOOO=/tmp/foo\n" in profile_content, profile_content)
         self.assertTrue("/tmp/foo" in os.environ["FOOO"], os.environ["FOOO"])
 
     @patch("udtc.tools.os.path.expanduser")
@@ -784,7 +784,7 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
+        self.assertTrue("FOOO=/tmp/foo\n" in profile_content, profile_content)
 
         tools.add_env_to_user("add twice", {"FOOO": {"value": "/tmp/foo"}})
 
@@ -822,14 +822,15 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
+        self.assertTrue("FOOO=/tmp/foo\n" in profile_content, profile_content)
 
         tools.add_env_to_user("add twice with other framework", {"BAR": {"value": "/tmp/bar"}})
 
         # ensure, it's only there once
         profile_content = open(profile_file).read()
-        self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
-        self.assertTrue("BAR=/tmp/bar" in profile_content, profile_content)
+        self.assertTrue("FOOO=/tmp/foo\n" in profile_content, profile_content)
+        self.assertTrue("BAR=/tmp/bar\n" in profile_content, profile_content)
+
 
     @patch("udtc.tools.os.path.expanduser")
     def test_remove_user_env(self, expanderusermock):
