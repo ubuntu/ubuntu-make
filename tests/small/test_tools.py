@@ -703,100 +703,207 @@ class TestMiscTools(LoggedTestCase):
         osmock.seteuid.assert_called_once_with(0)
 
 
-class TestAppendPATH(LoggedTestCase):
+class TestUserENV(LoggedTestCase):
 
     def setUp(self):
         super().setUp()
+        self.orig_environ = os.environ.copy()
         self.local_dir = tempfile.mkdtemp()
-        self.initial_path = os.environ['PATH']
 
     def tearDown(self):
         shutil.rmtree(self.local_dir)
-        os.environ['PATH'] = self.initial_path
+        os.environ = self.orig_environ.copy()
         super().tearDown()
 
     @patch("udtc.tools.os.path.expanduser")
-    def test_add_to_user_path(self, expanderusermock):
-        """Test that adding to user path append to an existing .bashrc file"""
+    def test_add_env_to_user(self, expanderusermock):
+        """Test that adding to user env appending to an existing .profile file"""
         expanderusermock.return_value = self.local_dir
-        bashrc_file = os.path.join(self.local_dir, ".bashrc")
-        open(bashrc_file, 'w').write("Foo\nBar\n")
-        tools.add_to_user_path(["/tmp/foo"], "one path addition")
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n")
+        tools.add_env_to_user("one path addition", "FOOO", "bar")
 
-        expanderusermock.assert_called_once_with('~')
-        bashrc_content = open(bashrc_file).read()
-        self.assertTrue("Foo\nBar\n" in bashrc_content, bashrc_content)  # we kept previous content
-        self.assertTrue("PATH=/tmp/foo:$PATH" in bashrc_content, bashrc_content)
-        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+        expanderusermock.assert_called_with('~')
+        profile_content = open(profile_file).read()
+        self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
+        self.assertTrue("FOOO=bar" in profile_content, profile_content)
+        self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
 
     @patch("udtc.tools.os.path.expanduser")
-    def test_add_to_user_path_multiple_paths(self, expanderusermock):
-        """Test that adding multiple paths to user path append to an existing .bashrc file"""
+    def test_add_env_to_user_keep(self, expanderusermock):
+        """Test that adding to user env appending to an existing env"""
+        os.environ["FOOO"] = "foo"
         expanderusermock.return_value = self.local_dir
-        bashrc_file = os.path.join(self.local_dir, ".bashrc")
-        open(bashrc_file, 'w').write("Foo\nBar\n")
-        tools.add_to_user_path(["/tmp/foo", "/tmp/bar"], "one path addition")
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n")
+        tools.add_env_to_user("one path addition", "FOOO", "bar")
 
-        expanderusermock.assert_called_once_with('~')
-        bashrc_content = open(bashrc_file).read()
-        self.assertTrue("Foo\nBar\n" in bashrc_content, bashrc_content)  # we kept previous content
-        self.assertTrue("PATH=/tmp/foo:/tmp/bar:$PATH" in bashrc_content, bashrc_content)
-        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
-        self.assertTrue("/tmp/bar" in os.environ["PATH"], os.environ["PATH"])
+        expanderusermock.assert_called_with('~')
+        profile_content = open(profile_file).read()
+        self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
+        self.assertTrue("FOOO=bar:$FOOO" in profile_content, profile_content)
+        self.assertTrue("foo" in os.environ["FOOO"], os.environ["FOOO"])
+        self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
 
     @patch("udtc.tools.os.path.expanduser")
-    def test_add_to_user_path_empty_file(self, expanderusermock):
-        """Test that adding to user path append to an non existing .bashrc file"""
+    def test_add_env_to_user_not_keep(self, expanderusermock):
+        """Test that adding to user env without keep replace an existing env"""
+        os.environ["FOOO"] = "foo"
         expanderusermock.return_value = self.local_dir
-        bashrc_file = os.path.join(self.local_dir, ".bashrc")
-        tools.add_to_user_path(["/tmp/foo"], "one path addition")
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n")
+        tools.add_env_to_user("one path addition", "FOOO", "bar", keep=False)
 
-        expanderusermock.assert_called_once_with('~')
-        bashrc_content = open(bashrc_file).read()
-        self.assertTrue("PATH=/tmp/foo:$PATH" in bashrc_content, bashrc_content)
-        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+        expanderusermock.assert_called_with('~')
+        profile_content = open(profile_file).read()
+        self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
+        self.assertTrue("FOOO=bar" in profile_content, profile_content)
+        self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
+        self.assertFalse("foo" in os.environ["FOOO"], os.environ["FOOO"])
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_add_env_to_user_empty_file(self, expanderusermock):
+        """Test that adding to user env append to an non existing .profile file"""
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".profile")
+        tools.add_env_to_user("add twice", "FOOO", "/tmp/foo")
+
+        expanderusermock.assert_called_with('~')
+        profile_content = open(profile_file).read()
+        self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
+        self.assertTrue("/tmp/foo" in os.environ["FOOO"], os.environ["FOOO"])
 
     @patch("udtc.tools.os.path.expanduser")
     def test_add_to_user_path_twice(self, expanderusermock):
-        """Test that adding to user path twice doesn't add it twice in the file"""
+        """Test that adding to user env twice doesn't add it twice in the file"""
         expanderusermock.return_value = self.local_dir
-        bashrc_file = os.path.join(self.local_dir, ".bashrc")
-        open(bashrc_file, 'w').write("Foo\nBar\n")
-        tools.add_to_user_path(["/tmp/foo"], "one path addition")
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n")
+        tools.add_env_to_user("add twice", "FOOO", "/tmp/foo")
 
-        expanderusermock.assert_called_once_with('~')
-        bashrc_content = open(bashrc_file).read()
-        self.assertTrue("Foo\nBar\n" in bashrc_content, bashrc_content)  # we kept previous content
-        self.assertTrue("PATH=/tmp/foo:$PATH" in bashrc_content, bashrc_content)
-        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+        expanderusermock.assert_called_with('~')
+        profile_content = open(profile_file).read()
+        self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
+        self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
 
-        tools.add_to_user_path(["/tmp/foo"], "one path addition")
+        tools.add_env_to_user("add twice", "FOOO", "/tmp/foo")
 
         # ensure, it's only there once
-        bashrc_content = open(bashrc_file).read()
-        self.assertEquals(bashrc_content.count("PATH=/tmp/foo:$PATH"), 1, bashrc_content)
-        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+        profile_content = open(profile_file).read()
+        self.assertEquals(profile_content.count("FOOO=/tmp/foo"), 1, profile_content)
 
     @patch("udtc.tools.os.path.expanduser")
     def test_add_to_user_path_twice_with_new_content(self, expanderusermock):
-        """Test that adding to user path twice but with new paths add only the new path to the file"""
+        """Test that adding to some env twice for same framework only add the latest"""
         expanderusermock.return_value = self.local_dir
-        bashrc_file = os.path.join(self.local_dir, ".bashrc")
-        open(bashrc_file, 'w').write("Foo\nBar\n")
-        tools.add_to_user_path(["/tmp/foo"], "one path addition")
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n")
+        tools.add_env_to_user("add twice", "FOOO", "/tmp/foo")
 
-        expanderusermock.assert_called_once_with('~')
-        bashrc_content = open(bashrc_file).read()
-        self.assertTrue("Foo\nBar\n" in bashrc_content, bashrc_content)  # we kept previous content
-        self.assertTrue("PATH=/tmp/foo:$PATH" in bashrc_content, bashrc_content)
-        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
+        expanderusermock.assert_called_with('~')
+        profile_content = open(profile_file).read()
+        self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
+        self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
 
-        tools.add_to_user_path(["/tmp/foo", "/tmp/bar"], "even more addition")
+        tools.add_env_to_user("add twice", "FOOO", "/tmp/bar")
 
-        # we only added the new element
-        bashrc_content = open(bashrc_file).read()
-        self.assertEquals(bashrc_content.count("PATH=/tmp/foo:$PATH"), 1, bashrc_content)
-        self.assertEquals(bashrc_content.count("/tmp/foo"), 1, bashrc_content)
-        self.assertTrue("PATH=/tmp/bar:$PATH" in bashrc_content, bashrc_content)
-        self.assertTrue("/tmp/foo" in os.environ["PATH"], os.environ["PATH"])
-        self.assertTrue("/tmp/bar" in os.environ["PATH"], os.environ["PATH"])
+        # ensure, it's only there once
+        profile_content = open(profile_file).read()
+        self.assertEquals(profile_content.count("FOOO=/tmp/bar"), 1, profile_content)
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_add_to_user_path_twice_other_framework(self, expanderusermock):
+        """Test that adding to user env with another framework add them twice"""
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n")
+        tools.add_env_to_user("add twice", "FOOO", "/tmp/foo")
+
+        expanderusermock.assert_called_with('~')
+        profile_content = open(profile_file).read()
+        self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
+        self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
+
+        tools.add_env_to_user("add twice with other framework", "BAR", "/tmp/bar")
+
+        # ensure, it's only there once
+        profile_content = open(profile_file).read()
+        self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
+        self.assertTrue("BAR=/tmp/bar" in profile_content, profile_content)
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_remove_user_env(self, expanderusermock):
+        """Remove an env from a user setup"""
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nFOO=bar\n\nBAR=baz")
+        tools.remove_framework_envs_from_user("framework A")
+
+        profile_content = open(profile_file).read()
+        self.assertEquals(profile_content, "Foo\nBar\nBAR=baz")
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_remove_user_env_end(self, expanderusermock):
+        """Remove an env from a user setup being at the end of profile file"""
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nFOO=bar\n\n")
+        tools.remove_framework_envs_from_user("framework A")
+
+        profile_content = open(profile_file).read()
+        self.assertEquals(profile_content, "Foo\nBar\n")
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_remove_user_env_not_found(self, expanderusermock):
+        """Remove an env from a user setup with no matching content found"""
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\nBAR=baz")
+        tools.remove_framework_envs_from_user("framework A")
+
+        profile_content = open(profile_file).read()
+        self.assertEquals(profile_content, "Foo\nBar\nBAR=baz")
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_remove_user_env_no_file(self, expanderusermock):
+        """Remove an env from a user setup with no profile file"""
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".profile")
+        tools.remove_framework_envs_from_user("framework A")
+
+        self.assertRaises(FileNotFoundError, open, profile_file)
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_remove_user_env_multiple_frameworks(self, expanderusermock):
+        """Remove an env from a user setup restraining to the correct framework"""
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework B\nBAR=bar\n\n"
+                                      "# UDTC installation of framework A\nFOO=bar\n\nBAR=baz")
+        tools.remove_framework_envs_from_user("framework A")
+
+        profile_content = open(profile_file).read()
+        self.assertEquals(profile_content, "Foo\nBar\n# UDTC installation of framework B\nBAR=bar\n\nBAR=baz")
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_remove_user_env_multiple_lines(self, expanderusermock):
+        """Remove an env from a user setup having multiple lines"""
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nFOO=bar\nBOO=foo\n\nBAR=baz")
+        tools.remove_framework_envs_from_user("framework A")
+
+        profile_content = open(profile_file).read()
+        self.assertEquals(profile_content, "Foo\nBar\nBAR=baz")
+
+    @patch("udtc.tools.os.path.expanduser")
+    def test_remove_user_multiple_same_framework(self, expanderusermock):
+        """Remove an env from a user setup, same framework being repeated multiple times"""
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nBAR=bar\n\n"
+                                      "# UDTC installation of framework A\nFOO=bar\n\nBAR=baz")
+        tools.remove_framework_envs_from_user("framework A")
+
+        profile_content = open(profile_file).read()
+        self.assertEquals(profile_content, "Foo\nBar\nBAR=baz")
