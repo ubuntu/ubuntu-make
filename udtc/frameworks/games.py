@@ -74,7 +74,7 @@ class Stencyl(udtc.frameworks.baseinstaller.BaseInstaller):
             return (None, in_download)
         return ((url, None), in_download)
 
-    def create_launcher(self):
+    def post_install(self):
         """Create the Stencyl launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Stencyl"),
                         icon_path=os.path.join(self.install_path, "data", "other", "icon-30x30.png"),
