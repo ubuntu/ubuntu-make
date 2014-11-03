@@ -721,7 +721,7 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
         open(profile_file, 'w').write("Foo\nBar\n")
-        tools.add_env_to_user("one path addition", "FOOO", "bar")
+        tools.add_env_to_user("one path addition", {"FOOO": {"value": "bar"}})
 
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
@@ -736,7 +736,7 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
         open(profile_file, 'w').write("Foo\nBar\n")
-        tools.add_env_to_user("one path addition", "FOOO", "bar")
+        tools.add_env_to_user("one path addition", {"FOOO": {"value": "bar"}})
 
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
@@ -752,7 +752,7 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
         open(profile_file, 'w').write("Foo\nBar\n")
-        tools.add_env_to_user("one path addition", "FOOO", "bar", keep=False)
+        tools.add_env_to_user("one path addition", {"FOOO": {"value": "bar", "keep": False}})
 
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
@@ -766,7 +766,7 @@ class TestUserENV(LoggedTestCase):
         """Test that adding to user env append to an non existing .profile file"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        tools.add_env_to_user("add twice", "FOOO", "/tmp/foo")
+        tools.add_env_to_user("one path addition", {"FOOO": {"value": "/tmp/foo"}})
 
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
@@ -779,14 +779,14 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
         open(profile_file, 'w').write("Foo\nBar\n")
-        tools.add_env_to_user("add twice", "FOOO", "/tmp/foo")
+        tools.add_env_to_user("add twice", {"FOOO": {"value": "/tmp/foo"}})
 
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
         self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
 
-        tools.add_env_to_user("add twice", "FOOO", "/tmp/foo")
+        tools.add_env_to_user("add twice", {"FOOO": {"value": "/tmp/foo"}})
 
         # ensure, it's only there once
         profile_content = open(profile_file).read()
@@ -798,14 +798,14 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
         open(profile_file, 'w').write("Foo\nBar\n")
-        tools.add_env_to_user("add twice", "FOOO", "/tmp/foo")
+        tools.add_env_to_user("add twice", {"FOOO": {"value": "/tmp/foo"}})
 
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
+        self.assertTrue("FOOO=/tmp/foo\n" in profile_content, profile_content)
 
-        tools.add_env_to_user("add twice", "FOOO", "/tmp/bar")
+        tools.add_env_to_user("add twice", {"FOOO": {"value": "/tmp/bar"}})
 
         # ensure, it's only there once
         profile_content = open(profile_file).read()
@@ -817,14 +817,14 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
         open(profile_file, 'w').write("Foo\nBar\n")
-        tools.add_env_to_user("add twice", "FOOO", "/tmp/foo")
+        tools.add_env_to_user("add twice", {"FOOO": {"value": "/tmp/foo"}})
 
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
         self.assertTrue("FOOO=/tmp/foo" in profile_content, profile_content)
 
-        tools.add_env_to_user("add twice with other framework", "BAR", "/tmp/bar")
+        tools.add_env_to_user("add twice with other framework", {"BAR": {"value": "/tmp/bar"}})
 
         # ensure, it's only there once
         profile_content = open(profile_file).read()
