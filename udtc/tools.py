@@ -379,5 +379,8 @@ def add_env_to_user(framework_tag, env_dict):
         for env in envs_to_insert:
             value = envs_to_insert[env]
             logger.debug("Adding {} to user {} for {}".format(value, env, framework_tag))
-            f.write("{}={}\n".format(env, value))
+            export = ""
+            if env != "PATH":
+                export = "export "
+            f.write("{}{}={}\n".format(export, env, value))
         f.write("\n")
