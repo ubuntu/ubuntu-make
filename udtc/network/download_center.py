@@ -30,23 +30,32 @@ import tempfile
 
 import requests
 import requests.exceptions
-
+from udtc.tools import ChecksumType
 
 logger = logging.getLogger(__name__)
 
 
+class DownloadItem(namedtuple('DownloadItem', ['url', 'checksum'])):
+    """An individual item to be downloaded and checked.
+
+    Checksum should be an instance of tools.Checksum, if provided."""
+    pass
+
+
 class DownloadCenter:
-    """A DownloadCenter enables to read or download requested urls in separate threads."""
+    """Read or download requested urls in separate threads."""
 
     BLOCK_SIZE = 1024*8  # from urlretrieve code
     DownloadResult = namedtuple("DownloadResult", ["buffer", "error", "fd"])
 
     def __init__(self, urls, on_done, download=True, report=lambda x: None):
         """Generate a threaded download machine.
-        urls is a list of tuples of (url, md5) to download or read from. The md5sum can be empty, no check will be done.
-        on_done is the callback that will be called once all those urls are downloaded.
-        md5s is the list like url of md5sum in the same order, if exists
-        report, if not None, will be called once any download is in progress, reporting
+
+        urls is a list of DownloadItems to download or read from.
+        on_done is the callback that will be called once all those urls are
+        downloaded.
+        report, if not None, will be called once any download is in progress,
+        reporting
         a dict of current download with current/size parameters
 
         The callback will get a dictionary parameter like:
@@ -71,10 +80,10 @@ class DownloadCenter:
 
         executor = futures.ThreadPoolExecutor(max_workers=3)
         for url_request in self._urls:
-            url, md5sum = (url_request, None)
+            url, checksum = (url_request, None)
             # grab the md5sum if any
             with suppress(ValueError):
-                (url, md5sum) = url_request
+                (url, checksum) = url_request
             # switch between inline memory and temp file
             if download:
                 # Named because shutils and tarfile library needs a .name property
@@ -82,17 +91,17 @@ class DownloadCenter:
                 # also, ensure we keep the same suffix
                 path, ext = os.path.splitext(url)
                 dest = tempfile.NamedTemporaryFile(suffix=ext)
-                logger.info("Start downloading {} as a temporary file".format(url))
+                logger.info("Start downloading {} to a temp file".format(url))
             else:
                 dest = BytesIO()
                 logger.info("Start downloading {} in memory".format(url))
-            future = executor.submit(self._fetch, url, md5sum, dest)
+            future = executor.submit(self._fetch, url, checksum, dest)
             future.tag_url = url
             future.tag_download = download
             future.tag_dest = dest
             future.add_done_callback(self._one_done)
 
-    def _fetch(self, url, md5sum, dest):
+    def _fetch(self, url, checksum, dest):
         """Get an url content and close the connexion.
 
         This write the content to dest return it, after seeking at start and check for md5sum
@@ -124,11 +133,26 @@ class DownloadCenter:
             # Wrap this for a nicer error message.
             raise BaseException("Protocol not supported.") from exc
 
-        if md5sum:
-            logger.debug("Checking md5sum")
+        if checksum:
+            checksum_type = checksum.checksum_type
+            checksum_value = checksum.checksum_value
+            logger.debug("Checking checksum ({}).".format(checksum_type.name))
             dest.seek(0)
-            if md5sum != self._md5_for_fd(dest):
-                raise(BaseException("The md5 of {} doesn't match. Corrupted download? Aborting.".format(url)))
+
+            if checksum_type is ChecksumType.sha1:
+                actual_checksum = self.sha1_for_fd(dest)
+            elif checksum_type is ChecksumType.md5:
+                actual_checksum = self.md5_for_fd(dest)
+            else:
+                msg = "Unsupported checksum type: {}.".format(checksum_type)
+                raise BaseException(msg)
+
+            logger.debug("Expected: {}, actual: {}.".format(checksum_value,
+                                                            actual_checksum))
+            if checksum_value != actual_checksum:
+                msg = ("The checksum of {} doesn't match. Corrupted download? "
+                       "Aborting.").format(url)
+                raise BaseException(msg)
         return dest
 
     def _one_done(self, future):
@@ -163,11 +187,20 @@ class DownloadCenter:
         logger.info("All pending downloads for {} done".format(self._urls))
         self._done_callback(self._downloaded_content)
 
-    def _md5_for_fd(self, f, block_size=2**20):
-        md5 = hashlib.md5()
+    @classmethod
+    def _checksum_for_fd(cls, algorithm, f, block_size=2**20):
+        checksum = algorithm()
         while True:
             data = f.read(block_size)
             if not data:
                 break
-            md5.update(data)
-        return md5.hexdigest()
+            checksum.update(data)
+        return checksum.hexdigest()
+
+    @classmethod
+    def md5_for_fd(cls, f, block_size=2**20):
+        return cls._checksum_for_fd(hashlib.md5, f, block_size)
+
+    @classmethod
+    def sha1_for_fd(cls, f, block_size=2**20):
+        return cls._checksum_for_fd(hashlib.sha1, f, block_size)

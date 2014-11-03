@@ -2,7 +2,7 @@
 # Copyright (C) 2014 Canonical
 #
 # Authors:
-#  Didier Roche
+# Didier Roche
 #
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -25,7 +25,8 @@ from time import time
 from unittest.mock import Mock, call
 from ..tools import get_data_dir, CopyingMock, LoggedTestCase
 from ..tools.local_server import LocalHttp
-from udtc.network.download_center import DownloadCenter
+from udtc.network.download_center import DownloadCenter, DownloadItem
+from udtc.tools import ChecksumType, Checksum
 
 
 class TestDownloadCenter(LoggedTestCase):
@@ -66,7 +67,7 @@ class TestDownloadCenter(LoggedTestCase):
         timeout = time() + 5
         while not mock_function_to_be_called.called:
             if time() > timeout:
-                raise(BaseException("Function not called within 5 seconds"))
+                raise (BaseException("Function not called within 5 seconds"))
         for calls in mock_function_to_be_called.call_args[0]:
             for request in calls:
                 if calls[request].fd:
@@ -77,11 +78,12 @@ class TestDownloadCenter(LoggedTestCase):
     def test_download(self):
         """we deliver one successful download"""
         filename = "simplefile"
-        request = self.build_server_address(filename)
+        url = self.build_server_address(filename)
+        request = DownloadItem(url, None)
         DownloadCenter([request], self.callback)
         self.wait_for_callback(self.callback)
 
-        result = self.callback.call_args[0][0][request]
+        result = self.callback.call_args[0][0][url]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
         with open(join(self.server_dir, filename), 'rb') as file_on_disk:
@@ -95,11 +97,12 @@ class TestDownloadCenter(LoggedTestCase):
         """we deliver one successful download after being redirected"""
         filename = "simplefile"
         # We add a suffix to make the server redirect us.
-        request = self.build_server_address(filename + "-redirect")
+        url = self.build_server_address(filename + "-redirect")
+        request = DownloadItem(url, None)
         DownloadCenter([request], self.callback)
         self.wait_for_callback(self.callback)
 
-        result = self.callback.call_args[0][0][request]
+        result = self.callback.call_args[0][0][url]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
         with open(join(self.server_dir, filename), 'rb') as file_on_disk:
@@ -111,11 +114,12 @@ class TestDownloadCenter(LoggedTestCase):
     def test_download_keep_extensions(self):
         """we deliver successful downloads keeping the extension"""
         filename = "android-studio-fake.tgz"
-        request = self.build_server_address(filename)
+        url = self.build_server_address(filename)
+        request = DownloadItem(url, None)
         DownloadCenter([request], self.callback)
         self.wait_for_callback(self.callback)
 
-        result = self.callback.call_args[0][0][request]
+        result = self.callback.call_args[0][0][url]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
         with open(join(self.server_dir, filename), 'rb'):
@@ -125,7 +129,9 @@ class TestDownloadCenter(LoggedTestCase):
         """we deliver once successful download, matching md5sum"""
         filename = "simplefile"
         request = self.build_server_address(filename)
-        DownloadCenter([(request, '268a5059001855fef30b4f95f82044ed')], self.callback)
+        DownloadCenter([DownloadItem(request, Checksum(ChecksumType.md5,
+                                                       '268a5059001855fef30b4f95f82044ed'))],
+                       self.callback)
         self.wait_for_callback(self.callback)
 
         result = self.callback.call_args[0][0][request]
@@ -142,34 +148,40 @@ class TestDownloadCenter(LoggedTestCase):
         filename = "simplefile"
         filesize = getsize(join(self.server_dir, filename))
         report = CopyingMock()
-        request = self.build_server_address(filename)
+        request = DownloadItem(self.build_server_address(filename), None)
         DownloadCenter([request], self.callback, report=report)
         self.wait_for_callback(self.callback)
 
         self.assertEqual(report.call_count, 2)
         self.assertEqual(report.call_args_list,
-                         [call({self.build_server_address(filename): {'size': filesize, 'current': 0}}),
-                          call({self.build_server_address(filename): {'size': filesize, 'current': filesize}})])
+                         [call({self.build_server_address(filename): {
+                             'size': filesize, 'current': 0}}),
+                          call({self.build_server_address(filename): {
+                              'size': filesize, 'current': filesize}})])
 
     def test_download_with_multiple_progress(self):
         """we deliver multiple progress hooks on bigger files"""
         filename = "biggerfile"
         filesize = getsize(join(self.server_dir, filename))
         report = CopyingMock()
-        request = self.build_server_address(filename)
+        request = DownloadItem(self.build_server_address(filename), None)
         dl_center = DownloadCenter([request], self.callback, report=report)
         self.wait_for_callback(self.callback)
 
         self.assertEqual(report.call_count, 3)
         self.assertEqual(report.call_args_list,
-                         [call({self.build_server_address(filename): {'size': filesize, 'current': 0}}),
-                          call({self.build_server_address(filename): {'size': filesize,
-                                                                      'current': dl_center.BLOCK_SIZE}}),
-                          call({self.build_server_address(filename): {'size': filesize, 'current': filesize}})])
+                         [call({self.build_server_address(filename): {
+                             'size': filesize, 'current': 0}}),
+                          call({self.build_server_address(filename): {
+                              'size': filesize,
+                              'current': dl_center.BLOCK_SIZE}}),
+                          call({self.build_server_address(filename): {
+                              'size': filesize, 'current': filesize}})])
 
     def test_multiple_downloads(self):
         """we deliver more than on download in parallel"""
-        requests = [self.build_server_address("biggerfile"), self.build_server_address("simplefile")]
+        requests = [DownloadItem(self.build_server_address("biggerfile"), None),
+                    DownloadItem(self.build_server_address("simplefile"), None)]
         DownloadCenter(requests, self.callback)
         self.wait_for_callback(self.callback)
 
@@ -182,11 +194,13 @@ class TestDownloadCenter(LoggedTestCase):
         for filename in ("biggerfile", "simplefile"):
             with open(join(self.server_dir, filename), 'rb') as file_on_disk:
                 self.assertEqual(file_on_disk.read(),
-                                 map_result[self.build_server_address(filename)].fd.read())
+                                 map_result[self.build_server_address(
+                                     filename)].fd.read())
 
     def test_multiple_downloads_with_reports(self):
         """we deliver more than on download in parallel"""
-        requests = [self.build_server_address("biggerfile"), self.build_server_address("simplefile")]
+        requests = [DownloadItem(self.build_server_address("biggerfile"), None),
+                    DownloadItem(self.build_server_address("simplefile"), None)]
         report = CopyingMock()
         DownloadCenter(requests, self.callback, report=report)
         self.wait_for_callback(self.callback)
@@ -200,13 +214,14 @@ class TestDownloadCenter(LoggedTestCase):
         result_dict = {}
         for filename in ("biggerfile", "simplefile"):
             file_size = getsize(join(self.server_dir, filename))
-            result_dict[self.build_server_address(filename)] = {'size': file_size,
-                                                                'current': file_size}
+            result_dict[self.build_server_address(filename)] = {
+                'size': file_size,
+                'current': file_size}
         self.assertEqual(report.call_args, call(result_dict))
 
     def test_404_url(self):
         """we return an error for a request including a 404 url"""
-        request = self.build_server_address("does_not_exist")
+        request = DownloadItem(self.build_server_address("does_not_exist"), None)
         DownloadCenter([request], self.callback)
         self.wait_for_callback(self.callback)
 
@@ -221,7 +236,8 @@ class TestDownloadCenter(LoggedTestCase):
 
     def test_multiple_with_one_404_url(self):
         """we raise an error when we try to download 404 urls"""
-        requests = [self.build_server_address("does_not_exist"), self.build_server_address("simplefile")]
+        requests = [DownloadItem(self.build_server_address("does_not_exist"), None),
+                    DownloadItem(self.build_server_address("simplefile"), None)]
         DownloadCenter(requests, self.callback)
         self.wait_for_callback(self.callback)
 
@@ -229,13 +245,16 @@ class TestDownloadCenter(LoggedTestCase):
         callback_args, callback_kwargs = self.callback.call_args
         map_result = callback_args[0]
         self.assertEqual(len(map_result), 2, str(map_result))
-        self.assertIsNotNone(map_result[self.build_server_address("does_not_exist")].error)
-        self.assertIsNotNone(map_result[self.build_server_address("simplefile")].fd)
+        self.assertIsNotNone(
+            map_result[self.build_server_address("does_not_exist")].error)
+        self.assertIsNotNone(
+            map_result[self.build_server_address("simplefile")].fd)
         self.expect_warn_error = True
 
     def test_download_same_file_multiple_times(self):
         """we only do one download when the same file is requested more than once in the same request"""
-        requests = [self.build_server_address("simplefile"), self.build_server_address("simplefile")]
+        requests = [DownloadItem(self.build_server_address("simplefile"), None),
+                    DownloadItem(self.build_server_address("simplefile"), None)]
         report = CopyingMock()
         DownloadCenter(requests, self.callback, report=report)
         self.wait_for_callback(self.callback)
@@ -250,11 +269,12 @@ class TestDownloadCenter(LoggedTestCase):
     def test_in_memory_download(self):
         """we deliver download on memory objects"""
         filename = "simplefile"
-        request = self.build_server_address(filename)
+        url = self.build_server_address(filename)
+        request = DownloadItem(url, None)
         DownloadCenter([request], self.callback, download=False)
         self.wait_for_callback(self.callback)
 
-        result = self.callback.call_args[0][0][request]
+        result = self.callback.call_args[0][0][url]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
         with open(join(self.server_dir, filename), 'rb') as file_on_disk:
@@ -266,11 +286,12 @@ class TestDownloadCenter(LoggedTestCase):
     def test_unsupported_protocol(self):
         """Raises an exception when trying to download for an unsupported protocol"""
         filename = "simplefile"
-        request = self.build_server_address(filename).replace('http', 'ftp')
+        url = self.build_server_address(filename).replace('http', 'ftp')
+        request = DownloadItem(url, None)
         DownloadCenter([request], self.callback, download=False)
         self.wait_for_callback(self.callback)
 
-        result = self.callback.call_args[0][0][request]
+        result = self.callback.call_args[0][0][url]
         self.assertIn("Protocol not supported", result.error)
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.fd)
@@ -280,7 +301,7 @@ class TestDownloadCenter(LoggedTestCase):
         """we raise an error if we don't have the correct md5sum"""
         filename = "simplefile"
         request = self.build_server_address(filename)
-        DownloadCenter([(request, 'AAAAA')], self.callback)
+        DownloadCenter([DownloadItem(request, Checksum(ChecksumType.md5, 'AAAAA'))], self.callback)
         self.wait_for_callback(self.callback)
 
         result = self.callback.call_args[0][0][request]
@@ -292,12 +313,13 @@ class TestDownloadCenter(LoggedTestCase):
     def test_download_with_no_size(self):
         """we deliver one successful download, even if size isn't provided. Progress returns -1 though"""
         filename = "simplefile-with-no-content-length"
-        request = self.build_server_address(filename)
+        url = self.build_server_address(filename)
+        request = DownloadItem(url, None)
         report = CopyingMock()
         DownloadCenter([request], self.callback, report=report)
         self.wait_for_callback(self.callback)
 
-        result = self.callback.call_args[0][0][request]
+        result = self.callback.call_args[0][0][url]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
         with open(join(self.server_dir, filename), 'rb') as file_on_disk:
@@ -307,8 +329,12 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.error)
         self.assertEqual(report.call_count, 2)
         self.assertEqual(report.call_args_list,
-                         [call({self.build_server_address(filename): {'size': -1, 'current': 0}}),
-                          call({self.build_server_address(filename): {'size': -1, 'current': 8192}})])
+                         [call({
+                             self.build_server_address(filename): {'size': -1,
+                                                                   'current': 0}}),
+                          call({
+                              self.build_server_address(filename): {'size': -1,
+                                                                    'current': 8192}})])
 
 
 class TestDownloadCenterSecure(LoggedTestCase):
@@ -342,17 +368,20 @@ class TestDownloadCenterSecure(LoggedTestCase):
         filename = "simplefile"
         # The host name is important here, since we verify it, so request
         # the localhost address.
-        request = TestDownloadCenter.build_server_address(self, filename, True)
+        url = TestDownloadCenter.build_server_address(self, filename, True)
+        request = DownloadItem(url, None)
         # prepare the cert and set it as the trusted system context
-        os.environ['REQUESTS_CA_BUNDLE'] = join(get_data_dir(), 'localhost.pem')
+        os.environ['REQUESTS_CA_BUNDLE'] = join(get_data_dir(),
+                                                'localhost.pem')
         try:
             DownloadCenter([request], self.callback)
             TestDownloadCenter.wait_for_callback(self, self.callback)
 
-            result = self.callback.call_args[0][0][request]
+            result = self.callback.call_args[0][0][url]
             self.assertTrue(self.callback.called)
             self.assertEqual(self.callback.call_count, 1)
-            with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+            with open(os.path.join(self.server_dir, filename),
+                      'rb') as file_on_disk:
                 self.assertEqual(file_on_disk.read(),
                                  result.fd.read())
         finally:
@@ -362,18 +391,21 @@ class TestDownloadCenterSecure(LoggedTestCase):
         """we deliver one successful download after being redirected"""
         filename = "simplefile"
         # We add a suffix to make the server redirect us.
-        request = TestDownloadCenter.build_server_address(self,
-                                                          filename + "-redirect",
-                                                          localhost=True)
-        os.environ['REQUESTS_CA_BUNDLE'] = join(get_data_dir(), 'localhost.pem')
+        url = TestDownloadCenter.build_server_address(self,
+                                                      filename + "-redirect",
+                                                      localhost=True)
+        request = DownloadItem(url, None)
+        os.environ['REQUESTS_CA_BUNDLE'] = join(get_data_dir(),
+                                                'localhost.pem')
         try:
             DownloadCenter([request], self.callback)
             TestDownloadCenter.wait_for_callback(self, self.callback)
 
-            result = self.callback.call_args[0][0][request]
+            result = self.callback.call_args[0][0][url]
             self.assertTrue(self.callback.called)
             self.assertEqual(self.callback.call_count, 1)
-            with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
+            with open(os.path.join(self.server_dir, filename),
+                      'rb') as file_on_disk:
                 self.assertEqual(file_on_disk.read(),
                                  result.fd.read())
             self.assertIsNone(result.buffer)
@@ -384,11 +416,12 @@ class TestDownloadCenterSecure(LoggedTestCase):
     def test_with_invalid_certificate(self):
         """we error on invalid ssl certificate"""
         filename = "simplefile"
-        request = TestDownloadCenter.build_server_address(self, filename)
+        url = TestDownloadCenter.build_server_address(self, filename)
+        request = DownloadItem(url, None)
         DownloadCenter([request], self.callback)
         TestDownloadCenter.wait_for_callback(self, self.callback)
 
-        result = self.callback.call_args[0][0][request]
+        result = self.callback.call_args[0][0][url]
         self.assertIn("CERTIFICATE_VERIFY_FAILED", result.error)
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.fd)
