@@ -341,7 +341,7 @@ def remove_framework_envs_from_user(framework_tag):
     except FileNotFoundError:
         return
     if framework_header not in content:
-         return
+        return
 
     while(framework_header in content):
         framework_start_index = content.find(framework_header)
@@ -354,20 +354,21 @@ def remove_framework_envs_from_user(framework_tag):
     os.rename(profile_filepath + ".new", profile_filepath)
 
 
-def add_to_user_path(paths, framework_tag):
-    """Add paths to user path in .bashrc if path isn't already in PATH"""
-    paths_to_add = []
-    for path in paths:
-        if path not in os.environ['PATH']:  # we don't care how, but the path already covers it
-            paths_to_add.append(path)
-    path_string = os.pathsep.join(paths_to_add)
+def add_env_to_user(framework_tag, env, args, keep=True):
+    """Add args to user env in .profile if the user doesn't have that env with those args
 
-    if not path_string:
-        return
+    If keep is set to True, we keep previous values with :$OLDERENV"""
 
-    os.environ['PATH'] = path_string + os.pathsep + os.environ['PATH']
-    logger.debug("Adding {} to user PATH for {}".format(path_string, framework_tag))
-    with open(os.path.join(os.path.expanduser('~'), ".bashrc"), "a", encoding='utf-8') as f:
+    remove_framework_envs_from_user(framework_tag)
+
+    if keep and os.environ.get(env):
+        args = "{}{}${}".format(args, os.pathsep, env)
+        os.environ[env] = args + os.environ[env]
+    else:
+        os.environ[env] = args
+
+    logger.debug("Adding {} to user {} for {}".format(args, env, framework_tag))
+    with open(os.path.join(os.path.expanduser('~'), ".profile"), "a", encoding='utf-8') as f:
+        f.write(profile_tag.format(framework_tag))
+        f.write("{}={}\n".format(env, args))
         f.write("\n")
-        f.write(_("# UDTC installation of {}\n").format(framework_tag))
-        f.write("PATH={}:$PATH\n".format(path_string))
