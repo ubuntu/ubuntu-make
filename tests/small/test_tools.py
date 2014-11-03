@@ -726,7 +726,7 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=bar\n" in profile_content, profile_content)
+        self.assertTrue("export FOOO=bar\n" in profile_content, profile_content)
         self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
 
     @patch("udtc.tools.os.path.expanduser")
@@ -741,7 +741,7 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=bar:$FOOO\n" in profile_content, profile_content)
+        self.assertTrue("export FOOO=bar:$FOOO\n" in profile_content, profile_content)
         self.assertEquals(os.environ["FOOO"], "bar:foo")
 
     @patch("udtc.tools.os.path.expanduser")
@@ -756,7 +756,7 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=bar\n" in profile_content, profile_content)
+        self.assertTrue("export FOOO=bar\n" in profile_content, profile_content)
         self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
         self.assertFalse("foo" in os.environ["FOOO"], os.environ["FOOO"])
         self.assertEquals(os.environ["FOOO"], "bar")
@@ -770,7 +770,7 @@ class TestUserENV(LoggedTestCase):
 
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
-        self.assertTrue("FOOO=/tmp/foo\n" in profile_content, profile_content)
+        self.assertTrue("export FOOO=/tmp/foo\n" in profile_content, profile_content)
         self.assertTrue("/tmp/foo" in os.environ["FOOO"], os.environ["FOOO"])
 
     @patch("udtc.tools.os.path.expanduser")
@@ -784,13 +784,13 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=/tmp/foo\n" in profile_content, profile_content)
+        self.assertTrue("export FOOO=/tmp/foo\n" in profile_content, profile_content)
 
         tools.add_env_to_user("add twice", {"FOOO": {"value": "/tmp/foo"}})
 
         # ensure, it's only there once
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content.count("FOOO=/tmp/foo"), 1, profile_content)
+        self.assertEquals(profile_content.count("export FOOO=/tmp/foo"), 1, profile_content)
 
     @patch("udtc.tools.os.path.expanduser")
     def test_add_to_user_path_twice_with_new_content(self, expanderusermock):
@@ -803,13 +803,13 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=/tmp/foo\n" in profile_content, profile_content)
+        self.assertTrue("export FOOO=/tmp/foo\n" in profile_content, profile_content)
 
         tools.add_env_to_user("add twice", {"FOOO": {"value": "/tmp/bar"}})
 
         # ensure, it's only there once
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content.count("FOOO=/tmp/bar"), 1, profile_content)
+        self.assertEquals(profile_content.count("export FOOO=/tmp/bar"), 1, profile_content)
 
     @patch("udtc.tools.os.path.expanduser")
     def test_add_to_user_path_twice_other_framework(self, expanderusermock):
@@ -822,14 +822,14 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=/tmp/foo\n" in profile_content, profile_content)
+        self.assertTrue("export FOOO=/tmp/foo\n" in profile_content, profile_content)
 
         tools.add_env_to_user("add twice with other framework", {"BAR": {"value": "/tmp/bar"}})
 
         # ensure, it's only there once
         profile_content = open(profile_file).read()
-        self.assertTrue("FOOO=/tmp/foo\n" in profile_content, profile_content)
-        self.assertTrue("BAR=/tmp/bar\n" in profile_content, profile_content)
+        self.assertTrue("export FOOO=/tmp/foo\n" in profile_content, profile_content)
+        self.assertTrue("export BAR=/tmp/bar\n" in profile_content, profile_content)
 
     @patch("udtc.tools.os.path.expanduser")
     def test_add_env_to_user_multiple(self, expanderusermock):
@@ -842,8 +842,8 @@ class TestUserENV(LoggedTestCase):
         expanderusermock.assert_called_with('~')
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
-        self.assertTrue("FOOO=bar\n" in profile_content, profile_content)
-        self.assertTrue("BAR=foo\n" in profile_content, profile_content)
+        self.assertTrue("export FOOO=bar\n" in profile_content, profile_content)
+        self.assertTrue("export BAR=foo\n" in profile_content, profile_content)
         self.assertEquals(os.environ["FOOO"], "bar")
         self.assertEquals(os.environ["BAR"], "foo")
 
@@ -852,18 +852,18 @@ class TestUserENV(LoggedTestCase):
         """Remove an env from a user setup"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nFOO=bar\n\nBAR=baz")
+        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nexport FOO=bar\n\nexport BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\nBAR=baz")
+        self.assertEquals(profile_content, "Foo\nBar\nexport BAR=baz")
 
     @patch("udtc.tools.os.path.expanduser")
     def test_remove_user_env_end(self, expanderusermock):
         """Remove an env from a user setup being at the end of profile file"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nFOO=bar\n\n")
+        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nexport FOO=bar\n\n")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
@@ -874,11 +874,11 @@ class TestUserENV(LoggedTestCase):
         """Remove an env from a user setup with no matching content found"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\nBAR=baz")
+        open(profile_file, 'w').write("Foo\nBar\nexport BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\nBAR=baz")
+        self.assertEquals(profile_content, "Foo\nBar\nexport BAR=baz")
 
     @patch("udtc.tools.os.path.expanduser")
     def test_remove_user_env_no_file(self, expanderusermock):
@@ -894,32 +894,34 @@ class TestUserENV(LoggedTestCase):
         """Remove an env from a user setup restraining to the correct framework"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework B\nBAR=bar\n\n"
-                                      "# UDTC installation of framework A\nFOO=bar\n\nBAR=baz")
+        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework B\nexport BAR=bar\n\n"
+                                      "# UDTC installation of framework A\nexport FOO=bar\n\nexport BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\n# UDTC installation of framework B\nBAR=bar\n\nBAR=baz")
+        self.assertEquals(profile_content, "Foo\nBar\n# UDTC installation of framework B\nexport BAR=bar\n\n"
+                                           "export BAR=baz")
 
     @patch("udtc.tools.os.path.expanduser")
     def test_remove_user_env_multiple_lines(self, expanderusermock):
         """Remove an env from a user setup having multiple lines"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nFOO=bar\nBOO=foo\n\nBAR=baz")
+        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nexport FOO=bar\nexport BOO=foo\n\n"
+                                      "export BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\nBAR=baz")
+        self.assertEquals(profile_content, "Foo\nBar\nexport BAR=baz")
 
     @patch("udtc.tools.os.path.expanduser")
     def test_remove_user_multiple_same_framework(self, expanderusermock):
         """Remove an env from a user setup, same framework being repeated multiple times"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nBAR=bar\n\n"
-                                      "# UDTC installation of framework A\nFOO=bar\n\nBAR=baz")
+        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nexport BAR=bar\n\n"
+                                      "# UDTC installation of framework A\nexport FOO=bar\n\nexport BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\nBAR=baz")
+        self.assertEquals(profile_content, "Foo\nBar\nexport BAR=baz")
