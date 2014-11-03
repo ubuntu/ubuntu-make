@@ -44,6 +44,8 @@ _current_arch = None
 _foreign_arch = None
 _version = None
 
+profile_tag = _("# UDTC installation of {}\n")
+
 
 @unique
 class ChecksumType(Enum):
@@ -326,6 +328,30 @@ def switch_to_current_user():
     # fallback to root user if no SUDO_GID (should be su - root)
     os.setegid(int(os.getenv("SUDO_GID", default=0)))
     os.seteuid(int(os.getenv("SUDO_UID", default=0)))
+
+
+def remove_framework_envs_from_user(framework_tag):
+    """Remove all envs from user if found"""
+    profile_filepath = os.path.join(os.path.expanduser('~'), ".profile")
+    content = ""
+    framework_header = profile_tag.format(framework_tag)
+    try:
+        with open(profile_filepath, "r") as f:
+            content = f.read()
+    except FileNotFoundError:
+        return
+    if framework_header not in content:
+         return
+
+    while(framework_header in content):
+        framework_start_index = content.find(framework_header)
+        framework_end_index = content[framework_start_index:].find("\n\n")
+        content = content[:framework_start_index] + content[framework_start_index + framework_end_index + len("\n\n"):]
+
+    # rewrite .profile and omit framework_tag
+    with open(profile_filepath + ".new", "w", encoding='utf-8') as f:
+        f.write(content)
+    os.rename(profile_filepath + ".new", profile_filepath)
 
 
 def add_to_user_path(paths, framework_tag):
