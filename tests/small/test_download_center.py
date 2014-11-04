@@ -142,6 +142,23 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.error)
 
+    def test_download_with_sha1sum(self):
+        """we deliver once successful download, matching sha1sum"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([DownloadItem(request, Checksum(ChecksumType.sha1, '0562f08aef399135936d6fb4eb0cc7bc1890d5b4'))],
+                       self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result.fd.read())
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.error)
+
     def test_download_with_progress(self):
         """we deliver progress hook while downloading"""
         filename = "simplefile"
@@ -292,6 +309,19 @@ class TestDownloadCenter(LoggedTestCase):
         filename = "simplefile"
         request = self.build_server_address(filename)
         DownloadCenter([DownloadItem(request, Checksum(ChecksumType.md5, 'AAAAA'))], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertIn("Corrupted download", result.error)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.fd)
+        self.expect_warn_error = True
+
+    def test_download_with_wrong_sha1(self):
+        """we raise an error if we don't have the correct md5sum"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([DownloadItem(request, Checksum(ChecksumType.sha1, 'AAAAA'))], self.callback)
         self.wait_for_callback(self.callback)
 
         result = self.callback.call_args[0][0][request]
