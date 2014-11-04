@@ -1,3 +1,15 @@
+ubuntu-developer-tools-center (0.1.1-0ubuntu1) vivid; urgency=medium
+
+  * Bug-fix release as Google changed their android-studio checksum from
+    md5sum to sha1sum. Implementing sha1sum largely thanks to Tin Tvrtković
+    work!
+  * Adapt tests + new tests for sha1sum.
+  * Note that the new Android Studio doesn't ship the sdk with it anymore.
+    You need to download it manually and set the path to it. Will try to
+    get in touch with the android studio developer team for this.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 04 Nov 2014 09:55:41 +0100
+
 ubuntu-developer-tools-center (0.1-0ubuntu1) vivid; urgency=medium
 
   * Add eclipse support as a standalone IDE. Usage is: udtc ide eclipse. Thanks
