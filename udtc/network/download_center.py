@@ -52,10 +52,8 @@ class DownloadCenter:
         """Generate a threaded download machine.
 
         urls is a list of DownloadItems to download or read from.
-        on_done is the callback that will be called once all those urls are
-        downloaded.
-        report, if not None, will be called once any download is in progress,
-        reporting
+        on_done is the callback that will be called once all those urls are downloaded.
+        report, if not None, will be called once any download is in progress, reporting
         a dict of current download with current/size parameters
 
         The callback will get a dictionary parameter like:

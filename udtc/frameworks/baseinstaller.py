@@ -56,9 +56,8 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
         self.dir_to_decompress_in_tarball = kwargs.get("dir_to_decompress_in_tarball", None)
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
-        for extra_arg in ["expect_license", "download_page", "checksum_type",
-                          "dir_to_decompress_in_tarball", "desktop_filename",
-                          "icon_filename"]:
+        for extra_arg in ["expect_license", "download_page", "checksum_type",  "dir_to_decompress_in_tarball",
+                          "desktop_filename", "icon_filename"]:
             with suppress(KeyError):
                 kwargs.pop(extra_arg)
         super().__init__(*args, **kwargs)
@@ -146,8 +145,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
 
     def download_provider_page(self):
         logger.debug("Download application provider page")
-        DownloadCenter([DownloadItem(self.download_page, None)],
-                       self.get_metadata_and_check_license, download=False)
+        DownloadCenter([DownloadItem(self.download_page, None)], self.get_metadata_and_check_license, download=False)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse license per line, eventually write to license_txt if it's in the license part.
@@ -193,8 +191,7 @@ class BaseInstaller(udtc.frameworks.BaseFramework):
             if url is None or (self.checksum_type and checksum is None):
                 logger.error("Download page changed its syntax or is not parsable")
                 UI.return_main_screen()
-            self.download_requests.append(
-                DownloadItem(url, Checksum(self.checksum_type, checksum)))
+            self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
 
             if license_txt.getvalue() != "":
                 logger.debug("Check license agreement.")

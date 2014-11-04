@@ -2,7 +2,7 @@
 # Copyright (C) 2014 Canonical
 #
 # Authors:
-# Didier Roche
+#  Didier Roche
 #  Tin Tvrtković
 #
 # This program is free software; you can redistribute it and/or modify it under
@@ -28,8 +28,7 @@ import platform
 from os.path import join
 import udtc.frameworks.baseinstaller
 from udtc.network.download_center import DownloadCenter, DownloadItem
-from udtc.tools import create_launcher, get_application_desktop_file, \
-    ChecksumType, Checksum
+from udtc.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum
 from udtc.ui import UI
 
 
@@ -92,12 +91,10 @@ class Eclipse(udtc.frameworks.baseinstaller.BaseInstaller):
             elif arch == 'x86_64':
                 download_url = self.DOWNLOAD_URL_PAT.format(arch='-x86_64',
                                                             suf='')
-            self.download_requests.append(
-                DownloadItem(download_url, Checksum(ChecksumType.md5, md5)))
+            self.download_requests.append(DownloadItem(download_url, Checksum(ChecksumType.md5, md5)))
             self.start_download_and_install()
 
-        DownloadCenter(urls=[DownloadItem(md5_url, None)], on_done=done,
-                       download=False)
+        DownloadCenter(urls=[DownloadItem(md5_url, None)], on_done=done, download=False)
 
     def create_launcher(self):
         """Create the Luna launcher"""
