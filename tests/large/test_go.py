@@ -55,8 +55,9 @@ class GoTests(LargeFrameworkTests):
             self.additional_dirs.append(self.example_prog_dir)
             example_file = os.path.join(self.example_prog_dir, "hello.go")
             open(example_file, "w").write(self.EXAMPLE_PROJECT)
+            compile_command = ["bash", "-l", "-c", "go run {}".format(example_file)]
         else:  # our mock expects getting that path
-            example_file = "/tmp/hello.go"
+            compile_command = ["bash", "-l", "go run /tmp/hello.go"]
 
         self.child = pexpect.spawnu(self.command('{} go'.format(UDTC)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
@@ -64,13 +65,13 @@ class GoTests(LargeFrameworkTests):
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_no_warn()
 
-        # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.path_exists(self.exec_path))
-
-        # TODO: check that the path are added to installation
+        self.assertTrue(self.is_in_path(self.exec_path))
 
         # compile a small project
-        output = subprocess.check_output(self.command_as_list(["bash", "-l", "-c", "go run {}".format(example_file)]))\
-            .decode()
+        output = subprocess.check_output(self.command_as_list(compile_command)).decode()
 
-        self.assertEquals(output, "hello, world")
+        if self.in_container:
+            self.assertEquals(output, "hello, world\r\n")
+        else:
+            self.assertEquals(output, "hello, world")
