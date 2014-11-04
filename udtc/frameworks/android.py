@@ -145,7 +145,7 @@ class EclipseAdt(udtc.frameworks.baseinstaller.BaseInstaller):
         # add adb and other android tools to PATH
         paths_to_add = os.pathsep.join([os.path.join(self.install_path, "sdk", "platform-tools"),
                                         os.path.join(self.install_path, "sdk", "tools")])
-        add_env_to_user(self.name, "PATH", paths_to_add)
+        add_env_to_user(self.name, {"PATH": {"value": paths_to_add}})
 
     @property
     def is_installed(self):
