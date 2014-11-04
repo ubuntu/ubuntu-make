@@ -52,7 +52,7 @@ class GoLang(udtc.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse Go download link, expect to find a sha1 and a url"""
         url, sha1 = (None, None)
-        if "linux-{}".format(get_current_arch()) in line:
+        if "linux-{}".format(get_current_arch().replace("i386", "386")) in line:
             in_download = True
         if in_download:
             p = re.search(r'href="(.*)">', line)
