@@ -26,12 +26,8 @@ import logging
 import os
 import re
 import udtc.frameworks.baseinstaller
-<<<<<<< HEAD
-from udtc.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon, add_to_user_path, \
+from udtc.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon, add_env_to_user, \
     ChecksumType
-=======
-from udtc.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon, add_env_to_user
->>>>>>> Adapt android env with the new facility
 
 logger = logging.getLogger(__name__)
 
