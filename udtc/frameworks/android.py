@@ -26,7 +26,8 @@ import logging
 import os
 import re
 import udtc.frameworks.baseinstaller
-from udtc.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon, add_to_user_path
+from udtc.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon, add_to_user_path, \
+    ChecksumType
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,8 @@ _supported_archs = ['i386', 'amd64']
 class AndroidCategory(udtc.frameworks.BaseCategory):
 
     def __init__(self):
-        super().__init__(name=_("Android"), description=_("Android Development Environment"),
+        super().__init__(name=_("Android"),
+                         description=_("Android Development Environment"),
                          logo_path=None,
                          packages_requirements=["openjdk-7-jdk", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386"])
 
@@ -77,8 +79,9 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Android Studio", description="Android Studio (default)", is_category_default=True,
                          category=category, only_on_archs=_supported_archs, expect_license=True,
                          download_page="https://developer.android.com/sdk/installing/studio.html",
-                         require_md5=True,
-                         dir_to_decompress_in_tarball="android-studio", desktop_filename="android-studio.desktop")
+                         checksum_type=ChecksumType.sha1,
+                         dir_to_decompress_in_tarball="android-studio",
+                         desktop_filename="android-studio.desktop")
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
@@ -118,7 +121,7 @@ class EclipseAdt(udtc.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Eclipse ADT", description="Android Developer Tools (using eclipse)",
                          category=category, only_on_archs=_supported_archs, expect_license=True,
                          download_page="https://developer.android.com/sdk/index.html",
-                         require_md5=True,
+                         checksum_type=ChecksumType.md5,
                          dir_to_decompress_in_tarball="adt-bundle-linux-*", desktop_filename="adt.desktop",
                          icon_filename="adt.png")
 

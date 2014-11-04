@@ -16,8 +16,9 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-
+from collections import namedtuple
 from contextlib import suppress
+from enum import unique, Enum
 from gettext import gettext as _
 from gi.repository import GLib, Gio
 from glob import glob
@@ -41,6 +42,18 @@ logger = logging.getLogger(__name__)
 _current_arch = None
 _foreign_arch = None
 _version = None
+
+
+@unique
+class ChecksumType(Enum):
+    """Types of supported checksum algorithms."""
+    md5 = "md5"
+    sha1 = "sha1"
+
+
+class Checksum(namedtuple('Checksum', ['checksum_type', 'checksum_value'])):
+    """A combination of checksum algorithm and actual value to check."""
+    pass
 
 
 class Singleton(type):
