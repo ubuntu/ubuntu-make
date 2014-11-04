@@ -58,8 +58,6 @@ class AndroidStudioTests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.is_in_path("adb"))
-        self.assertTrue(self.is_in_path("ddms"))
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -320,8 +318,6 @@ class EclipseADTTests(LargeFrameworkTests):
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
         self.assertTrue(self.path_exists(get_icon_path(self.icon_filename)))
-        self.assertTrue(self.is_in_path("adb"))
-        self.assertTrue(self.is_in_path("ddms"))
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,

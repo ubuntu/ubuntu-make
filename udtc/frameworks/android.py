@@ -97,10 +97,6 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
                         comment=_("Android Studio developer environment"),
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-android-studio"))
-        # add adb and other android tools to PATH
-        paths_to_add = [os.path.join(self.install_path, "sdk", "platform-tools"),
-                        os.path.join(self.install_path, "sdk", "tools")]
-        add_to_user_path(paths_to_add, self.name)
 
     @property
     def is_installed(self):
