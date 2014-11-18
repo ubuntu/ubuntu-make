@@ -131,6 +131,11 @@ class BaseJetBrains(udtc.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMe
     def download_page_url(self):
         pass
 
+    @property
+    @abstractmethod
+    def executable(self):
+        pass
+
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
         logger.debug("Fetched download page, parsing.")
@@ -153,26 +158,11 @@ class BaseJetBrains(udtc.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMe
         self.download_requests.append(DownloadItem(download_url, headers={'referer': self.download_page_url}))
         self.start_download_and_install()
 
-
-class PyCharm(BaseJetBrains):
-    """The JetBrains PyCharm Community Edition distribution."""
-    download_page_url = "https://www.jetbrains.com/pycharm/download/download_thanks.jsp?edition=comm&os=linux"
-
-    def __init__(self, category):
-        super().__init__(name=_("PyCharm"),
-                         description=_("JetBrains PyCharm Community Edition"),
-                         category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=self.download_page_url,
-                         dir_to_decompress_in_tarball='pycharm-community-3.4.1',
-                         desktop_filename='jetbrains-pycharm.desktop',
-                         packages_requirements=['openjdk-7-jdk'])
-
     def post_install(self):
-        """Create the PyCharm launcher"""
-        icon_filename = "pycharm.png"
-        icon_path = join(self.install_path, 'bin', icon_filename)
-        exec_path = '"{}" %f'.format(join(self.install_path, "bin", "pycharm.sh"))
-        comment = _("PyCharm Community Edition (UDTC)")
+        """Create the appropriate JetBrains launcher."""
+        icon_path = join(self.install_path, 'bin', self.icon_filename)
+        exec_path = '"{}" %f'.format(join(self.install_path, "bin", self.executable))
+        comment = self.description + " (UDTC)"
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=self.name,
@@ -180,31 +170,35 @@ class PyCharm(BaseJetBrains):
                                                      exec=exec_path,
                                                      comment=comment,
                                                      categories=categories))
+
+
+class PyCharm(BaseJetBrains):
+    """The JetBrains PyCharm Community Edition distribution."""
+    download_page_url = "https://www.jetbrains.com/pycharm/download/download_thanks.jsp?edition=comm&os=linux"
+    executable = "pycharm.sh"
+
+    def __init__(self, category):
+        super().__init__(name=_("PyCharm"),
+                         description=_("PyCharm Community Edition"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='pycharm-community-3.4.1',
+                         desktop_filename='jetbrains-pycharm.desktop',
+                         packages_requirements=['openjdk-7-jdk'],
+                         icon_filename='pycharm.png')
 
 
 class Idea(BaseJetBrains):
     """The JetBrains IntelliJ Idea Community Edition distribution."""
     download_page_url = "https://www.jetbrains.com/idea/download/download_thanks.jsp?edition=IC&os=linux"
+    executable = "idea.sh"
 
     def __init__(self, category):
         super().__init__(name=_("Idea"),
-                         description=_("JetBrains IntelliJ Idea Community Edition"),
+                         description=_("IntelliJ Idea Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='idea-IC-139.225.3',
                          desktop_filename='jetbrains-idea-ce.desktop',
-                         packages_requirements=['openjdk-7-jdk'])
-
-    def post_install(self):
-        """Create the Idea launcher"""
-        icon_filename = "idea.png"
-        icon_path = join(self.install_path, 'bin', icon_filename)
-        exec_path = '"{}" %f'.format(join(self.install_path, "bin", "idea.sh"))
-        comment = _("IntellijIdea Community Edition (UDTC)")
-        categories = "Development;IDE;"
-        create_launcher(self.desktop_filename,
-                        get_application_desktop_file(name=self.name,
-                                                     icon_path=icon_path,
-                                                     exec=exec_path,
-                                                     comment=comment,
-                                                     categories=categories))
+                         packages_requirements=['openjdk-7-jdk'],
+                         icon_filename='idea.png')

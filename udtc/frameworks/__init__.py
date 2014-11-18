@@ -301,7 +301,8 @@ def _is_categoryclass(o):
 
 
 def _is_frameworkclass(o):
-    return inspect.isclass(o) and issubclass(o, BaseFramework)
+    """Filter concrete (non-abstract) subclasses of BaseFramework."""
+    return inspect.isclass(o) and issubclass(o, BaseFramework) and not inspect.isabstract(o)
 
 
 def load_module(module_abs_name, main_category):
