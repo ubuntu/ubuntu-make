@@ -19,20 +19,18 @@
 
 """Module delivering a DownloadCenter to download in parallel multiple requests"""
 
+from collections import namedtuple
 from concurrent import futures
 from contextlib import closing
+import hashlib
+from io import BytesIO
 import logging
+import os
+import tempfile
 
 import requests
 import requests.exceptions
-
-from collections import namedtuple
-import hashlib
-from io import BytesIO
-import os
-import tempfile
 from udtc.tools import ChecksumType
-
 
 logger = logging.getLogger(__name__)
 

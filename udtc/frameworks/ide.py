@@ -182,7 +182,7 @@ class PyCharm(BaseJetBrains):
                          description=_("PyCharm Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
-                         dir_to_decompress_in_tarball='pycharm-community-3.4.1',
+                         dir_to_decompress_in_tarball='pycharm-community-*',
                          desktop_filename='jetbrains-pycharm.desktop',
                          packages_requirements=['openjdk-7-jdk'],
                          icon_filename='pycharm.png')
@@ -198,7 +198,7 @@ class Idea(BaseJetBrains):
                          description=_("IntelliJ Idea Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
-                         dir_to_decompress_in_tarball='idea-IC-139.225.3',
+                         dir_to_decompress_in_tarball='idea-IC-*',
                          desktop_filename='jetbrains-idea-ce.desktop',
                          packages_requirements=['openjdk-7-jdk'],
                          icon_filename='idea.png')

@@ -95,7 +95,7 @@ class EclipseIDETests(LargeFrameworkTests):
 class IdeaIDETests(LargeFrameworkTests):
     """IntelliJ Idea from the IDE collection."""
 
-    TIMEOUT_INSTALL_PROGRESS = 480
+    TIMEOUT_INSTALL_PROGRESS = 120
     TIMEOUT_START = 60
     TIMEOUT_STOP = 60
 
@@ -112,11 +112,6 @@ class IdeaIDETests(LargeFrameworkTests):
     @property
     def exec_path(self):
         return os.path.join(self.installed_path, "bin", Idea.executable)
-
-    @property
-    def arch_option(self):
-        """we return the expected arch call on command line"""
-        return platform.machine()
 
     def test_default_install(self):
         """Install from scratch test case"""
@@ -148,7 +143,7 @@ class IdeaIDETests(LargeFrameworkTests):
 class PyCharmIDETests(LargeFrameworkTests):
     """PyCharm from the IDE collection."""
 
-    TIMEOUT_INSTALL_PROGRESS = 480
+    TIMEOUT_INSTALL_PROGRESS = 120
     TIMEOUT_START = 60
     TIMEOUT_STOP = 60
 
@@ -165,11 +160,6 @@ class PyCharmIDETests(LargeFrameworkTests):
     @property
     def exec_path(self):
         return os.path.join(self.installed_path, "bin", PyCharm.executable)
-
-    @property
-    def arch_option(self):
-        """we return the expected arch call on command line"""
-        return platform.machine()
 
     def test_default_install(self):
         """Install from scratch test case"""

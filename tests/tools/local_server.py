@@ -123,6 +123,18 @@ class RequestHandler(SimpleHTTPRequestHandler):
             self.send_response(302)
             self.send_header('Location', self.path[:-len('-redirect')])
             self.end_headers()
+        elif 'headers' in self.path:
+            # For paths that end with '-headers', we check if the request actually
+            # contains the header with the specified value. The expected header key
+            # and value are in the query params.
+            url = urllib.parse.urlparse(self.path)
+            params = urllib.parse.parse_qs(url.query)
+            for key in params:
+                if self.headers[key] != params[key][0]:
+                    self.send_error(404)
+            # Now we need to chop off the '-header' part.
+            self.path = url.path[:-len('-headers')]
+            super().do_GET()
         else:
             # keep special ?file= to redirect the query
             if '?file=' in self.path:
