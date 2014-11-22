@@ -153,10 +153,26 @@ class BaseJetBrains(udtc.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMe
             logger.error("Can't parse the download URL from the download page.")
             UI.return_main_screen()
         download_url = link.attrs['href']
+        checksum_url = download_url + '.sha256'
         logger.debug("Found download URL: " + download_url)
+        logger.debug("Downloading checksum first, from " + checksum_url)
 
-        self.download_requests.append(DownloadItem(download_url, headers={'referer': self.download_page_url}))
-        self.start_download_and_install()
+        def checksum_downloaded(results):
+            checksum_result = next(iter(results.values()))  # Just get the first.
+            if checksum_result.error:
+                logger.error(checksum_result.error)
+                UI.return_main_screen()
+                return
+
+            checksum = checksum_result.buffer.getvalue().decode('utf-8').split()[0]
+            logger.info('Obtained SHA256 checksum: ' + checksum)
+
+            self.download_requests.append(DownloadItem(download_url,
+                                                       checksum=Checksum(ChecksumType.sha256, checksum),
+                                                       ignore_encoding=True))
+            self.start_download_and_install()
+
+        DownloadCenter([DownloadItem(checksum_url)], on_done=checksum_downloaded, download=False)
 
     def post_install(self):
         """Create the appropriate JetBrains launcher."""

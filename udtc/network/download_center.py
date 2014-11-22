@@ -35,13 +35,13 @@ from udtc.tools import ChecksumType
 logger = logging.getLogger(__name__)
 
 
-class DownloadItem(namedtuple('DownloadItem', ['url', 'checksum', 'headers'])):
+class DownloadItem(namedtuple('DownloadItem', ['url', 'checksum', 'headers', 'ignore_encoding'])):
     """An individual item to be downloaded and checked.
 
     Checksum should be an instance of tools.Checksum, if provided.
     Headers should be a dictionary of HTTP headers, if provided."""
-    def __new__(cls, url, checksum=None, headers=None):
-        return super().__new__(cls, url, checksum, headers)
+    def __new__(cls, url, checksum=None, headers=None, ignore_encoding=False):
+        return super().__new__(cls, url, checksum, headers, ignore_encoding)
 
 
 class DownloadCenter:
@@ -125,7 +125,7 @@ class DownloadCenter:
                 # read in chunk and send report updates
                 block_num = 0
                 _report(block_num, self.BLOCK_SIZE, content_size)
-                for data in r.iter_content(chunk_size=self.BLOCK_SIZE):
+                for data in r.raw.stream(amt=self.BLOCK_SIZE, decode_content=not download_item.ignore_encoding):
                     dest.write(data)
                     block_num += 1
                     _report(block_num, self.BLOCK_SIZE, content_size)
@@ -143,6 +143,8 @@ class DownloadCenter:
                 actual_checksum = self.sha1_for_fd(dest)
             elif checksum_type is ChecksumType.md5:
                 actual_checksum = self.md5_for_fd(dest)
+            elif checksum_type is ChecksumType.sha256:
+                actual_checksum = self.sha256_for_fd(dest)
             else:
                 msg = "Unsupported checksum type: {}.".format(checksum_type)
                 raise BaseException(msg)
@@ -204,3 +206,7 @@ class DownloadCenter:
     @classmethod
     def sha1_for_fd(cls, f, block_size=2**20):
         return cls._checksum_for_fd(hashlib.sha1, f, block_size)
+
+    @classmethod
+    def sha256_for_fd(cls, f, block_size=2**20):
+        return cls._checksum_for_fd(hashlib.sha256, f, block_size)
