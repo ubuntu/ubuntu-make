@@ -129,6 +129,35 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.error)
 
+    def test_content_encoding(self):
+        """Ensure we perform (or don't) content decoding properly."""
+
+        # Use an existing .gz file, at data/server-content/www.eclipse.org/.../eclipse-standard-luna-R-linux-gtk.tar.gz
+        filename = "www.eclipse.org/technology/epp/downloads/release/luna/R/eclipse-standard-luna-R-linux-gtk.tar.gz"
+        length = 4096
+        compressed_length = 266
+        url = self.build_server_address(filename + '-setheaders?content-encoding=gzip')
+        request = DownloadItem(url)
+        DownloadCenter([request], self.callback, download=False)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][url]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        self.assertEqual(length, len(result.buffer.getvalue()))
+
+        # Reset the callback mock.
+        self.callback = Mock()
+
+        request = DownloadItem(url, ignore_encoding=True)
+        DownloadCenter([request], self.callback, download=False)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][url]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        self.assertEqual(compressed_length, len(result.buffer.getvalue()))
+
     def test_download_keep_extensions(self):
         """we deliver successful downloads keeping the extension"""
         filename = "android-studio-fake.tgz"

@@ -80,12 +80,18 @@ class RequestHandler(SimpleHTTPRequestHandler):
 
     root_path = os.getcwd()
 
+    def __init__(self, request, client_address, server):
+        self.headers_to_send = []
+        super().__init__(request, client_address, server)
+
     def end_headers(self):
         """don't send Content-Length header for a particular file"""
         if self.path.endswith("-with-no-content-length"):
             for current_header in self._headers_buffer:
                 if current_header.decode("UTF-8").startswith("Content-Length"):
                     self._headers_buffer.remove(current_header)
+        for key, value in self.headers_to_send:
+            self.send_header(key, value)
         super().end_headers()
 
     def translate_path(self, path):
@@ -123,6 +129,17 @@ class RequestHandler(SimpleHTTPRequestHandler):
             self.send_response(302)
             self.send_header('Location', self.path[:-len('-redirect')])
             self.end_headers()
+        elif 'setheaders' in self.path:
+            # For paths that end with '-setheaders', we fish out the headers from the query
+            # params and set them.
+            url = urllib.parse.urlparse(self.path)
+            params = urllib.parse.parse_qs(url.query)
+            for key, values in params.items():
+                for value in values:
+                    self.headers_to_send.append((key, value))
+            # Now we need to chop off the '-setheaders' part.
+            self.path = url.path[:-len('-setheaders')]
+            super().do_GET()
         elif 'headers' in self.path:
             # For paths that end with '-headers', we check if the request actually
             # contains the header with the specified value. The expected header key
@@ -132,7 +149,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
             for key in params:
                 if self.headers[key] != params[key][0]:
                     self.send_error(404)
-            # Now we need to chop off the '-header' part.
+            # Now we need to chop off the '-headers' part.
             self.path = url.path[:-len('-headers')]
             super().do_GET()
         else:
