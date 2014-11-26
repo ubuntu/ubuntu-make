@@ -111,6 +111,53 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.error)
 
+    def test_header_download(self):
+        """we deliver one successful download with some headers"""
+        filename = "simplefile"
+        url = self.build_server_address(filename + '-headers?header=test')
+        request = DownloadItem(url, headers={"header": "test"})
+        DownloadCenter([request], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][url]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result.fd.read())
+            self.assertTrue('.' not in result.fd.name, result.fd.name)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.error)
+
+    def test_content_encoding(self):
+        """Ensure we perform (or don't) content decoding properly."""
+
+        # Use an existing .gz file, at data/server-content/www.eclipse.org/.../eclipse-standard-luna-R-linux-gtk.tar.gz
+        filename = "www.eclipse.org/technology/epp/downloads/release/luna/R/eclipse-standard-luna-R-linux-gtk.tar.gz"
+        length = 4096
+        compressed_length = 266
+        url = self.build_server_address(filename + '-setheaders?content-encoding=gzip')
+        request = DownloadItem(url)
+        DownloadCenter([request], self.callback, download=False)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][url]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        self.assertEqual(length, len(result.buffer.getvalue()))
+
+        # Reset the callback mock.
+        self.callback = Mock()
+
+        request = DownloadItem(url, ignore_encoding=True)
+        DownloadCenter([request], self.callback, download=False)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][url]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        self.assertEqual(compressed_length, len(result.buffer.getvalue()))
+
     def test_download_keep_extensions(self):
         """we deliver successful downloads keeping the extension"""
         filename = "android-studio-fake.tgz"
@@ -257,21 +304,6 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNotNone(map_result[self.build_server_address("does_not_exist")].error)
         self.assertIsNotNone(map_result[self.build_server_address("simplefile")].fd)
         self.expect_warn_error = True
-
-    def test_download_same_file_multiple_times(self):
-        """we only do one download when the same file is requested more than once in the same request"""
-        requests = [DownloadItem(self.build_server_address("simplefile"), None),
-                    DownloadItem(self.build_server_address("simplefile"), None)]
-        report = CopyingMock()
-        DownloadCenter(requests, self.callback, report=report)
-        self.wait_for_callback(self.callback)
-
-        # ensure we only have one file downloaded and mapped back as a result)
-        callback_args, callback_kwargs = self.callback.call_args
-        map_result = callback_args[0]
-        self.assertEqual(len(map_result), 1, str(map_result))
-        # ensure we only downloaded one file (didn't send multiple parallel requests)
-        self.assertEqual(report.call_count, 2)
 
     def test_in_memory_download(self):
         """we deliver download on memory objects"""
