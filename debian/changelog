@@ -1,4 +1,4 @@
-ubuntu-make (0.2-0ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (0.2) UNRELEASED; urgency=medium
 
   * Releasing under new name: ubuntu-make. Handle transition by shipping
     a temporary binary under the older name (udtc). New command is umake.

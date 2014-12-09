@@ -49,6 +49,7 @@ Package: ubuntu-developer-tools-center
 Architecture: all
 Section: oldlibs
 Priority: extra
-Depends: ubuntu-make, ${misc:Depends},
+Depends: ubuntu-make, ${misc:Depends}, ${python3:Depends}
 Description: transitional dummy package
-  This is a transitional dummy package. It can safely be removed.
+ This is a transitional dummy package only providing previous udtc binary
+ instead of umake. It can safely be removed.
