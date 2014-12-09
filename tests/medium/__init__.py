@@ -84,8 +84,8 @@ class ContainerTests(LoggedTestCase):
         return ["sshpass", "-p", settings.DOCKER_PASSWORD, "ssh", "-o", "UserKnownHostsFile=/dev/null", "-o",
                 "StrictHostKeyChecking=no", "-t", "-q",
                 "{}@{}".format(settings.DOCKER_USER, self.container_ip),
-                "{} {} '{}'".format(os.path.join(get_tools_helper_dir(), "run_in_umake_dir"), settings.UMAKE_IN_CONTAINER,
-                                    commands_to_run)]
+                "{} {} '{}'".format(os.path.join(get_tools_helper_dir(), "run_in_umake_dir"),
+                                    settings.UMAKE_IN_CONTAINER, commands_to_run)]
 
     def check_and_kill_process(self, process_grep, wait_before=0, send_sigkill=False):
         """Check a process matching process_grep exists and kill it"""

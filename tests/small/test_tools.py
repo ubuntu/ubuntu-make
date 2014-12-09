@@ -866,7 +866,8 @@ class TestUserENV(LoggedTestCase):
         """Remove an env from a user setup"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A\nexport FOO=bar\n\nexport BAR=baz")
+        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A"
+                                      "\nexport FOO=bar\n\nexport BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
@@ -877,7 +878,8 @@ class TestUserENV(LoggedTestCase):
         """Remove an env from a user setup being at the end of profile file"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A\nexport FOO=bar\n\n")
+        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A"
+                                      "\nexport FOO=bar\n\n")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
@@ -921,8 +923,8 @@ class TestUserENV(LoggedTestCase):
         """Remove an env from a user setup having multiple lines"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A\nexport FOO=bar\nexport BOO=foo\n\n"
-                                      "export BAR=baz")
+        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A"
+                                      "\nexport FOO=bar\nexport BOO=foo\n\nexport BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()

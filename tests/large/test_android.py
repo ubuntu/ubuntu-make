@@ -403,7 +403,8 @@ class EclipseADTTests(LargeFrameworkTests):
         for loop in ("install", "reinstall"):
             if loop == "reinstall":
                 self.installed_path = "/tmp/foo"
-                self.child = pexpect.spawnu(self.command('{} android eclipse-adt {}'.format(UMAKE, self.installed_path)))
+                self.child = pexpect.spawnu(self.command('{} android eclipse-adt {}'.format(UMAKE,
+                                                                                            self.installed_path)))
                 self.expect_and_no_warn("Eclipse ADT is already installed.*\[.*\] ")
                 self.child.sendline("y")
             else:
@@ -434,7 +435,8 @@ class EclipseADTTests(LargeFrameworkTests):
         for loop in ("install", "reinstall"):
             if loop == "reinstall":
                 self.installed_path = self.reinstalled_path
-                self.child = pexpect.spawnu(self.command('{} android eclipse-adt {}'.format(UMAKE, self.installed_path)))
+                self.child = pexpect.spawnu(self.command('{} android eclipse-adt {}'.format(UMAKE,
+                                                                                            self.installed_path)))
                 self.expect_and_no_warn("Eclipse ADT is already installed.*\[.*\] ")
                 self.child.sendline("y")
                 self.expect_and_no_warn("{} isn't an empty directory.*there\? \[.*\] ".format(self.installed_path))
