@@ -2,8 +2,7 @@ language: python
 python:
   - "3.4"
 before_install:
-  - sudo add-apt-repository -y ppa:didrocks/ppa
-  - sudo add-apt-repository -y ppa:fkrull/deadsnakes
+  - sudo add-apt-repository -y ppa:ubuntu-desktop/umake
   - sudo apt-get update
   - sudo apt-get install -qq python3.4 apt apt-utils libapt-pkg-dev gir1.2-glib-2.0 python3-gi sshpass python3-argcomplete python3-progressbar
 install:
