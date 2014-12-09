@@ -8,6 +8,8 @@ ubuntu-make (0.2) UNRELEASED; urgency=medium
     Also move previous configuration file location to the new one.
   * Update Standards-Version
   * Fix Android Studio installation, now that it reached 1.0 milestone.
+  * Removing Android Eclipse (adt) from Ubuntu Make: upstream doesn't provide
+    any bundle anymore as this tools is deprecated in favor of Android Studio.
 
  -- Didier Roche <didrocks@ubuntu.com>  Tue, 09 Dec 2014 08:23:33 +0100
 
