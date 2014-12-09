@@ -20,16 +20,16 @@
 
 """Framework with package requirements"""
 
-import udtc.frameworks
+import umake.frameworks
 
 
-class CategoryF(udtc.frameworks.BaseCategory):
+class CategoryF(umake.frameworks.BaseCategory):
 
     def __init__(self):
         super().__init__(name="Category F", description="Category F to test installed state")
 
 
-class FrameworkA(udtc.frameworks.BaseFramework):
+class FrameworkA(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework A", description="Description for framework A (impossible path)",
@@ -42,7 +42,7 @@ class FrameworkA(udtc.frameworks.BaseFramework):
         super().remove()
 
 
-class FrameworkB(udtc.frameworks.BaseFramework):
+class FrameworkB(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework B", description="Description for framework B (good install dir, "
@@ -56,7 +56,7 @@ class FrameworkB(udtc.frameworks.BaseFramework):
         super().remove()
 
 
-class FrameworkC(udtc.frameworks.BaseFramework):
+class FrameworkC(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework C", description="Description for framework C (good install dir, package req.)",

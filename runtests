@@ -74,10 +74,10 @@ def set_logging_profile(log_config_file):
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description="Run udtc tests. Specified list of test run in debug mode. "
+    parser = argparse.ArgumentParser(description="Run umake tests. Specified list of test run in debug mode. "
                                                  "Running a partial suite of tests is using a normal mode. "
                                                  "Running all tests is using coverage by default.")
-    parser.add_argument('-s', "--system", action="store_true", help="Use system udtc instead of local one")
+    parser.add_argument('-s', "--system", action="store_true", help="Use system umake instead of local one")
     parser.add_argument("--publish", action="store_true", help="Publish xunit results format")
 
     parser.add_argument("tests", nargs='*', help="Action to perform: all (or omitted) to run all tests. "
@@ -134,7 +134,7 @@ if __name__ == '__main__':
         sys.path.remove(root_dir)
     else:
         import tests
-        tests.tools.set_local_udtc()
+        tests.tools.set_local_umake()
 
     if not "all" in args.tests and len(args.tests) > 0:
         for test_type in args.tests:

@@ -20,17 +20,17 @@
 
 """Framework with package requirements on Category"""
 
-import udtc.frameworks
+import umake.frameworks
 
 
-class CategoryG(udtc.frameworks.BaseCategory):
+class CategoryG(umake.frameworks.BaseCategory):
 
     def __init__(self):
         super().__init__(name="Category G", description="Category G to test installed state",
                          packages_requirements=["baz"])
 
 
-class FrameworkA(udtc.frameworks.BaseFramework):
+class FrameworkA(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework A", description="Description for framework A (with add req.)",
@@ -43,7 +43,7 @@ class FrameworkA(udtc.frameworks.BaseFramework):
         super().remove()
 
 
-class FrameworkB(udtc.frameworks.BaseFramework):
+class FrameworkB(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework B", description="Description for framework B (with no req.)",

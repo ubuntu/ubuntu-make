@@ -20,7 +20,7 @@ handlers:
         backupCount: 20
         encoding: utf8
 loggers:
-    udtc.network:
+    umake.network:
         level: DEBUG
         handlers: [console, debug_network_file_handler]
         propagate: no

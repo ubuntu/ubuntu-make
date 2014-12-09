@@ -1,2 +1,2 @@
-# just source that file to enable shell completion on udtc
-eval "$(register-python-argcomplete bin/udtc)"
+# just source that file to enable shell completion on umake
+eval "$(register-python-argcomplete bin/umake)"

@@ -26,19 +26,19 @@ import logging
 from progressbar import ProgressBar
 import os
 import shutil
-import udtc.frameworks
-from udtc.decompressor import Decompressor
-from udtc.interactions import InputText, YesNo, LicenseAgreement, DisplayMessage, UnknownProgress
-from udtc.network.download_center import DownloadCenter, DownloadItem
-from udtc.network.requirements_handler import RequirementsHandler
-from udtc.ui import UI
-from udtc.tools import MainLoop, strip_tags, launcher_exists, get_icon_path, get_launcher_path, \
+import umake.frameworks
+from umake.decompressor import Decompressor
+from umake.interactions import InputText, YesNo, LicenseAgreement, DisplayMessage, UnknownProgress
+from umake.network.download_center import DownloadCenter, DownloadItem
+from umake.network.requirements_handler import RequirementsHandler
+from umake.ui import UI
+from umake.tools import MainLoop, strip_tags, launcher_exists, get_icon_path, get_launcher_path, \
     Checksum, remove_framework_envs_from_user
 
 logger = logging.getLogger(__name__)
 
 
-class BaseInstaller(udtc.frameworks.BaseFramework):
+class BaseInstaller(umake.frameworks.BaseFramework):
 
     def __new__(cls, *args, **kwargs):
         "This class is not meant to be instantiated, so __new__ returns None."

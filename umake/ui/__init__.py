@@ -20,7 +20,7 @@
 """Abstracted UI interface that will be overriden by different UI types"""
 
 from gi.repository import GLib
-from udtc.tools import Singleton, MainLoop
+from umake.tools import Singleton, MainLoop
 
 
 class UI(object, metaclass=Singleton):

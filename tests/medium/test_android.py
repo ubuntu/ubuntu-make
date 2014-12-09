@@ -23,8 +23,8 @@ from . import ContainerTests
 import os
 import pexpect
 from ..large import test_android
-from ..tools import get_data_dir, swap_file_and_restore, UDTC
-from udtc import settings
+from ..tools import get_data_dir, swap_file_and_restore, UMAKE
+from umake import settings
 
 
 class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
@@ -48,7 +48,7 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
         with swap_file_and_restore(android_studio_file_path) as content:
             with open(android_studio_file_path, "w") as newfile:
                 newfile.write(content.replace(settings.TEST_MD5_ANDROID_STUDIO_FAKE_DATA, "fakemd5sum"))
-            self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UDTC)))
+            self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
             self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
@@ -84,7 +84,7 @@ class EclipseADTInContainer(ContainerTests, test_android.EclipseADTTests):
             with open(eclipse_adt_file_path, "w") as newfile:
                 newfile.write(content.replace(settings.TEST_MD5_ECLIPSE_ADT_32_FAKE_DATA, "fakemd5sum")
                                      .replace(settings.TEST_MD5_ECLIPSE_ADT_64_FAKE_DATA, "fakemd5sum"))
-            self.child = pexpect.spawnu(self.command('{} android eclipse-adt'.format(UDTC)))
+            self.child = pexpect.spawnu(self.command('{} android eclipse-adt'.format(UMAKE)))
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
             self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question

@@ -25,8 +25,8 @@ from gettext import gettext as _
 import logging
 import os
 import re
-import udtc.frameworks.baseinstaller
-from udtc.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon, add_env_to_user, \
+import umake.frameworks.baseinstaller
+from umake.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon, add_env_to_user, \
     ChecksumType
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 _supported_archs = ['i386', 'amd64']
 
 
-class AndroidCategory(udtc.frameworks.BaseCategory):
+class AndroidCategory(umake.frameworks.BaseCategory):
 
     def __init__(self):
         super().__init__(name=_("Android"), description=_("Android Development Environment"), logo_path=None,
@@ -71,7 +71,7 @@ class AndroidCategory(udtc.frameworks.BaseCategory):
         return ((url, md5sum), in_download)
 
 
-class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
+class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Android Studio", description="Android Studio (default)", is_category_default=True,
@@ -109,7 +109,7 @@ class AndroidStudio(udtc.frameworks.baseinstaller.BaseInstaller):
         return True
 
 
-class EclipseAdt(udtc.frameworks.baseinstaller.BaseInstaller):
+class EclipseAdt(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Eclipse ADT", description="Android Developer Tools (using eclipse)",

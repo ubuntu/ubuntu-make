@@ -19,7 +19,7 @@
 
 """Common tools between tests"""
 
-# DO NOT IMPORT HERE udtc.* directly, only lazy import it in function.
+# DO NOT IMPORT HERE umake.* directly, only lazy import it in function.
 # This file is imported by runtests, before the coverage is enabled.
 from io import StringIO
 from contextlib import contextmanager, suppress
@@ -35,7 +35,7 @@ from unittest.mock import Mock
 logger = logging.getLogger(__name__)
 
 DOCKER = None
-UDTC = "udtc"
+UMAKE = "umake"
 
 
 class LoggedTestCase(TestCase):
@@ -96,12 +96,12 @@ def change_xdg_path(key, value=None, remove=False):
     if remove:
         with suppress(KeyError):
             os.environ.pop(key)
-    import udtc.tools
+    import umake.tools
     importlib.reload(xdg.BaseDirectory)
     with suppress(KeyError):
-        udtc.tools.Singleton._instances.pop(udtc.tools.ConfigHandler)
-    udtc.tools.xdg_config_home = xdg.BaseDirectory.xdg_config_home
-    udtc.tools.xdg_data_home = xdg.BaseDirectory.xdg_data_home
+        umake.tools.Singleton._instances.pop(umake.tools.ConfigHandler)
+    umake.tools.xdg_config_home = xdg.BaseDirectory.xdg_config_home
+    umake.tools.xdg_data_home = xdg.BaseDirectory.xdg_data_home
 
 
 @contextmanager
@@ -132,9 +132,9 @@ def swap_file_and_restore(filepath):
         open(filepath, 'w').write(original_content)
 
 
-def set_local_udtc():
-    global UDTC
-    UDTC = "./bin/udtc"
+def set_local_umake():
+    global UMAKE
+    UMAKE = "./bin/umake"
 
 
 def get_docker_path():

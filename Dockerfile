@@ -1,8 +1,8 @@
-# Docker container for ubuntu developer tools center
+# Docker container for Ubuntu Make
 # this installs a full ubuntu desktop environment in an
 # unprivileged container, and adds a passwordless sudo user.
 
-# This enables running medium tests of udtc.
+# This enables running medium tests of umake.
 
 FROM	ubuntu:14.04
 MAINTAINER	Didier Roche <didrocks@ubuntu.com>
@@ -25,14 +25,14 @@ RUN \
 # install add-apt-repository and tools to create build-deps
   apt-get install -y software-properties-common devscripts equivs dpkg-dev && \
 
-# add udtc ppa
-  add-apt-repository -y ppa:didrocks/ubuntu-developer-tools-center && \
+# add umake ppa
+  add-apt-repository -y ppa:ubuntu-desktop/ubuntu-make && \
   apt-get update && \
 
-# install system udtc (from latest released version)
-#RUN apt-get install -y ubuntu-developer-tools-center
+# install system umake (from latest released version)
+#RUN apt-get install -y ubuntu-make
 
-# install udtc build-deps
+# install umake build-deps
   mk-build-deps /tmp/control -i --tool 'apt-get --yes' && \
 
 # for running it as a daemon (and ssh requires the sshd directory)

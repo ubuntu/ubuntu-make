@@ -20,16 +20,16 @@
 
 """One framework with category module"""
 
-import udtc.frameworks
+import umake.frameworks
 
 
-class OneFrameworkCategory(udtc.frameworks.BaseCategory):
+class OneFrameworkCategory(umake.frameworks.BaseCategory):
 
     def __init__(self):
         super().__init__(name="One framework category", description="Category with one framework")
 
 
-class FrameworkA(udtc.frameworks.BaseFramework):
+class FrameworkA(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework A", description="Description for framework A",

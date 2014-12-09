@@ -17,7 +17,7 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-"""Tests the various udtc tools"""
+"""Tests the various umake tools"""
 
 from concurrent import futures
 from contextlib import contextmanager, suppress
@@ -32,8 +32,8 @@ from textwrap import dedent
 from time import time
 import threading
 from ..tools import change_xdg_path, get_data_dir, LoggedTestCase
-from udtc import settings, tools
-from udtc.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
+from umake import settings, tools
+from umake.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
     create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_icon_path, get_launcher_path, copy_icon
 from unittest.mock import patch
 
@@ -69,7 +69,7 @@ class TestConfigHandler(LoggedTestCase):
         self.assertEquals(ConfigHandler().config,
                           {'frameworks': {
                               'category-a': {
-                                  'framework-a': {'path': '/home/didrocks/quickly/ubuntu-developer-tools/adt-eclipse'},
+                                  'framework-a': {'path': '/home/didrocks/quickly/ubuntu-make/adt-eclipse'},
                                   'framework-b': {'path': '/home/didrocks/foo/bar/android-studio'}
                               }
                           }})
@@ -167,20 +167,20 @@ class TestCompletionArchVersion(LoggedTestCase):
         with self.create_dpkg("exit 1"):
             self.assertRaises(subprocess.CalledProcessError, get_current_arch)
 
-    @patch("udtc.tools.settings")
+    @patch("umake.tools.settings")
     def test_get_current_ubuntu_version(self, settings_module):
         """Current ubuntu version is reported from our lsb_release local file"""
         settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("valid")
         self.assertEquals(get_current_ubuntu_version(), '14.04')
 
-    @patch("udtc.tools.settings")
+    @patch("umake.tools.settings")
     def test_get_current_ubuntu_version_invalid(self, settings_module):
         """Raise an error when parsing an invalid lsb release file"""
         settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("invalid")
         self.assertRaises(BaseException, get_current_ubuntu_version)
         self.expect_warn_error = True
 
-    @patch("udtc.tools.settings")
+    @patch("umake.tools.settings")
     def test_get_current_ubuntu_version_no_lsb_release(self, settings_module):
         """Raise an error when there is no lsb release file"""
         settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("notexist")
@@ -255,7 +255,7 @@ class TestToolsThreads(LoggedTestCase):
         GLib.idle_add(self.get_mainloop_thread)
         self.mainloop_object.run()
 
-    @patch("udtc.tools.sys")
+    @patch("umake.tools.sys")
     def test_run_function_in_mainloop_thread(self, mocksys):
         """Decorated mainloop thread functions are really running in that thread"""
 
@@ -276,7 +276,7 @@ class TestToolsThreads(LoggedTestCase):
         self.assertIsNotNone(self.function_thread)
         self.assertEquals(self.mainloop_thread, self.function_thread)
 
-    @patch("udtc.tools.sys")
+    @patch("umake.tools.sys")
     def test_run_function_not_in_mainloop_thread(self, mocksys):
         """Non decorated callback functions are not running in the mainloop thread"""
 
@@ -307,7 +307,7 @@ class TestToolsThreads(LoggedTestCase):
             self.mainloop_object.run()
             self.assertTrue(mockmainloop.run.called)
 
-    @patch("udtc.tools.sys")
+    @patch("umake.tools.sys")
     def test_mainloop_quit(self, mocksys):
         """We quit the process"""
         def _quit_ignoring_exception():
@@ -319,7 +319,7 @@ class TestToolsThreads(LoggedTestCase):
 
         mocksys.exit.assert_called_once_with(0)
 
-    @patch("udtc.tools.sys")
+    @patch("umake.tools.sys")
     def test_mainloop_quit_with_exit_value(self, mocksys):
         """We quit the process with a return code"""
         def _quit_ignoring_exception():
@@ -331,7 +331,7 @@ class TestToolsThreads(LoggedTestCase):
 
         mocksys.exit.assert_called_once_with(42)
 
-    @patch("udtc.tools.sys")
+    @patch("umake.tools.sys")
     def test_unhandled_exception_in_mainloop_thead_exit(self, mocksys):
         """We quit the process in error for any unhandled exception, logging it"""
 
@@ -394,7 +394,7 @@ class TestLauncherIcons(LoggedTestCase):
             f.write("Foo Bar Baz")
         return result_file
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_can_install(self, SettingsMock):
         """Install a basic launcher, default case with unity://running"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
@@ -409,7 +409,7 @@ class TestLauncherIcons(LoggedTestCase):
         self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
         self.assertEquals(open(get_launcher_path("foo.desktop")).read(), self.get_generic_desktop_content())
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_can_update_launcher(self, SettingsMock):
         """Update a launcher file"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
@@ -432,7 +432,7 @@ class TestLauncherIcons(LoggedTestCase):
         self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
         self.assertEquals(open(get_launcher_path("foo.desktop")).read(), new_content)
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_can_install_without_unity_running(self, SettingsMock):
         """Install a basic launcher icon, without a running apps entry (so will be last)"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
@@ -444,7 +444,7 @@ class TestLauncherIcons(LoggedTestCase):
                                                                             "application://baz.desktop",
                                                                             "application://foo.desktop"])
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_can_install_already_in_launcher(self, SettingsMock):
         """A file listed in launcher still install the files, but the entry isn't changed"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
@@ -455,7 +455,7 @@ class TestLauncherIcons(LoggedTestCase):
         self.assertFalse(SettingsMock.return_value.set_strv.called)
         self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_install_no_schema_file(self, SettingsMock):
         """No schema file still installs the file"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
@@ -465,7 +465,7 @@ class TestLauncherIcons(LoggedTestCase):
         self.assertFalse(SettingsMock.return_value.set_strv.called)
         self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_already_existing_file_different_content(self, SettingsMock):
         """A file with a different file content already exists and is updated"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
@@ -474,7 +474,7 @@ class TestLauncherIcons(LoggedTestCase):
 
         self.assertEquals(open(result_file).read(), self.get_generic_desktop_content())
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_create_launcher_without_xdg_dir(self, SettingsMock):
         """Save a new launcher in an unexisting directory"""
         shutil.rmtree(self.local_dir)
@@ -492,7 +492,7 @@ class TestLauncherIcons(LoggedTestCase):
         """Launcher file doesn't exists"""
         self.assertFalse(launcher_exists("foo.desktop"))
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_launcher_exists_and_is_pinned(self, SettingsMock):
         """Launcher exists and is pinned if the file exists and is in favorites list"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
@@ -502,7 +502,7 @@ class TestLauncherIcons(LoggedTestCase):
 
         self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_launcher_isnt_pinned(self, SettingsMock):
         """Launcher doesn't exists and is pinned if the file exists but not in favorites list"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
@@ -511,7 +511,7 @@ class TestLauncherIcons(LoggedTestCase):
 
         self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_launcher_exists_but_isnt_pinned_in_none_unity(self, SettingsMock):
         """Launcher exists return True if file exists, not pinned but not in Unity"""
         os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
@@ -521,7 +521,7 @@ class TestLauncherIcons(LoggedTestCase):
 
         self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_launcher_exists_but_not_schema_in_none_unity(self, SettingsMock):
         """Launcher exists return True if file exists, even if Unity schema isn't installed"""
         os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
@@ -530,7 +530,7 @@ class TestLauncherIcons(LoggedTestCase):
 
         self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_launcher_exists_but_not_schema_in_unity(self, SettingsMock):
         """Launcher exists return False if file exists, but no Unity schema installed"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
@@ -538,7 +538,7 @@ class TestLauncherIcons(LoggedTestCase):
 
         self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
 
-    @patch("udtc.tools.Gio.Settings")
+    @patch("umake.tools.Gio.Settings")
     def test_launcher_doesnt_exists_but_pinned(self, SettingsMock):
         """Launcher doesn't exist if no file, even if pinned"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
@@ -671,7 +671,7 @@ class TestMiscTools(LoggedTestCase):
     def test_print_inputerror(self):
         self.assertEquals(str(tools.InputError("Foo bar")), "'Foo bar'")
 
-    @patch("udtc.tools.os")
+    @patch("umake.tools.os")
     def test_switch_user_from_sudo(self, osmock):
         """Test switch user account from root to previous user under SUDO"""
         osmock.getenv.return_value = 1234
@@ -681,7 +681,7 @@ class TestMiscTools(LoggedTestCase):
         osmock.setegid.assert_called_once_with(1234)
         osmock.seteuid.assert_called_once_with(1234)
 
-    @patch("udtc.tools.os")
+    @patch("umake.tools.os")
     def test_switch_user_from_non_sudo(self, osmock):
         """Test switch user from a non sudo command (non root), dosen't call anything"""
         osmock.getenv.return_value = 1234
@@ -692,7 +692,7 @@ class TestMiscTools(LoggedTestCase):
         self.assertFalse(osmock.seteuid.called)
         self.assertFalse(osmock.getenv.called)
 
-    @patch("udtc.tools.os")
+    @patch("umake.tools.os")
     def test_switch_user_from_root(self, osmock):
         """Test switch user from root, let it as root"""
         osmock.getenv.return_value = 0
@@ -715,7 +715,7 @@ class TestUserENV(LoggedTestCase):
         os.environ = self.orig_environ.copy()
         super().tearDown()
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_add_env_to_user(self, expanderusermock):
         """Test that adding to user env appending to an existing .profile file"""
         expanderusermock.return_value = self.local_dir
@@ -729,7 +729,7 @@ class TestUserENV(LoggedTestCase):
         self.assertTrue("export FOOO=bar\n" in profile_content, profile_content)
         self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_add_env_to_user_keep(self, expanderusermock):
         """Test that adding to user env appending to an existing env"""
         os.environ["FOOO"] = "foo"
@@ -744,7 +744,7 @@ class TestUserENV(LoggedTestCase):
         self.assertTrue("export FOOO=bar:$FOOO\n" in profile_content, profile_content)
         self.assertEquals(os.environ["FOOO"], "bar:foo")
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_add_env_to_user_not_keep(self, expanderusermock):
         """Test that adding to user env without keep replace an existing env"""
         os.environ["FOOO"] = "foo"
@@ -761,7 +761,7 @@ class TestUserENV(LoggedTestCase):
         self.assertFalse("foo" in os.environ["FOOO"], os.environ["FOOO"])
         self.assertEquals(os.environ["FOOO"], "bar")
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_add_env_to_user_empty_file(self, expanderusermock):
         """Test that adding to user env append to an non existing .profile file"""
         expanderusermock.return_value = self.local_dir
@@ -773,7 +773,7 @@ class TestUserENV(LoggedTestCase):
         self.assertTrue("export FOOO=/tmp/foo\n" in profile_content, profile_content)
         self.assertTrue("/tmp/foo" in os.environ["FOOO"], os.environ["FOOO"])
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_add_to_user_path_twice(self, expanderusermock):
         """Test that adding to user env twice doesn't add it twice in the file"""
         expanderusermock.return_value = self.local_dir
@@ -792,7 +792,7 @@ class TestUserENV(LoggedTestCase):
         profile_content = open(profile_file).read()
         self.assertEquals(profile_content.count("export FOOO=/tmp/foo"), 1, profile_content)
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_add_to_user_path_twice_with_new_content(self, expanderusermock):
         """Test that adding to some env twice for same framework only add the latest"""
         expanderusermock.return_value = self.local_dir
@@ -811,7 +811,7 @@ class TestUserENV(LoggedTestCase):
         profile_content = open(profile_file).read()
         self.assertEquals(profile_content.count("export FOOO=/tmp/bar"), 1, profile_content)
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_add_to_user_path_twice_other_framework(self, expanderusermock):
         """Test that adding to user env with another framework add them twice"""
         expanderusermock.return_value = self.local_dir
@@ -831,7 +831,7 @@ class TestUserENV(LoggedTestCase):
         self.assertTrue("export FOOO=/tmp/foo\n" in profile_content, profile_content)
         self.assertTrue("export BAR=/tmp/bar\n" in profile_content, profile_content)
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_add_env_to_user_multiple(self, expanderusermock):
         """Test that adding to user with multiple env for same framework appending to an existing .profile file"""
         expanderusermock.return_value = self.local_dir
@@ -847,7 +847,7 @@ class TestUserENV(LoggedTestCase):
         self.assertEquals(os.environ["FOOO"], "bar")
         self.assertEquals(os.environ["BAR"], "foo")
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_add_path_to_user(self, expanderusermock):
         """Test that adding to user path doesn't export as PATH is already exported"""
         expanderusermock.return_value = self.local_dir
@@ -861,29 +861,29 @@ class TestUserENV(LoggedTestCase):
         self.assertTrue("\nPATH=/tmp/bar:$PATH\n" in profile_content, profile_content)
         self.assertTrue("/tmp/bar" in os.environ["PATH"], os.environ["PATH"])
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_remove_user_env(self, expanderusermock):
         """Remove an env from a user setup"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nexport FOO=bar\n\nexport BAR=baz")
+        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A\nexport FOO=bar\n\nexport BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
         self.assertEquals(profile_content, "Foo\nBar\nexport BAR=baz")
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_remove_user_env_end(self, expanderusermock):
         """Remove an env from a user setup being at the end of profile file"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nexport FOO=bar\n\n")
+        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A\nexport FOO=bar\n\n")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
         self.assertEquals(profile_content, "Foo\nBar\n")
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_remove_user_env_not_found(self, expanderusermock):
         """Remove an env from a user setup with no matching content found"""
         expanderusermock.return_value = self.local_dir
@@ -894,7 +894,7 @@ class TestUserENV(LoggedTestCase):
         profile_content = open(profile_file).read()
         self.assertEquals(profile_content, "Foo\nBar\nexport BAR=baz")
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_remove_user_env_no_file(self, expanderusermock):
         """Remove an env from a user setup with no profile file"""
         expanderusermock.return_value = self.local_dir
@@ -903,38 +903,38 @@ class TestUserENV(LoggedTestCase):
 
         self.assertRaises(FileNotFoundError, open, profile_file)
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_remove_user_env_multiple_frameworks(self, expanderusermock):
         """Remove an env from a user setup restraining to the correct framework"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework B\nexport BAR=bar\n\n"
-                                      "# UDTC installation of framework A\nexport FOO=bar\n\nexport BAR=baz")
+        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework B\nexport BAR=bar\n\n"
+                                      "# Ubuntu make installation of framework A\nexport FOO=bar\n\nexport BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\n# UDTC installation of framework B\nexport BAR=bar\n\n"
+        self.assertEquals(profile_content, "Foo\nBar\n# Ubuntu make installation of framework B\nexport BAR=bar\n\n"
                                            "export BAR=baz")
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_remove_user_env_multiple_lines(self, expanderusermock):
         """Remove an env from a user setup having multiple lines"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nexport FOO=bar\nexport BOO=foo\n\n"
+        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A\nexport FOO=bar\nexport BOO=foo\n\n"
                                       "export BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
         self.assertEquals(profile_content, "Foo\nBar\nexport BAR=baz")
 
-    @patch("udtc.tools.os.path.expanduser")
+    @patch("umake.tools.os.path.expanduser")
     def test_remove_user_multiple_same_framework(self, expanderusermock):
         """Remove an env from a user setup, same framework being repeated multiple times"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
-        open(profile_file, 'w').write("Foo\nBar\n# UDTC installation of framework A\nexport BAR=bar\n\n"
-                                      "# UDTC installation of framework A\nexport FOO=bar\n\nexport BAR=baz")
+        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A\nexport BAR=bar\n\n"
+                                      "# Ubuntu make installation of framework A\nexport FOO=bar\n\nexport BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()

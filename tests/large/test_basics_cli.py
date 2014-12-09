@@ -20,7 +20,7 @@
 """Tests for basic CLI commands"""
 
 import subprocess
-from ..tools import LoggedTestCase, UDTC
+from ..tools import LoggedTestCase, UMAKE
 
 
 class BasicCLI(LoggedTestCase):
@@ -36,18 +36,18 @@ class BasicCLI(LoggedTestCase):
 
     def test_global_help(self):
         """We display a global help message"""
-        result = subprocess.check_output(self.command_as_list([UDTC, '--help']))
+        result = subprocess.check_output(self.command_as_list([UMAKE, '--help']))
         self.assertNotEquals(result, "")
 
     def test_setup_info_logging(self):
         """We display info logs"""
-        result = subprocess.check_output(self.command_as_list([UDTC, '-v', '--help']),
+        result = subprocess.check_output(self.command_as_list([UMAKE, '-v', '--help']),
                                          stderr=subprocess.STDOUT)
         self.assertIn("INFO:", self.return_without_first_output(result.decode("utf-8")))
 
     def test_setup_debug_logging(self):
         """We display debug logs"""
-        result = subprocess.check_output(self.command_as_list([UDTC, '-vv', '--help']),
+        result = subprocess.check_output(self.command_as_list([UMAKE, '-vv', '--help']),
                                          stderr=subprocess.STDOUT)
         self.assertIn("DEBUG:", self.return_without_first_output(result.decode("utf-8")))
 
@@ -55,7 +55,7 @@ class BasicCLI(LoggedTestCase):
         """We don't mix info or debug logs with a -v<something> option"""
         exception_raised = False
         try:
-            subprocess.check_output(self.command_as_list([UDTC, '-vouep', '--help']),
+            subprocess.check_output(self.command_as_list([UMAKE, '-vouep', '--help']),
                                     stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
             self.assertNotIn("INFO:", self.return_without_first_output(e.output.decode("utf-8")))

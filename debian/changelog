@@ -1,3 +1,12 @@
+ubuntu-make (0.2-0ubuntu1) UNRELEASED; urgency=medium
+
+  * Releasing under new name: ubuntu-make. Handle transition by shipping
+    a temporary binary under the older name (udtc). New command is umake.
+    Note as well that the new framework environment variable is
+    UMAKE_FRAMEWORKS.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 09 Dec 2014 08:23:33 +0100
+
 ubuntu-developer-tools-center (0.1.1-0ubuntu1) vivid; urgency=medium
 
   * Bug-fix release as Google changed their android-studio checksum from

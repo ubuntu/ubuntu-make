@@ -21,7 +21,7 @@
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-from udtc.tools import launcher_exists_and_is_pinned
+from umake.tools import launcher_exists_and_is_pinned
 
 
 if launcher_exists_and_is_pinned(sys.argv[1]):

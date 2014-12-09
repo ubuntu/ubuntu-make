@@ -20,16 +20,16 @@
 
 """Framework with another category module without any framework"""
 
-import udtc.frameworks
+import umake.frameworks
 
 
-class ACategory(udtc.frameworks.BaseCategory):
+class ACategory(umake.frameworks.BaseCategory):
 
     def __init__(self):
         super().__init__(name="Category A", description="Other category A description")
 
 
-class FrameworkC(udtc.frameworks.BaseFramework):
+class FrameworkC(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework C", description="Description for framework C",
@@ -42,7 +42,7 @@ class FrameworkC(udtc.frameworks.BaseFramework):
         super().remove()
 
 
-class FrameworkD(udtc.frameworks.BaseFramework):
+class FrameworkD(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework D", description="Description for framework D",

@@ -26,7 +26,7 @@ import os
 from os.path import join
 import pexpect
 from tests.large import LargeFrameworkTests
-from tests.tools import UDTC
+from tests.tools import UMAKE
 
 
 class EclipseIDETests(LargeFrameworkTests):
@@ -57,7 +57,7 @@ class EclipseIDETests(LargeFrameworkTests):
 
     def test_default_eclipse_ide_install(self):
         """Install eclipse from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} ide eclipse'.format(UDTC)))
+        self.child = pexpect.spawnu(self.command('{} ide eclipse'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -82,7 +82,7 @@ class EclipseIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} ide eclipse'.format(UDTC)))
+        self.child = pexpect.spawnu(self.command('{} ide eclipse'.format(UMAKE)))
         self.expect_and_no_warn("Eclipse is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_no_warn()

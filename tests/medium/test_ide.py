@@ -22,7 +22,7 @@
 from . import ContainerTests
 import os
 from ..large import test_ide
-from udtc import settings
+from umake import settings
 
 
 class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):

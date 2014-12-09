@@ -30,11 +30,11 @@ import os
 import pkgutil
 import sys
 import subprocess
-from udtc.network.requirements_handler import RequirementsHandler
-from udtc.settings import DEFAULT_INSTALL_TOOLS_PATH, UDTC_FRAMEWORKS_ENVIRON_VARIABLE
-from udtc.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
+from umake.network.requirements_handler import RequirementsHandler
+from umake.settings import DEFAULT_INSTALL_TOOLS_PATH, UMAKE_FRAMEWORKS_ENVIRON_VARIABLE
+from umake.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
     is_completion_mode, switch_to_current_user, MainLoop, get_user_frameworks_path
-from udtc.ui import UI
+from umake.ui import UI
 
 
 logger = logging.getLogger(__name__)
@@ -334,7 +334,7 @@ def load_frameworks():
     # If we have duplicated categories, only consider the first loaded one.
     local_paths = [get_user_frameworks_path()]
     sys.path.insert(0, get_user_frameworks_path())
-    environment_path = os.environ.get(UDTC_FRAMEWORKS_ENVIRON_VARIABLE)
+    environment_path = os.environ.get(UMAKE_FRAMEWORKS_ENVIRON_VARIABLE)
     if environment_path:
         sys.path.insert(0, environment_path)
         local_paths.insert(0, environment_path)

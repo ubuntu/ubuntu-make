@@ -26,10 +26,10 @@ import os
 from progressbar import ProgressBar, BouncingBar
 import readline
 import sys
-from udtc.interactions import InputText, TextWithChoices, LicenseAgreement, DisplayMessage, UnknownProgress
-from udtc.ui import UI
-from udtc.frameworks import BaseCategory
-from udtc.tools import InputError, MainLoop
+from umake.interactions import InputText, TextWithChoices, LicenseAgreement, DisplayMessage, UnknownProgress
+from umake.ui import UI
+from umake.frameworks import BaseCategory
+from umake.tools import InputError, MainLoop
 
 logger = logging.getLogger(__name__)
 

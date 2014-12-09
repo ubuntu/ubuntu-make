@@ -20,10 +20,10 @@
 
 """Framework with category module"""
 
-import udtc.frameworks
+import umake.frameworks
 
 
-class FrameworkFreeA(udtc.frameworks.BaseFramework):
+class FrameworkFreeA(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework Free A", description="Description for framework A in no category",
@@ -36,7 +36,7 @@ class FrameworkFreeA(udtc.frameworks.BaseFramework):
         super().remove()
 
 
-class FrameworkFreeB(udtc.frameworks.BaseFramework):
+class FrameworkFreeB(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework Free / B", description="Description for framework B in no category",

@@ -31,7 +31,7 @@ import os
 import subprocess
 import tempfile
 import time
-from udtc.tools import Singleton, get_foreign_archs, get_current_arch, switch_to_current_user
+from umake.tools import Singleton, get_foreign_archs, get_current_arch, switch_to_current_user
 
 logger = logging.getLogger(__name__)
 

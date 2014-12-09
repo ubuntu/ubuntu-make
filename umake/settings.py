@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2014 Canonical
 #
@@ -19,12 +18,18 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 import os
-import sys
-# Run local udtc from this helper
-root_dir = os.path.dirname(os.path.dirname(__file__))
-sys.path.insert(0, root_dir)
 
-from udtc import main
+DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join("~", "tools"))
+CONFIG_FILENAME = "umake"
+LSB_RELEASE_FILE = "/etc/lsb-release"
+UMAKE_FRAMEWORKS_ENVIRON_VARIABLE = "UMAKE_FRAMEWORKS"
 
-if __name__ == '__main__':
-    main()
+# Those are for the tests
+DOCKER_USER = "user"
+DOCKER_PASSWORD = "user"
+DOCKER_TESTIMAGE = "didrocks/docker-umake-manual"
+UMAKE_IN_CONTAINER = "/umake"
+TEST_MD5_ANDROID_STUDIO_FAKE_DATA = "490786f827f2578f788e25e423b10cec"
+TEST_MD5_ECLIPSE_ADT_32_FAKE_DATA = "3fb4db39926dca2e304b43440e4a25f1"
+TEST_MD5_ECLIPSE_ADT_64_FAKE_DATA = "3e26482c619e67b799db0a1d0da02061"
+APT_FAKE_REPO_PATH = "/apt-fake-repo"

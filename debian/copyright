@@ -1,6 +1,6 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: Ubuntu Developer Tools Center
-Source: https://github.com/didrocks/ubuntu-developer-tools-center
+Upstream-Name: Ubuntu Make
+Source: https://github.com/didrocks/ubuntu-make
 
 Files: *
 Copyright: (C) 2014 Canonical

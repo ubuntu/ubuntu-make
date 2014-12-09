@@ -1,6 +1,6 @@
 frameworks:
   category-a:
     framework-a:
-      path: /home/didrocks/quickly/ubuntu-developer-tools/adt-eclipse
+      path: /home/didrocks/quickly/ubuntu-make/adt-eclipse
     framework-b:
       path: /home/didrocks/foo/bar/android-studio

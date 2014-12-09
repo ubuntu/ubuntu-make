@@ -20,10 +20,10 @@
 
 """Try to get a reject to set a framework as default for main category"""
 
-import udtc.frameworks
+import umake.frameworks
 
 
-class FrameworkA(udtc.frameworks.BaseFramework):
+class FrameworkA(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework A", description="Description for framework A", is_category_default=True,

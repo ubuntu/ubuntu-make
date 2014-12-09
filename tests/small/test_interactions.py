@@ -17,11 +17,11 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-"""Tests the various udtc available interactions"""
+"""Tests the various umake available interactions"""
 
 from ..tools import LoggedTestCase
-from udtc.tools import InputError
-from udtc.interactions import Choice, TextWithChoices, LicenseAgreement, InputText, YesNo, DisplayMessage,\
+from umake.tools import InputError
+from umake.interactions import Choice, TextWithChoices, LicenseAgreement, InputText, YesNo, DisplayMessage,\
     UnknownProgress
 from unittest.mock import Mock
 

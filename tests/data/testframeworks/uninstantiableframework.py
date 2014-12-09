@@ -20,10 +20,10 @@
 
 """Framework with another category module without any framework"""
 
-import udtc.frameworks
+import umake.frameworks
 
 
-class Uninstantiable(udtc.frameworks.BaseFramework):
+class Uninstantiable(umake.frameworks.BaseFramework):
 
     def __new__(cls, *args, **kwargs):
         "This class is not meant to be instantiated, so __new__ returns None."

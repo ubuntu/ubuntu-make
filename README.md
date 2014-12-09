@@ -1,7 +1,7 @@
-# Ubuntu Developer Tools Center
-Ubuntu Developer Tools Center is a project to enable quick and easy setup of common developers needs on Ubuntu.
+# Ubuntu Make
+Ubuntu Make is a project to enable quick and easy setup of common developers needs on Ubuntu.
 
-<!---[![Build Status](https://api.travis-ci.org/didrocks/ubuntu-developer-tools-center.svg?branch=master)](https://travis-ci.org/didrocks/ubuntu-developer-tools-center) TRAVIS disabled until they support 14.04 (need python 3.4 with platform gi.repository)-->
+<!---[![Build Status](https://api.travis-ci.org/didrocks/ubuntu-make.svg?branch=master)](https://travis-ci.org/didrocks/ubuntu-make) TRAVIS disabled until they support 14.04 (need python 3.4 with platform gi.repository)-->
 
 As a first step, it's focusing on installing a full-fledged android developer environment on latest Ubuntu LTS (14.04).
 
@@ -11,7 +11,7 @@ As a first step, it's focusing on installing a full-fledged android developer en
 To run the tool:
 
 ```sh
-$ ./udtc
+$ ./umake
 ```
 
 You can of course use `--help` to get more information and change the verbosity of the output with `-v`, `-vv`.
@@ -45,19 +45,19 @@ Under normal circumstances, we expect *error.log* to remain empty../
 To load one of those logging profiles:
 
 ```sh
-$ LOG_CFG=confs/debug.logcfg bin/udtc
+$ LOG_CFG=confs/debug.logcfg bin/umake
 ```
 
 ## Development
 ### Providing user's framework
 
 It's possible for anyone to have local frameworks for either development purpose or for special local or team use-case.
-* Any files in a directory set with the "UDTC_FRAMEWORKS" environment variable will be loaded first.
-* Any files inside ~/.udtc/frameworks will be loaded next.
+* Any files in a directory set with the "UMAKE_FRAMEWORKS" environment variable will be loaded first.
+* Any files inside ~/.umake/frameworks will be loaded next.
 
-Any file should eventually contain a category or frameworks like the ones in udtc/frameworks/*.
+Any file should eventually contain a category or frameworks like the ones in umake/frameworks/*.
 
-If categories name are duplicated only one will be loaded. Ubuntu Developer Tools Center will first load the one controlled by the environment variable, then in home based directory, and finally, the system one.
+If categories name are duplicated only one will be loaded. Ubuntu Make will first load the one controlled by the environment variable, then in home based directory, and finally, the system one.
 Note that duplicate filenames aren't encouraged, but supported.
 
 
@@ -82,7 +82,7 @@ $ pep8 .
 #### Types of tests
 There are four kinds of tests that can be combined in runtests:
 
-* **pep8**: Run the pep8 tests on all the udtc and tests code.
+* **pep8**: Run the pep8 tests on all the umake and tests code.
 * **small**: mostly testing modules and component with mocks around it. Note that it's using a local webserver (http and https) to serve mock content
 * **medium**: testing the whole workflow, directly calling end user tool from the command line, but without any effect on the system. Requirements like installing packages are mocked, as well as the usage of a local webserver serving (smaller) content similar that what will be fetched in a real use case. The assets have the same formats and layout.
 * **large**: same tests are run as for the medium tests, but with real server download and installation of dpkg packages. Most of those tests need root rights. However, be aware that those tests only run on a graphical environment, will interfere with it and will install/remove packages on your system.
@@ -148,7 +148,7 @@ $ sudo apt-get install -qq apt apt-utils libapt-pkg-dev # those are the requirem
 $ sudo apt-get install -qq python3-progressbar python3-gi python3-argcomplete
 $ env/bin/pip install -r requirements.txt
 $ source env/bin/activate
-$ bin/udtc
+$ bin/umake
 ```
 
 ## Release management

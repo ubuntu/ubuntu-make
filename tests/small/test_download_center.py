@@ -25,8 +25,8 @@ from time import time
 from unittest.mock import Mock, call
 from ..tools import get_data_dir, CopyingMock, LoggedTestCase
 from ..tools.local_server import LocalHttp
-from udtc.network.download_center import DownloadCenter, DownloadItem
-from udtc.tools import ChecksumType, Checksum
+from umake.network.download_center import DownloadCenter, DownloadItem
+from umake.tools import ChecksumType, Checksum
 
 
 class TestDownloadCenter(LoggedTestCase):

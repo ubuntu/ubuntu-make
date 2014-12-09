@@ -26,22 +26,22 @@ import logging
 import platform
 
 from os.path import join
-import udtc.frameworks.baseinstaller
-from udtc.network.download_center import DownloadCenter, DownloadItem
-from udtc.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum
-from udtc.ui import UI
+import umake.frameworks.baseinstaller
+from umake.network.download_center import DownloadCenter, DownloadItem
+from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum
+from umake.ui import UI
 
 
 logger = logging.getLogger(__name__)
 
 
-class IdeCategory(udtc.frameworks.BaseCategory):
+class IdeCategory(umake.frameworks.BaseCategory):
     def __init__(self):
         super().__init__(name=_("IDE"), description=_("Generic IDEs"),
                          logo_path=None)
 
 
-class Eclipse(udtc.frameworks.baseinstaller.BaseInstaller):
+class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
     """The Eclipse Foundation distribution."""
     DOWNLOAD_URL_PAT = "https://www.eclipse.org/downloads/download.php?" \
                        "file=/technology/epp/downloads/release/luna/R/" \

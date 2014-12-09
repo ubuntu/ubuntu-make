@@ -23,7 +23,7 @@ import os
 import subprocess
 from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path
 from time import sleep
-from udtc import settings
+from umake import settings
 
 
 class ContainerTests(LoggedTestCase):
@@ -32,18 +32,18 @@ class ContainerTests(LoggedTestCase):
     def setUp(self):
         super().setUp()  # this will call other parents of ContainerTests ancestors, like LargeFrameworkTests
         self.in_container = True
-        self.udtc_path = get_root_dir()
+        self.umake_path = get_root_dir()
         self.image_name = settings.DOCKER_TESTIMAGE
         command = [get_docker_path(), "run"]
-        runner_cmd = "mkdir -p {}; ln -s {}/ {};".format(os.path.dirname(get_root_dir()), settings.UDTC_IN_CONTAINER,
+        runner_cmd = "mkdir -p {}; ln -s {}/ {};".format(os.path.dirname(get_root_dir()), settings.UMAKE_IN_CONTAINER,
                                                          get_root_dir())
 
         # start the local server at container startup
         if hasattr(self, "hostname"):
             command.extend(["-h", self.hostname])
             runner_cmd += "{} {} 'sudo -E env PATH={} VIRTUAL_ENV={} {} {} {}';".format(
-                os.path.join(get_tools_helper_dir(), "run_in_udtc_dir_async"),
-                settings.UDTC_IN_CONTAINER,
+                os.path.join(get_tools_helper_dir(), "run_in_umake_dir_async"),
+                settings.UMAKE_IN_CONTAINER,
                 os.getenv("PATH"), os.getenv("VIRTUAL_ENV"),
                 os.path.join(get_tools_helper_dir(), "run_local_server"),
                 self.port,
@@ -54,7 +54,7 @@ class ContainerTests(LoggedTestCase):
                 self.apt_repo_override_path)
         runner_cmd += "/usr/sbin/sshd -D"
 
-        command.extend(["-d", "-v", "{}:{}".format(self.udtc_path, settings.UDTC_IN_CONTAINER),
+        command.extend(["-d", "-v", "{}:{}".format(self.umake_path, settings.UMAKE_IN_CONTAINER),
                         "--dns=8.8.8.8", "--dns=8.8.4.4",  # suppress local DNS warning
                         self.image_name,
                         'sh', '-c', runner_cmd])
@@ -63,7 +63,7 @@ class ContainerTests(LoggedTestCase):
                                                      "{{ .NetworkSettings.IPAddress }}",
                                                      self.container_id]).decode("utf-8").strip()
         # override with container paths
-        self.conf_path = os.path.expanduser("/home/{}/.config/udtc".format(settings.DOCKER_USER))
+        self.conf_path = os.path.expanduser("/home/{}/.config/umake".format(settings.DOCKER_USER))
         sleep(5)  # let the container and service starts
 
     def tearDown(self):
@@ -84,7 +84,7 @@ class ContainerTests(LoggedTestCase):
         return ["sshpass", "-p", settings.DOCKER_PASSWORD, "ssh", "-o", "UserKnownHostsFile=/dev/null", "-o",
                 "StrictHostKeyChecking=no", "-t", "-q",
                 "{}@{}".format(settings.DOCKER_USER, self.container_ip),
-                "{} {} '{}'".format(os.path.join(get_tools_helper_dir(), "run_in_udtc_dir"), settings.UDTC_IN_CONTAINER,
+                "{} {} '{}'".format(os.path.join(get_tools_helper_dir(), "run_in_umake_dir"), settings.UMAKE_IN_CONTAINER,
                                     commands_to_run)]
 
     def check_and_kill_process(self, process_grep, wait_before=0, send_sigkill=False):

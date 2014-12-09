@@ -22,7 +22,7 @@
 import os
 import pep8
 from .tools import get_root_dir
-import udtc
+import umake
 from unittest import TestCase
 
 
@@ -35,8 +35,8 @@ class CodeCheck(TestCase):
         and excluding the virtualenv dir."""
         pep8style = pep8.StyleGuide(config_file=os.path.join(get_root_dir(), '.pep8'))
 
-        # we want to use either local or system udtc, but always local tests files
-        udtc_dir = os.path.dirname(udtc.__file__)
-        results = pep8style.check_files([udtc_dir, os.path.join(get_root_dir(), "tests"),
+        # we want to use either local or system umake, but always local tests files
+        umake_dir = os.path.dirname(umake.__file__)
+        results = pep8style.check_files([umake_dir, os.path.join(get_root_dir(), "tests"),
                                          os.path.join(get_root_dir(), "bin")])
         self.assertEqual(results.get_statistics(), [])

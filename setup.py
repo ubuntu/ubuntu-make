@@ -26,7 +26,7 @@ from glob import glob
 import os
 from setuptools import setup, find_packages
 import subprocess
-import udtc  # that initializes the gettext domain
+import umake  # that initializes the gettext domain
 
 I18N_DOMAIN = gettext.textdomain()
 PO_DIR = os.path.join(os.path.dirname(os.curdir), 'po')
@@ -118,7 +118,7 @@ class update_pot(cmd.Command):
     def run(self):
         cmd = ['xgettext', '--language=Python', '--keyword=_', '--package-name', I18N_DOMAIN,
                '--output', 'po/{}.pot'.format(I18N_DOMAIN)]
-        for path, names, filenames in os.walk(os.path.join(os.curdir, 'udtc')):
+        for path, names, filenames in os.walk(os.path.join(os.curdir, 'umake')):
             for f in filenames:
                 if f.endswith('.py'):
                     cmd.append(os.path.join(path, f))
@@ -126,17 +126,17 @@ class update_pot(cmd.Command):
 
 
 setup(
-    name="Ubuntu Developer Tools Center",
+    name="Ubuntu Make",
     version="0.0.1",
     packages=find_packages(exclude=["tests*"]),
     package_data={},
     entry_points={
         'console_scripts': [
-            'udtc = udtc:main'
+            'umake = umake:main'
         ],
     },
 
-    data_files=[("share/ubuntu-developer-tools-center/log-confs", glob('log-confs/*.yaml'))],
+    data_files=[("share/ubuntu-make/log-confs", glob('log-confs/*.yaml'))],
 
     # In addition to run all nose tests, that will as well show python warnings
     test_suite="nose.collector",

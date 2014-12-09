@@ -21,12 +21,12 @@
 
 import importlib
 from ..tools import LoggedTestCase
-from udtc.ui.cli import mangle_args_for_default_framework
+from umake.ui.cli import mangle_args_for_default_framework
 import os
 import sys
 from ..tools import get_data_dir, change_xdg_path, patchelem
-import udtc
-from udtc import frameworks
+import umake
+from umake import frameworks
 
 
 class TestCLIFromFrameworks(LoggedTestCase):
@@ -35,18 +35,18 @@ class TestCLIFromFrameworks(LoggedTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        importlib.reload(udtc.frameworks)
+        importlib.reload(umake.frameworks)
 
         change_xdg_path('XDG_CONFIG_HOME', os.path.join(get_data_dir(), 'configs', "foo"))
 
         sys.path.append(get_data_dir())
         cls.testframeworks_dir = os.path.join(get_data_dir(), 'testframeworks')
 
-        with patchelem(udtc.frameworks, '__file__', os.path.join(cls.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(cls.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "testframeworks"):
             frameworks.load_frameworks()
-        # patch the BaseCategory dictionary from the udtc.ui.cli one
-        udtc.ui.cli.BaseCategory = frameworks.BaseCategory
+        # patch the BaseCategory dictionary from the umake.ui.cli one
+        umake.ui.cli.BaseCategory = frameworks.BaseCategory
 
     @classmethod
     def tearDownClass(cls):

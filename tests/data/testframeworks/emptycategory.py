@@ -20,10 +20,10 @@
 
 """Framework with an empty category"""
 
-import udtc.frameworks
+import umake.frameworks
 
 
-class EmptyCategory(udtc.frameworks.BaseCategory):
+class EmptyCategory(umake.frameworks.BaseCategory):
 
     def __init__(self):
         super().__init__(name="Empty category", description="Category which has no frameworks")

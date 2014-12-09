@@ -31,7 +31,7 @@ import signal
 import subprocess
 import sys
 from textwrap import dedent
-from udtc import settings
+from umake import settings
 from xdg.BaseDirectory import load_first_config, xdg_config_home, xdg_data_home
 import yaml
 import yaml.scanner
@@ -44,7 +44,7 @@ _current_arch = None
 _foreign_arch = None
 _version = None
 
-profile_tag = _("# UDTC installation of {}\n")
+profile_tag = _("# Ubuntu make installation of {}\n")
 
 
 @unique
@@ -221,7 +221,7 @@ def is_completion_mode():
 
 def get_user_frameworks_path():
     """Return user frameworks local path"""
-    return os.path.expanduser(os.path.join('~', '.udtc', 'frameworks'))
+    return os.path.expanduser(os.path.join('~', '.umake', 'frameworks'))
 
 
 def get_icon_path(icon_filename):

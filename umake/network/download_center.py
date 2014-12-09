@@ -30,7 +30,7 @@ import tempfile
 
 import requests
 import requests.exceptions
-from udtc.tools import ChecksumType
+from umake.tools import ChecksumType
 
 logger = logging.getLogger(__name__)
 

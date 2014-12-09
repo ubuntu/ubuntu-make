@@ -26,7 +26,7 @@ import shutil
 import signal
 import subprocess
 from time import sleep
-from udtc.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned
+from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned
 from ..tools import LoggedTestCase, local_which
 
 
@@ -37,7 +37,7 @@ class LargeFrameworkTests(LoggedTestCase):
         super().setUp()
         self.in_container = False
         self.installed_path = ""
-        self.conf_path = os.path.expanduser("~/.config/udtc")
+        self.conf_path = os.path.expanduser("~/.config/umake")
         self.desktop_filename = ""
         self.icon_filename = ""
         self.child = None

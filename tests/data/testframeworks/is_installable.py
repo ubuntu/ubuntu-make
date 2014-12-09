@@ -20,16 +20,16 @@
 
 """Framework with another category module without any framework"""
 
-import udtc.frameworks
+import umake.frameworks
 
 
-class ECategory(udtc.frameworks.BaseCategory):
+class ECategory(umake.frameworks.BaseCategory):
 
     def __init__(self):
         super().__init__(name="Category E", description="Category E description")
 
 
-class FrameworkA(udtc.frameworks.BaseFramework):
+class FrameworkA(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework A", description="Description for framework A (installable chained to parent)",
@@ -46,7 +46,7 @@ class FrameworkA(udtc.frameworks.BaseFramework):
         return super().is_installable
 
 
-class FrameworkB(udtc.frameworks.BaseFramework):
+class FrameworkB(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework B", description="Description for framework B (installable forced to True even "
@@ -66,7 +66,7 @@ class FrameworkB(udtc.frameworks.BaseFramework):
         return True
 
 
-class FrameworkC(udtc.frameworks.BaseFramework):
+class FrameworkC(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework C", description="Description for framework C (installable forced to False "

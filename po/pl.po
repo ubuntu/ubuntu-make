@@ -1,11 +1,11 @@
-# Polish translation for ubuntu-developer-tools-center
+# Polish translation for ubuntu-make
 # Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
-# This file is distributed under the same license as the ubuntu-developer-tools-center package.
+# This file is distributed under the same license as the ubuntu-make package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: ubuntu-developer-tools-center\n"
+"Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-23 08:44+0200\n"
 "PO-Revision-Date: 2014-10-24 19:40+0000\n"
@@ -17,15 +17,15 @@ msgstr ""
 "X-Launchpad-Export-Date: 2014-10-29 09:16+0000\n"
 "X-Generator: Launchpad (build 17203)\n"
 
-#: udtc/__init__.py:104
+#: umake/__init__.py:104
 msgid "* Command '{}':"
 msgstr "* Komenda '{}':"
 
-#: udtc/__init__.py:112
+#: umake/__init__.py:112
 msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr "Łatwo wdróż i skonfiguruj środowisko programistyczne na Ubuntu"
 
-#: udtc/__init__.py:113
+#: umake/__init__.py:113
 msgid ""
 "Note that you can also configure different debug logs behaviors using "
 "LOG_CFG pointing to a log yaml profile."
@@ -33,39 +33,39 @@ msgstr ""
 "Możesz również skonfigurować różne zachowania debug logów używając LOG_CFG "
 "wskazujących na profile logów yaml."
 
-#: udtc/__init__.py:116
+#: umake/__init__.py:116
 msgid "Show this help"
 msgstr "Wyświetl tę pomoc"
 
-#: udtc/__init__.py:117
+#: umake/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
 msgstr "Zwiększ dokładność wyniku (2 stopnie)"
 
-#: udtc/__init__.py:119
+#: umake/__init__.py:119
 msgid "Remove specified framework if installed"
 msgstr "Usuń wskazany framework, jeśli jest zainstalowany"
 
-#: udtc/tools.py:329
-msgid "# UDTC installation of {}\n"
-msgstr "# Instalacja {} przez UDTC\n"
+#: umake/tools.py:329
+msgid "# Ubuntu make installation of {}\n"
+msgstr "# Instalacja {} przez Ubuntu make\n"
 
-#: udtc/interactions/__init__.py:73
+#: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
 msgstr "Nie podano właściwej odpowiedzi"
 
-#: udtc/interactions/__init__.py:75
+#: umake/interactions/__init__.py:75
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
 msgstr "Twój wybór '{}' nie jest dopuszczalny. Możliwe wybory to: {}"
 
-#: udtc/interactions/__init__.py:78
+#: umake/interactions/__init__.py:78
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
 msgstr "Twój wybór '{}' nie jest dopuszczalny. Możliwe wybory to: {} and {}"
 
-#: udtc/interactions/__init__.py:96
+#: umake/interactions/__init__.py:96
 msgid " ({})"
 msgstr " ({})"
 
-#: udtc/interactions/__init__.py:100
+#: umake/interactions/__init__.py:100
 msgid ""
 "{}\n"
 "[{}] "
@@ -73,81 +73,81 @@ msgstr ""
 "{}\n"
 "[{}] "
 
-#: udtc/interactions/__init__.py:103
+#: umake/interactions/__init__.py:103
 msgid "{} [{}] "
 msgstr "{} [{}] "
 
-#: udtc/interactions/__init__.py:111
+#: umake/interactions/__init__.py:111
 msgid "I Accept"
 msgstr "Zgadzam się"
 
-#: udtc/interactions/__init__.py:111
+#: umake/interactions/__init__.py:111
 msgid "a"
 msgstr "a"
 
-#: udtc/interactions/__init__.py:112
+#: umake/interactions/__init__.py:112
 msgid "I don't accept"
 msgstr "Nie zgadzam się"
 
-#: udtc/interactions/__init__.py:112 udtc/interactions/__init__.py:145
+#: umake/interactions/__init__.py:112 umake/interactions/__init__.py:145
 msgid "N"
 msgstr "N"
 
-#: udtc/interactions/__init__.py:121 udtc/interactions/__init__.py:122
+#: umake/interactions/__init__.py:121 umake/interactions/__init__.py:122
 msgid "{} ({})"
 msgstr "{} ({})"
 
-#: udtc/interactions/__init__.py:125
+#: umake/interactions/__init__.py:125
 msgid "[{}] "
 msgstr "[{}] "
 
-#: udtc/interactions/__init__.py:144
+#: umake/interactions/__init__.py:144
 msgid "Yes"
 msgstr "Tak"
 
-#: udtc/interactions/__init__.py:144
+#: umake/interactions/__init__.py:144
 msgid "y"
 msgstr "t"
 
-#: udtc/interactions/__init__.py:145
+#: umake/interactions/__init__.py:145
 msgid "No"
 msgstr "Nie"
 
-#: udtc/frameworks/__init__.py:240
+#: umake/frameworks/__init__.py:240
 msgid "You can't remove {} as it isn't installed"
 msgstr "Nie możesz usunąć {}, ponieważ nie jest zainstalowane"
 
-#: udtc/frameworks/__init__.py:271
+#: umake/frameworks/__init__.py:271
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
 msgstr ""
 "Jeśli nazwa domyślnego frameworka nie jest określona, destdir powinien "
 "zawierać a /"
 
-#: udtc/frameworks/__init__.py:274
+#: umake/frameworks/__init__.py:274
 msgid "Remove framework if installed"
 msgstr "Usuń framework, jeśli jest zainstalowany"
 
-#: udtc/frameworks/android.py:39
+#: umake/frameworks/android.py:39
 msgid "Android"
 msgstr "Android"
 
-#: udtc/frameworks/android.py:39
+#: umake/frameworks/android.py:39
 msgid "Android Development Environment"
 msgstr "Środowisko Programistyczne Android"
 
-#: udtc/frameworks/android.py:93
+#: umake/frameworks/android.py:93
 msgid "Android Studio"
 msgstr "Android Studio"
 
-#: udtc/frameworks/android.py:96
+#: umake/frameworks/android.py:96
 msgid "Android Studio developer environment"
 msgstr "środowisko programistyczne Android Studio"
 
-#: udtc/frameworks/android.py:143
+#: umake/frameworks/android.py:143
 msgid "ADT Eclipse"
 msgstr "Narzędzia Programistyczne Android ADT Eclipse"
 
-#: udtc/frameworks/android.py:146
+#: umake/frameworks/android.py:146
 msgid "Android Developer Tools (using eclipse)"
 msgstr "Narzędzia Programistyczne Android (używając Eclipse)"

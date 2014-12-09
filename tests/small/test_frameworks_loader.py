@@ -28,11 +28,11 @@ import sys
 import tempfile
 from ..data.testframeworks.uninstantiableframework import Uninstantiable, InheritedFromUninstantiable
 from ..tools import get_data_dir, change_xdg_path, patchelem, LoggedTestCase
-import udtc
-from udtc import frameworks
-from udtc.frameworks.baseinstaller import BaseInstaller
-from udtc.settings import UDTC_FRAMEWORKS_ENVIRON_VARIABLE
-from udtc.tools import NoneDict, ConfigHandler
+import umake
+from umake import frameworks
+from umake.frameworks.baseinstaller import BaseInstaller
+from umake.settings import UMAKE_FRAMEWORKS_ENVIRON_VARIABLE
+from umake.tools import NoneDict, ConfigHandler
 from unittest.mock import Mock, patch, call
 
 
@@ -62,20 +62,20 @@ class BaseFrameworkLoader(LoggedTestCase):
 
     def fake_arch_version(self, arch, version):
         """Help to mock the current arch and version on further calls"""
-        self._saved_current_arch_fn = udtc.frameworks.get_current_arch
+        self._saved_current_arch_fn = umake.frameworks.get_current_arch
         self.get_current_arch_mock = Mock()
         self.get_current_arch_mock.return_value = arch
-        udtc.frameworks.get_current_arch = self.get_current_arch_mock
+        umake.frameworks.get_current_arch = self.get_current_arch_mock
 
-        self._saved_current_ubuntu_version_fn = udtc.frameworks.get_current_ubuntu_version
+        self._saved_current_ubuntu_version_fn = umake.frameworks.get_current_ubuntu_version
         self.get_current_ubuntu_version_mock = Mock()
         self.get_current_ubuntu_version_mock.return_value = version
-        udtc.frameworks.get_current_ubuntu_version = self.get_current_ubuntu_version_mock
+        umake.frameworks.get_current_ubuntu_version = self.get_current_ubuntu_version_mock
 
     def restore_arch_version(self):
         """Restore initial current arch and version"""
-        udtc.frameworks.get_current_arch = self._saved_current_arch_fn
-        udtc.frameworks.get_current_ubuntu_version = self._saved_current_ubuntu_version_fn
+        umake.frameworks.get_current_arch = self._saved_current_arch_fn
+        umake.frameworks.get_current_ubuntu_version = self._saved_current_ubuntu_version_fn
 
 
 class TestFrameworkLoader(BaseFrameworkLoader):
@@ -97,8 +97,8 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         # fake versions and archs
         self.fake_arch_version("bar", "10.10.10")
         # load custom framework-directory
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "testframeworks"):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["category-a"]
 
@@ -378,8 +378,8 @@ class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
         super().setUp()
         change_xdg_path('XDG_CONFIG_HOME', self.config_dir_for_name("valid"))
         # load custom framework-directory
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "testframeworks"):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["category-a"]
 
@@ -391,7 +391,7 @@ class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
         """Configuration override defaults (explicit or implicit). If not present in config, still load default"""
         # was overridden with at load time
         self.assertEquals(self.categoryA.frameworks["framework-a"].install_path,
-                          "/home/didrocks/quickly/ubuntu-developer-tools/adt-eclipse")
+                          "/home/didrocks/quickly/ubuntu-make/adt-eclipse")
         # was default
         self.assertEquals(self.categoryA.frameworks["framework-b"].install_path,
                           "/home/didrocks/foo/bar/android-studio")
@@ -417,8 +417,8 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
     def setUp(self):
         super().setUp()
         # load custom framework-directory
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "testframeworks"):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["category-a"]
         self.config_dir = tempfile.mkdtemp()
@@ -511,8 +511,8 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
 
     def loadFramework(self, framework_name):
         """Load framework name"""
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', framework_name):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', framework_name):
             frameworks.load_frameworks()
 
     def install_category_parser(self, main_parser, categories=[]):
@@ -520,7 +520,7 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         categories_parser = main_parser.add_subparsers(dest="category")
         category_parsers = []
         for category in categories:
-            with patch('udtc.frameworks.is_completion_mode') as completionmode_mock:
+            with patch('umake.frameworks.is_completion_mode') as completionmode_mock:
                 completionmode_mock.return_value = False
                 self.loadFramework("testframeworks")
                 category_parsers.append(self.CategoryHandler.categories[category]
@@ -555,7 +555,7 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
 
     def test_check_not_installed_wrong_requirements(self):
         """Framework isn't installed if path and package requirements aren't met"""
-        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+        with patch('umake.frameworks.RequirementsHandler') as requirement_mock:
             requirement_mock.return_value.is_bucket_installed.return_value = False
             self.loadFramework("testframeworks")
             self.assertFalse(self.CategoryHandler.categories["category-f"].frameworks["framework-c"].is_installed)
@@ -565,7 +565,7 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
 
     def test_check_installed_with_matched_requirements(self):
         """Framework is installed if path and package requirements are met"""
-        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+        with patch('umake.frameworks.RequirementsHandler') as requirement_mock:
             requirement_mock.return_value.is_bucket_installed.return_value = True
             self.loadFramework("testframeworks")
             self.assertTrue(self.CategoryHandler.categories["category-f"].frameworks["framework-c"].is_installed)
@@ -575,28 +575,28 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
 
     def test_check_requirements_inherited_from_category(self):
         """Framework without package requirements are inherited from category"""
-        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+        with patch('umake.frameworks.RequirementsHandler') as requirement_mock:
             self.loadFramework("testframeworks")
             self.assertEquals(self.CategoryHandler.categories["category-g"].frameworks["framework-b"]
                               .packages_requirements, ["baz"])
 
     def test_check_requirements_from_category_merge_into_exiting(self):
         """Framework with package requirements merged them from the associated category"""
-        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+        with patch('umake.frameworks.RequirementsHandler') as requirement_mock:
             self.loadFramework("testframeworks")
             self.assertEquals(self.CategoryHandler.categories["category-g"].frameworks["framework-a"]
                               .packages_requirements, ["buz", "biz", "baz"])
 
     def test_root_needed_if_not_matched_requirements(self):
         """Framework with unmatched requirements need root access"""
-        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+        with patch('umake.frameworks.RequirementsHandler') as requirement_mock:
             requirement_mock.return_value.is_bucket_installed.return_value = False
             self.loadFramework("testframeworks")
             self.assertTrue(self.CategoryHandler.categories["category-f"].frameworks["framework-c"].need_root_access)
 
     def test_no_root_needed_if_matched_requirements_even_uninstalled(self):
         """Framework which are uninstalled but with matched requirements doesn't need root access"""
-        with patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+        with patch('umake.frameworks.RequirementsHandler') as requirement_mock:
             requirement_mock.return_value.is_bucket_installed.return_value = True
             self.loadFramework("testframeworks")
             # ensure the framework isn't installed, but the bucket being installed, we don't need root access
@@ -605,10 +605,10 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
 
     def test_root_needed_setup_call_root(self):
         """Framework with root access needed call sudo"""
-        with patch('udtc.frameworks.subprocess') as subprocess_mock,\
-                patch.object(udtc.frameworks.os, 'geteuid', return_value=1000) as geteuid,\
-                patch('udtc.frameworks.MainLoop') as mainloop_mock,\
-                patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+        with patch('umake.frameworks.subprocess') as subprocess_mock,\
+                patch.object(umake.frameworks.os, 'geteuid', return_value=1000) as geteuid,\
+                patch('umake.frameworks.MainLoop') as mainloop_mock,\
+                patch('umake.frameworks.RequirementsHandler') as requirement_mock:
             requirement_mock.return_value.is_bucket_installed.return_value = False
             self.loadFramework("testframeworks")
             self.assertTrue(self.CategoryHandler.categories["category-f"].frameworks["framework-c"].need_root_access)
@@ -619,10 +619,10 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
 
     def test_no_root_needed_setup_doesnt_call_root(self):
         """Framework without root access needed don't call sudo"""
-        with patch('udtc.frameworks.subprocess') as subprocess_mock,\
-                patch.object(udtc.frameworks.os, 'geteuid', return_value=1000) as geteuid,\
-                patch.object(udtc.frameworks.sys, 'exit', return_value=True) as sys_exit_mock,\
-                patch('udtc.frameworks.RequirementsHandler') as requirement_mock:
+        with patch('umake.frameworks.subprocess') as subprocess_mock,\
+                patch.object(umake.frameworks.os, 'geteuid', return_value=1000) as geteuid,\
+                patch.object(umake.frameworks.sys, 'exit', return_value=True) as sys_exit_mock,\
+                patch('umake.frameworks.RequirementsHandler') as requirement_mock:
             requirement_mock.return_value.is_bucket_installed.return_value = True
             self.loadFramework("testframeworks")
             self.assertFalse(self.CategoryHandler.categories["category-f"].frameworks["framework-c"].need_root_access)
@@ -633,11 +633,11 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
 
     def test_root_needed_setup_doesnt_call_root(self):
         """setup doesn't call sudo if we are already root"""
-        with patch('udtc.frameworks.subprocess') as subprocess_mock,\
-                patch.object(udtc.frameworks.sys, 'exit', return_value=True) as sys_exit_mock,\
-                patch.object(udtc.frameworks.os, 'geteuid', return_value=0) as geteuid,\
-                patch('udtc.frameworks.RequirementsHandler') as requirement_mock,\
-                patch('udtc.frameworks.switch_to_current_user') as switch_to_current_use_mock:
+        with patch('umake.frameworks.subprocess') as subprocess_mock,\
+                patch.object(umake.frameworks.sys, 'exit', return_value=True) as sys_exit_mock,\
+                patch.object(umake.frameworks.os, 'geteuid', return_value=0) as geteuid,\
+                patch('umake.frameworks.RequirementsHandler') as requirement_mock,\
+                patch('umake.frameworks.switch_to_current_user') as switch_to_current_use_mock:
             requirement_mock.return_value.is_bucket_installed.return_value = False
             self.loadFramework("testframeworks")
             self.assertTrue(self.CategoryHandler.categories["category-f"].frameworks["framework-c"].need_root_access)
@@ -650,9 +650,9 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
 
     def test_completion_mode_dont_use_expensive_calls(self):
         """Completion mode bypass expensive calls and so, register all frameworks"""
-        with patch('udtc.frameworks.ConfigHandler') as config_handler_mock,\
-                patch('udtc.frameworks.RequirementsHandler') as requirementhandler_mock,\
-                patch('udtc.frameworks.is_completion_mode') as completionmode_mock:
+        with patch('umake.frameworks.ConfigHandler') as config_handler_mock,\
+                patch('umake.frameworks.RequirementsHandler') as requirementhandler_mock,\
+                patch('umake.frameworks.is_completion_mode') as completionmode_mock:
             completionmode_mock.return_value = True
             self.loadFramework("testframeworks")
 
@@ -665,9 +665,9 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
 
     def test_use_expensive_calls_when_not_in_completion_mode(self):
         """Non completion mode have expensive calls and don't register all frameworks"""
-        with patch('udtc.frameworks.ConfigHandler') as config_handler_mock,\
-                patch('udtc.frameworks.RequirementsHandler') as requirementhandler_mock,\
-                patch('udtc.frameworks.is_completion_mode') as completionmode_mock:
+        with patch('umake.frameworks.ConfigHandler') as config_handler_mock,\
+                patch('umake.frameworks.RequirementsHandler') as requirementhandler_mock,\
+                patch('umake.frameworks.is_completion_mode') as completionmode_mock:
             completionmode_mock.return_value = False
             self.loadFramework("testframeworks")
 
@@ -682,7 +682,7 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         """Install category and framework parsers contains works"""
         main_parser = argparse.ArgumentParser()
         categories_parser = main_parser.add_subparsers()
-        with patch('udtc.frameworks.is_completion_mode') as completionmode_mock:
+        with patch('umake.frameworks.is_completion_mode') as completionmode_mock:
             completionmode_mock.return_value = False
             self.loadFramework("testframeworks")
             category_parser = self.CategoryHandler.categories['category-a'].install_category_parser(categories_parser)
@@ -779,8 +779,8 @@ class TestEmptyFrameworkLoader(BaseFrameworkLoader):
     def setUp(self):
         super().setUp()
         # load custom unexisting framework-directory
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworksdoesntexist"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "testframeworksdoesntexist"):
             frameworks.load_frameworks()
 
     def test_invalid_framework(self):
@@ -807,8 +807,8 @@ class TestDuplicatedFrameworkLoader(BaseFrameworkLoader):
 
     def setUp(self):
         super().setUp()
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "duplicatedframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "duplicatedframeworks"):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["category-a"]
         self.expect_warn_error = True  # as we load multiple duplicate categories and frameworks
@@ -845,8 +845,8 @@ class TestMultipleDefaultFrameworkLoader(BaseFrameworkLoader):
 
     def setUp(self):
         super().setUp()
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "multipledefaultsframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "multipledefaultsframeworks"):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["category-a"]
         self.expect_warn_error = True  # as we load multiple default frameworks in a category
@@ -896,8 +896,8 @@ class TestInvalidFrameworkLoader(BaseFrameworkLoader):
     def setUp(self):
         super().setUp()
         # load custom unexisting framework-directory
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "invalidframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "invalidframeworks"):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["category-a"]
 
@@ -930,7 +930,7 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
     def tearDown(self):
         self.restore_arch_version()
         with suppress(KeyError):
-            os.environ.pop(UDTC_FRAMEWORKS_ENVIRON_VARIABLE)
+            os.environ.pop(UMAKE_FRAMEWORKS_ENVIRON_VARIABLE)
         for path in self.dirs_to_remove:
             sys.path.remove(path)
             with suppress(FileNotFoundError):
@@ -939,7 +939,7 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
                 sys.path.remove(path)
         super().tearDown()
 
-    @patch("udtc.frameworks.get_user_frameworks_path")
+    @patch("umake.frameworks.get_user_frameworks_path")
     def test_load_additional_frameworks_in_home_dir(self, get_user_frameworks_path):
         """Ensure we load additional frameworks from home directory"""
         temp_path = tempfile.mkdtemp()
@@ -947,8 +947,8 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
         shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "overlayframeworks.py"), temp_path)
         get_user_frameworks_path.return_value = temp_path
         # load home framework-directory
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "testframeworks"):
             frameworks.load_frameworks()
 
         # ensure that the overlay is loaded
@@ -960,11 +960,11 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
         """Ensure we load additional frameworks set in an environment variable"""
         temp_path = tempfile.mkdtemp()
         self.dirs_to_remove.append(temp_path)
-        os.environ[UDTC_FRAMEWORKS_ENVIRON_VARIABLE] = temp_path
+        os.environ[UMAKE_FRAMEWORKS_ENVIRON_VARIABLE] = temp_path
         shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "overlayframeworks.py"), temp_path)
         # load env framework-directory
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "testframeworks"):
             frameworks.load_frameworks()
 
         # ensure that the overlay is loaded
@@ -972,7 +972,7 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
         # ensure that the other frameworks are still loaded
         self.assertEquals(self.CategoryHandler.categories["category-a"].name, "Category A")
 
-    @patch("udtc.frameworks.get_user_frameworks_path")
+    @patch("umake.frameworks.get_user_frameworks_path")
     def test_load_additional_frameworks_with_two_categories(self, get_user_frameworks_path):
         """Ensure we load additional frameworks in a path with two categories"""
         temp_path = tempfile.mkdtemp()
@@ -981,8 +981,8 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
         shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "withcategory2.py"), temp_path)
         get_user_frameworks_path.return_value = temp_path
         # load home framework-directory
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "testframeworks"):
             frameworks.load_frameworks()
 
         # ensure that both overlay are loaded
@@ -991,7 +991,7 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
         # ensure that the other frameworks are still loaded
         self.assertEquals(self.CategoryHandler.categories["category-a"].name, "Category A")
 
-    @patch("udtc.frameworks.get_user_frameworks_path")
+    @patch("umake.frameworks.get_user_frameworks_path")
     def test_load_additional_frameworks_with_same_filename(self, get_user_frameworks_path):
         """Ensure we load additional frameworks in a path with same filename"""
         temp_path = tempfile.mkdtemp()
@@ -999,8 +999,8 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
         shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "withcategory.py"), temp_path)
         get_user_frameworks_path.return_value = temp_path
         # load home framework-directory
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "testframeworks"):
             frameworks.load_frameworks()
 
         # ensure that the duplicated filename (but not category) is loaded
@@ -1008,7 +1008,7 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
         # ensure that the other frameworks with the same name is still loaded
         self.assertEquals(self.CategoryHandler.categories["category-a"].name, "Category A")
 
-    @patch("udtc.frameworks.get_user_frameworks_path")
+    @patch("umake.frameworks.get_user_frameworks_path")
     def test_load_additional_frameworks_with_duphome_before_system(self, get_user_frameworks_path):
         """Ensure we load additional frameworks from home before system if they have the same names"""
         temp_path = tempfile.mkdtemp()
@@ -1016,8 +1016,8 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
         shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "duplicatedcategory.py"), temp_path)
         get_user_frameworks_path.return_value = temp_path
         # load home framework-directory
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "testframeworks"):
             frameworks.load_frameworks()
 
         # ensure that the overlay one is loaded
@@ -1028,13 +1028,13 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
         self.assertEquals(self.CategoryHandler.categories["category-b"].name, "Category/B")
         self.expect_warn_error = True  # expect warning due to duplication
 
-    @patch("udtc.frameworks.get_user_frameworks_path")
+    @patch("umake.frameworks.get_user_frameworks_path")
     def test_load_additional_frameworks_with_dup_progname_env_before_home_before_system(self, get_user_frameworks_path):
         """Ensure we load additional frameworks from env before home and system if they have the same names"""
         # env var
         temp_path = tempfile.mkdtemp()
         self.dirs_to_remove.append(temp_path)
-        os.environ[UDTC_FRAMEWORKS_ENVIRON_VARIABLE] = temp_path
+        os.environ[UMAKE_FRAMEWORKS_ENVIRON_VARIABLE] = temp_path
         shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "duplicatedcategory2.py"), temp_path)
         # home dir
         temp_path = tempfile.mkdtemp()
@@ -1042,8 +1042,8 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
         shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "duplicatedcategory.py"), temp_path)
         get_user_frameworks_path.return_value = temp_path
         # load env and home framework-directory
-        with patchelem(udtc.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(udtc.frameworks, '__package__', "testframeworks"):
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "testframeworks"):
             frameworks.load_frameworks()
 
         # ensure that the env overlay one is loaded
@@ -1075,11 +1075,11 @@ class TestProductionFrameworkLoader(BaseFrameworkLoader):
 class TestCustomFrameworkCantLoad(BaseFrameworkLoader):
     """Get custom unloadable automatically frameworks to test custom corner cases"""
 
-    class _CustomFramework(udtc.frameworks.BaseFramework):
+    class _CustomFramework(umake.frameworks.BaseFramework):
 
         def __init__(self):
             super().__init__(name="Custom", description="Custom uninstallable framework",
-                             category=udtc.frameworks.MainCategory())
+                             category=umake.frameworks.MainCategory())
 
         def setup(self):
             super().setup()
@@ -1094,7 +1094,7 @@ class TestCustomFrameworkCantLoad(BaseFrameworkLoader):
     def test_call_setup_on_uninstallable_framework(self):
         """Calling setup on uninstallable framework return to main UI"""
         fw = self._CustomFramework()
-        with patch("udtc.frameworks.UI") as UIMock:
+        with patch("umake.frameworks.UI") as UIMock:
             fw.setup()
             self.assertTrue(UIMock.return_main_screen.called)
         self.expect_warn_error = True

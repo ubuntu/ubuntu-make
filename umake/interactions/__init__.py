@@ -22,7 +22,7 @@
 
 from gettext import gettext as _
 import logging
-from udtc.tools import InputError
+from umake.tools import InputError
 
 logger = logging.getLogger(__name__)
 

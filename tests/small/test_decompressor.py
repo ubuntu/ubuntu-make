@@ -26,7 +26,7 @@ import shutil
 import stat
 import tempfile
 from ..tools import get_data_dir, LoggedTestCase
-from udtc.decompressor import Decompressor
+from umake.decompressor import Decompressor
 
 
 class TestDecompressor(LoggedTestCase):

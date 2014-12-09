@@ -1,5 +1,5 @@
 [nosetests]
 with-cov=1
-cov=udtc
+cov=umake
 cov-report=term-missing,html,xml
 cov-config=confs/coverage.cov

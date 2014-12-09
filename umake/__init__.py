@@ -24,12 +24,12 @@ import logging
 import logging.config
 import os
 import sys
-from udtc.frameworks import BaseCategory, load_frameworks
-from udtc.tools import MainLoop
+from umake.frameworks import BaseCategory, load_frameworks
+from umake.tools import MainLoop
 from .ui import cli
 import yaml
 
-gettext.textdomain("ubuntu-developer-tools-center")
+gettext.textdomain("ubuntu-make")
 logger = logging.getLogger(__name__)
 
 _default_log_level = logging.WARNING

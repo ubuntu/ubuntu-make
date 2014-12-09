@@ -3,7 +3,7 @@ set -e
 
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
-        rm -f /etc/bash_completion.d/udtc
+        rm -f /etc/bash_completion.d/umake
     ;;
 
     *)

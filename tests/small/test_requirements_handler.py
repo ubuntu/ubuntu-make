@@ -28,9 +28,9 @@ import tempfile
 from time import time
 from ..tools import get_data_dir, LoggedTestCase, manipulate_path_env
 from unittest.mock import Mock, call, patch
-import udtc
-from udtc.network.requirements_handler import RequirementsHandler
-from udtc import tools
+import umake
+from umake.network.requirements_handler import RequirementsHandler
+from umake import tools
 
 
 class TestRequirementsHandler(LoggedTestCase):
@@ -190,7 +190,7 @@ class TestRequirementsHandler(LoggedTestCase):
 
     def test_install_perm_switch_back_user(self):
         """When we install one package, we switch back to user at the end"""
-        udtc.network.requirements_handler.os.geteuid.return_value = 0
+        umake.network.requirements_handler.os.geteuid.return_value = 0
         self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
@@ -531,7 +531,7 @@ class TestRequirementsHandler(LoggedTestCase):
         self.handler.cache.open()  # reopen the cache with the new added architecture
 
         bucket = ["testpackagefoo:foo", "testpackage1"]
-        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock:
+        with patch("umake.network.requirements_handler.subprocess") as subprocess_mock:
             self.handler.install_bucket(bucket, lambda x: "", self.done_callback)
             self.wait_for_callback(self.done_callback)
 
@@ -553,7 +553,7 @@ class TestRequirementsHandler(LoggedTestCase):
     def test_install_with_foreign_foreign_arch_add_fails(self):
         """Install packages with a foreign arch, where adding a foreign arch fails"""
         bucket = ["testpackagefoo:foo", "testpackage1"]
-        with patch("udtc.network.requirements_handler.subprocess") as subprocess_mock:
+        with patch("umake.network.requirements_handler.subprocess") as subprocess_mock:
             subprocess_mock.call.return_value = 1
             self.handler.install_bucket(bucket, lambda x: "", self.done_callback)
             self.wait_for_callback(self.done_callback)

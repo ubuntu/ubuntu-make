@@ -25,8 +25,8 @@ from time import time
 from unittest.mock import Mock, patch
 from ..tools import LoggedTestCase
 import threading
-from udtc.tools import MainLoop, Singleton
-from udtc.ui import UI
+from umake.tools import MainLoop, Singleton
+from umake.ui import UI
 
 
 class TestUI(LoggedTestCase):
@@ -87,7 +87,7 @@ class TestUI(LoggedTestCase):
         UI.return_main_screen()
         self.assertTrue(self.mockUIPlug._return_main_screen.called)
 
-    @patch("udtc.tools.sys")
+    @patch("umake.tools.sys")
     def test_call_display(self, mocksys):
         """We call the display method from the UIPlug"""
         UI.display(self.contentType)
@@ -99,7 +99,7 @@ class TestUI(LoggedTestCase):
         self.assertIsNotNone(self.display_thread)
         self.assertEquals(self.mainloop_thread, self.display_thread)
 
-    @patch("udtc.tools.sys")
+    @patch("umake.tools.sys")
     def test_call_display_other_thread(self, mocksys):
         """We call the display method on UIPlug in the main thread from another thread"""
         def run_display(future):
@@ -119,7 +119,7 @@ class TestUI(LoggedTestCase):
         self.assertNotEquals(self.mainloop_thread, self.function_thread)
         self.assertEquals(self.mainloop_thread, self.display_thread)
 
-    @patch("udtc.tools.sys")
+    @patch("umake.tools.sys")
     def test_call_delayed_display(self, mocksys):
         """We call the display method from the UIPlug in delayed_display with 50ms waiting"""
         UI.delayed_display(self.contentType)
@@ -133,7 +133,7 @@ class TestUI(LoggedTestCase):
         self.assertEquals(self.mainloop_thread, self.display_thread)
         self.assertTrue(self.time_display_call - now > 0.05)
 
-    @patch("udtc.tools.sys")
+    @patch("umake.tools.sys")
     def test_call_delayed_display_from_other_thread(self, mocksys):
         """We call the display method from the UIPlug in delayed_display with 50ms waiting, even on other thread"""
         now = 0

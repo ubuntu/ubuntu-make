@@ -1,4 +1,4 @@
-Source: ubuntu-developer-tools-center
+Source: ubuntu-make
 Section: devel
 Priority: optional
 Build-Depends: debhelper (>= 9),
@@ -25,7 +25,7 @@ Standards-Version: 3.9.5
 X-Python3-Version: >= 3.4
 XS-Testsuite: autopkgtest
 
-Package: ubuntu-developer-tools-center
+Package: ubuntu-make
 Architecture: all
 Depends: ${misc:Depends},
          ${python3:Depends},
@@ -38,9 +38,17 @@ Depends: ${misc:Depends},
          python3-requests,
          python3-xdg,
 Description: setup your development environment on ubuntu easily
- Ubuntu Developer Tools Center provides a set of functionality to setup,
+ Ubuntu Make provides a set of functionality to setup,
  maintain and personalize your developer environment easily. It will handle
  all dependencies, even those which aren't in Ubuntu itself, and install
  latest versions of the desired and recommended tools.
  .
  For now, you can configure a complete android studio environment.
+
+Package: ubuntu-developer-tools-center
+Architecture: all
+Section: oldlibs
+Priority: extra
+Depends: ubuntu-make, ${misc:Depends},
+Description: transitional dummy package
+  This is a transitional dummy package. It can safely be removed.
