@@ -3,7 +3,7 @@ set -e
 
 case "$1" in
     configure)
-        rm -f /etc/bash_completion.d/udtc
+        register-python-argcomplete3 umake > /etc/bash_completion.d/umake
     ;;
 
     *)
