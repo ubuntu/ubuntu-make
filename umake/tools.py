@@ -74,7 +74,12 @@ class ConfigHandler(metaclass=Singleton):
     def __init__(self):
         """Load the config"""
         self._config = {}
+        old_config_file = load_first_config(settings.OLD_CONFIG_FILENAME)
         config_file = load_first_config(settings.CONFIG_FILENAME)
+        if old_config_file:
+            if not config_file:
+                config_file = old_config_file.replace(settings.OLD_CONFIG_FILENAME, settings.CONFIG_FILENAME)
+            os.rename(old_config_file, config_file)
         logger.debug("Opening {}".format(config_file))
         try:
             with open(config_file) as f:

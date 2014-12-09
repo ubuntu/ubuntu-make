@@ -132,7 +132,8 @@ setup(
     package_data={},
     entry_points={
         'console_scripts': [
-            'umake = umake:main'
+            'umake = umake:main',
+            'udtc = umake:main'
         ],
     },
 

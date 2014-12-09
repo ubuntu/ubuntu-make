@@ -20,6 +20,7 @@
 import os
 
 DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join("~", "tools"))
+OLD_CONFIG_FILENAME = "udtc"
 CONFIG_FILENAME = "umake"
 LSB_RELEASE_FILE = "/etc/lsb-release"
 UMAKE_FRAMEWORKS_ENVIRON_VARIABLE = "UMAKE_FRAMEWORKS"

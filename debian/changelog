@@ -4,6 +4,8 @@ ubuntu-make (0.2-0ubuntu1) UNRELEASED; urgency=medium
     a temporary binary under the older name (udtc). New command is umake.
     Note as well that the new framework environment variable is
     UMAKE_FRAMEWORKS.
+  * Provide compatibility binary (udtc) for now in the transitional package.
+    Also move previous configuration file location to the new one.
 
  -- Didier Roche <didrocks@ubuntu.com>  Tue, 09 Dec 2014 08:23:33 +0100
 
