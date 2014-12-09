@@ -57,7 +57,7 @@ class AndroidCategory(umake.frameworks.BaseCategory):
         if tag in line:
             in_download = True
         if in_download:
-            p = re.search(r'href="(.*)">', line)
+            p = re.search(r'href="(.*)"', line)
             with suppress(AttributeError):
                 url = p.group(1)
             p = re.search(r'<td>(\w+)</td>', line)
@@ -76,7 +76,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Android Studio", description="Android Studio (default)", is_category_default=True,
                          category=category, only_on_archs=_supported_archs, expect_license=True,
-                         download_page="https://developer.android.com/sdk/installing/studio.html",
+                         download_page="http://developer.android.com/sdk/index.html",
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="android-studio",
                          desktop_filename="android-studio.desktop")
@@ -87,7 +87,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         """Parse Android Studio download link, expect to find a md5sum and a url"""
-        return self.category.parse_download_link('id="linux-studio"', line, in_download)
+        return self.category.parse_download_link('id="linux-bundle"', line, in_download)
 
     def post_install(self):
         """Create the Android Studio launcher"""
