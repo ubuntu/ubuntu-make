@@ -9,11 +9,11 @@
     <meta name="robots" content="all"/>
     <meta name="author" content="JetBrains, Inc., https://www.jetbrains.com"/>
 
-        
+
 <link rel="canonical" href="https://www.jetbrains.com/idea/download/download_thanks.jsp" />
 
 
-                    <meta http-equiv="cache-control" content="no-cache"/>  <meta http-equiv="pragma" content="no-cache"/>  <meta http-equiv="expires" content="0"/>     
+                    <meta http-equiv="cache-control" content="no-cache"/>  <meta http-equiv="pragma" content="no-cache"/>  <meta http-equiv="expires" content="0"/>
         <link rel="stylesheet" type="text/css" media="screen" href="styleset1.css?ver=04_rs_122014"/>
 
 
@@ -24,21 +24,21 @@
 <noscript>
     <link rel="stylesheet" type="text/css" media="screen" href="/styles2/noscript.css"/>
 </noscript>
-    
+
         <script type="text/javascript" src="/js2/css_browser_selector.js"></script>
 <script type="text/javascript" src="/js2/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="/js2/jquery/highlight.js"></script>
 <script type="text/javascript" src="/js2/html5.js"></script>
 <script type="text/javascript" src="/js2/mkto_function.js"></script>    <script type="text/javascript" src="/js2/common.js"></script>
-                                           <script type="text/javascript" src="../../js2/cookie.js"></script>                      <script type="text/javascript" src="../../js2/jquery/jquery.min.js"></script>                      <script type="text/javascript" src="../../js2/jquery/validate.js"></script>                      <script type="text/javascript" src="../../js2/rotation.js"></script>                      <script type="text/javascript">                      $(document).ready(function() {                      var os = 'linux';                      var edition = 'IC';                      var from = '';                      var getCookieDownload = getCookie("downloadFile");                      var url = 'http://download.jetbrains.com/idea/ideaIC-14.0.2.tar.gz';                      if (url && getCookieDownload != os + edition && (from != 'dropbox')) {                      location.href = url;                      setCookie("downloadFile", os + edition, "/", "/");                      }                                            $("#downloadThanksIDEA").validate();                      $("#downloadThanksIDEA").formGuard();                                            messageLoad(2);                                            if (os == "mac") {                      $(".objc").css("display", "block");                      }                      });                      </script>             
-        
+                                           <script type="text/javascript" src="../../js2/cookie.js"></script>                      <script type="text/javascript" src="../../js2/jquery/jquery.min.js"></script>                      <script type="text/javascript" src="../../js2/jquery/validate.js"></script>                      <script type="text/javascript" src="../../js2/rotation.js"></script>                      <script type="text/javascript">                      $(document).ready(function() {                      var os = 'linux';                      var edition = 'IC';                      var from = '';                      var getCookieDownload = getCookie("downloadFile");                      var url = 'http://download.jetbrains.com/idea/ideaIC-14.0.2.tar.gz';                      if (url && getCookieDownload != os + edition && (from != 'dropbox')) {                      location.href = url;                      setCookie("downloadFile", os + edition, "/", "/");                      }                                            $("#downloadThanksIDEA").validate();                      $("#downloadThanksIDEA").formGuard();                                            messageLoad(2);                                            if (os == "mac") {                      $(".objc").css("display", "block");                      }                      });                      </script>
+
             <link rel="Shortcut Icon" href="/idea/favicon.ico?08052013" type="image/x-icon"/>
     <link rel="apple-touch-icon" href="/idea/apple-touch-icon.png" />
     <link rel="apple-touch-icon" sizes="72x72" href="/idea/apple-touch-icon-72x72.png" />
     <link rel="apple-touch-icon" sizes="114x114" href="/idea/apple-touch-icon-114x114.png" />
     <link rel="apple-touch-icon" sizes="144x144" href="/idea/apple-touch-icon-144x144.png" />
 
-    
+
         </head>
 
 <body id="products" class="idea down wide" >
@@ -56,7 +56,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <header>
     <div class="container">
                     <a href="/" class="jb_logo" >JetBrains</a>
-                
+
         <ul id="jb_nav">
             <li class="products"><a href="/products.html" >Products</a></li>
             <li class="support"><a href="/support/" >Support</a></li>
@@ -141,14 +141,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div class="container">
         <a class="header-logo jb-logo _logo-idea _size-header-logo _inverted" href="/idea/">IntelliJ IDEA</a>
     <span class="nav-logo jb-logo _logo-idea _size-3 _inverted"></span>
-         
-        
-                
+
+
+
 
 </div>
 </div>
 
-    
+
 
 
 
@@ -195,21 +195,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <nav>
     <div class="container">
         <ul class="nav">
-            
+
             <li class="idea"><a href="/idea/" title="Overview">Overview</a></li>
-            
+
             <li class="whatsnew"><a href="/idea/whatsnew/" title="What's New">What's New</a></li>
-            
+
             <li class="features"><a href="/idea/features/" title="Features">Features</a></li>
-            
+
             <li class="plugins"><a href="/idea/plugins/" title="Plugins">Plugins</a></li>
-            
+
             <li class="documentation"><a href="/idea/documentation/" title="Getting Started">Getting Started</a></li>
-            
+
             <li class="current"><a href="/idea/download/" title="Download">Download</a></li>
-            
+
             <li class="buy"><a href="/idea/buy/" title="Buy &amp; Upgrade">Buy &amp; Upgrade</a></li>
-            
+
         </ul>
     </div>
 </nav>
@@ -233,14 +233,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     });
                 </script>
                 <div id="country_promo_block_storage" style="display: none"></div>
-                                                                        
-            
+
+
 <cache:cache>
     <div class="box nota_bene rightfloated objc" style="display: none">
         <p><strong>See also: <a href="../../objc/?fromIDEA">Objective-C IDE</a></strong></p>
     </div>
     <h2>Thank you for downloading IntelliJ IDEA</h2>
-    
+
     <div class="">
         <p>Your download will start shortly. If not, please use the following <a href="https://www.jetbrains.com/idea/idea-fake.tar.gz">direct link</a>.</p>
     </div>
@@ -300,7 +300,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <input class="button" id="submit" type="submit" value=" Send "/>
         </form>
     </div>
-    
+
     <div class="rightfloated noborder block55">
         <h4 class="underline">Did You Know?</h4>
 
@@ -419,7 +419,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </ul>
                         <div class="newsletter-block">
                 <h6>Get Monthly Newsletter</h6>
-                
+
 
 <script type='text/javascript' src='/eforms/dwr/interface/SubscriptionService.js'></script>
 <script type='text/javascript' src='/eforms/dwr/engine.js'></script>
