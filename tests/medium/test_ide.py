@@ -3,6 +3,7 @@
 #
 # Authors:
 #  Didier Roche
+#  Tin Tvrtković
 #
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -39,3 +40,35 @@ class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(settings.DOCKER_USER))
+
+
+class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
+    """This will test the Idea IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.jetbrains.com"
+        self.port = "443"
+        # Reuse the Eclipse environment.
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'eclipse')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/idea".format(settings.DOCKER_USER))
+
+
+class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
+    """This will test the PyCharm IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.jetbrains.com"
+        self.port = "443"
+        # Reuse the Eclipse environment.
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'eclipse')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/pycharm".format(settings.DOCKER_USER))

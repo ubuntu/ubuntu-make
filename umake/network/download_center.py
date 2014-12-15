@@ -21,7 +21,7 @@
 
 from collections import namedtuple
 from concurrent import futures
-from contextlib import suppress, closing
+from contextlib import closing
 import hashlib
 from io import BytesIO
 import logging
@@ -35,11 +35,13 @@ from umake.tools import ChecksumType
 logger = logging.getLogger(__name__)
 
 
-class DownloadItem(namedtuple('DownloadItem', ['url', 'checksum'])):
+class DownloadItem(namedtuple('DownloadItem', ['url', 'checksum', 'headers', 'ignore_encoding'])):
     """An individual item to be downloaded and checked.
 
-    Checksum should be an instance of tools.Checksum, if provided."""
-    pass
+    Checksum should be an instance of tools.Checksum, if provided.
+    Headers should be a dictionary of HTTP headers, if provided."""
+    def __new__(cls, url, checksum=None, headers=None, ignore_encoding=False):
+        return super().__new__(cls, url, checksum, headers, ignore_encoding)
 
 
 class DownloadCenter:
@@ -71,39 +73,39 @@ class DownloadCenter:
         self._wired_report = report
         self._download_to_file = download
 
-        self._urls = list(set(urls))
+        self._urls = urls
         self._downloaded_content = {}
 
         self._download_progress = {}
 
         executor = futures.ThreadPoolExecutor(max_workers=3)
         for url_request in self._urls:
-            url, checksum = (url_request, None)
             # grab the md5sum if any
-            with suppress(ValueError):
-                (url, checksum) = url_request
             # switch between inline memory and temp file
             if download:
                 # Named because shutils and tarfile library needs a .name property
                 # http://bugs.python.org/issue21044
                 # also, ensure we keep the same suffix
-                path, ext = os.path.splitext(url)
+                path, ext = os.path.splitext(url_request.url)
                 dest = tempfile.NamedTemporaryFile(suffix=ext)
-                logger.info("Start downloading {} to a temp file".format(url))
+                logger.info("Start downloading {} to a temp file".format(url_request.url))
             else:
                 dest = BytesIO()
-                logger.info("Start downloading {} in memory".format(url))
-            future = executor.submit(self._fetch, url, checksum, dest)
-            future.tag_url = url
+                logger.info("Start downloading {} in memory".format(url_request))
+            future = executor.submit(self._fetch, url_request, dest)
+            future.tag_url = url_request.url
             future.tag_download = download
             future.tag_dest = dest
             future.add_done_callback(self._one_done)
 
-    def _fetch(self, url, checksum, dest):
+    def _fetch(self, download_item, dest):
         """Get an url content and close the connexion.
 
         This write the content to dest return it, after seeking at start and check for md5sum
         """
+        url = download_item.url
+        checksum = download_item.checksum
+        headers = download_item.headers or {}
 
         def _report(block_no, block_size, total_size):
             current_size = int(block_no * block_size)
@@ -115,7 +117,7 @@ class DownloadCenter:
 
         # Requests support redirection out of the box.
         try:
-            with closing(requests.get(url, stream=True)) as r:
+            with closing(requests.get(url, stream=True, headers=headers)) as r:
                 if r.status_code != 200:
                     raise(BaseException("Can't download ({}): {}".format(r.status_code, r.reason)))
                 content_size = int(r.headers.get('content-length', -1))
@@ -123,7 +125,7 @@ class DownloadCenter:
                 # read in chunk and send report updates
                 block_num = 0
                 _report(block_num, self.BLOCK_SIZE, content_size)
-                for data in r.iter_content(chunk_size=self.BLOCK_SIZE):
+                for data in r.raw.stream(amt=self.BLOCK_SIZE, decode_content=not download_item.ignore_encoding):
                     dest.write(data)
                     block_num += 1
                     _report(block_num, self.BLOCK_SIZE, content_size)
@@ -141,6 +143,8 @@ class DownloadCenter:
                 actual_checksum = self.sha1_for_fd(dest)
             elif checksum_type is ChecksumType.md5:
                 actual_checksum = self.md5_for_fd(dest)
+            elif checksum_type is ChecksumType.sha256:
+                actual_checksum = self.sha256_for_fd(dest)
             else:
                 msg = "Unsupported checksum type: {}.".format(checksum_type)
                 raise BaseException(msg)
@@ -202,3 +206,7 @@ class DownloadCenter:
     @classmethod
     def sha1_for_fd(cls, f, block_size=2**20):
         return cls._checksum_for_fd(hashlib.sha1, f, block_size)
+
+    @classmethod
+    def sha256_for_fd(cls, f, block_size=2**20):
+        return cls._checksum_for_fd(hashlib.sha256, f, block_size)

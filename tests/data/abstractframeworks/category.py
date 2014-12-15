@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-"""Invalid framework with category module"""
+"""Abstract framework with category module"""
 
 import umake.frameworks
 

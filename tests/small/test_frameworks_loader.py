@@ -879,14 +879,14 @@ class TestNotLoadedFrameworkLoader(BaseFrameworkLoader):
         self.assertEquals(len(self.CategoryHandler.categories), 0, str(self.CategoryHandler.categories))
 
 
-class TestInvalidFrameworkLoader(BaseFrameworkLoader):
-    """This will test the dynamic framework loader activity with some invalid (interface not fullfilled) frameworks"""
+class TestAbstractFrameworkLoader(BaseFrameworkLoader):
+    """Test the loader skips abstract frameworks."""
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         sys.path.append(get_data_dir())
-        cls.testframeworks_dir = os.path.join(get_data_dir(), 'invalidframeworks')
+        cls.testframeworks_dir = os.path.join(get_data_dir(), 'abstractframeworks')
 
     @classmethod
     def tearDownClass(cls):
@@ -897,14 +897,14 @@ class TestInvalidFrameworkLoader(BaseFrameworkLoader):
         super().setUp()
         # load custom unexisting framework-directory
         with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
-                patchelem(umake.frameworks, '__package__', "invalidframeworks"):
+                patchelem(umake.frameworks, '__package__', "abstractframeworks"):
             frameworks.load_frameworks()
         self.categoryA = self.CategoryHandler.categories["category-a"]
 
     def test_load(self):
         """Previous loading should have been successful"""
         self.assertFalse(self.categoryA.has_frameworks())
-        self.expect_warn_error = True  # It errors the fact that it ignores one invalid framework
+        self.expect_warn_error = False  # Should be silent.
 
 
 class TestFrameworkLoaderCustom(BaseFrameworkLoader):

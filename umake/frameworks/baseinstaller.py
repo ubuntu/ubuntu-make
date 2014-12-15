@@ -147,7 +147,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
     def download_provider_page(self):
         logger.debug("Download application provider page")
-        DownloadCenter([DownloadItem(self.download_page, None)], self.get_metadata_and_check_license, download=False)
+        DownloadCenter([DownloadItem(self.download_page)], self.get_metadata_and_check_license, download=False)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse license per line, eventually write to license_txt if it's in the license part.

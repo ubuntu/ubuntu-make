@@ -52,6 +52,7 @@ class ChecksumType(Enum):
     """Types of supported checksum algorithms."""
     md5 = "md5"
     sha1 = "sha1"
+    sha256 = "sha256"
 
 
 class Checksum(namedtuple('Checksum', ['checksum_type', 'checksum_value'])):

@@ -1,5 +1,6 @@
 # runtime requirements
 argcomplete
+beautifulsoup4
 pyyaml
 pyxdg
 requests
