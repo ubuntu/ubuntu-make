@@ -44,7 +44,8 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
     # additional test with fake md5sum
     def test_android_studio_install_with_wrong_md5sum(self):
         """Install android studio requires a md5sum, and a wrong one is rejected"""
-        android_studio_file_path = os.path.join(get_data_dir(), "server-content", "sdk", "installing", "studio.html")
+        android_studio_file_path = os.path.join(get_data_dir(), "server-content", "developer.android.com",
+                                                "sdk", "index.html")
         with swap_file_and_restore(android_studio_file_path) as content:
             with open(android_studio_file_path, "w") as newfile:
                 newfile.write(content.replace(settings.TEST_MD5_ANDROID_STUDIO_FAKE_DATA, "fakemd5sum"))
