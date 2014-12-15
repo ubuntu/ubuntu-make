@@ -76,7 +76,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Android Studio", description="Android Studio (default)", is_category_default=True,
                          category=category, only_on_archs=_supported_archs, expect_license=True,
-                         download_page="http://developer.android.com/sdk/index.html",
+                         download_page="https://developer.android.com/sdk/index.html",
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="android-studio",
                          desktop_filename="android-studio.desktop")
