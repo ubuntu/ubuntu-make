@@ -1,4 +1,4 @@
-ubuntu-make (0.3) UNRELEASED; urgency=medium
+ubuntu-make (0.3) vivid; urgency=medium
 
   * New release featuring intellij IDEA and Pycharm support (from jetbrain)
     in their community edition. Thanks to Tin Tvrtković for this work. They
@@ -7,7 +7,7 @@ ubuntu-make (0.3) UNRELEASED; urgency=medium
   * Ensure we download Android Studio over https.
   * Miscellaneous medium tests fixes.
 
- -- Didier Roche <didrocks@ubuntu.com>  Mon, 15 Dec 2014 13:26:51 +0100
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 16 Dec 2014 09:33:21 +0100
 
 ubuntu-make (0.2) vivid; urgency=medium
 
