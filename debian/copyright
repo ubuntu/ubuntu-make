@@ -1,6 +1,6 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Ubuntu Make
-Source: https://github.com/didrocks/ubuntu-make
+Source: https://github.com/ubuntu/ubuntu-make
 
 Files: *
 Copyright: (C) 2014 Canonical
