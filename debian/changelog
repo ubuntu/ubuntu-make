@@ -1,3 +1,14 @@
+ubuntu-make (0.3) UNRELEASED; urgency=medium
+
+  * New release featuring intellij IDEA and Pycharm support (from jetbrain)
+    in their community edition. Thanks to Tin Tvrtković for this work. They
+    both are covered by new tests.
+  * Add dependency on beautifulsoup for easier html parsing by Tin Tvrtković.
+  * Ensure we download Android Studio over https.
+  * Miscellaneous medium tests fixes.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Mon, 15 Dec 2014 13:26:51 +0100
+
 ubuntu-make (0.2) vivid; urgency=medium
 
   * Releasing under new name: ubuntu-make. Handle transition by shipping
