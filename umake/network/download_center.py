@@ -133,7 +133,7 @@ class DownloadCenter:
             # Wrap this for a nicer error message.
             raise BaseException("Protocol not supported.") from exc
 
-        if checksum:
+        if checksum and checksum.checksum_value:
             checksum_type = checksum.checksum_type
             checksum_value = checksum.checksum_value
             logger.debug("Checking checksum ({}).".format(checksum_type.name))

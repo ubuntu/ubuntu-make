@@ -206,6 +206,24 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.error)
 
+    def test_download_with_no_checksum_value(self):
+        """we deliver one successful download with a checksum type having no value"""
+        filename = "simplefile"
+        url = self.build_server_address(filename)
+        request = DownloadItem(url, Checksum(ChecksumType.md5, None))
+        DownloadCenter([request], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][url]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result.fd.read())
+            self.assertTrue('.' not in result.fd.name, result.fd.name)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.error)
+
     def test_download_with_progress(self):
         """we deliver progress hook while downloading"""
         filename = "simplefile"
