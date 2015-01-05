@@ -69,4 +69,3 @@ class AndroidCategory(umake.frameworks.BaseCategory):
         if url is None and md5sum is None:
             return (None, in_download)
         return ((url, md5sum), in_download)
-
