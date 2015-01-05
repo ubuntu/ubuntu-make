@@ -17,10 +17,8 @@ ADD tests/data/www.jetbrains.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/golang.org.crt /usr/local/share/ca-certificates/
 ADD docker/create_packages.sh /tmp/
 
-# remove proposed (but used in the base system, so needed if apt has an update and so on…)
-# and be up to date.
+# Refresh the image
 RUN \
-  rm /etc/apt/sources.list.d/proposed.list && \
   apt-get update && \
   apt-get dist-upgrade -y && \
 
