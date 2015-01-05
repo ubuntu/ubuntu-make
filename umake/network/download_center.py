@@ -88,7 +88,7 @@ class DownloadCenter:
                 # also, ensure we keep the same suffix
                 path, ext = os.path.splitext(url_request.url)
                 dest = tempfile.NamedTemporaryFile(suffix=ext)
-                logger.info("Start downloading {} to a temp file".format(url_request.url))
+                logger.info("Start downloading {} to a temp file".format(url_request))
             else:
                 dest = BytesIO()
                 logger.info("Start downloading {} in memory".format(url_request))

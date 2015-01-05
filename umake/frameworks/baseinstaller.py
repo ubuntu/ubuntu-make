@@ -188,7 +188,6 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                     (newurl, new_checksum) = download
                     url = newurl if newurl is not None else url
                     checksum = new_checksum if new_checksum is not None else checksum
-                    logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
                     if url is not None:
                         if self.checksum_type and checksum:
                             logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
