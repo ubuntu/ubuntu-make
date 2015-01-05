@@ -26,7 +26,7 @@ import shutil
 import signal
 import subprocess
 from time import sleep
-from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned
+from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned, remove_framework_envs_from_user
 from ..tools import LoggedTestCase, local_which
 
 
@@ -37,23 +37,31 @@ class LargeFrameworkTests(LoggedTestCase):
         super().setUp()
         self.in_container = False
         self.installed_path = ""
+        self.framework_name_for_profile = ""
         self.conf_path = os.path.expanduser("~/.config/umake")
         self.desktop_filename = ""
         self.icon_filename = ""
         self.child = None
+        self.additional_dirs = []
 
     def tearDown(self):
         # don't remove on machine paths if running within a container
         if not self.in_container:
             with suppress(FileNotFoundError):
                 shutil.rmtree(self.installed_path)
+            # TODO: need to be finer grain in the future
             with suppress(FileNotFoundError):
                 os.remove(self.conf_path)
-            with suppress(FileNotFoundError):
-                os.remove(get_launcher_path(self.desktop_filename))
+            if self.desktop_filename:
+                with suppress(FileNotFoundError):
+                    os.remove(get_launcher_path(self.desktop_filename))
             with suppress(FileNotFoundError):
                 if self.icon_filename:
                     os.remove(get_icon_path(self.icon_filename))
+            remove_framework_envs_from_user(self.framework_name_for_profile)
+            for dir in self.additional_dirs:
+                with suppress(OSError):
+                    shutil.rmtree(dir)
         super().tearDown()
 
     def _pid_for(self, process_grep):
@@ -140,7 +148,7 @@ class LargeFrameworkTests(LoggedTestCase):
 
     def is_in_path(self, filename):
         """check that we have a directory in path"""
-        return_code = subprocess.call(["bash", "-i", "which", filename], stdin=subprocess.DEVNULL,
+        return_code = subprocess.call(["bash", "-l", "which", filename], stdin=subprocess.DEVNULL,
                                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         if return_code == 0:
             return True
