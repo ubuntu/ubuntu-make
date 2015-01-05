@@ -69,3 +69,41 @@ class AndroidCategory(umake.frameworks.BaseCategory):
         if url is None and md5sum is None:
             return (None, in_download)
         return ((url, md5sum), in_download)
+
+
+class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Android Studio", description="Android Studio (default)", is_category_default=True,
+                         category=category, only_on_archs=_supported_archs, expect_license=True,
+                         download_page="https://developer.android.com/sdk/index.html",
+                         checksum_type=ChecksumType.sha1,
+                         dir_to_decompress_in_tarball="android-studio",
+                         desktop_filename="android-studio.desktop")
+
+    def parse_license(self, line, license_txt, in_license):
+        """Parse Android Studio download page for license"""
+        return self.category.parse_license(line, license_txt, in_license)
+
+    def parse_download_link(self, line, in_download):
+        """Parse Android Studio download link, expect to find a md5sum and a url"""
+        return self.category.parse_download_link('id="linux-bundle"', line, in_download)
+
+    def post_install(self):
+        """Create the Android Studio launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Android Studio"),
+                        icon_path=os.path.join(self.install_path, "bin", "idea.png"),
+                        exec='"{}" %f'.format(os.path.join(self.install_path, "bin", "studio.sh")),
+                        comment=_("Android Studio developer environment"),
+                        categories="Development;IDE;",
+                        extra="StartupWMClass=jetbrains-android-studio"))
+
+    @property
+    def is_installed(self):
+        # check path and requirements
+        if not super().is_installed:
+            return False
+        if not os.path.join(self.install_path, "bin", "studio.sh"):
+            logger.debug("{} binary isn't installed".format(self.name))
+            return False
+        return True
