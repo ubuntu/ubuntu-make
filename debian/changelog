@@ -1,3 +1,11 @@
+ubuntu-make (0.4) UNRELEASED; urgency=medium
+
+  * Add go support from the golang google compiler
+  * Add a game category with stencyl support
+  * Refactor and add some tests for those
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 06 Jan 2015 10:49:58 +0100
+
 ubuntu-make (0.3) vivid; urgency=medium
 
   * New release featuring intellij IDEA and Pycharm support (from jetbrain)
