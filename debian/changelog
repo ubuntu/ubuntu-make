@@ -1,4 +1,4 @@
-ubuntu-make (0.4) UNRELEASED; urgency=medium
+ubuntu-make (0.4) vivid; urgency=medium
 
   * Add go support from the golang google compiler
   * Add a game category with stencyl support
