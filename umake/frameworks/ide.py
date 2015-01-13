@@ -57,7 +57,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page=None,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
-                         packages_requirements=['openjdk-7-jdk'])
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'])
 
     def download_provider_page(self):
         """First, we need to fetch the MD5, then kick off the proceedings.
@@ -200,7 +200,7 @@ class PyCharm(BaseJetBrains):
                          download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='pycharm-community-*',
                          desktop_filename='jetbrains-pycharm.desktop',
-                         packages_requirements=['openjdk-7-jdk'],
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='pycharm.png')
 
 
@@ -216,5 +216,5 @@ class Idea(BaseJetBrains):
                          download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='idea-IC-*',
                          desktop_filename='jetbrains-idea-ce.desktop',
-                         packages_requirements=['openjdk-7-jdk'],
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='idea.png')
