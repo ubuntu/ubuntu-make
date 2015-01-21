@@ -32,7 +32,9 @@ rm -rf $temp_dir
 }
 
 extract_version() {
-echo $(apt-cache policy $1 | grep Candidate | awk '{print $2}')
+version=$(apt-cache policy $1 | grep Candidate | awk '{print $2}')
+[ -z "$version" ] && version=1.0
+echo $version
 }
 
 create_package() {
