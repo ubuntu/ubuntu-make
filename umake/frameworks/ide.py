@@ -57,7 +57,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page=None,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'])
+                         packages_requirements=['openjdk-7-jdk'])
 
     def download_provider_page(self):
         """First, we need to fetch the MD5, then kick off the proceedings.
