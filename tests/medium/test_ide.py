@@ -58,6 +58,22 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/idea".format(settings.DOCKER_USER))
 
 
+class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
+    """This will test the Idea Ultimate IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.jetbrains.com"
+        self.port = "443"
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/idea-ultimate".format(settings.DOCKER_USER))
+
+
 class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
     """This will test the PyCharm IDE integration inside a container"""
 

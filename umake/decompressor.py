@@ -108,7 +108,8 @@ class Decompressor:
 
         result = self.DecompressResult(error=None)
         if future.exception():
-            logger.error("A decompression to {} failed: {}".format(future.tag_dest, future.exception()))
+            logger.error("A decompression to {} failed: {}".format(future.tag_dest, future.exception()),
+                         exc_info=future.exception())
             result = result._replace(error=str(future.exception()))
 
         logger.info("Decompression to {} finished".format(future.tag_dest))
