@@ -57,7 +57,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page=None,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'])
+                         packages_requirements=['openjdk-7-jdk'])
 
     def download_provider_page(self):
         """First, we need to fetch the MD5, then kick off the proceedings.
@@ -148,7 +148,7 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
             UI.return_main_screen()
 
         soup = BeautifulSoup(page.buffer)
-        link = soup.find('a', text="direct link")
+        link = soup.find('a', text="HTTPS")
         if link is None:
             logger.error("Can't parse the download URL from the download page.")
             UI.return_main_screen()

@@ -51,8 +51,8 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     def setUp(self):
         self.hostname = "www.jetbrains.com"
         self.port = "443"
-        # Reuse the Eclipse environment.
-        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'eclipse')
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/idea".format(settings.DOCKER_USER))
