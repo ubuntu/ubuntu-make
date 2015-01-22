@@ -58,7 +58,6 @@ dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 mkdir -p $repo_root_dir/eclipse
 cd $repo_root_dir/eclipse
 create_package openjdk-7-jdk
-create_package jayatana
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 
 # stencyl deps

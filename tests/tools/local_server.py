@@ -100,6 +100,14 @@ class RequestHandler(SimpleHTTPRequestHandler):
         Most of it is a copy of the parent function which can't be override and
         uses cwd
         """
+        # Before we actually abandon the query params, see if they match an
+        # actual file.
+        # Need to strip the leading '/' so the join will actually work.
+        file_path = posixpath.normpath(urllib.parse.unquote(path))[1:]
+        file_path = os.path.join(RequestHandler.root_path, file_path)
+        if os.path.exists(file_path):
+            return file_path
+
         # abandon query parameters
         path = path.split('?', 1)[0]
         path = path.split('#', 1)[0]
