@@ -1,3 +1,12 @@
+ubuntu-make (0.4.1) UNRELEASED; urgency=medium
+
+  * Fix for Intellij IDEA download page, thanks to Tin Tvrtković.
+  * Add jayatana dependency for ides based on intellij so that even
+    older releases than vivid get appmenu support.
+  * Some misc test and docker container fixes.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 22 Jan 2015 08:57:20 +0100
+
 ubuntu-make (0.4) vivid; urgency=medium
 
   * Add go support from the golang google compiler
