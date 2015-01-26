@@ -43,11 +43,6 @@ arch=$2
 version=$(extract_version $package_name)
 generate_package $package_name $version $arch
 }
-# jayatana, for android studio and jetbrains
-mkdir -p $repo_root_dir/jayatana
-cd $repo_root_dir/jayatana
-create_package jayatana
-dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 
 # android studio and adt deps
 mkdir -p $repo_root_dir/android
