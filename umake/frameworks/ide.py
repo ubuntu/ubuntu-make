@@ -181,7 +181,7 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
         comment = self.description + " (UDTC)"
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
-                        get_application_desktop_file(name=self.name,
+                        get_application_desktop_file(name=self.description,
                                                      icon_path=icon_path,
                                                      exec=exec_path,
                                                      comment=comment,
@@ -211,10 +211,26 @@ class Idea(BaseJetBrains):
 
     def __init__(self, category):
         super().__init__(name=_("Idea"),
-                         description=_("IntelliJ Idea Community Edition"),
+                         description=_("IntelliJ IDEA Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='idea-IC-*',
                          desktop_filename='jetbrains-idea-ce.desktop',
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         icon_filename='idea.png')
+
+
+class IdeaUltimate(BaseJetBrains):
+    """The JetBrains IntelliJ Idea Ultimate Edition distribution."""
+    download_page_url = "https://www.jetbrains.com/idea/download/download_thanks.jsp?edition=IU&os=linux"
+    executable = "idea.sh"
+
+    def __init__(self, category):
+        super().__init__(name=_("Idea Ultimate"),
+                         description=_("IntelliJ IDEA"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='idea-IU-*',
+                         desktop_filename='jetbrains-idea.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='idea.png')

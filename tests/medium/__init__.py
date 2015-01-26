@@ -58,6 +58,7 @@ class ContainerTests(LoggedTestCase):
                         "--dns=8.8.8.8", "--dns=8.8.4.4",  # suppress local DNS warning
                         self.image_name,
                         'sh', '-c', runner_cmd])
+
         self.container_id = subprocess.check_output(command).decode("utf-8").strip()
         self.container_ip = subprocess.check_output([get_docker_path(), "inspect", "-f",
                                                      "{{ .NetworkSettings.IPAddress }}",

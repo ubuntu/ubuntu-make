@@ -140,6 +140,56 @@ class IdeaIDETests(LargeFrameworkTests):
         self.wait_and_no_warn()
 
 
+class IdeaUltimateIDETests(LargeFrameworkTests):
+    """IntelliJ Idea Ultimate from the IDE collection."""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 60
+    TIMEOUT_STOP = 60
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.expanduser("~/tools/ide/idea-ultimate")
+        self.desktop_filename = 'jetbrains-idea.desktop'
+        self.icon_filename = 'idea.png'
+
+    @property
+    def full_icon_path(self):
+        return join(self.installed_path, 'bin', self.icon_filename)
+
+    @property
+    def exec_path(self):
+        return os.path.join(self.installed_path, "bin", Idea.executable)
+
+    def test_default_install(self):
+        """Install from scratch test case"""
+        self.child = pexpect.spawnu(self.command('{} ide idea-ultimate'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+
+        logger.info("Installed, running...")
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.exec_path))
+        self.assertTrue(self.path_exists(self.full_icon_path))
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = pexpect.spawnu(self.command('{} ide idea-ultimate'.format(UMAKE)))
+        self.expect_and_no_warn("Idea Ultimate is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_no_warn()
+
+
 class PyCharmIDETests(LargeFrameworkTests):
     """PyCharm from the IDE collection."""
 
