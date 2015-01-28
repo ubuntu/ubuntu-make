@@ -107,12 +107,14 @@ class ConfigHandler(metaclass=Singleton):
 
 class NoneDict(dict):
     """We don't use a defaultdict(lambda: None) as it's growing everytime something is requested"""
+
     def __getitem__(self, key):
         return dict.get(self, key)
 
 
 class classproperty(object):
     """Class property, similar to instance properties"""
+
     def __init__(self, f):
         self.f = f
 
@@ -221,9 +223,7 @@ def get_current_ubuntu_version():
 
 def is_completion_mode():
     """Return true if we are in completion mode"""
-    if os.environ.get('_ARGCOMPLETE') == '1':
-        return True
-    return False
+    return os.environ.get('_ARGCOMPLETE') == '1'
 
 
 def get_user_frameworks_path():
@@ -346,14 +346,14 @@ def remove_framework_envs_from_user(framework_tag):
     content = ""
     framework_header = profile_tag.format(framework_tag)
     try:
-        with open(profile_filepath, "r") as f:
+        with open(profile_filepath, "r", encoding='utf-8') as f:
             content = f.read()
     except FileNotFoundError:
         return
     if framework_header not in content:
         return
 
-    while(framework_header in content):
+    while framework_header in content:
         framework_start_index = content.find(framework_header)
         framework_end_index = content[framework_start_index:].find("\n\n")
         content = content[:framework_start_index] + content[framework_start_index + framework_end_index + len("\n\n"):]
