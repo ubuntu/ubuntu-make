@@ -343,7 +343,7 @@ class TestDownloadCenter(LoggedTestCase):
     def test_unsupported_protocol(self):
         """Raises an exception when trying to download for an unsupported protocol"""
         filename = "simplefile"
-        url = self.build_server_address(filename).replace('http', 'ftp')
+        url = self.build_server_address(filename).replace('http', 'sftp')
         request = DownloadItem(url, None)
         DownloadCenter([request], self.callback, download=False)
         self.wait_for_callback(self.callback)

@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 class LocalHttp:
     """Local threaded http server. will be serving path content"""
 
-    def __init__(self, path, use_ssl=False, port=9876):
+    def __init__(self, path, use_ssl=False, port=9876, ftp_redir=False):
         """path is the local path to server
         set use_ssl to a specific filename turn on the use of the local certificate
         """
@@ -50,8 +50,10 @@ class LocalHttp:
         self.use_ssl = use_ssl
         handler = RequestHandler
         handler.root_path = path
+        handler.ftp_redir = ftp_redir
         # can be TCPServer, but we don't have a self.httpd.server_name then
         self.httpd = HTTPServer(("", self.port), RequestHandler)
+        handler.hostname = self.httpd.server_name
         if self.use_ssl:
             self.httpd.socket = ssl.wrap_socket(self.httpd.socket,
                                                 certfile=os.path.join(get_data_dir(), self.use_ssl),
@@ -164,6 +166,15 @@ class RequestHandler(SimpleHTTPRequestHandler):
             # keep special ?file= to redirect the query
             if '?file=' in self.path:
                 self.path = self.path.split('?file=', 1)[1]
+                self.path = self.path.replace('&', '?', 1) # Replace the first & with ? to make it valid.
+            if RequestHandler.ftp_redir:
+                self.send_response(302)
+                # We need to remove the query parameters, so we actually parse the URL.
+                parsed_url = urllib.parse.urlparse(self.path)
+                new_loc = 'ftp://' + RequestHandler.hostname + parsed_url.path
+                self.send_header('Location', new_loc)
+                self.end_headers()
+                return
             super().do_GET()
 
     def log_message(self, fmt, *args):
