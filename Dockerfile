@@ -47,6 +47,9 @@ RUN \
   adduser --disabled-password --gecos "" user && \
   echo user:user | chpasswd && \
 
+# Twisted for a mock FTP server.
+  apt-get install python-twisted-core -y && \
+
 # add certificates
   update-ca-certificates && \
 

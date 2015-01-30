@@ -30,6 +30,7 @@ import tempfile
 
 import requests
 import requests.exceptions
+from umake.network.ftp_adapter import FTPAdapter
 from umake.tools import ChecksumType
 
 logger = logging.getLogger(__name__)
@@ -116,10 +117,12 @@ class DownloadCenter:
             self._wired_report(self._download_progress)
 
         # Requests support redirection out of the box.
+        # Create a session so we can mount our own FTP adapter.
+        session = requests.Session()
+        session.mount('ftp://', FTPAdapter())
         try:
-            with closing(requests.get(url, stream=True, headers=headers)) as r:
-                if r.status_code != 200:
-                    raise(BaseException("Can't download ({}): {}".format(r.status_code, r.reason)))
+            with closing(session.get(url, stream=True, headers=headers)) as r:
+                r.raise_for_status()
                 content_size = int(r.headers.get('content-length', -1))
 
                 # read in chunk and send report updates

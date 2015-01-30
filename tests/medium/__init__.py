@@ -21,7 +21,7 @@
 
 import os
 import subprocess
-from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path
+from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path, get_data_dir
 from time import sleep
 from umake import settings
 
@@ -40,14 +40,20 @@ class ContainerTests(LoggedTestCase):
 
         # start the local server at container startup
         if hasattr(self, "hostname"):
+            ftp_redir = hasattr(self, 'ftp')
             command.extend(["-h", self.hostname])
-            runner_cmd += "{} {} 'sudo -E env PATH={} VIRTUAL_ENV={} {} {} {}';".format(
+            runner_cmd += "{} {} 'sudo -E env PATH={} VIRTUAL_ENV={} {} {} {} {}';".format(
                 os.path.join(get_tools_helper_dir(), "run_in_umake_dir_async"),
                 settings.UMAKE_IN_CONTAINER,
                 os.getenv("PATH"), os.getenv("VIRTUAL_ENV"),
                 os.path.join(get_tools_helper_dir(), "run_local_server"),
                 self.port,
-                self.hostname)
+                self.hostname,
+                str(ftp_redir))
+
+            if ftp_redir:
+                runner_cmd += "/usr/bin/twistd ftp -p 21 -r {};".format(os.path.join(get_data_dir(), 'server-content',
+                                                                        self.hostname))
 
         if hasattr(self, "apt_repo_override_path"):
             runner_cmd += "sudo sh -c 'echo deb file:{} / > /etc/apt/sources.list';sudo apt-get update;".format(
