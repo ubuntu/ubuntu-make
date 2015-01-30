@@ -57,7 +57,7 @@ class EclipseIDEInContainerFTP(ContainerTests, test_ide.EclipseIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(settings.DOCKER_USER))
-        
+
 
 class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     """This will test the Idea IDE integration inside a container"""

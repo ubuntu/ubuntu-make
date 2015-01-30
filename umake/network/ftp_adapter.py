@@ -44,7 +44,8 @@ class FTPAdapter(BaseAdapter):
             # We have to do this in a background thread, since ftplib's and requests' approaches are the opposite:
             # ftplib is callback based, and requests needs to expose an iterable. (Push vs pull)
 
-            queue = Queue()
+            # When the queue size is reached, puts will block. This provides some backpressure.
+            queue = Queue(maxsize=100)
             done_sentinel = object()
 
             def handle_transfer():
@@ -56,12 +57,21 @@ class FTPAdapter(BaseAdapter):
 
             def stream(amt=8192, decode_content=False):
                 """A generator, yielding chunks from the queue."""
+                # We maintain a buffer so the consumer gets exactly the number of bytes requested.
+                buffer = bytearray()
                 while True:
                     data = queue.get()
 
                     if data is not done_sentinel:
-                        yield data
+                        buffer.extend(data)
+                        if len(buffer) >= amt:
+                            result = buffer[:amt]
+                            buffer = buffer[amt:]
+
+                            yield result
                     else:
+                        if buffer:
+                            yield buffer
                         return
 
             Raw = namedtuple('raw', 'stream')

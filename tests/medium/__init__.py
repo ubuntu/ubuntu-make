@@ -53,7 +53,7 @@ class ContainerTests(LoggedTestCase):
 
             if ftp_redir:
                 runner_cmd += "/usr/bin/twistd ftp -p 21 -r {};".format(os.path.join(get_data_dir(), 'server-content',
-                                                                                 self.hostname))
+                                                                        self.hostname))
 
         if hasattr(self, "apt_repo_override_path"):
             runner_cmd += "sudo sh -c 'echo deb file:{} / > /etc/apt/sources.list';sudo apt-get update;".format(

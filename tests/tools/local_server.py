@@ -166,7 +166,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
             # keep special ?file= to redirect the query
             if '?file=' in self.path:
                 self.path = self.path.split('?file=', 1)[1]
-                self.path = self.path.replace('&', '?', 1) # Replace the first & with ? to make it valid.
+                self.path = self.path.replace('&', '?', 1)  # Replace the first & with ? to make it valid.
             if RequestHandler.ftp_redir:
                 self.send_response(302)
                 # We need to remove the query parameters, so we actually parse the URL.
