@@ -110,7 +110,7 @@ class LargeFrameworkTests(LoggedTestCase):
         It doesn't fail on the given timeout if stdout is progressing"""
         output = ""
         continue_expect = True
-        while(continue_expect):
+        while continue_expect:
             try:
                 self.child.expect(expect_query, timeout=timeout)
                 continue_expect = False

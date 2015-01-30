@@ -34,9 +34,10 @@ logging.basicConfig(level=logging.DEBUG,
 
 # start a connection
 hostname = sys.argv[2]
+ftp_redir = (sys.argv[3].lower() == 'true') if len(sys.argv) > 3 else False
 server_dir = os.path.join(get_data_dir(), "server-content", hostname)
 use_ssl = "{}.pem".format(hostname)
 if not os.path.isfile(os.path.join(get_data_dir(), use_ssl)):
     use_ssl = False
 
-LocalHttp(server_dir, port=int(sys.argv[1]), use_ssl=use_ssl)
+LocalHttp(server_dir, port=int(sys.argv[1]), use_ssl=use_ssl, ftp_redir=ftp_redir)

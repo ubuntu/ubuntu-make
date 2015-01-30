@@ -42,6 +42,23 @@ class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(settings.DOCKER_USER))
 
 
+class EclipseIDEInContainerFTP(ContainerTests, test_ide.EclipseIDETests):
+    """This will test the Eclipse IDE integration inside a container, involving an FTP server."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        self.ftp = True
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'eclipse')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(settings.DOCKER_USER))
+
+
 class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     """This will test the Idea IDE integration inside a container"""
 
