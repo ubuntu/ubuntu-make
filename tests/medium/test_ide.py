@@ -105,3 +105,16 @@ class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/pycharm".format(settings.DOCKER_USER))
+
+
+class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
+    """This will test the RubyMine IDE integration inside a container"""
+
+    def setUp(self):
+        self.hostname = "www.jetbrains.com"
+        self.port = "443"
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/rubymine".format(settings.DOCKER_USER))

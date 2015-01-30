@@ -244,3 +244,20 @@ class IdeaUltimate(BaseJetBrains):
                          desktop_filename='jetbrains-idea.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='idea.png')
+
+
+class RubyMine(BaseJetBrains):
+    """The JetBrains RubyMine IDE"""
+    download_page_url = "https://www.jetbrains.com/ruby/download/download_thanks.jsp?os=linux"
+    executable = "rubymine.sh"
+
+    def __init__(self, category):
+        super().__init__(name=_('RubyMine'),
+                         description=_("RubyMine"),
+                         category=category,
+                         only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='RubyMine-*',
+                         desktop_filename='jetbrains-rubymine.desktop',
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         icon_filename='rubymine.png')
