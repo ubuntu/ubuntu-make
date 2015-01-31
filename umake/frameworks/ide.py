@@ -204,6 +204,22 @@ class PyCharm(BaseJetBrains):
                          icon_filename='pycharm.png')
 
 
+class PyCharmProfessional(BaseJetBrains):
+    """The JetBrains PyCharm Professional Edition distribution."""
+    download_page_url = "https://www.jetbrains.com/pycharm/download/download_thanks.jsp?os=linux"
+    executable = "pycharm.sh"
+
+    def __init__(self, category):
+        super().__init__(name=_("PyCharm Professional"),
+                         description=_("PyCharm Professional Edition"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='pycharm-*',
+                         desktop_filename='jetbrains-pycharm-professional.desktop',
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         icon_filename='pycharm.png')
+
+
 class Idea(BaseJetBrains):
     """The JetBrains IntelliJ Idea Community Edition distribution."""
     download_page_url = "https://www.jetbrains.com/idea/download/download_thanks.jsp?edition=IC&os=linux"
