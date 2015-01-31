@@ -214,6 +214,22 @@ class PyCharm(BaseJetBrains):
                          icon_filename='pycharm.png')
 
 
+class PyCharmEducational(BaseJetBrains):
+    """The JetBrains PyCharm Educational Edition distribution."""
+    download_page_url = "https://www.jetbrains.com/pycharm-educational/download/download_thanks.jsp?os=linux"
+    executable = "pycharm.sh"
+
+    def __init__(self, category):
+        super().__init__(name=_("PyCharm Educational"),
+                         description=_("PyCharm Educational Edition"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='pycharm-edu*',
+                         desktop_filename='jetbrains-pycharm-educational.desktop',
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         icon_filename='pycharm.png')
+
+
 class PyCharmProfessional(BaseJetBrains):
     """The JetBrains PyCharm Professional Edition distribution."""
     download_page_url = "https://www.jetbrains.com/pycharm/download/download_thanks.jsp?os=linux"
