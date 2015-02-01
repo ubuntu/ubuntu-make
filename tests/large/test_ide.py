@@ -52,7 +52,7 @@ class EclipseIDETests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "eclipse")
+        return join(self.installed_path, "eclipse")
 
     @property
     def arch_option(self):
@@ -111,7 +111,7 @@ class IdeaIDETests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "bin", Idea.executable)
+        return join(self.installed_path, "bin", Idea.executable)
 
     def test_default_install(self):
         """Install from scratch test case"""
@@ -159,7 +159,7 @@ class IdeaUltimateIDETests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "bin", Idea.executable)
+        return join(self.installed_path, "bin", Idea.executable)
 
     def test_default_install(self):
         """Install from scratch test case"""
@@ -209,7 +209,7 @@ class PyCharmIDETests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "bin", PyCharm.executable)
+        return join(self.installed_path, "bin", PyCharm.executable)
 
     def test_default_install(self):
         """Install from scratch test case"""
@@ -259,7 +259,7 @@ class PyCharmEducationalIDETests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "bin", PyCharmEducational.executable)
+        return join(self.installed_path, "bin", PyCharmEducational.executable)
 
     def test_default_install(self):
         """Install from scratch test case"""
@@ -309,7 +309,7 @@ class PyCharmProfessionalIDETests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "bin", PyCharmProfessional.executable)
+        return join(self.installed_path, "bin", PyCharmProfessional.executable)
 
     def test_default_install(self):
         """Install from scratch test case"""
@@ -359,7 +359,7 @@ class RubyMineIDETests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "bin", RubyMine.executable)
+        return join(self.installed_path, "bin", RubyMine.executable)
 
     def test_default_install(self):
         """Install from scratch test case"""
