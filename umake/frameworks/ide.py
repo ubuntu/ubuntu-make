@@ -283,3 +283,20 @@ class RubyMine(BaseJetBrains):
                          desktop_filename='jetbrains-rubymine.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='rubymine.png')
+
+
+class WebStorm(BaseJetBrains):
+    """The JetBrains WebStorm IDE"""
+    download_page_url = "https://www.jetbrains.com/webstorm/download/download_thanks.jsp?os=linux"
+    executable = "webstorm.sh"
+
+    def __init__(self, category):
+        super().__init__(name=_('WebStorm'),
+                         description=_("WebStorm"),
+                         category=category,
+                         only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='WebStorm-*',
+                         desktop_filename='jetbrains-webstorm.desktop',
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         icon_filename='webstorm.png')
