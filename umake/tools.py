@@ -364,16 +364,19 @@ def remove_framework_envs_from_user(framework_tag):
     os.rename(profile_filepath + ".new", profile_filepath)
 
 
+# TODO: Make it useful for most shells
+# zsh, ksh, csh and etc.
 def add_env_to_user(framework_tag, env_dict):
-    """Add args to user env in .profile if the user doesn't have that env with those args
+    """Add args to user env in .profile (.zprofile if zsh) if the user doesn't have that env with those args
 
     env_dict is a dictionary of:
     { env_variable: { value: value,
                       keep: True/False }
     If keep is set to True, we keep previous values with :$OLDERENV."""
 
+    current_shell = os.getenv('SHELL').lower()
+    profile_filename = '.zprofile' if 'zsh' in current_shell else '.profile'
     remove_framework_envs_from_user(framework_tag)
-
     envs_to_insert = {}
     for env in env_dict:
         value = env_dict[env]["value"]
@@ -384,7 +387,7 @@ def add_env_to_user(framework_tag, env_dict):
             os.environ[env] = value
         envs_to_insert[env] = value
 
-    with open(os.path.join(os.path.expanduser('~'), ".profile"), "a", encoding='utf-8') as f:
+    with open(os.path.join(os.path.expanduser('~'), profile_filename), "a", encoding='utf-8') as f:
         f.write(profile_tag.format(framework_tag))
         for env in envs_to_insert:
             value = envs_to_insert[env]
