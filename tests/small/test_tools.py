@@ -709,6 +709,7 @@ class TestUserENV(LoggedTestCase):
         super().setUp()
         self.orig_environ = os.environ.copy()
         self.local_dir = tempfile.mkdtemp()
+        os.environ['SHELL'] = '/bin/bash'
 
     def tearDown(self):
         shutil.rmtree(self.local_dir)
@@ -720,6 +721,21 @@ class TestUserENV(LoggedTestCase):
         """Test that adding to user env appending to an existing .profile file"""
         expanderusermock.return_value = self.local_dir
         profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n")
+        tools.add_env_to_user("one path addition", {"FOOO": {"value": "bar"}})
+
+        expanderusermock.assert_called_with('~')
+        profile_content = open(profile_file).read()
+        self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
+        self.assertTrue("export FOOO=bar\n" in profile_content, profile_content)
+        self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
+
+    @patch("umake.tools.os.path.expanduser")
+    def test_add_env_to_user_with_shell_zsh(self, expanderusermock):
+        """Test that adding to user env appending to an existing .zprofile file"""
+        os.environ['SHELL'] = '/bin/zsh'
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".zprofile")
         open(profile_file, 'w').write("Foo\nBar\n")
         tools.add_env_to_user("one path addition", {"FOOO": {"value": "bar"}})
 
