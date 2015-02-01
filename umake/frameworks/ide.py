@@ -300,3 +300,20 @@ class WebStorm(BaseJetBrains):
                          desktop_filename='jetbrains-webstorm.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='webstorm.png')
+
+
+class PhpStorm(BaseJetBrains):
+    """The JetBrains PhpStorm IDE"""
+    download_page_url = "https://www.jetbrains.com/phpstorm/download/download_thanks.jsp?os=linux"
+    executable = "phpstorm.sh"
+
+    def __init__(self, category):
+        super().__init__(name=_('PhpStorm'),
+                         description=_("PhpStorm"),
+                         category=category,
+                         only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='PhpStorm-*',
+                         desktop_filename='jetbrains-phpstorm.desktop',
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         icon_filename='webide.png')
