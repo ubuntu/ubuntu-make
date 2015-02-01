@@ -149,7 +149,7 @@ class TestRequirementsHandler(LoggedTestCase):
     def test_singleton(self):
         """Ensure we are delivering a singleton for RequirementsHandler"""
         other = RequirementsHandler()
-        self.assertEquals(self.handler, other)
+        self.assertEqual(self.handler, other)
 
     def test_install(self):
         """Install one package"""
@@ -195,9 +195,9 @@ class TestRequirementsHandler(LoggedTestCase):
         self.wait_for_callback(self.done_callback)
 
         # we call it twice and the latest is the user id
-        self.assertEquals(os.seteuid.call_count, 2)
-        self.assertEquals(os.seteuid.call_args, call(self.user_uid))
-        self.assertEquals(os.setegid.call_args, call(self.user_gid))
+        self.assertEqual(os.seteuid.call_count, 2)
+        self.assertEqual(os.seteuid.call_args, call(self.user_uid))
+        self.assertEqual(os.setegid.call_args, call(self.user_gid))
 
     def test_install_progress(self):
         """Install one package and get progress feedback"""
@@ -212,9 +212,9 @@ class TestRequirementsHandler(LoggedTestCase):
         self.assertTrue(downloading_msg > 1)
         self.assertTrue(installing_msg > 1)
         # the first download call is at 0% of progress. testpackage is 1byte to download
-        self.assertEquals(progress_callback.call_args_list[0][0][0],
+        self.assertEqual(progress_callback.call_args_list[0][0][0],
                           {'step': 0, 'pkg_size_download': 1, 'percentage': 0.0})
-        self.assertEquals(progress_callback.call_args_list[2][0][0],
+        self.assertEqual(progress_callback.call_args_list[2][0][0],
                           {'step': 1, 'percentage': 0.0})
 
     def test_install_multiple_packages(self):
@@ -239,7 +239,7 @@ class TestRequirementsHandler(LoggedTestCase):
         self.assertTrue(downloading_msg > 1)
         self.assertTrue(installing_msg > 1)
         # the first download call is at 0% of progress. testpackage is 1byte to download
-        self.assertEquals(progress_callback.call_args_list[0][0][0],
+        self.assertEqual(progress_callback.call_args_list[0][0][0],
                           {'step': 0, 'pkg_size_download': 1, 'percentage': 0.0})
 
     def test_install_pending(self):
@@ -492,7 +492,7 @@ class TestRequirementsHandler(LoggedTestCase):
         with patch.object(self.handler.cache, 'open', side_effect=cache_call) as openaptcache_mock:
             self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
             self.wait_for_callback(self.done_callback)
-            self.assertEquals(openaptcache_mock.call_count, 2)
+            self.assertEqual(openaptcache_mock.call_count, 2)
 
     def test_upgrade(self):
         """Upgrade one package already installed"""
@@ -500,14 +500,14 @@ class TestRequirementsHandler(LoggedTestCase):
                     os.path.join(self.dpkg_dir, "status"))
         self.handler.cache.open()
         self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
-        self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.0")
+        self.assertEqual(self.handler.cache["testpackage"].installed.version, "0.0.0")
         self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
 
         self.assertEqual(self.done_callback.call_args[0][0].bucket, ['testpackage'])
         self.assertIsNone(self.done_callback.call_args[0][0].error)
         self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
-        self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.1")
+        self.assertEqual(self.handler.cache["testpackage"].installed.version, "0.0.1")
 
     def test_one_install_one_upgrade(self):
         """Install and Upgrade one package in the same bucket"""
@@ -515,7 +515,7 @@ class TestRequirementsHandler(LoggedTestCase):
                     os.path.join(self.dpkg_dir, "status"))
         self.handler.cache.open()
         self.assertTrue(self.handler.is_bucket_installed(["testpackage"]))
-        self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.0")
+        self.assertEqual(self.handler.cache["testpackage"].installed.version, "0.0.0")
         self.assertFalse(self.handler.is_bucket_installed(["testpackage0"]))
         self.handler.install_bucket(["testpackage", "testpackage0"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
@@ -523,7 +523,7 @@ class TestRequirementsHandler(LoggedTestCase):
         self.assertEqual(self.done_callback.call_args[0][0].bucket, ['testpackage', 'testpackage0'])
         self.assertIsNone(self.done_callback.call_args[0][0].error)
         self.assertTrue(self.handler.is_bucket_installed(["testpackage", "testpackage0"]))
-        self.assertEquals(self.handler.cache["testpackage"].installed.version, "0.0.1")
+        self.assertEqual(self.handler.cache["testpackage"].installed.version, "0.0.1")
 
     def test_install_with_foreign_foreign_arch_added(self):
         """Install packages with a foreign arch added"""

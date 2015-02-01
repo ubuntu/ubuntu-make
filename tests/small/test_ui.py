@@ -73,14 +73,14 @@ class TestUI(LoggedTestCase):
     def display_UIPlug(self, contentType):
         """handler to mock _display and save the current thread"""
         self.time_display_call = time()
-        self.assertEquals(self.contentType, contentType)
+        self.assertEqual(self.contentType, contentType)
         self.display_thread = threading.current_thread().ident
         self.mainloop_object.quit(raise_exception=False)
 
     def test_singleton(self):
         """Ensure we are delivering a singleton for UI"""
         other = UI(self.mockUIPlug)
-        self.assertEquals(self.ui, other)
+        self.assertEqual(self.ui, other)
 
     def test_return_to_mainscreen(self):
         """We call the return to main screen on the UIPlug"""
@@ -97,7 +97,7 @@ class TestUI(LoggedTestCase):
         self.assertTrue(self.mockUIPlug._display.called)
         self.assertIsNotNone(self.mainloop_thread)
         self.assertIsNotNone(self.display_thread)
-        self.assertEquals(self.mainloop_thread, self.display_thread)
+        self.assertEqual(self.mainloop_thread, self.display_thread)
 
     @patch("umake.tools.sys")
     def test_call_display_other_thread(self, mocksys):
@@ -116,8 +116,8 @@ class TestUI(LoggedTestCase):
         self.assertIsNotNone(self.mainloop_thread)
         self.assertIsNotNone(self.function_thread)
         self.assertIsNotNone(self.display_thread)
-        self.assertNotEquals(self.mainloop_thread, self.function_thread)
-        self.assertEquals(self.mainloop_thread, self.display_thread)
+        self.assertNotEqual(self.mainloop_thread, self.function_thread)
+        self.assertEqual(self.mainloop_thread, self.display_thread)
 
     @patch("umake.tools.sys")
     def test_call_delayed_display(self, mocksys):
@@ -130,7 +130,7 @@ class TestUI(LoggedTestCase):
         self.assertTrue(self.mockUIPlug._display.called)
         self.assertIsNotNone(self.mainloop_thread)
         self.assertIsNotNone(self.display_thread)
-        self.assertEquals(self.mainloop_thread, self.display_thread)
+        self.assertEqual(self.mainloop_thread, self.display_thread)
         self.assertTrue(self.time_display_call - now > 0.05)
 
     @patch("umake.tools.sys")
@@ -154,6 +154,6 @@ class TestUI(LoggedTestCase):
         self.assertIsNotNone(self.mainloop_thread)
         self.assertIsNotNone(self.function_thread)
         self.assertIsNotNone(self.display_thread)
-        self.assertNotEquals(self.mainloop_thread, self.function_thread)
-        self.assertEquals(self.mainloop_thread, self.display_thread)
+        self.assertNotEqual(self.mainloop_thread, self.function_thread)
+        self.assertEqual(self.mainloop_thread, self.display_thread)
         self.assertTrue(self.time_display_call - now > 0.05)

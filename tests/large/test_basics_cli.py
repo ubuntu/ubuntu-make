@@ -37,7 +37,7 @@ class BasicCLI(LoggedTestCase):
     def test_global_help(self):
         """We display a global help message"""
         result = subprocess.check_output(self.command_as_list([UMAKE, '--help']))
-        self.assertNotEquals(result, "")
+        self.assertNotEqual(result, "")
 
     def test_setup_info_logging(self):
         """We display info logs"""

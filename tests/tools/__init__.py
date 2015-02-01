@@ -53,9 +53,9 @@ class LoggedTestCase(TestCase):
         super().tearDown()
         logging.root.removeHandler(self.__handler)
         if self.expect_warn_error:
-            self.assertNotEquals(self.error_warn_logs.getvalue(), "")
+            self.assertNotEqual(self.error_warn_logs.getvalue(), "")
         else:
-            self.assertEquals(self.error_warn_logs.getvalue(), "")
+            self.assertEqual(self.error_warn_logs.getvalue(), "")
         self.error_warn_logs.close()
 
 
