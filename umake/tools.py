@@ -31,6 +31,7 @@ import signal
 import subprocess
 import sys
 from textwrap import dedent
+from time import sleep
 from umake import settings
 from xdg.BaseDirectory import load_first_config, xdg_config_home, xdg_data_home
 import yaml
@@ -302,6 +303,9 @@ def create_launcher(desktop_filename, content):
         with suppress(ValueError):
             index = launcher_list.index("unity://running-apps")
         launcher_list.insert(index, launcher_tag)
+        # FIXME: working around a bug in glib: https://bugzilla.gnome.org/show_bug.cgi?id=744030
+        sleep(1.5)
+        ##########
         gsettings.set_strv("favorites", launcher_list)
 
 
