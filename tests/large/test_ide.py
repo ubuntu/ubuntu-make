@@ -28,7 +28,7 @@ from os.path import join
 import pexpect
 from tests.large import LargeFrameworkTests
 from tests.tools import UMAKE
-from umake.frameworks.ide import Idea, PyCharm
+from umake.frameworks.ide import Idea, PyCharm, PyCharmEducational, PyCharmProfessional, PhpStorm, RubyMine, WebStorm
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +52,7 @@ class EclipseIDETests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "eclipse")
+        return join(self.installed_path, "eclipse")
 
     @property
     def arch_option(self):
@@ -111,7 +111,7 @@ class IdeaIDETests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "bin", Idea.executable)
+        return join(self.installed_path, "bin", Idea.executable)
 
     def test_default_install(self):
         """Install from scratch test case"""
@@ -159,7 +159,7 @@ class IdeaUltimateIDETests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "bin", Idea.executable)
+        return join(self.installed_path, "bin", Idea.executable)
 
     def test_default_install(self):
         """Install from scratch test case"""
@@ -209,7 +209,7 @@ class PyCharmIDETests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "bin", PyCharm.executable)
+        return join(self.installed_path, "bin", PyCharm.executable)
 
     def test_default_install(self):
         """Install from scratch test case"""
@@ -236,5 +236,255 @@ class PyCharmIDETests(LargeFrameworkTests):
         # ensure that it's detected as installed:
         self.child = pexpect.spawnu(self.command('{} ide pycharm'.format(UMAKE)))
         self.expect_and_no_warn("PyCharm is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_no_warn()
+
+
+class PyCharmEducationalIDETests(LargeFrameworkTests):
+    """PyCharm Educational from the IDE collection."""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 60
+    TIMEOUT_STOP = 60
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.expanduser("~/tools/ide/pycharm-educational")
+        self.desktop_filename = 'jetbrains-pycharm-educational.desktop'
+        self.icon_filename = 'pycharm.png'
+
+    @property
+    def full_icon_path(self):
+        return join(self.installed_path, 'bin', self.icon_filename)
+
+    @property
+    def exec_path(self):
+        return join(self.installed_path, "bin", PyCharmEducational.executable)
+
+    def test_default_install(self):
+        """Install from scratch test case"""
+        self.child = pexpect.spawnu(self.command('{} ide pycharm-educational'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+
+        logger.info("Installed, running...")
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.exec_path))
+        self.assertTrue(self.path_exists(self.full_icon_path))
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = pexpect.spawnu(self.command('{} ide pycharm-educational'.format(UMAKE)))
+        self.expect_and_no_warn("PyCharm Educational is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_no_warn()
+
+
+class PyCharmProfessionalIDETests(LargeFrameworkTests):
+    """PyCharm Professional from the IDE collection."""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 60
+    TIMEOUT_STOP = 60
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.expanduser("~/tools/ide/pycharm-professional")
+        self.desktop_filename = 'jetbrains-pycharm-professional.desktop'
+        self.icon_filename = 'pycharm.png'
+
+    @property
+    def full_icon_path(self):
+        return join(self.installed_path, 'bin', self.icon_filename)
+
+    @property
+    def exec_path(self):
+        return join(self.installed_path, "bin", PyCharmProfessional.executable)
+
+    def test_default_install(self):
+        """Install from scratch test case"""
+        self.child = pexpect.spawnu(self.command('{} ide pycharm-professional'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+
+        logger.info("Installed, running...")
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.exec_path))
+        self.assertTrue(self.path_exists(self.full_icon_path))
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = pexpect.spawnu(self.command('{} ide pycharm-professional'.format(UMAKE)))
+        self.expect_and_no_warn("PyCharm Professional is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_no_warn()
+
+
+class RubyMineIDETests(LargeFrameworkTests):
+    """RubyMine from the IDE collection."""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 60
+    TIMEOUT_STOP = 60
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.expanduser("~/tools/ide/rubymine")
+        self.desktop_filename = 'jetbrains-rubymine.desktop'
+        self.icon_filename = 'rubymine.png'
+
+    @property
+    def full_icon_path(self):
+        return join(self.installed_path, 'bin', self.icon_filename)
+
+    @property
+    def exec_path(self):
+        return join(self.installed_path, "bin", RubyMine.executable)
+
+    def test_default_install(self):
+        """Install from scratch test case"""
+        self.child = pexpect.spawnu(self.command('{} ide rubymine'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+
+        logger.info("Installed, running...")
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.exec_path))
+        self.assertTrue(self.path_exists(self.full_icon_path))
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = pexpect.spawnu(self.command('{} ide rubymine'.format(UMAKE)))
+        self.expect_and_no_warn("RubyMine is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_no_warn()
+
+
+class WebStormIDETests(LargeFrameworkTests):
+    """WebStorm from the IDE collection."""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 60
+    TIMEOUT_STOP = 60
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.expanduser("~/tools/ide/webstorm")
+        self.desktop_filename = 'jetbrains-webstorm.desktop'
+        self.icon_filename = 'webstorm.png'
+
+    @property
+    def full_icon_path(self):
+        return join(self.installed_path, 'bin', self.icon_filename)
+
+    @property
+    def exec_path(self):
+        return join(self.installed_path, "bin", WebStorm.executable)
+
+    def test_default_install(self):
+        """Install from scratch test case"""
+        self.child = pexpect.spawnu(self.command('{} ide webstorm'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+
+        logger.info("Installed, running...")
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.exec_path))
+        self.assertTrue(self.path_exists(self.full_icon_path))
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = pexpect.spawnu(self.command('{} ide webstorm'.format(UMAKE)))
+        self.expect_and_no_warn("WebStorm is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_no_warn()
+
+
+class PhpStormIDETests(LargeFrameworkTests):
+    """PhpStorm from the IDE collection."""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 60
+    TIMEOUT_STOP = 60
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.expanduser("~/tools/ide/phpstorm")
+        self.desktop_filename = 'jetbrains-phpstorm.desktop'
+        self.icon_filename = 'phpstorm.png'
+
+    @property
+    def full_icon_path(self):
+        return join(self.installed_path, 'bin', self.icon_filename)
+
+    @property
+    def exec_path(self):
+        return join(self.installed_path, "bin", PhpStorm.executable)
+
+    def test_default_install(self):
+        """Install from scratch test case"""
+        self.child = pexpect.spawnu(self.command('{} ide phpstorm'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+
+        logger.info("Installed, running...")
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.exec_path))
+        self.assertTrue(self.path_exists(self.full_icon_path))
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = pexpect.spawnu(self.command('{} ide phpstorm'.format(UMAKE)))
+        self.expect_and_no_warn("PhpStorm is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_no_warn()

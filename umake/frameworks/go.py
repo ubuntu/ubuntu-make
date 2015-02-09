@@ -70,14 +70,13 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Add go necessary env variables"""
-
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")},
                                     "GOROOT": {"value": self.install_path}})
         UI.delayed_display(DisplayMessage(_("You need to restart a shell session for your installation to work")))
 
     @property
     def is_installed(self):
-        # check path and requirements
+        """Checks path and requirements for installation"""
         if not super().is_installed:
             return False
         if not os.path.join(self.install_path, "bin", "go"):

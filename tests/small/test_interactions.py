@@ -35,8 +35,8 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", lambda: "")]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.choices, choices)
-        self.assertEquals(inter.content, "Foo Content")
+        self.assertEqual(inter.choices, choices)
+        self.assertEqual(inter.content, "Foo Content")
 
     def test_choices_with_text_shorcut(self):
         """We can instantiate choices interactions with shortcut"""
@@ -44,8 +44,8 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", lambda: "", txt_shorcut="C")]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.choices, choices)
-        self.assertEquals(inter.content, "Foo Content")
+        self.assertEqual(inter.choices, choices)
+        self.assertEqual(inter.content, "Foo Content")
 
     def test_choices_with_default(self):
         """We can instantiate choices interactions with a default"""
@@ -53,8 +53,8 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", lambda: "")]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.choices, choices)
-        self.assertEquals(inter.content, "Foo Content")
+        self.assertEqual(inter.choices, choices)
+        self.assertEqual(inter.content, "Foo Content")
 
     def test_choices_prompt(self):
         """We give a prompt for normal choice"""
@@ -62,7 +62,7 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", lambda: "")]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.prompt, "Foo Content [Choice0/Choice1/Choice2] ")
+        self.assertEqual(inter.prompt, "Foo Content [Choice0/Choice1/Choice2] ")
 
     def test_choices_prompt_with_newline(self):
         """We give a prompt with newline before options if requested"""
@@ -70,7 +70,7 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", lambda: "")]
         inter = TextWithChoices("Foo Content", choices, newline_before_option=True)
 
-        self.assertEquals(inter.prompt, "Foo Content\n[Choice0/Choice1/Choice2] ")
+        self.assertEqual(inter.prompt, "Foo Content\n[Choice0/Choice1/Choice2] ")
 
     def test_choices_prompt_with_txt_shortcut(self):
         """We give a prompt with txt shortcut if any"""
@@ -78,7 +78,7 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", lambda: "", txt_shorcut="c")]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.prompt, "Foo Content [Choice0 (A)/Choice1 (B)/Choice2 (c)] ")
+        self.assertEqual(inter.prompt, "Foo Content [Choice0 (A)/Choice1 (B)/Choice2 (c)] ")
 
     def test_choices_prompt_with_partial_txt_shortcut(self):
         """We give a prompt, some choices having txt shortcut"""
@@ -86,7 +86,7 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", lambda: "", txt_shorcut="c")]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.prompt, "Foo Content [Choice0 (A)/Choice1/Choice2 (c)] ")
+        self.assertEqual(inter.prompt, "Foo Content [Choice0 (A)/Choice1/Choice2 (c)] ")
 
     def test_instantiate_with_multiple_defaults_raises(self):
         """Instantiating with multiple defaults raises"""
@@ -104,8 +104,8 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", callback2)]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.choose(choice_id=1), callback1.return_value)
-        self.assertEquals(inter.choose(choice_id=2), callback2.return_value)
+        self.assertEqual(inter.choose(choice_id=1), callback1.return_value)
+        self.assertEqual(inter.choose(choice_id=2), callback2.return_value)
 
     def test_choices_choose_with_shorcut_run_right_callback(self):
         """Choose with text shortcut calls the correct callback"""
@@ -115,8 +115,8 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", callback2, txt_shorcut="C")]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.choose(answer='B'), callback1.return_value)
-        self.assertEquals(inter.choose(answer='C'), callback2.return_value)
+        self.assertEqual(inter.choose(answer='B'), callback1.return_value)
+        self.assertEqual(inter.choose(answer='C'), callback2.return_value)
 
     def test_choices_choose_with_label_run_right_callback(self):
         """Choose with label calls the correct callback"""
@@ -126,8 +126,8 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", callback2, txt_shorcut="C")]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.choose(answer='Choice1'), callback1.return_value)
-        self.assertEquals(inter.choose(answer='Choice2'), callback2.return_value)
+        self.assertEqual(inter.choose(answer='Choice1'), callback1.return_value)
+        self.assertEqual(inter.choose(answer='Choice2'), callback2.return_value)
 
     def test_choices_choose_with_partial_shorcut_run_right_callback(self):
         """Choose with some having text shortcut calls the correct callback"""
@@ -136,7 +136,7 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", Mock())]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.choose(answer='B'), callback1.return_value)
+        self.assertEqual(inter.choose(answer='B'), callback1.return_value)
 
     def test_choices_choose_with_shorcut_no_right_casse(self):
         """Choose with shortcut without respecting the casse"""
@@ -145,7 +145,7 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", Mock())]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.choose(answer='b'), callback1.return_value)
+        self.assertEqual(inter.choose(answer='b'), callback1.return_value)
 
     def test_choices_choose_with_label_no_right_casse(self):
         """Choose with label without respecting the casse"""
@@ -154,7 +154,7 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", Mock())]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.choose(answer='chOIce1'), callback1.return_value)
+        self.assertEqual(inter.choose(answer='chOIce1'), callback1.return_value)
 
     def test_reject_invalid_choices(self):
         """TestChoice with Choices with the same id raises"""
@@ -198,7 +198,7 @@ class TestInteractions(LoggedTestCase):
                    Choice(2, "Choice2", Mock())]
         inter = TextWithChoices("Foo Content", choices)
 
-        self.assertEquals(inter.choose(), callback1.return_value)
+        self.assertEqual(inter.choose(), callback1.return_value)
 
     def test_choices_choose_no_default_raises(self):
         """We raise an exception if there is no default and we choose without any answer"""
@@ -214,8 +214,8 @@ class TestInteractions(LoggedTestCase):
         callback_yes = Mock()
         callback_no = Mock()
         inter = LicenseAgreement("License content", callback_yes, callback_no)
-        self.assertEquals(inter.content, "License content")
-        self.assertEquals(len(inter.choices), 2, str(inter.choices))
+        self.assertEqual(inter.content, "License content")
+        self.assertEqual(len(inter.choices), 2, str(inter.choices))
 
     def test_license_agreement_choice(self):
         """We have right callbacks called in license choices"""
@@ -223,29 +223,29 @@ class TestInteractions(LoggedTestCase):
         callback_no = Mock()
         inter = LicenseAgreement("License content", callback_yes, callback_no)
 
-        self.assertEquals(inter.choose(choice_id=0), callback_yes.return_value)
-        self.assertEquals(inter.choose(choice_id=1), callback_no.return_value)
-        self.assertEquals(inter.choose(answer='a'), callback_yes.return_value)
-        self.assertEquals(inter.choose(answer='N'), callback_no.return_value)
-        self.assertEquals(inter.choose(), callback_no.return_value)
+        self.assertEqual(inter.choose(choice_id=0), callback_yes.return_value)
+        self.assertEqual(inter.choose(choice_id=1), callback_no.return_value)
+        self.assertEqual(inter.choose(answer='a'), callback_yes.return_value)
+        self.assertEqual(inter.choose(answer='N'), callback_no.return_value)
+        self.assertEqual(inter.choose(), callback_no.return_value)
 
     def test_license_agreement_input(self):
         """We return a license agreement input"""
         inter = LicenseAgreement("License content", lambda: "", lambda: "")
-        self.assertEquals(inter.input, "[I Accept (a)/I don't accept (N)] ")
+        self.assertEqual(inter.input, "[I Accept (a)/I don't accept (N)] ")
 
     def test_input_text(self):
         """We can instantiate an input text"""
         inter = InputText("Content", lambda: "")
 
-        self.assertEquals(inter.content, "Content")
-        self.assertEquals(inter.default_input, "")
+        self.assertEqual(inter.content, "Content")
+        self.assertEqual(inter.default_input, "")
 
     def test_input_text_with_default_input(self):
         """We can instantiate an input text with a default input"""
         inter = InputText("Content", lambda: "", default_input="This is a default input")
 
-        self.assertEquals(inter.default_input, "This is a default input")
+        self.assertEqual(inter.default_input, "This is a default input")
 
     def test_input_text_callback(self):
         """An input text runs callback with the result as argument"""
@@ -259,9 +259,9 @@ class TestInteractions(LoggedTestCase):
         """We can instantiate a YesNo"""
         inter = YesNo("Content?", lambda: "", lambda: "")
 
-        self.assertEquals(inter.content, "Content?")
-        self.assertEquals(len(inter.choices), 2, str(inter.choices))
-        self.assertEquals(inter.prompt, "Content? [Yes (y)/No (N)] ")
+        self.assertEqual(inter.content, "Content?")
+        self.assertEqual(len(inter.choices), 2, str(inter.choices))
+        self.assertEqual(inter.prompt, "Content? [Yes (y)/No (N)] ")
 
     def test_yesno_choose_default(self):
         """Default is No"""
@@ -289,17 +289,17 @@ class TestInteractions(LoggedTestCase):
         no_callback = Mock()
         inter = YesNo("Content?", yes_callback, no_callback)
 
-        self.assertEquals(inter.choose(choice_id=0), yes_callback.return_value)
-        self.assertEquals(inter.choose(choice_id=1), no_callback.return_value)
-        self.assertEquals(inter.choose(answer='Y'), yes_callback.return_value)
-        self.assertEquals(inter.choose(answer='N'), no_callback.return_value)
-        self.assertEquals(inter.choose(answer='yEs'), yes_callback.return_value)
-        self.assertEquals(inter.choose(answer='nO'), no_callback.return_value)
+        self.assertEqual(inter.choose(choice_id=0), yes_callback.return_value)
+        self.assertEqual(inter.choose(choice_id=1), no_callback.return_value)
+        self.assertEqual(inter.choose(answer='Y'), yes_callback.return_value)
+        self.assertEqual(inter.choose(answer='N'), no_callback.return_value)
+        self.assertEqual(inter.choose(answer='yEs'), yes_callback.return_value)
+        self.assertEqual(inter.choose(answer='nO'), no_callback.return_value)
 
     def test_display_message(self):
         """We can instantiate a message display"""
         inter = DisplayMessage("Content")
-        self.assertEquals(inter.text, "Content")
+        self.assertEqual(inter.text, "Content")
 
     def test_unknown_progress(self):
         """We can instantiate an unknown progress"""
@@ -308,4 +308,4 @@ class TestInteractions(LoggedTestCase):
         inter = UnknownProgress(foo)
         inter.bar = "BarElement"
 
-        self.assertEquals(inter.bar, "BarElement")
+        self.assertEqual(inter.bar, "BarElement")

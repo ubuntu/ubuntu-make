@@ -105,3 +105,74 @@ class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/pycharm".format(settings.DOCKER_USER))
+
+
+class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducationalIDETests):
+    """This will test the PyCharm Educational IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.jetbrains.com"
+        self.port = "443"
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/pycharm-educational".format(settings.DOCKER_USER))
+
+
+class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessionalIDETests):
+    """This will test the PyCharm Professional IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.jetbrains.com"
+        self.port = "443"
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/pycharm-professional".format(settings.DOCKER_USER))
+
+
+class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
+    """This will test the RubyMine IDE integration inside a container"""
+
+    def setUp(self):
+        self.hostname = "www.jetbrains.com"
+        self.port = "443"
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/rubymine".format(settings.DOCKER_USER))
+
+
+class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
+    """This will test the WebStorm IDE integration inside a container"""
+
+    def setUp(self):
+        self.hostname = "www.jetbrains.com"
+        self.port = "443"
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/webstorm".format(settings.DOCKER_USER))
+
+
+class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
+    """This will test the PhpStorm IDE integration inside a container"""
+
+    def setUp(self):
+        self.hostname = "www.jetbrains.com"
+        self.port = "443"
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/phpstorm".format(settings.DOCKER_USER))
