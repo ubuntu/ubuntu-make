@@ -23,6 +23,8 @@ from glob import glob
 import logging
 import os
 import shutil
+import stat
+import subprocess
 import tarfile
 import zipfile
 
@@ -84,10 +86,25 @@ class Decompressor:
         # will keep the original perms.
         archive = None
         try:
-            archive = tarfile.open(fileobj=fd)
-        except tarfile.ReadError:
-            archive = self.ZipFileWithPerm(fd.name)
-        archive.extractall(dest)
+            try:
+                archive = tarfile.open(fileobj=fd)
+                logger.debug("tar file")
+            except tarfile.ReadError:
+                archive = self.ZipFileWithPerm(fd.name)
+                logger.debug("zip file")
+            archive.extractall(dest)
+        except:
+            # try to treat it as self-extractable, some format don't like being opened at the same time though, so link
+            # it.
+            name = "{}.safe".format(fd.name)
+            os.link(fd.name, name)
+            fd.close()
+            st = os.stat(name)
+            os.chmod(name, st.st_mode | stat.S_IEXEC)
+            archive = subprocess.Popen([name, "-o{}".format(dest)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            archive.communicate()
+            logger.debug("executable file")
+            os.remove(name)
 
         # we want the content of dir to be the root of dest, rename and move content
         if dir is not None:
