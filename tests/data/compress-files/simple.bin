@@ -1,0 +1,18 @@
+#!/bin/bash
+
+dest=android-ndk-foo
+
+while getopts "o:" opt; do
+  case $opt in
+    o)
+      dest=$OPTARG/$dest
+      ;;
+  esac
+done
+
+mkdir -p $dest
+
+for bin in ndk-which ndk-build; do
+    echo "#!/bin/sh" > $dest/$bin
+    chmod +x $dest/$bin
+done
