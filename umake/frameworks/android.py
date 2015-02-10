@@ -24,8 +24,11 @@ from contextlib import suppress
 from gettext import gettext as _
 import logging
 import os
+import platform
 import re
 import umake.frameworks.baseinstaller
+from umake.interactions import DisplayMessage
+from umake.ui import UI
 from umake.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon, add_env_to_user, \
     ChecksumType
 
@@ -37,9 +40,7 @@ _supported_archs = ['i386', 'amd64']
 class AndroidCategory(umake.frameworks.BaseCategory):
 
     def __init__(self):
-        super().__init__(name=_("Android"), description=_("Android Development Environment"), logo_path=None,
-                         packages_requirements=["openjdk-7-jdk", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386",
-                                                "jayatana"])
+        super().__init__(name=_("Android"), description=_("Android Development Environment"), logo_path=None)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android download page for license"""
@@ -63,7 +64,9 @@ class AndroidCategory(umake.frameworks.BaseCategory):
                 url = p.group(1)
             p = re.search(r'<td>(\w+)</td>', line)
             with suppress(AttributeError):
-                md5sum = p.group(1)
+                # ensure the size can match a md5 or sha1 checksum
+                if len(p.group(1)) > 15:
+                    md5sum = p.group(1)
             if "</tr>" in line:
                 in_download = False
 
@@ -77,6 +80,8 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Android Studio", description="Android Studio (default)", is_category_default=True,
                          category=category, only_on_archs=_supported_archs, expect_license=True,
+                         packages_requirements=["openjdk-7-jdk", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386",
+                                                "jayatana"],
                          download_page="https://developer.android.com/sdk/index.html",
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="android-studio",
@@ -105,6 +110,40 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
         if not super().is_installed:
             return False
         if not os.path.join(self.install_path, "bin", "studio.sh"):
+            logger.debug("{} binary isn't installed".format(self.name))
+            return False
+        return True
+
+
+class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Android NDK", description="Android NDK",
+                         category=category, only_on_archs=_supported_archs, expect_license=False,
+                         download_page="https://developer.android.com/tools/sdk/ndk/index.html",
+                         checksum_type=ChecksumType.md5,
+                         dir_to_decompress_in_tarball="android-ndk-*")
+
+    def parse_download_link(self, line, in_download):
+        """Parse Android Studio download link, expect to find a md5sum and a url"""
+        arch = platform.machine()
+        tag_machine = '64'
+        if arch == 'i686':
+            tag_machine = '32'
+        return self.category.parse_download_link('<td>Linux {}'.format(tag_machine), line, in_download)
+
+    def post_install(self):
+        """Print wiki page message"""
+        UI.display(DisplayMessage("NDK installed in {}. More information on how to use it on {}".format(
+                                  self.install_path,
+                                  "https://developer.android.com/tools/sdk/ndk/index.html#GetStarted")))
+
+    @property
+    def is_installed(self):
+        # check path and requirements
+        if not super().is_installed:
+            return False
+        if not os.path.exists(os.path.join(self.install_path, "ndk-build")):
             logger.debug("{} binary isn't installed".format(self.name))
             return False
         return True
