@@ -188,6 +188,16 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
                                                      comment=comment,
                                                      categories=categories))
 
+    @property
+    def is_installed(self):
+        # check path and requirements
+        if not super().is_installed:
+            return False
+        if not isfile(join(self.install_path, "bin", self.executable)):
+            logger.debug("{} binary isn't installed".format(self.name))
+            return False
+        return True
+
 
 class PyCharm(BaseJetBrains):
     """The JetBrains PyCharm Community Edition distribution."""
