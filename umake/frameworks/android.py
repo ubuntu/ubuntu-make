@@ -109,7 +109,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
         # check path and requirements
         if not super().is_installed:
             return False
-        if not os.path.join(self.install_path, "bin", "studio.sh"):
+        if not os.path.isfile(os.path.join(self.install_path, "bin", "studio.sh")):
             logger.debug("{} binary isn't installed".format(self.name))
             return False
         return True

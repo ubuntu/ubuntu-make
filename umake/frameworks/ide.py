@@ -23,11 +23,12 @@
 
 from gettext import gettext as _
 import logging
+import os
 import platform
 from bs4 import BeautifulSoup
 from abc import ABCMeta, abstractmethod
 
-from os.path import join
+from os.path import join, isfile
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop
@@ -117,7 +118,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         # check path and requirements
         if not super().is_installed:
             return False
-        if not join(self.install_path, "eclipse"):
+        if not isfile(join(self.install_path, "eclipse")):
             logger.debug("{} binary isn't installed".format(self.name))
             return False
         return True
