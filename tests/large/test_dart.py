@@ -59,7 +59,7 @@ class DartEditorTests(LargeFrameworkTests):
         return platform.machine()
 
     def test_default_dart_install(self):
-        """Install eclipse from scratch test case"""
+        """Install dart editor from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} dart'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")

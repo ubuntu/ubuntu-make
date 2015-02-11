@@ -69,7 +69,7 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
         return ((None, None), False)
 
     def post_install(self):
-        """Create the Android Studio launcher"""
+        """Create the Dart Editor launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Dart Editor"),
                         icon_path=os.path.join(self.install_path, "icon.xpm"),
                         exec=os.path.join(self.install_path, "DartEditor"),
