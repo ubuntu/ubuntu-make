@@ -35,14 +35,18 @@ class TestDecompressor(LoggedTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.compressfiles_dir = os.path.join(get_data_dir(), "compress-files")
+        cls.compressfiles_dir_orig = os.path.join(get_data_dir(), "compress-files")
 
     def setUp(self):
         super().setUp()
         self.on_done = Mock()
+        self.tempdir = tempfile.mkdtemp()
+        self.compressfiles_dir = os.path.join(self.tempdir, "source-files")
+        shutil.copytree(self.compressfiles_dir_orig, self.compressfiles_dir)
 
     def tearDown(self):
         shutil.rmtree(self.tempdir)
+        super().tearDown()
 
     def wait_for_callback(self, mock_function_to_be_called, timeout=10):
         """wait for the callback to be called until a timeout.
@@ -56,7 +60,6 @@ class TestDecompressor(LoggedTestCase):
     def test_decompress(self):
         """We decompress a valid .tgz file successfully"""
         filepath = os.path.join(self.compressfiles_dir, "valid.tgz")
-        self.tempdir = tempfile.mkdtemp()
         Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
         self.wait_for_callback(self.on_done)
 
@@ -72,7 +75,6 @@ class TestDecompressor(LoggedTestCase):
     def test_decompress_move_dir_content(self):
         """We decompress a valid file decompressing one subdir content (other files in root are kept in place)"""
         filepath = os.path.join(self.compressfiles_dir, "valid.tgz")
-        self.tempdir = tempfile.mkdtemp()
         Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='server-content')},
                      self.on_done)
         self.wait_for_callback(self.on_done)
@@ -88,8 +90,8 @@ class TestDecompressor(LoggedTestCase):
 
     def test_decompress_invalid_file(self):
         """We return an error if the compressed file is invalid"""
+        self.expect_warn_error = True
         filepath = os.path.join(self.compressfiles_dir, "invalid.tgz")
-        self.tempdir = tempfile.mkdtemp()
         Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
         self.wait_for_callback(self.on_done)
 
@@ -101,7 +103,6 @@ class TestDecompressor(LoggedTestCase):
     def test_decompress_content_glob(self):
         """We decompress a valid file decompressing one subdir content with a glob schema"""
         filepath = os.path.join(self.compressfiles_dir, "valid.tgz")
-        self.tempdir = tempfile.mkdtemp()
         Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='server-*')},
                      self.on_done)
         self.wait_for_callback(self.on_done)
@@ -118,7 +119,6 @@ class TestDecompressor(LoggedTestCase):
     def test_decompress_zip(self):
         """We decompress a valid zip file successfully"""
         filepath = os.path.join(self.compressfiles_dir, "valid.zip")
-        self.tempdir = tempfile.mkdtemp()
         Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
         self.wait_for_callback(self.on_done)
 
@@ -135,7 +135,6 @@ class TestDecompressor(LoggedTestCase):
     def test_decompress_zip_good_permission(self):
         """We decompress a valid zip file successfully, retaining the right permissions"""
         filepath = os.path.join(self.compressfiles_dir, "valid.zip")
-        self.tempdir = tempfile.mkdtemp()
         Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
         self.wait_for_callback(self.on_done)
 
@@ -154,7 +153,6 @@ class TestDecompressor(LoggedTestCase):
     def test_decompress_exec(self):
         """We decompress a valid executable file successfully"""
         filepath = os.path.join(self.compressfiles_dir, "simple.bin")
-        self.tempdir = tempfile.mkdtemp()
         Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
         self.wait_for_callback(self.on_done)
 
