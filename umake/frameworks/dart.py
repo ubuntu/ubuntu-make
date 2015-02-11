@@ -27,10 +27,7 @@ import os
 import platform
 import re
 import umake.frameworks.baseinstaller
-from umake.interactions import DisplayMessage
-from umake.ui import UI
-from umake.tools import create_launcher, get_application_desktop_file, get_current_arch, copy_icon, add_env_to_user, \
-    ChecksumType
+from umake.tools import create_launcher, get_application_desktop_file
 
 logger = logging.getLogger(__name__)
 

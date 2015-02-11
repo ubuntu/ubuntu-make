@@ -23,7 +23,6 @@
 
 from gettext import gettext as _
 import logging
-import os
 import platform
 from bs4 import BeautifulSoup
 from abc import ABCMeta, abstractmethod
