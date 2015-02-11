@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 class IdeCategory(umake.frameworks.BaseCategory):
     def __init__(self):
-        super().__init__(name=_("IDE"), description=_("Generic IDEs"),
+        super().__init__(name="IDE", description=_("Generic IDEs"),
                          logo_path=None)
 
 
@@ -52,7 +52,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                        "&r=1"
 
     def __init__(self, category):
-        super().__init__(name=_("Eclipse"),
+        super().__init__(name="Eclipse",
                          description=_("Pure Eclipse Luna (4.4)"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=None,
@@ -205,7 +205,7 @@ class PyCharm(BaseJetBrains):
     executable = "pycharm.sh"
 
     def __init__(self, category):
-        super().__init__(name=_("PyCharm"),
+        super().__init__(name="PyCharm",
                          description=_("PyCharm Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
@@ -221,7 +221,7 @@ class Idea(BaseJetBrains):
     executable = "idea.sh"
 
     def __init__(self, category):
-        super().__init__(name=_("Idea"),
+        super().__init__(name="Idea",
                          description=_("IntelliJ IDEA Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
@@ -237,7 +237,7 @@ class IdeaUltimate(BaseJetBrains):
     executable = "idea.sh"
 
     def __init__(self, category):
-        super().__init__(name=_("Idea Ultimate"),
+        super().__init__(name="Idea Ultimate",
                          description=_("IntelliJ IDEA"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,

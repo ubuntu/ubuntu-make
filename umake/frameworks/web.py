@@ -36,13 +36,13 @@ _supported_archs = ['i386', 'amd64']
 class WebCategory(umake.frameworks.BaseCategory):
 
     def __init__(self):
-        super().__init__(name=_("Web"), description=_("Web Developer Environment"), logo_path=None)
+        super().__init__(name="Web", description=_("Web Developer Environment"), logo_path=None)
 
 
 class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
-        super().__init__(name="Firefox Dev", description="Firefox Developer Edition", is_category_default=False,
+        super().__init__(name="Firefox Dev", description=_("Firefox Developer Edition"), is_category_default=False,
                          category=category, only_on_archs=_supported_archs, expect_license=False,
                          download_page=None,
                          dir_to_decompress_in_tarball="firefox",

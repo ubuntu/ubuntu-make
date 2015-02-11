@@ -40,7 +40,7 @@ _supported_archs = ['i386', 'amd64']
 class AndroidCategory(umake.frameworks.BaseCategory):
 
     def __init__(self):
-        super().__init__(name=_("Android"), description=_("Android Development Environment"), logo_path=None)
+        super().__init__(name="Android", description=_("Android Development Environment"), logo_path=None)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android download page for license"""
@@ -78,7 +78,7 @@ class AndroidCategory(umake.frameworks.BaseCategory):
 class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
-        super().__init__(name="Android Studio", description="Android Studio (default)", is_category_default=True,
+        super().__init__(name="Android Studio", description=_("Android Studio (default)"), is_category_default=True,
                          category=category, only_on_archs=_supported_archs, expect_license=True,
                          packages_requirements=["openjdk-7-jdk", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386",
                                                 "jayatana"],
@@ -118,7 +118,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
-        super().__init__(name="Android NDK", description="Android NDK",
+        super().__init__(name="Android NDK", description=_("Android NDK"),
                          category=category, only_on_archs=_supported_archs, expect_license=False,
                          download_page="https://developer.android.com/tools/sdk/ndk/index.html",
                          checksum_type=ChecksumType.md5,

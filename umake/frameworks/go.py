@@ -36,14 +36,14 @@ logger = logging.getLogger(__name__)
 class GoCategory(umake.frameworks.BaseCategory):
 
     def __init__(self):
-        super().__init__(name=_("Go"), description=_("Go language"),
+        super().__init__(name="Go", description=_("Go language"),
                          logo_path=None)
 
 
 class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
-        super().__init__(name="Go Lang", description="Google compiler (default)", is_category_default=True,
+        super().__init__(name="Go Lang", description=_("Google compiler (default)"), is_category_default=True,
                          category=category, only_on_archs=['i386', 'amd64'], expect_license=False,
                          download_page="https://golang.org/dl/",
                          checksum_type=ChecksumType.sha1,

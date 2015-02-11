@@ -34,13 +34,13 @@ logger = logging.getLogger(__name__)
 class GamesCategory(umake.frameworks.BaseCategory):
 
     def __init__(self):
-        super().__init__(name=_("Games"), description=_("Games Development Environment"), logo_path=None)
+        super().__init__(name="Games", description=_("Games Development Environment"), logo_path=None)
 
 
 class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
-        super().__init__(name="Stencyl", description="Stencyl game developer IDE",
+        super().__init__(name="Stencyl", description=_("Stencyl game developer IDE"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page="http://www.stencyl.com/download/",
                          desktop_filename="stencyl.desktop",
