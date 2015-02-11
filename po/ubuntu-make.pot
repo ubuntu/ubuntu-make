@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-23 08:44+0200\n"
+"POT-Creation-Date: 2015-02-11 10:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgstr ""
 msgid "Remove specified framework if installed"
 msgstr ""
 
-#: umake/tools.py:329
+#: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
 msgstr ""
 
@@ -122,26 +122,106 @@ msgstr ""
 msgid "Remove framework if installed"
 msgstr ""
 
-#: umake/frameworks/android.py:39
-msgid "Android"
+#: umake/frameworks/games.py:37
+msgid "Games Development Environment"
 msgstr ""
 
-#: umake/frameworks/android.py:39
+#: umake/frameworks/games.py:43
+msgid "Stencyl game developer IDE"
+msgstr ""
+
+#: umake/frameworks/games.py:79
+msgid "Stencyl"
+msgstr ""
+
+#: umake/frameworks/games.py:82
+msgid "Stencyl Game developer environment"
+msgstr ""
+
+#: umake/frameworks/ide.py:42
+msgid "Generic IDEs"
+msgstr ""
+
+#: umake/frameworks/ide.py:55
+msgid "Pure Eclipse Luna (4.4)"
+msgstr ""
+
+#: umake/frameworks/ide.py:106
+msgid "The Eclipse Luna Integrated Development Environment"
+msgstr ""
+
+#: umake/frameworks/ide.py:109
+msgid "Eclipse Luna"
+msgstr ""
+
+#: umake/frameworks/ide.py:208
+msgid "PyCharm Community Edition"
+msgstr ""
+
+#: umake/frameworks/ide.py:224
+msgid "IntelliJ IDEA Community Edition"
+msgstr ""
+
+#: umake/frameworks/ide.py:240
+msgid "IntelliJ IDEA"
+msgstr ""
+
+#: umake/frameworks/dart.py:40
+msgid "Dartlang Development Environment"
+msgstr ""
+
+#: umake/frameworks/dart.py:46
+msgid "Dart SDK with editor (default)"
+msgstr ""
+
+#: umake/frameworks/dart.py:70
+msgid "Dart Editor"
+msgstr ""
+
+#: umake/frameworks/dart.py:73
+msgid "Dart Editor for the dart language"
+msgstr ""
+
+#: umake/frameworks/go.py:39
+msgid "Go language"
+msgstr ""
+
+#: umake/frameworks/go.py:46
+msgid "Google compiler (default)"
+msgstr ""
+
+#: umake/frameworks/go.py:76
+msgid "You need to restart a shell session for your installation to work"
+msgstr ""
+
+#: umake/frameworks/web.py:39
+msgid "Web Developer Environment"
+msgstr ""
+
+#: umake/frameworks/web.py:45 umake/frameworks/web.py:65
+msgid "Firefox Developer Edition"
+msgstr ""
+
+#: umake/frameworks/web.py:68
+msgid "Firefox Aurora with Developer tools"
+msgstr ""
+
+#: umake/frameworks/android.py:42
 msgid "Android Development Environment"
 msgstr ""
 
-#: umake/frameworks/android.py:93
+#: umake/frameworks/android.py:80
+msgid "Android Studio (default)"
+msgstr ""
+
+#: umake/frameworks/android.py:99
 msgid "Android Studio"
 msgstr ""
 
-#: umake/frameworks/android.py:96
+#: umake/frameworks/android.py:102
 msgid "Android Studio developer environment"
 msgstr ""
 
-#: umake/frameworks/android.py:143
-msgid "ADT Eclipse"
-msgstr ""
-
-#: umake/frameworks/android.py:146
-msgid "Android Developer Tools (using eclipse)"
+#: umake/frameworks/android.py:120
+msgid "Android NDK"
 msgstr ""
