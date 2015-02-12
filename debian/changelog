@@ -1,3 +1,20 @@
+ubuntu-make (0.5) UNRELEASED; urgency=medium
+
+  * Add Idea Ultimate support, thanks to Tin Tvrtković.
+  * Add Android NDK support.
+  * Add Dartlang support.
+  * Add Firefox Developer Edition support.
+  * Get new ftp download support as Intellij downloads can redirect to ftp
+    download based on location. Thank to Tin Tvrtković.
+  * Refresh de and es translations. Thanks to all contributors!
+  * Rationalize what is up for translations and refresh i18n templates
+    for new strings.
+  * Fix some is_installed() detection.
+  * Workaround a glib issue when some Unity launcher icon doesn't appear.
+  * Some tests enhancements, cleanups and fixes.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 12 Feb 2015 10:48:20 +0100
+
 ubuntu-make (0.4.1) vivid; urgency=medium
 
   * Fix for Intellij IDEA download page, thanks to Tin Tvrtković.
