@@ -1,4 +1,4 @@
-ubuntu-make (0.5) UNRELEASED; urgency=medium
+ubuntu-make (0.5) vivid; urgency=medium
 
   * Add Idea Ultimate support, thanks to Tin Tvrtković.
   * Add Android NDK support.
