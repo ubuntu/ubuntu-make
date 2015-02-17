@@ -169,3 +169,16 @@ class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/webstorm".format(settings.DOCKER_USER))
+
+
+class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
+    """This will test the PhpStorm IDE integration inside a container"""
+
+    def setUp(self):
+        self.hostname = "www.jetbrains.com"
+        self.port = "443"
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/phpstorm".format(settings.DOCKER_USER))
