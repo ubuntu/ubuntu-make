@@ -309,4 +309,4 @@ class WebStorm(BaseJetBrains):
                          dir_to_decompress_in_tarball='WebStorm-*',
                          desktop_filename='jetbrains-webstorm.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
-                         icon_filename='webstorm.png')
+                         icon_filename='webide.png')

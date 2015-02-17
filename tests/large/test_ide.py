@@ -401,7 +401,7 @@ class WebStormIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/webstorm")
         self.desktop_filename = 'jetbrains-webstorm.desktop'
-        self.icon_filename = 'webstorm.png'
+        self.icon_filename = 'webide.png'
 
     @property
     def full_icon_path(self):
