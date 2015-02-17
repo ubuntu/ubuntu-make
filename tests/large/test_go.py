@@ -72,6 +72,6 @@ class GoTests(LargeFrameworkTests):
         output = subprocess.check_output(self.command_as_list(compile_command)).decode()
 
         if self.in_container:
-            self.assertEquals(output, "hello, world\r\n")
+            self.assertEqual(output, "hello, world\r\n")
         else:
-            self.assertEquals(output, "hello, world")
+            self.assertEqual(output, "hello, world")

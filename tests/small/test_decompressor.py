@@ -64,7 +64,7 @@ class TestDecompressor(LoggedTestCase):
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
-        self.assertEquals(len(results), 1, str(results))
+        self.assertEqual(len(results), 1, str(results))
         for fd in results:
             self.assertIsNone(results[fd].error)
         self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content')))
@@ -80,7 +80,7 @@ class TestDecompressor(LoggedTestCase):
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
-        self.assertEquals(len(results), 1, str(results))
+        self.assertEqual(len(results), 1, str(results))
         for fd in results:
             self.assertIsNone(results[fd].error)
         self.assertTrue(os.path.isdir(self.tempdir))
@@ -96,7 +96,7 @@ class TestDecompressor(LoggedTestCase):
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
-        self.assertEquals(len(results), 1, str(results))
+        self.assertEqual(len(results), 1, str(results))
         for fd in results:
             self.assertIsNotNone(results[fd].error)
 
@@ -108,7 +108,7 @@ class TestDecompressor(LoggedTestCase):
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
-        self.assertEquals(len(results), 1, str(results))
+        self.assertEqual(len(results), 1, str(results))
         for fd in results:
             self.assertIsNone(results[fd].error)
         self.assertTrue(os.path.isdir(self.tempdir))
@@ -123,7 +123,7 @@ class TestDecompressor(LoggedTestCase):
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
-        self.assertEquals(len(results), 1, str(results))
+        self.assertEqual(len(results), 1, str(results))
         for fd in results:
             self.assertIsNone(results[fd].error)
         self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content')))
@@ -139,7 +139,7 @@ class TestDecompressor(LoggedTestCase):
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
-        self.assertEquals(len(results), 1, str(results))
+        self.assertEqual(len(results), 1, str(results))
         for fd in results:
             self.assertIsNone(results[fd].error)
         self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content')))
@@ -147,8 +147,8 @@ class TestDecompressor(LoggedTestCase):
         self.assertTrue(os.path.isfile(simplefile))
         execfile = os.path.join(self.tempdir, 'server-content', 'executablefile')
         self.assertTrue(os.path.isfile(execfile))
-        self.assertEquals(oct(stat.S_IMODE(os.lstat(simplefile).st_mode)), '0o664')
-        self.assertEquals(oct(stat.S_IMODE(os.lstat(execfile).st_mode)), '0o775')
+        self.assertEqual(oct(stat.S_IMODE(os.lstat(simplefile).st_mode)), '0o664')
+        self.assertEqual(oct(stat.S_IMODE(os.lstat(execfile).st_mode)), '0o775')
 
     def test_decompress_exec(self):
         """We decompress a valid executable file successfully"""
@@ -157,7 +157,7 @@ class TestDecompressor(LoggedTestCase):
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
-        self.assertEquals(len(results), 1, str(results))
+        self.assertEqual(len(results), 1, str(results))
         for fd in results:
             self.assertIsNone(results[fd].error)
 

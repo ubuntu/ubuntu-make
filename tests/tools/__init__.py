@@ -55,7 +55,7 @@ class LoggedTestCase(TestCase):
         if self.expect_warn_error:
             self.assertNotEquals(self.error_warn_logs.getvalue(), "")
         else:
-            self.assertEquals(self.error_warn_logs.getvalue(), "")
+            self.assertEqual(self.error_warn_logs.getvalue(), "")
         self.error_warn_logs.close()
 
 

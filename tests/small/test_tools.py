@@ -61,12 +61,12 @@ class TestConfigHandler(LoggedTestCase):
         """Ensure we are delivering a singleton for TestConfigHandler"""
         config1 = ConfigHandler()
         config2 = ConfigHandler()
-        self.assertEquals(config1, config2)
+        self.assertEqual(config1, config2)
 
     def test_load_config(self):
         """Valid config loads correct content"""
         change_xdg_path('XDG_CONFIG_HOME', self.config_dir_for_name("valid"))
-        self.assertEquals(ConfigHandler().config,
+        self.assertEqual(ConfigHandler().config,
                           {'frameworks': {
                               'category-a': {
                                   'framework-a': {'path': '/home/didrocks/quickly/ubuntu-make/adt-eclipse'},
@@ -77,12 +77,12 @@ class TestConfigHandler(LoggedTestCase):
     def test_load_no_config(self):
         """No existing file gives an empty result"""
         change_xdg_path('XDG_CONFIG_HOME', self.config_dir_for_name("foo"))
-        self.assertEquals(ConfigHandler().config, {})
+        self.assertEqual(ConfigHandler().config, {})
 
     def test_load_invalid_config(self):
         """Existing invalid file gives an empty result"""
         change_xdg_path('XDG_CONFIG_HOME', self.config_dir_for_name("invalid"))
-        self.assertEquals(ConfigHandler().config, {})
+        self.assertEqual(ConfigHandler().config, {})
         self.expect_warn_error = True
 
     def test_save_new_config(self):
@@ -90,9 +90,9 @@ class TestConfigHandler(LoggedTestCase):
         content = {'foo': 'bar'}
         ConfigHandler().config = content
 
-        self.assertEquals(ConfigHandler().config, content)
+        self.assertEqual(ConfigHandler().config, content)
         with open(os.path.join(self.config_dir, settings.CONFIG_FILENAME)) as f:
-            self.assertEquals(f.read(), 'foo: bar\n')
+            self.assertEqual(f.read(), 'foo: bar\n')
 
     def test_save_config_without_xdg_dir(self):
         """Save a new config file with an unexisting directory"""
@@ -105,15 +105,15 @@ class TestConfigHandler(LoggedTestCase):
         content = {'foo': 'bar'}
         ConfigHandler().config = content
 
-        self.assertEquals(ConfigHandler().config, content)
+        self.assertEqual(ConfigHandler().config, content)
         with open(os.path.join(self.config_dir, settings.CONFIG_FILENAME)) as f:
-            self.assertEquals(f.read(), 'foo: bar\n')
+            self.assertEqual(f.read(), 'foo: bar\n')
 
     def test_dont_create_file_without_assignment(self):
         """We don't create any file without an assignment"""
         ConfigHandler()
 
-        self.assertEquals(len(os.listdir(self.config_dir)), 0)
+        self.assertEqual(len(os.listdir(self.config_dir)), 0)
 
 
 class TestCompletionArchVersion(LoggedTestCase):
@@ -154,13 +154,13 @@ class TestCompletionArchVersion(LoggedTestCase):
     def test_get_current_arch(self):
         """Current arch is reported"""
         with self.create_dpkg("echo fooarch"):
-            self.assertEquals(get_current_arch(), "fooarch")
+            self.assertEqual(get_current_arch(), "fooarch")
 
     def test_get_current_arch_twice(self):
         """Current arch is reported twice and the same"""
         with self.create_dpkg("echo fooarch"):
-            self.assertEquals(get_current_arch(), "fooarch")
-            self.assertEquals(get_current_arch(), "fooarch")
+            self.assertEqual(get_current_arch(), "fooarch")
+            self.assertEqual(get_current_arch(), "fooarch")
 
     def test_get_current_arch_no_dpkg(self):
         """Assert an error if dpkg exit with an error"""
@@ -171,7 +171,7 @@ class TestCompletionArchVersion(LoggedTestCase):
     def test_get_current_ubuntu_version(self, settings_module):
         """Current ubuntu version is reported from our lsb_release local file"""
         settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("valid")
-        self.assertEquals(get_current_ubuntu_version(), '14.04')
+        self.assertEqual(get_current_ubuntu_version(), '14.04')
 
     @patch("umake.tools.settings")
     def test_get_current_ubuntu_version_invalid(self, settings_module):
@@ -190,12 +190,12 @@ class TestCompletionArchVersion(LoggedTestCase):
     def test_get_foreign_arch(self):
         """Get current foreign arch (one)"""
         with self.create_dpkg("echo fooarch"):
-            self.assertEquals(get_foreign_archs(), ["fooarch"])
+            self.assertEqual(get_foreign_archs(), ["fooarch"])
 
     def test_get_foreign_archs(self):
         """Get current foreign arch (multiple)"""
         with self.create_dpkg("echo fooarch\necho bararch\necho bazarch"):
-            self.assertEquals(get_foreign_archs(), ["fooarch", "bararch", "bazarch"])
+            self.assertEqual(get_foreign_archs(), ["fooarch", "bararch", "bazarch"])
 
     def test_get_foreign_archs_error(self):
         """Get current foreign arch raises an exception if dpkg is in error"""
@@ -274,7 +274,7 @@ class TestToolsThreads(LoggedTestCase):
         # mainloop and thread were started
         self.assertIsNotNone(self.mainloop_thread)
         self.assertIsNotNone(self.function_thread)
-        self.assertEquals(self.mainloop_thread, self.function_thread)
+        self.assertEqual(self.mainloop_thread, self.function_thread)
 
     @patch("umake.tools.sys")
     def test_run_function_not_in_mainloop_thread(self, mocksys):
@@ -299,7 +299,7 @@ class TestToolsThreads(LoggedTestCase):
     def test_singleton(self):
         """Ensure we are delivering a singleton for RequirementsHandler"""
         second = tools.MainLoop()
-        self.assertEquals(self.mainloop_object, second)
+        self.assertEqual(self.mainloop_object, second)
 
     def test_mainloop_run(self):
         """We effectively executes the mainloop"""
@@ -407,7 +407,7 @@ class TestLauncherIcons(LoggedTestCase):
                                                                             "application://foo.desktop",
                                                                             "unity://running-apps"])
         self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
-        self.assertEquals(open(get_launcher_path("foo.desktop")).read(), self.get_generic_desktop_content())
+        self.assertEqual(open(get_launcher_path("foo.desktop")).read(), self.get_generic_desktop_content())
 
     @patch("umake.tools.Gio.Settings")
     def test_can_update_launcher(self, SettingsMock):
@@ -430,7 +430,7 @@ class TestLauncherIcons(LoggedTestCase):
         create_launcher("foo.desktop", new_content)
 
         self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
-        self.assertEquals(open(get_launcher_path("foo.desktop")).read(), new_content)
+        self.assertEqual(open(get_launcher_path("foo.desktop")).read(), new_content)
 
     @patch("umake.tools.Gio.Settings")
     def test_can_install_without_unity_running(self, SettingsMock):
@@ -472,7 +472,7 @@ class TestLauncherIcons(LoggedTestCase):
         result_file = self.write_desktop_file("foo.desktop")
         create_launcher("foo.desktop", self.get_generic_desktop_content())
 
-        self.assertEquals(open(result_file).read(), self.get_generic_desktop_content())
+        self.assertEqual(open(result_file).read(), self.get_generic_desktop_content())
 
     @patch("umake.tools.Gio.Settings")
     def test_create_launcher_without_xdg_dir(self, SettingsMock):
@@ -553,7 +553,7 @@ class TestLauncherIcons(LoggedTestCase):
         copy_icon(os.path.join(self.server_dir, "simplefile"), "foo.png")
 
         self.assertTrue(os.path.exists(get_icon_path("foo.png")))
-        self.assertEquals(open(os.path.join(self.server_dir, "simplefile")).read(),
+        self.assertEqual(open(os.path.join(self.server_dir, "simplefile")).read(),
                           open(get_icon_path("foo.png")).read())
 
     def test_can_update_icon(self):
@@ -562,7 +562,7 @@ class TestLauncherIcons(LoggedTestCase):
         copy_icon(os.path.join(self.server_dir, "biggerfile"), "foo.png")
 
         self.assertTrue(os.path.exists(get_icon_path("foo.png")))
-        self.assertEquals(open(os.path.join(self.server_dir, "biggerfile")).read(),
+        self.assertEqual(open(os.path.join(self.server_dir, "biggerfile")).read(),
                           open(get_icon_path("foo.png")).read())
 
     def test_can_copy_icon_with_glob(self):
@@ -571,7 +571,7 @@ class TestLauncherIcons(LoggedTestCase):
         copy_icon(os.path.join(self.server_dir, "sim*file"), "foo.png")
 
         self.assertTrue(os.path.exists(get_icon_path("foo.png")))
-        self.assertEquals(open(os.path.join(self.server_dir, "simplefile")).read(),
+        self.assertEqual(open(os.path.join(self.server_dir, "simplefile")).read(),
                           open(get_icon_path("foo.png")).read())
 
     def test_create_icon_without_xdg_dir(self):
@@ -583,18 +583,18 @@ class TestLauncherIcons(LoggedTestCase):
 
     def test_get_icon_path(self):
         """Get correct launcher path"""
-        self.assertEquals(get_icon_path("foo.png"), os.path.join(self.local_dir, "icons", "foo.png"))
+        self.assertEqual(get_icon_path("foo.png"), os.path.join(self.local_dir, "icons", "foo.png"))
 
     def test_get_launcher_path(self):
         """Get correct launcher path"""
-        self.assertEquals(get_launcher_path("foo.desktop"), os.path.join(self.local_dir, "applications", "foo.desktop"))
+        self.assertEqual(get_launcher_path("foo.desktop"), os.path.join(self.local_dir, "applications", "foo.desktop"))
 
 
 class TestMiscTools(LoggedTestCase):
 
     def test_get_application_desktop_file(self):
         """We return expect results with normal content"""
-        self.assertEquals(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
+        self.assertEqual(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
                                                              exec="/to/exec/path %f", comment="Comment for Name 1",
                                                              categories="Cat1:Cat2"),
                           dedent("""\
@@ -612,7 +612,7 @@ class TestMiscTools(LoggedTestCase):
 
     def test_get_application_desktop_file_with_extra(self):
         """We return expect results with extra content"""
-        self.assertEquals(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
+        self.assertEqual(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
                                                              exec="/to/exec/path %f", comment="Comment for Name 1",
                                                              categories="Cat1:Cat2", extra="Extra=extra1\nFoo=foo"),
                           dedent("""\
@@ -631,7 +631,7 @@ class TestMiscTools(LoggedTestCase):
 
     def test_get_application_desktop_file_all_empty(self):
         """We return expect results without any content"""
-        self.assertEquals(tools.get_application_desktop_file(),
+        self.assertEqual(tools.get_application_desktop_file(),
                           dedent("""\
                             [Desktop Entry]
                             Version=1.0
@@ -647,19 +647,19 @@ class TestMiscTools(LoggedTestCase):
 
     def test_strip_tags(self):
         """We return strip tags from content"""
-        self.assertEquals(tools.strip_tags("content <a foo bar>content content content</a><b><c>content\n content</c>"
+        self.assertEqual(tools.strip_tags("content <a foo bar>content content content</a><b><c>content\n content</c>"
                                            "\n</b>content content"),
                           "content content content contentcontent\n content\ncontent content")
 
     def test_strip_invalid_tags(self):
         """We return trip tags even if invalid"""
-        self.assertEquals(tools.strip_tags("content <a foo bar>content content content</a><b>content\n content</c>"
+        self.assertEqual(tools.strip_tags("content <a foo bar>content content content</a><b>content\n content</c>"
                                            "\n</b>content content"),
                           "content content content contentcontent\n content\ncontent content")
 
     def test_strip_without_tags(self):
         """We return unmodified content if there is no tag"""
-        self.assertEquals(tools.strip_tags("content content content contentcontent\n content"
+        self.assertEqual(tools.strip_tags("content content content contentcontent\n content"
                                            "\ncontent content"),
                           "content content content contentcontent\n content\ncontent content")
 
@@ -669,7 +669,7 @@ class TestMiscTools(LoggedTestCase):
         self.assertRaises(tools.InputError, foo)
 
     def test_print_inputerror(self):
-        self.assertEquals(str(tools.InputError("Foo bar")), "'Foo bar'")
+        self.assertEqual(str(tools.InputError("Foo bar")), "'Foo bar'")
 
     @patch("umake.tools.os")
     def test_switch_user_from_sudo(self, osmock):
@@ -758,7 +758,7 @@ class TestUserENV(LoggedTestCase):
         profile_content = open(profile_file).read()
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
         self.assertTrue("export FOOO=bar:$FOOO\n" in profile_content, profile_content)
-        self.assertEquals(os.environ["FOOO"], "bar:foo")
+        self.assertEqual(os.environ["FOOO"], "bar:foo")
 
     @patch("umake.tools.os.path.expanduser")
     def test_add_env_to_user_not_keep(self, expanderusermock):
@@ -775,7 +775,7 @@ class TestUserENV(LoggedTestCase):
         self.assertTrue("export FOOO=bar\n" in profile_content, profile_content)
         self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
         self.assertFalse("foo" in os.environ["FOOO"], os.environ["FOOO"])
-        self.assertEquals(os.environ["FOOO"], "bar")
+        self.assertEqual(os.environ["FOOO"], "bar")
 
     @patch("umake.tools.os.path.expanduser")
     def test_add_env_to_user_empty_file(self, expanderusermock):
@@ -806,7 +806,7 @@ class TestUserENV(LoggedTestCase):
 
         # ensure, it's only there once
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content.count("export FOOO=/tmp/foo"), 1, profile_content)
+        self.assertEqual(profile_content.count("export FOOO=/tmp/foo"), 1, profile_content)
 
     @patch("umake.tools.os.path.expanduser")
     def test_add_to_user_path_twice_with_new_content(self, expanderusermock):
@@ -825,7 +825,7 @@ class TestUserENV(LoggedTestCase):
 
         # ensure, it's only there once
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content.count("export FOOO=/tmp/bar"), 1, profile_content)
+        self.assertEqual(profile_content.count("export FOOO=/tmp/bar"), 1, profile_content)
 
     @patch("umake.tools.os.path.expanduser")
     def test_add_to_user_path_twice_other_framework(self, expanderusermock):
@@ -860,8 +860,8 @@ class TestUserENV(LoggedTestCase):
         self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
         self.assertTrue("export FOOO=bar\n" in profile_content, profile_content)
         self.assertTrue("export BAR=foo\n" in profile_content, profile_content)
-        self.assertEquals(os.environ["FOOO"], "bar")
-        self.assertEquals(os.environ["BAR"], "foo")
+        self.assertEqual(os.environ["FOOO"], "bar")
+        self.assertEqual(os.environ["BAR"], "foo")
 
     @patch("umake.tools.os.path.expanduser")
     def test_add_path_to_user(self, expanderusermock):
@@ -887,7 +887,7 @@ class TestUserENV(LoggedTestCase):
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\nexport BAR=baz")
+        self.assertEqual(profile_content, "Foo\nBar\nexport BAR=baz")
 
     @patch("umake.tools.os.path.expanduser")
     def test_remove_user_env_end(self, expanderusermock):
@@ -899,7 +899,7 @@ class TestUserENV(LoggedTestCase):
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\n")
+        self.assertEqual(profile_content, "Foo\nBar\n")
 
     @patch("umake.tools.os.path.expanduser")
     def test_remove_user_env_not_found(self, expanderusermock):
@@ -910,7 +910,7 @@ class TestUserENV(LoggedTestCase):
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\nexport BAR=baz")
+        self.assertEqual(profile_content, "Foo\nBar\nexport BAR=baz")
 
     @patch("umake.tools.os.path.expanduser")
     def test_remove_user_env_no_file(self, expanderusermock):
@@ -931,7 +931,7 @@ class TestUserENV(LoggedTestCase):
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\n# Ubuntu make installation of framework B\nexport BAR=bar\n\n"
+        self.assertEqual(profile_content, "Foo\nBar\n# Ubuntu make installation of framework B\nexport BAR=bar\n\n"
                                            "export BAR=baz")
 
     @patch("umake.tools.os.path.expanduser")
@@ -944,7 +944,7 @@ class TestUserENV(LoggedTestCase):
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\nexport BAR=baz")
+        self.assertEqual(profile_content, "Foo\nBar\nexport BAR=baz")
 
     @patch("umake.tools.os.path.expanduser")
     def test_remove_user_multiple_same_framework(self, expanderusermock):
@@ -956,4 +956,4 @@ class TestUserENV(LoggedTestCase):
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()
-        self.assertEquals(profile_content, "Foo\nBar\nexport BAR=baz")
+        self.assertEqual(profile_content, "Foo\nBar\nexport BAR=baz")
