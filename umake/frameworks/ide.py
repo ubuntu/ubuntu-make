@@ -220,7 +220,7 @@ class PyCharmEducational(BaseJetBrains):
     executable = "pycharm.sh"
 
     def __init__(self, category):
-        super().__init__(name=_("PyCharm Educational"),
+        super().__init__(name="PyCharm Educational",
                          description=_("PyCharm Educational Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
@@ -236,7 +236,7 @@ class PyCharmProfessional(BaseJetBrains):
     executable = "pycharm.sh"
 
     def __init__(self, category):
-        super().__init__(name=_("PyCharm Professional"),
+        super().__init__(name="PyCharm Professional",
                          description=_("PyCharm Professional Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
@@ -284,7 +284,7 @@ class RubyMine(BaseJetBrains):
     executable = "rubymine.sh"
 
     def __init__(self, category):
-        super().__init__(name='RubyMine',
+        super().__init__(name="RubyMine",
                          description=_("Ruby on Rails IDE"),
                          category=category,
                          only_on_archs=['i386', 'amd64'],
