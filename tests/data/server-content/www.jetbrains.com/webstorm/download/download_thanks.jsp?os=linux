@@ -242,7 +242,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <cache:cache>
 <h1>Thank you for downloading WebStorm!</h1>
 
-<h4 class="sans_serif_normal">Your download should start shortly. If it doesn't, please use one of these direct links: <a href="http://download.jetbrains.com/webstorm/WebStorm-9.0.3.tar.gz">HTTP</a> or <a href="https://download.jetbrains.com/webstorm/WebStorm-fake.tar.gz">HTTPS</a>.</h4>
+<h4 class="sans_serif_normal">Your download should start shortly. If it doesn't, please use one of these direct links: <a href="http://download.jetbrains.com/webstorm/WebStorm-9.0.3.tar.gz">HTTP</a> or <a href="https://www.jetbrains.com/webstorm/WebStorm-fake.tar.gz">HTTPS</a>.</h4>
 <p>Download and verify the file <a href="https://download.jetbrains.com/webstorm/WebStorm-9.0.3.tar.gz.sha256">SHA-256 checksum</a>.</p>
 <br class="clr"/>
 <div class="leftfloated block40">
