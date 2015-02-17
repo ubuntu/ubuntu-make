@@ -158,6 +158,9 @@ class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
 class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
     """This will test the WebStorm IDE integration inside a container"""
 
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
     def setUp(self):
         self.hostname = "www.jetbrains.com"
         self.port = "443"
