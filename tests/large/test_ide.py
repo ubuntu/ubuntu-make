@@ -451,7 +451,7 @@ class PhpStormIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/phpstorm")
         self.desktop_filename = 'jetbrains-phpstorm.desktop'
-        self.icon_filename = 'phpstorm.png'
+        self.icon_filename = 'webide.png'
 
     @property
     def full_icon_path(self):
