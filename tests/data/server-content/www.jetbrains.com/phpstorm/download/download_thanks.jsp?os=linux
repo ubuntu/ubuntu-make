@@ -241,7 +241,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <cache:cache>
     <h1>Thank you for downloading PhpStorm!</h1>
-    <h4 class="sans_serif_normal">Your download should start shortly. If it doesn't, please use one of these direct links: <a href="http://download.jetbrains.com/webide/PhpStorm-8.0.2.tar.gz">HTTP</a> or <a href="https://download.jetbrains.com/webide/PhpStorm-fake.tar.gz">HTTPS</a>.</h4>
+    <h4 class="sans_serif_normal">Your download should start shortly. If it doesn't, please use one of these direct links: <a href="http://download.jetbrains.com/webide/PhpStorm-8.0.2.tar.gz">HTTP</a> or <a href="https://www.jetbrains.com/phpstorm/PhpStorm-fake.tar.gz">HTTPS</a>.</h4>
     <p>Download and verify the file <a href="https://download.jetbrains.com/webide/PhpStorm-8.0.2.tar.gz.sha256">SHA-256 checksum</a>.</p>
     <br/>
     <div class="leftfloated block60">
