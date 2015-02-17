@@ -69,79 +69,79 @@ class TestCLIFromFrameworks(LoggedTestCase):
     def test_mangle_args_for_framework(self):
         """Well formatted framework command are preserved"""
         self.assertEqual(mangle_args_for_default_framework(["category-a", "framework-a"]),
-                          ["category-a", "framework-a"])
+                         ["category-a", "framework-a"])
 
     def test_mangle_args_for_framework_none_default(self):
         """Well formatted none default framework command are preserved"""
         self.assertEqual(mangle_args_for_default_framework(["category-a", "framework-b"]),
-                          ["category-a", "framework-b"])
+                         ["category-a", "framework-b"])
 
     def test_mangle_args_for_framework_with_framework_options(self):
         """Well formatted framework command with framework options are preserved"""
         self.assertEqual(mangle_args_for_default_framework(["category-a", "framework-a", "--bar", "install_path",
-                                                             "--foo"]),
-                          ["category-a", "framework-a", "--bar", "install_path", "--foo"])
+                                                            "--foo"]),
+                         ["category-a", "framework-a", "--bar", "install_path", "--foo"])
 
     def test_mangle_args_for_framework_global_options(self):
         """Well formatted framework with global options are preserved"""
         self.assertEqual(mangle_args_for_default_framework(["category-a", "framework-a"]),
-                          ["category-a", "framework-a"])
+                         ["category-a", "framework-a"])
 
     def test_mangle_args_default_framework(self):
         """Choose default framework for the category"""
         self.assertEqual(mangle_args_for_default_framework(["category-a"]),
-                          ["category-a", "framework-a"])
+                         ["category-a", "framework-a"])
 
     def test_mangle_args_without_framework_with_framework_options(self):
         """Don't choose any framework for a category with default framework and framework options"""
         self.assertEqual(mangle_args_for_default_framework(["category-a", "install_path", "--foo"]),
-                          ["category-a", "install_path", "--foo"])
+                         ["category-a", "install_path", "--foo"])
 
     def test_mangle_args_for_framework_with_global_options(self):
         """Global options are preserved"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "--debug", "category-a", "framework-a"]),
-                          ["-v", "--debug", "category-a", "framework-a"])
+                         ["-v", "--debug", "category-a", "framework-a"])
 
     def test_mangle_args_for_framework_with_global_and_framework_options(self):
         """Global options and framework options are preserved"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "category-a", "framework-a", "--bar",
-                                                             "install", "--foo"]),
-                          ["-v", "category-a", "framework-a", "--bar", "install", "--foo"])
+                                                            "install", "--foo"]),
+                         ["-v", "category-a", "framework-a", "--bar", "install", "--foo"])
 
     def test_mangle_args_for_default_framework_with_global_options(self):
         """Global options are preserved, completing with default framework"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "category-a"]),
-                          ["-v", "category-a", "framework-a"])
+                         ["-v", "category-a", "framework-a"])
 
     def test_mangle_args_for_default_framework_with_simple_options(self):
         """Global and framework simple options are preserved, completing with default framework with simple options"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "category-a", "--foo", "--bar"]),
-                          ["-v", "category-a", "framework-a", "--foo", "--bar"])
+                         ["-v", "category-a", "framework-a", "--foo", "--bar"])
 
     def test_mangle_args_with_global_framework_extended_options(self):
         """Global options and framework extended options are preserved, NOT completing with default framework"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "category-a", "--bar", "install_path", "--foo"]),
-                          ["-v", "category-a", "--bar", "install_path", "--foo"])
+                         ["-v", "category-a", "--bar", "install_path", "--foo"])
 
     def test_mangle_args_with_global_framework_options_after_install(self):
         """Global and extended framework options are preserved after install_path, NOT completing with dft framework"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "category-a", "install_path", "--foo"]),
-                          ["-v", "category-a", "install_path", "--foo"])
+                         ["-v", "category-a", "install_path", "--foo"])
 
     def test_mangle_args_for_default_framework_after_install_with_sep(self):
         """Add the default framework if the install path has a sep"""
         self.assertEqual(mangle_args_for_default_framework(["category-a", "install/path"]),
-                          ["category-a", "framework-a", "install/path"])
+                         ["category-a", "framework-a", "install/path"])
 
     def test_mangle_args_with_global_framework_options_after_install_with_sep(self):
         """Global and ext framework options are preserved after install_path with sep, completing with dft framework"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "category-a", "install/path", "--foo"]),
-                          ["-v", "category-a", "framework-a", "install/path", "--foo"])
+                         ["-v", "category-a", "framework-a", "install/path", "--foo"])
 
     def test_mangle_args_with_global_framework_options_between_install_with_sep(self):
         """Global and ext framework options are preserved before install_path with sep, completing with dft framework"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "category-a", "--bar", "install/path", "--foo"]),
-                          ["-v", "category-a", "framework-a", "--bar", "install/path", "--foo"])
+                         ["-v", "category-a", "framework-a", "--bar", "install/path", "--foo"])
 
     def test_mangle_args_for_framework_in_main_category(self):
         """framework in main category is preserved"""
@@ -150,22 +150,22 @@ class TestCLIFromFrameworks(LoggedTestCase):
     def test_mangle_args_for_framework_in_main_category_with_framework_options(self):
         """framework in main category with framework simple options are preserved"""
         self.assertEqual(mangle_args_for_default_framework(["framework-free-a", "--foo"]),
-                          ["framework-free-a", "--foo"])
+                         ["framework-free-a", "--foo"])
 
     def test_mangle_args_for_framework_in_main_category_with_framework_extended_options(self):
         """framework in main category with framework extended options are preserved"""
         self.assertEqual(mangle_args_for_default_framework(["framework-free-a", "--foo", "install_path"]),
-                          ["framework-free-a", "--foo", "install_path"])
+                         ["framework-free-a", "--foo", "install_path"])
 
     def test_mangle_args_for_framework_in_main_category_with_global_and_framework_extended_options(self):
         """framework in main category with framework global and extended options are preserved"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "framework-free-a", "--foo", "install_path"]),
-                          ["-v", "framework-free-a", "--foo", "install_path"])
+                         ["-v", "framework-free-a", "--foo", "install_path"])
 
     def test_mangle_args_for_framework_in_main_category_with_global_and_framework_extended_options_and_path(self):
         """framework in main category with framework global and extended options are preserved and path"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "framework-free-a", "--foo", "install/path"]),
-                          ["-v", "framework-free-a", "--foo", "install/path"])
+                         ["-v", "framework-free-a", "--foo", "install/path"])
 
     def test_mangle_args_for_category_without_default_framework(self):
         """No framework in a category without default are preserved"""
@@ -174,14 +174,14 @@ class TestCLIFromFrameworks(LoggedTestCase):
     def test_mangle_args_for_category_without_default_framework_with_extended_options(self):
         """No framework in a category with ext. option without default are preserved"""
         self.assertEqual(mangle_args_for_default_framework(["category-f", "--foo", "install_path"]),
-                          ["category-f", "--foo", "install_path"])
+                         ["category-f", "--foo", "install_path"])
 
     def test_mangle_args_for_category_without_default_framework_with_install_path(self):
         """No framework in a category without default are preserved with install path"""
         self.assertEqual(mangle_args_for_default_framework(["category-f", "--foo", "install/path"]),
-                          ["category-f", "--foo", "install/path"])
+                         ["category-f", "--foo", "install/path"])
 
     def test_mangle_args_for_category_without_default_framework_with_global_and_extended_options(self):
         """No framework in a category without default are preserved with global and ext options"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "category-f", "--foo", "install_path"]),
-                          ["-v", "category-f", "--foo", "install_path"])
+                         ["-v", "category-f", "--foo", "install_path"])

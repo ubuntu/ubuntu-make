@@ -67,12 +67,12 @@ class TestConfigHandler(LoggedTestCase):
         """Valid config loads correct content"""
         change_xdg_path('XDG_CONFIG_HOME', self.config_dir_for_name("valid"))
         self.assertEqual(ConfigHandler().config,
-                          {'frameworks': {
-                              'category-a': {
-                                  'framework-a': {'path': '/home/didrocks/quickly/ubuntu-make/adt-eclipse'},
-                                  'framework-b': {'path': '/home/didrocks/foo/bar/android-studio'}
-                              }
-                          }})
+                         {'frameworks': {
+                             'category-a': {
+                                 'framework-a': {'path': '/home/didrocks/quickly/ubuntu-make/adt-eclipse'},
+                                 'framework-b': {'path': '/home/didrocks/foo/bar/android-studio'}
+                             }
+                         }})
 
     def test_load_no_config(self):
         """No existing file gives an empty result"""
@@ -294,7 +294,7 @@ class TestToolsThreads(LoggedTestCase):
         # mainloop and thread were started
         self.assertIsNotNone(self.mainloop_thread)
         self.assertIsNotNone(self.function_thread)
-        self.assertNotEquals(self.mainloop_thread, self.function_thread)
+        self.assertNotEqual(self.mainloop_thread, self.function_thread)
 
     def test_singleton(self):
         """Ensure we are delivering a singleton for RequirementsHandler"""
@@ -554,7 +554,7 @@ class TestLauncherIcons(LoggedTestCase):
 
         self.assertTrue(os.path.exists(get_icon_path("foo.png")))
         self.assertEqual(open(os.path.join(self.server_dir, "simplefile")).read(),
-                          open(get_icon_path("foo.png")).read())
+                         open(get_icon_path("foo.png")).read())
 
     def test_can_update_icon(self):
         """Update a basic icon with a new content"""
@@ -563,7 +563,7 @@ class TestLauncherIcons(LoggedTestCase):
 
         self.assertTrue(os.path.exists(get_icon_path("foo.png")))
         self.assertEqual(open(os.path.join(self.server_dir, "biggerfile")).read(),
-                          open(get_icon_path("foo.png")).read())
+                         open(get_icon_path("foo.png")).read())
 
     def test_can_copy_icon_with_glob(self):
         """Copy an icon with glob pattern matching"""
@@ -572,7 +572,7 @@ class TestLauncherIcons(LoggedTestCase):
 
         self.assertTrue(os.path.exists(get_icon_path("foo.png")))
         self.assertEqual(open(os.path.join(self.server_dir, "simplefile")).read(),
-                          open(get_icon_path("foo.png")).read())
+                         open(get_icon_path("foo.png")).read())
 
     def test_create_icon_without_xdg_dir(self):
         """Save a new icon in an unexisting directory"""
@@ -595,73 +595,73 @@ class TestMiscTools(LoggedTestCase):
     def test_get_application_desktop_file(self):
         """We return expect results with normal content"""
         self.assertEqual(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
-                                                             exec="/to/exec/path %f", comment="Comment for Name 1",
-                                                             categories="Cat1:Cat2"),
-                          dedent("""\
-                            [Desktop Entry]
-                            Version=1.0
-                            Type=Application
-                            Name=Name 1
-                            Icon=/to/icon/path
-                            Exec=/to/exec/path %f
-                            Comment=Comment for Name 1
-                            Categories=Cat1:Cat2
-                            Terminal=false
+                                                            exec="/to/exec/path %f", comment="Comment for Name 1",
+                                                            categories="Cat1:Cat2"),
+                         dedent("""\
+                           [Desktop Entry]
+                           Version=1.0
+                           Type=Application
+                           Name=Name 1
+                           Icon=/to/icon/path
+                           Exec=/to/exec/path %f
+                           Comment=Comment for Name 1
+                           Categories=Cat1:Cat2
+                           Terminal=false
 
-                            """))
+                           """))
 
     def test_get_application_desktop_file_with_extra(self):
         """We return expect results with extra content"""
         self.assertEqual(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
-                                                             exec="/to/exec/path %f", comment="Comment for Name 1",
-                                                             categories="Cat1:Cat2", extra="Extra=extra1\nFoo=foo"),
-                          dedent("""\
-                            [Desktop Entry]
-                            Version=1.0
-                            Type=Application
-                            Name=Name 1
-                            Icon=/to/icon/path
-                            Exec=/to/exec/path %f
-                            Comment=Comment for Name 1
-                            Categories=Cat1:Cat2
-                            Terminal=false
-                            Extra=extra1
-                            Foo=foo
-                            """))
+                                                            exec="/to/exec/path %f", comment="Comment for Name 1",
+                                                            categories="Cat1:Cat2", extra="Extra=extra1\nFoo=foo"),
+                         dedent("""\
+                           [Desktop Entry]
+                           Version=1.0
+                           Type=Application
+                           Name=Name 1
+                           Icon=/to/icon/path
+                           Exec=/to/exec/path %f
+                           Comment=Comment for Name 1
+                           Categories=Cat1:Cat2
+                           Terminal=false
+                           Extra=extra1
+                           Foo=foo
+                           """))
 
     def test_get_application_desktop_file_all_empty(self):
         """We return expect results without any content"""
         self.assertEqual(tools.get_application_desktop_file(),
-                          dedent("""\
-                            [Desktop Entry]
-                            Version=1.0
-                            Type=Application
-                            Name=
-                            Icon=
-                            Exec=
-                            Comment=
-                            Categories=
-                            Terminal=false
+                         dedent("""\
+                           [Desktop Entry]
+                           Version=1.0
+                           Type=Application
+                           Name=
+                           Icon=
+                           Exec=
+                           Comment=
+                           Categories=
+                           Terminal=false
 
-                            """))
+                           """))
 
     def test_strip_tags(self):
         """We return strip tags from content"""
         self.assertEqual(tools.strip_tags("content <a foo bar>content content content</a><b><c>content\n content</c>"
-                                           "\n</b>content content"),
-                          "content content content contentcontent\n content\ncontent content")
+                                          "\n</b>content content"),
+                         "content content content contentcontent\n content\ncontent content")
 
     def test_strip_invalid_tags(self):
         """We return trip tags even if invalid"""
         self.assertEqual(tools.strip_tags("content <a foo bar>content content content</a><b>content\n content</c>"
-                                           "\n</b>content content"),
-                          "content content content contentcontent\n content\ncontent content")
+                                          "\n</b>content content"),
+                         "content content content contentcontent\n content\ncontent content")
 
     def test_strip_without_tags(self):
         """We return unmodified content if there is no tag"""
         self.assertEqual(tools.strip_tags("content content content contentcontent\n content"
-                                           "\ncontent content"),
-                          "content content content contentcontent\n content\ncontent content")
+                                          "\ncontent content"),
+                         "content content content contentcontent\n content\ncontent content")
 
     def test_raise_inputerror(self):
         def foo():
@@ -932,7 +932,7 @@ class TestUserENV(LoggedTestCase):
 
         profile_content = open(profile_file).read()
         self.assertEqual(profile_content, "Foo\nBar\n# Ubuntu make installation of framework B\nexport BAR=bar\n\n"
-                                           "export BAR=baz")
+                                          "export BAR=baz")
 
     @patch("umake.tools.os.path.expanduser")
     def test_remove_user_env_multiple_lines(self, expanderusermock):

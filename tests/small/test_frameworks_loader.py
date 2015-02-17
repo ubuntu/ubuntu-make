@@ -109,7 +109,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
     def test_load_main_category(self):
         """The main category is loaded"""
         self.assertEqual(len([1 for category in self.CategoryHandler.categories.values()
-                               if category.is_main_category]), 1, str(self.CategoryHandler.categories.values()))
+                              if category.is_main_category]), 1, str(self.CategoryHandler.categories.values()))
 
     def test_get_main_category(self):
         """main_category property returns main category"""
@@ -159,8 +159,8 @@ class TestFrameworkLoader(BaseFrameworkLoader):
 
     def test_frameworks_doesn_t_mix(self):
         """Frameworks, even with the same name, don't mix between categories"""
-        self.assertNotEquals(self.categoryA.frameworks["framework-a"],
-                             self.CategoryHandler.categories["category-b"].frameworks["framework-a"])
+        self.assertNotEqual(self.categoryA.frameworks["framework-a"],
+                            self.CategoryHandler.categories["category-b"].frameworks["framework-a"])
 
     def test_has_more_than_one_framework(self):
         """more than one frameworks in a category is correctly reported"""
@@ -191,12 +191,12 @@ class TestFrameworkLoader(BaseFrameworkLoader):
     def test_category_fully_installed(self):
         """Category returns than all frameworks are installed"""
         self.assertEqual(self.CategoryHandler.categories["category-b"].is_installed,
-                          self.CategoryHandler.FULLY_INSTALLED)
+                         self.CategoryHandler.FULLY_INSTALLED)
 
     def test_category_half_installed(self):
         """Category returns than half frameworks are installed"""
         self.assertEqual(self.CategoryHandler.categories["category-c"].is_installed,
-                          self.CategoryHandler.PARTIALLY_INSTALLED)
+                         self.CategoryHandler.PARTIALLY_INSTALLED)
 
     def test_frameworks_loaded_in_main_category(self):
         """Some frameworks are loaded and attached to main category"""
@@ -219,12 +219,12 @@ class TestFrameworkLoader(BaseFrameworkLoader):
     def test_default_install_path(self):
         """Default install path is what we expect, based on category-and framework prog_name"""
         self.assertEqual(self.categoryA.frameworks["framework-b"].install_path,
-                          os.path.expanduser("~/tools/category-a/framework-b"))
+                         os.path.expanduser("~/tools/category-a/framework-b"))
 
     def test_specified_at_load_install_path(self):
         """Default install path is overriden by framework specified install path at load time"""
         self.assertEqual(self.categoryA.frameworks["framework-a"].install_path,
-                          os.path.expanduser("~/tools/custom/frameworka"))
+                         os.path.expanduser("~/tools/custom/frameworka"))
 
     def test_no_restriction_installable_framework(self):
         """Framework with an no arch or version restriction is installable"""
@@ -391,13 +391,13 @@ class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
         """Configuration override defaults (explicit or implicit). If not present in config, still load default"""
         # was overridden with at load time
         self.assertEqual(self.categoryA.frameworks["framework-a"].install_path,
-                          "/home/didrocks/quickly/ubuntu-make/adt-eclipse")
+                         "/home/didrocks/quickly/ubuntu-make/adt-eclipse")
         # was default
         self.assertEqual(self.categoryA.frameworks["framework-b"].install_path,
-                          "/home/didrocks/foo/bar/android-studio")
+                         "/home/didrocks/foo/bar/android-studio")
         # isn't in the config
         self.assertEqual(self.CategoryHandler.categories['category-c'].frameworks["framework-a"].install_path,
-                          os.path.expanduser("~/tools/category-c/framework-a"))
+                         os.path.expanduser("~/tools/category-c/framework-a"))
 
 
 class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
@@ -435,10 +435,10 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         self.categoryA.frameworks["framework-b"].mark_in_config()
 
         self.assertEqual(ConfigHandler().config,
-                          {'frameworks': {
-                              'category-a': {
-                                  'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
-                              }}})
+                         {'frameworks': {
+                             'category-a': {
+                                 'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+                             }}})
 
     def test_call_setup_save_and_then_mark_in_config_tweaked_path(self):
         """Calling mark_in_config with a custom install path save it in the configuration"""
@@ -449,10 +449,10 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         self.categoryA.frameworks["framework-b"].mark_in_config()
 
         self.assertEqual(ConfigHandler().config,
-                          {'frameworks': {
-                              'category-a': {
-                                  'framework-b': {'path': '/home/foo/bar'}
-                              }}})
+                         {'frameworks': {
+                             'category-a': {
+                                 'framework-b': {'path': '/home/foo/bar'}
+                             }}})
 
     def test_call_remove_from_config(self):
         """Calling remove_from_config remove a framework from the config"""
@@ -477,13 +477,13 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         self.categoryA.frameworks["framework-b"].remove_from_config()
 
         self.assertEqual(ConfigHandler().config,
-                          {'frameworks': {
-                              'category-a': {
-                                  'framework-c': {'path': os.path.expanduser('~/tools/category-a/framework-c')}
-                              },
-                              'category-b': {
-                                  'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
-                              }}})
+                         {'frameworks': {
+                             'category-a': {
+                                 'framework-c': {'path': os.path.expanduser('~/tools/category-a/framework-c')}
+                             },
+                             'category-b': {
+                                 'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+                             }}})
 
 
 class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
@@ -578,14 +578,14 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         with patch('umake.frameworks.RequirementsHandler') as requirement_mock:
             self.loadFramework("testframeworks")
             self.assertEqual(self.CategoryHandler.categories["category-g"].frameworks["framework-b"]
-                              .packages_requirements, ["baz"])
+                             .packages_requirements, ["baz"])
 
     def test_check_requirements_from_category_merge_into_exiting(self):
         """Framework with package requirements merged them from the associated category"""
         with patch('umake.frameworks.RequirementsHandler') as requirement_mock:
             self.loadFramework("testframeworks")
             self.assertEqual(self.CategoryHandler.categories["category-g"].frameworks["framework-a"]
-                              .packages_requirements, ["buz", "biz", "baz"])
+                             .packages_requirements, ["buz", "biz", "baz"])
 
     def test_root_needed_if_not_matched_requirements(self):
         """Framework with unmatched requirements need root access"""
@@ -826,7 +826,7 @@ class TestDuplicatedFrameworkLoader(BaseFrameworkLoader):
     def test_main_category_empty(self):
         """The main category (unused here) is empty by default"""
         self.assertEqual(len(self.CategoryHandler.main_category.frameworks), 0,
-                          str(self.CategoryHandler.main_category.frameworks))
+                         str(self.CategoryHandler.main_category.frameworks))
 
 
 class TestMultipleDefaultFrameworkLoader(BaseFrameworkLoader):
@@ -855,13 +855,13 @@ class TestMultipleDefaultFrameworkLoader(BaseFrameworkLoader):
         """Setting multiple defaults frameworks to a category should void any default"""
         self.assertIsNone(self.categoryA.default_framework)
         self.assertEqual(len(self.categoryA.frameworks), 2,
-                          str(self.categoryA.frameworks))  # ensure they are still loaded
+                         str(self.categoryA.frameworks))  # ensure they are still loaded
 
     def test_one_default_in_main_category(self):
         """Reject default framework for main category"""
         self.assertIsNone(self.CategoryHandler.main_category.default_framework)
         self.assertEqual(len(self.CategoryHandler.main_category.frameworks), 1,
-                          str(self.CategoryHandler.main_category.frameworks))  # ensure it's still loaded
+                         str(self.CategoryHandler.main_category.frameworks))  # ensure it's still loaded
 
 
 class TestNotLoadedFrameworkLoader(BaseFrameworkLoader):
@@ -1064,7 +1064,7 @@ class TestProductionFrameworkLoader(BaseFrameworkLoader):
         self.assertTrue(len(self.CategoryHandler.categories) > 0, str(self.CategoryHandler.categories))
         self.assertIsNotNone(self.CategoryHandler.main_category)
         self.assertEqual(len(self.CategoryHandler.categories["android"].frameworks), 2,
-                          str(self.CategoryHandler.categories["android"].frameworks))
+                         str(self.CategoryHandler.categories["android"].frameworks))
 
     def test_ignored_frameworks(self):
         """Ignored frameworks aren't loaded"""

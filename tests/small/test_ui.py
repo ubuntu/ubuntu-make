@@ -116,7 +116,7 @@ class TestUI(LoggedTestCase):
         self.assertIsNotNone(self.mainloop_thread)
         self.assertIsNotNone(self.function_thread)
         self.assertIsNotNone(self.display_thread)
-        self.assertNotEquals(self.mainloop_thread, self.function_thread)
+        self.assertNotEqual(self.mainloop_thread, self.function_thread)
         self.assertEqual(self.mainloop_thread, self.display_thread)
 
     @patch("umake.tools.sys")
@@ -154,6 +154,6 @@ class TestUI(LoggedTestCase):
         self.assertIsNotNone(self.mainloop_thread)
         self.assertIsNotNone(self.function_thread)
         self.assertIsNotNone(self.display_thread)
-        self.assertNotEquals(self.mainloop_thread, self.function_thread)
+        self.assertNotEqual(self.mainloop_thread, self.function_thread)
         self.assertEqual(self.mainloop_thread, self.display_thread)
         self.assertTrue(self.time_display_call - now > 0.05)

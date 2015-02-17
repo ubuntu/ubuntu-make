@@ -213,9 +213,9 @@ class TestRequirementsHandler(LoggedTestCase):
         self.assertTrue(installing_msg > 1)
         # the first download call is at 0% of progress. testpackage is 1byte to download
         self.assertEqual(progress_callback.call_args_list[0][0][0],
-                          {'step': 0, 'pkg_size_download': 1, 'percentage': 0.0})
+                         {'step': 0, 'pkg_size_download': 1, 'percentage': 0.0})
         self.assertEqual(progress_callback.call_args_list[2][0][0],
-                          {'step': 1, 'percentage': 0.0})
+                         {'step': 1, 'percentage': 0.0})
 
     def test_install_multiple_packages(self):
         """Install multiple packages in one shot"""
@@ -240,7 +240,7 @@ class TestRequirementsHandler(LoggedTestCase):
         self.assertTrue(installing_msg > 1)
         # the first download call is at 0% of progress. testpackage is 1byte to download
         self.assertEqual(progress_callback.call_args_list[0][0][0],
-                          {'step': 0, 'pkg_size_download': 1, 'percentage': 0.0})
+                         {'step': 0, 'pkg_size_download': 1, 'percentage': 0.0})
 
     def test_install_pending(self):
         """Appending two installations and wait for results. Only the first call should have progress"""

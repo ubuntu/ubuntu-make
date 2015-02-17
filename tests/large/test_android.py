@@ -308,9 +308,9 @@ class AndroidNDKTests(LargeFrameworkTests):
 
         # launch it, send SIGTERM and check that it exits fine
         self.assertEqual(subprocess.check_call(self.command_as_list([self.exec_path, "gcc"]),
-                                                stdout=subprocess.DEVNULL,
-                                                stderr=subprocess.DEVNULL),
-                          0)
+                                               stdout=subprocess.DEVNULL,
+                                               stderr=subprocess.DEVNULL),
+                         0)
 
         # ensure that it's detected as installed:
         self.child = pexpect.spawnu(self.command('{} android android-ndk'.format(UMAKE)))
