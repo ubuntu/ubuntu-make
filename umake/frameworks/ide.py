@@ -301,7 +301,7 @@ class WebStorm(BaseJetBrains):
     executable = "webstorm.sh"
 
     def __init__(self, category):
-        super().__init__(name=_('WebStorm'),
+        super().__init__(name="WebStorm",
                          description=_("WebStorm"),
                          category=category,
                          only_on_archs=['i386', 'amd64'],
