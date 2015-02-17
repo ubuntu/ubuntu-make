@@ -110,6 +110,9 @@ class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
 class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
     """This will test the RubyMine IDE integration inside a container"""
 
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
     def setUp(self):
         self.hostname = "www.jetbrains.com"
         self.port = "443"

@@ -241,7 +241,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <cache:cache>
     <h1>Thank you for downloading RubyMine!</h1>
-    <h4 class="sans_serif_normal">Your download should start shortly. If it doesn't, please use one of these direct links: <a href="http://download.jetbrains.com/ruby/RubyMine-7.0.3.tar.gz">HTTP</a> or <a href="https://www.jetbrains.com/idea/rubymine-fake.tar.gz">HTTPS</a>.</h4>
+    <h4 class="sans_serif_normal">Your download should start shortly. If it doesn't, please use one of these direct links: <a href="http://download.jetbrains.com/ruby/RubyMine-7.0.3.tar.gz">HTTP</a> or <a href="https://www.jetbrains.com/ruby/rubymine-fake.tar.gz">HTTPS</a>.</h4>
     <p>Download and verify the file <a href="https://download.jetbrains.com/ruby/RubyMine-7.0.3.tar.gz.sha256">SHA-256 checksum</a>.</p>
     <br/>
     <div class="leftfloated block60">
