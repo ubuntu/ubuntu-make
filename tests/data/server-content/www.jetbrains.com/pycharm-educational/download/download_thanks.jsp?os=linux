@@ -236,7 +236,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
         <h2>Thank you for downloading PyCharm Educational Edition!</h2>
-        <h4 class="sans_serif_normal">Your download should start shortly. If it doesn't, please use one of these direct links: <a href="http://download.jetbrains.com/python/pycharm-educational-1.0.1.tar.gz">HTTP</a> or <a href="https://download.jetbrains.com/python/pycharm-educational-fake.tar.gz">HTTPS</a>.</h4>
+        <h4 class="sans_serif_normal">Your download should start shortly. If it doesn't, please use one of these direct links: <a href="http://download.jetbrains.com/python/pycharm-educational-1.0.1.tar.gz">HTTP</a> or <a href="https://www.jetbrains.com/pycharm/pycharm-educational-fake.tar.gz">HTTPS</a>.</h4>
         <p>Download and verify the file <a href="https://download.jetbrains.com/python/pycharm-educational-fake.tar.gz.sha256">SHA-256 checksum</a>.</p>
         <br/>
         <div class="leftfloated block60">
