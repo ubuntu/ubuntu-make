@@ -318,7 +318,7 @@ class PhpStorm(BaseJetBrains):
     executable = "phpstorm.sh"
 
     def __init__(self, category):
-        super().__init__(name=_('PhpStorm'),
+        super().__init__(name="PhpStorm",
                          description=_("PhpStorm"),
                          category=category,
                          only_on_archs=['i386', 'amd64'],
