@@ -174,6 +174,9 @@ class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
 class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
     """This will test the PhpStorm IDE integration inside a container"""
 
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
     def setUp(self):
         self.hostname = "www.jetbrains.com"
         self.port = "443"
