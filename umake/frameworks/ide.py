@@ -225,7 +225,7 @@ class PyCharmEducational(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='pycharm-edu*',
-                         desktop_filename='jetbrains-pycharm-educational.desktop',
+                         desktop_filename='jetbrains-pycharm.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='pycharm.png')
 
@@ -241,7 +241,7 @@ class PyCharmProfessional(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='pycharm-*',
-                         desktop_filename='jetbrains-pycharm-professional.desktop',
+                         desktop_filename='jetbrains-pycharm.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='pycharm.png')
 
@@ -257,7 +257,7 @@ class Idea(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='idea-IC-*',
-                         desktop_filename='jetbrains-idea-ce.desktop',
+                         desktop_filename='jetbrains-idea.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='idea.png')
 
