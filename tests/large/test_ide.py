@@ -102,7 +102,7 @@ class IdeaIDETests(LargeFrameworkTests):
     def setUp(self):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/idea")
-        self.desktop_filename = 'jetbrains-idea-ce.desktop'
+        self.desktop_filename = 'jetbrains-idea.desktop'
         self.icon_filename = 'idea.png'
 
     @property
@@ -250,7 +250,7 @@ class PyCharmEducationalIDETests(LargeFrameworkTests):
     def setUp(self):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/pycharm-educational")
-        self.desktop_filename = 'jetbrains-pycharm-educational.desktop'
+        self.desktop_filename = 'jetbrains-pycharm.desktop'
         self.icon_filename = 'pycharm.png'
 
     @property
@@ -300,7 +300,7 @@ class PyCharmProfessionalIDETests(LargeFrameworkTests):
     def setUp(self):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/pycharm-professional")
-        self.desktop_filename = 'jetbrains-pycharm-professional.desktop'
+        self.desktop_filename = 'jetbrains-pycharm.desktop'
         self.icon_filename = 'pycharm.png'
 
     @property
