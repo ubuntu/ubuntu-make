@@ -1,3 +1,17 @@
+ubuntu-make (0.6) UNRELEASED; urgency=medium
+
+  * New IDEs support and various cleanups by Anton Antonov:
+    - rubymine
+    - pycharm educational
+    - pycharm professional
+    - webstorm
+    - phpstorm
+  * All of those covered by medium and large tests
+  * Add zsh support + tests (thanks Anton Antonov again)
+  * Various small code enhancements
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 18 Feb 2015 09:47:08 +0100
+
 ubuntu-make (0.5) vivid; urgency=medium
 
   * Add Idea Ultimate support, thanks to Tin Tvrtković.
