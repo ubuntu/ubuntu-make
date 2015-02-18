@@ -1,4 +1,4 @@
-ubuntu-make (0.6) UNRELEASED; urgency=medium
+ubuntu-make (0.6) vivid; urgency=medium
 
   * New IDEs support and various cleanups by Anton Antonov:
     - rubymine
