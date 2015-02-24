@@ -48,7 +48,7 @@ if __name__ == '__main__':
                     in_depends_section = True
                 else:
                     # we are getting out of the depends section parts
-                    if line[0] != " ":
+                    if not line or line[0] != " ":
                         in_depends_section = False
                 if not in_depends_section:
                     continue
