@@ -1,5 +1,5 @@
 Tests: all
 # the jquery dependencies are recommends of python3-coverage to generate the html reports
-Depends: @, docker.io, sshpass, fakeroot, eatmydata, python3-nose, python3-nose-cov, python3-nose-json, python3-pep8, python3-pexpect, libjs-jquery-hotkeys, libjs-jquery-isonscreen, libjs-jquery-tablesorter, libjs-jquery
+Depends: @, docker.io, sshpass, fakeroot, eatmydata, python3-bs4, python3-nose, python3-nose-cov, python3-nose-json, python3-pep8, python3-pexpect, python3-yaml, libjs-jquery-hotkeys, libjs-jquery-isonscreen, libjs-jquery-tablesorter, libjs-jquery
 Restrictions: rw-build-tree isolation-machine, allow-stderr
 
