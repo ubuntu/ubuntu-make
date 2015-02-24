@@ -43,7 +43,7 @@ class DartCategory(umake.frameworks.BaseCategory):
 class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
-        super().__init__(name="Editor", description=_("Dart SDK with editor (default)"), is_category_default=True,
+        super().__init__(name="Dart Editor", description=_("Dart SDK with editor (default)"), is_category_default=True,
                          category=category, only_on_archs=_supported_archs, expect_license=False,
                          packages_requirements=["openjdk-7-jdk"],
                          download_page="https://www.dartlang.org/tools/download-editor.html",

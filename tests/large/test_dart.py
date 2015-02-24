@@ -41,7 +41,7 @@ class DartEditorTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/dart/editor")
+        self.installed_path = os.path.expanduser("~/tools/dart/dart-editor")
         self.desktop_filename = "dart-editor.desktop"
         self.icon_filename = "icon.xpm"
 

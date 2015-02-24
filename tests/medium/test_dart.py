@@ -38,4 +38,4 @@ class DartInContainer(ContainerTests, test_dart.DartEditorTests):
         self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'eclipse')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/dart/editor".format(settings.DOCKER_USER))
+        self.installed_path = os.path.expanduser("/home/{}/tools/dart/dart-editor".format(settings.DOCKER_USER))
