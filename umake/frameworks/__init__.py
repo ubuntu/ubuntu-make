@@ -126,7 +126,7 @@ class BaseCategory():
         # try to call default framework if any
         if not args.framework:
             if not self.default_framework:
-                message = "A default framework for category {} was requested where there is none".format(self.name)
+                message = _("A default framework for category {} was requested where there is none".format(self.name))
                 logger.error(message)
                 self.category_parser.print_usage()
                 UI.return_main_screen(status_code=1)
