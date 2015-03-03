@@ -107,8 +107,8 @@ class BaseCategory():
         if self.is_main_category:
             framework_parser = parser
         else:
-            category_parser = parser.add_parser(self.prog_name, help=self.description)
-            framework_parser = category_parser.add_subparsers(dest="framework")
+            self.category_parser = parser.add_parser(self.prog_name, help=self.description)
+            framework_parser = self.category_parser.add_subparsers(dest="framework")
         for framework in self.frameworks.values():
             framework.install_framework_parser(framework_parser)
         return framework_parser
@@ -128,6 +128,7 @@ class BaseCategory():
             if not self.default_framework:
                 message = "A default framework for category {} was requested where there is none".format(self.name)
                 logger.error(message)
+                self.category_parser.print_usage()
                 UI.return_main_screen(status_code=1)
             self.default_framework.run_for(args)
             return
