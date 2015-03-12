@@ -1,4 +1,4 @@
-ubuntu-make (0.6.1) UNRELEASED; urgency=medium
+ubuntu-make (0.6.1) vivid; urgency=medium
 
   * Set dart-editor as the command to install the editor and adapt the tests
     to this
