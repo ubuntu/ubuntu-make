@@ -1,3 +1,14 @@
+ubuntu-make (0.6.1) UNRELEASED; urgency=medium
+
+  * Set dart-editor as the command to install the editor and adapt the tests
+    to this
+  * Fix some strings not marked for translations
+  * Print help for category with no default framework
+  * Fix get binary depends with empty starting line in debian/control
+  * Add missing tests deps in debian/tests/control
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 12 Mar 2015 08:14:02 +0100
+
 ubuntu-make (0.6) vivid; urgency=medium
 
   * New IDEs support and various cleanups by Anton Antonov:
