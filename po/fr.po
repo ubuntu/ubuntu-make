@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-09-23 08:44+0200\n"
-"PO-Revision-Date: 2014-10-29 09:13+0000\n"
-"Last-Translator: destiriser <destiriser@me.com>\n"
+"POT-Creation-Date: 2015-02-11 10:58+0100\n"
+"PO-Revision-Date: 2015-04-02 06:29+0000\n"
+"Last-Translator: Didier Roche <didrocks@ubuntu.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-10-29 09:16+0000\n"
-"X-Generator: Launchpad (build 17203)\n"
+"X-Launchpad-Export-Date: 2015-04-02 06:32+0000\n"
+"X-Generator: Launchpad (build 17413)\n"
 
 #: umake/__init__.py:104
 msgid "* Command '{}':"
@@ -47,7 +47,7 @@ msgstr "Augmenter la verbosité de la sortie (2 niveaux)"
 msgid "Remove specified framework if installed"
 msgstr "Supprimer un environnement spécifique si installé"
 
-#: umake/tools.py:329
+#: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
 msgstr "# Ajouté par Ubuntu make de {}\n"
 
@@ -131,26 +131,108 @@ msgstr ""
 msgid "Remove framework if installed"
 msgstr "Supprime l'environnement si installé"
 
-#: umake/frameworks/android.py:39
-msgid "Android"
-msgstr "Android"
+#: umake/frameworks/games.py:37
+msgid "Games Development Environment"
+msgstr "Environnement de développement de jeux"
 
-#: umake/frameworks/android.py:39
+#: umake/frameworks/games.py:43
+msgid "Stencyl game developer IDE"
+msgstr "Éditeur de jeux Stencyl"
+
+#: umake/frameworks/games.py:79
+msgid "Stencyl"
+msgstr "Stencyl"
+
+#: umake/frameworks/games.py:82
+msgid "Stencyl Game developer environment"
+msgstr "Environnement de développement de jeux Stencyl"
+
+#: umake/frameworks/ide.py:42
+msgid "Generic IDEs"
+msgstr "Environnement de développement intégré"
+
+#: umake/frameworks/ide.py:55
+msgid "Pure Eclipse Luna (4.4)"
+msgstr "Eclipse Luna (4.4)"
+
+#: umake/frameworks/ide.py:106
+msgid "The Eclipse Luna Integrated Development Environment"
+msgstr "L'environnement de développement intégré Eclipse Luna"
+
+#: umake/frameworks/ide.py:109
+msgid "Eclipse Luna"
+msgstr "Eclipse Luna"
+
+#: umake/frameworks/ide.py:208
+msgid "PyCharm Community Edition"
+msgstr "Pycharm Édition Communautaire"
+
+#: umake/frameworks/ide.py:224
+msgid "IntelliJ IDEA Community Edition"
+msgstr "IntelliJ IDEA Édition Communautaire"
+
+#: umake/frameworks/ide.py:240
+msgid "IntelliJ IDEA"
+msgstr "IntelliJ IDEA"
+
+#: umake/frameworks/dart.py:40
+msgid "Dartlang Development Environment"
+msgstr "Environnement de Développement Dartlang"
+
+#: umake/frameworks/dart.py:46
+msgid "Dart SDK with editor (default)"
+msgstr "Dart SDK avec éditeur (défaut)"
+
+#: umake/frameworks/dart.py:70
+msgid "Dart Editor"
+msgstr "Éditeur Dart"
+
+#: umake/frameworks/dart.py:73
+msgid "Dart Editor for the dart language"
+msgstr "Éditeur Dart pour le langage dart"
+
+#: umake/frameworks/go.py:39
+msgid "Go language"
+msgstr "Langage Go"
+
+#: umake/frameworks/go.py:46
+msgid "Google compiler (default)"
+msgstr "Compilateur Google (défaut)"
+
+#: umake/frameworks/go.py:76
+msgid "You need to restart a shell session for your installation to work"
+msgstr ""
+"Vous devez redémarrer une session shell pour que votre installation "
+"fonctionne"
+
+#: umake/frameworks/web.py:39
+msgid "Web Developer Environment"
+msgstr "Environnement de développement Web"
+
+#: umake/frameworks/web.py:45 umake/frameworks/web.py:65
+msgid "Firefox Developer Edition"
+msgstr "Firefox Édition Développeur"
+
+#: umake/frameworks/web.py:68
+msgid "Firefox Aurora with Developer tools"
+msgstr "Firefox Aurora avec outils développeur"
+
+#: umake/frameworks/android.py:42
 msgid "Android Development Environment"
 msgstr "Environnement de développement Android"
 
-#: umake/frameworks/android.py:93
+#: umake/frameworks/android.py:80
+msgid "Android Studio (default)"
+msgstr "Android Studio (défaut)"
+
+#: umake/frameworks/android.py:99
 msgid "Android Studio"
 msgstr "Android Studio"
 
-#: umake/frameworks/android.py:96
+#: umake/frameworks/android.py:102
 msgid "Android Studio developer environment"
 msgstr "Environnement de développement Android Studio"
 
-#: umake/frameworks/android.py:143
-msgid "ADT Eclipse"
-msgstr "Eclipse ADT"
-
-#: umake/frameworks/android.py:146
-msgid "Android Developer Tools (using eclipse)"
-msgstr "Android Developer Tools (version Eclipse)"
+#: umake/frameworks/android.py:120
+msgid "Android NDK"
+msgstr "Android NDK"

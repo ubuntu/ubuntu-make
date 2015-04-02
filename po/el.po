@@ -1,16 +1,16 @@
-# German translation for ubuntu-make
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
+# Greek translation for ubuntu-make
+# Copyright (c) 2015 Rosetta Contributors and Canonical Ltd 2015
 # This file is distributed under the same license as the ubuntu-make package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-02-11 10:58+0100\n"
-"PO-Revision-Date: 2015-02-12 04:14+0000\n"
-"Last-Translator: Niklas Resch <ro0kie4@ymail.com>\n"
-"Language-Team: German <de@li.org>\n"
+"PO-Revision-Date: 2015-03-07 01:22+0000\n"
+"Last-Translator: Aggelos Arnaoutis <angelosarn@hotmail.com>\n"
+"Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,21 +19,25 @@ msgstr ""
 
 #: umake/__init__.py:104
 msgid "* Command '{}':"
-msgstr "* Kommando '{}'"
+msgstr "* Εντολή '{}':"
 
 #: umake/__init__.py:112
 msgid "Deploy and setup developers environment easily on ubuntu"
-msgstr "Entwicklerumgebungen einfach auf Ubuntu aufspielen und konfigurieren"
+msgstr ""
+"Αναπτύξτε και ρυθμίστε το προγραμματιστικό περιβάλλον εύκολα στο ubuntu"
 
 #: umake/__init__.py:113
 msgid ""
 "Note that you can also configure different debug logs behaviors using "
 "LOG_CFG pointing to a log yaml profile."
 msgstr ""
+"Σημειώστε πως μπορείτε επίσης να ρυθμίστε διαφορετικές συμπεριφορές "
+"καταγραφών απασφαλμάτωσης χρησιμοποιώντας LOG_CFG δείχνοντας σε ένα log yaml "
+"προφίλ"
 
 #: umake/__init__.py:116
 msgid "Show this help"
-msgstr "Diese Hilfe anzeigen"
+msgstr ""
 
 #: umake/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
@@ -41,24 +45,26 @@ msgstr ""
 
 #: umake/__init__.py:119
 msgid "Remove specified framework if installed"
-msgstr "Entferne, falls installiert, das spezifizierte Framework"
+msgstr "Αφαίρεση συγκεκριμένου πλάισιου αν έχει εγκατασταθεί"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
-msgstr ""
+msgstr "# Το Ubuntu εγκαθιστά το {}\n"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
-msgstr "Keine passende Antwort gegeben"
+msgstr "Δεν παρέχεται καμία καμία κατάλληλη απάντηση"
 
 #: umake/interactions/__init__.py:75
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
-msgstr "Ihre Eingabe '{}' ist nicht erlaubt. Mögliche Eingaben sind: {}"
+msgstr ""
+"Η καταχώρισή σας '{}' δεν ειναι μια αποδεκτή επιλογή. οι επιλογές είναι: {}"
 
 #: umake/interactions/__init__.py:78
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
 msgstr ""
-"Ihre Eingabe '{}' ist nicht erlaubt. Mögliche Eingaben sind {} oder {}"
+"Η καταχώρισή σας '{}' δεν είναι μια αποδεκτή επιλογή. οι επιλογές είναι: {} "
+"και {}"
 
 #: umake/interactions/__init__.py:96
 msgid " ({})"
@@ -78,19 +84,19 @@ msgstr "{} [{}] "
 
 #: umake/interactions/__init__.py:111
 msgid "I Accept"
-msgstr "Ich akzeptiere"
+msgstr "Αποδέχομαι"
 
 #: umake/interactions/__init__.py:111
 msgid "a"
-msgstr "a"
+msgstr "α"
 
 #: umake/interactions/__init__.py:112
 msgid "I don't accept"
-msgstr "Ich akzeptiere nicht"
+msgstr "Δεν αποδέχομαι"
 
 #: umake/interactions/__init__.py:112 umake/interactions/__init__.py:145
 msgid "N"
-msgstr "N"
+msgstr ""
 
 #: umake/interactions/__init__.py:121 umake/interactions/__init__.py:122
 msgid "{} ({})"
@@ -102,50 +108,50 @@ msgstr "[{}] "
 
 #: umake/interactions/__init__.py:144
 msgid "Yes"
-msgstr "Ja"
+msgstr "Ναι"
 
 #: umake/interactions/__init__.py:144
 msgid "y"
-msgstr "j"
+msgstr ""
 
 #: umake/interactions/__init__.py:145
 msgid "No"
-msgstr "Nein"
+msgstr "Όχι"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't remove {} as it isn't installed"
-msgstr ""
+msgstr "Δεν μπορείς να αφαιρέσει {} ενώ δεν είναι εγκατεστημένο"
 
 #: umake/frameworks/__init__.py:271
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
 msgstr ""
-"Wenn der Name des standard Frameworks nicht gegeben ist, so sollte das "
-"Zielverzeichnis ein / enthalten"
+"Εάν το προεπιλεγμένο όνομα πλαισίου δεν παρέχεται, το destdir πρέπει να "
+"περιέχει ένα /"
 
 #: umake/frameworks/__init__.py:274
 msgid "Remove framework if installed"
-msgstr "Entferne, falls installiert, das Framework"
+msgstr "Αφαιρέστε το πλάισιο αν είναι εγκατεστημένο"
 
 #: umake/frameworks/games.py:37
 msgid "Games Development Environment"
-msgstr ""
+msgstr "Περιβάλλον Ανάπτυξης Παιχνιδιών"
 
 #: umake/frameworks/games.py:43
 msgid "Stencyl game developer IDE"
-msgstr ""
+msgstr "IDE προγραμματιστή παιχνιδιών Stencyl"
 
 #: umake/frameworks/games.py:79
 msgid "Stencyl"
-msgstr ""
+msgstr "Stencyl"
 
 #: umake/frameworks/games.py:82
 msgid "Stencyl Game developer environment"
-msgstr ""
+msgstr "Περιβάλλον προγραμματιστή Παιχνιδιών Stencyl"
 
 #: umake/frameworks/ide.py:42
 msgid "Generic IDEs"
-msgstr ""
+msgstr "Γενικά IDE"
 
 #: umake/frameworks/ide.py:55
 msgid "Pure Eclipse Luna (4.4)"
@@ -161,19 +167,19 @@ msgstr ""
 
 #: umake/frameworks/ide.py:208
 msgid "PyCharm Community Edition"
-msgstr ""
+msgstr "PyCharm Έκδοση Κοινότητας"
 
 #: umake/frameworks/ide.py:224
 msgid "IntelliJ IDEA Community Edition"
-msgstr ""
+msgstr "IntelliJ IDEA Έκδοση Κοινότητας"
 
 #: umake/frameworks/ide.py:240
 msgid "IntelliJ IDEA"
-msgstr ""
+msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/dart.py:40
 msgid "Dartlang Development Environment"
-msgstr ""
+msgstr "Dartlang Περιβάλλον Ανάπτυξης"
 
 #: umake/frameworks/dart.py:46
 msgid "Dart SDK with editor (default)"
@@ -193,40 +199,42 @@ msgstr ""
 
 #: umake/frameworks/go.py:46
 msgid "Google compiler (default)"
-msgstr ""
+msgstr "Google μεταγλωττιστής (προεπιλεγμένος)"
 
 #: umake/frameworks/go.py:76
 msgid "You need to restart a shell session for your installation to work"
 msgstr ""
+"Πρέπει να επανεκκινήσεις μια συνεδρία κελύφους για να δουλέψει η εγκατάστασή "
+"σου"
 
 #: umake/frameworks/web.py:39
 msgid "Web Developer Environment"
-msgstr ""
+msgstr "Περιβάλλον Ανάπτυξης Ιστού"
 
 #: umake/frameworks/web.py:45 umake/frameworks/web.py:65
 msgid "Firefox Developer Edition"
-msgstr ""
+msgstr "Firefox Έκδοση Προγραμματιστή"
 
 #: umake/frameworks/web.py:68
 msgid "Firefox Aurora with Developer tools"
-msgstr ""
+msgstr "Firefox Aurora με εργαλεία Προγραμματιστή"
 
 #: umake/frameworks/android.py:42
 msgid "Android Development Environment"
-msgstr "Android Entwicklungsumgebung"
+msgstr "Android Περιβάλλον Ανάπτυξης"
 
 #: umake/frameworks/android.py:80
 msgid "Android Studio (default)"
-msgstr ""
+msgstr "Android Στούντιο (προεπιλεγμένο)"
 
 #: umake/frameworks/android.py:99
 msgid "Android Studio"
-msgstr "Android Studio"
+msgstr "Android Στούντιο"
 
 #: umake/frameworks/android.py:102
 msgid "Android Studio developer environment"
-msgstr "Android Studio Entwicklungsumgebung"
+msgstr "Περιβάλλον προγραμματιστή Android Στούντιο"
 
 #: umake/frameworks/android.py:120
 msgid "Android NDK"
-msgstr ""
+msgstr "Android NDK"
