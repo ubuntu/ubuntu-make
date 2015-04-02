@@ -1,3 +1,12 @@
+ubuntu-make (0.6.2) UNRELEASED; urgency=medium
+
+  * New translations:
+    - Greek, Indonesian
+  * Updated translations:
+    - German, Spanish, French
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 02 Apr 2015 09:56:30 +0200
+
 ubuntu-make (0.6.1) vivid; urgency=medium
 
   * Set dart-editor as the command to install the editor and adapt the tests
