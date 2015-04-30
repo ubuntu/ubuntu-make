@@ -37,3 +37,17 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/web/firefox-dev".format(settings.DOCKER_USER))
+
+
+class VisualStudioCodeContainer(ContainerTests, test_web.VisualStudioCodeTest):
+    """This will test the Visual Studio Code integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "code.visualstudio.com"
+        self.port = "443"
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/web/visual-studio-code".format(settings.DOCKER_USER))
