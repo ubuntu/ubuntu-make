@@ -1,10 +1,10 @@
-ubuntu-make (0.7) UNRELEASED; urgency=medium
+ubuntu-make (0.7) vivid; urgency=medium
 
   * Add Visual Studio Code support (under the "web" category)
   * Fix an error message printing for the eclipse framework if the server
     doesn't return a success code
 
- -- Didier Roche <didrocks@ubuntu.com>  Thu, 30 Apr 2015 13:02:51 +0200
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 30 Apr 2015 13:06:50 +0200
 
 ubuntu-make (0.6.2) vivid; urgency=medium
 
