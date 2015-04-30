@@ -17,6 +17,7 @@ ADD tests/data/www.jetbrains.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/golang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.dartlang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/download.mozilla.org.crt /usr/local/share/ca-certificates/
+ADD tests/data/code.visualstudio.com.crt /usr/local/share/ca-certificates/
 ADD docker/create_packages.sh /tmp/
 
 # Refresh the image
