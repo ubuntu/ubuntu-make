@@ -57,7 +57,7 @@ class FirefoxDevTests(LargeFrameworkTests):
         """we return the expected arch call on command line"""
         return platform.machine()
 
-    def test_default__install(self):
+    def test_default_install(self):
         """Install firefox dev from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} web firefox-dev'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
