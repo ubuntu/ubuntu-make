@@ -75,6 +75,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("Unsupported architecture: {}".format(arch))
             UI.return_main_screen()
 
+        @MainLoop.in_mainloop_thread
         def done(download_result):
             res = download_result[md5_url]
 
