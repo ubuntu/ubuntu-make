@@ -63,7 +63,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
-        self.assertEqual(proc.wait(self.TIMEOUT_STOP), 0)
+        self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
 
         # ensure that it's detected as installed:
         self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
@@ -119,7 +119,7 @@ class AndroidStudioTests(LargeFrameworkTests):
             proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                     stderr=subprocess.DEVNULL)
             self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
-            self.assertEqual(proc.wait(self.TIMEOUT_STOP), 0)
+            self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
 
     def test_android_studio_reinstall_other_path(self):
         """Reinstall android studio on another path once installed should remove the first version"""
