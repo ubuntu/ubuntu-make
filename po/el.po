@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-02-11 10:58+0100\n"
-"PO-Revision-Date: 2015-03-07 01:22+0000\n"
-"Last-Translator: Aggelos Arnaoutis <angelosarn@hotmail.com>\n"
+"PO-Revision-Date: 2015-05-03 22:41+0000\n"
+"Last-Translator: stratosg <Unknown>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-02 06:32+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2015-05-04 07:08+0000\n"
+"X-Generator: Launchpad (build 17474)\n"
 
 #: umake/__init__.py:104
 msgid "* Command '{}':"
@@ -37,11 +37,11 @@ msgstr ""
 
 #: umake/__init__.py:116
 msgid "Show this help"
-msgstr ""
+msgstr "Εμφάνιση αυτής της βοήθειας"
 
 #: umake/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
-msgstr ""
+msgstr "Αυξήστε τη λεκτική λεπτομέρεια εξόδου (2 επίπεδα)"
 
 #: umake/__init__.py:119
 msgid "Remove specified framework if installed"

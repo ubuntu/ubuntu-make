@@ -1,16 +1,16 @@
-# German translation for ubuntu-make
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
+# Swedish translation for ubuntu-make
+# Copyright (c) 2015 Rosetta Contributors and Canonical Ltd 2015
 # This file is distributed under the same license as the ubuntu-make package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-02-11 10:58+0100\n"
-"PO-Revision-Date: 2015-04-23 16:16+0000\n"
-"Last-Translator: Niklas Resch <ro0kie4@ymail.com>\n"
-"Language-Team: German <de@li.org>\n"
+"PO-Revision-Date: 2015-05-02 09:00+0000\n"
+"Last-Translator: Lars Nyström <Unknown>\n"
+"Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,49 +19,45 @@ msgstr ""
 
 #: umake/__init__.py:104
 msgid "* Command '{}':"
-msgstr "* Befehl '{}':"
+msgstr ""
 
 #: umake/__init__.py:112
 msgid "Deploy and setup developers environment easily on ubuntu"
-msgstr "Entwicklerumgebungen einfach auf Ubuntu aufspielen und konfigurieren"
+msgstr "Installera och konfigurera utvecklares arbetsmiljö enkelt på Ubuntu"
 
 #: umake/__init__.py:113
 msgid ""
 "Note that you can also configure different debug logs behaviors using "
 "LOG_CFG pointing to a log yaml profile."
 msgstr ""
-"Beachten Sie, dass ebenfalls das Verhalten verschiedener \"debug logs\" "
-"konfiguriert werden kann, indem Sie LOG_CFG benutzen, was auf einen \"log "
-"yaml\"-Profil zeigt."
 
 #: umake/__init__.py:116
 msgid "Show this help"
-msgstr "Diese Hilfe anzeigen"
+msgstr "Visa denna hjälptext"
 
 #: umake/__init__.py:117
 msgid "Increase output verbosity (2 levels)"
-msgstr "Erhöhe die Ausführlichkeit der Ausgabe"
+msgstr ""
 
 #: umake/__init__.py:119
 msgid "Remove specified framework if installed"
-msgstr "Entferne, falls installiert, das spezifizierte Framework"
+msgstr "Avinstallera givet ramverk om det är installerat"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
-msgstr "# Ubuntu make Installation von {}￼\n"
+msgstr ""
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
-msgstr "Keine passende Antwort verfügbar"
+msgstr "Inget lämpligt svar angivet"
 
 #: umake/interactions/__init__.py:75
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
-msgstr "Ihre Eingabe '{}' ist nicht erlaubt. Mögliche Eingaben sind: {}"
+msgstr ""
 
 #: umake/interactions/__init__.py:78
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
 msgstr ""
-"Ihre Eingabe '{}' ist nicht erlaubt. Mögliche Eingaben sind {} oder {}"
 
 #: umake/interactions/__init__.py:96
 msgid " ({})"
@@ -81,7 +77,7 @@ msgstr "{} [{}] "
 
 #: umake/interactions/__init__.py:111
 msgid "I Accept"
-msgstr "Ich akzeptiere"
+msgstr "Jag godkänner"
 
 #: umake/interactions/__init__.py:111
 msgid "a"
@@ -89,7 +85,7 @@ msgstr "a"
 
 #: umake/interactions/__init__.py:112
 msgid "I don't accept"
-msgstr "Ich akzeptiere nicht"
+msgstr "Jag godkänner inte"
 
 #: umake/interactions/__init__.py:112 umake/interactions/__init__.py:145
 msgid "N"
@@ -113,42 +109,40 @@ msgstr "j"
 
 #: umake/interactions/__init__.py:145
 msgid "No"
-msgstr "Nein"
+msgstr "Nej"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't remove {} as it isn't installed"
-msgstr ""
+msgstr "Du kan inte avinstallera {} eftersom det inte är installerat"
 
 #: umake/frameworks/__init__.py:271
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
 msgstr ""
-"Wenn der Name des standard Frameworks nicht gegeben ist, so sollte das "
-"Zielverzeichnis ein / enthalten"
 
 #: umake/frameworks/__init__.py:274
 msgid "Remove framework if installed"
-msgstr "Entferne, falls installiert, das Framework"
+msgstr "Avinstallera ramverket om det är installerat"
 
 #: umake/frameworks/games.py:37
 msgid "Games Development Environment"
-msgstr ""
+msgstr "Spelutvecklingsmiljö"
 
 #: umake/frameworks/games.py:43
 msgid "Stencyl game developer IDE"
-msgstr ""
+msgstr "Stencyl spelutvecklingsmiljö"
 
 #: umake/frameworks/games.py:79
 msgid "Stencyl"
-msgstr ""
+msgstr "Stencyl"
 
 #: umake/frameworks/games.py:82
 msgid "Stencyl Game developer environment"
-msgstr ""
+msgstr "Stencyl spelutvecklingsmiljö"
 
 #: umake/frameworks/ide.py:42
 msgid "Generic IDEs"
-msgstr ""
+msgstr "Allmänna utvecklingsmiljöer"
 
 #: umake/frameworks/ide.py:55
 msgid "Pure Eclipse Luna (4.4)"
@@ -216,7 +210,7 @@ msgstr ""
 
 #: umake/frameworks/android.py:42
 msgid "Android Development Environment"
-msgstr "Android Entwicklungsumgebung"
+msgstr ""
 
 #: umake/frameworks/android.py:80
 msgid "Android Studio (default)"
@@ -224,11 +218,11 @@ msgstr ""
 
 #: umake/frameworks/android.py:99
 msgid "Android Studio"
-msgstr "Android Studio"
+msgstr ""
 
 #: umake/frameworks/android.py:102
 msgid "Android Studio developer environment"
-msgstr "Android Studio Entwicklungsumgebung"
+msgstr ""
 
 #: umake/frameworks/android.py:120
 msgid "Android NDK"
