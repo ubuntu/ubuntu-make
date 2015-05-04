@@ -79,7 +79,7 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Stencyl"),
                         icon_path=os.path.join(self.install_path, "data", "other", "icon-30x30.png"),
                         exec='"{}" %f'.format(os.path.join(self.install_path, "Stencyl")),
-                        comment=_("Stencyl Game developer environment"),
+                        comment=self.description,
                         categories="Development;IDE;",
                         extra="Path={}\nStartupWMClass=stencyl-sw-Launcher".format(self.install_path)))
 
