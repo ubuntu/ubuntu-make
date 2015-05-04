@@ -1,0 +1,109 @@
+=head1 NAME
+ 
+umake - Deploy and setup developers environment easily on ubuntu
+ 
+=head1 SYNOPSIS
+
+umake [--help] [-v] [-r] {go,games,web,ide,android,dart} ...
+ 
+=head1 DESCRIPTION
+
+umake takes two different types of arguments: positional and optional arguments.
+
+=over 10
+
+=item positional arguments:
+
+  {go,games,web,ide,android,dart} Developer environment.
+    go                  Go language
+    games               Games Development Environment
+    web                 Web Developer Environment
+    ide                 Generic IDEs
+    android             Android Development Environment
+    dart                Dartlang Development Environment
+
+=item  optional arguments:
+
+  --help                Show help
+  -v, --verbose         Increase output verbosity (2 levels)
+  -r, --remove          Remove specified framework if installed
+
+=back
+
+=head2 go:
+
+positional arguments:
+  {go-lang}
+    go-lang   Google compiler (default)
+
+optional arguments:
+  -h, --help  show help message and exit
+
+=head2 games:
+
+positional arguments:
+  {stencyl}
+    stencyl   Stencyl game developer IDE
+
+optional arguments:
+  -h, --help  show help message and exit
+
+=head2 web:
+
+positional arguments:
+  {firefox-dev}
+    firefox-dev  Firefox Developer Edition
+
+optional arguments:
+  -h, --help     show help message and exit
+
+=head2 ide:
+
+
+positional arguments:
+  {eclipse,pycharm-educational,idea-ultimate,pycharm,phpstorm,idea,pycharm-professional,webstorm,rubymine}
+    eclipse             Pure Eclipse Luna (4.4)
+    pycharm-educational
+                        PyCharm Educational Edition
+    idea-ultimate       IntelliJ IDEA
+    pycharm             PyCharm Community Edition
+    phpstorm            PhpStorm
+    idea                IntelliJ IDEA Community Edition
+    pycharm-professional
+                        PyCharm Professional Edition
+    webstorm            WebStorm
+    rubymine            Ruby on Rails IDE
+
+optional arguments:
+  -h, --help            show help message and exit
+
+=head2 android:
+
+positional arguments:
+  {android-studio,android-ndk}
+    android-studio      Android Studio (default)
+    android-ndk         Android NDK
+
+optional arguments:
+  -h, --help            show help message and exit
+
+=head2 dart:
+
+positional arguments:
+  {dart-editor}
+    dart-editor  Dart SDK with editor (default)
+
+optional arguments:
+  -h, --help     show help message and exit
+ 
+=head1 LICENSE
+
+Copyright  Free  Software  Foundation,  Inc.   License  GPLv3:  GNU   GPL   version   3 <http://gnu.org/licenses/gpl.html>.  This  is  free software: you are free to change and redistribute it.  There is NO WARRANTY, to the extent permitted by law.
+ 
+=head1 SEE ALSO
+
+For full documentation refer https://wiki.ubuntu.com/ubuntu-make 
+ 
+=cut
+
+
