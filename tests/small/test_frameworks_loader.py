@@ -270,6 +270,24 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Framework with not requirements don't need root access"""
         self.assertFalse(self.categoryA.frameworks["framework-a"].need_root_access)
 
+    def test_uninstalled_framework_marked_for_removal_only_not_registered(self):
+        """Uninstalled framework marked for removal only isn't not registered (as we can't install it back)"""
+        self.assertIsNone(self.CategoryHandler.categories["category-r"].frameworks["framework-r-uninstalled"])
+
+    def test_installed_framework_not_installable_registered(self):
+        """Installed framework not installable are still registered (can be used for removal)"""
+        self.assertIsNotNone(self.CategoryHandler.categories["category-r"]
+            .frameworks["framework-r-installed-not-installable"])
+
+    def test_installed_framework_marked_for_removal_only_registered(self):
+        """Installed framework marked for removal only is registered to be able to remove it"""
+        self.assertIsNotNone(self.CategoryHandler.categories["category-r"].frameworks["framework-r-installed"])
+
+    def test_installed_framework_marked_for_removal_only_not_installable(self):
+        """Installed framework that are marked for removal only are not installable"""
+        self.assertFalse(self.CategoryHandler.categories["category-r"].frameworks["framework-r-installed"]
+                         .is_installable)
+
     def test_parse_category_and_framework_run_correct_framework(self):
         """Parsing category and framework return right category and framework"""
         args = Mock()
@@ -343,6 +361,32 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.remove = True
         self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
         self.expect_warn_error = True
+
+    def test_parse_category_and_framework_cannot_install_not_installable_but_installed_framework(self):
+        """We cannot install frameworks that are not installable but already installed (and so, registered)"""
+        self.expect_warn_error = True
+        args = Mock()
+        args.category = "category-r"
+        args.destdir = None
+        args.framework = "framework-r-installed-not-installable"
+        args.accept_license = False
+        args.remove = False
+        self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
+
+    def test_parse_category_and_framework_can_remove_not_installable_but_installed_framework(self):
+        """Parsing category and frameworks with --remove can remove not installable but installed framework"""
+        args = Mock()
+        args.category = "category-r"
+        args.destdir = None
+        args.framework = "framework-r-installed"
+        args.accept_license = False
+        args.remove = True
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-r-installed"], "remove")\
+                as remove_call:
+            self.CategoryHandler.categories[args.category].run_for(args)
+
+            self.assertTrue(remove_call.called)
+            remove_call.assert_called_with()
 
     def test_uninstantiable_framework(self):
         """A uninstantiable framework isn't loaded"""
