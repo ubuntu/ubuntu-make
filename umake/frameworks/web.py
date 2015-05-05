@@ -124,9 +124,12 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen()
         self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, None), headers=self.headers))
 
-        logger.debug("Downloading License page")
-        DownloadCenter([DownloadItem(self.license_url, headers=self.headers)], self.check_external_license,
-                       download=False)
+        if not self.auto_accept_license:
+            logger.debug("Downloading License page")
+            DownloadCenter([DownloadItem(self.license_url, headers=self.headers)], self.check_external_license,
+                           download=False)
+        else:
+            self.start_download_and_install()
 
     @MainLoop.in_mainloop_thread
     def check_external_license(self, result):

@@ -50,13 +50,12 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         """The Downloader framework isn't instantiated directly, but is useful to inherit from for all frameworks
 
         having a set of downloads to proceed, some eventual supported_archs."""
-        self.expect_license = kwargs.get("expect_license", False)
         self.download_page = kwargs["download_page"]
         self.checksum_type = kwargs.get("checksum_type", None)
         self.dir_to_decompress_in_tarball = kwargs.get("dir_to_decompress_in_tarball", None)
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
-        for extra_arg in ["expect_license", "download_page", "checksum_type",  "dir_to_decompress_in_tarball",
+        for extra_arg in ["download_page", "checksum_type",  "dir_to_decompress_in_tarball",
                           "desktop_filename", "icon_filename"]:
             with suppress(KeyError):
                 kwargs.pop(extra_arg)
@@ -76,8 +75,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             return launcher_exists(self.desktop_filename)
         return True
 
-    def setup(self, arg_install_path=None):
-        self.arg_install_path = arg_install_path
+    def setup(self, install_path=None, auto_accept_license=False):
+        self.arg_install_path = install_path
+        self.auto_accept_license = auto_accept_license
         super().setup()
 
         # first step, check if installed
@@ -85,7 +85,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             UI.display(YesNo("{} is already installed on your system, do you want to reinstall "
                              "it anyway?".format(self.name), self.reinstall, UI.return_main_screen))
         else:
-            self.confirm_path(arg_install_path)
+            self.confirm_path(self.arg_install_path)
 
     def reinstall(self):
         logger.debug("Mark previous installation path for cleaning.")
@@ -180,7 +180,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             for line in result[self.download_page].buffer:
                 line_content = line.decode()
 
-                if self.expect_license:
+                if self.expect_license and not self.auto_accept_license:
                     in_license = self.parse_license(line_content, license_txt, in_license)
 
                 (download, in_download) = self.parse_download_link(line_content, in_download)
@@ -206,7 +206,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                 UI.display(LicenseAgreement(strip_tags(license_txt.getvalue()).strip(),
                                             self.start_download_and_install,
                                             UI.return_main_screen))
-            elif self.expect_license:
+            elif self.expect_license and not self.auto_accept_license:
                 logger.error("We were expecting to find a license on the download page, we didn't.")
                 UI.return_main_screen()
             else:

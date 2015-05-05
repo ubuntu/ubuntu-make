@@ -138,7 +138,8 @@ class BaseCategory():
 class BaseFramework(metaclass=abc.ABCMeta):
 
     def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None,
-                 only_on_archs=None, only_ubuntu_version=None, packages_requirements=None, only_for_removal=False):
+                 only_on_archs=None, only_ubuntu_version=None, packages_requirements=None, only_for_removal=False,
+                 expect_license=False):
         self.name = name
         self.description = description
         self.logo_path = None
@@ -149,6 +150,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.packages_requirements = [] if packages_requirements is None else packages_requirements
         self.packages_requirements.extend(self.category.packages_requirements)
         self.only_for_removal = only_for_removal
+        self.expect_license = expect_license
 
         # don't detect anything for completion mode (as we need to be quick), so avoid opening apt cache and detect
         # if it's installed.
@@ -276,6 +278,9 @@ class BaseFramework(metaclass=abc.ABCMeta):
                                                                         "destdir should contain a /"))
         this_framework_parser.add_argument('-r', '--remove', action="store_true",
                                            help=_("Remove framework if installed"))
+        if self.expect_license:
+            this_framework_parser.add_argument('--accept-license', dest="accept_license", action="store_true",
+                                               help=_("Accept license without prompting"))
         return this_framework_parser
 
     def run_for(self, args):
@@ -289,9 +294,12 @@ class BaseFramework(metaclass=abc.ABCMeta):
             self.remove()
         else:
             install_path = None
+            auto_accept_license = False
             if args.destdir:
                 install_path = os.path.abspath(os.path.expanduser(args.destdir))
-            self.setup(install_path)
+            if self.expect_license and args.accept_license:
+                auto_accept_license = True
+            self.setup(install_path=install_path, auto_accept_license=auto_accept_license)
 
 
 class MainCategory(BaseCategory):
