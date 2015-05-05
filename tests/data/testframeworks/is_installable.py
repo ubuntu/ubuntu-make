@@ -35,7 +35,7 @@ class FrameworkA(umake.frameworks.BaseFramework):
         super().__init__(name="Framework A", description="Description for framework A (installable chained to parent)",
                          category=category)
 
-    def setup(self, install_path=None):
+    def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
 
     def remove(self):
@@ -54,7 +54,7 @@ class FrameworkB(umake.frameworks.BaseFramework):
                          category=category, only_on_archs=["archswhichdontexist"],
                          only_ubuntu_version=["versionwhichdontexist"])
 
-    def setup(self, install_path=None):
+    def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
 
     def remove(self):
@@ -73,7 +73,7 @@ class FrameworkC(umake.frameworks.BaseFramework):
                                                          "even with no restriction",
                          category=category)
 
-    def setup(self, install_path=None):
+    def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
 
     def remove(self):

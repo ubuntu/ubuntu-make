@@ -36,7 +36,7 @@ class FrameworkA(umake.frameworks.BaseFramework):
         super().__init__(name="Framework A", description="Description for framework A (with add req.)",
                          category=category, install_path_dir="/", packages_requirements=["buz", "biz"])
 
-    def setup(self, install_path=None):
+    def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
 
     def remove(self):
@@ -49,7 +49,7 @@ class FrameworkB(umake.frameworks.BaseFramework):
         super().__init__(name="Framework B", description="Description for framework B (with no req.)",
                          category=category, install_path_dir="/")
 
-    def setup(self, install_path=None):
+    def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
 
     def remove(self):

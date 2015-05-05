@@ -44,7 +44,7 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Go Lang", description=_("Google compiler (default)"), is_category_default=True,
-                         category=category, only_on_archs=['i386', 'amd64'], expect_license=False,
+                         category=category, only_on_archs=['i386', 'amd64'],
                          download_page="https://golang.org/dl/",
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="go")

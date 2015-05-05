@@ -18,22 +18,22 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 
-"""Framework with another category module without any framework"""
+"""Framework only marked for removal"""
 
 import umake.frameworks
 
 
-class DCategory(umake.frameworks.BaseCategory):
+class RCategory(umake.frameworks.BaseCategory):
 
     def __init__(self):
-        super().__init__(name="Category D", description="Category D description (with restricted frameworks)")
+        super().__init__(name="Category R", description="Only containing one framework for removal")
 
 
-class FrameworkA(umake.frameworks.BaseFramework):
+class FrameworkRuninstalled(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
-        super().__init__(name="Framework A", description="Description for framework A (restricted arch)",
-                         category=category, only_on_archs=["foo", "baz"])
+        super().__init__(name="Framework R uninstalled", description="For removal", only_for_removal=True,
+                         category=category)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
@@ -42,11 +42,11 @@ class FrameworkA(umake.frameworks.BaseFramework):
         super().remove()
 
 
-class FrameworkB(umake.frameworks.BaseFramework):
+class FrameworkRinstalled(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
-        super().__init__(name="Framework B", description="Description for framework B (restricted version)",
-                         category=category, only_ubuntu_version=["9.10", "10.04"])
+        super().__init__(name="Framework R installed", description="For removal", only_for_removal=True,
+                         category=category)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
@@ -54,16 +54,28 @@ class FrameworkB(umake.frameworks.BaseFramework):
     def remove(self):
         super().remove()
 
+    @property
+    def is_installed(self):
+        return True
 
-class FrameworkC(umake.frameworks.BaseFramework):
+
+class FrameworkRinstallednotinstallable(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
-        super().__init__(name="Framework C", description="Description for framework C (restricted version and arch)",
-                         category=category, only_on_archs=["foo", "bar", "baz"],
-                         only_ubuntu_version=["9.10", "10.04", "10.10.10"])
+        super().__init__(name="Framework R installed not installable",
+                         description="For removal without only for removal", category=category)
 
     def setup(self, install_path=None, auto_accept_license=False):
+        print("here")
         super().setup()
 
     def remove(self):
         super().remove()
+
+    @property
+    def is_installed(self):
+        return True
+
+    @property
+    def is_installable(self):
+        return False

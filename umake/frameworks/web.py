@@ -47,8 +47,8 @@ class WebCategory(umake.frameworks.BaseCategory):
 class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
-        super().__init__(name="Firefox Dev", description=_("Firefox Developer Edition"), is_category_default=False,
-                         category=category, only_on_archs=_supported_archs, expect_license=False,
+        super().__init__(name="Firefox Dev", description=_("Firefox Developer Edition"),
+                         category=category, only_on_archs=_supported_archs,
                          download_page=None,
                          dir_to_decompress_in_tarball="firefox",
                          desktop_filename="firefox-developer.desktop")
@@ -88,7 +88,6 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Visual Studio Code", description=_("Visual Studio focused on modern web and cloud"),
-                         is_category_default=False,
                          category=category, only_on_archs=['amd64'], expect_license=True,
                          download_page="https://code.visualstudio.com",
                          desktop_filename="visual-studio-code.desktop")
@@ -124,9 +123,12 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen()
         self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, None), headers=self.headers))
 
-        logger.debug("Downloading License page")
-        DownloadCenter([DownloadItem(self.license_url, headers=self.headers)], self.check_external_license,
-                       download=False)
+        if not self.auto_accept_license:
+            logger.debug("Downloading License page")
+            DownloadCenter([DownloadItem(self.license_url, headers=self.headers)], self.check_external_license,
+                           download=False)
+        else:
+            self.start_download_and_install()
 
     @MainLoop.in_mainloop_thread
     def check_external_license(self, result):

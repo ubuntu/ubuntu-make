@@ -118,7 +118,7 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Android NDK", description=_("Android NDK"),
-                         category=category, only_on_archs=_supported_archs, expect_license=False,
+                         category=category, only_on_archs=_supported_archs,
                          download_page="https://developer.android.com/tools/sdk/ndk/index.html",
                          checksum_type=ChecksumType.md5,
                          dir_to_decompress_in_tarball="android-ndk-*")
@@ -146,3 +146,10 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
             logger.debug("{} binary isn't installed".format(self.name))
             return False
         return True
+
+
+class EclipseADTForRemoval(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse ADT", description="For removal only (not supported upstream anymore)",
+                         download_page=None, category=category, only_on_archs=_supported_archs, only_for_removal=True)

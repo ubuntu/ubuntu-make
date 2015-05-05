@@ -270,19 +270,38 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         """Framework with not requirements don't need root access"""
         self.assertFalse(self.categoryA.frameworks["framework-a"].need_root_access)
 
+    def test_uninstalled_framework_marked_for_removal_only_not_registered(self):
+        """Uninstalled framework marked for removal only isn't not registered (as we can't install it back)"""
+        self.assertIsNone(self.CategoryHandler.categories["category-r"].frameworks["framework-r-uninstalled"])
+
+    def test_installed_framework_not_installable_registered(self):
+        """Installed framework not installable are still registered (can be used for removal)"""
+        self.assertIsNotNone(self.CategoryHandler.categories["category-r"]
+            .frameworks["framework-r-installed-not-installable"])
+
+    def test_installed_framework_marked_for_removal_only_registered(self):
+        """Installed framework marked for removal only is registered to be able to remove it"""
+        self.assertIsNotNone(self.CategoryHandler.categories["category-r"].frameworks["framework-r-installed"])
+
+    def test_installed_framework_marked_for_removal_only_not_installable(self):
+        """Installed framework that are marked for removal only are not installable"""
+        self.assertFalse(self.CategoryHandler.categories["category-r"].frameworks["framework-r-installed"]
+                         .is_installable)
+
     def test_parse_category_and_framework_run_correct_framework(self):
         """Parsing category and framework return right category and framework"""
         args = Mock()
         args.category = "category-a"
         args.destdir = None
         args.framework = "framework-b"
+        args.accept_license = False
         args.remove = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "setup")\
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
 
             self.assertTrue(setup_call.called)
-            self.assertEqual(setup_call.call_args, call(args.destdir))
+            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=False))
 
     def test_parse_no_framework_run_default_for_category(self):
         """Parsing category will run default framework"""
@@ -290,20 +309,21 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.category = "category-a"
         args.destdir = None
         args.framework = None
+        args.accept_license = False
         args.remove = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "setup")\
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
-
             self.assertTrue(setup_call.called)
-            self.assertEqual(setup_call.call_args, call(args.destdir))
+            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=False))
 
     def test_parse_category_and_framework_run_correct_remove_framework(self):
-        """Parsing category and frameworkwwith --remove run remove on right category and framework"""
+        """Parsing category and framework with --remove run remove on right category and framework"""
         args = Mock()
         args.category = "category-a"
         args.destdir = None
         args.framework = "framework-b"
+        args.accept_license = False
         args.remove = True
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "remove")\
                 as remove_call:
@@ -318,6 +338,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.category = "category-a"
         args.framework = None
         args.remove = True
+        args.accept_license = False
         args.destdir = None
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "remove")\
                 as remove_call:
@@ -331,6 +352,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args = Mock()
         args.category = "category-b"
         args.framework = None
+        args.accept_license = False
         args.remove = False
         self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
         self.expect_warn_error = True
@@ -341,8 +363,50 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.category = "category-a"
         args.framework = "framework-b"
         args.remove = True
+        args.accept_license = False
         self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
         self.expect_warn_error = True
+
+    def test_parse_category_and_framework_cannot_install_not_installable_but_installed_framework(self):
+        """We cannot install frameworks that are not installable but already installed (and so, registered)"""
+        self.expect_warn_error = True
+        args = Mock()
+        args.category = "category-r"
+        args.destdir = None
+        args.framework = "framework-r-installed-not-installable"
+        args.accept_license = False
+        args.remove = False
+        self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
+
+    def test_parse_category_and_framework_can_remove_not_installable_but_installed_framework(self):
+        """Parsing category and frameworks with --remove can remove not installable but installed framework"""
+        args = Mock()
+        args.category = "category-r"
+        args.destdir = None
+        args.framework = "framework-r-installed"
+        args.accept_license = False
+        args.remove = True
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-r-installed"], "remove")\
+                as remove_call:
+            self.CategoryHandler.categories[args.category].run_for(args)
+
+            self.assertTrue(remove_call.called)
+            remove_call.assert_called_with()
+
+    def test_parse_category_and_framework_get_accept_license_arg(self):
+        """Parsing category and framework get the accept license arg"""
+        args = Mock()
+        args.category = "category-a"
+        args.destdir = None
+        args.framework = "framework-b"
+        args.accept_license = True
+        args.remove = False
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "setup")\
+                as setup_call:
+            self.CategoryHandler.categories[args.category].run_for(args)
+
+            self.assertTrue(setup_call.called)
+            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=True))
 
     def test_uninstantiable_framework(self):
         """A uninstantiable framework isn't loaded"""
@@ -649,7 +713,9 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
             switch_to_current_use_mock.assert_called_once_with()
 
     def test_completion_mode_dont_use_expensive_calls(self):
-        """Completion mode bypass expensive calls and so, register all frameworks"""
+        """Completion mode bypass expensive calls and so, register all frameworks but those marked as only for removal
+
+        (so read config)"""
         with patch('umake.frameworks.ConfigHandler') as config_handler_mock,\
                 patch('umake.frameworks.RequirementsHandler') as requirementhandler_mock,\
                 patch('umake.frameworks.is_completion_mode') as completionmode_mock:
@@ -657,8 +723,6 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
             self.loadFramework("testframeworks")
 
             self.assertTrue(completionmode_mock.called)
-            self.assertFalse(len(config_handler_mock.return_value.config.mock_calls) > 0,
-                             str(config_handler_mock.return_value.config.mock_calls))
             self.assertFalse(requirementhandler_mock.return_value.is_bucket_installed.called)
             # test that a non installed framework is registered
             self.assertIsNotNone(self.CategoryHandler.categories["category-e"].frameworks["framework-c"])
@@ -699,6 +763,29 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         self.assertEqual(args.category, "category-a")
         self.assertEqual(args.framework, "framework-a")
         self.assertEqual(args.destdir, None)
+
+    def test_parse_framework(self):
+        """Parsing framework get default parser framework options"""
+        main_parser = argparse.ArgumentParser()
+        self.install_category_parser(main_parser, ['category-a'])
+        args = main_parser.parse_args(["category-a", "framework-a"])
+        self.assertEqual(args.category, "category-a")
+        self.assertEqual(args.framework, "framework-a")
+        self.assertEqual(args.destdir, None)
+        self.assertFalse(args.remove)
+        with self.assertRaises(AttributeError):
+            args.accept_license
+
+    def test_parse_framework_with_optional_accept_license(self):
+        """Parsing framework with optional auto accept license argument"""
+        main_parser = argparse.ArgumentParser()
+        self.install_category_parser(main_parser, ['category-a'])
+        args = main_parser.parse_args(["category-a", "framework-b", "--accept-license"])
+        self.assertEqual(args.category, "category-a")
+        self.assertEqual(args.framework, "framework-b")
+        self.assertEqual(args.destdir, None)
+        self.assertFalse(args.remove)
+        self.assertTrue(args.accept_license)
 
     def test_parse_invalid_categories_raise_exit_error(self):
         """Invalid categories parse requests exit"""

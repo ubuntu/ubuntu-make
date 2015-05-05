@@ -82,7 +82,6 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
             if res.error:
                 logger.error(res.error)
                 UI.return_main_screen()
-                return
 
             # Should be ASCII anyway.
             md5 = res.buffer.getvalue().decode('utf-8').split()[0]
@@ -163,7 +162,6 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
             if checksum_result.error:
                 logger.error(checksum_result.error)
                 UI.return_main_screen()
-                return
 
             checksum = checksum_result.buffer.getvalue().decode('utf-8').split()[0]
             logger.info('Obtained SHA256 checksum: ' + checksum)

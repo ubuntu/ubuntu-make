@@ -35,7 +35,7 @@ class FrameworkC(umake.frameworks.BaseFramework):
         super().__init__(name="Framework C", description="Description for framework C",
                          category=category)
 
-    def setup(self, install_path=None):
+    def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
 
     def remove(self):
@@ -48,7 +48,7 @@ class FrameworkD(umake.frameworks.BaseFramework):
         super().__init__(name="Framework D", description="Description for framework D",
                          category=category)
 
-    def setup(self, install_path=None):
+    def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
 
     def remove(self):
