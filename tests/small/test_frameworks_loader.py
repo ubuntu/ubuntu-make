@@ -393,6 +393,21 @@ class TestFrameworkLoader(BaseFrameworkLoader):
             self.assertTrue(remove_call.called)
             remove_call.assert_called_with()
 
+    def test_parse_category_and_framework_get_accept_license_arg(self):
+        """Parsing category and framework get the accept license arg"""
+        args = Mock()
+        args.category = "category-a"
+        args.destdir = None
+        args.framework = "framework-b"
+        args.accept_license = True
+        args.remove = False
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "setup")\
+                as setup_call:
+            self.CategoryHandler.categories[args.category].run_for(args)
+
+            self.assertTrue(setup_call.called)
+            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=True))
+
     def test_uninstantiable_framework(self):
         """A uninstantiable framework isn't loaded"""
         # use the string as we fake the package when loading them
@@ -748,6 +763,29 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         self.assertEqual(args.category, "category-a")
         self.assertEqual(args.framework, "framework-a")
         self.assertEqual(args.destdir, None)
+
+    def test_parse_framework(self):
+        """Parsing framework get default parser framework options"""
+        main_parser = argparse.ArgumentParser()
+        self.install_category_parser(main_parser, ['category-a'])
+        args = main_parser.parse_args(["category-a", "framework-a"])
+        self.assertEqual(args.category, "category-a")
+        self.assertEqual(args.framework, "framework-a")
+        self.assertEqual(args.destdir, None)
+        self.assertFalse(args.remove)
+        with self.assertRaises(AttributeError):
+            args.accept_license
+
+    def test_parse_framework_with_optional_accept_license(self):
+        """Parsing framework with optional auto accept license argument"""
+        main_parser = argparse.ArgumentParser()
+        self.install_category_parser(main_parser, ['category-a'])
+        args = main_parser.parse_args(["category-a", "framework-b", "--accept-license"])
+        self.assertEqual(args.category, "category-a")
+        self.assertEqual(args.framework, "framework-b")
+        self.assertEqual(args.destdir, None)
+        self.assertFalse(args.remove)
+        self.assertTrue(args.accept_license)
 
     def test_parse_invalid_categories_raise_exit_error(self):
         """Invalid categories parse requests exit"""

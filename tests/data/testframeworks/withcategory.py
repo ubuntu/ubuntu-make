@@ -46,7 +46,7 @@ class FrameworkB(umake.frameworks.BaseFramework):
 
     def __init__(self, category):
         super().__init__(name="Framework/B", description="Description for framework B",
-                         category=category)
+                         category=category, expect_license=True)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
