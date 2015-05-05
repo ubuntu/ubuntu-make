@@ -281,6 +281,17 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
 
+    def test_automated_android_studio_install(self):
+        """Install android studio automatically with no interactive options"""
+        self.child = pexpect.spawnu(self.command('{} android android-studio {} --accept-license'.format(UMAKE,
+                                                 self.installed_path)))
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+
+        # we have an installed launcher, added to the launcher
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.exec_path))
+
 
 class AndroidNDKTests(LargeFrameworkTests):
     """This will test the Android NDK installation"""
