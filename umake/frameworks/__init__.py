@@ -226,7 +226,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
     def setup(self):
         """Method call to setup the Framework"""
         if not self.is_installable:
-            logger.error("You can't install that framework on that machine")
+            logger.error(_("You can't install that framework on this machine"))
             UI.return_main_screen()
             return
 
