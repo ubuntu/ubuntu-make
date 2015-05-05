@@ -138,7 +138,7 @@ class BaseCategory():
 class BaseFramework(metaclass=abc.ABCMeta):
 
     def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None,
-                 only_on_archs=None, only_ubuntu_version=None, packages_requirements=None):
+                 only_on_archs=None, only_ubuntu_version=None, packages_requirements=None, only_for_removal=False):
         self.name = name
         self.description = description
         self.logo_path = None
@@ -148,6 +148,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.only_ubuntu_version = [] if only_ubuntu_version is None else only_ubuntu_version
         self.packages_requirements = [] if packages_requirements is None else packages_requirements
         self.packages_requirements.extend(self.category.packages_requirements)
+        self.only_for_removal = only_for_removal
 
         # don't detect anything for completion mode (as we need to be quick), so avoid opening apt cache and detect
         # if it's installed.
@@ -191,6 +192,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
     @property
     def is_installable(self):
         """Return if the framework can be installed on that arch"""
+        if self.only_for_removal:
+            return False
         try:
             if len(self.only_on_archs) > 0:
                 # we have some restricted archs, check we support it
