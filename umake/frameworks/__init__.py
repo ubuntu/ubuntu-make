@@ -155,6 +155,16 @@ class BaseFramework(metaclass=abc.ABCMeta):
         # don't detect anything for completion mode (as we need to be quick), so avoid opening apt cache and detect
         # if it's installed.
         if is_completion_mode():
+            # only show it in shell completion if it was already installed
+            if self.only_for_removal:
+                config = ConfigHandler().config
+                try:
+                    if not os.path.isdir(config["frameworks"][category.prog_name][self.prog_name]["path"]):
+                        # don't show the framework in shell completion as for removal only and not installed
+                        return
+                except (TypeError, KeyError, FileNotFoundError):
+                    # don't show the framework in shell completion as for removal only and not installed
+                    return
             category.register_framework(self)
             return
 

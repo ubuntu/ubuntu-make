@@ -713,7 +713,9 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
             switch_to_current_use_mock.assert_called_once_with()
 
     def test_completion_mode_dont_use_expensive_calls(self):
-        """Completion mode bypass expensive calls and so, register all frameworks"""
+        """Completion mode bypass expensive calls and so, register all frameworks but those marked as only for removal
+
+        (so read config)"""
         with patch('umake.frameworks.ConfigHandler') as config_handler_mock,\
                 patch('umake.frameworks.RequirementsHandler') as requirementhandler_mock,\
                 patch('umake.frameworks.is_completion_mode') as completionmode_mock:
@@ -721,8 +723,6 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
             self.loadFramework("testframeworks")
 
             self.assertTrue(completionmode_mock.called)
-            self.assertFalse(len(config_handler_mock.return_value.config.mock_calls) > 0,
-                             str(config_handler_mock.return_value.config.mock_calls))
             self.assertFalse(requirementhandler_mock.return_value.is_bucket_installed.called)
             # test that a non installed framework is registered
             self.assertIsNotNone(self.CategoryHandler.categories["category-e"].frameworks["framework-c"])
