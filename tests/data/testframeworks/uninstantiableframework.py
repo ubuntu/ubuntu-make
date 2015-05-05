@@ -34,7 +34,7 @@ class Uninstantiable(umake.frameworks.BaseFramework):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def setup(self, install_path=None):
+    def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
 
     def remove(self):

@@ -29,7 +29,7 @@ class FrameworkFreeA(umake.frameworks.BaseFramework):
         super().__init__(name="Framework Free A", description="Description for framework A in no category",
                          category=category, install_path_dir="custom/frameworka")
 
-    def setup(self, install_path=None):
+    def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
 
     def remove(self):
@@ -42,7 +42,7 @@ class FrameworkFreeB(umake.frameworks.BaseFramework):
         super().__init__(name="Framework Free / B", description="Description for framework B in no category",
                          category=category)
 
-    def setup(self, install_path=None):
+    def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
 
     def remove(self):

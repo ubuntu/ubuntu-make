@@ -294,13 +294,14 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.category = "category-a"
         args.destdir = None
         args.framework = "framework-b"
+        args.accept_license = False
         args.remove = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "setup")\
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
 
             self.assertTrue(setup_call.called)
-            self.assertEqual(setup_call.call_args, call(args.destdir))
+            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=False))
 
     def test_parse_no_framework_run_default_for_category(self):
         """Parsing category will run default framework"""
@@ -308,20 +309,21 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.category = "category-a"
         args.destdir = None
         args.framework = None
+        args.accept_license = False
         args.remove = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "setup")\
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
-
             self.assertTrue(setup_call.called)
-            self.assertEqual(setup_call.call_args, call(args.destdir))
+            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=False))
 
     def test_parse_category_and_framework_run_correct_remove_framework(self):
-        """Parsing category and frameworkwwith --remove run remove on right category and framework"""
+        """Parsing category and framework with --remove run remove on right category and framework"""
         args = Mock()
         args.category = "category-a"
         args.destdir = None
         args.framework = "framework-b"
+        args.accept_license = False
         args.remove = True
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "remove")\
                 as remove_call:
@@ -336,6 +338,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.category = "category-a"
         args.framework = None
         args.remove = True
+        args.accept_license = False
         args.destdir = None
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "remove")\
                 as remove_call:
@@ -349,6 +352,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args = Mock()
         args.category = "category-b"
         args.framework = None
+        args.accept_license = False
         args.remove = False
         self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
         self.expect_warn_error = True
@@ -359,6 +363,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.category = "category-a"
         args.framework = "framework-b"
         args.remove = True
+        args.accept_license = False
         self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
         self.expect_warn_error = True
 
