@@ -47,8 +47,8 @@ class WebCategory(umake.frameworks.BaseCategory):
 class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
-        super().__init__(name="Firefox Dev", description=_("Firefox Developer Edition"), is_category_default=False,
-                         category=category, only_on_archs=_supported_archs, expect_license=False,
+        super().__init__(name="Firefox Dev", description=_("Firefox Developer Edition"),
+                         category=category, only_on_archs=_supported_archs,
                          download_page=None,
                          dir_to_decompress_in_tarball="firefox",
                          desktop_filename="firefox-developer.desktop")
@@ -88,7 +88,6 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Visual Studio Code", description=_("Visual Studio focused on modern web and cloud"),
-                         is_category_default=False,
                          category=category, only_on_archs=['amd64'], expect_license=True,
                          download_page="https://code.visualstudio.com",
                          desktop_filename="visual-studio-code.desktop")
