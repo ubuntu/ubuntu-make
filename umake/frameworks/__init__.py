@@ -228,7 +228,6 @@ class BaseFramework(metaclass=abc.ABCMeta):
         if not self.is_installable:
             logger.error(_("You can't install that framework on this machine"))
             UI.return_main_screen()
-            return
 
         if self.need_root_access and os.geteuid() != 0:
             logger.debug("Requesting root access")
@@ -245,7 +244,6 @@ class BaseFramework(metaclass=abc.ABCMeta):
         if not self.is_installed:
             logger.error(_("You can't remove {} as it isn't installed".format(self.name)))
             UI.return_main_screen(status_code=1)
-            return
 
     def mark_in_config(self):
         """Mark the installation as installed in the config file"""

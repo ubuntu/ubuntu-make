@@ -211,7 +211,6 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                 UI.return_main_screen()
             else:
                 self.start_download_and_install()
-        return
 
     def start_download_and_install(self):
         self.last_progress_download = None
@@ -319,7 +318,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             fd = self.result_download[url].fd
         if error_detected:
             UI.return_main_screen()
-            return
+
         self.decompress_and_install(fd)
 
     def decompress_and_install(self, fd):
@@ -348,7 +347,6 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             fd.close()
         if error_detected:
             UI.return_main_screen()
-            return
 
         self.post_install()
 
