@@ -379,7 +379,7 @@ class TestLauncherIcons(LoggedTestCase):
                Version=1.0
                Type=Application
                Name=Android Studio
-               Icon=/home/didrocks/tools/android-studio/bin/idea.png
+               Icon=/home/didrocks/tools/android-studio/bin/studio.png
                Exec="/home/didrocks/tools/android-studio/bin/studio.sh" %f
                Comment=Develop with pleasure!
                Categories=Development;IDE;
