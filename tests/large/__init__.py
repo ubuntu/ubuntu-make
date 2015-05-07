@@ -102,6 +102,21 @@ class LargeFrameworkTests(LoggedTestCase):
                 with suppress(AttributeError):
                     path = p.group(1)
 
+        # sanitize the field with unescaped quotes
+        for separator in ('"', "'", " "):
+            elem_paths = path.split(separator)
+            path = ""
+            for elem in elem_paths:
+                if not elem:
+                    continue
+                # the separator was escaped, read the separator element
+                if elem[-1] == "\\":
+                    elem += separator
+                path += elem
+                # stop for current sep at first unescaped separator
+                if not path.endswith("\\" + separator):
+                    break
+
         if not path.startswith("/") and abspath_transform:
             path = abspath_transform(path)
         return path
