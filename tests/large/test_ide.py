@@ -46,10 +46,6 @@ class EclipseIDETests(LargeFrameworkTests):
         self.desktop_filename = "eclipse.desktop"
 
     @property
-    def exec_path(self):
-        return join(self.installed_path, "eclipse")
-
-    @property
     def arch_option(self):
         """we return the expected arch call on command line"""
         return platform.machine()
@@ -64,7 +60,7 @@ class EclipseIDETests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
@@ -99,10 +95,6 @@ class IdeaIDETests(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/ide/idea")
         self.desktop_filename = 'jetbrains-idea.desktop'
 
-    @property
-    def exec_path(self):
-        return join(self.installed_path, "bin", Idea.executable)
-
     def test_default_install(self):
         """Install from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} ide idea'.format(UMAKE)))
@@ -113,7 +105,7 @@ class IdeaIDETests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
@@ -142,10 +134,6 @@ class IdeaUltimateIDETests(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/ide/idea-ultimate")
         self.desktop_filename = 'jetbrains-idea.desktop'
 
-    @property
-    def exec_path(self):
-        return join(self.installed_path, "bin", Idea.executable)
-
     def test_default_install(self):
         """Install from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} ide idea-ultimate'.format(UMAKE)))
@@ -158,7 +146,7 @@ class IdeaUltimateIDETests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
@@ -187,10 +175,6 @@ class PyCharmIDETests(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/ide/pycharm")
         self.desktop_filename = 'jetbrains-pycharm.desktop'
 
-    @property
-    def exec_path(self):
-        return join(self.installed_path, "bin", PyCharm.executable)
-
     def test_default_install(self):
         """Install from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} ide pycharm'.format(UMAKE)))
@@ -203,7 +187,7 @@ class PyCharmIDETests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
@@ -232,10 +216,6 @@ class PyCharmEducationalIDETests(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/ide/pycharm-educational")
         self.desktop_filename = 'jetbrains-pycharm.desktop'
 
-    @property
-    def exec_path(self):
-        return join(self.installed_path, "bin", PyCharmEducational.executable)
-
     def test_default_install(self):
         """Install from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} ide pycharm-educational'.format(UMAKE)))
@@ -248,7 +228,7 @@ class PyCharmEducationalIDETests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
@@ -277,10 +257,6 @@ class PyCharmProfessionalIDETests(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/ide/pycharm-professional")
         self.desktop_filename = 'jetbrains-pycharm.desktop'
 
-    @property
-    def exec_path(self):
-        return join(self.installed_path, "bin", PyCharmProfessional.executable)
-
     def test_default_install(self):
         """Install from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} ide pycharm-professional'.format(UMAKE)))
@@ -293,7 +269,7 @@ class PyCharmProfessionalIDETests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
@@ -322,10 +298,6 @@ class RubyMineIDETests(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/ide/rubymine")
         self.desktop_filename = 'jetbrains-rubymine.desktop'
 
-    @property
-    def exec_path(self):
-        return join(self.installed_path, "bin", RubyMine.executable)
-
     def test_default_install(self):
         """Install from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} ide rubymine'.format(UMAKE)))
@@ -338,7 +310,7 @@ class RubyMineIDETests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
@@ -367,10 +339,6 @@ class WebStormIDETests(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/ide/webstorm")
         self.desktop_filename = 'jetbrains-webstorm.desktop'
 
-    @property
-    def exec_path(self):
-        return join(self.installed_path, "bin", WebStorm.executable)
-
     def test_default_install(self):
         """Install from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} ide webstorm'.format(UMAKE)))
@@ -383,7 +351,7 @@ class WebStormIDETests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
@@ -412,10 +380,6 @@ class PhpStormIDETests(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/ide/phpstorm")
         self.desktop_filename = 'jetbrains-phpstorm.desktop'
 
-    @property
-    def exec_path(self):
-        return join(self.installed_path, "bin", PhpStorm.executable)
-
     def test_default_install(self):
         """Install from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} ide phpstorm'.format(UMAKE)))
@@ -428,7 +392,7 @@ class PhpStormIDETests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine

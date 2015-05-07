@@ -41,10 +41,6 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/android/android-studio")
         self.desktop_filename = "android-studio.desktop"
 
-    @property
-    def exec_path(self):
-        return os.path.join(self.installed_path, "bin", "studio.sh")
-
     def test_default_android_studio_install(self):
         """Install android studio from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
@@ -57,7 +53,7 @@ class AndroidStudioTests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
@@ -114,7 +110,7 @@ class AndroidStudioTests(LargeFrameworkTests):
 
             # we have an installed launcher, added to the launcher
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-            self.assertTrue(self.path_exists(self.exec_path))
+            self.assert_exec_exists()
 
             # launch it, send SIGTERM and check that it exits fine
             proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -143,7 +139,7 @@ class AndroidStudioTests(LargeFrameworkTests):
 
             # we have an installed launcher, added to the launcher
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-            self.assertTrue(self.path_exists(self.exec_path))
+            self.assert_exec_exists()
 
         # ensure that version first isn't installed anymore
         self.assertFalse(self.path_exists(original_install_path))
@@ -176,7 +172,7 @@ class AndroidStudioTests(LargeFrameworkTests):
 
             # we have an installed launcher, added to the launcher
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-            self.assertTrue(self.path_exists(self.exec_path))
+            self.assert_exec_exists()
 
         # ensure that version first isn't installed anymore
         self.assertFalse(self.path_exists(original_install_path))
@@ -291,7 +287,7 @@ class AndroidStudioTests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
 
 
 class AndroidNDKTests(LargeFrameworkTests):
@@ -315,8 +311,8 @@ class AndroidNDKTests(LargeFrameworkTests):
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_no_warn()
 
-        # we have an installed launcher, added to the launcher
-        self.assertTrue(self.path_exists(self.exec_path))
+        # we have an installed ndk exec
+        self.assert_exec_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         self.assertEqual(subprocess.check_call(self.command_as_list([self.exec_path, "gcc"]),

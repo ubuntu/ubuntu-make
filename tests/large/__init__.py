@@ -86,24 +86,33 @@ class LargeFrameworkTests(LoggedTestCase):
         else:
             os.kill(pid, signal.SIGTERM)
 
-    def assert_icon_exists(self):
-        """Assert that the icon name exists"""
+    @property
+    def exec_path(self):
+        return self._get_path_from_desktop_file("Exec")
 
+    def _get_path_from_desktop_file(self, key, abspath_transform=None):
+        """get the path referred as key in the desktop filename exists"""
         if not self.desktop_filename:
-            return
+            return ""
 
-        icon_path = None
+        path = ""
         with open(get_launcher_path(self.desktop_filename)) as f:
             for line in f:
-                p = re.search(r'Icon=(.*)', line)
+                p = re.search(r'{}=(.*)'.format(key), line)
                 with suppress(AttributeError):
-                    icon_path = p.group(1)
-        if not icon_path:
-            return
-        # scan the desktop file
-        if not icon_path.startswith("/"):
-            icon_path = get_icon_path(icon_path)
-        self.assertTrue(self.path_exists(icon_path))
+                    path = p.group(1)
+
+        if not path.startswith("/") and abspath_transform:
+            path = abspath_transform(path)
+        return path
+
+    def assert_exec_exists(self):
+        """Assert that the exec path exists"""
+        self.assertTrue(self.path_exists(self.exec_path))
+
+    def assert_icon_exists(self):
+        """Assert that the icon path exists"""
+        self.assertTrue(self.path_exists(self._get_path_from_desktop_file('Icon', get_icon_path)))
 
     def assert_for_warn(self, content, expect_warn=False):
         """assert if there is any warn"""

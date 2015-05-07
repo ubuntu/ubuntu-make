@@ -44,10 +44,6 @@ class FirefoxDevTests(LargeFrameworkTests):
         self.desktop_filename = "firefox-developer.desktop"
 
     @property
-    def exec_path(self):
-        return os.path.join(self.installed_path, "firefox")
-
-    @property
     def arch_option(self):
         """we return the expected arch call on command line"""
         return platform.machine()
@@ -62,7 +58,7 @@ class FirefoxDevTests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
@@ -92,10 +88,6 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/web/visual-studio-code")
         self.desktop_filename = "visual-studio-code.desktop"
 
-    @property
-    def exec_path(self):
-        return os.path.join(self.installed_path, "Code")
-
     def test_default_install(self):
         """Install firefox dev from scratch test case"""
 
@@ -113,7 +105,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine

@@ -38,10 +38,6 @@ class StencylTests(LargeFrameworkTests):
         self.installed_path = os.path.expanduser("~/tools/games/stencyl")
         self.desktop_filename = "stencyl.desktop"
 
-    @property
-    def exec_path(self):
-        return os.path.join(self.installed_path, "Stencyl")
-
     def test_default_stencyl_install(self):
         """Install stencyl from scratch test case"""
         self.child = pexpect.spawnu(self.command('{} games stencyl'.format(UMAKE)))
@@ -52,7 +48,7 @@ class StencylTests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine

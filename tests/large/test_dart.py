@@ -45,10 +45,6 @@ class DartEditorTests(LargeFrameworkTests):
         self.desktop_filename = "dart-editor.desktop"
 
     @property
-    def exec_path(self):
-        return os.path.join(self.installed_path, "DartEditor")
-
-    @property
     def arch_option(self):
         """we return the expected arch call on command line"""
         return platform.machine()
@@ -63,7 +59,7 @@ class DartEditorTests(LargeFrameworkTests):
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine

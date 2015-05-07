@@ -65,7 +65,7 @@ class GoTests(LargeFrameworkTests):
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_no_warn()
 
-        self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_exec_exists()
         self.assertTrue(self.is_in_path(self.exec_path))
 
         # compile a small project
