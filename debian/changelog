@@ -1,3 +1,20 @@
+ubuntu-make (0.7.1) UNRELEASED; urgency=medium
+
+  * Fix icon name that changed in Android Studio 1.2. Thanks Mark Trolley for
+    this contribution!
+  * Add tests to ensure that we are checking icon file name for android
+    frameworks as well.
+  * Rewrite the access in tests for icons and executables to read directly from
+    the optional installed desktop file. Keep a way to override it for
+    frameworks without desktop file.
+  * Ensure we can remove deprecated frameworks. They only appear in shell
+    completion and --help only if you had them installed. Prevent any
+    reinstallation but only get a removal option.
+  * Addition of a full non interactive installation mode.
+  * Add tests for all those new features and fix some previous failing tests.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 07 May 2015 10:41:55 +0200
+
 ubuntu-make (0.7) vivid; urgency=medium
 
   * Add Visual Studio Code support (under the "web" category)
