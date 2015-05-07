@@ -42,11 +42,6 @@ class FirefoxDevTests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/web/firefox-dev")
         self.desktop_filename = "firefox-developer.desktop"
-        self.icon_filename = "mozicon128.png"
-
-    @property
-    def full_icon_path(self):
-        return join(self.installed_path, "browser", "icons", self.icon_filename)
 
     @property
     def exec_path(self):
@@ -68,7 +63,7 @@ class FirefoxDevTests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(self.full_icon_path))
+        self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -96,11 +91,6 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/web/visual-studio-code")
         self.desktop_filename = "visual-studio-code.desktop"
-        self.icon_filename = "vso.png"
-
-    @property
-    def full_icon_path(self):
-        return join(self.installed_path, "resources", "app", self.icon_filename)
 
     @property
     def exec_path(self):
@@ -124,7 +114,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(self.full_icon_path))
+        self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,

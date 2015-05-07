@@ -22,6 +22,7 @@
 from contextlib import suppress
 import os
 import pexpect
+import re
 import shutil
 import signal
 import subprocess
@@ -40,7 +41,6 @@ class LargeFrameworkTests(LoggedTestCase):
         self.framework_name_for_profile = ""
         self.conf_path = os.path.expanduser("~/.config/umake")
         self.desktop_filename = ""
-        self.icon_filename = ""
         self.child = None
         self.additional_dirs = []
 
@@ -55,9 +55,6 @@ class LargeFrameworkTests(LoggedTestCase):
             if self.desktop_filename:
                 with suppress(FileNotFoundError):
                     os.remove(get_launcher_path(self.desktop_filename))
-            with suppress(FileNotFoundError):
-                if self.icon_filename:
-                    os.remove(get_icon_path(self.icon_filename))
             remove_framework_envs_from_user(self.framework_name_for_profile)
             for dir in self.additional_dirs:
                 with suppress(OSError):
@@ -88,6 +85,25 @@ class LargeFrameworkTests(LoggedTestCase):
             os.kill(pid, signal.SIGKILL)
         else:
             os.kill(pid, signal.SIGTERM)
+
+    def assert_icon_exists(self):
+        """Assert that the icon name exists"""
+
+        if not self.desktop_filename:
+            return
+
+        icon_path = None
+        with open(get_launcher_path(self.desktop_filename)) as f:
+            for line in f:
+                p = re.search(r'Icon=(.*)', line)
+                with suppress(AttributeError):
+                    icon_path = p.group(1)
+        if not icon_path:
+            return
+        # scan the desktop file
+        if not icon_path.startswith("/"):
+            icon_path = get_icon_path(icon_path)
+        self.assertTrue(self.path_exists(icon_path))
 
     def assert_for_warn(self, content, expect_warn=False):
         """assert if there is any warn"""

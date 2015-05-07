@@ -53,6 +53,8 @@ class StencylTests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
+        self.assert_icon_exists()
+
         # launch it, send SIGTERM and check that it exits fine
         use_cwd = self.installed_path
         if self.in_container:

@@ -44,11 +44,6 @@ class EclipseIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/eclipse")
         self.desktop_filename = "eclipse.desktop"
-        self.icon_filename = "icon.xpm"
-
-    @property
-    def full_icon_path(self):
-        return join(self.installed_path, self.icon_filename)
 
     @property
     def exec_path(self):
@@ -70,7 +65,7 @@ class EclipseIDETests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(self.full_icon_path))
+        self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -103,11 +98,6 @@ class IdeaIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/idea")
         self.desktop_filename = 'jetbrains-idea.desktop'
-        self.icon_filename = 'idea.png'
-
-    @property
-    def full_icon_path(self):
-        return join(self.installed_path, 'bin', self.icon_filename)
 
     @property
     def exec_path(self):
@@ -124,7 +114,7 @@ class IdeaIDETests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(self.full_icon_path))
+        self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -151,11 +141,6 @@ class IdeaUltimateIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/idea-ultimate")
         self.desktop_filename = 'jetbrains-idea.desktop'
-        self.icon_filename = 'idea.png'
-
-    @property
-    def full_icon_path(self):
-        return join(self.installed_path, 'bin', self.icon_filename)
 
     @property
     def exec_path(self):
@@ -174,7 +159,7 @@ class IdeaUltimateIDETests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(self.full_icon_path))
+        self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -201,11 +186,6 @@ class PyCharmIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/pycharm")
         self.desktop_filename = 'jetbrains-pycharm.desktop'
-        self.icon_filename = 'pycharm.png'
-
-    @property
-    def full_icon_path(self):
-        return join(self.installed_path, 'bin', self.icon_filename)
 
     @property
     def exec_path(self):
@@ -224,7 +204,7 @@ class PyCharmIDETests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(self.full_icon_path))
+        self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -251,11 +231,6 @@ class PyCharmEducationalIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/pycharm-educational")
         self.desktop_filename = 'jetbrains-pycharm.desktop'
-        self.icon_filename = 'pycharm.png'
-
-    @property
-    def full_icon_path(self):
-        return join(self.installed_path, 'bin', self.icon_filename)
 
     @property
     def exec_path(self):
@@ -274,7 +249,7 @@ class PyCharmEducationalIDETests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(self.full_icon_path))
+        self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -301,11 +276,6 @@ class PyCharmProfessionalIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/pycharm-professional")
         self.desktop_filename = 'jetbrains-pycharm.desktop'
-        self.icon_filename = 'pycharm.png'
-
-    @property
-    def full_icon_path(self):
-        return join(self.installed_path, 'bin', self.icon_filename)
 
     @property
     def exec_path(self):
@@ -324,7 +294,7 @@ class PyCharmProfessionalIDETests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(self.full_icon_path))
+        self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -351,11 +321,6 @@ class RubyMineIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/rubymine")
         self.desktop_filename = 'jetbrains-rubymine.desktop'
-        self.icon_filename = 'rubymine.png'
-
-    @property
-    def full_icon_path(self):
-        return join(self.installed_path, 'bin', self.icon_filename)
 
     @property
     def exec_path(self):
@@ -374,7 +339,7 @@ class RubyMineIDETests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(self.full_icon_path))
+        self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -401,11 +366,6 @@ class WebStormIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/webstorm")
         self.desktop_filename = 'jetbrains-webstorm.desktop'
-        self.icon_filename = 'webide.png'
-
-    @property
-    def full_icon_path(self):
-        return join(self.installed_path, 'bin', self.icon_filename)
 
     @property
     def exec_path(self):
@@ -424,7 +384,7 @@ class WebStormIDETests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(self.full_icon_path))
+        self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -451,11 +411,6 @@ class PhpStormIDETests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.expanduser("~/tools/ide/phpstorm")
         self.desktop_filename = 'jetbrains-phpstorm.desktop'
-        self.icon_filename = 'webide.png'
-
-    @property
-    def full_icon_path(self):
-        return join(self.installed_path, 'bin', self.icon_filename)
 
     @property
     def exec_path(self):
@@ -474,7 +429,7 @@ class PhpStormIDETests(LargeFrameworkTests):
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.exec_path))
-        self.assertTrue(self.path_exists(self.full_icon_path))
+        self.assert_icon_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
