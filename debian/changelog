@@ -1,4 +1,4 @@
-ubuntu-make (0.7.1) UNRELEASED; urgency=medium
+ubuntu-make (0.7.1) vivid; urgency=medium
 
   * Fix icon name that changed in Android Studio 1.2. Thanks Mark Trolley for
     this contribution!
@@ -13,7 +13,7 @@ ubuntu-make (0.7.1) UNRELEASED; urgency=medium
   * Addition of a full non interactive installation mode.
   * Add tests for all those new features and fix some previous failing tests.
 
- -- Didier Roche <didrocks@ubuntu.com>  Thu, 07 May 2015 10:41:55 +0200
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 07 May 2015 11:13:09 +0200
 
 ubuntu-make (0.7) vivid; urgency=medium
 
