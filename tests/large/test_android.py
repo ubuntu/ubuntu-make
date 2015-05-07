@@ -77,7 +77,6 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.accept_default_and_wait()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.path_exists(self.exec_path))
 
     def test_doesnt_accept_wrong_path(self):
         """We don't accept a wrong path"""
@@ -91,7 +90,6 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.wait_and_no_warn()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.path_exists(self.exec_path))
 
     def test_android_studio_reinstall(self):
         """Reinstall android studio once installed"""
@@ -196,7 +194,6 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.accept_default_and_wait()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.path_exists(self.exec_path))
 
     # FIXME: should do a real install to check everything's fine
     def test_start_install_on_existing_dir(self):
@@ -212,7 +209,6 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.accept_default_and_wait()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.path_exists(self.exec_path))
 
     def test_is_default_framework(self):
         """Android Studio is chosen as the default framework"""
