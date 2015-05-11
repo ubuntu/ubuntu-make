@@ -332,28 +332,20 @@ class PhpStorm(BaseJetBrains):
 
 class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     """The Arduino Software distribution."""
-    MAIN_PAGE_URL = 'http://www.arduino.cc/en/Main/Software'
-
     def __init__(self, category):
         super().__init__(name="Arduino",
                          description=_("The Arduino Software Distribution"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=self.MAIN_PAGE_URL,
+                         download_page='http://www.arduino.cc/en/Main/Software',
                          dir_to_decompress_in_tarball='arduino-*',
                          desktop_filename='arduino.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'])
+                         packages_requirements=['openjdk-7-jdk', 'jayatana', 'gcc-avr', 'avr-libc'])
         self.scraped_checksum_url = None
         self.scraped_download_url = None
 
         # This is needed later in several places.
-        arch = platform.machine()
-        if arch == 'i686':
-            self.bits = '32'
-        elif arch == 'x86_64':
-            self.bits = '64'
-        else:
-            logger.error("Unsupported architecture: {}".format(arch))
-            UI.return_main_screen()
+        # The framework covers other cases, in combination with self.only_on_archs
+        self.bits = '32' if platform.machine() == 'i686' else '64'
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -384,6 +376,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         DownloadCenter([DownloadItem(self.scraped_download_url), DownloadItem(self.scraped_checksum_url)],
                        on_done=self.prepare_to_download_archive, download=False)
 
+    @MainLoop.in_mainloop_thread
     def prepare_to_download_archive(self, results):
         """Store the md5 for later and fire off the actual download."""
         download_page = results[self.scraped_download_url]
@@ -424,8 +417,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Luna launcher"""
-        icon_filename = "lib/arduino_icon.ico"
-        icon_path = join(self.install_path, icon_filename)
+        icon_path = join(self.install_path, 'lib', 'arduino_icon.ico')
         exec_path = '"{}" %f'.format(join(self.install_path, "arduino"))
         comment = _("The Arduino Software IDE")
         categories = "Development;IDE;"
