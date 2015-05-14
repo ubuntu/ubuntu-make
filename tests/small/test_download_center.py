@@ -130,6 +130,22 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.error)
 
+    def test_cookies(self):
+        """Test handing of outgoing and incoming cookies."""
+        filename = "simplefile"
+        url = self.build_server_address(filename)
+
+        # The server is rigged to inc the 'int' cookie by one.
+        cookies = {'int': '5'}
+        request = DownloadItem(url, None, cookies=cookies)
+        DownloadCenter([request], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][url]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        self.assertEqual('6', result.cookies['int'])
+
     def test_content_encoding(self):
         """Ensure we perform (or don't) content decoding properly."""
 
