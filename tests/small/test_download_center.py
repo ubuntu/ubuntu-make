@@ -105,6 +105,7 @@ class TestDownloadCenter(LoggedTestCase):
         result = self.callback.call_args[0][0][url]
         self.assertTrue(self.callback.called)
         self.assertEqual(self.callback.call_count, 1)
+        self.assertEqual(result.final_url, self.build_server_address(filename))
         with open(join(self.server_dir, filename), 'rb') as file_on_disk:
             self.assertEqual(file_on_disk.read(),
                              result.fd.read())
@@ -465,6 +466,7 @@ class TestDownloadCenterSecure(LoggedTestCase):
             result = self.callback.call_args[0][0][url]
             self.assertTrue(self.callback.called)
             self.assertEqual(self.callback.call_count, 1)
+            self.assertEqual(result.final_url, TestDownloadCenter.build_server_address(self, filename, localhost=True))
             with open(os.path.join(self.server_dir, filename), 'rb') as file_on_disk:
                 self.assertEqual(file_on_disk.read(),
                                  result.fd.read())
