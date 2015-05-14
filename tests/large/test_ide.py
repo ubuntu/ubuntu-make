@@ -407,3 +407,47 @@ class PhpStormIDETests(LargeFrameworkTests):
         self.expect_and_no_warn("PhpStorm is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_no_warn()
+
+
+class ArduinoIDETests(LargeFrameworkTests):
+    """The Arduino Software distribution from the IDE collection."""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 60
+    TIMEOUT_STOP = 60
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.expanduser("~/tools/ide/arduino")
+        self.desktop_filename = "arduino.desktop"
+
+    @property
+    def arch_option(self):
+        """we return the expected arch call on command line"""
+        return platform.machine()
+
+    def test_default_install(self):
+        """Install the distribution from scratch test case"""
+        self.child = pexpect.spawnu(self.command('{} ide arduino'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process(["java", "processing.app.Base"], wait_before=self.TIMEOUT_START)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = pexpect.spawnu(self.command('{} ide arduino'.format(UMAKE)))
+        self.expect_and_no_warn("Arduino is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_no_warn()
