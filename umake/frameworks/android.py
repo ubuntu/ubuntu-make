@@ -119,7 +119,7 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Android NDK", description=_("Android NDK"),
                          category=category, only_on_archs=_supported_archs,
-                         download_page="https://developer.android.com/tools/sdk/ndk/index.html",
+                         download_page="https://developer.android.com/ndk/downloads/index.html",
                          checksum_type=ChecksumType.md5,
                          dir_to_decompress_in_tarball="android-ndk-*")
 
