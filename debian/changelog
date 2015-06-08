@@ -1,3 +1,11 @@
+ubuntu-make (0.8.1) wily; urgency=medium
+
+  * Match Android NDK with new download URL.
+  * Adapt medium test accordingly.
+  * Fix one failing Android large test.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Mon, 08 Jun 2015 08:59:30 +0200
+
 ubuntu-make (0.8) wily; urgency=medium
 
   * Fix icon name that changed in Android Studio 1.2. Thanks Mark Trolley for
