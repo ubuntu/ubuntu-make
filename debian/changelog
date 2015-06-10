@@ -1,11 +1,11 @@
-ubuntu-make (0.8.2) UNRELEASED; urgency=medium
+ubuntu-make (0.8.2) wily; urgency=medium
 
   * Fix Visual Studio Code support due to new upstream archive layout and
     web page content.
   * Add support for 32 bits installation of VSC as now supported upstream.
   * Refresh and adapt large and medium tests to reflect those changes.
 
- -- Didier Roche <didrocks@ubuntu.com>  Wed, 10 Jun 2015 09:40:14 +0200
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 10 Jun 2015 09:41:49 +0200
 
 ubuntu-make (0.8.1) wily; urgency=medium
 
