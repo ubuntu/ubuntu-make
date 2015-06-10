@@ -88,9 +88,10 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Visual Studio Code", description=_("Visual Studio focused on modern web and cloud"),
-                         category=category, only_on_archs=['amd64'], expect_license=True,
-                         download_page="https://code.visualstudio.com",
-                         desktop_filename="visual-studio-code.desktop")
+                         category=category, only_on_archs=_supported_archs, expect_license=True,
+                         download_page="https://code.visualstudio.com/Download",
+                         desktop_filename="visual-studio-code.desktop", dir_to_decompress_in_tarball="VSCode-linux-*",
+                         packages_requirements=["libgtk2.0-0"])
         self.license_url = "https://code.visualstudio.com/License"
         # we have to mock headers for visual studio code website to give us an answer
         self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
@@ -110,10 +111,14 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen()
 
+        arch = platform.machine()
+        tag_machine = '64'
+        if arch == 'i686':
+            tag_machine = '32'
         url = None
         for line in result[self.download_page].buffer:
             line = line.decode()
-            p = re.search(r'<a.*href="(.*)">.*for Linux.*', line)
+            p = re.search(r'<a.*href="(.*)">.*for Linux.*{}.*'.format(tag_machine), line)
             with suppress(AttributeError):
                 url = p.group(1)
                 logger.debug("Found download link for {}".format(url))
