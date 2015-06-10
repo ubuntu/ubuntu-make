@@ -89,11 +89,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         self.desktop_filename = "visual-studio-code.desktop"
 
     def test_default_install(self):
-        """Install firefox dev from scratch test case"""
-
-        # only an amd64 test
-        if platform.machine() != "x86_64":
-            return
+        """Install visual studio from scratch test case"""
 
         self.child = pexpect.spawnu(self.command('{} web visual-studio-code'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
