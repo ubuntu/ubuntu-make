@@ -24,7 +24,6 @@ import os
 import pexpect
 from ..large import test_android
 from ..tools import get_data_dir, swap_file_and_restore, UMAKE
-from umake import settings
 
 
 class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
@@ -37,10 +36,10 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
     def setUp(self):
         self.hostname = "developer.android.com"
         self.port = "443"
-        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/android/android-studio".format(settings.DOCKER_USER))
+        self.installed_path = os.path.expanduser("/home/{}/tools/android/android-studio".format(self.DOCKER_USER))
 
     # additional test with fake md5sum
     def test_android_studio_install_with_wrong_md5sum(self):
@@ -69,7 +68,7 @@ class AndroidNDKContainer(ContainerTests, test_android.AndroidNDKTests):
     def setUp(self):
         self.hostname = "developer.android.com"
         self.port = "443"
-        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'android')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/android/android-ndk".format(settings.DOCKER_USER))
+        self.installed_path = os.path.expanduser("/home/{}/tools/android/android-ndk".format(self.DOCKER_USER))

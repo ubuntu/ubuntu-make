@@ -22,7 +22,6 @@
 from . import ContainerTests
 import os
 from ..large import test_games
-from umake import settings
 
 
 class StencylInContainer(ContainerTests, test_games.StencylTests):
@@ -34,7 +33,7 @@ class StencylInContainer(ContainerTests, test_games.StencylTests):
     def setUp(self):
         self.hostname = "www.stencyl.com"
         self.port = "80"
-        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'stencyl')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'stencyl')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/games/stencyl".format(settings.DOCKER_USER))
+        self.installed_path = os.path.expanduser("/home/{}/tools/games/stencyl".format(self.DOCKER_USER))

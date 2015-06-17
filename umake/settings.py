@@ -24,10 +24,3 @@ OLD_CONFIG_FILENAME = "udtc"
 CONFIG_FILENAME = "umake"
 LSB_RELEASE_FILE = "/etc/lsb-release"
 UMAKE_FRAMEWORKS_ENVIRON_VARIABLE = "UMAKE_FRAMEWORKS"
-
-# Those are for the tests
-DOCKER_USER = "user"
-DOCKER_PASSWORD = "user"
-DOCKER_TESTIMAGE = "didrocks/docker-umake-manual"
-UMAKE_IN_CONTAINER = "/umake"
-APT_FAKE_REPO_PATH = "/apt-fake-repo"

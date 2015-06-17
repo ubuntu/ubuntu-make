@@ -22,7 +22,6 @@
 from . import ContainerTests
 import os
 from ..large import test_web
-from umake import settings
 
 
 class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
@@ -36,7 +35,7 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
         self.port = "443"
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/web/firefox-dev".format(settings.DOCKER_USER))
+        self.installed_path = os.path.expanduser("/home/{}/tools/web/firefox-dev".format(self.DOCKER_USER))
 
 
 class VisualStudioCodeContainer(ContainerTests, test_web.VisualStudioCodeTest):
@@ -48,7 +47,7 @@ class VisualStudioCodeContainer(ContainerTests, test_web.VisualStudioCodeTest):
     def setUp(self):
         self.hostname = "code.visualstudio.com"
         self.port = "443"
-        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'vscode')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'vscode')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/web/visual-studio-code".format(settings.DOCKER_USER))
+        self.installed_path = os.path.expanduser("/home/{}/tools/web/visual-studio-code".format(self.DOCKER_USER))

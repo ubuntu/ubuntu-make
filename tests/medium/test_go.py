@@ -22,7 +22,6 @@
 from . import ContainerTests
 import os
 from ..large import test_go
-from umake import settings
 
 
 class GoInContainer(ContainerTests, test_go.GoTests):
@@ -33,4 +32,4 @@ class GoInContainer(ContainerTests, test_go.GoTests):
         self.port = "443"
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/go/go-lang".format(settings.DOCKER_USER))
+        self.installed_path = os.path.expanduser("/home/{}/tools/go/go-lang".format(self.DOCKER_USER))

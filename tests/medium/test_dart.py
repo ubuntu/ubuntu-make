@@ -22,7 +22,6 @@
 from . import ContainerTests
 import os
 from ..large import test_dart
-from umake import settings
 
 
 class DartInContainer(ContainerTests, test_dart.DartEditorTests):
@@ -35,7 +34,7 @@ class DartInContainer(ContainerTests, test_dart.DartEditorTests):
         self.hostname = "www.dartlang.org"
         self.port = "443"
         # we reuse the android-studio repo
-        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'eclipse')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/dart/dart-editor".format(settings.DOCKER_USER))
+        self.installed_path = os.path.expanduser("/home/{}/tools/dart/dart-editor".format(self.DOCKER_USER))
