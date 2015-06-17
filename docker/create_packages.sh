@@ -97,3 +97,9 @@ create_package libnspr4-0d i386
 create_package libcurl3 i386
 create_package libasound2 i386
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+# visual studio code deps
+mkdir -p $repo_root_dir/vscode
+cd $repo_root_dir/vscode
+create_package libgtk2.0-0
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz

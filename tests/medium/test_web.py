@@ -48,6 +48,7 @@ class VisualStudioCodeContainer(ContainerTests, test_web.VisualStudioCodeTest):
     def setUp(self):
         self.hostname = "code.visualstudio.com"
         self.port = "443"
+        self.apt_repo_override_path = os.path.join(settings.APT_FAKE_REPO_PATH, 'vscode')
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/web/visual-studio-code".format(settings.DOCKER_USER))
