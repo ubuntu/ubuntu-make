@@ -28,7 +28,7 @@ import signal
 import subprocess
 from time import sleep
 from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned, remove_framework_envs_from_user
-from ..tools import LoggedTestCase, local_which
+from ..tools import LoggedTestCase, local_which, get_path_from_desktop_file
 
 
 class LargeFrameworkTests(LoggedTestCase):
@@ -92,31 +92,8 @@ class LargeFrameworkTests(LoggedTestCase):
 
     def _get_path_from_desktop_file(self, key, abspath_transform=None):
         """get the path referred as key in the desktop filename exists"""
-        if not self.desktop_filename:
-            return ""
 
-        path = ""
-        with open(get_launcher_path(self.desktop_filename)) as f:
-            for line in f:
-                p = re.search(r'{}=(.*)'.format(key), line)
-                with suppress(AttributeError):
-                    path = p.group(1)
-
-        # sanitize the field with unescaped quotes
-        for separator in ('"', "'", " "):
-            elem_paths = path.split(separator)
-            path = ""
-            for elem in elem_paths:
-                if not elem:
-                    continue
-                # the separator was escaped, read the separator element
-                if elem[-1] == "\\":
-                    elem += separator
-                path += elem
-                # stop for current sep at first unescaped separator
-                if not path.endswith("\\" + separator):
-                    break
-
+        path = get_path_from_desktop_file(self.desktop_filename, key)
         if not path.startswith("/") and abspath_transform:
             path = abspath_transform(path)
         return path

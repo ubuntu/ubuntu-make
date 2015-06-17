@@ -27,6 +27,7 @@ from copy import deepcopy
 import importlib
 import logging
 import os
+import re
 import shutil
 import xdg.BaseDirectory
 from unittest import TestCase
@@ -153,3 +154,35 @@ def local_which(filename):
         if os.path.isfile(file_path):
             return file_path
     return None
+
+
+def get_path_from_desktop_file(desktop_filename, key):
+    """get the path referred as key in the desktop filename exists"""
+    if not desktop_filename:
+        return ""
+
+    from umake.tools import get_launcher_path
+    importlib.reload(xdg.BaseDirectory)
+
+    path = ""
+    with open(get_launcher_path(desktop_filename)) as f:
+        for line in f:
+            p = re.search(r'{}=(.*)'.format(key), line)
+            with suppress(AttributeError):
+                path = p.group(1)
+
+    # sanitize the field with unescaped quotes
+    for separator in ('"', "'", " "):
+        elem_paths = path.split(separator)
+        path = ""
+        for elem in elem_paths:
+            if not elem:
+                continue
+            # the separator was escaped, read the separator element
+            if elem[-1] == "\\":
+                elem += separator
+            path += elem
+            # stop for current sep at first unescaped separator
+            if not path.endswith("\\" + separator):
+                break
+    return path

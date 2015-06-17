@@ -100,40 +100,61 @@ class ContainerTests(LoggedTestCase):
         if not self._exec_command(self.command_as_list("{} {} {}".format(os.path.join(get_tools_helper_dir(),
                                                                                       "check_and_kill_process"),
                                                                          send_sigkill,
-                                                                         " ".join(process_grep)))):
+                                                                         " ".join(process_grep))))[0]:
             raise BaseException("The process we try to find and kill can't be found".format(process_grep))
 
+    def _get_path_from_desktop_file(self, key, abspath_transform=None):
+        """get the path referred as key in the desktop filename exists"""
+
+        command = self.command_as_list([os.path.join(get_tools_helper_dir(), "get_path_from_desktop_file"),
+                                       self.desktop_filename, key])
+        success, stdout, stderr = self._exec_command(command)
+        if success:
+            path = stdout
+            if not path.startswith("/") and abspath_transform:
+                path = abspath_transform(path)
+        else:
+            raise BaseException("Unknown failure from {}".format(command))
+        return path
+
     def _exec_command(self, command):
-        """Exec the required command inside the container"""
-        return_code = subprocess.call(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
-                                      stderr=subprocess.DEVNULL)
+        """Exec the required command inside the container, returns if it exited with 0 or 1 + stdout/stderr"""
+        proc = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+
+        (stdout, stderr) = proc.communicate()
+        # convert in strings and remove remaining \n
+        if stdout:
+            stdout = stdout.decode("utf-8").strip()
+        if stderr:
+            stderr = stderr.decode("utf-8").strip()
+        return_code = proc.returncode
         if return_code == 0:
-            return True
+            return (True, stdout, stderr)
         elif return_code == 1:
-            return False
+            return (False, stdout, stderr)
         raise BaseException("Unknown return code from {}".format(command))
 
     def launcher_exists_and_is_pinned(self, desktop_filename):
         """Check if launcher exists and is pinned inside the container"""
         command = self.command_as_list([os.path.join(get_tools_helper_dir(), "check_launcher_exists_and_is_pinned"),
                                         desktop_filename])
-        return self._exec_command(command)
+        return self._exec_command(command)[0]
 
     def path_exists(self, path):
         """Check if a path exists inside the container"""
         # replace current user home dir with container one.
         path = path.replace(os.environ['HOME'], "/home/{}".format(settings.DOCKER_USER))
         command = self.command_as_list([os.path.join(get_tools_helper_dir(), "path_exists"), path])
-        return self._exec_command(command)
+        return self._exec_command(command)[0]
 
     def is_in_path(self, filename):
         """Check inside the container if filename is in PATH thanks to which"""
-        return self._exec_command(self.command_as_list(["bash", "-l", "which", filename]))
+        return self._exec_command(self.command_as_list(["bash", "-l", "which", filename]))[0]
 
     def create_file(self, path, content):
         """Create file inside the container.replace in path current user with the docker user"""
         path = path.replace(os.getlogin(), settings.DOCKER_USER)
         dir_path = os.path.dirname(path)
         command = self.command_as_list(["mkdir", "-p", dir_path, path])
-        if not self._exec_command(command):
+        if not self._exec_command(command)[0]:
             raise BaseException("Couldn't create {} in container".format(path))
