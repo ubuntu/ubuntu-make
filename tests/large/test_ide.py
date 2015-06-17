@@ -24,11 +24,9 @@ import logging
 import platform
 import subprocess
 import os
-from os.path import join
 import pexpect
 from tests.large import LargeFrameworkTests
 from tests.tools import UMAKE
-from umake.frameworks.ide import Idea, PyCharm, PyCharmEducational, PyCharmProfessional, PhpStorm, RubyMine, WebStorm
 
 logger = logging.getLogger(__name__)
 

@@ -23,7 +23,6 @@ import logging
 import platform
 import subprocess
 import os
-from os.path import join
 import pexpect
 from tests.large import LargeFrameworkTests
 from tests.tools import UMAKE

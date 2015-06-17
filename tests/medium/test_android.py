@@ -34,7 +34,6 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
     TIMEOUT_STOP = 10
     TEST_CHECKSUM_ANDROID_STUDIO_FAKE_DATA = "d8362a0c2ffc07b1b19c4b9001c8532de5a4b8c3"
 
-
     def setUp(self):
         self.hostname = "developer.android.com"
         self.port = "443"

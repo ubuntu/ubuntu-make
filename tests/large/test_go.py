@@ -23,7 +23,6 @@
 import platform
 import subprocess
 import os
-from os.path import join
 import pexpect
 import tempfile
 from tests.large import LargeFrameworkTests

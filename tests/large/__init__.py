@@ -22,13 +22,12 @@
 from contextlib import suppress
 import os
 import pexpect
-import re
 import shutil
 import signal
 import subprocess
 from time import sleep
 from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned, remove_framework_envs_from_user
-from ..tools import LoggedTestCase, local_which, get_path_from_desktop_file
+from ..tools import LoggedTestCase, get_path_from_desktop_file
 
 
 class LargeFrameworkTests(LoggedTestCase):

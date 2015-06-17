@@ -22,10 +22,8 @@
 from . import LargeFrameworkTests
 import os
 import pexpect
-import platform
 import subprocess
 import tempfile
-from umake.tools import get_icon_path
 from ..tools import UMAKE
 
 
