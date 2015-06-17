@@ -62,7 +62,6 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
 
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-            self.assertFalse(self.path_exists(self.exec_path))
 
 
 class AndroidNDKContainer(ContainerTests, test_android.AndroidNDKTests):
