@@ -32,6 +32,8 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
+    TEST_CHECKSUM_ANDROID_STUDIO_FAKE_DATA = "d8362a0c2ffc07b1b19c4b9001c8532de5a4b8c3"
+
 
     def setUp(self):
         self.hostname = "developer.android.com"
@@ -48,7 +50,8 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
                                                 "sdk", "index.html")
         with swap_file_and_restore(android_studio_file_path) as content:
             with open(android_studio_file_path, "w") as newfile:
-                newfile.write(content.replace(settings.TEST_MD5_ANDROID_STUDIO_FAKE_DATA, "fakemd5sum"))
+                newfile.write(content.replace(self.TEST_CHECKSUM_ANDROID_STUDIO_FAKE_DATA,
+                                              "c8362a0c2ffc07b1b19c4b9001c8532de5a4b8c3"))
             self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
