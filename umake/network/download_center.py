@@ -36,20 +36,21 @@ from umake.tools import ChecksumType
 logger = logging.getLogger(__name__)
 
 
-class DownloadItem(namedtuple('DownloadItem', ['url', 'checksum', 'headers', 'ignore_encoding'])):
+class DownloadItem(namedtuple('DownloadItem', ['url', 'checksum', 'headers', 'ignore_encoding', 'cookies'])):
     """An individual item to be downloaded and checked.
 
     Checksum should be an instance of tools.Checksum, if provided.
-    Headers should be a dictionary of HTTP headers, if provided."""
-    def __new__(cls, url, checksum=None, headers=None, ignore_encoding=False):
-        return super().__new__(cls, url, checksum, headers, ignore_encoding)
+    Headers should be a dictionary of HTTP headers, if provided.
+    Cookies should be a cookie dictionary, if provided."""
+    def __new__(cls, url, checksum=None, headers=None, ignore_encoding=False, cookies=None):
+        return super().__new__(cls, url, checksum, headers, ignore_encoding, cookies)
 
 
 class DownloadCenter:
     """Read or download requested urls in separate threads."""
 
     BLOCK_SIZE = 1024*8  # from urlretrieve code
-    DownloadResult = namedtuple("DownloadResult", ["buffer", "error", "fd"])
+    DownloadResult = namedtuple("DownloadResult", ["buffer", "error", "fd", "final_url", "cookies"])
 
     def __init__(self, urls, on_done, download=True, report=lambda x: None):
         """Generate a threaded download machine.
@@ -65,7 +66,9 @@ class DownloadCenter:
                 DownloadResult(buffer=page content as bytes if download is set to False. close() will clean it from
                                       memory,
                                error=string detailing the error which occurred (path and content would be empty),
-                               fd=temporary file descriptor. close() will delete it from disk
+                               fd=temporary file descriptor. close() will delete it from disk,
+                               final_url=the final url, which may be different from the start if there were redirects,
+                               cookies=a dictionary of cookies after the request
                 )
         }
         """
@@ -102,11 +105,13 @@ class DownloadCenter:
     def _fetch(self, download_item, dest):
         """Get an url content and close the connexion.
 
-        This write the content to dest return it, after seeking at start and check for md5sum
+        This will write the content to dest and check for md5sum.
+        Return a tuple of (dest, final_url, cookies)
         """
         url = download_item.url
         checksum = download_item.checksum
         headers = download_item.headers or {}
+        cookies = download_item.cookies
 
         def _report(block_no, block_size, total_size):
             current_size = int(block_no * block_size)
@@ -121,7 +126,7 @@ class DownloadCenter:
         session = requests.Session()
         session.mount('ftp://', FTPAdapter())
         try:
-            with closing(session.get(url, stream=True, headers=headers)) as r:
+            with closing(session.get(url, stream=True, headers=headers, cookies=cookies)) as r:
                 r.raise_for_status()
                 content_size = int(r.headers.get('content-length', -1))
 
@@ -132,6 +137,8 @@ class DownloadCenter:
                     dest.write(data)
                     block_num += 1
                     _report(block_num, self.BLOCK_SIZE, content_size)
+                final_url = r.url
+                cookies = session.cookies
         except requests.exceptions.InvalidSchema as exc:
             # Wrap this for a nicer error message.
             raise BaseException("Protocol not supported.") from exc
@@ -158,7 +165,7 @@ class DownloadCenter:
                 msg = ("The checksum of {} doesn't match. Corrupted download? "
                        "Aborting.").format(url)
                 raise BaseException(msg)
-        return dest
+        return dest, final_url, cookies
 
     def _one_done(self, future):
         """Callback that will be called once the download finishes.
@@ -166,20 +173,20 @@ class DownloadCenter:
         (will be wired on the constructor)
         """
 
-        result = self.DownloadResult(buffer=None, error=None, fd=None)
         if future.exception():
             logger.error("{} couldn't finish download: {}".format(future.tag_url, future.exception()))
-            result = result._replace(error=str(future.exception()))
+            result = self.DownloadResult(buffer=None, error=str(future.exception()), fd=None, final_url=None,
+                                         cookies=None)
             # cleaned unusable temp file as something bad happened
             future.tag_dest.close()
         else:
             logger.info("{} download finished".format(future.tag_url))
-            fd = future.result()
+            fd, final_url, cookies = future.result()
             fd.seek(0)
             if future.tag_download:
-                result = result._replace(fd=fd)
+                result = self.DownloadResult(buffer=None, error=None, fd=fd, final_url=final_url, cookies=cookies)
             else:
-                result = result._replace(buffer=fd)
+                result = self.DownloadResult(buffer=fd, error=None, fd=None, final_url=final_url, cookies=cookies)
         self._downloaded_content[future.tag_url] = result
         if len(self._urls) == len(self._downloaded_content):
             self._done()

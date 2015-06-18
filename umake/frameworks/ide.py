@@ -24,6 +24,8 @@
 from gettext import gettext as _
 import logging
 import platform
+import re
+from urllib import parse
 from bs4 import BeautifulSoup
 from abc import ABCMeta, abstractmethod
 
@@ -326,3 +328,103 @@ class PhpStorm(BaseJetBrains):
                          desktop_filename='jetbrains-phpstorm.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='webide.png')
+
+
+class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
+    """The Arduino Software distribution."""
+    def __init__(self, category):
+        super().__init__(name="Arduino",
+                         description=_("The Arduino Software Distribution"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page='http://www.arduino.cc/en/Main/Software',
+                         dir_to_decompress_in_tarball='arduino-*',
+                         desktop_filename='arduino.desktop',
+                         packages_requirements=['openjdk-7-jdk', 'jayatana', 'gcc-avr', 'avr-libc'])
+        self.scraped_checksum_url = None
+        self.scraped_download_url = None
+
+        # This is needed later in several places.
+        # The framework covers other cases, in combination with self.only_on_archs
+        self.bits = '32' if platform.machine() == 'i686' else '64'
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        """We diverge from the BaseInstaller implementation a little here."""
+        logger.debug("Parse download metadata")
+
+        error_msg = result[self.download_page].error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen()
+
+        soup = BeautifulSoup(result[self.download_page].buffer)
+
+
+        # We need to avoid matching arduino-nightly-...
+        download_link_pat = r'arduino-(\d\.?){1,3}-linux' + self.bits + '.tar.xz$'
+
+        self.scraped_download_url = soup.find('a', href=re.compile(download_link_pat))['href']
+        self.scraped_checksum_url = soup.find('a', text=re.compile('Checksums'))['href']
+
+        if not self.scraped_download_url:
+            logger.error("Can't parse the download link from %s.", self.download_page)
+            UI.return_main_screen()
+        if not self.scraped_checksum_url:
+            logger.error("Can't parse the checksum link from %s.", self.download_page)
+            UI.return_main_screen()
+
+        DownloadCenter([DownloadItem(self.scraped_download_url), DownloadItem(self.scraped_checksum_url)],
+                       on_done=self.prepare_to_download_archive, download=False)
+
+    @MainLoop.in_mainloop_thread
+    def prepare_to_download_archive(self, results):
+        """Store the md5 for later and fire off the actual download."""
+        download_page = results[self.scraped_download_url]
+        checksum_page = results[self.scraped_checksum_url]
+        if download_page.error:
+            logger.error("Error fetching download page: %s", download_page.error)
+            UI.return_main_screen()
+        if checksum_page.error:
+            logger.error("Error fetching checksums: %s", checksum_page.error)
+            UI.return_main_screen()
+
+        match = re.search(r'^(\S+)\s+arduino-(\d\.?){1,3}-linux' + self.bits + '.tar.xz$',
+                          checksum_page.buffer.getvalue().decode('ascii'),
+                          re.M)
+        if not match:
+            logger.error("Can't parse the checksum.")
+            UI.return_main_screen()
+        checksum = match.group(1)
+
+        soup = BeautifulSoup(download_page.buffer.getvalue())
+        btn = soup.find('button', text=re.compile('JUST DOWNLOAD'))
+
+        if not btn:
+            logger.error("Can't parse download button.")
+            UI.return_main_screen()
+
+        base_url = download_page.final_url
+        cookies = download_page.cookies
+
+        final_download_url = parse.urljoin(base_url, btn.parent['href'])
+
+        logger.info('Final download url: %s, cookies: %s.', final_download_url, cookies)
+
+        self.download_requests = [DownloadItem(final_download_url,
+                                               checksum=Checksum(ChecksumType.md5, checksum),
+                                               cookies=cookies)]
+        self.start_download_and_install()
+
+    def post_install(self):
+        """Create the Luna launcher"""
+        icon_path = join(self.install_path, 'lib', 'arduino_icon.ico')
+        exec_path = '"{}" %f'.format(join(self.install_path, "arduino"))
+        comment = _("The Arduino Software IDE")
+        categories = "Development;IDE;"
+        create_launcher(self.desktop_filename,
+                        get_application_desktop_file(name=_("Arduino"),
+                                                     icon_path=icon_path,
+                                                     exec=exec_path,
+                                                     comment=comment,
+                                                     categories=categories))
+

@@ -21,6 +21,7 @@
 
 from concurrent import futures
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+import http.cookies
 import logging
 import os
 import posixpath
@@ -135,6 +136,12 @@ class RequestHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         """Override this to enable redirecting paths that end in -redirect or rewrite in presence of ?file="""
+        cookies = http.cookies.SimpleCookie(self.headers['Cookie'])
+        if 'int' in cookies:
+            cookies['int'] = int(cookies['int'].value) + 1
+        for cookie in cookies.values():
+            self.headers_to_send.append(('Set-Cookie', cookie.OutputString(None)))
+
         if self.path.endswith('-redirect'):
             self.send_response(302)
             self.send_header('Location', self.path[:-len('-redirect')])
