@@ -20,23 +20,42 @@
 
 
 """Generic IDE module."""
-
+from abc import ABCMeta, abstractmethod
+from bs4 import BeautifulSoup
+from concurrent import futures
 from gettext import gettext as _
+import grp
 import logging
+import os
+from os.path import join, isfile
+import pwd
 import platform
 import re
+import subprocess
 from urllib import parse
-from bs4 import BeautifulSoup
-from abc import ABCMeta, abstractmethod
 
-from os.path import join, isfile
 import umake.frameworks.baseinstaller
+from umake.interactions import DisplayMessage
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop
 from umake.ui import UI
 
 
 logger = logging.getLogger(__name__)
+
+
+def _add_to_group(user, group):
+        """Add user to group. Should only be used in an other process"""
+        # switch to root
+        os.seteuid(0)
+        os.setegid(0)
+        try:
+            output = subprocess.check_output(["adduser", user, group])
+            logger.debug("Added {} to {}: {}".format(user, group, output))
+            return True
+        except subprocess.CalledProcessError as e:
+            logger.error("Couldn't add {} to {}".format(user, group))
+            return False
 
 
 class IdeCategory(umake.frameworks.BaseCategory):
@@ -332,14 +351,29 @@ class PhpStorm(BaseJetBrains):
 
 class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     """The Arduino Software distribution."""
+
+    ARDUINO_GROUP = "dialout"
+
     def __init__(self, category):
+
+        if os.geteuid() != 0:
+            self._current_user = os.getenv("USER")
+        self._current_user = pwd.getpwuid(int(os.getenv("SUDO_UID", default=0))).pw_name
+        for group_name in [g.gr_name for g in grp.getgrall() if self._current_user in g.gr_mem]:
+            if group_name == self.ARDUINO_GROUP:
+                self.was_in_arduino_group = True
+                break
+        else:
+            self.was_in_arduino_group = False
+
         super().__init__(name="Arduino",
                          description=_("The Arduino Software Distribution"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page='http://www.arduino.cc/en/Main/Software',
                          dir_to_decompress_in_tarball='arduino-*',
                          desktop_filename='arduino.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana', 'gcc-avr', 'avr-libc'])
+                         packages_requirements=['openjdk-7-jdk', 'jayatana', 'gcc-avr', 'avr-libc'],
+                         need_root_access=not self.was_in_arduino_group)
         self.scraped_checksum_url = None
         self.scraped_download_url = None
 
@@ -415,6 +449,14 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         self.download_requests = [DownloadItem(final_download_url,
                                                checksum=Checksum(ChecksumType.md5, checksum),
                                                cookies=cookies)]
+
+        # add the user to arduino group
+        if not self.was_in_arduino_group:
+            with futures.ProcessPoolExecutor(max_workers=1) as executor:
+                f = executor.submit(_add_to_group, self._current_user, self.ARDUINO_GROUP)
+                if not f.result():
+                    UI.return_main_screen()
+
         self.start_download_and_install()
 
     def post_install(self):
@@ -429,3 +471,5 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
                                                      exec=exec_path,
                                                      comment=comment,
                                                      categories=categories))
+        if not self.was_in_arduino_group:
+            UI.delayed_display(DisplayMessage(_("You need to logout and login again for your installation to work")))

@@ -139,7 +139,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
 
     def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None,
                  only_on_archs=None, only_ubuntu_version=None, packages_requirements=None, only_for_removal=False,
-                 expect_license=False):
+                 expect_license=False, need_root_access=False):
         self.name = name
         self.description = description
         self.logo_path = None
@@ -168,9 +168,10 @@ class BaseFramework(metaclass=abc.ABCMeta):
             category.register_framework(self)
             return
 
-        self.need_root_access = False
-        with suppress(KeyError):
-            self.need_root_access = not RequirementsHandler().is_bucket_installed(self.packages_requirements)
+        self.need_root_access = need_root_access
+        if not need_root_access:
+            with suppress(KeyError):
+                self.need_root_access = not RequirementsHandler().is_bucket_installed(self.packages_requirements)
 
         if self.is_category_default:
             if self.category == BaseCategory.main_category:
