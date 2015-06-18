@@ -24,6 +24,7 @@
 from io import StringIO
 from contextlib import contextmanager, suppress
 from copy import deepcopy
+import grp
 import importlib
 import logging
 import os
@@ -186,3 +187,12 @@ def get_path_from_desktop_file(desktop_filename, key):
             if not path.endswith("\\" + separator):
                 break
     return path
+
+
+def is_in_group(group):
+    """return if current user is in a group"""
+    for group_name in [g.gr_name for g in grp.getgrall() if os.environ["USER"] in g.gr_mem]:
+        print(group_name)
+        if group_name == group:
+            return True
+    return False

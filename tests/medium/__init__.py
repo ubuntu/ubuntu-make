@@ -156,6 +156,11 @@ class ContainerTests(LoggedTestCase):
         """Check inside the container if filename is in PATH thanks to which"""
         return self._exec_command(self.command_as_list(["bash", "-l", "which", filename]))[0]
 
+    def is_in_group(self, group):
+        """Check inside the container if the user is in a group"""
+        command = self.command_as_list([os.path.join(get_tools_helper_dir(), "check_user_in_group"), group])
+        return self._exec_command(command)[0]
+
     def create_file(self, path, content):
         """Create file inside the container.replace in path current user with the docker user"""
         path = path.replace(os.getlogin(), self.DOCKER_USER)

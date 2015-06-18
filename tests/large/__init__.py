@@ -27,7 +27,7 @@ import signal
 import subprocess
 from time import sleep
 from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned, remove_framework_envs_from_user
-from ..tools import LoggedTestCase, get_path_from_desktop_file
+from ..tools import LoggedTestCase, get_path_from_desktop_file, is_in_group
 
 
 class LargeFrameworkTests(LoggedTestCase):
@@ -171,6 +171,10 @@ class LargeFrameworkTests(LoggedTestCase):
         elif return_code == 1:
             return False
         raise BaseException("Unknown return code for looking if {} is in path".format(filename))
+
+    def is_in_group(self, group):
+        """return if current user is in a group"""
+        is_in_group(group)
 
     def create_file(self, path, content):
         """passthrough to create a file on the disk"""
