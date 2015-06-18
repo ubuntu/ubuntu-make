@@ -184,3 +184,18 @@ class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/phpstorm".format(self.DOCKER_USER))
+
+
+class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
+    """This will test the Arduino IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.arduino.cc"
+        self.port = "80"
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'arduino')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/arduino".format(self.DOCKER_USER))
