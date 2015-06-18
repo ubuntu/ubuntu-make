@@ -1,0 +1,5 @@
+65a7305053e2f20aeaf772120ba9657c arduino-1.6.5-linux32.tar.xz
+65a7305053e2f20aeaf772120ba9657c arduino-1.6.5-linux64.tar.xz
+035be823fa0f39a0d9b74863987137b9  arduino-1.6.5-macosx.zip
+c0bfb988e7998a54d60505d2fe8eb3e5  arduino-1.6.5-r2-windows.exe
+134e0672f4920c01777d4d89b1733c59  arduino-1.6.5-r2-windows.zip
