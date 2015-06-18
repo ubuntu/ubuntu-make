@@ -359,7 +359,6 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
 
         soup = BeautifulSoup(result[self.download_page].buffer)
 
-
         # We need to avoid matching arduino-nightly-...
         download_link_pat = r'arduino-(\d\.?){1,3}-linux' + self.bits + '.tar.xz$'
 
@@ -430,4 +429,3 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
                                                      exec=exec_path,
                                                      comment=comment,
                                                      categories=categories))
-
