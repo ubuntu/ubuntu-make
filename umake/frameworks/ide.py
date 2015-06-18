@@ -366,6 +366,9 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         self.scraped_download_url = soup.find('a', href=re.compile(download_link_pat))['href']
         self.scraped_checksum_url = soup.find('a', text=re.compile('Checksums'))['href']
 
+        self.scraped_download_url = 'http:' + self.scraped_download_url
+        self.scraped_checksum_url = 'http:' + self.scraped_checksum_url
+
         if not self.scraped_download_url:
             logger.error("Can't parse the download link from %s.", self.download_page)
             UI.return_main_screen()
