@@ -23,7 +23,6 @@ import os
 import subprocess
 from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path, get_data_dir
 from time import sleep
-from umake import settings
 
 
 class ContainerTests(LoggedTestCase):
