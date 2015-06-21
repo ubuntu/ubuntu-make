@@ -32,8 +32,19 @@ RUN \
   add-apt-repository -y ppa:ubuntu-desktop/ubuntu-make && \
   apt-get update && \
 
+# install git to clone the latest umake repo from GitHub
+  apt-get install -y git && \
 # install system umake (from latest released version)
 #RUN apt-get install -y ubuntu-make
+
+# get the latest umake repo from GitHub
+  git clone https://github.com/ubuntu/ubuntu-make.git && \
+# make umake executable
+  export PATH=$PATH:ubuntu-make/bin && \
+# install prerequirements to install Python development requirements
+  apt-get install -y python-pip bzr python-dev python-yaml && \
+# install umake python development dependencies
+  pip install -r ubuntu-make/requirements.txt && \
 
 # install umake build-deps
   mk-build-deps /tmp/control -i --tool 'apt-get --yes' && \
@@ -64,4 +75,3 @@ RUN \
   apt-get clean -y && \
   apt-get remove --purge -y software-properties-common devscripts equivs && \
   apt-get autoremove -y
-
