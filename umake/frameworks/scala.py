@@ -43,7 +43,7 @@ class ScalaCategory(umake.frameworks.BaseCategory):
 class ScalaLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
-        super().__init__(name="Scala Programming Language", description=_("Scala compiler and interpreter (default)"),
+        super().__init__(name="Scala Lang", description=_("Scala compiler and interpreter (default)"),
                          is_category_default=True, category=category, packages_requirements=["default-jre"],
                          download_page="http://www.scala-lang.org/download/",
                          dir_to_decompress_in_tarball="scala-*")
