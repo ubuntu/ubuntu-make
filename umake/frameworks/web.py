@@ -21,6 +21,7 @@
 """Web module"""
 
 from contextlib import suppress
+from functools import partial
 from gettext import gettext as _
 from io import StringIO
 import logging
@@ -28,7 +29,7 @@ import os
 import platform
 import re
 import umake.frameworks.baseinstaller
-from umake.interactions import LicenseAgreement
+from umake.interactions import Choice, LicenseAgreement, TextWithChoices
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.ui import UI
 from umake.tools import create_launcher, get_application_desktop_file, Checksum, MainLoop, strip_tags
@@ -49,21 +50,39 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Firefox Dev", description=_("Firefox Developer Edition"),
                          category=category, only_on_archs=_supported_archs,
-                         download_page=None,
+                         download_page="https://www.mozilla.org/en-US/firefox/developer/all",
                          dir_to_decompress_in_tarball="firefox",
                          desktop_filename="firefox-developer.desktop")
 
-    def download_provider_page(self):
-        """Skip download provider page and directly use the download links"""
-
+    def language_select_callback(self, lang):
         arch = platform.machine()
         tag_machine = ''
         if arch == 'x86_64':
             tag_machine = '64'
-        self.download_requests.append(DownloadItem(
-            "https://download.mozilla.org/?product=firefox-aurora-latest&os=linux{}".format(tag_machine),
-            Checksum(None, None)))
+        url = "https://download.mozilla.org/?product=firefox-aurora-latest-ssl&os=linux{}&lang={}"
+        url = url.format(tag_machine, lang)
+        self.download_requests.append(DownloadItem(url, None))
         self.start_download_and_install()
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        """Diverge from the baseinstallator implementation in order to allow language selection"""
+
+        logger.debug("Parse download metadata")
+        error_msg = result[self.download_page].error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen()
+
+        languages = []
+        for p in re.finditer(r'<td lang="(.+)">', result[self.download_page].buffer.getvalue().decode()):
+            lang = p.group(1)
+            is_default_choice = False
+            if lang == "en-US":
+                is_default_choice = True
+            choice = Choice(lang, lang, partial(self.language_select_callback, lang), is_default=is_default_choice)
+            languages.append(choice)
+        UI.delayed_display(TextWithChoices(_("Choose localization:"), languages, True))
 
     def post_install(self):
         """Create the Firefox Developer launcher"""
