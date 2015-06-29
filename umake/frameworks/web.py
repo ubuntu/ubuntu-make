@@ -54,13 +54,10 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="firefox",
                          desktop_filename="firefox-developer.desktop")
 
-    def language_select_callback(self, lang):
-        arch = platform.machine()
-        tag_machine = ''
-        if arch == 'x86_64':
-            tag_machine = '64'
-        url = "https://download.mozilla.org/?product=firefox-aurora-latest-ssl&os=linux{}&lang={}"
-        url = url.format(tag_machine, lang)
+    @MainLoop.in_mainloop_thread
+    def language_select_callback(self, url):
+        url = url.replace("&amp;", "&")
+        logger.debug("Found download link for {}".format(url))
         self.download_requests.append(DownloadItem(url, None))
         self.start_download_and_install()
 
@@ -74,15 +71,30 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen()
 
+        arch = platform.machine()
+        tag_machine = ''
+        if arch == 'x86_64':
+            tag_machine = '64'
+
+        reg_expression = '<td class="download linux{}"><a href="(.*)" title'.format(tag_machine)
         languages = []
-        for p in re.finditer(r'<td lang="(.+)">', result[self.download_page].buffer.getvalue().decode()):
-            lang = p.group(1)
+        decoded_page = result[self.download_page].buffer.getvalue().decode()
+        for p in re.finditer(reg_expression, decoded_page):
+            with suppress(AttributeError):
+                url = p.group(1)
+
+            m = re.search(r'lang=(.*)', url)
+            with suppress(AttributeError):
+                lang = m.group(1)
+
             is_default_choice = False
             if lang == "en-US":
                 is_default_choice = True
-            choice = Choice(lang, lang, partial(self.language_select_callback, lang), is_default=is_default_choice)
+            choice = Choice(lang, lang, partial(self.language_select_callback, url), is_default=is_default_choice)
             languages.append(choice)
-        UI.delayed_display(TextWithChoices(_("Choose localization:"), languages, True))
+
+        logger.debug("Check list of installable languages.")
+        UI.delayed_display(TextWithChoices(_("Choose language:"), languages, True))
 
     def post_install(self):
         """Create the Firefox Developer launcher"""

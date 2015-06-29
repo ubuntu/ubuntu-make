@@ -31,7 +31,7 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "download.mozilla.org"
+        self.hostname = "www.mozilla.org"
         self.port = "443"
         super().setUp()
         # override with container path
