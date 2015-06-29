@@ -63,22 +63,18 @@ class IdeCategory(umake.frameworks.BaseCategory):
         super().__init__(name="IDE", description=_("Generic IDEs"),
                          logo_path=None)
 
+class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
+    """The base for all Eclipse Foundation installers."""
 
-class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
-    """The Eclipse Foundation distribution."""
-    DOWNLOAD_URL_PAT = "https://www.eclipse.org/downloads/download.php?" \
-                       "file=/technology/epp/downloads/release/luna/R/" \
-                       "eclipse-standard-luna-R-linux-gtk{arch}.tar.gz{suf}" \
-                       "&r=1"
+    @property
+    @abstractmethod
+    def download_url_path(self):
+        pass
 
-    def __init__(self, category):
-        super().__init__(name="Eclipse",
-                         description=_("Pure Eclipse Luna (4.4)"),
-                         category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=None,
-                         dir_to_decompress_in_tarball='eclipse',
-                         desktop_filename='eclipse.desktop',
-                         packages_requirements=['openjdk-7-jdk'])
+    @property
+    @abstractmethod
+    def executable(self):
+        pass
 
     def download_provider_page(self):
         """First, we need to fetch the MD5, then kick off the proceedings.
@@ -89,9 +85,9 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
 
         arch = platform.machine()
         if arch == 'i686':
-            md5_url = self.DOWNLOAD_URL_PAT.format(arch='', suf='.md5')
+            md5_url = self.download_url_path.format(arch='', suf='.md5')
         elif arch == 'x86_64':
-            md5_url = self.DOWNLOAD_URL_PAT.format(arch='-x86_64', suf='.md5')
+            md5_url = self.download_url_path.format(arch='-x86_64', suf='.md5')
         else:
             logger.error("Unsupported architecture: {}".format(arch))
             UI.return_main_screen()
@@ -110,9 +106,9 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
 
             logger.debug("Preparing to download the main archive.")
             if arch == 'i686':
-                download_url = self.DOWNLOAD_URL_PAT.format(arch='', suf='')
+                download_url = self.download_url_path.format(arch='', suf='')
             elif arch == 'x86_64':
-                download_url = self.DOWNLOAD_URL_PAT.format(arch='-x86_64',
+                download_url = self.download_url_path.format(arch='-x86_64',
                                                             suf='')
             self.download_requests.append(DownloadItem(download_url, Checksum(ChecksumType.md5, md5)))
             self.start_download_and_install()
@@ -120,14 +116,13 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         DownloadCenter(urls=[DownloadItem(md5_url, None)], on_done=done, download=False)
 
     def post_install(self):
-        """Create the Luna launcher"""
         icon_filename = "icon.xpm"
         icon_path = join(self.install_path, icon_filename)
-        exec_path = '"{}" %f'.format(join(self.install_path, "eclipse"))
-        comment = _("The Eclipse Luna Integrated Development Environment")
+        exec_path = '"{}" %f'.format(join(self.install_path, self.executable))
+        comment = _("The {0} Integrated Development Environment").format(self.description)
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
-                        get_application_desktop_file(name=_("Eclipse Luna"),
+                        get_application_desktop_file(name=self.description,
                                                      icon_path=icon_path,
                                                      exec=exec_path,
                                                      comment=comment,
@@ -142,6 +137,42 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
             logger.debug("{} binary isn't installed".format(self.name))
             return False
         return True
+
+
+class Eclipse(BaseEclipse):
+    """The Eclipse Foundation Luna distribution."""
+    download_url_path = "https://www.eclipse.org/downloads/download.php?" \
+                       "file=/technology/epp/downloads/release/luna/R/" \
+                       "eclipse-standard-luna-R-linux-gtk{arch}.tar.gz{suf}" \
+                       "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse",
+                         description=_("Pure Eclipse Luna (4.4)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=None,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseMars(BaseEclipse):
+    """The Eclipse Foundation Luna distribution."""
+    download_url_path = "https://www.eclipse.org/downloads/download.php?" \
+                       "file=/technology/epp/downloads/release/mars/R/" \
+                       "eclipse-jee-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                       "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse",
+                         description=_("Pure Eclipse Mars (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=None,
+                         dir_to_decompress_in_tarball='eclipse-mars',
+                         desktop_filename='eclipse-mars.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
 
 
 class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):

@@ -81,6 +81,56 @@ class EclipseIDETests(LargeFrameworkTests):
         self.wait_and_no_warn()
 
 
+class EclipseMarsIDETests(LargeFrameworkTests):
+    """The Eclipse Mars distribution from the IDE collection."""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 60
+    TIMEOUT_STOP = 60
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.expanduser("~/tools/ide/eclipse-mars")
+        self.desktop_filename = "eclipse-mars.desktop"
+
+    @property
+    def arch_option(self):
+        """we return the expected arch call on command line"""
+        return platform.machine()
+
+    def test_default_eclipse_ide_install(self):
+        """Install eclipse mars from scratch test case"""
+        self.child = pexpect.spawnu(self.command('{} ide eclipse-mars'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_no_warn()
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        # on 64 bits, there is a java subprocess, we kill that one with SIGKILL (eclipse isn't reliable on SIGTERM)
+        if self.arch_option == "x86_64":
+            self.check_and_kill_process(["java", self.arch_option, self.installed_path],
+                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
+        else:
+            self.check_and_kill_process([self.exec_path],
+                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = pexpect.spawnu(self.command('{} ide eclipse-mars'.format(UMAKE)))
+        self.expect_and_no_warn("Eclipse-mars is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_no_warn()
+
+
 class IdeaIDETests(LargeFrameworkTests):
     """IntelliJ Idea from the IDE collection."""
 

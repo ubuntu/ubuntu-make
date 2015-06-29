@@ -26,7 +26,7 @@ from ..large import test_ide
 
 
 class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
-    """This will test the eclipse IDE integration inside a container"""
+    """This will test the Eclipse Luna IDE integration inside a container."""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
@@ -35,14 +35,14 @@ class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
         self.hostname = "www.eclipse.org"
         self.port = "443"
         # we reuse the android-studio repo
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(self.DOCKER_USER))
 
 
-class EclipseIDEInContainerFTP(ContainerTests, test_ide.EclipseIDETests):
-    """This will test the Eclipse IDE integration inside a container, involving an FTP server."""
+class EclipseMarsIDEInContainer(ContainerTests, test_ide.EclipseMarsIDETests):
+    """This will test the Eclipse Mars IDE integration inside a container."""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
@@ -52,10 +52,10 @@ class EclipseIDEInContainerFTP(ContainerTests, test_ide.EclipseIDETests):
         self.port = "443"
         self.ftp = True
         # we reuse the android-studio repo
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(self.DOCKER_USER))
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-mars".format(self.DOCKER_USER))
 
 
 class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
