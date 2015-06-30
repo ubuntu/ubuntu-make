@@ -93,6 +93,9 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
             choice = Choice(lang, lang, partial(self.language_select_callback, url), is_default=is_default_choice)
             languages.append(choice)
 
+        if not languages:
+            logger.error("Download page changed its syntax or is not parsable")
+            UI.return_main_screen()
         logger.debug("Check list of installable languages.")
         UI.delayed_display(TextWithChoices(_("Choose language:"), languages, True))
 
