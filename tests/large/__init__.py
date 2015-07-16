@@ -174,7 +174,7 @@ class LargeFrameworkTests(LoggedTestCase):
 
     def is_in_group(self, group):
         """return if current user is in a group"""
-        is_in_group(group)
+        return is_in_group(group)
 
     def create_file(self, path, content):
         """passthrough to create a file on the disk"""
