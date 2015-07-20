@@ -112,13 +112,13 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen()
 
         arch = platform.machine()
-        tag_machine = '64'
+        download_re = r'<a.*href="(.*)">.*for Linux.*64.*'
         if arch == 'i686':
-            tag_machine = '32'
+            download_re = r'<a.*href="(.*)">x32 version</a>'
         url = None
         for line in result[self.download_page].buffer:
             line = line.decode()
-            p = re.search(r'<a.*href="(.*)">.*for Linux.*{}.*'.format(tag_machine), line)
+            p = re.search(download_re, line)
             with suppress(AttributeError):
                 url = p.group(1)
                 logger.debug("Found download link for {}".format(url))
