@@ -27,14 +27,9 @@ from ..large import test_dart
 class DartInContainer(ContainerTests, test_dart.DartEditorTests):
     """This will test the eclipse IDE integration inside a container"""
 
-    TIMEOUT_START = 20
-    TIMEOUT_STOP = 10
-
     def setUp(self):
         self.hostname = "www.dartlang.org"
         self.port = "443"
-        # we reuse the android-studio repo
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/dart/dart-editor".format(self.DOCKER_USER))
+        self.installed_path = os.path.expanduser("/home/{}/tools/dart/dart-sdk".format(self.DOCKER_USER))
