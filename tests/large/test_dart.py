@@ -34,18 +34,14 @@ class DartEditorTests(LargeFrameworkTests):
     """Tests for Dart Editor with SDK"""
 
     TIMEOUT_INSTALL_PROGRESS = 120
-    TIMEOUT_START = 20
-    TIMEOUT_STOP = 20
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/dart/dart-editor")
-        self.desktop_filename = "dart-editor.desktop"
+        self.installed_path = os.path.expanduser("~/tools/dart/dart-sdk")
 
     @property
-    def arch_option(self):
-        """we return the expected arch call on command line"""
-        return platform.machine()
+    def exec_path(self):
+        return os.path.join(self.installed_path, "bin", "dart")
 
     def test_default_dart_install(self):
         """Install dart editor from scratch test case"""
@@ -56,25 +52,11 @@ class DartEditorTests(LargeFrameworkTests):
         self.wait_and_no_warn()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assert_exec_exists()
-        self.assert_icon_exists()
-
-        # launch it, send SIGTERM and check that it exits fine
-        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
-                                stderr=subprocess.DEVNULL)
-
-        # on 64 bits, there is a java subprocess, we kill that one with SIGKILL (eclipse isn't reliable on SIGTERM)
-        if self.arch_option == "x86_64":
-            self.check_and_kill_process(["java", self.arch_option, self.installed_path],
-                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
-        else:
-            self.check_and_kill_process([self.exec_path],
-                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
-        proc.wait(self.TIMEOUT_STOP)
+        self.assertTrue(self.is_in_path(self.exec_path))
 
         # ensure that it's detected as installed:
         self.child = pexpect.spawnu(self.command('{} dart'.format(UMAKE)))
-        self.expect_and_no_warn("Dart Editor is already installed.*\[.*\] ")
+        self.expect_and_no_warn("Dart SDK is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_no_warn()
