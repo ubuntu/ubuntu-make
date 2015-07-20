@@ -75,10 +75,7 @@
                 <div class="download">
                     <div class="logo linux"></div>
                     <a class="link-button" onclick="reportAction('Download', 'linux', {'version': 'preview'})" href="https://code.visualstudio.com/visual-studio-code-amd64.zip">Download for Linux x64</a>
-                </div>
-                <div class="download">
-                    <div class="logo linux"></div>
-                    <a class="link-button" onclick="reportAction('Download', 'linux', {'version': 'preview'})" href="https://code.visualstudio.com/visual-studio-code-i386.zip">Download for Linux x32</a>
+                    <a onclick="reportAction('Download', 'linux', {'version': 'preview'})" href="https://code.visualstudio.com/visual-studio-code-i386.zip">x32 version</a>
                 </div>
                 <div class="download">
                     <div class="logo mac"></div>
