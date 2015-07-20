@@ -27,7 +27,9 @@ import os
 import platform
 import re
 import umake.frameworks.baseinstaller
-from umake.tools import create_launcher, get_application_desktop_file
+from umake.interactions import DisplayMessage
+from umake.tools import add_env_to_user
+from umake.ui import UI
 
 logger = logging.getLogger(__name__)
 
@@ -40,45 +42,45 @@ class DartCategory(umake.frameworks.BaseCategory):
         super().__init__(name="Dart", description=_("Dartlang Development Environment"), logo_path=None)
 
 
+class DartLangEditorRemoval(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Dart Editor", description=_("Dart SDK with editor (not supported upstream anyymore)"),
+                         download_page=None, category=category, only_on_archs=_supported_archs, only_for_removal=True)
+
+
 class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
-        super().__init__(name="Dart Editor", description=_("Dart SDK with editor (default)"), is_category_default=True,
+        super().__init__(name="Dart SDK", description=_("Dart SDK (default)"), is_category_default=True,
                          category=category, only_on_archs=_supported_archs,
-                         packages_requirements=["openjdk-7-jdk"],
-                         download_page="https://www.dartlang.org/tools/download-editor.html",
-                         dir_to_decompress_in_tarball="dart",
-                         desktop_filename="dart-editor.desktop")
+                         download_page="https://www.dartlang.org/downloads/linux.html",
+                         dir_to_decompress_in_tarball="dart-sdk")
 
     def parse_download_link(self, line, in_download):
         """Parse Dart Lang download link, expect to find a url"""
+        tag_machine = '64'
+        if platform.machine() == 'i686':
+            tag_machine = '32'
+        download_re = r'<a data-bits="{}" data-os="linux" data-tool="sdk".*href="(.*)">'.format(tag_machine)
 
-        if 'data-os="linux"' in line and 'data-tool="editor"' in line:
-            arch = platform.machine()
-            tag_machine = '64'
-            if arch == 'i686':
-                tag_machine = '32'
-            if 'data-bits="{}"'.format(tag_machine) in line:
-                p = re.search(r'href="(.*)"', line)
-                with suppress(AttributeError):
-                    url = p.group(1)
-                    return ((url, None), True)
+        p = re.search(download_re, line)
+        with suppress(AttributeError):
+            url = p.group(1)
+            return ((url, None), True)
         return ((None, None), False)
 
     def post_install(self):
-        """Create the Dart Editor launcher"""
-        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Dart Editor"),
-                        icon_path=os.path.join(self.install_path, "icon.xpm"),
-                        exec=os.path.join(self.install_path, "DartEditor"),
-                        comment=_("Dart Editor for the dart language"),
-                        categories="Development;IDE;"))
+        """Add go necessary env variables"""
+        add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
+        UI.delayed_display(DisplayMessage(_("You need to restart a shell session for your installation to work")))
 
     @property
     def is_installed(self):
         # check path and requirements
         if not super().is_installed:
             return False
-        if not os.path.isfile(os.path.join(self.install_path, "DartEditor")):
+        if not os.path.isfile(os.path.join(self.install_path, "bin", "dart")):
             logger.debug("{} binary isn't installed".format(self.name))
             return False
         return True
