@@ -1,4 +1,4 @@
-ubuntu-make (0.9) UNRELEASED; urgency=medium
+ubuntu-make (0.9) wily; urgency=medium
 
   * New arduino support. Thanks to Tin Tvrtković to have provided most of the
     work.
