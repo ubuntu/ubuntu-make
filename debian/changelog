@@ -1,3 +1,20 @@
+ubuntu-make (0.9) UNRELEASED; urgency=medium
+
+  * New arduino support. Thanks to Tin Tvrtković to have provided most of the
+    work.
+  * Fix parsing for Visual Studio Code 32 bits as upstream page changed.
+  * Deprecate Dart Editor framework (marked for remove only) and add Dart SDK
+    new framework as per Dart 1.11, the Editor is not supported anymore.
+  * Added or adapt tests for those new cases.
+  * Refresh and add helpers to large and medium tests to factorize them much
+    more and aligning information we check from the .desktop files (exec and
+    icon paths).
+  * Remove tests data from umake runtime.
+  * Some test cleanups and mock refresh (android studio, Visual Studio Code,
+    Android NDK).
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 21 Jul 2015 09:34:45 +0200
+
 ubuntu-make (0.8.2) wily; urgency=medium
 
   * Fix Visual Studio Code support due to new upstream archive layout and
