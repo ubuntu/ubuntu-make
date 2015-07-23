@@ -133,8 +133,13 @@ class LargeFrameworkTests(LoggedTestCase):
             except pexpect.TIMEOUT:
                 # stalled during timeout period
                 if output == self.child.before:
+                    print(self.child.before)
                     raise
                 output = self.child.before
+            # print the whole process output before getting the pexpect exception
+            except:
+                print(self.child.before)
+                raise
         self.assert_for_warn(self.child.before, expect_warn)
 
     def wait_and_no_warn(self, expect_warn=False):
