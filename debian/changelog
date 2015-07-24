@@ -1,4 +1,4 @@
-ubuntu-make (0.9.1) UNRELEASED; urgency=medium
+ubuntu-make (0.9.1) wily; urgency=medium
 
   * Change test to prevent FTBFS with 3.5: assert_has_calls()
   * Print whole process output before getting the pexpect exception
