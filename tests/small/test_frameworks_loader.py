@@ -625,7 +625,7 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
             self.assertFalse(self.CategoryHandler.categories["category-f"].frameworks["framework-c"].is_installed)
             requirement_mock.return_value.is_bucket_installed.assert_called_with(['foo', 'bar'])
             # is_bucket_available is called when it's not installed
-            requirement_mock.return_value.is_bucket_available.assert_any_calls(call(['foo', 'bar']))
+            requirement_mock.return_value.is_bucket_available.assert_has_calls([call(['foo', 'bar'])])
 
     def test_check_installed_with_matched_requirements(self):
         """Framework is installed if path and package requirements are met"""
