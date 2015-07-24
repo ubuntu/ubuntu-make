@@ -1,3 +1,11 @@
+ubuntu-make (0.9.1) UNRELEASED; urgency=medium
+
+  * Change test to prevent FTBFS with 3.5: assert_has_calls()
+  * Print whole process output before getting the pexpect exception
+    to get more info when a medium or large test is failing
+
+ -- Didier Roche <didrocks@ubuntu.com>  Fri, 24 Jul 2015 11:59:57 +0200
+
 ubuntu-make (0.9.0) wily; urgency=medium
 
   * Force depending only on default python3 for the current ubuntu version.
