@@ -63,7 +63,7 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
-        """Diverge from the baseinstallator implementation in order to allow language selection"""
+        """Diverge from the baseinstaller implementation in order to allow language selection"""
 
         logger.debug("Parse download metadata")
         error_msg = result[self.download_page].error
@@ -72,6 +72,7 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen()
 
         arch = platform.machine()
+        default_label = ''
         tag_machine = ''
         if arch == 'x86_64':
             tag_machine = '64'
@@ -79,7 +80,7 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
         reg_expression = '<td class="download linux{}"><a href="(.*)" title'.format(tag_machine)
         languages = []
         decoded_page = result[self.download_page].buffer.getvalue().decode()
-        for p in re.finditer(reg_expression, decoded_page):
+        for index, p in enumerate(re.finditer(reg_expression, decoded_page)):
             with suppress(AttributeError):
                 url = p.group(1)
 
@@ -89,15 +90,16 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
 
             is_default_choice = False
             if lang == "en-US":
+                default_label = "(default: en-US)"
                 is_default_choice = True
-            choice = Choice(lang, lang, partial(self.language_select_callback, url), is_default=is_default_choice)
+            choice = Choice(index, lang, partial(self.language_select_callback, url), is_default=is_default_choice)
             languages.append(choice)
 
         if not languages:
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen()
         logger.debug("Check list of installable languages.")
-        UI.delayed_display(TextWithChoices(_("Choose language:"), languages, True))
+        UI.delayed_display(TextWithChoices(_("Choose language: {}".format(default_label)), languages, True))
 
     def post_install(self):
         """Create the Firefox Developer launcher"""
