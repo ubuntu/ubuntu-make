@@ -53,6 +53,7 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://www.mozilla.org/en-US/firefox/developer/all",
                          dir_to_decompress_in_tarball="firefox",
                          desktop_filename="firefox-developer.desktop")
+        self.arg_lang = None
 
     @MainLoop.in_mainloop_thread
     def language_select_callback(self, url):
@@ -72,6 +73,7 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen()
 
         arch = platform.machine()
+        arg_lang_url = None
         default_label = ''
         tag_machine = ''
         if arch == 'x86_64':
@@ -88,18 +90,29 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
             with suppress(AttributeError):
                 lang = m.group(1)
 
-            is_default_choice = False
-            if lang == "en-US":
-                default_label = "(default: en-US)"
-                is_default_choice = True
-            choice = Choice(index, lang, partial(self.language_select_callback, url), is_default=is_default_choice)
-            languages.append(choice)
+            if self.arg_lang and self.arg_lang.lower() == lang.lower():
+                arg_lang_url = url
+                break
+            else:
+                is_default_choice = False
+                if lang == "en-US":
+                    default_label = "(default: en-US)"
+                    is_default_choice = True
+                choice = Choice(index, lang, partial(self.language_select_callback, url), is_default=is_default_choice)
+                languages.append(choice)
 
-        if not languages:
-            logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen()
-        logger.debug("Check list of installable languages.")
-        UI.delayed_display(TextWithChoices(_("Choose language: {}".format(default_label)), languages, True))
+        if self.arg_lang:
+            logger.info(self.arg_lang)
+            if not arg_lang_url:
+                logger.error("Could not find a download url for language {}".format(self.arg_lang))
+                UI.return_main_screen()
+            self.language_select_callback(arg_lang_url)
+        else:
+            if not languages:
+                logger.error("Download page changed its syntax or is not parsable")
+                UI.return_main_screen()
+            logger.debug("Check list of installable languages.")
+            UI.delayed_display(TextWithChoices(_("Choose language: {}".format(default_label)), languages, True))
 
     def post_install(self):
         """Create the Firefox Developer launcher"""
@@ -108,6 +121,17 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=os.path.join(self.install_path, "firefox"),
                         comment=_("Firefox Aurora with Developer tools"),
                         categories="Development;IDE;"))
+
+    def install_framework_parser(self, parser):
+        this_framework_parser = super().install_framework_parser(parser)
+        this_framework_parser.add_argument('--lang', dest="lang", action="store",
+                                           help=_("Install in given language without prompting"))
+        return this_framework_parser
+
+    def run_for(self, args):
+        if args.lang:
+            self.arg_lang = args.lang
+        super().run_for(args)
 
     @property
     def is_installed(self):

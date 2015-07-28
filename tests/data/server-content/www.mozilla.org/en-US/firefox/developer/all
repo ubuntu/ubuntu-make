@@ -537,9 +537,9 @@ help support Mozilla.-->
   
           <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=bg" title="Download for Mac OS X">Download</a></td>
   
-          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=bg" title="Download for Linux">Download</a></td>
+          <td class="download linux"><a href="https://www.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=bg" title="Download for Linux">Download</a></td>
   
-          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=bg" title="Download for 64-bit Linux">Download</a></td>
+          <td class="download linux64"><a href="https://www.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=bg" title="Download for 64-bit Linux">Download</a></td>
   
   </tr>
 
