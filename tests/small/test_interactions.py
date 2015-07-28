@@ -172,7 +172,6 @@ class TestInteractions(LoggedTestCase):
         inter = TextWithChoices("Foo Content", choices)
 
         self.assertRaises(InputError, inter.choose, choice_id=3)
-        self.expect_warn_error = True
 
     def test_choices_wrong_txt_shortcut_raise(self):
         """Wrong txt shortcut raises an exception"""
@@ -181,7 +180,6 @@ class TestInteractions(LoggedTestCase):
         inter = TextWithChoices("Foo Content", choices)
 
         self.assertRaises(InputError, inter.choose, answer='Z')
-        self.expect_warn_error = True
 
     def test_choices_wrong_label_raise(self):
         """Wrong label answer raises an exception"""
@@ -189,7 +187,6 @@ class TestInteractions(LoggedTestCase):
         inter = TextWithChoices("Foo Content", choices)
 
         self.assertRaises(InputError, inter.choose, answer='abc')
-        self.expect_warn_error = True
 
     def test_choices_choose_default(self):
         """Choices with a default without any answer return callback"""
@@ -207,7 +204,6 @@ class TestInteractions(LoggedTestCase):
         inter = TextWithChoices("Foo Content", choices)
 
         self.assertRaises(InputError, inter.choose)
-        self.expect_warn_error = True
 
     def test_license_agreement(self):
         """We can instantiate a license agreement interaction"""
