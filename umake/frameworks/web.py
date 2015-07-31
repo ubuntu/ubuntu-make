@@ -102,10 +102,10 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
                 languages.append(choice)
 
         if self.arg_lang:
-            logger.info(self.arg_lang)
+            logger.debug("Selecting {} lang".format(self.arg_lang))
             if not arg_lang_url:
                 logger.error("Could not find a download url for language {}".format(self.arg_lang))
-                UI.return_main_screen()
+                UI.return_main_screen(1)
             self.language_select_callback(arg_lang_url)
         else:
             if not languages:

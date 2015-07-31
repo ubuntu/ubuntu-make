@@ -102,6 +102,14 @@ class FirefoxDevTests(LargeFrameworkTests):
         self.wait_and_no_warn()
         self.verify_install(install_language)
 
+    def test_unavailable_language_select_install(self):
+        install_language = "ABCdwXYZ"
+        self.child = pexpect.spawnu(self.command('{} web firefox-dev --lang={}'.format(UMAKE, install_language)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.accept_default_and_wait(expect_warn=True)
+        self.child.close()
+        self.assertEqual(self.child.exitstatus, 1)
+
     def language_file_exists(self, language):
         return self.path_exists(os.path.join(self.installed_path, "dictionaries", "{}.aff".format(language)))
 
