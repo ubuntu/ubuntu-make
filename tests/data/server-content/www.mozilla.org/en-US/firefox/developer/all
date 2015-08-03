@@ -1,0 +1,2100 @@
+
+<!doctype html>
+<html class="windows x86 no-js" lang="en" dir="ltr" data-latest-firefox="38.0.5" data-esr-versions="[31, 38]">
+  <head>
+    <meta charset="utf-8">
+<!--
+             _.-~-.
+           7''  Q..\
+        _7         (_
+      _7  _/    _q.  /
+    _7 . ___  /VVvv-'_                                            .
+   7/ / /~- \_\\      '-._     .-'                      /       //
+  ./ ( /-~-/||'=.__  '::. '-~'' {             ___   /  //     ./{
+ V   V-~-~| ||   __''_   ':::.   ''~-~.___.-'' _/  // / {_   /  {  /
+  VV/-~-~-|/ \ .'__'. '.    '::                     _ _ _        ''.
+  / /~~~~||VVV/ /  \ )  \        _ __ ___   ___ ___(_) | | __ _   .::'
+ / (~-~-~\\.-' /    \'   \::::. | '_ ` _ \ / _ \_  / | | |/ _` | :::'
+/..\    /..\__/      '     '::: | | | | | | (_) / /| | | | (_| | ::'
+vVVv    vVVv                 ': |_| |_| |_|\___/___|_|_|_|\__,_| ''
+
+Hi there, nice to meet you!
+
+Interested in having a direct impact on hundreds of millions of users? Join
+Mozilla, and become part of a global community that’s helping to build a
+brighter future for the Web.
+
+Visit https://careers.mozilla.org to learn about our current job openings.
+Visit https://www.mozilla.org/contribute for more ways to get involved and
+help support Mozilla.-->
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Mozilla Firefox Web Browser — Download Developer Edition in your language — Mozilla</title>
+    <meta name="description" content="Download Firefox Developer Edition in your language to experience the newest features and innovations in an unstable environment even before they go to Beta. Give us feedback that will determine what makes it to Final Release and help shape the future of Firefox.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Mozilla">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:url" content="https://www.mozilla.org/en-US/firefox/developer/all/">
+    <meta property="og:image" content="https://mozorg.cdn.mozilla.net/media/img/firefox/all/page-image.721b78d14b94.png">
+    <meta property="og:title" content="Mozilla Firefox Web Browser — Download Developer Edition in your language">
+    <meta property="og:description" content="Download Firefox Developer Edition in your language to experience the newest features and innovations in an unstable environment even before they go to Beta. Give us feedback that will determine what makes it to Final Release and help shape the future of Firefox.">
+    <meta property="fb:page_id" content="14696440021">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@firefox">
+    <meta name="twitter:domain" content="mozilla.org">
+    <meta name="twitter:app:name:googleplay" content="Firefox">
+    <meta name="twitter:app:id:googleplay" content="org.mozilla.firefox">
+    <link rel="author" type="text/plain" href="/humans.txt">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="//mozorg.cdn.mozilla.net/media/img/firefox/ios-icon-180.7a8401f21915.png">
+    <link rel="icon" type="image/png" sizes="196x196" href="//mozorg.cdn.mozilla.net/media/img/firefox/favicon-196.223e1bcaf067.png">
+    <link rel="shortcut icon" href="//mozorg.cdn.mozilla.net/media/img/firefox/favicon.dc6635050bf5.ico">
+        <link rel="canonical" hreflang="en" href="https://www.mozilla.org/en-US/firefox/developer/all/">
+    <link rel="alternate" hreflang="x-default" href="https://www.mozilla.org/firefox/developer/all/">
+    <link rel="alternate" hreflang="en" href="https://www.mozilla.org/en-US/firefox/developer/all/" title="English">
+    <link rel="alternate" hreflang="en-CA" href="https://www.mozilla.org/en-US/firefox/developer/all/" title="English (Canada)">
+    <link rel="alternate" hreflang="ja" href="https://www.mozilla.org/ja/firefox/developer/all/" title="日本語">
+        
+    
+
+          <link href="//mozorg.cdn.mozilla.net/media/css/tabzilla-min.c4ec201287fa.css" rel="stylesheet" type="text/css" />    
+    <!--[if lte IE 8]>
+            <script src="//mozorg.cdn.mozilla.net/media/js/libs/html5shiv.d580a4cd1cb4.js"></script>
+    <![endif]-->
+
+    <!--[if lte IE 7]>
+            <link href="//mozorg.cdn.mozilla.net/media/css/oldIE-bundle.d6160f20fd25.css" rel="stylesheet" type="text/css" />    <![endif]-->
+
+    <!--[if !lte IE 7]><!-->
+          <link href="//mozorg.cdn.mozilla.net/media/css/firefox_all-bundle.e6b598f59a64.css" rel="stylesheet" type="text/css" />
+            <!--<![endif]-->
+
+              
+    <script type="text/javascript" src="//mozorg.cdn.mozilla.net/media/js/site-bundle.4d72c30b1a11.js" charset="utf-8"></script>
+    
+              <!-- Google Tag Manager -->
+<!-- Customized for Mozilla.org-->
+<!-- Region Container: NONE -->
+<!-- Rollup Container: System Filtered -->
+<!-- Site Container: NONE -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    //core dataLayer object goes here
+  });
+</script>
+
+<script>
+(function(w,d,s,l,i,j,f,dl,k,q){
+  w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});f=d.getElementsByTagName(s)[0];
+  k=i.length;q='//www.googletagmanager.com/gtm.js?id=@&l='+(l||'dataLayer');
+  while(k--){j=d.createElement(s);j.async=!0;j.src=q.replace('@',i[k]);f.parentNode.insertBefore(j,f);}
+}(window,document,'script','dataLayer',['GTM-MW3R8V']));
+</script>
+<!-- End Google Tag Manager -->
+      </head>
+
+  <body id="firefox-all" class="html-ltr sky firefox-all-alpha blueprint">
+    <div id="strings"
+      data-global-close="Close"
+      data-global-next="Next"
+      data-global-previous="Previous"
+      data-global-update-firefox="Update your Firefox"
+      ></div>
+    <div id="outer-wrapper">
+
+        
+    <div id="wrapper">
+
+          <header id="masthead">
+                <a href="/en-US/" id="tabzilla" data-infobar="update translation">Mozilla</a>
+        
+          <nav id="nav-main" role="navigation">
+  <span id="nav-main-toggle" class="toggle" role="button" aria-controls="nav-main-menu" aria-expanded="false" tabindex="0">Menu</span>
+  <ul id="nav-main-menu" class="has-submenus">
+    <li class="first" id="nav-main-features"><a href="/en-US/firefox/new/" tabindex="0" aria-owns="nav-main-features-submenu" aria-haspopup="true">Firefox</a>
+      <ul aria-expanded="false" id="nav-main-features-submenu" class="submenu">
+        <li class="first"><a href="/en-US/firefox/desktop/" tabindex="-1">Desktop</a></li>
+        <li><a href="/en-US/firefox/android/" tabindex="-1">Android</a></li>
+        <li><a href="/en-US/firefox/developer/" tabindex="-1">Developer Edition</a></li>
+        <li>
+          <hr>          <a class="sublink" href="/en-US/firefox/sync/" tabindex="-1">Sync</a>
+          <a class="sublink" href="/en-US/firefox/hello/" tabindex="-1">Hello</a>
+        </li>
+      </ul>
+    </li>
+    <li id="nav-main-addons"><a rel="external" href="https://addons.mozilla.org/" tabindex="0" aria-owns="nav-main-addons-submenu" aria-haspopup="true">Add-ons</a>
+      <ul aria-expanded="false" id="nav-main-addons-submenu" class="submenu">
+        <li class="first"><a href="https://addons.mozilla.org/firefox/" tabindex="-1">Desktop Add-ons</a></li>
+        <li><a href="https://addons.mozilla.org/android/" tabindex="-1">Android Add-ons</a></li>
+        <li class="last"><a href="https://addons.mozilla.org/firefox/themes/" tabindex="-1">Themes</a></li>
+      </ul>
+    </li>
+    <li id="nav-main-support"><a rel="external" href="https://support.mozilla.org/" tabindex="0" aria-owns="nav-main-support-submenu" aria-haspopup="true">Support</a>
+      <ul aria-expanded="false" id="nav-main-support-submenu" class="submenu">
+        <li class="first"><a href="https://support.mozilla.org/products/firefox" tabindex="-1">Desktop Support</a></li>
+        <li class="last"><a href="https://support.mozilla.org/products/mobile" tabindex="-1">Android Support</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+              <h2><a href="/en-US/firefox/developer/"><img class="js " src="" data-processed="false" data-src="//mozorg.cdn.mozilla.net/media/img/firefox/developer/title.cc24bed4ace7.png" data-high-res="true" data-high-res-src="//mozorg.cdn.mozilla.net/media/img/firefox/developer/title-high-res.3bd820c2e8da.png" width="220" alt="Firefox Developer Edition" height="84"><noscript><img class="" src="//mozorg.cdn.mozilla.net/media/img/firefox/developer/title.cc24bed4ace7.png" width="220" alt="Firefox Developer Edition" height="84"></noscript></a></h2>
+  
+        
+        
+        
+                </header>
+    
+    
+              
+      <header id="main-feature">
+    <h1>Download Developer Edition in your language</h1>
+    <h2>      Download Firefox Developer Edition in your language to experience the newest features and innovations in an unstable environment even before they go to Beta. Give us feedback that will determine what makes it to Final Release and help shape the future of Firefox.
+  </h2>
+    <p><a class="sysreq" href="/en-US/firefox/developer/system-requirements/">Check the system requirements</a><br />
+    <a class="sysreq" href="/en-US/firefox/developer/notes/">Release notes</a>
+    </p>
+  </header>
+
+    <form id="language-search" class="billboard" method="get">
+    <div class="search-column">
+      <input type="search"
+             placeholder="Search languages"
+             name="q"
+             id="language-search-q"
+             list="languages"
+             >
+      <datalist id="languages">
+                    <option value="Acholi"></option>
+                              <option value="Afrikaans"></option>
+                              <option value="Albanian, Shqip"></option>
+                              <option value="Arabic, عربي"></option>
+                              <option value="Aragonese, aragonés"></option>
+                              <option value="Armenian, Հայերեն"></option>
+                              <option value="Assamese, অসমীয়া"></option>
+                              <option value="Asturian, Asturianu"></option>
+                              <option value="Azerbaijani, Azərbaycanca"></option>
+                              <option value="Basque, Euskara"></option>
+                              <option value="Belarusian, Беларуская"></option>
+                              <option value="Bengali (Bangladesh), বাংলা (বাংলাদেশ)"></option>
+                              <option value="Bengali (India), বাংলা (ভারত)"></option>
+                              <option value="Bodo, बर&#39;"></option>
+                              <option value="Bosnian, Bosanski"></option>
+                              <option value="Breton, Brezhoneg"></option>
+                              <option value="Bulgarian, Български"></option>
+                              <option value="Burmese, မြန်မာဘာသာ"></option>
+                              <option value="Catalan, Català"></option>
+                              <option value="Chinese (Simplified), 中文 (简体)"></option>
+                              <option value="Chinese (Traditional), 正體中文 (繁體)"></option>
+                              <option value="Croatian, Hrvatski"></option>
+                              <option value="Czech, Čeština"></option>
+                              <option value="Danish, Dansk"></option>
+                              <option value="Dutch, Nederlands"></option>
+                              <option value="English (British)"></option>
+                              <option value="English (South African)"></option>
+                              <option value="English (US)"></option>
+                              <option value="Esperanto"></option>
+                              <option value="Estonian, Eesti keel"></option>
+                              <option value="Finnish, suomi"></option>
+                              <option value="French, Français"></option>
+                              <option value="Frisian, Frysk"></option>
+                              <option value="Fulah, Pulaar-Fulfulde"></option>
+                              <option value="Gaelic (Scotland), Gàidhlig"></option>
+                              <option value="Galician, Galego"></option>
+                              <option value="German, Deutsch"></option>
+                              <option value="Greek, Ελληνικά"></option>
+                              <option value="Gujarati (India), ગુજરાતી (ભારત)"></option>
+                              <option value="Hebrew, עברית"></option>
+                              <option value="Hindi (India), हिन्दी (भारत)"></option>
+                              <option value="Hungarian, magyar"></option>
+                              <option value="Icelandic, íslenska"></option>
+                              <option value="Indonesian, Bahasa Indonesia"></option>
+                              <option value="Irish, Gaeilge"></option>
+                              <option value="Italian, Italiano"></option>
+                              <option value="Japanese, 日本語"></option>
+                              <option value="Kannada, ಕನ್ನಡ"></option>
+                              <option value="Kashmiri, كشمیری"></option>
+                              <option value="Kazakh, Қазақ"></option>
+                              <option value="Khmer, ខ្មែរ"></option>
+                              <option value="Konkani, कोंकनी"></option>
+                              <option value="Korean, 한국어"></option>
+                              <option value="Latvian, Latviešu"></option>
+                              <option value="Ligurian, Ligure"></option>
+                              <option value="Lithuanian, lietuvių kalba"></option>
+                              <option value="Lower Sorbian, Dolnoserbšćina"></option>
+                              <option value="Macedonian, Македонски"></option>
+                              <option value="Maithili, मैथिली মৈথিলী"></option>
+                              <option value="Malay, Melayu"></option>
+                              <option value="Malayalam, മലയാളം"></option>
+                              <option value="Marathi, मराठी"></option>
+                              <option value="Norwegian (Bokmål), Norsk bokmål"></option>
+                              <option value="Norwegian (Nynorsk), Norsk nynorsk"></option>
+                              <option value="Occitan (Lengadocian), occitan (lengadocian)"></option>
+                              <option value="Oriya, ଓଡ଼ିଆ"></option>
+                              <option value="Persian, فارسی"></option>
+                              <option value="Polish, Polski"></option>
+                              <option value="Portuguese (Brazilian), Português (do Brasil)"></option>
+                              <option value="Portuguese (Portugal), Português (Europeu)"></option>
+                              <option value="Punjabi (India), ਪੰਜਾਬੀ (ਭਾਰਤ)"></option>
+                              <option value="Romanian, română"></option>
+                              <option value="Romansh, rumantsch"></option>
+                              <option value="Russian, Русский"></option>
+                              <option value="Santali, संताली"></option>
+                              <option value="Serbian, Српски"></option>
+                              <option value="Sinhala, සිංහල"></option>
+                              <option value="Slovak, slovenčina"></option>
+                              <option value="Slovenian, Slovenščina"></option>
+                              <option value="Songhai, Soŋay"></option>
+                              <option value="Spanish (Argentina), Español (de Argentina)"></option>
+                              <option value="Spanish (Chile), Español (de Chile)"></option>
+                              <option value="Spanish (Mexico), Español (de México)"></option>
+                              <option value="Spanish (Spain), Español (de España)"></option>
+                              <option value="Swedish, Svenska"></option>
+                              <option value="Tamil, தமிழ்"></option>
+                              <option value="Telugu, తెలుగు"></option>
+                              <option value="Thai, ไทย"></option>
+                              <option value="Turkish, Türkçe"></option>
+                              <option value="Ukrainian, Українська"></option>
+                              <option value="Upper Sorbian, Hornjoserbsce"></option>
+                              <option value="Uzbek, Oʻzbek tili"></option>
+                              <option value="Vietnamese, Tiếng Việt"></option>
+                              <option value="Welsh, Cymraeg"></option>
+                              <option value="Xhosa, isiXhosa"></option>
+                  </datalist>
+      <button class="button arrow" type="submit"><span>Search</span></button>
+    </div>
+      </form>
+
+
+  <main id="main-content" role="main" class="pager pager-with-tabs pager-no-history">
+      <section class="pager-content">
+
+        
+      <div class="esr-builds-table pager-page" id="builds">
+        <div class="localized">
+            <div class="build-table-container">
+          <table class="table build-table">
+        <caption>
+          <h3>Fully localized versions</h3>
+                    </caption>
+        <thead>
+          <tr>
+            <th colspan="2" scope="col">Language</th>
+            <th scope="col">Windows</th>
+            <th scope="col">Windows 64-bit</th>
+            <th scope="col">Mac OS X</th>
+            <th scope="col">Linux</th>
+            <th scope="col">Linux 64-bit</th>
+          </tr>
+        </thead>
+        <tbody>
+                        <tr id="ach" data-search="acholi, acholi">
+    <th scope="row">Acholi</th>
+    <td lang="ach">Acholi</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ach" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ach" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ach" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ach" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ach" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="af" data-search="afrikaans, afrikaans">
+    <th scope="row">Afrikaans</th>
+    <td lang="af">Afrikaans</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=af" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=af" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=af" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=af" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=af" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="sq" data-search="albanian, shqip">
+    <th scope="row">Albanian</th>
+    <td lang="sq">Shqip</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=sq" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=sq" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=sq" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=sq" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=sq" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ar" data-search="arabic, عربي">
+    <th scope="row">Arabic</th>
+    <td lang="ar">عربي</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ar" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ar" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ar" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ar" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ar" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="an" data-search="aragonese, aragonés">
+    <th scope="row">Aragonese</th>
+    <td lang="an">aragonés</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=an" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=an" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=an" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=an" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=an" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="hy-AM" data-search="armenian, հայերեն">
+    <th scope="row">Armenian</th>
+    <td lang="hy-AM">Հայերեն</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=hy-AM" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=hy-AM" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=hy-AM" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=hy-AM" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=hy-AM" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="as" data-search="assamese, অসমীয়া">
+    <th scope="row">Assamese</th>
+    <td lang="as">অসমীয়া</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=as" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=as" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=as" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=as" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=as" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ast" data-search="asturian, asturianu">
+    <th scope="row">Asturian</th>
+    <td lang="ast">Asturianu</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ast" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ast" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ast" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ast" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ast" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="az" data-search="azerbaijani, azərbaycanca">
+    <th scope="row">Azerbaijani</th>
+    <td lang="az">Azərbaycanca</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=az" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=az" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=az" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=az" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=az" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="eu" data-search="basque, euskara">
+    <th scope="row">Basque</th>
+    <td lang="eu">Euskara</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=eu" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=eu" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=eu" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=eu" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=eu" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="be" data-search="belarusian, беларуская">
+    <th scope="row">Belarusian</th>
+    <td lang="be">Беларуская</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=be" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=be" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=be" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=be" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=be" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="bn-BD" data-search="bengali (bangladesh), বাংলা (বাংলাদেশ)">
+    <th scope="row">Bengali (Bangladesh)</th>
+    <td lang="bn-BD">বাংলা (বাংলাদেশ)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=bn-BD" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=bn-BD" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=bn-BD" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=bn-BD" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=bn-BD" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="bn-IN" data-search="bengali (india), বাংলা (ভারত)">
+    <th scope="row">Bengali (India)</th>
+    <td lang="bn-IN">বাংলা (ভারত)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=bn-IN" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=bn-IN" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=bn-IN" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=bn-IN" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=bn-IN" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="brx" data-search="bodo, बर&#39;">
+    <th scope="row">Bodo</th>
+    <td lang="brx">बर&#39;</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=brx" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=brx" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=brx" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=brx" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=brx" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="bs" data-search="bosnian, bosanski">
+    <th scope="row">Bosnian</th>
+    <td lang="bs">Bosanski</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=bs" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=bs" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=bs" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=bs" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=bs" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="br" data-search="breton, brezhoneg">
+    <th scope="row">Breton</th>
+    <td lang="br">Brezhoneg</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=br" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=br" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=br" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=br" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=br" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="bg" data-search="bulgarian, български">
+    <th scope="row">Bulgarian</th>
+    <td lang="bg">Български</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=bg" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=bg" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=bg" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://www.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=bg" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://www.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=bg" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="my" data-search="burmese, မြန်မာဘာသာ">
+    <th scope="row">Burmese</th>
+    <td lang="my">မြန်မာဘာသာ</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=my" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=my" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=my" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=my" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=my" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ca" data-search="catalan, català">
+    <th scope="row">Catalan</th>
+    <td lang="ca">Català</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ca" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ca" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ca" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ca" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ca" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="zh-CN" data-search="chinese (simplified), 中文 (简体)">
+    <th scope="row">Chinese (Simplified)</th>
+    <td lang="zh-CN">中文 (简体)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=zh-CN" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=zh-CN" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=zh-CN" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=zh-CN" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=zh-CN" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="zh-TW" data-search="chinese (traditional), 正體中文 (繁體)">
+    <th scope="row">Chinese (Traditional)</th>
+    <td lang="zh-TW">正體中文 (繁體)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=zh-TW" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=zh-TW" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=zh-TW" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=zh-TW" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=zh-TW" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="hr" data-search="croatian, hrvatski">
+    <th scope="row">Croatian</th>
+    <td lang="hr">Hrvatski</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=hr" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=hr" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=hr" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=hr" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=hr" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="cs" data-search="czech, čeština">
+    <th scope="row">Czech</th>
+    <td lang="cs">Čeština</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=cs" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=cs" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=cs" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=cs" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=cs" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="da" data-search="danish, dansk">
+    <th scope="row">Danish</th>
+    <td lang="da">Dansk</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=da" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=da" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=da" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=da" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=da" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="nl" data-search="dutch, nederlands">
+    <th scope="row">Dutch</th>
+    <td lang="nl">Nederlands</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=nl" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=nl" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=nl" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=nl" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=nl" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="en-GB" data-search="english (british), english (british)">
+    <th scope="row">English (British)</th>
+    <td lang="en-GB">English (British)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=en-GB" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=en-GB" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=en-GB" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=en-GB" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=en-GB" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="en-ZA" data-search="english (south african), english (south african)">
+    <th scope="row">English (South African)</th>
+    <td lang="en-ZA">English (South African)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=en-ZA" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=en-ZA" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=en-ZA" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=en-ZA" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=en-ZA" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="en-US" data-search="english (us), english (us)">
+    <th scope="row">English (US)</th>
+    <td lang="en-US">English (US)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-stub&amp;os=win&amp;lang=en-US" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-ssl&amp;os=win64&amp;lang=en-US" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-ssl&amp;os=osx&amp;lang=en-US" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://www.mozilla.org/?product=firefox-aurora-latest-ssl&amp;os=linux&amp;lang=en-US" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://www.mozilla.org/?product=firefox-aurora-latest-ssl&amp;os=linux64&amp;lang=en-US" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="eo" data-search="esperanto, esperanto">
+    <th scope="row">Esperanto</th>
+    <td lang="eo">Esperanto</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=eo" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=eo" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=eo" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=eo" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=eo" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="et" data-search="estonian, eesti keel">
+    <th scope="row">Estonian</th>
+    <td lang="et">Eesti keel</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=et" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=et" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=et" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=et" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=et" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="fi" data-search="finnish, suomi">
+    <th scope="row">Finnish</th>
+    <td lang="fi">suomi</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=fi" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=fi" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=fi" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=fi" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=fi" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="fr" data-search="french, français">
+    <th scope="row">French</th>
+    <td lang="fr">Français</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=fr" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=fr" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=fr" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=fr" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=fr" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="fy-NL" data-search="frisian, frysk">
+    <th scope="row">Frisian</th>
+    <td lang="fy-NL">Frysk</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=fy-NL" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=fy-NL" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=fy-NL" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=fy-NL" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=fy-NL" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ff" data-search="fulah, pulaar-fulfulde">
+    <th scope="row">Fulah</th>
+    <td lang="ff">Pulaar-Fulfulde</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ff" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ff" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ff" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ff" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ff" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="gd" data-search="gaelic (scotland), gàidhlig">
+    <th scope="row">Gaelic (Scotland)</th>
+    <td lang="gd">Gàidhlig</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=gd" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=gd" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=gd" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=gd" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=gd" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="gl" data-search="galician, galego">
+    <th scope="row">Galician</th>
+    <td lang="gl">Galego</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=gl" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=gl" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=gl" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=gl" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=gl" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="de" data-search="german, deutsch">
+    <th scope="row">German</th>
+    <td lang="de">Deutsch</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=de" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=de" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=de" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=de" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=de" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="el" data-search="greek, ελληνικά">
+    <th scope="row">Greek</th>
+    <td lang="el">Ελληνικά</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=el" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=el" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=el" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=el" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=el" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="gu-IN" data-search="gujarati (india), ગુજરાતી (ભારત)">
+    <th scope="row">Gujarati (India)</th>
+    <td lang="gu-IN">ગુજરાતી (ભારત)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=gu-IN" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=gu-IN" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=gu-IN" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=gu-IN" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=gu-IN" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="he" data-search="hebrew, עברית">
+    <th scope="row">Hebrew</th>
+    <td lang="he">עברית</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=he" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=he" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=he" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=he" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=he" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="hi-IN" data-search="hindi (india), हिन्दी (भारत)">
+    <th scope="row">Hindi (India)</th>
+    <td lang="hi-IN">हिन्दी (भारत)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=hi-IN" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=hi-IN" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=hi-IN" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=hi-IN" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=hi-IN" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="hu" data-search="hungarian, magyar">
+    <th scope="row">Hungarian</th>
+    <td lang="hu">magyar</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=hu" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=hu" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=hu" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=hu" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=hu" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="is" data-search="icelandic, íslenska">
+    <th scope="row">Icelandic</th>
+    <td lang="is">íslenska</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=is" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=is" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=is" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=is" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=is" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="id" data-search="indonesian, bahasa indonesia">
+    <th scope="row">Indonesian</th>
+    <td lang="id">Bahasa Indonesia</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=id" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=id" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=id" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=id" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=id" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ga-IE" data-search="irish, gaeilge">
+    <th scope="row">Irish</th>
+    <td lang="ga-IE">Gaeilge</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ga-IE" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ga-IE" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ga-IE" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ga-IE" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ga-IE" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="it" data-search="italian, italiano">
+    <th scope="row">Italian</th>
+    <td lang="it">Italiano</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=it" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=it" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=it" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=it" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=it" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ja" data-search="japanese, 日本語">
+    <th scope="row">Japanese</th>
+    <td lang="ja">日本語</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ja" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ja" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ja" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ja" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ja" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="kn" data-search="kannada, ಕನ್ನಡ">
+    <th scope="row">Kannada</th>
+    <td lang="kn">ಕನ್ನಡ</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=kn" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=kn" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=kn" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=kn" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=kn" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ks" data-search="kashmiri, كشمیری">
+    <th scope="row">Kashmiri</th>
+    <td lang="ks">كشمیری</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ks" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ks" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ks" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ks" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ks" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="kk" data-search="kazakh, қазақ">
+    <th scope="row">Kazakh</th>
+    <td lang="kk">Қазақ</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=kk" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=kk" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=kk" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=kk" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=kk" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="km" data-search="khmer, ខ្មែរ">
+    <th scope="row">Khmer</th>
+    <td lang="km">ខ្មែរ</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=km" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=km" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=km" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=km" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=km" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="kok" data-search="konkani, कोंकनी">
+    <th scope="row">Konkani</th>
+    <td lang="kok">कोंकनी</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=kok" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=kok" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=kok" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=kok" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=kok" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ko" data-search="korean, 한국어">
+    <th scope="row">Korean</th>
+    <td lang="ko">한국어</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ko" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ko" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ko" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ko" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ko" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="lv" data-search="latvian, latviešu">
+    <th scope="row">Latvian</th>
+    <td lang="lv">Latviešu</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=lv" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=lv" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=lv" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=lv" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=lv" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="lij" data-search="ligurian, ligure">
+    <th scope="row">Ligurian</th>
+    <td lang="lij">Ligure</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=lij" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=lij" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=lij" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=lij" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=lij" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="lt" data-search="lithuanian, lietuvių kalba">
+    <th scope="row">Lithuanian</th>
+    <td lang="lt">lietuvių kalba</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=lt" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=lt" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=lt" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=lt" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=lt" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="dsb" data-search="lower sorbian, dolnoserbšćina">
+    <th scope="row">Lower Sorbian</th>
+    <td lang="dsb">Dolnoserbšćina</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=dsb" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=dsb" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=dsb" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=dsb" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=dsb" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="mk" data-search="macedonian, македонски">
+    <th scope="row">Macedonian</th>
+    <td lang="mk">Македонски</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=mk" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=mk" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=mk" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=mk" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=mk" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="mai" data-search="maithili, मैथिली মৈথিলী">
+    <th scope="row">Maithili</th>
+    <td lang="mai">मैथिली মৈথিলী</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=mai" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=mai" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=mai" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=mai" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=mai" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ms" data-search="malay, melayu">
+    <th scope="row">Malay</th>
+    <td lang="ms">Melayu</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ms" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ms" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ms" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ms" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ms" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ml" data-search="malayalam, മലയാളം">
+    <th scope="row">Malayalam</th>
+    <td lang="ml">മലയാളം</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ml" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ml" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ml" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ml" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ml" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="mr" data-search="marathi, मराठी">
+    <th scope="row">Marathi</th>
+    <td lang="mr">मराठी</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=mr" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=mr" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=mr" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=mr" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=mr" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="nb-NO" data-search="norwegian (bokmål), norsk bokmål">
+    <th scope="row">Norwegian (Bokmål)</th>
+    <td lang="nb-NO">Norsk bokmål</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=nb-NO" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=nb-NO" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=nb-NO" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=nb-NO" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=nb-NO" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="nn-NO" data-search="norwegian (nynorsk), norsk nynorsk">
+    <th scope="row">Norwegian (Nynorsk)</th>
+    <td lang="nn-NO">Norsk nynorsk</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=nn-NO" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=nn-NO" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=nn-NO" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=nn-NO" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=nn-NO" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="oc" data-search="occitan (lengadocian), occitan (lengadocian)">
+    <th scope="row">Occitan (Lengadocian)</th>
+    <td lang="oc">occitan (lengadocian)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=oc" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=oc" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=oc" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=oc" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=oc" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="or" data-search="oriya, ଓଡ଼ିଆ">
+    <th scope="row">Oriya</th>
+    <td lang="or">ଓଡ଼ିଆ</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=or" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=or" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=or" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=or" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=or" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="fa" data-search="persian, فارسی">
+    <th scope="row">Persian</th>
+    <td lang="fa">فارسی</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=fa" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=fa" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=fa" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=fa" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=fa" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="pl" data-search="polish, polski">
+    <th scope="row">Polish</th>
+    <td lang="pl">Polski</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=pl" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=pl" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=pl" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=pl" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=pl" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="pt-BR" data-search="portuguese (brazilian), português (do brasil)">
+    <th scope="row">Portuguese (Brazilian)</th>
+    <td lang="pt-BR">Português (do Brasil)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=pt-BR" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=pt-BR" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=pt-BR" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=pt-BR" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=pt-BR" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="pt-PT" data-search="portuguese (portugal), português (europeu)">
+    <th scope="row">Portuguese (Portugal)</th>
+    <td lang="pt-PT">Português (Europeu)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=pt-PT" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=pt-PT" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=pt-PT" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=pt-PT" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=pt-PT" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="pa-IN" data-search="punjabi (india), ਪੰਜਾਬੀ (ਭਾਰਤ)">
+    <th scope="row">Punjabi (India)</th>
+    <td lang="pa-IN">ਪੰਜਾਬੀ (ਭਾਰਤ)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=pa-IN" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=pa-IN" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=pa-IN" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=pa-IN" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=pa-IN" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ro" data-search="romanian, română">
+    <th scope="row">Romanian</th>
+    <td lang="ro">română</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ro" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ro" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ro" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ro" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ro" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="rm" data-search="romansh, rumantsch">
+    <th scope="row">Romansh</th>
+    <td lang="rm">rumantsch</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=rm" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=rm" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=rm" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=rm" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=rm" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ru" data-search="russian, русский">
+    <th scope="row">Russian</th>
+    <td lang="ru">Русский</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ru" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ru" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ru" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ru" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ru" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="sat" data-search="santali, संताली">
+    <th scope="row">Santali</th>
+    <td lang="sat">संताली</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=sat" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=sat" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=sat" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=sat" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=sat" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="sr" data-search="serbian, српски">
+    <th scope="row">Serbian</th>
+    <td lang="sr">Српски</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=sr" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=sr" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=sr" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=sr" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=sr" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="si" data-search="sinhala, සිංහල">
+    <th scope="row">Sinhala</th>
+    <td lang="si">සිංහල</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=si" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=si" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=si" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=si" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=si" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="sk" data-search="slovak, slovenčina">
+    <th scope="row">Slovak</th>
+    <td lang="sk">slovenčina</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=sk" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=sk" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=sk" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=sk" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=sk" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="sl" data-search="slovenian, slovenščina">
+    <th scope="row">Slovenian</th>
+    <td lang="sl">Slovenščina</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=sl" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=sl" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=sl" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=sl" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=sl" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="son" data-search="songhai, soŋay">
+    <th scope="row">Songhai</th>
+    <td lang="son">Soŋay</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=son" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=son" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=son" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=son" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=son" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="es-AR" data-search="spanish (argentina), español (de argentina)">
+    <th scope="row">Spanish (Argentina)</th>
+    <td lang="es-AR">Español (de Argentina)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=es-AR" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=es-AR" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=es-AR" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=es-AR" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=es-AR" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="es-CL" data-search="spanish (chile), español (de chile)">
+    <th scope="row">Spanish (Chile)</th>
+    <td lang="es-CL">Español (de Chile)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=es-CL" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=es-CL" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=es-CL" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=es-CL" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=es-CL" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="es-MX" data-search="spanish (mexico), español (de méxico)">
+    <th scope="row">Spanish (Mexico)</th>
+    <td lang="es-MX">Español (de México)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=es-MX" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=es-MX" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=es-MX" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=es-MX" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=es-MX" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="es-ES" data-search="spanish (spain), español (de españa)">
+    <th scope="row">Spanish (Spain)</th>
+    <td lang="es-ES">Español (de España)</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=es-ES" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=es-ES" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=es-ES" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=es-ES" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=es-ES" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="sv-SE" data-search="swedish, svenska">
+    <th scope="row">Swedish</th>
+    <td lang="sv-SE">Svenska</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=sv-SE" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=sv-SE" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=sv-SE" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=sv-SE" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=sv-SE" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="ta" data-search="tamil, தமிழ்">
+    <th scope="row">Tamil</th>
+    <td lang="ta">தமிழ்</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=ta" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=ta" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=ta" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=ta" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=ta" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="te" data-search="telugu, తెలుగు">
+    <th scope="row">Telugu</th>
+    <td lang="te">తెలుగు</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=te" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=te" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=te" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=te" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=te" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="th" data-search="thai, ไทย">
+    <th scope="row">Thai</th>
+    <td lang="th">ไทย</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=th" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=th" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=th" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=th" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=th" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="tr" data-search="turkish, türkçe">
+    <th scope="row">Turkish</th>
+    <td lang="tr">Türkçe</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=tr" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=tr" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=tr" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=tr" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=tr" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="uk" data-search="ukrainian, українська">
+    <th scope="row">Ukrainian</th>
+    <td lang="uk">Українська</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=uk" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=uk" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=uk" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=uk" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=uk" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="hsb" data-search="upper sorbian, hornjoserbsce">
+    <th scope="row">Upper Sorbian</th>
+    <td lang="hsb">Hornjoserbsce</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=hsb" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=hsb" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=hsb" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=hsb" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=hsb" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="uz" data-search="uzbek, oʻzbek tili">
+    <th scope="row">Uzbek</th>
+    <td lang="uz">Oʻzbek tili</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=uz" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=uz" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=uz" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=uz" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=uz" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="vi" data-search="vietnamese, tiếng việt">
+    <th scope="row">Vietnamese</th>
+    <td lang="vi">Tiếng Việt</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=vi" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=vi" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=vi" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=vi" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=vi" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="cy" data-search="welsh, cymraeg">
+    <th scope="row">Welsh</th>
+    <td lang="cy">Cymraeg</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=cy" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=cy" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=cy" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=cy" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=cy" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                        <tr id="xh" data-search="xhosa, isixhosa">
+    <th scope="row">Xhosa</th>
+    <td lang="xh">isiXhosa</td>
+          <td class="download win"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win&amp;lang=xh" title="Download for Windows">Download</a></td>
+  
+          <td class="download win64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=win64&amp;lang=xh" title="Download for 64-bit Windows">Download</a></td>
+  
+          <td class="download osx"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=osx&amp;lang=xh" title="Download for Mac OS X">Download</a></td>
+  
+          <td class="download linux"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux&amp;lang=xh" title="Download for Linux">Download</a></td>
+  
+          <td class="download linux64"><a href="https://download.mozilla.org/?product=firefox-aurora-latest-l10n&amp;os=linux64&amp;lang=xh" title="Download for 64-bit Linux">Download</a></td>
+  
+  </tr>
+
+                  </tbody>
+      </table>
+        <h4 class="not-found hide">No matching languages found.</h4>
+  </div>
+
+        </div>
+
+            </div></section>
+  </main>
+
+    
+
+      <div id="footer-email-errors" class="hidden">
+      <ul class="errorlist"></ul>
+    </div>
+  
+  <form class="billboard newsletter-form footer-newsletter-form"
+        id="newsletter-form" action="/en-US/newsletter/" method="post">
+    <input id="id_newsletters" maxlength="100" name="newsletters" type="hidden" value="mozilla-and-you" />
+    <input type="hidden" name="source_url" value="https://www.mozilla.org/en-US/firefox/developer/all/">
+
+          <h3>Get Firefox news</h3>
+    
+    <div class="form-contents">
+      <div class="field field-email ">
+        <input id="id_email" name="email" placeholder="YOUR EMAIL HERE" required="required" type="email" />
+      </div>
+
+      <div id="form-details">
+                  <div class="field field-country">
+            <select aria-required="true" id="id_country" name="country" required="required">
+<option value="af">Afghanistan</option>
+<option value="al">Albania</option>
+<option value="dz">Algeria</option>
+<option value="as">American Samoa</option>
+<option value="ad">Andorra</option>
+<option value="ao">Angola</option>
+<option value="ai">Anguilla</option>
+<option value="aq">Antarctica</option>
+<option value="ag">Antigua and Barbuda</option>
+<option value="ar">Argentina</option>
+<option value="am">Armenia</option>
+<option value="aw">Aruba</option>
+<option value="au">Australia</option>
+<option value="at">Austria</option>
+<option value="az">Azerbaijan</option>
+<option value="bs">Bahamas</option>
+<option value="bh">Bahrain</option>
+<option value="bd">Bangladesh</option>
+<option value="bb">Barbados</option>
+<option value="by">Belarus</option>
+<option value="be">Belgium</option>
+<option value="bz">Belize</option>
+<option value="bj">Benin</option>
+<option value="bm">Bermuda</option>
+<option value="bt">Bhutan</option>
+<option value="bo">Bolivia</option>
+<option value="ba">Bosnia and Herzegovina</option>
+<option value="bw">Botswana</option>
+<option value="bv">Bouvet Island</option>
+<option value="br">Brazil</option>
+<option value="io">British Indian Ocean Territory</option>
+<option value="vg">British Virgin Islands</option>
+<option value="bn">Brunei Darussalam</option>
+<option value="bg">Bulgaria</option>
+<option value="bf">Burkina Faso</option>
+<option value="bi">Burundi</option>
+<option value="kh">Cambodia</option>
+<option value="cm">Cameroon</option>
+<option value="ca">Canada</option>
+<option value="cv">Cape Verde</option>
+<option value="ky">Cayman Islands</option>
+<option value="cf">Central African Republic</option>
+<option value="td">Chad</option>
+<option value="cl">Chile</option>
+<option value="cn">China</option>
+<option value="cx">Christmas Island</option>
+<option value="cc">Cocos (Keeling) Islands</option>
+<option value="co">Colombia</option>
+<option value="km">Comoros</option>
+<option value="cg">Congo-Brazzaville</option>
+<option value="cd">Congo-Kinshasa</option>
+<option value="ck">Cook Islands</option>
+<option value="cr">Costa Rica</option>
+<option value="hr">Croatia</option>
+<option value="cu">Cuba</option>
+<option value="cy">Cyprus</option>
+<option value="cz">Czech Republic</option>
+<option value="dk">Denmark</option>
+<option value="dj">Djibouti</option>
+<option value="dm">Dominica</option>
+<option value="do">Dominican Republic</option>
+<option value="ec">Ecuador</option>
+<option value="eg">Egypt</option>
+<option value="sv">El Salvador</option>
+<option value="gq">Equatorial Guinea</option>
+<option value="er">Eritrea</option>
+<option value="ee">Estonia</option>
+<option value="et">Ethiopia</option>
+<option value="fk">Falkland Islands (Malvinas)</option>
+<option value="fo">Faroe Islands</option>
+<option value="fj">Fiji</option>
+<option value="fi">Finland</option>
+<option value="fr">France</option>
+<option value="gf">French Guiana</option>
+<option value="pf">French Polynesia</option>
+<option value="tf">French Southern Territories</option>
+<option value="ga">Gabon</option>
+<option value="gm">Gambia</option>
+<option value="ge">Georgia</option>
+<option value="de">Germany</option>
+<option value="gh">Ghana</option>
+<option value="gi">Gibraltar</option>
+<option value="gr">Greece</option>
+<option value="gl">Greenland</option>
+<option value="gd">Grenada</option>
+<option value="gp">Guadeloupe</option>
+<option value="gu">Guam</option>
+<option value="gt">Guatemala</option>
+<option value="gg">Guernsey</option>
+<option value="gn">Guinea</option>
+<option value="gw">Guinea-Bissau</option>
+<option value="gy">Guyana</option>
+<option value="ht">Haiti</option>
+<option value="hm">Heard Island and McDonald Islands</option>
+<option value="hn">Honduras</option>
+<option value="hk">Hong Kong</option>
+<option value="hu">Hungary</option>
+<option value="is">Iceland</option>
+<option value="in">India</option>
+<option value="id">Indonesia</option>
+<option value="ir">Iran</option>
+<option value="iq">Iraq</option>
+<option value="ie">Ireland</option>
+<option value="im">Isle of Man</option>
+<option value="il">Israel</option>
+<option value="it">Italy</option>
+<option value="ci">Ivory Coast</option>
+<option value="jm">Jamaica</option>
+<option value="jp">Japan</option>
+<option value="je">Jersey</option>
+<option value="jo">Jordan</option>
+<option value="kz">Kazakhstan</option>
+<option value="ke">Kenya</option>
+<option value="ki">Kiribati</option>
+<option value="kw">Kuwait</option>
+<option value="kg">Kyrgyzstan</option>
+<option value="la">Laos</option>
+<option value="lv">Latvia</option>
+<option value="lb">Lebanon</option>
+<option value="ls">Lesotho</option>
+<option value="lr">Liberia</option>
+<option value="ly">Libya</option>
+<option value="li">Liechtenstein</option>
+<option value="lt">Lithuania</option>
+<option value="lu">Luxembourg</option>
+<option value="mo">Macao</option>
+<option value="mk">Macedonia, F.Y.R. of</option>
+<option value="mg">Madagascar</option>
+<option value="mw">Malawi</option>
+<option value="my">Malaysia</option>
+<option value="mv">Maldives</option>
+<option value="ml">Mali</option>
+<option value="mt">Malta</option>
+<option value="mh">Marshall Islands</option>
+<option value="mq">Martinique</option>
+<option value="mr">Mauritania</option>
+<option value="mu">Mauritius</option>
+<option value="yt">Mayotte</option>
+<option value="mx">Mexico</option>
+<option value="fm">Micronesia</option>
+<option value="md">Moldova</option>
+<option value="mc">Monaco</option>
+<option value="mn">Mongolia</option>
+<option value="me">Montenegro</option>
+<option value="ms">Montserrat</option>
+<option value="ma">Morocco</option>
+<option value="mz">Mozambique</option>
+<option value="mm">Myanmar</option>
+<option value="na">Namibia</option>
+<option value="nr">Nauru</option>
+<option value="np">Nepal</option>
+<option value="nl">Netherlands</option>
+<option value="an">Netherlands Antilles</option>
+<option value="nc">New Caledonia</option>
+<option value="nz">New Zealand</option>
+<option value="ni">Nicaragua</option>
+<option value="ne">Niger</option>
+<option value="ng">Nigeria</option>
+<option value="nu">Niue</option>
+<option value="nf">Norfolk Island</option>
+<option value="kp">North Korea</option>
+<option value="mp">Northern Mariana Islands</option>
+<option value="no">Norway</option>
+<option value="ps">Occupied Palestinian Territory</option>
+<option value="om">Oman</option>
+<option value="pk">Pakistan</option>
+<option value="pw">Palau</option>
+<option value="pa">Panama</option>
+<option value="pg">Papua New Guinea</option>
+<option value="py">Paraguay</option>
+<option value="pe">Peru</option>
+<option value="ph">Philippines</option>
+<option value="pn">Pitcairn</option>
+<option value="pl">Poland</option>
+<option value="pt">Portugal</option>
+<option value="pr">Puerto Rico</option>
+<option value="qa">Qatar</option>
+<option value="re">Reunion</option>
+<option value="ro">Romania</option>
+<option value="ru">Russian Federation</option>
+<option value="rw">Rwanda</option>
+<option value="bl">Saint Barthélemy</option>
+<option value="sh">Saint Helena</option>
+<option value="kn">Saint Kitts and Nevis</option>
+<option value="lc">Saint Lucia</option>
+<option value="mf">Saint Martin</option>
+<option value="pm">Saint Pierre and Miquelon</option>
+<option value="vc">Saint Vincent and the Grenadines</option>
+<option value="ws">Samoa</option>
+<option value="sm">San Marino</option>
+<option value="st">Sao Tome and Principe</option>
+<option value="sa">Saudi Arabia</option>
+<option value="sn">Senegal</option>
+<option value="rs">Serbia</option>
+<option value="sc">Seychelles</option>
+<option value="sl">Sierra Leone</option>
+<option value="sg">Singapore</option>
+<option value="sk">Slovakia</option>
+<option value="si">Slovenia</option>
+<option value="sb">Solomon Islands</option>
+<option value="so">Somalia</option>
+<option value="za">South Africa</option>
+<option value="gs">South Georgia and the South Sandwich Islands</option>
+<option value="kr">South Korea</option>
+<option value="es">Spain</option>
+<option value="lk">Sri Lanka</option>
+<option value="sd">Sudan</option>
+<option value="sr">Suriname</option>
+<option value="sj">Svalbard and Jan Mayen</option>
+<option value="sz">Swaziland</option>
+<option value="se">Sweden</option>
+<option value="ch">Switzerland</option>
+<option value="sy">Syria</option>
+<option value="tw">Taiwan</option>
+<option value="tj">Tajikistan</option>
+<option value="tz">Tanzania</option>
+<option value="th">Thailand</option>
+<option value="tl">Timor-Leste</option>
+<option value="tg">Togo</option>
+<option value="tk">Tokelau</option>
+<option value="to">Tonga</option>
+<option value="tt">Trinidad and Tobago</option>
+<option value="tn">Tunisia</option>
+<option value="tr">Turkey</option>
+<option value="tm">Turkmenistan</option>
+<option value="tc">Turks and Caicos Islands</option>
+<option value="tv">Tuvalu</option>
+<option value="ae">U.A.E.</option>
+<option value="vi">U.S. Virgin Islands</option>
+<option value="ug">Uganda</option>
+<option value="ua">Ukraine</option>
+<option value="gb">United Kingdom</option>
+<option value="us" selected="selected">United States</option>
+<option value="um">United States Minor Outlying Islands</option>
+<option value="uy">Uruguay</option>
+<option value="uz">Uzbekistan</option>
+<option value="vu">Vanuatu</option>
+<option value="va">Vatican City</option>
+<option value="ve">Venezuela</option>
+<option value="vn">Vietnam</option>
+<option value="wf">Wallis and Futuna</option>
+<option value="eh">Western Sahara</option>
+<option value="ye">Yemen</option>
+<option value="zm">Zambia</option>
+<option value="zw">Zimbabwe</option>
+<option value="ax">Åland Islands</option>
+</select>
+          </div>
+                          <div class="field field-language ">
+            <select aria-required="true" id="id_lang" name="lang" required="required">
+<option value="id">Bahasa Indonesia</option>
+<option value="de">Deutsch</option>
+<option value="en" selected="selected">English</option>
+<option value="es">Español</option>
+<option value="fr">Français</option>
+<option value="pl">Polski</option>
+<option value="pt">Português</option>
+<option value="hu">magyar</option>
+<option value="ru">Русский</option>
+</select>
+          </div>
+                <div class="field field-format">
+          <label for="id_fmt_0"><input checked="checked" id="id_fmt_0" name="fmt" type="radio" value="H" /> HTML</label><label for="id_fmt_1"><input id="id_fmt_1" name="fmt" type="radio" value="T" /> Text</label>
+        </div>
+        <div class="field field-privacy ">
+          <label for="id_privacy" class="privacy-check-label"><input id="id_privacy" name="privacy" required="required" type="checkbox" /> <span class="title">I’m okay with Mozilla handling my info as explained in <a href="/privacy/">this Privacy Policy</a></span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-submit">
+      <input type="submit" id="footer_email_submit"
+             value="Sign me up »" class="button">
+
+              <p class="form-details">
+          <small>We will only send you Mozilla-related information.</small>
+        </p>
+      
+    </div>
+
+    <div id="newsletter-spinner" class="hidden"></div>
+  </form>
+  <div id="newsletter-form-thankyou" class="thank billboard newsletter-form hidden">
+            <h3>Thanks! Please check your inbox to confirm your subscription.</h3>
+  <p>
+    You'll receive an email from mozilla@e.mozilla.org to confirm your subscription. If you don't see it, check your spam filter. You must confirm your subscription to receive our newsletter.  </p>
+
+      </div>
+
+    </div><!-- close #wrapper -->
+
+                <footer id="colophon" class="">
+        <nav class="row">
+          <div class="col col-1">
+            <h1 class="logo"><a href="/en-US/">Mozilla</a></h1>
+            <p class="license">Portions of this content are ©1998–2015 by individual mozilla.org contributors. Content available under a <a href="/en-US/foundation/licensing/website-content/">Creative Commons license</a>.</p>
+          </div>
+          <div class="col col-2">
+            <ul class="links-join">
+              <li><a href="/en-US/contact/spaces/">Contact Us</a></li>
+              <li class="wrap"><a href="/en-US/about/partnerships/">Partner with Us</a></li>
+              <li class="clear"><a href="https://sendto.mozilla.org/page/contribute/givenow-seq?preset=2&amp;source=mozillaorg_footer&amp;ref=EOYFR2014&amp;utm_campaign=EOYFR2014&amp;utm_source=mozilla.org&amp;utm_medium=referral&amp;utm_content=mozillaorg_footer" class="donate">Donate</a></li>
+              <li class="wrap"><a href="/en-US/contribute/friends/">Firefox Friends</a></li>
+              <li class="clear"><a href="https://wiki.mozilla.org/Webdev/GetInvolved/mozilla.org">Contribute to this site</a></li>
+            </ul>
+            <ul class="links-legal">
+              <li><a href="/en-US/privacy/">Privacy</a></li>
+              <li class="wrap"><a href="/en-US/privacy/websites/#cookies">Cookies</a></li>
+              <li class="wrap"><a href="/en-US/about/legal/">Legal</a></li>
+              <li class="clear"><a href="/en-US/about/legal/fraud-report/">Report Trademark Abuse</a></li>
+            </ul>
+          </div>
+          <div class="col col-3">
+            <ul class="links-social">
+              <li>
+                Mozilla:
+                <ul>
+                  <li><a href="https://twitter.com/mozilla">Twitter<span> (@mozilla)</span></a></li>
+                  <li><a href="https://www.facebook.com/mozilla">Facebook<span> (Mozilla)</span></a></li>
+                </ul>
+              </li>
+              <li>
+                Firefox:
+                <ul>
+                  <li><a href="https://twitter.com/firefox">Twitter<span> (@firefox)</span></a></li>
+                  <li><a href="https://www.facebook.com/Firefox">Facebook<span> (Firefox)</span></a></li>
+                  <li><a href="https://www.youtube.com/firefoxchannel">YouTube<span> (firefoxchannel)</span></a></li>
+                </ul>
+              </li>
+            </ul>
+            <div class="lang-switcher">
+              <form id="lang_form" method="get" action="#">
+  <label for="language">Other languages:</label>
+  <select id="language" name="lang" dir="ltr">
+          <option lang="en-US" value="en-US" selected>English</option>
+          <option lang="ja" value="ja">日本語</option>
+      </select>
+  <noscript>
+    <button type="submit">Go</button>
+  </noscript>
+</form>
+            </div>
+          </div>
+        </nav>
+      </footer>    
+    </div><!-- close #outer-wrapper -->
+
+    <!--[if IE 9]>
+      <script src="//mozorg.cdn.mozilla.net/media/js/libs/matchMedia.3fd01d1af18b.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript" src="//mozorg.cdn.mozilla.net/media/js/firefox-resp-bundle.a080f6f60e2f.js" charset="utf-8"></script>          <script src="//mozorg.cdn.mozilla.net/en-US/tabzilla/tabzilla.js"></script>
+                <script type="text/javascript" src="//mozorg.cdn.mozilla.net/media/js/firefox_all-bundle.248a13e96a18.js" charset="utf-8"></script>        </body>
+</html>

@@ -75,14 +75,18 @@ class TextWithChoices:
             msg = _("Your entry '{}' isn't an acceptable choice. choices are: {}")\
                 .format(choice_id, [choice.id for choice in self.choices])
         if answer is not None:
-            msg = _("Your entry '{}' isn't an acceptable choice. choices are: {} and {}")\
-                .format(answer, [choice.txt_shorcut for choice in self.choices if choice.txt_shorcut is not None],
-                        [choice.label for choice in self.choices])
+            txt_shortcuts = [choice.txt_shorcut for choice in self.choices if choice.txt_shorcut is not None]
+            if txt_shortcuts:
+                msg = _("Your entry '{}' isn't an acceptable choice. choices are: {} and {}")\
+                    .format(answer, txt_shortcuts, [choice.label for choice in self.choices])
+            else:
+                msg = _("Your entry '{}' isn't an acceptable choice. choices are: {}")\
+                    .format(answer, [choice.label for choice in self.choices])
+
         if not choice_id and not answer:
             for choice in self.choices:
                 if choice.is_default:
                     return choice.callback_fn()
-        logger.error(msg)
         raise InputError(msg)
 
     @property
