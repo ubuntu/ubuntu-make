@@ -41,8 +41,8 @@ class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(self.DOCKER_USER))
 
 
-class EclipseMarsIDEInContainer(ContainerTests, test_ide.EclipseMarsIDETests):
-    """This will test the Eclipse Mars IDE integration inside a container."""
+class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
+    """This will test the Eclipse Mars Java IDE integration inside a container."""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
@@ -50,12 +50,203 @@ class EclipseMarsIDEInContainer(ContainerTests, test_ide.EclipseMarsIDETests):
     def setUp(self):
         self.hostname = "www.eclipse.org"
         self.port = "443"
-        self.ftp = True
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-mars".format(self.DOCKER_USER))
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-java".format(self.DOCKER_USER))
+
+
+class EclipseEEIDEInContainer(ContainerTests, test_ide.EclipseEEIDETests):
+    """This will test the Eclipse Mars EE IDE integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-ee".format(self.DOCKER_USER))
+
+
+class EclipseCppIDEInContainer(ContainerTests, test_ide.EclipseCppIDETests):
+    """This will test the Eclipse Mars C/C++ IDE integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-c-cpp".format(self.DOCKER_USER))
+
+
+class EclipsePhpIDEInContainer(ContainerTests, test_ide.EclipsePhpIDETests):
+    """This will test the Eclipse Mars PHP IDE integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-php".format(self.DOCKER_USER))
+
+
+class EclipseCommittersIDEInContainer(ContainerTests, test_ide.EclipseCommittersIDETests):
+    """This will test the Eclipse Mars Committers IDE integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-committers".format(self.DOCKER_USER))
+
+
+class EclipseDslIDEInContainer(ContainerTests, test_ide.EclipseDslIDETests):
+    """This will test the Eclipse Mars Java and DSL IDE integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-dsl".format(self.DOCKER_USER))
+
+
+class EclipseRcpAndRapIDEInContainer(ContainerTests, test_ide.EclipseRcpAndRapIDETests):
+    """This will test the Eclipse Mars RCP and RAP IDE integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-rcp".format(self.DOCKER_USER))
+
+
+class EclipseModelingToolsIDEInContainer(ContainerTests, test_ide.EclipseModelingToolsIDETests):
+    """This will test the Eclipse Mars Modeling Tools integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-modeling".format(self.DOCKER_USER))
+
+
+class EclipseReportIDEInContainer(ContainerTests, test_ide.EclipseReportIDETests):
+    """This will test the Eclipse Mars Java and Report integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-report".format(self.DOCKER_USER))
+
+
+class EclipseAutomotiveIDEInContainer(ContainerTests, test_ide.EclipseAutomotiveIDETests):
+    """This will test the Eclipse Mars Automotive integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-automotive".format(self.DOCKER_USER))
+
+
+class EclipseTestersIDEInContainer(ContainerTests, test_ide.EclipseTestersIDETests):
+    """This will test the Eclipse Mars Testers integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-testing".format(self.DOCKER_USER))
+
+
+class EclipseParallelIDEInContainer(ContainerTests, test_ide.EclipseParallelIDETests):
+    """This will test the Eclipse Mars Parallel integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-parallel".format(self.DOCKER_USER))
+
+
+class EclipseScoutIDEInContainer(ContainerTests, test_ide.EclipseScoutIDETests):
+    """This will test the Eclipse Mars Scout integration inside a container."""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "www.eclipse.org"
+        self.port = "443"
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse-scout".format(self.DOCKER_USER))
 
 
 class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):

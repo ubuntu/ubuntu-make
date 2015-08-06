@@ -22,6 +22,7 @@
 from collections import namedtuple
 from concurrent import futures
 from contextlib import closing
+from multiprocessing import cpu_count
 import hashlib
 from io import BytesIO
 import logging
@@ -34,6 +35,7 @@ from umake.network.ftp_adapter import FTPAdapter
 from umake.tools import ChecksumType
 
 logger = logging.getLogger(__name__)
+MAX_WORKERS = cpu_count()
 
 
 class DownloadItem(namedtuple('DownloadItem', ['url', 'checksum', 'headers', 'ignore_encoding', 'cookies'])):
@@ -82,7 +84,7 @@ class DownloadCenter:
 
         self._download_progress = {}
 
-        executor = futures.ThreadPoolExecutor(max_workers=3)
+        executor = futures.ThreadPoolExecutor(max_workers=MAX_WORKERS)
         for url_request in self._urls:
             # grab the md5sum if any
             # switch between inline memory and temp file
@@ -96,6 +98,7 @@ class DownloadCenter:
             else:
                 dest = BytesIO()
                 logger.info("Start downloading {} in memory".format(url_request))
+
             future = executor.submit(self._fetch, url_request, dest)
             future.tag_url = url_request.url
             future.tag_download = download
@@ -103,7 +106,7 @@ class DownloadCenter:
             future.add_done_callback(self._one_done)
 
     def _fetch(self, download_item, dest):
-        """Get an url content and close the connexion.
+        """Get an url content and close the connection.
 
         This will write the content to dest and check for md5sum.
         Return a tuple of (dest, final_url, cookies)

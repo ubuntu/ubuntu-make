@@ -53,7 +53,7 @@ def _add_to_group(user, group):
             output = subprocess.check_output(["adduser", user, group])
             logger.debug("Added {} to {}: {}".format(user, group, output))
             return True
-        except subprocess.CalledProcessError as e:
+        except subprocess.CalledProcessError:
             logger.error("Couldn't add {} to {}".format(user, group))
             return False
 
@@ -63,12 +63,13 @@ class IdeCategory(umake.frameworks.BaseCategory):
         super().__init__(name="IDE", description=_("Generic IDEs"),
                          logo_path=None)
 
+
 class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
     """The base for all Eclipse Foundation installers."""
 
     @property
     @abstractmethod
-    def download_url_path(self):
+    def download_page_url(self):
         pass
 
     @property
@@ -82,12 +83,11 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         This could actually be done in parallel, in a future version.
         """
         logger.debug("Preparing to download MD5.")
-
         arch = platform.machine()
         if arch == 'i686':
-            md5_url = self.download_url_path.format(arch='', suf='.md5')
+            md5_url = self.download_page_url.format(arch='', suf='.md5')
         elif arch == 'x86_64':
-            md5_url = self.download_url_path.format(arch='-x86_64', suf='.md5')
+            md5_url = self.download_page_url.format(arch='-x86_64', suf='.md5')
         else:
             logger.error("Unsupported architecture: {}".format(arch))
             UI.return_main_screen()
@@ -106,10 +106,10 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
 
             logger.debug("Preparing to download the main archive.")
             if arch == 'i686':
-                download_url = self.download_url_path.format(arch='', suf='')
+                download_url = self.download_page_url.format(arch='', suf='')
             elif arch == 'x86_64':
-                download_url = self.download_url_path.format(arch='-x86_64',
-                                                            suf='')
+                download_url = self.download_page_url.format(arch='-x86_64',
+                                                             suf='')
             self.download_requests.append(DownloadItem(download_url, Checksum(ChecksumType.md5, md5)))
             self.start_download_and_install()
 
@@ -133,7 +133,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         # check path and requirements
         if not super().is_installed:
             return False
-        if not isfile(join(self.install_path, "eclipse")):
+        if not isfile(join(self.install_path, "bin", self.executable)):
             logger.debug("{} binary isn't installed".format(self.name))
             return False
         return True
@@ -141,37 +141,253 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
 
 class Eclipse(BaseEclipse):
     """The Eclipse Foundation Luna distribution."""
-    download_url_path = "https://www.eclipse.org/downloads/download.php?" \
-                       "file=/technology/epp/downloads/release/luna/R/" \
-                       "eclipse-standard-luna-R-linux-gtk{arch}.tar.gz{suf}" \
-                       "&r=1"
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/luna/R/" \
+                        "eclipse-standard-luna-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
     executable = 'eclipse.sh'
 
     def __init__(self, category):
         super().__init__(name="Eclipse",
                          description=_("Pure Eclipse Luna (4.4)"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=None,
+                         download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
                          packages_requirements=['openjdk-7-jdk'])
 
 
-class EclipseMars(BaseEclipse):
-    """The Eclipse Foundation Luna distribution."""
-    download_url_path = "https://www.eclipse.org/downloads/download.php?" \
-                       "file=/technology/epp/downloads/release/mars/R/" \
-                       "eclipse-jee-mars-R-linux-gtk{arch}.tar.gz{suf}" \
-                       "&r=1"
+class EclipseJava(BaseEclipse):
+    """The Eclipse Foundation Mars for Java Developers distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-java-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
     executable = 'eclipse.sh'
 
     def __init__(self, category):
-        super().__init__(name="Eclipse",
-                         description=_("Pure Eclipse Mars (4.5)"),
+        super().__init__(name="Eclipse Java",
+                         description=_("Eclipse Mars for Java Developers (4.5)"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=None,
-                         dir_to_decompress_in_tarball='eclipse-mars',
-                         desktop_filename='eclipse-mars.desktop',
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-java.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseEE(BaseEclipse):
+    """The Eclipse Foundation Mars for Java EE Developers distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-jee-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse EE",
+                         description=_("Eclipse Mars for Java EE Developers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-ee.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseCpp(BaseEclipse):
+    """The Eclipse Foundation Mars for C/C++ Developers distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-cpp-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse C/Cpp",
+                         description=_("Eclipse Mars for C/C++ Developers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-c-cpp.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipsePhp(BaseEclipse):
+    """The Eclipse Foundation Mars for PHP Developers distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-php-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse PHP",
+                         description=_("Eclipse Mars for PHP Developers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-php.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseCommitters(BaseEclipse):
+    """The Eclipse Foundation Mars for Eclipse development distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-committers-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse Committers",
+                         description=_("Eclipse Mars for Eclipse Committers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-committers.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseDsl(BaseEclipse):
+    """The Eclipse Foundation Mars for Java and DSL development distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-dsl-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse DSL",
+                         description=_("Eclipse Mars for Eclipse Java and DSL developers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-dsl.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseRcpAndRap(BaseEclipse):
+    """The Eclipse Foundation Mars for RCP and RAP development distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-rcp-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse RCP",
+                         description=_("Eclipse Mars for Eclipse RCP and RAP developers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-rcp.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseModelingTools(BaseEclipse):
+    """The Eclipse Foundation Mars for Modeling Tools development distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-modeling-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse Modeling",
+                         description=_("Eclipse Mars for Eclipse Modeling Tools developers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-modeling.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseReport(BaseEclipse):
+    """The Eclipse Foundation Mars for Java and Report development distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-reporting-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse Report",
+                         description=_("Eclipse Mars for Eclipse Java and Report developers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-report.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseAutomotive(BaseEclipse):
+    """The Eclipse Foundation Mars for Automotive Software development distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-automotive-mars-R-incubation-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse Automotive",
+                         description=_("Eclipse Mars for Eclipse Automotive Software developers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-automotive.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseTesters(BaseEclipse):
+    """The Eclipse Foundation Mars for Testers distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-testing-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse Testers",
+                         description=_("Eclipse Mars for Testers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-testers.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseParallel(BaseEclipse):
+    """The Eclipse Foundation Mars for Parallel Application developers distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-parallel-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse Parallel",
+                         description=_("Eclipse Mars for Parallel Application developers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-parallel.desktop',
+                         packages_requirements=['openjdk-7-jdk'])
+
+
+class EclipseScout(BaseEclipse):
+    """The Eclipse Foundation Mars for Scout developers distribution."""
+    download_page_url = "https://www.eclipse.org/downloads/download.php?" \
+                        "file=/technology/epp/downloads/release/mars/R/" \
+                        "eclipse-scout-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                        "&r=1"
+    executable = 'eclipse.sh'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse Scout",
+                         description=_("Eclipse Mars for Scout developers (4.5)"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-scout.desktop',
                          packages_requirements=['openjdk-7-jdk'])
 
 
