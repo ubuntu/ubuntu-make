@@ -95,7 +95,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
             md5_url = self.DOWNLOAD_URL_PAT.format(arch='-x86_64', suf='.md5')
         else:
             logger.error("Unsupported architecture: {}".format(arch))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         @MainLoop.in_mainloop_thread
         def done(download_result):
@@ -103,7 +103,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
 
             if res.error:
                 logger.error(res.error)
-                UI.return_main_screen()
+                UI.return_main_screen(status_code=1)
 
             # Should be ASCII anyway.
             md5 = res.buffer.getvalue().decode('utf-8').split()[0]
@@ -167,13 +167,13 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
         error_msg = page.error
         if error_msg:
             logger.error("An error occurred while downloading {}: {}".format(self.download_page_url, error_msg))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         soup = BeautifulSoup(page.buffer)
         link = soup.find('a', text="HTTPS")
         if link is None:
             logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
         download_url = link.attrs['href']
         checksum_url = download_url + '.sha256'
         logger.debug("Found download URL: " + download_url)
@@ -183,7 +183,7 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
             checksum_result = next(iter(results.values()))  # Just get the first.
             if checksum_result.error:
                 logger.error(checksum_result.error)
-                UI.return_main_screen()
+                UI.return_main_screen(status_code=1)
 
             checksum = checksum_result.buffer.getvalue().decode('utf-8').split()[0]
             logger.info('Obtained SHA256 checksum: ' + checksum)
@@ -390,7 +390,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         error_msg = result[self.download_page].error
         if error_msg:
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         soup = BeautifulSoup(result[self.download_page].buffer)
 
@@ -408,10 +408,10 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
 
         if not self.scraped_download_url:
             logger.error("Can't parse the download link from %s.", self.download_page)
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
         if not self.scraped_checksum_url:
             logger.error("Can't parse the checksum link from %s.", self.download_page)
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         DownloadCenter([DownloadItem(self.scraped_download_url), DownloadItem(self.scraped_checksum_url)],
                        on_done=self.prepare_to_download_archive, download=False)
@@ -423,17 +423,17 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         checksum_page = results[self.scraped_checksum_url]
         if download_page.error:
             logger.error("Error fetching download page: %s", download_page.error)
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
         if checksum_page.error:
             logger.error("Error fetching checksums: %s", checksum_page.error)
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         match = re.search(r'^(\S+)\s+arduino-[\d\.\-r]+-linux' + self.bits + '.tar.xz$',
                           checksum_page.buffer.getvalue().decode('ascii'),
                           re.M)
         if not match:
             logger.error("Can't find a checksum.")
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
         checksum = match.group(1)
 
         soup = BeautifulSoup(download_page.buffer.getvalue())
@@ -441,7 +441,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
 
         if not btn:
             logger.error("Can't parse download button.")
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         base_url = download_page.final_url
         cookies = download_page.cookies
@@ -459,7 +459,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
             with futures.ProcessPoolExecutor(max_workers=1) as executor:
                 f = executor.submit(_add_to_group, self._current_user, self.ARDUINO_GROUP)
                 if not f.result():
-                    UI.return_main_screen()
+                    UI.return_main_screen(status_code=1)
 
         self.start_download_and_install()
 
