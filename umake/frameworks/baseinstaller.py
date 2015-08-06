@@ -255,10 +255,16 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                                                             (self.pkg_size_download + self.total_download_size),
                                                             0.15)
 
+        if not self.pbar.finished:  # drawing is delayed, so ensure we are not done first
+            progress = self._calculate_progress()
+            self.pbar.update(progress)
+
+    def _calculate_progress(self):
         progress = self.balance_requirement_download * self.last_progress_requirement +\
             (1 - self.balance_requirement_download) * self.last_progress_download
-        if not self.pbar.finished:  # drawing is delayed, so ensure we are not done first
-            self.pbar.update(progress)
+        normalized_progress = max(0, progress)
+        normalized_progress = min(normalized_progress, 100)
+        return normalized_progress
 
     def get_progress_requirement(self, status):
         """Chain up to main get_progress, returning current value between 0 and 100"""
