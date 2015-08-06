@@ -238,7 +238,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         """Method call to setup the Framework"""
         if not self.is_installable:
             logger.error(_("You can't install that framework on this machine"))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         if self.need_root_access and os.geteuid() != 0:
             logger.debug("Requesting root access")
@@ -299,7 +299,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
             if args.destdir:
                 message = "You can't specify a destination dir while removing a framework"
                 logger.error(message)
-                UI.return_main_screen()
+                UI.return_main_screen(status_code=1)
             self.remove()
         else:
             install_path = None
