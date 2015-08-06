@@ -112,3 +112,9 @@ create_package jayatana
 create_package gcc-avr
 create_package avr-libc
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+# scala deps
+mkdir -p $repo_root_dir/scala
+cd $repo_root_dir/scala
+create_package default-jre
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
