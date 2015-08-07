@@ -47,7 +47,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
         self.child.sendline("a")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -64,7 +64,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
         self.expect_and_no_warn("Android Studio is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
     def test_no_license_accept_android_studio(self):
         """We don't accept the license (default)"""
@@ -73,6 +73,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.child.sendline("")
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
         self.accept_default_and_wait()
+        self.close_and_check_status()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
@@ -102,7 +103,7 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.expect_and_no_warn("\[.*\] ")
             self.child.sendline("a")
             self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-            self.wait_and_no_warn()
+            self.wait_and_close()
 
             # we have an installed launcher, added to the launcher
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -130,7 +131,7 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.expect_and_no_warn("\[.*\] ")
             self.child.sendline("a")
             self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-            self.wait_and_no_warn()
+            self.wait_and_close()
 
             # we have an installed launcher, added to the launcher
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -163,7 +164,7 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.expect_and_no_warn("\[.*\] ")
             self.child.sendline("a")
             self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-            self.wait_and_no_warn()
+            self.wait_and_close()
 
             # we have an installed launcher, added to the launcher
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -178,6 +179,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} android android-studio /tmp/foo'.format(UMAKE)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
+        self.close_and_check_status()
 
     def test_start_install_on_empty_dir(self):
         """We try to install on an existing empty dir"""
@@ -189,6 +191,7 @@ class AndroidStudioTests(LargeFrameworkTests):
                                                  .format(UMAKE, self.installed_path)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
+        self.close_and_check_status()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
@@ -204,6 +207,7 @@ class AndroidStudioTests(LargeFrameworkTests):
                                                  .format(UMAKE, self.installed_path)))
         self.expect_and_no_warn("{} isn't an empty directory.*there\? \[.*\] ".format(self.installed_path))
         self.accept_default_and_wait()
+        self.close_and_check_status()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
@@ -220,12 +224,14 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} android /tmp/foo'.format(UMAKE)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
+        self.close_and_check_status()
 
     def test_not_default_framework_with_path_without_path_separator(self):
         """Android Studio isn't selected for default framework with path without separator"""
         self.child = pexpect.spawnu(self.command('{} android foo'.format(UMAKE)))
         self.expect_and_no_warn("error: argument framework: invalid choice")
         self.accept_default_and_wait()
+        self.close_and_check_status(exit_status=2)
 
     def test_is_default_framework_with_user_path(self):
         """Android Studio isn't selected for default framework with path without separator"""
@@ -233,6 +239,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} android ~/foo'.format(UMAKE)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
+        self.close_and_check_status()
 
     def test_removal(self):
         """Remove android studio with default path"""
@@ -242,13 +249,13 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.expect_and_no_warn("\[.*\] ")
         self.child.sendline("a")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.installed_path))
 
         # now, remove it
         self.child = pexpect.spawnu(self.command('{} android android-studio --remove'.format(UMAKE)))
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
@@ -260,13 +267,13 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.expect_and_no_warn("\[.*\] ")
         self.child.sendline("a")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertTrue(self.path_exists(self.installed_path))
 
         # now, remove it
         self.child = pexpect.spawnu(self.command('{} android android-studio --remove'.format(UMAKE)))
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
@@ -276,7 +283,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} android android-studio {} --accept-license'.format(UMAKE,
                                                  self.installed_path)))
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -344,7 +351,7 @@ class AndroidNDKTests(LargeFrameworkTests):
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
         self.child.sendline("a")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         # we have an installed ndk exec
         self.assert_exec_exists()
@@ -359,4 +366,4 @@ class AndroidNDKTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} android android-ndk'.format(UMAKE)))
         self.expect_and_no_warn("Android NDK is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()

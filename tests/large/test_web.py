@@ -66,7 +66,7 @@ class FirefoxDevTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} web firefox-dev'.format(UMAKE)))
         self.expect_and_no_warn("Firefox Dev is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
     def test_default_install(self):
         """Install firefox dev from scratch test case"""
@@ -77,7 +77,7 @@ class FirefoxDevTests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose language:")
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
         self.verify_install(install_language)
 
     def test_arg_language_select_install(self):
@@ -87,7 +87,7 @@ class FirefoxDevTests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
         self.verify_install(install_language)
 
     def test_interactive_language_select_install(self):
@@ -99,16 +99,18 @@ class FirefoxDevTests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose language:")
         self.child.sendline(install_language)
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
         self.verify_install(install_language)
 
     def test_unavailable_language_select_install(self):
+        """Installing Firefox-dev in unavailable language should be rejected"""
         install_language = "ABCdwXYZ"
         self.child = pexpect.spawnu(self.command('{} web firefox-dev --lang={}'.format(UMAKE, install_language)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
-        self.accept_default_and_wait(expect_warn=True)
-        self.child.close()
-        self.assertEqual(self.child.exitstatus, 1)
+        self.child.sendline("")
+        self.wait_and_close(expect_warn=True, exit_status=1)
+
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
     def language_file_exists(self, language):
         return self.path_exists(os.path.join(self.installed_path, "dictionaries", "{}.aff".format(language)))
@@ -135,7 +137,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
         self.child.sendline("a")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -154,4 +156,4 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} web visual-studio-code'.format(UMAKE)))
         self.expect_and_no_warn("Visual Studio Code is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()

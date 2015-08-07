@@ -152,6 +152,16 @@ class LargeFrameworkTests(LoggedTestCase):
         self.child.sendline("")
         self.wait_and_no_warn(expect_warn)
 
+    def close_and_check_status(self, exit_status=0):
+        """exit child process and check its exit status"""
+        self.child.close()
+        self.assertEqual(exit_status, self.child.exitstatus)
+
+    def wait_and_close(self, expect_warn=False, exit_status=0):
+        """wait for exiting and check exit status"""
+        self.wait_and_no_warn(expect_warn)
+        self.close_and_check_status(exit_status)
+
     def command(self, commands_to_run):
         """passthrough, return args"""
         return commands_to_run
