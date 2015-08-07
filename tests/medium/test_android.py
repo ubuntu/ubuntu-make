@@ -57,6 +57,7 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
             self.child.sendline("a")
             self.expect_and_no_warn([pexpect.EOF, "Corrupted download? Aborting."],
                                     timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
 
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
