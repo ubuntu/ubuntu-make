@@ -230,7 +230,7 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
             self.child = pexpect.spawnu(self.command('{} ide arduino'.format(UMAKE)))
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
-            self.expect_and_no_warn("Can't parse the download link", expect_warn=True)
+            self.expect_and_no_warn("Can't parse the download link from", expect_warn=True)
             self.wait_and_close(exit_status=1)
 
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
