@@ -22,7 +22,9 @@
 
 from . import ContainerTests
 import os
+import pexpect
 from ..large import test_ide
+from ..tools import get_data_dir, swap_file_and_restore, UMAKE
 
 
 class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
@@ -72,6 +74,23 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/idea".format(self.DOCKER_USER))
+
+    # This actually tests the code in BaseJetBrains
+    def test_install_with_changed_download_page(self):
+        """Installing IntelliJ Idea should fail if download page has changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.jetbrains.com", "idea",
+                                               "download", "download_thanks.jsp?edition=IC&os=linux")
+        fake_content = "<html></html>"
+        with swap_file_and_restore(download_page_file_path):
+            with open(download_page_file_path, "w") as newfile:
+                newfile.write(fake_content)
+            self.child = pexpect.spawnu(self.command('{} ide idea'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn("Can't parse the download URL from the download page.", expect_warn=True)
+            self.wait_and_close(exit_status=1)
+
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
 
 class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
@@ -199,3 +218,19 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/arduino".format(self.DOCKER_USER))
+
+    def test_install_with_changed_download_page(self):
+        """Installing arduino ide should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.arduino.cc", "en", "Main",
+                                               "Software")
+        fake_content = "<html></html>"
+        with swap_file_and_restore(download_page_file_path):
+            with open(download_page_file_path, "w") as newfile:
+                newfile.write(fake_content)
+            self.child = pexpect.spawnu(self.command('{} ide arduino'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn("Can't parse the download link", expect_warn=True)
+            self.wait_and_close(exit_status=1)
+
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
