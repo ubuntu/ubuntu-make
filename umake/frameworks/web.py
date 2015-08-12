@@ -149,7 +149,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Visual Studio Code", description=_("Visual Studio focused on modern web and cloud"),
                          category=category, only_on_archs=_supported_archs, expect_license=True,
-                         download_page="https://code.visualstudio.com/Download",
+                         download_page="https://code.visualstudio.com/Docs",
                          desktop_filename="visual-studio-code.desktop", dir_to_decompress_in_tarball="VSCode-linux-*",
                          packages_requirements=["libgtk2.0-0"])
         self.license_url = "https://code.visualstudio.com/License"
@@ -172,9 +172,9 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen()
 
         arch = platform.machine()
-        download_re = r'<a.*href="(.*)">.*for Linux.*64.*'
+        download_re = r'\'linux64\': \'([^\']+)\''
         if arch == 'i686':
-            download_re = r'<a.*href="(.*)">x32 version</a>'
+            download_re = r'\'linux32\': \'([^\']+)\''
         url = None
         for line in result[self.download_page].buffer:
             line = line.decode()
