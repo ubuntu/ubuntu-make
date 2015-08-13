@@ -277,7 +277,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
     def test_installed_framework_not_installable_registered(self):
         """Installed framework not installable are still registered (can be used for removal)"""
         self.assertIsNotNone(self.CategoryHandler.categories["category-r"]
-            .frameworks["framework-r-installed-not-installable"])
+                                 .frameworks["framework-r-installed-not-installable"])
 
     def test_installed_framework_marked_for_removal_only_registered(self):
         """Installed framework marked for removal only is registered to be able to remove it"""
