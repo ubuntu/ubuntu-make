@@ -1,4 +1,4 @@
-ubuntu-make (15.08) UNRELEASED; urgency=medium
+ubuntu-make (15.08) wily; urgency=medium
 
   * Add scala support and add related medium and large tests. (Igor Vuk)
   * Fix Visual Studio Code download URL as VSCode updated their download
