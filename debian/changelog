@@ -1,3 +1,14 @@
+ubuntu-make (15.08) UNRELEASED; urgency=medium
+
+  * Add scala support and add related medium and large tests. (Igor Vuk)
+  * Fix Visual Studio Code download URL as VSCode updated their download
+    mechanism on their website. (Vartan Simonian)
+  * Fix progress bar out of range exception. (Anton Antonov)
+  * Change medium VSC assets to match new download page.
+  * Do some pep8 fixes triggered by new pep8 version.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 13 Aug 2015 07:43:12 +0200
+
 ubuntu-make (0.9.2) wily; urgency=medium
 
   * Enable language selection in firefox developer tools
