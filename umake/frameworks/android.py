@@ -128,7 +128,7 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
         return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
-        """Parse Android Studio download link, expect to find a md5sum and a url"""
+        """Parse Android NDK download link, expect to find a md5sum and a url"""
         arch = platform.machine()
         tag_machine = '64'
         if arch == 'i686':
