@@ -87,7 +87,8 @@ class Decompressor:
         archive = None
         try:
             try:
-                archive = tarfile.open(fileobj=fd)
+                # the fd isn't forcibly at position 0 (like in Unity3D where we offset the script part)
+                archive = tarfile.open(fileobj=fd, mode='r|*')
                 logger.debug("tar file")
             except tarfile.ReadError:
                 archive = self.ZipFileWithPerm(fd.name)
