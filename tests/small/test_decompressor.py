@@ -164,3 +164,22 @@ class TestDecompressor(LoggedTestCase):
         self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'android-ndk-foo')))
         self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'android-ndk-foo', 'ndk-which')))
         self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'android-ndk-foo', 'ndk-build')))
+
+    def test_decompress_file_with_archive(self):
+        """We decompress a .sh file containing an archive successfully"""
+        filepath = os.path.join(self.compressfiles_dir, "script_with_archive.sh")
+        with open(filepath, 'rb') as fd:
+            for line in fd:
+                if line.startswith(b"== ARCHIVE TAG =="):
+                    break
+            Decompressor({fd: Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
+            self.wait_for_callback(self.on_done)
+
+        results = self.on_done.call_args[0][0]
+        self.assertEqual(len(results), 1, str(results))
+        for fd in results:
+            self.assertIsNone(results[fd].error)
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'simplefile')))
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content', 'subdir')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'subdir', 'otherfile')))
