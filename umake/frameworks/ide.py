@@ -45,17 +45,17 @@ logger = logging.getLogger(__name__)
 
 
 def _add_to_group(user, group):
-        """Add user to group. Should only be used in an other process"""
-        # switch to root
-        os.seteuid(0)
-        os.setegid(0)
-        try:
-            output = subprocess.check_output(["adduser", user, group])
-            logger.debug("Added {} to {}: {}".format(user, group, output))
-            return True
-        except subprocess.CalledProcessError as e:
-            logger.error("Couldn't add {} to {}".format(user, group))
-            return False
+    """Add user to group. Should only be used in an other process"""
+    # switch to root
+    os.seteuid(0)
+    os.setegid(0)
+    try:
+        output = subprocess.check_output(["adduser", user, group])
+        logger.debug("Added {} to {}: {}".format(user, group, output))
+        return True
+    except subprocess.CalledProcessError as e:
+        logger.error("Couldn't add {} to {}".format(user, group))
+        return False
 
 
 class IdeCategory(umake.frameworks.BaseCategory):
