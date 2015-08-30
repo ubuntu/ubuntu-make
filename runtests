@@ -19,7 +19,10 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 import argparse
-import configparser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import logging
 import logging.config
 import nose
@@ -136,7 +139,7 @@ if __name__ == '__main__':
         import tests
         tests.tools.set_local_umake()
 
-    if not "all" in args.tests and len(args.tests) > 0:
+    if "all" not in args.tests and len(args.tests) > 0:
         for test_type in args.tests:
             for named_test_type in ("small", "medium", "large", "pep8"):
                 if test_type == named_test_type:

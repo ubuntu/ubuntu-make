@@ -19,7 +19,6 @@
 
 
 """Downloader abstract module"""
-
 from contextlib import suppress
 from io import StringIO
 import logging
@@ -125,6 +124,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             return
 
         logger.debug("Installation path provided. Checking if exists.")
+
         with suppress(FileNotFoundError):
             if os.listdir(path_dir):
                 # we already told we were ok to overwrite as it was the previous install path
@@ -137,6 +137,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                     UI.display(YesNo("{} isn't an empty directory, do you want to remove its content and install "
                                      "there?".format(path_dir), self.set_installdir_to_clean, UI.return_main_screen))
                     return
+
         self.install_path = path_dir
         self.download_provider_page()
 
@@ -173,21 +174,24 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen()
 
-        url, checksum = (None, None)
-        with StringIO() as license_txt:
+        with StringIO() as license_text:
+            url, checksum = (None, None)
             in_license = False
             in_download = False
+
             for line in result[self.download_page].buffer:
                 line_content = line.decode()
 
                 if self.expect_license and not self.auto_accept_license:
-                    in_license = self.parse_license(line_content, license_txt, in_license)
+                    in_license = self.parse_license(line_content, license_text, in_license)
 
                 (download, in_download) = self.parse_download_link(line_content, in_download)
+
                 if download is not None:
                     (newurl, new_checksum) = download
                     url = newurl if newurl is not None else url
                     checksum = new_checksum if new_checksum is not None else checksum
+
                     if url is not None:
                         if self.checksum_type and checksum:
                             logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
@@ -199,18 +203,23 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             if url is None or (self.checksum_type and checksum is None):
                 logger.error("Download page changed its syntax or is not parsable")
                 UI.return_main_screen()
-            self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
 
-            if license_txt.getvalue() != "":
-                logger.debug("Check license agreement.")
-                UI.display(LicenseAgreement(strip_tags(license_txt.getvalue()).strip(),
-                                            self.start_download_and_install,
-                                            UI.return_main_screen))
-            elif self.expect_license and not self.auto_accept_license:
-                logger.error("We were expecting to find a license on the download page, we didn't.")
-                UI.return_main_screen()
-            else:
-                self.start_download_and_install()
+            self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
+            self._handle_license_text(license_text)
+
+    def _handle_license_text(self, license_text):
+        if license_text.getvalue() != "":
+            logger.debug("Check license agreement.")
+
+            content = strip_tags(license_text.getvalue()).strip()
+            UI.display(LicenseAgreement(content,
+                                        self.start_download_and_install,
+                                        UI.return_main_screen))
+        elif self.expect_license and not self.auto_accept_license:
+            logger.error("We were expecting to find a license on the download page, we didn't.")
+            UI.return_main_screen()
+        else:
+            self.start_download_and_install()
 
     def start_download_and_install(self):
         self.last_progress_download = None
@@ -237,34 +246,34 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             self.last_progress_requirement = progress_requirement
 
         # we wait to have the file size to start getting progress proportion info
-
-        # try to compute balance requirement
         if self.balance_requirement_download is None:
-            if not self.pkg_to_install:
-                self.balance_requirement_download = 0
-                self.last_progress_requirement = 0
-                if self.last_progress_download is None:
-                    return
-            else:
-                # we only update if we got a progress from both sides
-                if self.last_progress_download is None or self.last_progress_requirement is None:
-                    return
-                else:
-                    # apply a minimum of 15% (no download or small download + install time)
-                    self.balance_requirement_download = max(self.pkg_size_download /
-                                                            (self.pkg_size_download + self.total_download_size),
-                                                            0.15)
-
+            if self._compute_balanced_requirement() is None:
+                return
         if not self.pbar.finished:  # drawing is delayed, so ensure we are not done first
             progress = self._calculate_progress()
             self.pbar.update(progress)
+
+    def _compute_balanced_requirement(self):
+        if not self.pkg_to_install:
+            self.balance_requirement_download = 0
+            self.last_progress_requirement = 0
+            if self.last_progress_download is None:
+                return
+        else:
+            # we only update if we got a progress from both sides
+            if self.last_progress_download is None or self.last_progress_requirement is None:
+                return
+            # apply a minimum of 15% (no download or small download + install time)
+            self.balance_requirement_download = max(self.pkg_size_download /
+                                                    (self.pkg_size_download +
+                                                     self.total_download_size),
+                                                    0.15)
 
     def _calculate_progress(self):
         progress = self.balance_requirement_download * self.last_progress_requirement +\
             (1 - self.balance_requirement_download) * self.last_progress_download
         normalized_progress = max(0, progress)
-        normalized_progress = min(normalized_progress, 100)
-        return normalized_progress
+        return min(normalized_progress, 100)
 
     def get_progress_requirement(self, status):
         """Chain up to main get_progress, returning current value between 0 and 100"""
