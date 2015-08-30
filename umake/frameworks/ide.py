@@ -66,14 +66,14 @@ class IdeCategory(umake.frameworks.BaseCategory):
 
 class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
     """The Eclipse Foundation distribution."""
-    DOWNLOAD_URL_PAT = "https://www.eclipse.org/downloads/download.php?" \
-                       "file=/technology/epp/downloads/release/luna/R/" \
-                       "eclipse-standard-luna-R-linux-gtk{arch}.tar.gz{suf}" \
-                       "&r=1"
+    DOWNLOAD_URL_PAT = "http://www.eclipse.org/downloads/download.php?" \
+                       "file=/technology/epp/downloads/release/mars/R/" \
+                       "eclipse-java-mars-R-linux-gtk{arch}.tar.gz{suf}" \
+                       "&mirror_id=1"
 
     def __init__(self, category):
         super().__init__(name="Eclipse",
-                         description=_("Pure Eclipse Luna (4.4)"),
+                         description=_("Pure Eclipse Mars (4.5)"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page=None,
                          dir_to_decompress_in_tarball='eclipse',
