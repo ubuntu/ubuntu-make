@@ -41,9 +41,9 @@ class AndroidCategory(umake.frameworks.BaseCategory):
     def __init__(self):
         super().__init__(name="Android", description=_("Android Development Environment"), logo_path=None)
 
-    def parse_license(self, line, license_txt, in_license):
+    def parse_license(self, tag, line, license_txt, in_license):
         """Parse Android download page for license"""
-        if line.startswith('<p class="sdk-terms-intro">'):
+        if line.startswith(tag):
             in_license = True
         if in_license:
             if line.startswith('</div>'):
@@ -88,7 +88,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
-        return self.category.parse_license(line, license_txt, in_license)
+        return self.category.parse_license('<p class="sdk-terms-intro">', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
         """Parse Android Studio download link, expect to find a md5sum and a url"""
