@@ -25,7 +25,7 @@ from ..large import test_games
 
 
 class StencylInContainer(ContainerTests, test_games.StencylTests):
-    """This will test the basic cli command class inside a container"""
+    """This will test the Stencyl editor inside a container"""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
