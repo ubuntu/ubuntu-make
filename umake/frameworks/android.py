@@ -118,10 +118,14 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Android NDK", description=_("Android NDK"),
-                         category=category, only_on_archs=_supported_archs,
+                         category=category, only_on_archs=_supported_archs, expect_license=True,
                          download_page="https://developer.android.com/ndk/downloads/index.html",
                          checksum_type=ChecksumType.md5,
                          dir_to_decompress_in_tarball="android-ndk-*")
+
+    def parse_license(self, line, license_txt, in_license):
+        """Parse Android NDK download page for license"""
+        return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
         """Parse Android Studio download link, expect to find a md5sum and a url"""
