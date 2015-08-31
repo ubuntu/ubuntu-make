@@ -37,3 +37,18 @@ class StencylInContainer(ContainerTests, test_games.StencylTests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/games/stencyl".format(self.DOCKER_USER))
+
+
+class Unity3DInContainer(ContainerTests, test_games.Unity3DTests):
+    """This will test the Unity 3D editor inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostname = "download.unity3d.com"
+        self.port = "80"
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'unity3d')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/games/unity3d".format(self.DOCKER_USER))
