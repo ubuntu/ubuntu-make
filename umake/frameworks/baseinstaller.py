@@ -191,10 +191,8 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                     if url is not None:
                         if self.checksum_type and checksum:
                             logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
-                            break
                         elif not self.checksum_type:
                             logger.debug("Found download link for {}".format(url))
-                            break
 
             if url is None or (self.checksum_type and checksum is None):
                 logger.error("Download page changed its syntax or is not parsable")
