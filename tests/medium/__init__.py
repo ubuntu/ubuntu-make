@@ -161,6 +161,15 @@ class ContainerTests(LoggedTestCase):
         command = self.command_as_list([os.path.join(get_tools_helper_dir(), "check_user_in_group"), group])
         return self._exec_command(command)[0]
 
+    def get_file_perms(self, path):
+        """return unix file perms string for path from the container"""
+        command = self.command_as_list([os.path.join(get_tools_helper_dir(), "get_file_perms"), path])
+        success, stdout, stderr = self._exec_command(command)
+        if success:
+            return stdout
+        else:
+            raise BaseException("Unknown failure from {}".format(command))
+
     def create_file(self, path, content):
         """Create file inside the container.replace in path current user with the docker user"""
         path = path.replace(os.getlogin(), self.DOCKER_USER)

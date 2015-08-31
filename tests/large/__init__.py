@@ -24,6 +24,7 @@ import os
 import pexpect
 import shutil
 import signal
+import stat
 import subprocess
 from time import sleep
 from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned, remove_framework_envs_from_user
@@ -180,6 +181,10 @@ class LargeFrameworkTests(LoggedTestCase):
     def is_in_group(self, group):
         """return if current user is in a group"""
         return is_in_group(group)
+
+    def get_file_perms(self, path):
+        """return unix file perms string for path"""
+        return stat.filemode(os.stat(path).st_mode)
 
     def create_file(self, path, content):
         """passthrough to create a file on the disk"""
