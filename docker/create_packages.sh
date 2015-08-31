@@ -118,3 +118,35 @@ mkdir -p $repo_root_dir/scala
 cd $repo_root_dir/scala
 create_package default-jre
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+# unity3d deps
+mkdir -p $repo_root_dir/unity3d
+cd $repo_root_dir/unity3d
+create_package gconf-service
+create_package lib32gcc1
+create_package lib32stdc++6
+create_package libasound2
+create_package libcairo2
+create_package libcap2
+create_package libcups2
+create_package libfontconfig1
+create_package libfreetype6
+create_package libgconf-2-4
+create_package libgdk-pixbuf2.0-0
+create_package libgl1-mesa-glx
+create_package libglu1-mesa
+create_package libgtk2.0-0
+create_package libnspr4
+create_package libnss3
+create_package libpango1.0-0
+create_package libxcomposite1
+create_package libxcursor1
+create_package libxdamage1
+create_package libxext6
+create_package libxfixes3
+create_package libxi6
+create_package libxrandr2
+create_package libxrender1
+create_package libxtst6
+create_package monodevelop
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
