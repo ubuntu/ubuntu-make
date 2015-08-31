@@ -301,6 +301,8 @@ class AndroidNDKTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} android android-ndk'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
+        self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
+        self.child.sendline("a")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_no_warn()
 
