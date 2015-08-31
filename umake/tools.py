@@ -372,6 +372,8 @@ def add_env_to_user(framework_tag, env_dict):
     env_dict is a dictionary of:
     { env_variable: { value: value,
                       keep: True/False }
+    }
+    value is either a list (in that case, it's concatenated) or a string
     If keep is set to True, we keep previous values with :$OLDERENV."""
 
     current_shell = os.getenv('SHELL').lower()
@@ -380,6 +382,8 @@ def add_env_to_user(framework_tag, env_dict):
     envs_to_insert = {}
     for env in env_dict:
         value = env_dict[env]["value"]
+        if isinstance(value, list):
+            value = os.pathsep.join(value)
         if env_dict[env].get("keep", True) and os.environ.get(env):
             os.environ[env] = value + os.pathsep + os.environ[env]
             value = "{}{}${}".format(value, os.pathsep, env)
