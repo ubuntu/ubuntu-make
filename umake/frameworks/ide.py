@@ -395,7 +395,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         soup = BeautifulSoup(result[self.download_page].buffer)
 
         # We need to avoid matching arduino-nightly-...
-        download_link_pat = r'arduino-(\d\.?){1,3}-linux' + self.bits + '.tar.xz$'
+        download_link_pat = r'arduino-[\d\.\-r]+-linux' + self.bits + '.tar.xz$'
 
         # Trap no match found, then, download/checksum url will be empty and will raise the error
         # instead of crashing.
@@ -428,7 +428,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("Error fetching checksums: %s", checksum_page.error)
             UI.return_main_screen()
 
-        match = re.search(r'^(\S+)\s+arduino-(\d\.?){1,3}-linux' + self.bits + '.tar.xz$',
+        match = re.search(r'^(\S+)\s+arduino-[\d\.\-r]+-linux' + self.bits + '.tar.xz$',
                           checksum_page.buffer.getvalue().decode('ascii'),
                           re.M)
         if not match:
