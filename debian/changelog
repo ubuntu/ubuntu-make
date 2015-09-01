@@ -1,3 +1,23 @@
+ubuntu-make (15.09) UNRELEASED; urgency=medium
+
+  * Unity 3D editor experimental support. You can install it through:
+    umake games unity3d. Only amd64 is currently supported upstream.
+  * Fix Arduino download as upstream web pages changes. Support more release
+    version format and ensure we don't raise an exception but only log an
+    error.
+  * Add license support to Android NDK.
+  * Adapt and add large and medium tests for both Unity 3D and Android NDK.
+  * Various enhancements to enable decompressing shell-embedded archives
+    without copying entire files. Add corresponding tests.
+  * Refactor Android license parsing to be reusable to future Android SDK
+    support.
+  * Fix a bug where if license was after the download links, we wouldn't find
+    the license.
+  * Better add_to_user_env API for contributors.
+  * Minor cosmetic and small bug fixes.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 01 Sep 2015 10:39:06 +0200
+
 ubuntu-make (15.08) wily; urgency=medium
 
   * Add scala support and add related medium and large tests. (Igor Vuk)
