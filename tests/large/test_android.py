@@ -322,6 +322,7 @@ class AndroidSDKTests(LargeFrameworkTests):
         self.child.sendline()
         self.wait_and_no_warn()
 
+
 class AndroidNDKTests(LargeFrameworkTests):
     """This will test the Android NDK installation"""
 

@@ -135,7 +135,8 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Add go necessary env variables"""
-        # add "platform-tools" to PATH to ensure "adb" can be run once the platform tools are installed via the SDK manager
+        # add "platform-tools" to PATH to ensure "adb" can be run once the platform tools are installed via
+        # the SDK manager
         add_env_to_user(self.name, {"PATH": {"value": [os.path.join(self.install_path, "tools"),
                                                        os.path.join(self.install_path, "platform-tools")]}})
         UI.delayed_display(DisplayMessage(_("You need to restart a shell session for your installation to work")))

@@ -73,6 +73,7 @@ class AndroidSDKContainer(ContainerTests, test_android.AndroidSDKTests):
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/android/android-sdk".format(self.DOCKER_USER))
 
+
 class AndroidNDKContainer(ContainerTests, test_android.AndroidNDKTests):
     """This will install Android NDK inside a container"""
 
