@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2014 Canonical
+# Copyright (C) 2014-2015 Canonical
 #
 # Authors:
 #  Didier Roche
@@ -23,6 +23,7 @@
 from abc import ABCMeta, abstractmethod
 from bs4 import BeautifulSoup
 from concurrent import futures
+from contextlib import suppress
 from gettext import gettext as _
 import grp
 import logging
@@ -396,11 +397,14 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         # We need to avoid matching arduino-nightly-...
         download_link_pat = r'arduino-(\d\.?){1,3}-linux' + self.bits + '.tar.xz$'
 
-        self.scraped_download_url = soup.find('a', href=re.compile(download_link_pat))['href']
-        self.scraped_checksum_url = soup.find('a', text=re.compile('Checksums'))['href']
+        # Trap no match found, then, download/checksum url will be empty and will raise the error
+        # instead of crashing.
+        with suppress(TypeError):
+            self.scraped_download_url = soup.find('a', href=re.compile(download_link_pat))['href']
+            self.scraped_checksum_url = soup.find('a', text=re.compile('Checksums'))['href']
 
-        self.scraped_download_url = 'http:' + self.scraped_download_url
-        self.scraped_checksum_url = 'http:' + self.scraped_checksum_url
+            self.scraped_download_url = 'http:' + self.scraped_download_url
+            self.scraped_checksum_url = 'http:' + self.scraped_checksum_url
 
         if not self.scraped_download_url:
             logger.error("Can't parse the download link from %s.", self.download_page)
