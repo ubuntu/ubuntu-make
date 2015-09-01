@@ -1,4 +1,4 @@
-ubuntu-make (15.09) UNRELEASED; urgency=medium
+ubuntu-make (15.09) wily; urgency=medium
 
   * Unity 3D editor experimental support. You can install it through:
     umake games unity3d. Only amd64 is currently supported upstream.
@@ -16,7 +16,7 @@ ubuntu-make (15.09) UNRELEASED; urgency=medium
   * Better add_to_user_env API for contributors.
   * Minor cosmetic and small bug fixes.
 
- -- Didier Roche <didrocks@ubuntu.com>  Tue, 01 Sep 2015 10:39:06 +0200
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 01 Sep 2015 10:51:32 +0200
 
 ubuntu-make (15.08) wily; urgency=medium
 
