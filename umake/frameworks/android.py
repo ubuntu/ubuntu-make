@@ -29,7 +29,7 @@ import re
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
 from umake.ui import UI
-from umake.tools import create_launcher, get_application_desktop_file, ChecksumType
+from umake.tools import add_env_to_user, create_launcher, get_application_desktop_file, ChecksumType
 
 logger = logging.getLogger(__name__)
 
@@ -114,6 +114,48 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
         return True
 
 
+class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Android SDK", description=_("Android SDK"),
+                         category=category, only_on_archs=_supported_archs, expect_license=True,
+                         packages_requirements=["openjdk-7-jdk", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386",
+                                                "jayatana"],
+                         download_page="https://developer.android.com/sdk/index.html",
+                         checksum_type=ChecksumType.sha1,
+                         dir_to_decompress_in_tarball="android-sdk-linux")
+
+    def parse_license(self, line, license_txt, in_license):
+        """Parse Android SDK download page for license"""
+        return self.category.parse_license('<p class="sdk-terms-intro">', line, license_txt, in_license)
+
+    def parse_download_link(self, line, in_download):
+        """Parse Android SDK download link, expect to find a SHA-1 and a url"""
+        return self.category.parse_download_link('id="linux-tools"', line, in_download)
+
+    def post_install(self):
+        """Add go necessary env variables"""
+        # add "platform-tools" to PATH to ensure "adb" can be run once the platform tools are installed via the SDK manager
+        add_env_to_user(self.name, {"PATH": {"value": [os.path.join(self.install_path, "tools"),
+                                                       os.path.join(self.install_path, "platform-tools")]}})
+        UI.delayed_display(DisplayMessage(_("You need to restart a shell session for your installation to work")))
+
+        """Print wiki page message"""
+        UI.delayed_display(DisplayMessage("SDK installed in {}. More information on how to use it on {}".format(
+                                  self.install_path,
+                                  "https://developer.android.com/sdk/installing/adding-packages.html")))
+
+    @property
+    def is_installed(self):
+        # check path and requirements
+        if not super().is_installed:
+            return False
+        if not os.path.exists(os.path.join(self.install_path, "tools", "android")):
+            logger.debug("{} binary isn't installed".format(self.name))
+            return False
+        return True
+
+
 class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
@@ -128,7 +170,7 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
         return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
-        """Parse Android Studio download link, expect to find a md5sum and a url"""
+        """Parse Android NDK download link, expect to find a md5sum and a url"""
         arch = platform.machine()
         tag_machine = '64'
         if arch == 'i686':

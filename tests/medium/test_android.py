@@ -62,6 +62,17 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
 
+class AndroidSDKContainer(ContainerTests, test_android.AndroidSDKTests):
+    """This will install Android SDK inside a container"""
+
+    def setUp(self):
+        self.hostname = "developer.android.com"
+        self.port = "443"
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.expanduser("/home/{}/tools/android/android-sdk".format(self.DOCKER_USER))
+
 class AndroidNDKContainer(ContainerTests, test_android.AndroidNDKTests):
     """This will install Android NDK inside a container"""
 
