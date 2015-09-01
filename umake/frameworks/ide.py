@@ -432,7 +432,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
                           checksum_page.buffer.getvalue().decode('ascii'),
                           re.M)
         if not match:
-            logger.error("Can't parse the checksum.")
+            logger.error("Can't find a checksum.")
             UI.return_main_screen()
         checksum = match.group(1)
 
