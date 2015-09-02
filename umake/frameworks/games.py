@@ -158,7 +158,7 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
             # chrome sandbox requires this: https//code.google.com/p/chromium/wiki/LinuxSUIDSandbox
             f = executor.submit(_chrome_sandbox_setuid, os.path.join(self.install_path, "Editor", "chrome-sandbox"))
             if not f.result():
-                UI.return_main_screen()
+                UI.return_main_screen(exit_status=1)
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Unity3D Editor"),
                         icon_path=os.path.join(self.install_path, "unity-editor-icon.png"),
                         exec=os.path.join(self.install_path, "Editor", "Unity"),

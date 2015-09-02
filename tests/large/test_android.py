@@ -311,7 +311,7 @@ class AndroidSDKTests(LargeFrameworkTests):
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
         self.child.sendline("a")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         # we have an installed sdk exec
         self.assert_exec_exists()
@@ -327,7 +327,7 @@ class AndroidSDKTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} android android-sdk'.format(UMAKE)))
         self.expect_and_no_warn("Android SDK is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
 
 class AndroidNDKTests(LargeFrameworkTests):
