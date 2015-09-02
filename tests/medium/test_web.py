@@ -63,7 +63,7 @@ class VisualStudioCodeContainer(ContainerTests, test_web.VisualStudioCodeTest):
 
     def test_install_with_changed_download_page(self):
         """Installing visual studio code should fail if download page has significantly changed"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "code.visualstudio.com", "Download")
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "code.visualstudio.com", "Docs")
         umake_command = self.command('{} web visual-studio-code'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
