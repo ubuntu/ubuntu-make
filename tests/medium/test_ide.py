@@ -22,9 +22,9 @@
 
 from . import ContainerTests
 import os
-import pexpect
+
 from ..large import test_ide
-from ..tools import get_data_dir, swap_file_and_restore, UMAKE
+from ..tools import get_data_dir, UMAKE
 
 
 class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
@@ -80,17 +80,9 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
         """Installing IntelliJ Idea should fail if download page has changed"""
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.jetbrains.com", "idea",
                                                "download", "download_thanks.jsp?edition=IC&os=linux")
-        fake_content = "<html></html>"
-        with swap_file_and_restore(download_page_file_path):
-            with open(download_page_file_path, "w") as newfile:
-                newfile.write(fake_content)
-            self.child = pexpect.spawnu(self.command('{} ide idea'.format(UMAKE)))
-            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
-            self.child.sendline("")
-            self.expect_and_no_warn("Can't parse the download URL from the download page.", expect_warn=True)
-            self.wait_and_close(exit_status=1)
-
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        umake_command = self.command('{} ide idea'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
 
 class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
@@ -223,14 +215,14 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
         """Installing arduino ide should fail if download page has significantly changed"""
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.arduino.cc", "en", "Main",
                                                "Software")
-        fake_content = "<html></html>"
-        with swap_file_and_restore(download_page_file_path):
-            with open(download_page_file_path, "w") as newfile:
-                newfile.write(fake_content)
-            self.child = pexpect.spawnu(self.command('{} ide arduino'.format(UMAKE)))
-            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
-            self.child.sendline("")
-            self.expect_and_no_warn("Can't parse the download link from", expect_warn=True)
-            self.wait_and_close(exit_status=1)
+        umake_command = self.command('{} ide arduino'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+    def test_install_with_changed_checksum_page(self):
+        """Installing arduino ide should fail if checksum link is unparseable"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.arduino.cc",
+                                               "checksums.md5sum.txt")
+        umake_command = self.command('{} ide arduino'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))

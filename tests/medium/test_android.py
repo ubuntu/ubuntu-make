@@ -64,19 +64,11 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
 
     def test_install_with_changed_download_page(self):
         """Installing android studio should fail if download page has significantly changed"""
-        android_studio_file_path = os.path.join(get_data_dir(), "server-content", "developer.android.com",
-                                                "sdk", "index.html")
-        fake_content = "<html></html>"
-        with swap_file_and_restore(android_studio_file_path):
-            with open(android_studio_file_path, "w") as newfile:
-                newfile.write(fake_content)
-            self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
-            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
-            self.child.sendline("")
-            self.expect_and_no_warn("Download page changed its syntax or is not parsable", expect_warn=True)
-            self.wait_and_close(exit_status=1)
-
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "developer.android.com",
+                                               "sdk", "index.html")
+        umake_command = self.command("{} android android-studio".format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
 
 class AndroidSDKContainer(ContainerTests, test_android.AndroidSDKTests):
