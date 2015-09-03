@@ -45,7 +45,7 @@ class StencylTests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -65,7 +65,7 @@ class StencylTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} games stencyl'.format(UMAKE)))
         self.expect_and_no_warn("Stencyl is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
 
 class Unity3DTests(LargeFrameworkTests):
@@ -91,7 +91,7 @@ class Unity3DTests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -112,4 +112,4 @@ class Unity3DTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} games unity3d'.format(UMAKE)))
         self.expect_and_no_warn("Unity3d is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()

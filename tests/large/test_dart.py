@@ -49,7 +49,7 @@ class DartEditorTests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assert_exec_exists()
@@ -59,4 +59,4 @@ class DartEditorTests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} dart'.format(UMAKE)))
         self.expect_and_no_warn("Dart SDK is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()

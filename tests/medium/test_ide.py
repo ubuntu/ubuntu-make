@@ -22,7 +22,9 @@
 
 from . import ContainerTests
 import os
+
 from ..large import test_ide
+from ..tools import get_data_dir, UMAKE
 
 
 class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
@@ -72,6 +74,15 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/idea".format(self.DOCKER_USER))
+
+    # This actually tests the code in BaseJetBrains
+    def test_install_with_changed_download_page(self):
+        """Installing IntelliJ Idea should fail if download page has changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.jetbrains.com", "idea",
+                                               "download", "download_thanks.jsp?edition=IC&os=linux")
+        umake_command = self.command('{} ide idea'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
 
 class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
@@ -199,3 +210,19 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.expanduser("/home/{}/tools/ide/arduino".format(self.DOCKER_USER))
+
+    def test_install_with_changed_download_page(self):
+        """Installing arduino ide should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.arduino.cc", "en", "Main",
+                                               "Software")
+        umake_command = self.command('{} ide arduino'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_changed_checksum_page(self):
+        """Installing arduino ide should fail if checksum link is unparseable"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.arduino.cc",
+                                               "checksums.md5sum.txt")
+        umake_command = self.command('{} ide arduino'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))

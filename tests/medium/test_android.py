@@ -57,9 +57,18 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
             self.child.sendline("a")
             self.expect_and_no_warn([pexpect.EOF, "Corrupted download? Aborting."],
                                     timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
 
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_changed_download_page(self):
+        """Installing android studio should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "developer.android.com",
+                                               "sdk", "index.html")
+        umake_command = self.command("{} android android-studio".format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
 
 class AndroidSDKContainer(ContainerTests, test_android.AndroidSDKTests):

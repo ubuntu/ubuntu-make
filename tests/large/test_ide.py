@@ -54,7 +54,7 @@ class EclipseIDETests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -78,7 +78,7 @@ class EclipseIDETests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} ide eclipse'.format(UMAKE)))
         self.expect_and_no_warn("Eclipse is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
 
 class IdeaIDETests(LargeFrameworkTests):
@@ -99,7 +99,7 @@ class IdeaIDETests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -117,7 +117,7 @@ class IdeaIDETests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} ide idea'.format(UMAKE)))
         self.expect_and_no_warn("Idea is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
 
 class IdeaUltimateIDETests(LargeFrameworkTests):
@@ -138,7 +138,7 @@ class IdeaUltimateIDETests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         logger.info("Installed, running...")
 
@@ -158,7 +158,7 @@ class IdeaUltimateIDETests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} ide idea-ultimate'.format(UMAKE)))
         self.expect_and_no_warn("Idea Ultimate is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
 
 class PyCharmIDETests(LargeFrameworkTests):
@@ -179,7 +179,7 @@ class PyCharmIDETests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         logger.info("Installed, running...")
 
@@ -199,7 +199,7 @@ class PyCharmIDETests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} ide pycharm'.format(UMAKE)))
         self.expect_and_no_warn("PyCharm is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
 
 class PyCharmEducationalIDETests(LargeFrameworkTests):
@@ -220,7 +220,7 @@ class PyCharmEducationalIDETests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         logger.info("Installed, running...")
 
@@ -240,7 +240,7 @@ class PyCharmEducationalIDETests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} ide pycharm-educational'.format(UMAKE)))
         self.expect_and_no_warn("PyCharm Educational is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
 
 class PyCharmProfessionalIDETests(LargeFrameworkTests):
@@ -261,7 +261,7 @@ class PyCharmProfessionalIDETests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         logger.info("Installed, running...")
 
@@ -281,7 +281,7 @@ class PyCharmProfessionalIDETests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} ide pycharm-professional'.format(UMAKE)))
         self.expect_and_no_warn("PyCharm Professional is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
 
 class RubyMineIDETests(LargeFrameworkTests):
@@ -302,7 +302,7 @@ class RubyMineIDETests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         logger.info("Installed, running...")
 
@@ -322,7 +322,7 @@ class RubyMineIDETests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} ide rubymine'.format(UMAKE)))
         self.expect_and_no_warn("RubyMine is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
 
 class WebStormIDETests(LargeFrameworkTests):
@@ -343,7 +343,7 @@ class WebStormIDETests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         logger.info("Installed, running...")
 
@@ -363,7 +363,7 @@ class WebStormIDETests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} ide webstorm'.format(UMAKE)))
         self.expect_and_no_warn("WebStorm is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
 
 class PhpStormIDETests(LargeFrameworkTests):
@@ -384,7 +384,7 @@ class PhpStormIDETests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         logger.info("Installed, running...")
 
@@ -404,7 +404,7 @@ class PhpStormIDETests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} ide phpstorm'.format(UMAKE)))
         self.expect_and_no_warn("PhpStorm is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
 
 class ArduinoIDETests(LargeFrameworkTests):
@@ -430,7 +430,7 @@ class ArduinoIDETests(LargeFrameworkTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -449,4 +449,4 @@ class ArduinoIDETests(LargeFrameworkTests):
         self.child = pexpect.spawnu(self.command('{} ide arduino'.format(UMAKE)))
         self.expect_and_no_warn("Arduino is already installed.*\[.*\] ")
         self.child.sendline()
-        self.wait_and_no_warn()
+        self.wait_and_close()

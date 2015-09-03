@@ -171,7 +171,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         error_msg = result[self.download_page].error
         if error_msg:
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         url, checksum = (None, None)
         with StringIO() as license_txt:
@@ -196,7 +196,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
             if url is None or (self.checksum_type and checksum is None):
                 logger.error("Download page changed its syntax or is not parsable")
-                UI.return_main_screen()
+                UI.return_main_screen(status_code=1)
             self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
 
             if license_txt.getvalue() != "":
@@ -206,7 +206,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                                             UI.return_main_screen))
             elif self.expect_license and not self.auto_accept_license:
                 logger.error("We were expecting to find a license on the download page, we didn't.")
-                UI.return_main_screen()
+                UI.return_main_screen(status_code=1)
             else:
                 self.start_download_and_install()
 
@@ -321,7 +321,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                 error_detected = True
             fd = self.result_download[url].fd
         if error_detected:
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         self.decompress_and_install(fd)
 
@@ -350,7 +350,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                 error_detected = True
             fd.close()
         if error_detected:
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         self.post_install()
 
