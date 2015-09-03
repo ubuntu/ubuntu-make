@@ -143,8 +143,8 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
 
         """Print wiki page message"""
         UI.delayed_display(DisplayMessage("SDK installed in {}. More information on how to use it on {}".format(
-                                  self.install_path,
-                                  "https://developer.android.com/sdk/installing/adding-packages.html")))
+                                       self.install_path,
+                                       "https://developer.android.com/sdk/installing/adding-packages.html")))
 
     @property
     def is_installed(self):
