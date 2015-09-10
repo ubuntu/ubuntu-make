@@ -1,4 +1,4 @@
-ubuntu-make (15.09.1) UNRELEASED; urgency=medium
+ubuntu-make (15.09.1) wily; urgency=medium
 
   * Add support for installing android SDK only by Sebastian Schubert
     - add associated set of medium and large tests.
