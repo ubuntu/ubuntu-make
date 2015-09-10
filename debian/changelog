@@ -1,4 +1,4 @@
-ubuntu-make (15.09.2) UNRELEASED; urgency=medium
+ubuntu-make (15.09.2) wily; urgency=medium
 
   * Ignore continuation line having to be a multiple of 4 in older pep8
     release (making identation not aligned with above line).
