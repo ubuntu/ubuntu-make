@@ -200,7 +200,7 @@ class DownloadCenter:
         self._done_callback(self._downloaded_content)
 
     @classmethod
-    def _checksum_for_fd(cls, algorithm, f, block_size=2**20):
+    def _checksum_for_fd(cls, algorithm, f, block_size=2 ** 20):
         checksum = algorithm()
         while True:
             data = f.read(block_size)
@@ -210,13 +210,13 @@ class DownloadCenter:
         return checksum.hexdigest()
 
     @classmethod
-    def md5_for_fd(cls, f, block_size=2**20):
+    def md5_for_fd(cls, f, block_size=2 ** 20):
         return cls._checksum_for_fd(hashlib.md5, f, block_size)
 
     @classmethod
-    def sha1_for_fd(cls, f, block_size=2**20):
+    def sha1_for_fd(cls, f, block_size=2 ** 20):
         return cls._checksum_for_fd(hashlib.sha1, f, block_size)
 
     @classmethod
-    def sha256_for_fd(cls, f, block_size=2**20):
+    def sha256_for_fd(cls, f, block_size=2 ** 20):
         return cls._checksum_for_fd(hashlib.sha256, f, block_size)
