@@ -49,7 +49,7 @@ class DownloadItem(namedtuple('DownloadItem', ['url', 'checksum', 'headers', 'ig
 class DownloadCenter:
     """Read or download requested urls in separate threads."""
 
-    BLOCK_SIZE = 1024*8  # from urlretrieve code
+    BLOCK_SIZE = 1024 * 8  # from urlretrieve code
     DownloadResult = namedtuple("DownloadResult", ["buffer", "error", "fd", "final_url", "cookies"])
 
     def __init__(self, urls, on_done, download=True, report=lambda x: None):

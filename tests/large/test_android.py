@@ -81,9 +81,9 @@ class AndroidStudioTests(LargeFrameworkTests):
         """We don't accept a wrong path"""
         self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
-        self.child.sendline(chr(127)*100)
+        self.child.sendline(chr(127) * 100)
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
-        self.child.sendline(chr(127)*100 + "/")
+        self.child.sendline(chr(127) * 100 + "/")
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path), expect_warn=True)
         self.child.sendcontrol('C')
         self.wait_and_no_warn()
