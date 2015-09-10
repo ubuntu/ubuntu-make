@@ -1,3 +1,20 @@
+ubuntu-make (15.09.1) UNRELEASED; urgency=medium
+
+  * Add support for installing android SDK only by Sebastian Schubert
+    - add associated set of medium and large tests.
+  * Rationalize exit status of umake by Omer Sheikh
+    - every error now, in addition to print some errors, exits as expect with
+      an exit code of 1.
+    - add and modify large tests, to ensure that each framework (those using
+      BaseInstaller and those having some dedicated code path) are behaving
+      the same for errors.
+    - mock in medium tests bad page download to exercise the error code path
+      here as well.
+  * Fix some pep8 issues (trusty only), some small tests broken by previous
+    merges.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 10 Sep 2015 07:24:23 +0200
+
 ubuntu-make (15.09) wily; urgency=medium
 
   * Unity 3D editor experimental support. You can install it through:
