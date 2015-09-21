@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<matrix-project>
+  <actions/>
+  <description>Collect ubuntu make trusty tests coverage report</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.queueSorter.PrioritySorterJobProperty>
+      <priority>100</priority>
+    </hudson.queueSorter.PrioritySorterJobProperty>
+    <hudson.plugins.build__publisher.ExternalProjectProperty/>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <axes>
+    <hudson.matrix.LabelAxis>
+      <name>label</name>
+      <values>
+        <string>ps-trusty-desktop-amd64-1</string>
+        <string>ps-trusty-desktop-i386-1</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+  </axes>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash -eu
+
+# remove old artefacts.
+rm -rf * .* 2&gt;/dev/null || true
+
+TESTS_RESULT_DIR=~/jenkins/workspace/tests/label/*/type
+
+for test_type in `ls $TESTS_RESULT_DIR`; do
+    coverage_file=${TESTS_RESULT_DIR}/${test_type}/.coverage
+    config_dir=${TESTS_RESULT_DIR}/${test_type}/config
+
+    if [ -f ${coverage_file} ]; then
+        cp ${coverage_file} .coverage.${test_type}
+    fi
+
+    # all configs are identicals
+    if [ ! -d config ] &amp;&amp; [ -d ${config_dir} ]; then
+        cp -a ${config_dir} .
+    fi
+done
+
+python3-coverage combine
+
+python3-coverage html -d html-coverage
+python3-coverage xml
+
+# print on stdout as well
+python3-coverage report
+
+echo Stats:
+cd ~/ubuntu-make
+mv umakelocal umake 2&gt;/dev/null || true  # for the stats in case of system tests
+sloccount umake/ tests/ | head -n -17 | tail -n 9
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>**</artifacts>
+      <latestOnly>false</latestOnly>
+    </hudson.tasks.ArtifactArchiver>
+    <hudson.plugins.build__publisher.BuildPublisher>
+      <publishUnstableBuilds>true</publishUnstableBuilds>
+      <publishFailedBuilds>true</publishFailedBuilds>
+      <postActions class="vector"/>
+    </hudson.plugins.build__publisher.BuildPublisher>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger>
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs class="java.util.Collections$EmptyList"/>
+          <projects>ps-trusty-desktop-revert-snapshot-daily</projects>
+          <condition>ALWAYS</condition>
+          <triggerWithNoParameters>true</triggerWithNoParameters>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
+  </publishers>
+  <buildWrappers/>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
+</matrix-project>

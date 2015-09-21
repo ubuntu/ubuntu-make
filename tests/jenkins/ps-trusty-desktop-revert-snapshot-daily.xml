@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.queueSorter.PrioritySorterJobProperty>
+      <priority>100</priority>
+    </hudson.queueSorter.PrioritySorterJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+set -ex
+
+ssh ubuntu@10.100.0.103 /usr/bin/virsh snapshot-revert ps-trusty-desktop-amd64-1 24022015
+ssh ubuntu@10.100.0.103 /usr/bin/virsh snapshot-revert ps-trusty-desktop-i386-1 24022015-i386
+ssh ubuntu@10.100.0.103 /usr/bin/virsh start ps-trusty-desktop-amd64-1 || true
+ssh ubuntu@10.100.0.103 /usr/bin/virsh start ps-trusty-desktop-i386-1 || true
+
+# Sleep for 5 minutes to give the slaves time to boot and start the jnlp slave service
+# before proceeding to the next job.
+sleep 150
+
+ssh ubuntu@ps-trusty-desktop-amd64-1 /usr/bin/sudo start jenkins-slave || true
+ssh ubuntu@ps-trusty-desktop-i386-1 /usr/bin/sudo start jenkins-slave || true</command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.parameterizedtrigger.TriggerBuilder>
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+          <configs class="java.util.Collections$EmptyList"/>
+          <projects>ps-trusty-desktop-update-daily</projects>
+          <condition>ALWAYS</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+          <block/>
+          <buildAllNodesWithLabel>false</buildAllNodesWithLabel>
+        </hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.TriggerBuilder>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+set -ex
+
+# The slaves were rebooted by ps-trusty-desktop-update-daily, sleep to allow them to boot up.
+sleep 150
+
+ssh ubuntu@ps-trusty-desktop-amd64-1 /usr/bin/sudo start jenkins-slave || true
+ssh ubuntu@ps-trusty-desktop-i386-1 /usr/bin/sudo start jenkins-slave || true</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
