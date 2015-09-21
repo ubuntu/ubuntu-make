@@ -313,7 +313,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         error_detected = False
         fd = None
         if self.result_requirement.error:
-            logger.error("Package requirements can't be met: %s".format(self.result_requirement.error))
+            logger.error("Package requirements can't be met: {}".format(self.result_requirement.error))
             error_detected = True
         for url in self.result_download:
             if self.result_download[url].error:
