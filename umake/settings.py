@@ -18,8 +18,9 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 import os
+from xdg.BaseDirectory import xdg_data_home
 
-DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join("~", "tools"))
+DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join(xdg_data_home, "umake"))
 OLD_CONFIG_FILENAME = "udtc"
 CONFIG_FILENAME = "umake"
 LSB_RELEASE_FILE = "/etc/lsb-release"
