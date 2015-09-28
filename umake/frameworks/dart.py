@@ -60,8 +60,8 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
-        """Download files to download + license and check it"""
-        logger.debug("Parse download metadata")
+        """Get latest version and append files to download"""
+        logger.debug("Set download metadata")
 
         error_msg = result[self.download_page].error
         if error_msg:
