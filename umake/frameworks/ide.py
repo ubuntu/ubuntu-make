@@ -237,7 +237,7 @@ class PyCharm(BaseJetBrains):
 
 class PyCharmEducational(BaseJetBrains):
     """The JetBrains PyCharm Educational Edition distribution."""
-    download_page_url = "https://www.jetbrains.com/pycharm-educational/download/download_thanks.jsp?os=linux"
+    download_page_url = "https://www.jetbrains.com/pycharm-edu/download/download_thanks.jsp?os=linux"
     executable = "pycharm.sh"
 
     def __init__(self, category):
