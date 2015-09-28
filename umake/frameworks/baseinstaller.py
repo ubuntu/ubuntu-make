@@ -183,7 +183,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                 if self.expect_license and not self.auto_accept_license:
                     in_license = self.parse_license(line_content, license_txt, in_license)
 
-                (download, in_download) = self.parse_download_link(line_content, in_download)
+                # always take the first valid (url, checksum):
+                download = None
+                if url is None or (self.checksum_type and not checksum):
+                    (download, in_download) = self.parse_download_link(line_content, in_download)
                 if download is not None:
                     (newurl, new_checksum) = download
                     url = newurl if newurl is not None else url
