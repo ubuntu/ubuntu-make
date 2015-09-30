@@ -48,7 +48,7 @@ class GoTests(LargeFrameworkTests):
         return os.path.join(self.installed_path, "bin", "go")
 
     def test_default_go_install(self):
-        """Install eclipse from scratch test case"""
+        """Install Go from scratch test case"""
         if not self.in_container:
             self.example_prog_dir = tempfile.mkdtemp()
             self.additional_dirs.append(self.example_prog_dir)
