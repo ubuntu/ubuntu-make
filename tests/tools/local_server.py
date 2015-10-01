@@ -42,8 +42,10 @@ logger = logging.getLogger(__name__)
 class LocalHttp:
     """Local threaded http server. will be serving path content"""
 
-    def __init__(self, path, use_ssl=False, port=9876, ftp_redir=False):
+    def __init__(self, path, multi_hosts=False, use_ssl=False, port=9876, ftp_redir=False):
         """path is the local path to server
+        multi_hosts will transfer http://hostname/foo to path/hostname/foo. This is used when we potentially serve
+        multiple paths.
         set use_ssl to a specific filename turn on the use of the local certificate
         """
         self.port = port
@@ -51,6 +53,7 @@ class LocalHttp:
         self.use_ssl = use_ssl
         handler = RequestHandler
         handler.root_path = path
+        handler.multi_hosts = multi_hosts
         handler.ftp_redir = ftp_redir
         # can be TCPServer, but we don't have a self.httpd.server_name then
         self.httpd = HTTPServer(("", self.port), RequestHandler)
@@ -106,8 +109,12 @@ class RequestHandler(SimpleHTTPRequestHandler):
         # Before we actually abandon the query params, see if they match an
         # actual file.
         # Need to strip the leading '/' so the join will actually work.
+        current_root_path = RequestHandler.root_path
+        if RequestHandler.multi_hosts:
+            current_root_path = os.path.join(RequestHandler.root_path, self.headers["Host"].split(":")[0])
+
         file_path = posixpath.normpath(urllib.parse.unquote(path))[1:]
-        file_path = os.path.join(RequestHandler.root_path, file_path)
+        file_path = os.path.join(current_root_path, file_path)
         if os.path.exists(file_path):
             return file_path
 
@@ -121,8 +128,8 @@ class RequestHandler(SimpleHTTPRequestHandler):
         words = path.split('/')
         words = filter(None, words)
 
-        # root path isn't cwd but the one we specified
-        path = RequestHandler.root_path
+        # root path isn't cwd but the one we specified and translated
+        path = current_root_path
 
         for word in words:
             drive, word = os.path.splitdrive(word)
