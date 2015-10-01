@@ -32,7 +32,7 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.mozilla.org"
+        self.hostnames = ["www.mozilla.org"]
         self.port = "443"
         super().setUp()
         # override with container path
@@ -54,7 +54,7 @@ class VisualStudioCodeContainer(ContainerTests, test_web.VisualStudioCodeTest):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "code.visualstudio.com"
+        self.hostnames = ["code.visualstudio.com"]
         self.port = "443"
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'vscode')
         super().setUp()

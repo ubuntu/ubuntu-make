@@ -28,7 +28,7 @@ class GoInContainer(ContainerTests, test_go.GoTests):
     """This will test the Go integration inside a container"""
 
     def setUp(self):
-        self.hostname = "golang.org"
+        self.hostnames = ["golang.org"]
         self.port = "443"
         super().setUp()
         # override with container path

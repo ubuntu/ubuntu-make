@@ -31,7 +31,7 @@ class StencylInContainer(ContainerTests, test_games.StencylTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.stencyl.com"
+        self.hostnames = ["www.stencyl.com"]
         self.port = "80"
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'stencyl')
         super().setUp()
@@ -46,7 +46,7 @@ class Unity3DInContainer(ContainerTests, test_games.Unity3DTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "download.unity3d.com"
+        self.hostnames = ["download.unity3d.com"]
         self.port = "80"
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'unity3d')
         super().setUp()

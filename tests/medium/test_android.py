@@ -34,7 +34,7 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
     TEST_CHECKSUM_ANDROID_STUDIO_FAKE_DATA = "d8362a0c2ffc07b1b19c4b9001c8532de5a4b8c3"
 
     def setUp(self):
-        self.hostname = "developer.android.com"
+        self.hostnames = ["developer.android.com"]
         self.port = "443"
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -75,7 +75,7 @@ class AndroidSDKContainer(ContainerTests, test_android.AndroidSDKTests):
     """This will install Android SDK inside a container"""
 
     def setUp(self):
-        self.hostname = "developer.android.com"
+        self.hostnames = ["developer.android.com"]
         self.port = "443"
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -87,7 +87,7 @@ class AndroidNDKContainer(ContainerTests, test_android.AndroidNDKTests):
     """This will install Android NDK inside a container"""
 
     def setUp(self):
-        self.hostname = "developer.android.com"
+        self.hostnames = ["developer.android.com"]
         self.port = "443"
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
