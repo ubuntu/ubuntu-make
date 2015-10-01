@@ -28,7 +28,7 @@ class DartInContainer(ContainerTests, test_dart.DartEditorTests):
     """This will test the eclipse IDE integration inside a container"""
 
     def setUp(self):
-        self.hostname = "www.dartlang.org"
+        self.hostnames = ["www.dartlang.org"]
         self.port = "443"
         super().setUp()
         # override with container path
