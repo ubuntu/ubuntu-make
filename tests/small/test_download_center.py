@@ -429,7 +429,7 @@ class TestDownloadCenterSecure(LoggedTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.server_dir = join(get_data_dir(), "server-content")
-        cls.server = LocalHttp(cls.server_dir, use_ssl="localhost.pem")
+        cls.server = LocalHttp(cls.server_dir, use_ssl=["localhost"])
 
     @classmethod
     def tearDownClass(cls):
