@@ -42,11 +42,11 @@ logger = logging.getLogger(__name__)
 class LocalHttp:
     """Local threaded http server. will be serving path content"""
 
-    def __init__(self, path, multi_hosts=False, use_ssl=False, port=9876, ftp_redir=False):
+    def __init__(self, path, multi_hosts=False, use_ssl=[], port=9876, ftp_redir=False):
         """path is the local path to server
         multi_hosts will transfer http://hostname/foo to path/hostname/foo. This is used when we potentially serve
         multiple paths.
-        set use_ssl to a specific filename turn on the use of the local certificate
+        set use_ssl to a specific array of hostnames. We'll use the corresponding certificates.
         """
         self.port = port
         self.path = path
@@ -58,12 +58,32 @@ class LocalHttp:
         # can be TCPServer, but we don't have a self.httpd.server_name then
         self.httpd = HTTPServer(("", self.port), RequestHandler)
         handler.hostname = self.httpd.server_name
-        if self.use_ssl:
-            self.httpd.socket = ssl.wrap_socket(self.httpd.socket,
-                                                certfile=os.path.join(get_data_dir(), self.use_ssl),
-                                                server_side=True)
+
+        # create ssl certificate handling for SNI case (switching between different host name)
+        self.ssl_contexts = {}
+        context_associated = False
+        for hostname in self.use_ssl:
+            pem_file = os.path.join(get_data_dir(), "{}.pem".format(hostname))
+            if os.path.isfile(pem_file):
+                context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+                context.load_cert_chain(pem_file)
+                self.ssl_contexts[hostname] = context
+                if not context_associated:
+                    context_associated = True
+                    self.httpd.socket = context.wrap_socket(self.httpd.socket, server_side=True)
+                    context.set_servername_callback(self._match_sni_context)
+
         executor = futures.ThreadPoolExecutor(max_workers=1)
         self.future = executor.submit(self._serve)
+
+    def _match_sni_context(self, ssl_sock, server_name, initial_context):
+        """return matching certificates to the current request"""
+        logger.info("Request on {}".format(server_name))
+        try:
+            ssl_sock.context = self.ssl_contexts[server_name]
+        except KeyError:
+            logger.warning("Didn't find corresponding context on this server for {}, keeping default"
+                           .format(server_name))
 
     def _serve(self):
         logger.info("Serving locally from {} on {}".format(self.path, self.get_address()))
