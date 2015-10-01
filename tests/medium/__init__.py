@@ -47,21 +47,24 @@ class ContainerTests(LoggedTestCase):
                                                          get_root_dir())
 
         # start the local server at container startup
-        if hasattr(self, "hostname"):
+        if hasattr(self, "hostnames"):
             ftp_redir = hasattr(self, 'ftp')
-            command.extend(["-h", self.hostname])
+            for hostname in self.hostnames:
+                if "-h" not in command:
+                    command.extend(["-h", hostname])
+                runner_cmd += 'sudo echo "127.0.0.1 {}" >> /etc/hosts;'.format(hostname)
             runner_cmd += "{} {} 'sudo -E env PATH={} VIRTUAL_ENV={} {} {} {} {}';".format(
                 os.path.join(get_tools_helper_dir(), "run_in_umake_dir_async"),
                 self.UMAKE_IN_CONTAINER,
                 os.getenv("PATH"), os.getenv("VIRTUAL_ENV"),
                 os.path.join(get_tools_helper_dir(), "run_local_server"),
                 self.port,
-                self.hostname,
-                str(ftp_redir))
+                str(ftp_redir),
+                " ".join(self.hostnames))
 
             if ftp_redir:
                 runner_cmd += "/usr/bin/twistd ftp -p 21 -r {};".format(os.path.join(get_data_dir(), 'server-content',
-                                                                        self.hostname))
+                                                                                     self.hostnames[0]))
 
         if hasattr(self, "apt_repo_override_path"):
             runner_cmd += "sudo sh -c 'echo deb file:{} / > /etc/apt/sources.list';sudo apt-get update;".format(
