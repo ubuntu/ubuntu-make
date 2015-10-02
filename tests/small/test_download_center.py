@@ -405,7 +405,7 @@ class TestDownloadCenter(LoggedTestCase):
         self.expect_warn_error = True
 
     def test_download_with_wrong_sha1(self):
-        """we raise an error if we don't have the correct md5sum"""
+        """we raise an error if we don't have the correct sha1"""
         filename = "simplefile"
         request = self.build_server_address(filename)
         DownloadCenter([DownloadItem(request, Checksum(ChecksumType.sha1, 'AAAAA'))], self.callback)
