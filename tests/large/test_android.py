@@ -289,6 +289,11 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assert_exec_exists()
 
+    def test_try_removing_uninstalled_framework(self):
+        """Trying to remove an uninstalled framework will fail"""
+        self.child = pexpect.spawnu(self.command('{} android android-studio --remove'.format(UMAKE)))
+        self.wait_and_close(expect_warn=True, exit_status=1)
+
 
 class AndroidSDKTests(LargeFrameworkTests):
     """This will test the Android SDK installation"""
