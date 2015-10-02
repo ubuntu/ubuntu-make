@@ -109,8 +109,9 @@ class Decompressor:
 
         # we want the content of dir to be the root of dest, rename and move content
         if dir is not None:
-            dir_path = glob(os.path.join(dest, dir))[0]
-            if not dir_path:
+            try:
+                dir_path = glob(os.path.join(dest, dir))[0]
+            except IndexError:
                 raise BaseException("Couldn't find {} in tarball".format(dir_path))
             tempdir = os.path.join(dest, "footemp")
             os.rename(dir_path, tempdir)
