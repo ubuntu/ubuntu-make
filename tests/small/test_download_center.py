@@ -19,6 +19,7 @@
 
 """Tests for the download center module using a local server"""
 
+from enum import Enum
 import os
 from os.path import join, getsize
 from time import time
@@ -223,6 +224,24 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.error)
 
+    def test_download_with_sha256sum(self):
+        """we deliver once successful download, matching sha256sum"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([DownloadItem(request, Checksum(ChecksumType.sha256,
+                                                'b1b113c6ed8ab3a14779f7c54179eac2b87d39fcebbf65a50556b8d68caaa2fb'))],
+                       self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result.fd.read())
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.error)
+
     def test_download_with_no_checksum_value(self):
         """we deliver one successful download with a checksum type having no value"""
         filename = "simplefile"
@@ -397,6 +416,19 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.fd)
         self.expect_warn_error = True
 
+    def test_download_with_wrong_sha256(self):
+        """we raise an error if we don't have the correct sha256"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([DownloadItem(request, Checksum(ChecksumType.sha256, 'AAAAA'))], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertIn("Corrupted download", result.error)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.fd)
+        self.expect_warn_error = True
+
     def test_download_with_no_size(self):
         """we deliver one successful download, even if size isn't provided. Progress returns -1 though"""
         filename = "simplefile-with-no-content-length"
@@ -418,6 +450,22 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertEqual(report.call_args_list,
                          [call({self.build_server_address(filename): {'size': -1, 'current': 0}}),
                           call({self.build_server_address(filename): {'size': -1, 'current': 8192}})])
+
+    def test_download_with_wrong_checksumtype(self):
+        """we raise an error if we don't have a support checksum type"""
+        class WrongChecksumType(Enum):
+            didrocksha = "didrocksha"
+
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([DownloadItem(request, Checksum(WrongChecksumType.didrocksha, 'AAAAA'))], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertIn("Unsupported checksum type", result.error)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.fd)
+        self.expect_warn_error = True
 
 
 class TestDownloadCenterSecure(LoggedTestCase):
