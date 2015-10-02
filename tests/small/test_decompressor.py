@@ -183,3 +183,16 @@ class TestDecompressor(LoggedTestCase):
         self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'simplefile')))
         self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content', 'subdir')))
         self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'subdir', 'otherfile')))
+
+    def test_decompress_wrong_dir_content(self):
+        """We decompress a valid file, but the selected subdir isn't valid"""
+        self.expect_warn_error = True
+        filepath = os.path.join(self.compressfiles_dir, "valid.tgz")
+        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='doesnt-exists')},
+                     self.on_done)
+        self.wait_for_callback(self.on_done)
+
+        results = self.on_done.call_args[0][0]
+        self.assertEqual(len(results), 1, str(results))
+        for fd in results:
+            self.assertIsNotNone(results[fd].error)
