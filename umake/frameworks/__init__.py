@@ -341,11 +341,8 @@ def load_module(module_abs_name, main_category):
     if current_category not in BaseCategory.categories.values():
         return
     for framework_name, FrameworkClass in inspect.getmembers(module, _is_frameworkclass):
-        try:
-            if FrameworkClass(current_category) is not None:
-                logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
-        except TypeError as e:
-            logger.error("Can't attach {} to {}: {}".format(framework_name, current_category.name, e))
+        if FrameworkClass(current_category) is not None:
+            logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
 
 
 def load_frameworks():
