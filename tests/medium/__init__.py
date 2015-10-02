@@ -145,6 +145,12 @@ class ContainerTests(LoggedTestCase):
             return (False, stdout, stderr)
         raise BaseException("Unknown return code from {}".format(command))
 
+    def get_launcher_path(self, desktop_filename):
+        """Return launcher path inside container"""
+        command = self.command_as_list([os.path.join(get_tools_helper_dir(), "get_launcher_path"),
+                                        desktop_filename])
+        return self._exec_command(command)[1]
+
     def launcher_exists_and_is_pinned(self, desktop_filename):
         """Check if launcher exists and is pinned inside the container"""
         command = self.command_as_list([os.path.join(get_tools_helper_dir(), "check_launcher_exists_and_is_pinned"),
@@ -157,6 +163,12 @@ class ContainerTests(LoggedTestCase):
         path = path.replace(os.environ['HOME'], "/home/{}".format(self.DOCKER_USER))
         command = self.command_as_list([os.path.join(get_tools_helper_dir(), "path_exists"), path])
         return self._exec_command(command)[0]
+
+    def remove_path(self, path):
+        """Remove targeted path"""
+        path = path.replace(os.environ['HOME'], "/home/{}".format(self.DOCKER_USER))
+        command = self.command_as_list([os.path.join(get_tools_helper_dir(), "remove_path"), path])
+        self._exec_command(command)
 
     def is_in_path(self, filename):
         """Check inside the container if filename is in PATH thanks to which"""
