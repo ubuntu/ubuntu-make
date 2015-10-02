@@ -53,10 +53,11 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.download_page = kwargs["download_page"]
         self.checksum_type = kwargs.get("checksum_type", None)
         self.dir_to_decompress_in_tarball = kwargs.get("dir_to_decompress_in_tarball", None)
+        self.required_files_path = kwargs.get("required_files_path", [])
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
-                          "desktop_filename", "icon_filename"]:
+                          "desktop_filename", "icon_filename", "required_files_path"]:
             with suppress(KeyError):
                 kwargs.pop(extra_arg)
         super().__init__(*args, **kwargs)
@@ -71,6 +72,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         # check path and requirements
         if not super().is_installed:
             return False
+        for required_file_path in self.required_files_path:
+            if not os.path.exists(os.path.join(self.install_path, required_file_path)):
+                logger.debug("{} binary isn't installed".format(self.name))
+                return False
         if self.desktop_filename:
             return launcher_exists(self.desktop_filename)
         return True
