@@ -170,6 +170,10 @@ class LargeFrameworkTests(LoggedTestCase):
         """passthrough, return args"""
         return commands_input
 
+    def get_launcher_path(self, desktop_filename):
+        """passthrough getting the launcher path from umake tools"""
+        return get_launcher_path(desktop_filename)
+
     def launcher_exists_and_is_pinned(self, desktop_filename):
         """passthrough to in process method"""
         return launcher_exists_and_is_pinned(desktop_filename)
@@ -177,6 +181,13 @@ class LargeFrameworkTests(LoggedTestCase):
     def path_exists(self, path):
         """passthrough to os.path.exists"""
         return os.path.exists(path)
+
+    def remove_path(self, path):
+        """Remove targeted path"""
+        try:
+            os.remove(path)
+        except OSError:
+            shutil.rmtree(path)
 
     def is_in_path(self, filename):
         """check that we have a directory in path"""
