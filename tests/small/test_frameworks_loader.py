@@ -994,6 +994,29 @@ class TestAbstractFrameworkLoader(BaseFrameworkLoader):
         self.expect_warn_error = False  # Should be silent.
 
 
+class TestInvalidFrameworksLoader(BaseFrameworkLoader):
+    """Test the loader handles badly formatted frameworks."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        sys.path.append(get_data_dir())
+        cls.testframeworks_dir = os.path.join(get_data_dir(), 'invalidframeworks')
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.path.remove(get_data_dir())
+        super().tearDownClass()
+
+    def test_invalid_framework_loading(self):
+        """Frameworks that don't have a Framework type aren't loaded"""
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "invalidframeworks"):
+            frameworks.load_frameworks()
+        self.assertEqual(len(self.CategoryHandler.categories["category-a"].frameworks), 0,
+                         self.CategoryHandler.categories["category-a"].frameworks)
+
+
 class TestFrameworkLoaderCustom(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with custom path"""
 
