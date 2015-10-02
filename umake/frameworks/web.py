@@ -52,7 +52,8 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=_supported_archs,
                          download_page="https://www.mozilla.org/en-US/firefox/developer/all",
                          dir_to_decompress_in_tarball="firefox",
-                         desktop_filename="firefox-developer.desktop")
+                         desktop_filename="firefox-developer.desktop",
+                         required_files_path=["firefox"])
         self.arg_lang = None
 
     @MainLoop.in_mainloop_thread
@@ -133,16 +134,6 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
             self.arg_lang = args.lang
         super().run_for(args)
 
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.isfile(os.path.join(self.install_path, "firefox")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
-
 
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -150,7 +141,9 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Visual Studio Code", description=_("Visual Studio focused on modern web and cloud"),
                          category=category, only_on_archs=_supported_archs, expect_license=True,
                          download_page="https://code.visualstudio.com/Docs",
-                         desktop_filename="visual-studio-code.desktop", dir_to_decompress_in_tarball="VSCode-linux-*",
+                         desktop_filename="visual-studio-code.desktop",
+                         required_files_path=["Code"],
+                         dir_to_decompress_in_tarball="VSCode-linux-*",
                          packages_requirements=["libgtk2.0-0"])
         self.license_url = "https://code.visualstudio.com/License"
         # we have to mock headers for visual studio code website to give us an answer
@@ -232,13 +225,3 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=os.path.join(self.install_path, "Code"),
                         comment=_("Visual Studio focused on modern web and cloud"),
                         categories="Development;IDE;"))
-
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.isfile(os.path.join(self.install_path, "Code")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
