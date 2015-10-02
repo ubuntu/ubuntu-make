@@ -228,8 +228,9 @@ class TestDownloadCenter(LoggedTestCase):
         """we deliver once successful download, matching sha256sum"""
         filename = "simplefile"
         request = self.build_server_address(filename)
-        DownloadCenter([DownloadItem(request, Checksum(ChecksumType.sha256,
-                                                'b1b113c6ed8ab3a14779f7c54179eac2b87d39fcebbf65a50556b8d68caaa2fb'))],
+        DownloadCenter([DownloadItem(request,
+                                     Checksum(ChecksumType.sha256,
+                                              'b1b113c6ed8ab3a14779f7c54179eac2b87d39fcebbf65a50556b8d68caaa2fb'))],
                        self.callback)
         self.wait_for_callback(self.callback)
 
