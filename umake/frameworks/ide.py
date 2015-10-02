@@ -79,6 +79,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page=None,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
+                         required_files_path=["eclipse"],
                          packages_requirements=['openjdk-7-jdk'])
 
     def download_provider_page(self):
@@ -134,19 +135,17 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                                                      comment=comment,
                                                      categories=categories))
 
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not isfile(join(self.install_path, "eclipse")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
-
 
 class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
     """The base for all JetBrains installers."""
+
+    def __init__(self, *args, **kwargs):
+        """Add executable required file path to existing list"""
+        if self.executable:
+            current_required_files_path = kwargs.get("required_files_path", [])
+            current_required_files_path.append(os.path.join("bin", self.executable))
+            kwargs["required_files_path"] = current_required_files_path
+        super().__init__(*args, **kwargs)
 
     @property
     @abstractmethod
@@ -207,16 +206,6 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
                                                      exec=exec_path,
                                                      comment=comment,
                                                      categories=categories))
-
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not isfile(join(self.install_path, "bin", self.executable)):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
 
 
 class PyCharm(BaseJetBrains):

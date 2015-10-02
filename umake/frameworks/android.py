@@ -84,7 +84,8 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://developer.android.com/sdk/index.html",
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="android-studio",
-                         desktop_filename="android-studio.desktop")
+                         desktop_filename="android-studio.desktop",
+                         required_files_path=[os.path.join("bin", "studio.sh")])
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
@@ -103,16 +104,6 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-android-studio"))
 
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.isfile(os.path.join(self.install_path, "bin", "studio.sh")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
-
 
 class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -123,7 +114,8 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
                                                 "jayatana"],
                          download_page="https://developer.android.com/sdk/index.html",
                          checksum_type=ChecksumType.sha1,
-                         dir_to_decompress_in_tarball="android-sdk-linux")
+                         dir_to_decompress_in_tarball="android-sdk-linux",
+                         required_files_path=[os.path.join("tools", "android")])
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android SDK download page for license"""
@@ -146,16 +138,6 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
                                           self.install_path,
                                           "https://developer.android.com/sdk/installing/adding-packages.html")))
 
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.exists(os.path.join(self.install_path, "tools", "android")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
-
 
 class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -164,7 +146,8 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=_supported_archs, expect_license=True,
                          download_page="https://developer.android.com/ndk/downloads/index.html",
                          checksum_type=ChecksumType.md5,
-                         dir_to_decompress_in_tarball="android-ndk-*")
+                         dir_to_decompress_in_tarball="android-ndk-*",
+                         required_files_path=[os.path.join("ndk-build")])
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android NDK download page for license"""
@@ -183,16 +166,6 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
         UI.display(DisplayMessage("NDK installed in {}. More information on how to use it on {}".format(
                                   self.install_path,
                                   "https://developer.android.com/tools/sdk/ndk/index.html#GetStarted")))
-
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.exists(os.path.join(self.install_path, "ndk-build")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
 
 
 class EclipseADTForRemoval(umake.frameworks.baseinstaller.BaseInstaller):

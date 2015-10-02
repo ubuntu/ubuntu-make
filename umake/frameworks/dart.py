@@ -56,7 +56,8 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Dart SDK", description=_("Dart SDK (default)"), is_category_default=True,
                          category=category, only_on_archs=_supported_archs,
                          download_page="https://api.dartlang.org",
-                         dir_to_decompress_in_tarball="dart-sdk")
+                         dir_to_decompress_in_tarball="dart-sdk",
+                         required_files_path=[os.path.join("bin", "dart")])
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -94,13 +95,3 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
         """Add go necessary env variables"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
         UI.delayed_display(DisplayMessage(_("You need to restart a shell session for your installation to work")))
-
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.isfile(os.path.join(self.install_path, "bin", "dart")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True

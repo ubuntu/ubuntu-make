@@ -49,6 +49,7 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page="http://www.stencyl.com/download/",
                          desktop_filename="stencyl.desktop",
+                         required_files_path=["Stencyl"],
                          packages_requirements=["libxtst6:i386", "libxext6:i386", "libxi6:i386", "libncurses5:i386",
                                                 "libxt6:i386", "libxpm4:i386", "libxmu6:i386", "libxp6:i386",
                                                 "libgtk2.0-0:i386", "libatk1.0-0:i386", "libc6:i386", "libcairo2:i386",
@@ -88,16 +89,6 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
                         categories="Development;IDE;",
                         extra="Path={}\nStartupWMClass=stencyl-sw-Launcher".format(self.install_path)))
 
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.isfile(os.path.join(self.install_path, "Stencyl")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
-
 
 def _chrome_sandbox_setuid(path):
     """Chown and setUID to chrome sandbox"""
@@ -125,6 +116,7 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page=None,
                          dir_to_decompress_in_tarball='unity-editor*',
                          desktop_filename="unity3d-editor.desktop",
+                         required_files_path=[os.path.join("Editor", "Unity")],
                          # we need root access for chrome sandbox setUID
                          need_root_access=True,
                          # Note that some packages requirements essential to the system itself are not listed (we
@@ -164,13 +156,3 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=os.path.join(self.install_path, "Editor", "Unity"),
                         comment=self.description,
                         categories="Development;IDE;"))
-
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.isfile(os.path.join(self.install_path, "Editor", "Unity")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True

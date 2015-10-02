@@ -46,7 +46,8 @@ class ScalaLang(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Scala Lang", description=_("Scala compiler and interpreter (default)"),
                          is_category_default=True, category=category, packages_requirements=["default-jre"],
                          download_page="http://www.scala-lang.org/download/",
-                         dir_to_decompress_in_tarball="scala-*")
+                         dir_to_decompress_in_tarball="scala-*",
+                         required_files_path=[os.path.join("bin", "scala")])
 
     def parse_download_link(self, line, in_download):
         """Parse Scala download link, expect to find a url"""
@@ -63,13 +64,3 @@ class ScalaLang(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")},
                                     "SCALA_HOME": {"value": self.install_path}})
         UI.delayed_display(DisplayMessage(_("You need to restart the shell session for your installation to work")))
-
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.isfile(os.path.join(self.install_path, "bin", "scala")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
