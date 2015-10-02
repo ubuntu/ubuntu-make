@@ -157,16 +157,25 @@ def local_which(filename):
     return None
 
 
-def get_path_from_desktop_file(desktop_filename, key):
-    """get the path referred as key in the desktop filename exists"""
+def get_desktop_file_path(desktop_filename):
+    """get the desktop file path"""
     if not desktop_filename:
         return ""
 
     from umake.tools import get_launcher_path
     importlib.reload(xdg.BaseDirectory)
 
+    return get_launcher_path(desktop_filename)
+
+
+def get_path_from_desktop_file(desktop_filename, key):
+    """get the path referred as key in the desktop filename exists"""
+    desktop_file_path = get_desktop_file_path(desktop_filename)
+    if not get_desktop_file_path(desktop_file_path):
+        return ""
+
     path = ""
-    with open(get_launcher_path(desktop_filename)) as f:
+    with open(desktop_file_path) as f:
         for line in f:
             p = re.search(r'{}=(.*)'.format(key), line)
             with suppress(AttributeError):
