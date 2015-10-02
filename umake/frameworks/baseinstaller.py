@@ -78,6 +78,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                 return False
         if self.desktop_filename:
             return launcher_exists(self.desktop_filename)
+        logger.debug("{} is installed".format(self.name))
         return True
 
     def setup(self, install_path=None, auto_accept_license=False):

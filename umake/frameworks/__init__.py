@@ -277,7 +277,6 @@ class BaseFramework(metaclass=abc.ABCMeta):
             return False
         if not RequirementsHandler().is_bucket_installed(self.packages_requirements):
             return False
-        logger.debug("{} is installed".format(self.name))
         return True
 
     def install_framework_parser(self, parser):
