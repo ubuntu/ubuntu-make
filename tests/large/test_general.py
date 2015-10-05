@@ -27,16 +27,12 @@ from ..tools import UMAKE
 class GeneralTests(LargeFrameworkTests):
     """This will test the General frameworks functionality"""
 
-    def return_without_first_output(self, stdout):
-        """We return ignoring the first line which is INFO: set logging level to"""
-        return "\n".join(stdout.split('\n')[1:])
-
     def test_run_category_without_default_framework(self):
         """Trying to run a category without a default framework exits in error"""
         exception_raised = False
         try:
             subprocess.check_output(self.command_as_list([UMAKE, 'ide']), stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
-            self.assertIn("ERROR:", self.return_without_first_output(e.output.decode("utf-8")))
+            self.assertIn("ERROR:", e.output.decode("utf-8"))
             exception_raised = True
         self.assertTrue(exception_raised)
