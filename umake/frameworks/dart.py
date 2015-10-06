@@ -70,7 +70,7 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen(status_code=1)
 
         version = ''
-        version_re = r'Dart SDK (.*) api docs'
+        version_re = r'Dart SDK ([\d\.]+)'
         for line in result[self.download_page].buffer:
             p = re.search(version_re, line.decode())
             with suppress(AttributeError):
