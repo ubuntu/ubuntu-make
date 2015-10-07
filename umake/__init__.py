@@ -54,21 +54,6 @@ def _setup_logging(env_key='LOG_CFG', level=_default_log_level):
     logger.info("Logging level set to {}".format(logging.getLevelName(logging.root.getEffectiveLevel())))
 
 
-def get_data_dir():
-    """Return absolute path to data dir.
-
-    Use the local data dir if found, otherwise, return the system dir.
-    """
-    if not _datadir:
-        local_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data'))
-        if os.path.isdir(local_dir):
-            logger.debug("Using local data dir in {}".format(local_dir))
-            return local_dir
-    if not _datadir:
-        logging.error("No data directory found")
-    return _datadir
-
-
 def set_logging_from_args(args, parser):
     """Choose logging ignoring any unknown sys.argv options"""
     result_verbosity_arg = []
