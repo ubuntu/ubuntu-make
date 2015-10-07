@@ -19,12 +19,23 @@
 
 """Tests for basic CLI commands"""
 
+import os
 import subprocess
-from ..tools import LoggedTestCase, UMAKE
+from ..tools import LoggedTestCase, UMAKE, get_root_dir
 
 
 class BasicCLI(LoggedTestCase):
     """This will test the basic cli command class"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.log_cfg = os.environ.pop("LOG_CFG")
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        os.environ["LOG_CFG"] = cls.log_cfg
 
     def command_as_list(self, commands_input):
         """passthrough, return args"""
@@ -62,3 +73,11 @@ class BasicCLI(LoggedTestCase):
             self.assertNotIn("DEBUG:", self.return_without_first_output(e.output.decode("utf-8")))
             exception_raised = True
         self.assertTrue(exception_raised)
+
+    def test_setup_logging_level_with_env(self):
+        """Set logging option to debug via env var"""
+        env = {"LOG_CFG": os.path.join(get_root_dir(), "confs", "info.logcfg")}
+        env.update(os.environ)
+        result = subprocess.check_output(self.command_as_list([UMAKE]), env=env,
+                                         stderr=subprocess.STDOUT)
+        self.assertIn("Logging level set to INFO", result.decode("utf-8"))
