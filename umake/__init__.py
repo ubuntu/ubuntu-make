@@ -51,7 +51,7 @@ def _setup_logging(env_key='LOG_CFG', level=_default_log_level):
             with open(path, 'rt') as f:
                 config = yaml.load(f.read())
             logging.config.dictConfig(config)
-    logger.info("Logging level set to {}".format(logging.getLevelName(logging.root.getEffectiveLevel())))
+    logging.info("Logging level set to {}".format(logging.getLevelName(logging.root.getEffectiveLevel())))
 
 
 def set_logging_from_args(args, parser):
