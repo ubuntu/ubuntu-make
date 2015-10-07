@@ -115,6 +115,23 @@ class TestConfigHandler(LoggedTestCase):
 
         self.assertEqual(len(os.listdir(self.config_dir)), 0)
 
+    def test_transition_old_config(self):
+        """Transition udtc old config to new umake one"""
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            shutil.copy(os.path.join(self.config_dir_for_name("old"), "udtc"), tmpdirname)
+            change_xdg_path('XDG_CONFIG_HOME', tmpdirname)
+            self.assertEqual(ConfigHandler().config,
+                             {'frameworks': {
+                                 'category-a': {
+                                     'framework-a': {'path': '/home/didrocks/quickly/ubuntu-make/adt-eclipse'},
+                                     'framework-b': {'path': '/home/didrocks/foo/bar/android-studio'}
+                                 }
+                             }})
+
+            # file has been renamed
+            self.assertTrue(os.path.exists(os.path.join(tmpdirname, "umake")), "New umake config file exists")
+            self.assertFalse(os.path.exists(os.path.join(tmpdirname, "udtc")), "Old udtc config file is removed")
+
 
 class TestCompletionArchVersion(LoggedTestCase):
 
