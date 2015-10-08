@@ -21,10 +21,11 @@
 
 import os
 import subprocess
+from . import LargeFrameworkTests
 from ..tools import LoggedTestCase, UMAKE, get_root_dir
 
 
-class BasicCLI(LoggedTestCase):
+class BasicCLI(LargeFrameworkTests):
     """This will test the basic cli command class"""
 
     @classmethod
@@ -78,6 +79,9 @@ class BasicCLI(LoggedTestCase):
         """Set logging option to debug via env var"""
         env = {"LOG_CFG": os.path.join(get_root_dir(), "confs", "info.logcfg")}
         env.update(os.environ)
-        result = subprocess.check_output(self.command_as_list([UMAKE]), env=env,
+        commands = [UMAKE]
+        if self.in_container:
+            commands.insert(0, "LOG_CFG={}".format(env["LOG_CFG"]))
+        result = subprocess.check_output(self.command_as_list(commands), env=env,
                                          stderr=subprocess.STDOUT)
         self.assertIn("Logging level set to INFO", result.decode("utf-8"))
