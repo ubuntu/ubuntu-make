@@ -19,6 +19,7 @@
 
 """Tests for basic CLI commands"""
 
+from contextlib import suppress
 import os
 import subprocess
 from . import LargeFrameworkTests
@@ -31,12 +32,15 @@ class BasicCLI(LargeFrameworkTests):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.log_cfg = os.environ.pop("LOG_CFG")
+        cls.log_cfg = None
+        with suppress(KeyError):
+            cls.log_cfg = os.environ.pop("LOG_CFG")
 
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
-        os.environ["LOG_CFG"] = cls.log_cfg
+        if (cls.log_cfg):
+            os.environ["LOG_CFG"] = cls.log_cfg
 
     def command_as_list(self, commands_input):
         """passthrough, return args"""
