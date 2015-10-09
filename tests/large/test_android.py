@@ -403,6 +403,11 @@ class AndroidNDKTests(LargeFrameworkTests):
 
         # we have an installed ndk exec
         self.assert_exec_exists()
+        cmd_list = ["echo $ANDROID_NDK"]
+        if not self.in_container:
+            cmd_list.insert(0, ["bash", "-l", "-c"])
+        self.assertEqual(subprocess.check_output(self.command_as_list(cmd_list)).decode("utf-8").strip(),
+                         self.installed_path)
 
         # launch it, send SIGTERM and check that it exits fine
         self.assertEqual(subprocess.check_call(self.command_as_list([self.exec_path, "gcc"]),
