@@ -126,11 +126,12 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
         return self.category.parse_download_link('id="linux-tools"', line, in_download)
 
     def post_install(self):
-        """Add go necessary env variables"""
+        """Add necessary environment variables"""
+        add_env_to_user(self.name, {"ANDROID_HOME": {"value": self.install_path, "keep": False}})
         # add "platform-tools" to PATH to ensure "adb" can be run once the platform tools are installed via
         # the SDK manager
-        add_env_to_user(self.name, {"PATH": {"value": [os.path.join(self.install_path, "tools"),
-                                                       os.path.join(self.install_path, "platform-tools")]}})
+        add_env_to_user(self.name, {"PATH": {"value": [os.path.join("$ANDROID_HOME", "tools"),
+                                                       os.path.join("$ANDROID_HOME", "platform-tools")]}})
         UI.delayed_display(DisplayMessage(_("You need to restart a shell session for your installation to work")))
 
         """Print wiki page message"""
@@ -162,6 +163,9 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
         return self.category.parse_download_link('<td>Linux {}'.format(tag_machine), line, in_download)
 
     def post_install(self):
+        """Add necessary environment variables"""
+        add_env_to_user(self.name, {"ANDROID_NDK": {"value": self.install_path, "keep": False}})
+
         """Print wiki page message"""
         UI.display(DisplayMessage("NDK installed in {}. More information on how to use it on {}".format(
                                   self.install_path,
