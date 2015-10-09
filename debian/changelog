@@ -38,7 +38,7 @@ ubuntu-make (15.09.2) wily; urgency=medium
 
 ubuntu-make (15.09.1) wily; urgency=medium
 
-  * Add support for installing android SDK only by Sebastian Schubert
+  * Add support for installing android SDK only by Sebastian Schuberth
     - add associated set of medium and large tests.
   * Rationalize exit status of umake by Omer Sheikh
     - every error now, in addition to print some errors, exits as expect with
