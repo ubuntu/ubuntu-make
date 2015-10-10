@@ -31,7 +31,7 @@ import tempfile
 from textwrap import dedent
 from time import time
 import threading
-from ..tools import change_xdg_path, get_data_dir, LoggedTestCase
+from ..tools import change_xdg_path, get_data_dir, LoggedTestCase, INSTALL_DIR
 from umake import settings, tools
 from umake.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
     create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_icon_path, get_launcher_path, copy_icon
@@ -396,13 +396,13 @@ class TestLauncherIcons(LoggedTestCase):
                Version=1.0
                Type=Application
                Name=Android Studio
-               Icon=/home/didrocks/.local/share/umake/android-studio/bin/studio.png
-               Exec="/home/didrocks/.local/share/umake/android-studio/bin/studio.sh" %f
+               Icon=/home/didrocks/{install_dir}/android-studio/bin/studio.png
+               Exec="/home/didrocks/{install_dir}/android-studio/bin/studio.sh" %f
                Comment=Develop with pleasure!
                Categories=Development;IDE;
                Terminal=false
                StartupWMClass=jetbrains-android-studio
-               """)
+               """.format(install_dir=INSTALL_DIR))
 
     def write_desktop_file(self, filename):
         """Write a dummy filename to the applications dir and return filepath"""
@@ -437,13 +437,13 @@ class TestLauncherIcons(LoggedTestCase):
                Version=1.0
                Type=Application
                Name=Android Studio 2
-               Icon=/home/didrocks/.local/share/umake/android-studio/bin/idea2.png
-               Exec="/home/didrocks/.local/share/umake/android-studio/bin/studio2.sh" %f
+               Icon=/home/didrocks/{install_dir}/android-studio/bin/idea2.png
+               Exec="/home/didrocks/{install_dir}/android-studio/bin/studio2.sh" %f
                Comment=Develop with pleasure!
                Categories=Development;IDE;
                Terminal=false
                StartupWMClass=jetbrains-android-studio
-               """)
+               """.format(install_dir=INSTALL_DIR))
         create_launcher("foo.desktop", new_content)
 
         self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
