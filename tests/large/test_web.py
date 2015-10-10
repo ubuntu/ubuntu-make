@@ -39,7 +39,7 @@ class FirefoxDevTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/web/firefox-dev")
+        self.installed_path = os.path.join(self.install_base_path, "web", "firefox-dev")
         self.desktop_filename = "firefox-developer.desktop"
 
     @property
@@ -125,7 +125,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/web/visual-studio-code")
+        self.installed_path = os.path.join(self.install_base_path, "web", "visual-studio-code")
         self.desktop_filename = "visual-studio-code.desktop"
 
     def test_default_install(self):

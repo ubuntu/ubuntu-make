@@ -36,7 +36,7 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
         self.port = "443"
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/web/firefox-dev".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "web", "firefox-dev")
 
     def test_install_with_changed_download_page(self):
         """Installing firefox developer should fail if download page has significantly changed"""
@@ -59,7 +59,7 @@ class VisualStudioCodeContainer(ContainerTests, test_web.VisualStudioCodeTest):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'vscode')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/web/visual-studio-code".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "web", "visual-studio-code")
 
     def test_install_with_changed_download_page(self):
         """Installing visual studio code should fail if download page has significantly changed"""
