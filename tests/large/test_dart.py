@@ -37,7 +37,7 @@ class DartEditorTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/dart/dart-sdk")
+        self.installed_path = os.path.join(self.install_base_path, "dart", "dart-sdk")
 
     @property
     def exec_path(self):

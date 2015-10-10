@@ -40,7 +40,7 @@ class GoTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/go/go-lang")
+        self.installed_path = os.path.join(self.install_base_path, "go", "go-lang")
         self.framework_name_for_profile = "Go Lang"
 
     @property

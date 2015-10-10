@@ -33,7 +33,7 @@ class DartInContainer(ContainerTests, test_dart.DartEditorTests):
         self.port = "443"
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/dart/dart-sdk".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "dart", "dart-sdk")
 
     def test_install_with_changed_version_page(self):
         """Installing dart sdk should fail if version page has significantly changed"""

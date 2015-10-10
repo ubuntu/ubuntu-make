@@ -396,8 +396,8 @@ class TestLauncherIcons(LoggedTestCase):
                Version=1.0
                Type=Application
                Name=Android Studio
-               Icon=/home/didrocks/tools/android-studio/bin/studio.png
-               Exec="/home/didrocks/tools/android-studio/bin/studio.sh" %f
+               Icon=/home/didrocks/.local/share/umake/android-studio/bin/studio.png
+               Exec="/home/didrocks/.local/share/umake/android-studio/bin/studio.sh" %f
                Comment=Develop with pleasure!
                Categories=Development;IDE;
                Terminal=false
@@ -437,8 +437,8 @@ class TestLauncherIcons(LoggedTestCase):
                Version=1.0
                Type=Application
                Name=Android Studio 2
-               Icon=/home/didrocks/tools/android-studio/bin/idea2.png
-               Exec="/home/didrocks/tools/android-studio/bin/studio2.sh" %f
+               Icon=/home/didrocks/.local/share/umake/android-studio/bin/idea2.png
+               Exec="/home/didrocks/.local/share/umake/android-studio/bin/studio2.sh" %f
                Comment=Develop with pleasure!
                Categories=Development;IDE;
                Terminal=false

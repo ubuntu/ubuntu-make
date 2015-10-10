@@ -36,7 +36,7 @@ class AndroidStudioTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/android/android-studio")
+        self.installed_path = os.path.join(self.install_base_path, "android", "android-studio")
         self.desktop_filename = "android-studio.desktop"
 
     def test_default_android_studio_install(self):
@@ -357,7 +357,7 @@ class AndroidSDKTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/android/android-sdk")
+        self.installed_path = os.path.join(self.install_base_path, "android", "android-sdk")
 
     @property
     def exec_path(self):
@@ -397,7 +397,7 @@ class AndroidNDKTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/android/android-ndk")
+        self.installed_path = os.path.join(self.install_base_path, "android", "android-ndk")
 
     @property
     def exec_path(self):

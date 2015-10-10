@@ -36,7 +36,7 @@ class StencylInContainer(ContainerTests, test_games.StencylTests):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'stencyl')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/games/stencyl".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "games", "stencyl")
 
 
 class Unity3DInContainer(ContainerTests, test_games.Unity3DTests):
@@ -51,4 +51,4 @@ class Unity3DInContainer(ContainerTests, test_games.Unity3DTests):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'unity3d')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/games/unity3d".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "games", "unity3d")

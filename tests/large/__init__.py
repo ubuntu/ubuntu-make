@@ -40,6 +40,7 @@ class LargeFrameworkTests(LoggedTestCase):
         self.installed_path = ""
         self.framework_name_for_profile = ""
         self.conf_path = os.path.expanduser("~/.config/umake")
+        self.install_base_path = os.path.expanduser("~/.local/share/umake")
         self.desktop_filename = ""
         self.child = None
         self.additional_dirs = []
