@@ -36,7 +36,7 @@ class StencylTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/games/stencyl")
+        self.installed_path = os.path.join(self.install_base_path, "games", "stencyl")
         self.desktop_filename = "stencyl.desktop"
 
     def test_default_stencyl_install(self):
@@ -77,7 +77,7 @@ class Unity3DTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/games/unity3d")
+        self.installed_path = os.path.join(self.install_base_path, "games", "unity-3d")
         self.desktop_filename = "unity3d-editor.desktop"
 
     def test_default_unity3D_install(self):

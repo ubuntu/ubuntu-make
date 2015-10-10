@@ -40,7 +40,7 @@ class EclipseIDETests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/ide/eclipse")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
         self.desktop_filename = "eclipse.desktop"
 
     @property
@@ -90,7 +90,7 @@ class IdeaIDETests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/ide/idea")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "idea")
         self.desktop_filename = 'jetbrains-idea.desktop'
 
     def test_default_install(self):
@@ -129,7 +129,7 @@ class IdeaUltimateIDETests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/ide/idea-ultimate")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "idea-ultimate")
         self.desktop_filename = 'jetbrains-idea.desktop'
 
     def test_default_install(self):
@@ -170,7 +170,7 @@ class PyCharmIDETests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/ide/pycharm")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm")
         self.desktop_filename = 'jetbrains-pycharm.desktop'
 
     def test_default_install(self):
@@ -211,7 +211,7 @@ class PyCharmEducationalIDETests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/ide/pycharm-educational")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-educational")
         self.desktop_filename = 'jetbrains-pycharm.desktop'
 
     def test_default_install(self):
@@ -252,7 +252,7 @@ class PyCharmProfessionalIDETests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/ide/pycharm-professional")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-professional")
         self.desktop_filename = 'jetbrains-pycharm.desktop'
 
     def test_default_install(self):
@@ -293,7 +293,7 @@ class RubyMineIDETests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/ide/rubymine")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "rubymine")
         self.desktop_filename = 'jetbrains-rubymine.desktop'
 
     def test_default_install(self):
@@ -334,7 +334,7 @@ class WebStormIDETests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/ide/webstorm")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "webstorm")
         self.desktop_filename = 'jetbrains-webstorm.desktop'
 
     def test_default_install(self):
@@ -375,7 +375,7 @@ class PhpStormIDETests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/ide/phpstorm")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "phpstorm")
         self.desktop_filename = 'jetbrains-phpstorm.desktop'
 
     def test_default_install(self):
@@ -416,7 +416,7 @@ class ArduinoIDETests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/ide/arduino")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "arduino")
         self.desktop_filename = "arduino.desktop"
 
     @property

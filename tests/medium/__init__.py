@@ -41,6 +41,7 @@ class ContainerTests(LoggedTestCase):
         super().setUp()  # this will call other parents of ContainerTests ancestors, like LargeFrameworkTests
         self.in_container = True
         self.umake_path = get_root_dir()
+        self.install_base_path = os.path.expanduser("/home/{}/.local/share/umake".format(self.DOCKER_USER))
         self.image_name = self.DOCKER_TESTIMAGE
         command = [get_docker_path(), "run"]
         runner_cmd = "mkdir -p {}; ln -s {}/ {};".format(os.path.dirname(get_root_dir()), self.UMAKE_IN_CONTAINER,

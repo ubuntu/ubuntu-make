@@ -41,7 +41,7 @@ class ScalaTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/scala/scala-lang")
+        self.installed_path = os.path.join(self.install_base_path, "scala", "scala-lang")
         self.framework_name_for_profile = "Scala Lang"
 
     @property
