@@ -216,6 +216,18 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
             self.assert_exec_exists()
 
+    def test_xdg_data_install_path(self):
+        """Install in path specified by XDG_DATA_HOME"""
+        xdg_data_path = "/tmp/foo"
+        self.installed_path = "{}/umake/android/android-studio".format(xdg_data_path)
+        self.child = pexpect.spawnu(self.command('XDG_DATA_HOME={} {} android android-studio'
+                                                 .format(xdg_data_path, UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("\[I Accept.*\]")
+        self.accept_default_and_wait()
+        self.close_and_check_status()
+
     def test_custom_install_path(self):
         """We install android studio in a custom path"""
         # We skip the existing directory prompt
