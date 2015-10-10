@@ -38,6 +38,7 @@ logger = logging.getLogger(__name__)
 
 DOCKER = None
 UMAKE = "umake"
+INSTALL_DIR = ".local/share/umake"
 
 
 class LoggedTestCase(TestCase):
