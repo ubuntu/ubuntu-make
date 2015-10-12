@@ -5,8 +5,6 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 
 As a first step, it focuses on installing a full-fledged android development environment on the latest Ubuntu LTS (14.04).
 
-**/!\ WIP, not ready for consumption yet**
-
 ## Running the command line tool
 To run the tool:
 
