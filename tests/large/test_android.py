@@ -230,6 +230,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.expect_and_no_warn("\[I Accept.*\]")
         self.accept_default_and_wait()
         self.close_and_check_status()
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
     def test_custom_install_path(self):
         """We install android studio in a custom path"""
