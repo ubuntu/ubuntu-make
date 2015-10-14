@@ -77,7 +77,7 @@ class Unity3DTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.join(self.install_base_path, "games", "unity-3d")
+        self.installed_path = os.path.join(self.install_base_path, "games", "unity3d")
         self.desktop_filename = "unity3d-editor.desktop"
 
     def test_default_unity3D_install(self):
