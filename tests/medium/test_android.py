@@ -23,7 +23,7 @@ from . import ContainerTests
 import os
 import pexpect
 from ..large import test_android
-from ..tools import get_data_dir, swap_file_and_restore, UMAKE
+from ..tools import get_data_dir, swap_file_and_restore, UMAKE, spawn_process
 
 
 class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
@@ -50,7 +50,7 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
             with open(android_studio_file_path, "w") as newfile:
                 newfile.write(content.replace(self.TEST_CHECKSUM_ANDROID_STUDIO_FAKE_DATA,
                                               "c8362a0c2ffc07b1b19c4b9001c8532de5a4b8c3"))
-            self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
+            self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
             self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question

@@ -24,9 +24,8 @@ import logging
 import platform
 import subprocess
 import os
-import pexpect
 from tests.large import LargeFrameworkTests
-from tests.tools import UMAKE
+from tests.tools import UMAKE, spawn_process
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +49,7 @@ class EclipseIDETests(LargeFrameworkTests):
 
     def test_default_eclipse_ide_install(self):
         """Install eclipse from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} ide eclipse'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide eclipse'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -75,7 +74,7 @@ class EclipseIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} ide eclipse'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide eclipse'.format(UMAKE)))
         self.expect_and_no_warn("Eclipse is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
@@ -95,7 +94,7 @@ class IdeaIDETests(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} ide idea'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide idea'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -114,7 +113,7 @@ class IdeaIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} ide idea'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide idea'.format(UMAKE)))
         self.expect_and_no_warn("Idea is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
@@ -134,7 +133,7 @@ class IdeaUltimateIDETests(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} ide idea-ultimate'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide idea-ultimate'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -155,7 +154,7 @@ class IdeaUltimateIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} ide idea-ultimate'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide idea-ultimate'.format(UMAKE)))
         self.expect_and_no_warn("Idea Ultimate is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
@@ -175,7 +174,7 @@ class PyCharmIDETests(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} ide pycharm'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide pycharm'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -196,7 +195,7 @@ class PyCharmIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} ide pycharm'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide pycharm'.format(UMAKE)))
         self.expect_and_no_warn("PyCharm is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
@@ -216,7 +215,7 @@ class PyCharmEducationalIDETests(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} ide pycharm-educational'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide pycharm-educational'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -237,7 +236,7 @@ class PyCharmEducationalIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} ide pycharm-educational'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide pycharm-educational'.format(UMAKE)))
         self.expect_and_no_warn("PyCharm Educational is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
@@ -257,7 +256,7 @@ class PyCharmProfessionalIDETests(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} ide pycharm-professional'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide pycharm-professional'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -278,7 +277,7 @@ class PyCharmProfessionalIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} ide pycharm-professional'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide pycharm-professional'.format(UMAKE)))
         self.expect_and_no_warn("PyCharm Professional is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
@@ -298,7 +297,7 @@ class RubyMineIDETests(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} ide rubymine'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide rubymine'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -319,7 +318,7 @@ class RubyMineIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} ide rubymine'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide rubymine'.format(UMAKE)))
         self.expect_and_no_warn("RubyMine is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
@@ -339,7 +338,7 @@ class WebStormIDETests(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} ide webstorm'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide webstorm'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -360,7 +359,7 @@ class WebStormIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} ide webstorm'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide webstorm'.format(UMAKE)))
         self.expect_and_no_warn("WebStorm is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
@@ -380,7 +379,7 @@ class PhpStormIDETests(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} ide phpstorm'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide phpstorm'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -401,7 +400,7 @@ class PhpStormIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} ide phpstorm'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide phpstorm'.format(UMAKE)))
         self.expect_and_no_warn("PhpStorm is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
@@ -426,7 +425,7 @@ class ArduinoIDETests(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install the distribution from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} ide arduino'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide arduino'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -446,7 +445,7 @@ class ArduinoIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} ide arduino'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} ide arduino'.format(UMAKE)))
         self.expect_and_no_warn("Arduino is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()

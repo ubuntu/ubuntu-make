@@ -20,10 +20,9 @@
 """Tests for basic CLI commands"""
 
 import os
-import pexpect
 import subprocess
 from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path, get_data_dir, \
-    swap_file_and_restore, INSTALL_DIR
+    swap_file_and_restore, INSTALL_DIR, spawn_process
 from time import sleep
 from nose.tools import nottest
 
@@ -203,7 +202,7 @@ class ContainerTests(LoggedTestCase):
         with swap_file_and_restore(content_file_path):
             with open(content_file_path, "w") as newfile:
                 newfile.write("foo")
-            self.child = pexpect.spawnu(command)
+            self.child = spawn_process(command)
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
             self.wait_and_close(expect_warn=True, exit_status=1)
