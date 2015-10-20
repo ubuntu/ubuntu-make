@@ -31,6 +31,7 @@ import os
 import re
 import shutil
 import xdg.BaseDirectory
+import pexpect
 from unittest import TestCase
 from unittest.mock import Mock
 
@@ -206,3 +207,8 @@ def is_in_group(group):
         if group_name == group:
             return True
     return False
+
+
+def spawn_process(command):
+    """return a handle to a new controllable child process"""
+    return pexpect.spawnu(command, dimensions=(24, 250))
