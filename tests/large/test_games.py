@@ -21,10 +21,9 @@
 
 from . import LargeFrameworkTests
 import os
-import pexpect
 import platform
 import subprocess
-from ..tools import UMAKE
+from ..tools import UMAKE, spawn_process
 
 
 class StencylTests(LargeFrameworkTests):
@@ -36,12 +35,12 @@ class StencylTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/games/stencyl")
+        self.installed_path = os.path.join(self.install_base_path, "games", "stencyl")
         self.desktop_filename = "stencyl.desktop"
 
     def test_default_stencyl_install(self):
         """Install stencyl from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} games stencyl'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} games stencyl'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -62,7 +61,7 @@ class StencylTests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} games stencyl'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} games stencyl'.format(UMAKE)))
         self.expect_and_no_warn("Stencyl is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
@@ -77,7 +76,7 @@ class Unity3DTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/games/unity3d")
+        self.installed_path = os.path.join(self.install_base_path, "games", "unity3d")
         self.desktop_filename = "unity3d-editor.desktop"
 
     def test_default_unity3D_install(self):
@@ -87,7 +86,7 @@ class Unity3DTests(LargeFrameworkTests):
         if platform.machine() != "x86_64":
             return
 
-        self.child = pexpect.spawnu(self.command('{} games unity3d'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} games unity3d'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -109,7 +108,7 @@ class Unity3DTests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} games unity3d'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} games unity3d'.format(UMAKE)))
         self.expect_and_no_warn("Unity3d is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()

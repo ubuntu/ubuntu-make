@@ -21,10 +21,9 @@
 
 from . import LargeFrameworkTests
 import os
-import pexpect
 import subprocess
 import tempfile
-from ..tools import UMAKE
+from ..tools import UMAKE, spawn_process
 
 
 class AndroidStudioTests(LargeFrameworkTests):
@@ -36,12 +35,12 @@ class AndroidStudioTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/android/android-studio")
+        self.installed_path = os.path.join(self.install_base_path, "android", "android-studio")
         self.desktop_filename = "android-studio.desktop"
 
     def test_default_android_studio_install(self):
         """Install android studio from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
@@ -61,14 +60,14 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
         self.expect_and_no_warn("Android Studio is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
     def test_no_license_accept_android_studio(self):
         """We don't accept the license (default)"""
-        self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
@@ -79,7 +78,7 @@ class AndroidStudioTests(LargeFrameworkTests):
 
     def test_doesnt_accept_wrong_path(self):
         """We don't accept a wrong path"""
-        self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline(chr(127) * 100)
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
@@ -93,7 +92,7 @@ class AndroidStudioTests(LargeFrameworkTests):
     def test_android_studio_reinstall(self):
         """Reinstall android studio once installed"""
         for loop in ("install", "reinstall"):
-            self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
+            self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
             if loop == "reinstall":
                 # we only have one question, not the one about existing dir.
                 self.expect_and_no_warn("Android Studio is already installed.*\[.*\] ")
@@ -120,12 +119,12 @@ class AndroidStudioTests(LargeFrameworkTests):
         for loop in ("install", "reinstall"):
             if loop == "reinstall":
                 self.installed_path = "/tmp/foo"
-                self.child = pexpect.spawnu(self.command('{} android android-studio {}'.format(UMAKE,
-                                                                                               self.installed_path)))
+                self.child = spawn_process(self.command('{} android android-studio {}'.format(UMAKE,
+                                                                                              self.installed_path)))
                 self.expect_and_no_warn("Android Studio is already installed.*\[.*\] ")
                 self.child.sendline("y")
             else:
-                self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
+                self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
                 self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
                 self.child.sendline("")
             self.expect_and_no_warn("\[.*\] ")
@@ -151,14 +150,14 @@ class AndroidStudioTests(LargeFrameworkTests):
         for loop in ("install", "reinstall"):
             if loop == "reinstall":
                 self.installed_path = self.reinstalled_path
-                self.child = pexpect.spawnu(self.command('{} android android-studio {}'.format(UMAKE,
-                                                                                               self.installed_path)))
+                self.child = spawn_process(self.command('{} android android-studio {}'.format(UMAKE,
+                                                                                              self.installed_path)))
                 self.expect_and_no_warn("Android Studio is already installed.*\[.*\] ")
                 self.child.sendline("y")
                 self.expect_and_no_warn("{} isn't an empty directory.*there\? \[.*\] ".format(self.installed_path))
                 self.child.sendline("y")
             else:
-                self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
+                self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
                 self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
                 self.child.sendline("")
             self.expect_and_no_warn("\[.*\] ")
@@ -181,7 +180,7 @@ class AndroidStudioTests(LargeFrameworkTests):
                 # remove code (but not laucher)
                 self.remove_path(self.installed_path)
 
-            self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
+            self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
             self.expect_and_no_warn("\[.*\] ")
@@ -201,7 +200,7 @@ class AndroidStudioTests(LargeFrameworkTests):
                 # remove launcher, but not code
                 self.remove_path(self.get_launcher_path(self.desktop_filename))
 
-            self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
+            self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
             if loop == "reinstall":
@@ -216,10 +215,26 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
             self.assert_exec_exists()
 
+    def test_xdg_data_install_path(self):
+        """Install in path specified by XDG_DATA_HOME"""
+        xdg_data_path = "/tmp/foo"
+        self.installed_path = "{}/umake/android/android-studio".format(xdg_data_path)
+        cmd = "XDG_DATA_HOME={} {} android android-studio".format(xdg_data_path, UMAKE)
+        if not self.in_container:
+            cmd = 'bash -c "{}"'.format(cmd)
+
+        self.child = spawn_process(self.command(cmd))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("\[I Accept.*\]")
+        self.accept_default_and_wait()
+        self.close_and_check_status()
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
     def test_custom_install_path(self):
         """We install android studio in a custom path"""
         # We skip the existing directory prompt
-        self.child = pexpect.spawnu(self.command('{} android android-studio /tmp/foo'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-studio /tmp/foo'.format(UMAKE)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
         self.close_and_check_status()
@@ -230,8 +245,7 @@ class AndroidStudioTests(LargeFrameworkTests):
             self.installed_path = tempfile.mkdtemp()
         else:  # we still give a path for the container
             self.installed_path = os.path.join(tempfile.gettempdir(), "tmptests")
-        self.child = pexpect.spawnu(self.command('{} android android-studio {}'
-                                                 .format(UMAKE, self.installed_path)))
+        self.child = spawn_process(self.command('{} android android-studio {}'.format(UMAKE, self.installed_path)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
         self.close_and_check_status()
@@ -246,8 +260,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         else:  # we still give a path for the container
             self.installed_path = os.path.join(tempfile.gettempdir(), "tmptests")
         self.create_file(os.path.join(self.installed_path, "bar"), "foo")
-        self.child = pexpect.spawnu(self.command('{} android android-studio {}'
-                                                 .format(UMAKE, self.installed_path)))
+        self.child = spawn_process(self.command('{} android android-studio {}'.format(UMAKE, self.installed_path)))
         self.expect_and_no_warn("{} isn't an empty directory.*there\? \[.*\] ".format(self.installed_path))
         self.accept_default_and_wait()
         self.close_and_check_status()
@@ -256,7 +269,7 @@ class AndroidStudioTests(LargeFrameworkTests):
 
     def test_is_default_framework(self):
         """Android Studio is chosen as the default framework"""
-        self.child = pexpect.spawnu(self.command('{} android'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android'.format(UMAKE)))
         # we ensure it thanks to installed_path being the android-studio one
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendcontrol('C')
@@ -264,14 +277,14 @@ class AndroidStudioTests(LargeFrameworkTests):
 
     def test_is_default_framework_with_options(self):
         """Android Studio options are sucked in as the default framework"""
-        self.child = pexpect.spawnu(self.command('{} android /tmp/foo'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android /tmp/foo'.format(UMAKE)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
         self.close_and_check_status()
 
     def test_not_default_framework_with_path_without_path_separator(self):
         """Android Studio isn't selected for default framework with path without separator"""
-        self.child = pexpect.spawnu(self.command('{} android foo'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android foo'.format(UMAKE)))
         self.expect_and_no_warn("error: argument framework: invalid choice")
         self.accept_default_and_wait()
         self.close_and_check_status(exit_status=2)
@@ -279,14 +292,14 @@ class AndroidStudioTests(LargeFrameworkTests):
     def test_is_default_framework_with_user_path(self):
         """Android Studio isn't selected for default framework with path without separator"""
         # TODO: once a baseinstaller test: do a real install to check the path
-        self.child = pexpect.spawnu(self.command('{} android ~/foo'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android ~/foo'.format(UMAKE)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.accept_default_and_wait()
         self.close_and_check_status()
 
     def test_removal(self):
         """Remove android studio with default path"""
-        self.child = pexpect.spawnu(self.command('{} android android-studio'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("\[.*\] ")
@@ -297,7 +310,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.assertTrue(self.path_exists(self.installed_path))
 
         # now, remove it
-        self.child = pexpect.spawnu(self.command('{} android android-studio --remove'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-studio --remove'.format(UMAKE)))
         self.wait_and_close()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -306,7 +319,7 @@ class AndroidStudioTests(LargeFrameworkTests):
     def test_removal_non_default_path(self):
         """Remove android studio with non default path"""
         self.installed_path = "/tmp/foo"
-        self.child = pexpect.spawnu(self.command('{} android android-studio {}'.format(UMAKE, self.installed_path)))
+        self.child = spawn_process(self.command('{} android android-studio {}'.format(UMAKE, self.installed_path)))
         self.expect_and_no_warn("\[.*\] ")
         self.child.sendline("a")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -315,7 +328,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.assertTrue(self.path_exists(self.installed_path))
 
         # now, remove it
-        self.child = pexpect.spawnu(self.command('{} android android-studio --remove'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-studio --remove'.format(UMAKE)))
         self.wait_and_close()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -323,8 +336,8 @@ class AndroidStudioTests(LargeFrameworkTests):
 
     def test_automated_android_studio_install(self):
         """Install android studio automatically with no interactive options"""
-        self.child = pexpect.spawnu(self.command('{} android android-studio {} --accept-license'.format(UMAKE,
-                                                 self.installed_path)))
+        self.child = spawn_process(self.command('{} android android-studio {} --accept-license'.format(UMAKE,
+                                                self.installed_path)))
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
@@ -334,7 +347,7 @@ class AndroidStudioTests(LargeFrameworkTests):
 
     def test_try_removing_uninstalled_framework(self):
         """Trying to remove an uninstalled framework will fail"""
-        self.child = pexpect.spawnu(self.command('{} android android-studio --remove'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-studio --remove'.format(UMAKE)))
         self.wait_and_close(expect_warn=True, exit_status=1)
 
 
@@ -345,7 +358,7 @@ class AndroidSDKTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/android/android-sdk")
+        self.installed_path = os.path.join(self.install_base_path, "android", "android-sdk")
 
     @property
     def exec_path(self):
@@ -353,7 +366,7 @@ class AndroidSDKTests(LargeFrameworkTests):
 
     def test_default_android_sdk_install(self):
         """Install android sdk from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} android android-sdk'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-sdk'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
@@ -372,7 +385,7 @@ class AndroidSDKTests(LargeFrameworkTests):
                          0)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} android android-sdk'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-sdk'.format(UMAKE)))
         self.expect_and_no_warn("Android SDK is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
@@ -385,7 +398,7 @@ class AndroidNDKTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/android/android-ndk")
+        self.installed_path = os.path.join(self.install_base_path, "android", "android-ndk")
 
     @property
     def exec_path(self):
@@ -393,7 +406,7 @@ class AndroidNDKTests(LargeFrameworkTests):
 
     def test_default_android_ndk_install(self):
         """Install android ndk from scratch test case"""
-        self.child = pexpect.spawnu(self.command('{} android android-ndk'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-ndk'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
@@ -418,7 +431,7 @@ class AndroidNDKTests(LargeFrameworkTests):
                          0)
 
         # ensure that it's detected as installed:
-        self.child = pexpect.spawnu(self.command('{} android android-ndk'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} android android-ndk'.format(UMAKE)))
         self.expect_and_no_warn("Android NDK is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()

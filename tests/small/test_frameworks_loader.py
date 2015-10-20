@@ -27,7 +27,7 @@ import shutil
 import sys
 import tempfile
 from ..data.testframeworks.uninstantiableframework import Uninstantiable, InheritedFromUninstantiable
-from ..tools import get_data_dir, change_xdg_path, patchelem, LoggedTestCase
+from ..tools import get_data_dir, change_xdg_path, patchelem, LoggedTestCase, INSTALL_DIR
 import umake
 from umake import frameworks
 from umake.frameworks.baseinstaller import BaseInstaller
@@ -219,12 +219,12 @@ class TestFrameworkLoader(BaseFrameworkLoader):
     def test_default_install_path(self):
         """Default install path is what we expect, based on category-and framework prog_name"""
         self.assertEqual(self.categoryA.frameworks["framework-b"].install_path,
-                         os.path.expanduser("~/tools/category-a/framework-b"))
+                         os.path.expanduser("~/{}/category-a/framework-b".format(INSTALL_DIR)))
 
     def test_specified_at_load_install_path(self):
         """Default install path is overriden by framework specified install path at load time"""
         self.assertEqual(self.categoryA.frameworks["framework-a"].install_path,
-                         os.path.expanduser("~/tools/custom/frameworka"))
+                         os.path.expanduser("~/{}/custom/frameworka".format(INSTALL_DIR)))
 
     def test_no_restriction_installable_framework(self):
         """Framework with an no arch or version restriction is installable"""
@@ -461,7 +461,7 @@ class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
                          "/home/didrocks/foo/bar/android-studio")
         # isn't in the config
         self.assertEqual(self.CategoryHandler.categories['category-c'].frameworks["framework-a"].install_path,
-                         os.path.expanduser("~/tools/category-c/framework-a"))
+                         os.path.expanduser("~/{}/category-c/framework-a".format(INSTALL_DIR)))
 
 
 class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
@@ -501,8 +501,9 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         self.assertEqual(ConfigHandler().config,
                          {'frameworks': {
                              'category-a': {
-                                 'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
-                             }}})
+                                 'framework-b': {
+                                     'path': os.path.expanduser('~/{}/category-a/framework-b'.format(INSTALL_DIR))
+                                 }}}})
 
     def test_call_setup_save_and_then_mark_in_config_tweaked_path(self):
         """Calling mark_in_config with a custom install path save it in the configuration"""
@@ -522,7 +523,7 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         """Calling remove_from_config remove a framework from the config"""
         ConfigHandler().config = {'frameworks': {
             'category-a': {
-                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+                'framework-b': {'path': os.path.expanduser('~/{}/category-a/framework-b'.format(INSTALL_DIR))}
             }}}
         self.categoryA.frameworks["framework-b"].remove_from_config()
 
@@ -532,22 +533,24 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         """Calling remove_from_config remove a framework from the config but keep others"""
         ConfigHandler().config = {'frameworks': {
             'category-a': {
-                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')},
-                'framework-c': {'path': os.path.expanduser('~/tools/category-a/framework-c')}
+                'framework-b': {'path': os.path.expanduser('~/{}/category-a/framework-b'.format(INSTALL_DIR))},
+                'framework-c': {'path': os.path.expanduser('~/{}/category-a/framework-c'.format(INSTALL_DIR))}
             },
             'category-b': {
-                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+                'framework-b': {'path': os.path.expanduser('~/{}/category-a/framework-b'.format(INSTALL_DIR))}
             }}}
         self.categoryA.frameworks["framework-b"].remove_from_config()
 
         self.assertEqual(ConfigHandler().config,
                          {'frameworks': {
                              'category-a': {
-                                 'framework-c': {'path': os.path.expanduser('~/tools/category-a/framework-c')}
-                             },
+                                 'framework-c': {
+                                     'path': os.path.expanduser('~/{}/category-a/framework-c'.format(INSTALL_DIR))
+                                 }},
                              'category-b': {
-                                 'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
-                             }}})
+                                 'framework-b': {
+                                     'path': os.path.expanduser('~/{}/category-a/framework-b'.format(INSTALL_DIR))
+                                 }}}})
 
 
 class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):

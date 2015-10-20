@@ -32,4 +32,4 @@ class GoInContainer(ContainerTests, test_go.GoTests):
         self.port = "443"
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/go/go-lang".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "go", "go-lang")

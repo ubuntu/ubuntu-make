@@ -40,7 +40,7 @@ class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
 
 
 class EclipseIDEInContainerFTP(ContainerTests, test_ide.EclipseIDETests):
@@ -57,7 +57,7 @@ class EclipseIDEInContainerFTP(ContainerTests, test_ide.EclipseIDETests):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
 
 
 class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
@@ -73,7 +73,7 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/idea".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "idea")
 
     # This actually tests the code in BaseJetBrains
     def test_install_with_changed_download_page(self):
@@ -98,7 +98,7 @@ class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/idea-ultimate".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "idea-ultimate")
 
 
 class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
@@ -114,7 +114,7 @@ class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/pycharm".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm")
 
 
 class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducationalIDETests):
@@ -130,7 +130,7 @@ class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducation
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/pycharm-educational".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-educational")
 
 
 class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessionalIDETests):
@@ -146,7 +146,7 @@ class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessi
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/pycharm-professional".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-professional")
 
 
 class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
@@ -162,7 +162,7 @@ class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/rubymine".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "rubymine")
 
 
 class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
@@ -178,7 +178,7 @@ class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/webstorm".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "webstorm")
 
 
 class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
@@ -194,7 +194,7 @@ class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/phpstorm".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "phpstorm")
 
 
 class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
@@ -209,7 +209,7 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'arduino')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/arduino".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "arduino")
 
     def test_install_with_changed_download_page(self):
         """Installing arduino ide should fail if download page has significantly changed"""
