@@ -26,5 +26,9 @@ sys.path.insert(0, root_dir)
 
 from umake import main
 
+# Stamp that we are running a local version
+from umake import settings
+settings.from_dev = True
+
 if __name__ == '__main__':
     main()
