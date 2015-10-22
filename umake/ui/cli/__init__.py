@@ -30,6 +30,7 @@ from umake.interactions import InputText, TextWithChoices, LicenseAgreement, Dis
 from umake.ui import UI
 from umake.frameworks import BaseCategory
 from umake.tools import InputError, MainLoop
+from umake.settings import get_version
 
 logger = logging.getLogger(__name__)
 
@@ -160,6 +161,10 @@ def main(parser):
     # manipulate sys.argv for default frameworks:
     arg_to_parse = mangle_args_for_default_framework(sys.argv[1:])
     args = parser.parse_args(arg_to_parse)
+
+    if args.version:
+        print(get_version())
+        sys.exit(0)
 
     if not args.category:
         parser.print_help()

@@ -103,6 +103,8 @@ def main():
 
     parser.add_argument('-r', '--remove', action="store_true", help=_("Remove specified framework if installed"))
 
+    parser.add_argument('--version', action="store_true", help=_("Print version and exits"))
+
     # set logging ignoring unknown options
     set_logging_from_args(sys.argv, parser)
 
