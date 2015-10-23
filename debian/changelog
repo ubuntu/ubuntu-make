@@ -1,3 +1,9 @@
+ubuntu-make (15.10.2) wily; urgency=medium
+
+  * aa
+
+ -- Didier Roche <didrocks@ubuntu.com>  Fri, 23 Oct 2015 09:45:33 +0200
+
 ubuntu-make (15.10) wily; urgency=medium
 
   * Fix Dartlang download due to its new website layout.
