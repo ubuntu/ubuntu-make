@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# We ensure we bump everything needed when doing a release.
+# We do not use debcommit, but just put "releasing" in the changelog,
+# we match "releas", ignoring the case and change+tag version
+# 0. Ensuring that we have some UNRELEASED content in debian/changelog
+# 1. Compute the new release number, based on older umake/version
+# 2. We update umake/version with the new release number
+# 3. Bumping debian/changelog version as well
+# 4. Then, modifying the commit message itself to match the correct version
+
+grep -qri releas $1
+found=$?
+
+# we are releasing a version, generate the version
+if [ $found -eq 0 ]; then
+    scriptdir=$(dirname $(readlink -f $0))
+    rootdir="$scriptdir/../.."
+    releasingfile="$rootdir/.git/releasing"
+
+    # if we are already releasing (and so, amending the commit), don't redo anything (avoid loop)
+    if [ -f $releasingfile ]; then
+        exit 0
+    fi
+
+    head -1 ${rootdir}/debian/changelog  | grep -q UNRELEASED
+    if [ $? -ne 0 ]; then
+        echo "This commits says that it's releasing, but no UNRELEASED in debian/changelog, exiting"
+        exit 1
+    fi
+
+    # get a new valid version. This updates umake/version as well
+    set -e
+    version=$(${scriptdir}/update_version
+    git add ${rootdir}/umake/version)
+    dch -v ${version} ""
+    dch -r ""
+    git add ${rootdir}/debian/changelog
+
+    echo "releasing package ubuntu-make ${version}" > $1
+    set +e
+fi
