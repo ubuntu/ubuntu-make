@@ -36,12 +36,8 @@ def get_version():
         return version
     import subprocess
     try:
-        # append sha1 if running from a branch
-        version += "+" + subprocess.check_output(["git", "rev-parse", "HEAD"], env={'LANG': 'C'})\
-            .decode('utf-8').strip()
-        # append dirty if local changes
-        if subprocess.check_output(["git", "diff-index", "HEAD"]).decode('utf-8').strip() != "":
-            version += "+dirty"
+        # use git describe to get a revision ref if running from a branch. Will append dirty if local changes
+        version = subprocess.check_output(["git", "describe", "--tags", "--dirty"]).decode('utf-8').strip()
     except subprocess.CalledProcessError:
         version += "+unknown"
     return version
