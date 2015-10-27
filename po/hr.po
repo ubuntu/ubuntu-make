@@ -27,8 +27,8 @@ msgstr ""
 
 #: umake/__init__.py:113
 msgid ""
-"Note that you can also configure different debug logging behavior using "
-"LOG_CFG that points to a log yaml profile."
+"Note that you can also configure different debug logs behaviors using "
+"LOG_CFG pointing to a log yaml profile."
 msgstr ""
 
 #: umake/__init__.py:116
