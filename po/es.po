@@ -27,8 +27,8 @@ msgstr "Instalar y configurar entornos de desarrollo fácilmente en Ubuntu"
 
 #: umake/__init__.py:113
 msgid ""
-"Note that you can also configure different debug logging behavior using "
-"LOG_CFG that points to a log yaml profile."
+"Note that you can also configure different debug logs behaviors using "
+"LOG_CFG pointing to a log yaml profile."
 msgstr ""
 "También puede configurar distintos comportamientos para los registros de "
 "depuración usando LOG_CFG apuntando a un perfil yaml."

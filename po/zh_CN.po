@@ -27,8 +27,8 @@ msgstr "在 Ubuntu 上轻松部署和设置开发环境"
 
 #: umake/__init__.py:113
 msgid ""
-"Note that you can also configure different debug logging behavior using "
-"LOG_CFG that points to a log yaml profile."
+"Note that you can also configure different debug logs behaviors using "
+"LOG_CFG pointing to a log yaml profile."
 msgstr "请注意，您还可以通过 LOG_CFG 指向的 yaml 配置文件来设置不同的调试日志行为。"
 
 #: umake/__init__.py:116
