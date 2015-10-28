@@ -89,3 +89,8 @@ class BasicCLI(LargeFrameworkTests):
         result = subprocess.check_output(self.command_as_list(commands), env=env,
                                          stderr=subprocess.STDOUT)
         self.assertIn("Logging level set to INFO", result.decode("utf-8"))
+
+    def test_version(self):
+        """We display a version"""
+        result = subprocess.check_output(self.command_as_list([UMAKE, '--version']))
+        self.assertNotEqual(result, "")
