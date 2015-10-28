@@ -334,6 +334,25 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
 
+    def test_removal_global_option(self):
+        """Remove android studio via global option (before category) should delete it"""
+        self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("\[.*\] ")
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.path_exists(self.installed_path))
+
+        # now, remove it
+        self.child = spawn_process(self.command('{} --remove android android-studio'.format(UMAKE)))
+        self.wait_and_close()
+
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.path_exists(self.installed_path))
+
     def test_automated_android_studio_install(self):
         """Install android studio automatically with no interactive options"""
         self.child = spawn_process(self.command('{} android android-studio {} --accept-license'.format(UMAKE,
