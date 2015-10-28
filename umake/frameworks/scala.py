@@ -63,4 +63,4 @@ class ScalaLang(umake.frameworks.baseinstaller.BaseInstaller):
         """Add the necessary Scala environment variables"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")},
                                     "SCALA_HOME": {"value": self.install_path}})
-        UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation to work properly".format("Scala")")))
+        UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation to work properly").format(self.name)))
