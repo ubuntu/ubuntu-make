@@ -38,6 +38,6 @@ def get_version():
     try:
         # use git describe to get a revision ref if running from a branch. Will append dirty if local changes
         version = subprocess.check_output(["git", "describe", "--tags", "--dirty"]).decode('utf-8').strip()
-    except subprocess.CalledProcessError:
+    except (subprocess.CalledProcessError, FileNotFoundError):
         version += "+unknown"
     return version
