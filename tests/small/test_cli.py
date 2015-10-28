@@ -185,3 +185,18 @@ class TestCLIFromFrameworks(LoggedTestCase):
         """No framework in a category without default are preserved with global and ext options"""
         self.assertEqual(mangle_args_for_default_framework(["-v", "category-f", "--foo", "install_path"]),
                          ["-v", "category-f", "--foo", "install_path"])
+
+    def test_mangle_args_for_category_with_remove_global_options(self):
+        """We mangle the remove option if global (before the category name) to append it to the framework option"""
+        self.assertEqual(mangle_args_for_default_framework(["--remove", "category-a", "framework-a"]),
+                         ["category-a", "framework-a", "--remove"])
+
+    def test_mangle_args_for_category_with_remove_framework_options_middle(self):
+        """We mangle the remove option if framework (between category and framework)"""
+        self.assertEqual(mangle_args_for_default_framework(["category-a", "--remove", "framework-a"]),
+                         ["category-a", "framework-a", "--remove"])
+
+    def test_mangle_args_for_category_with_remove_framework_options(self):
+        """We don't change the remove option if after framework"""
+        self.assertEqual(mangle_args_for_default_framework(["category-a", "framework-a", "--remove", "--bar"]),
+                         ["category-a", "framework-a", "--remove", "--bar"])
