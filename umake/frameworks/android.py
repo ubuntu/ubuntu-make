@@ -134,7 +134,7 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
                                                        os.path.join("$ANDROID_HOME", "platform-tools")]}})
         UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation to work properly").format(self.name)))
 
-        """Print wiki page message"""
+        # print wiki page message
         UI.delayed_display(DisplayMessage("SDK installed in {}. More information on how to use it on {}".format(
                                           self.install_path,
                                           "https://developer.android.com/sdk/installing/adding-packages.html")))
@@ -166,7 +166,7 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
         """Add necessary environment variables"""
         add_env_to_user(self.name, {"ANDROID_NDK": {"value": self.install_path, "keep": False}})
 
-        """Print wiki page message"""
+        # print wiki page message
         UI.display(DisplayMessage("NDK installed in {}. More information on how to use it on {}".format(
                                   self.install_path,
                                   "https://developer.android.com/tools/sdk/ndk/index.html#GetStarted")))
