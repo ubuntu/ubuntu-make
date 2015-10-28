@@ -1,0 +1,7 @@
+#!/bin/sh
+
+params=$@
+if [ "$params" = "describe --tags --dirty" ]; then
+    echo "42.03-25-g1fd9507"
+fi
+
