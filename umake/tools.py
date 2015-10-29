@@ -342,7 +342,9 @@ def switch_to_current_user():
 
 def remove_framework_envs_from_user(framework_tag):
     """Remove all envs from user if found"""
-    profile_filepath = os.path.join(os.path.expanduser('~'), ".profile")
+    current_shell = os.getenv('SHELL').lower()
+    profile_filename = '.zprofile' if 'zsh' in current_shell else '.profile'
+    profile_filepath = os.path.join(os.path.expanduser('~'), profile_filename)
     content = ""
     framework_header = profile_tag.format(framework_tag)
     try:
