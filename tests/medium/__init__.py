@@ -42,14 +42,16 @@ class ContainerTests(LoggedTestCase):
         self.umake_path = get_root_dir()
         self.install_base_path = os.path.expanduser("/home/{}/{}".format(self.DOCKER_USER, INSTALL_DIR))
         self.image_name = self.DOCKER_TESTIMAGE
+        if not hasattr(self, "hosts"):
+            self.hosts = {}
         command = [get_docker_path(), "run"]
         runner_cmd = "mkdir -p {}; ln -s {}/ {};".format(os.path.dirname(get_root_dir()), self.UMAKE_IN_CONTAINER,
                                                          get_root_dir())
 
         # start the local server at container startup
-        if hasattr(self, "hostnames"):
+        for port, hostnames in self.hosts.items():
             ftp_redir = hasattr(self, 'ftp')
-            for hostname in self.hostnames:
+            for hostname in hostnames:
                 if "-h" not in command:
                     command.extend(["-h", hostname])
                 runner_cmd += 'sudo echo "127.0.0.1 {}" >> /etc/hosts;'.format(hostname)
@@ -58,13 +60,13 @@ class ContainerTests(LoggedTestCase):
                 self.UMAKE_IN_CONTAINER,
                 os.getenv("PATH"), os.getenv("VIRTUAL_ENV"),
                 os.path.join(get_tools_helper_dir(), "run_local_server"),
-                self.port,
+                str(port),
                 str(ftp_redir),
-                " ".join(self.hostnames))
+                " ".join(hostnames) if port == 443 else "")
 
             if ftp_redir:
                 runner_cmd += "/usr/bin/twistd ftp -p 21 -r {};".format(os.path.join(get_data_dir(), 'server-content',
-                                                                                     self.hostnames[0]))
+                                                                                     hostnames[0]))
 
         if hasattr(self, "apt_repo_override_path"):
             runner_cmd += "sudo sh -c 'echo deb file:{} / > /etc/apt/sources.list';sudo apt-get update;".format(
