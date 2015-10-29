@@ -988,3 +988,16 @@ class TestUserENV(LoggedTestCase):
 
         profile_content = open(profile_file).read()
         self.assertEqual(profile_content, "Foo\nBar\nexport BAR=baz")
+
+    @patch("umake.tools.os.path.expanduser")
+    def test_remove_user_env_zsh(self, expanderusermock):
+        """Remove an env from a user setup using zsh"""
+        os.environ['SHELL'] = '/bin/zsh'
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".zprofile")
+        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A"
+                                      "\nexport FOO=bar\n\nexport BAR=baz")
+        tools.remove_framework_envs_from_user("framework A")
+
+        profile_content = open(profile_file).read()
+        self.assertEqual(profile_content, "Foo\nBar\nexport BAR=baz")
