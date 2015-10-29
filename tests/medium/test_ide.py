@@ -34,8 +34,7 @@ class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.eclipse.org"]
-        self.port = "443"
+        self.hosts = {443: ["www.eclipse.org"]}
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
         super().setUp()
@@ -50,8 +49,7 @@ class EclipseIDEInContainerFTP(ContainerTests, test_ide.EclipseIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.eclipse.org"]
-        self.port = "443"
+        self.hosts = {443: ["www.eclipse.org"]}
         self.ftp = True
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
@@ -67,8 +65,7 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.jetbrains.com"]
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -92,8 +89,7 @@ class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.jetbrains.com"]
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -108,8 +104,7 @@ class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.jetbrains.com"]
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -124,8 +119,7 @@ class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducation
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.jetbrains.com"]
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -140,8 +134,7 @@ class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessi
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.jetbrains.com"]
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -156,8 +149,7 @@ class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.jetbrains.com"]
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -172,8 +164,7 @@ class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.jetbrains.com"]
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -188,8 +179,7 @@ class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.jetbrains.com"]
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -204,8 +194,7 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.arduino.cc"]
-        self.port = "80"
+        self.hosts = {80: ["www.arduino.cc"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'arduino')
         super().setUp()
         # override with container path
