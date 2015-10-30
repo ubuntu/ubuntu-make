@@ -235,3 +235,46 @@ class TestDecompressor(LoggedTestCase):
         self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'subdir', 'otherfile')))
         # the original file is there here
         self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'foo')))
+
+    def test_decompress_multiple(self):
+        """We decompress multiple valid .tgz file successfully"""
+        filepath1 = os.path.join(self.compressfiles_dir, "valid.tgz")
+        filepath2 = os.path.join(self.compressfiles_dir, "valid2.tgz")
+        Decompressor({open(filepath1, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=''),
+                      open(filepath2, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='')}, self.on_done)
+        self.wait_for_callback(self.on_done)
+
+        results = self.on_done.call_args[0][0]
+        self.assertEqual(len(results), 2, str(results))
+        for fd in results:
+            self.assertIsNone(results[fd].error)
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'simplefile')))
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content', 'subdir')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'subdir', 'otherfile')))
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content2')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content2', 'simplefile2')))
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content2', 'subdir2')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content2', 'subdir2', 'otherfile')))
+        self.assertEqual(self.on_done.call_count, 1, "Global done callback is only called once")
+
+    def test_decompress_multiple_with_dir(self):
+        """We decompress multiple valid .tgz file successfully with different dir to extract"""
+        filepath1 = os.path.join(self.compressfiles_dir, "valid.tgz")
+        filepath2 = os.path.join(self.compressfiles_dir, "valid2.tgz")
+        Decompressor({open(filepath1, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='server-content'),
+                      open(filepath2, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='server-content2')},
+                     self.on_done)
+        self.wait_for_callback(self.on_done)
+
+        results = self.on_done.call_args[0][0]
+        self.assertEqual(len(results), 2, str(results))
+        for fd in results:
+            self.assertIsNone(results[fd].error)
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'simplefile')))
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'subdir')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'subdir', 'otherfile')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'simplefile2')))
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'subdir2')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'subdir2', 'otherfile')))
+        self.assertEqual(self.on_done.call_count, 1, "Global done callback is only called once")
