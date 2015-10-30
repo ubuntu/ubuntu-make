@@ -308,6 +308,7 @@ class TestDownloadCenter(LoggedTestCase):
             with open(join(self.server_dir, filename), 'rb') as file_on_disk:
                 self.assertEqual(file_on_disk.read(),
                                  map_result[self.build_server_address(filename)].fd.read())
+        self.assertEqual(self.callback.call_count, 1, "Global done callback is only called once")
 
     def test_multiple_downloads_with_reports(self):
         """we deliver more than on download in parallel"""
@@ -329,6 +330,7 @@ class TestDownloadCenter(LoggedTestCase):
             result_dict[self.build_server_address(filename)] = {'size': file_size,
                                                                 'current': file_size}
         self.assertEqual(report.call_args, call(result_dict))
+        self.assertEqual(self.callback.call_count, 1, "Global done callback is only called once")
 
     def test_404_url(self):
         """we return an error for a request including a 404 url"""
@@ -344,6 +346,7 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.fd)
         self.expect_warn_error = True
+        self.assertEqual(self.callback.call_count, 1, "Global done callback is only called once")
 
     def test_multiple_with_one_404_url(self):
         """we raise an error when we try to download 404 urls"""
@@ -359,6 +362,7 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNotNone(map_result[self.build_server_address("does_not_exist")].error)
         self.assertIsNotNone(map_result[self.build_server_address("simplefile")].fd)
         self.expect_warn_error = True
+        self.assertEqual(self.callback.call_count, 1, "Global done callback is only called once")
 
     def test_in_memory_download(self):
         """we deliver download on memory objects"""
