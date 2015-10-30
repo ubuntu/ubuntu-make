@@ -292,6 +292,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         """Chain up to main get_progress, returning current value between 0 and 100
 
         First call initialize the balance between requirements and download progress"""
+        # don't push any progress until we have the total download size
+        if len(downloads) != len(self.download_requests):
+            return
         total_size = 0
         total_current_size = 0
         for download in downloads:
