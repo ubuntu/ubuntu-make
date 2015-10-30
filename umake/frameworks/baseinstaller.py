@@ -52,7 +52,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         having a set of downloads to proceed, some eventual supported_archs."""
         self.download_page = kwargs["download_page"]
         self.checksum_type = kwargs.get("checksum_type", None)
-        self.dir_to_decompress_in_tarball = kwargs.get("dir_to_decompress_in_tarball", None)
+        self.dir_to_decompress_in_tarball = kwargs.get("dir_to_decompress_in_tarball", "")
         self.required_files_path = kwargs.get("required_files_path", [])
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
