@@ -71,6 +71,7 @@ class TestDecompressor(LoggedTestCase):
         self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'simplefile')))
         self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content', 'subdir')))
         self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'subdir', 'otherfile')))
+        self.assertEqual(self.on_done.call_count, 1, "Global done callback is only called once")
 
     def test_decompress_move_dir_content(self):
         """We decompress a valid file decompressing one subdir content (other files in root are kept in place)"""
@@ -99,6 +100,7 @@ class TestDecompressor(LoggedTestCase):
         self.assertEqual(len(results), 1, str(results))
         for fd in results:
             self.assertIsNotNone(results[fd].error)
+        self.assertEqual(self.on_done.call_count, 1, "Global done callback is only called once")
 
     def test_decompress_content_glob(self):
         """We decompress a valid file decompressing one subdir content with a glob schema"""
