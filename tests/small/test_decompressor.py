@@ -196,3 +196,42 @@ class TestDecompressor(LoggedTestCase):
         self.assertEqual(len(results), 1, str(results))
         for fd in results:
             self.assertIsNotNone(results[fd].error)
+
+    def test_decompress_content_keep_existing_files(self):
+        """We decompress a valid file in a directory which already have some content. This one is left."""
+        filepath = os.path.join(self.compressfiles_dir, "valid.tgz")
+        open(os.path.join(self.tempdir, "foo"), 'w').write('')
+        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='')},
+                     self.on_done)
+        self.wait_for_callback(self.on_done)
+
+        results = self.on_done.call_args[0][0]
+        self.assertEqual(len(results), 1, str(results))
+        for fd in results:
+            self.assertIsNone(results[fd].error)
+        self.assertTrue(os.path.isdir(self.tempdir))
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'simplefile')))
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'server-content', 'subdir')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'server-content', 'subdir', 'otherfile')))
+        # the original file is there here
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'foo')))
+
+    def test_decompress_move_dir_content_keep_existing_files(self):
+        """We decompress a valid file changing dir in a directory which already have some content. This one is left."""
+        filepath = os.path.join(self.compressfiles_dir, "valid.tgz")
+        open(os.path.join(self.tempdir, "foo"), 'w').write('')
+        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='server-content')},
+                     self.on_done)
+        self.wait_for_callback(self.on_done)
+
+        results = self.on_done.call_args[0][0]
+        self.assertEqual(len(results), 1, str(results))
+        for fd in results:
+            self.assertIsNone(results[fd].error)
+        self.assertTrue(os.path.isdir(self.tempdir))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'simplefile')))
+        self.assertTrue(os.path.isdir(os.path.join(self.tempdir, 'subdir')))
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'subdir', 'otherfile')))
+        # the original file is there here
+        self.assertTrue(os.path.isfile(os.path.join(self.tempdir, 'foo')))
