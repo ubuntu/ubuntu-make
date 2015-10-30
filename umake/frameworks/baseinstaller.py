@@ -346,6 +346,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         for dir_to_remove in self._paths_to_clean:
             with suppress(FileNotFoundError):
                 shutil.rmtree(dir_to_remove)
+            # marked them as cleaned
+            self._paths_to_clean = []
+
+        os.makedirs(self.install_path, exist_ok=True)
         decompress_fds = {}
         for fd in fds:
             decompress_fds[fd] = Decompressor.DecompressOrder(dir=self.dir_to_decompress_in_tarball,
