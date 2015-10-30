@@ -435,7 +435,7 @@ class AndroidNDKTests(LargeFrameworkTests):
 
         # we have an installed ndk exec
         self.assert_exec_exists()
-        cmd_list = ["echo $ANDROID_NDK"]
+        cmd_list = ["echo $NDK_ROOT"]
         if not self.in_container:
             relogging_command = ["bash", "-l", "-c"]
             relogging_command.extend(cmd_list)
