@@ -135,14 +135,14 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
         self.download_requests.append(DownloadItem(self.DOWNLOAD_URL, None))
         self.start_download_and_install()
 
-    def decompress_and_install(self, fd):
+    def decompress_and_install(self, fds):
         """Override to strip the unwanted shell header part"""
         logger.debug("Start looking at the archive inside the script")
-        for line in fd:
+        for line in fds[0]:
             if line.startswith(b"__ARCHIVE_BEGINS_HERE__"):
                 logger.debug("Found the archive inside the script")
                 break
-        super().decompress_and_install(fd)
+        super().decompress_and_install(fds)
 
     def post_install(self):
         """Create the Unity 3D launcher and setuid chrome sandbox"""
