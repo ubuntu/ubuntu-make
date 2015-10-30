@@ -82,7 +82,7 @@ class DownloadCenter:
 
         self._download_progress = {}
 
-        executor = futures.ThreadPoolExecutor(max_workers=3)
+        executor = futures.ThreadPoolExecutor(max_workers=len(urls))
         for url_request in self._urls:
             # grab the md5sum if any
             # switch between inline memory and temp file
