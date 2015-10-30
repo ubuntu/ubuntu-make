@@ -26,6 +26,7 @@ import shutil
 import stat
 import subprocess
 import tarfile
+import tempfile
 import zipfile
 
 
@@ -82,6 +83,8 @@ class Decompressor:
 
         dir can be a regexp"""
         logger.debug("Extracting to {}".format(dest))
+        # we temporarily extract to this destination the archive content
+        tempdest = tempfile.mktemp(dir=dest)
         # We don't use shutil to automatically select the right codec as we need to ensure that zipfile
         # will keep the original perms.
         archive = None
@@ -93,7 +96,7 @@ class Decompressor:
             except tarfile.ReadError:
                 archive = self.ZipFileWithPerm(fd.name)
                 logger.debug("zip file")
-            archive.extractall(dest)
+            archive.extractall(tempdest)
         except:
             # try to treat it as self-extractable, some format don't like being opened at the same time though, so link
             # it.
@@ -102,22 +105,18 @@ class Decompressor:
             fd.close()
             st = os.stat(name)
             os.chmod(name, st.st_mode | stat.S_IEXEC)
-            archive = subprocess.Popen([name, "-o{}".format(dest)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            archive = subprocess.Popen([name, "-o{}".format(tempdest)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             archive.communicate()
             logger.debug("executable file")
             os.remove(name)
 
-        # we want the content of dir to be the root of dest, rename and move content
-        if dir is not None:
-            try:
-                dir_path = glob(os.path.join(dest, dir))[0]
-            except IndexError:
-                raise BaseException("Couldn't find {} in tarball".format(dir_path))
-            tempdir = os.path.join(dest, "footemp")
-            os.rename(dir_path, tempdir)
-            for filename in os.listdir(tempdir):
-                shutil.move(os.path.join(tempdir, filename), os.path.join(dest, filename))
-            os.rmdir(tempdir)
+        try:
+            dir_path = glob(os.path.join(tempdest, dir))[0]
+        except IndexError:
+            raise BaseException("Couldn't find {} in tarball".format(dir))
+        for filename in os.listdir(dir_path):
+            shutil.move(os.path.join(dir_path, filename), os.path.join(dest, filename))
+        shutil.rmtree(tempdest)
 
     def _one_done(self, future):
         """Callback that will be called once one decompress finishes.
