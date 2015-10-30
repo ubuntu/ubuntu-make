@@ -60,7 +60,7 @@ class TestDecompressor(LoggedTestCase):
     def test_decompress(self):
         """We decompress a valid .tgz file successfully"""
         filepath = os.path.join(self.compressfiles_dir, "valid.tgz")
-        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
+        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='')}, self.on_done)
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
@@ -92,7 +92,7 @@ class TestDecompressor(LoggedTestCase):
         """We return an error if the compressed file is invalid"""
         self.expect_warn_error = True
         filepath = os.path.join(self.compressfiles_dir, "invalid.tgz")
-        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
+        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='')}, self.on_done)
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
@@ -119,7 +119,7 @@ class TestDecompressor(LoggedTestCase):
     def test_decompress_zip(self):
         """We decompress a valid zip file successfully"""
         filepath = os.path.join(self.compressfiles_dir, "valid.zip")
-        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
+        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='')}, self.on_done)
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
@@ -135,7 +135,7 @@ class TestDecompressor(LoggedTestCase):
     def test_decompress_zip_good_permission(self):
         """We decompress a valid zip file successfully, retaining the right permissions"""
         filepath = os.path.join(self.compressfiles_dir, "valid.zip")
-        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
+        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='')}, self.on_done)
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
@@ -153,7 +153,7 @@ class TestDecompressor(LoggedTestCase):
     def test_decompress_exec(self):
         """We decompress a valid executable file successfully"""
         filepath = os.path.join(self.compressfiles_dir, "simple.bin")
-        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
+        Decompressor({open(filepath, 'rb'): Decompressor.DecompressOrder(dest=self.tempdir, dir='')}, self.on_done)
         self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
@@ -172,7 +172,7 @@ class TestDecompressor(LoggedTestCase):
             for line in fd:
                 if line.startswith(b"== ARCHIVE TAG =="):
                     break
-            Decompressor({fd: Decompressor.DecompressOrder(dest=self.tempdir, dir=None)}, self.on_done)
+            Decompressor({fd: Decompressor.DecompressOrder(dest=self.tempdir, dir='')}, self.on_done)
             self.wait_for_callback(self.on_done)
 
         results = self.on_done.call_args[0][0]
