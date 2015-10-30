@@ -40,6 +40,8 @@ logger = logging.getLogger(__name__)
 
 class BaseInstaller(umake.frameworks.BaseFramework):
 
+    DIRECT_COPY_EXT = ['.svg', '.png', '.ico', '.jpg', '.jpeg']
+
     def __new__(cls, *args, **kwargs):
         "This class is not meant to be instantiated, so __new__ returns None."
         if cls == BaseInstaller:
@@ -352,8 +354,16 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         os.makedirs(self.install_path, exist_ok=True)
         decompress_fds = {}
         for fd in fds:
-            decompress_fds[fd] = Decompressor.DecompressOrder(dir=self.dir_to_decompress_in_tarball,
-                                                              dest=self.install_path)
+            direct_copy = False
+            for ext in self.DIRECT_COPY_EXT:
+                if fd.name.endswith(ext):
+                    direct_copy = True
+                    break
+            if direct_copy:
+                shutil.copy2(fd.name, os.path.join(self.install_path, fd.name))
+            else:
+                decompress_fds[fd] = Decompressor.DecompressOrder(dir=self.dir_to_decompress_in_tarball,
+                                                                  dest=self.install_path)
         Decompressor(decompress_fds, self.decompress_and_install_done)
         UI.display(UnknownProgress(self.iterate_until_install_done))
 
