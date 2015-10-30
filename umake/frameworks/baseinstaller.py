@@ -323,29 +323,34 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.pbar.finish()
         # display eventual errors
         error_detected = False
-        fd = None
         if self.result_requirement.error:
             logger.error("Package requirements can't be met: {}".format(self.result_requirement.error))
             error_detected = True
+
+        # check for any errors and collect fds
+        fds = []
         for url in self.result_download:
             if self.result_download[url].error:
                 logger.error(self.result_download[url].error)
                 error_detected = True
-            fd = self.result_download[url].fd
+            fds.append(self.result_download[url].fd)
         if error_detected:
             UI.return_main_screen(status_code=1)
 
-        self.decompress_and_install(fd)
+        # now decompress
+        self.decompress_and_install(fds)
 
-    def decompress_and_install(self, fd):
+    def decompress_and_install(self, fds):
         UI.display(DisplayMessage("Installing {}".format(self.name)))
         # empty destination directory if reinstall
         for dir_to_remove in self._paths_to_clean:
             with suppress(FileNotFoundError):
                 shutil.rmtree(dir_to_remove)
-
-        Decompressor({fd: Decompressor.DecompressOrder(dir=self.dir_to_decompress_in_tarball, dest=self.install_path)},
-                     self.decompress_and_install_done)
+        decompress_fds = {}
+        for fd in fds:
+            decompress_fds[fd] = Decompressor.DecompressOrder(dir=self.dir_to_decompress_in_tarball,
+                                                              dest=self.install_path)
+        Decompressor(decompress_fds, self.decompress_and_install_done)
         UI.display(UnknownProgress(self.iterate_until_install_done))
 
     def post_install(self):
