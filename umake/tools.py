@@ -182,7 +182,12 @@ class InputError(BaseException):
 
 
 def get_current_arch():
-    """Get current configuration dpkg architecture"""
+    """Get current configuration dpkg architecture.
+
+    Possible outputs:
+    * amd64
+    * i386
+    """
     global _current_arch
     if _current_arch is None:
         _current_arch = subprocess.check_output(["dpkg", "--print-architecture"], universal_newlines=True).rstrip("\n")
