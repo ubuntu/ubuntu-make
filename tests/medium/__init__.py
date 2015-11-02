@@ -22,7 +22,7 @@
 import os
 import subprocess
 from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path, get_data_dir, \
-    swap_file_and_restore, INSTALL_DIR, spawn_process
+    swap_file_and_restore, INSTALL_DIR, spawn_process, BRANCH_TESTS, SYSTEM_UMAKE_DIR
 from time import sleep
 from nose.tools import nottest
 
@@ -50,6 +50,12 @@ class ContainerTests(LoggedTestCase):
         runner_cmd = "mkdir -p {}; ln -s {}/ {};".format(os.path.dirname(get_root_dir()), self.UMAKE_TOOLS_IN_CONTAINER,
                                                          get_root_dir())
 
+        if not BRANCH_TESTS:
+            # create a system binary which will use system umake version (without having the package installed)
+            bin_umake = "/usr/bin/umake"
+            runner_cmd += "echo '#!/usr/bin/env python3\nfrom umake import main\nif __name__ == \"__main__\":" \
+                          "\n  main()'>{bin_umake}; chmod +x {bin_umake};".format(bin_umake=bin_umake)
+
         # start the local server at container startup
         for port, hostnames in self.hosts.items():
             ftp_redir = hasattr(self, 'ftp')
@@ -74,6 +80,10 @@ class ContainerTests(LoggedTestCase):
             runner_cmd += "sh -c 'echo deb file:{} / > /etc/apt/sources.list'; apt-get update;".format(
                 self.apt_repo_override_path)
         runner_cmd += "/usr/sbin/sshd -D"
+
+        # we bindmount system umake directory
+        if not BRANCH_TESTS:
+            command.extend(["-v", "{system_umake}:{system_umake}".format(system_umake=SYSTEM_UMAKE_DIR)])
 
         command.extend(["-d", "-v", "{}:{}".format(self.umake_path, self.UMAKE_TOOLS_IN_CONTAINER),
                         "--dns=8.8.8.8", "--dns=8.8.4.4",  # suppress local DNS warning
