@@ -37,9 +37,11 @@ from unittest.mock import Mock
 
 logger = logging.getLogger(__name__)
 
+BRANCH_TESTS = False
 DOCKER = None
 UMAKE = "umake"
 INSTALL_DIR = ".local/share/umake"
+SYSTEM_UMAKE_DIR = "/usr/lib/python3/dist-packages/umake"
 
 
 class LoggedTestCase(TestCase):
@@ -138,7 +140,9 @@ def swap_file_and_restore(filepath):
 
 def set_local_umake():
     global UMAKE
+    global BRANCH_TESTS
     UMAKE = "./bin/umake"
+    BRANCH_TESTS = True
 
 
 def get_docker_path():
