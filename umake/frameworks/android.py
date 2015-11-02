@@ -165,7 +165,7 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Add necessary environment variables"""
-        add_env_to_user(self.name, {"ANDROID_NDK": {"value": self.install_path, "keep": False}})
+        add_env_to_user(self.name, {"NDK_ROOT": {"value": self.install_path, "keep": False}})
 
         # print wiki page message
         UI.display(DisplayMessage("NDK installed in {}. More information on how to use it on {}".format(
