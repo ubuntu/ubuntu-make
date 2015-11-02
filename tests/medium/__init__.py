@@ -33,7 +33,7 @@ class ContainerTests(LoggedTestCase):
     DOCKER_USER = "user"
     DOCKER_PASSWORD = "user"
     DOCKER_TESTIMAGE = "didrocks/docker-umake-manual"
-    UMAKE_IN_CONTAINER = "/umake"
+    UMAKE_TOOLS_IN_CONTAINER = "/umake"
     APT_FAKE_REPO_PATH = "/apt-fake-repo"
 
     def setUp(self):
@@ -45,7 +45,9 @@ class ContainerTests(LoggedTestCase):
         if not hasattr(self, "hosts"):
             self.hosts = {}
         command = [get_docker_path(), "run"]
-        runner_cmd = "mkdir -p {}; ln -s {}/ {};".format(os.path.dirname(get_root_dir()), self.UMAKE_IN_CONTAINER,
+
+        # bind master used for testing tools code inside the container
+        runner_cmd = "mkdir -p {}; ln -s {}/ {};".format(os.path.dirname(get_root_dir()), self.UMAKE_TOOLS_IN_CONTAINER,
                                                          get_root_dir())
 
         # start the local server at container startup
@@ -57,7 +59,7 @@ class ContainerTests(LoggedTestCase):
                 runner_cmd += 'sudo echo "127.0.0.1 {}" >> /etc/hosts;'.format(hostname)
             runner_cmd += "{} {} 'sudo -E env PATH={} VIRTUAL_ENV={} {} {} {} {}';".format(
                 os.path.join(get_tools_helper_dir(), "run_in_umake_dir_async"),
-                self.UMAKE_IN_CONTAINER,
+                self.UMAKE_TOOLS_IN_CONTAINER,
                 os.getenv("PATH"), os.getenv("VIRTUAL_ENV"),
                 os.path.join(get_tools_helper_dir(), "run_local_server"),
                 str(port),
@@ -73,7 +75,7 @@ class ContainerTests(LoggedTestCase):
                 self.apt_repo_override_path)
         runner_cmd += "/usr/sbin/sshd -D"
 
-        command.extend(["-d", "-v", "{}:{}".format(self.umake_path, self.UMAKE_IN_CONTAINER),
+        command.extend(["-d", "-v", "{}:{}".format(self.umake_path, self.UMAKE_TOOLS_IN_CONTAINER),
                         "--dns=8.8.8.8", "--dns=8.8.4.4",  # suppress local DNS warning
                         self.image_name,
                         'sh', '-c', runner_cmd])
@@ -105,7 +107,7 @@ class ContainerTests(LoggedTestCase):
                 "StrictHostKeyChecking=no", "-t", "-q",
                 "{}@{}".format(self.DOCKER_USER, self.container_ip),
                 "{} {} '{}'".format(os.path.join(get_tools_helper_dir(), "run_in_umake_dir"),
-                                    self.UMAKE_IN_CONTAINER, commands_to_run)]
+                                    self.UMAKE_TOOLS_IN_CONTAINER, commands_to_run)]
 
     def check_and_kill_process(self, process_grep, wait_before=0, send_sigkill=False):
         """Check a process matching process_grep exists and kill it"""
