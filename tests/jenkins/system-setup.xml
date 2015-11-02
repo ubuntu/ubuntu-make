@@ -60,6 +60,7 @@ sudo addgroup $(whoami) docker
 
 # ensure docker is using the CI proxy
 sudo bash -c &apos;echo export http_proxy=&quot;http://squid.internal:3128&quot; &gt;&gt; /etc/default/docker.io&apos;
+sudo restart docker
 
 # config save
 mkdir ${CONFIG_PATH}
