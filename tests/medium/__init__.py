@@ -56,7 +56,7 @@ class ContainerTests(LoggedTestCase):
             for hostname in hostnames:
                 if "-h" not in command:
                     command.extend(["-h", hostname])
-                runner_cmd += 'sudo echo "127.0.0.1 {}" >> /etc/hosts;'.format(hostname)
+                runner_cmd += ' echo "127.0.0.1 {}" >> /etc/hosts;'.format(hostname)
             runner_cmd += "{} {} 'sudo -E env PATH={} VIRTUAL_ENV={} {} {} {} {}';".format(
                 os.path.join(get_tools_helper_dir(), "run_in_umake_dir_async"),
                 self.UMAKE_TOOLS_IN_CONTAINER,
@@ -71,7 +71,7 @@ class ContainerTests(LoggedTestCase):
                                                                                      hostnames[0]))
 
         if hasattr(self, "apt_repo_override_path"):
-            runner_cmd += "sudo sh -c 'echo deb file:{} / > /etc/apt/sources.list';sudo apt-get update;".format(
+            runner_cmd += "sh -c 'echo deb file:{} / > /etc/apt/sources.list'; apt-get update;".format(
                 self.apt_repo_override_path)
         runner_cmd += "/usr/sbin/sshd -D"
 
