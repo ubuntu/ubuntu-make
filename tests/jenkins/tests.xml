@@ -58,8 +58,6 @@ if [ &quot;$target&quot; == &quot;system&quot; ]; then
     ADDITIONAL_OPTS=&quot;--system &quot;
 fi
 
-cd ~/ubuntu-make
-
 TEST_ENV=&quot;DISPLAY=:0&quot;
 
 # set proxy for all tests but small ones (proxy doesn&apos;t know about localhost and try to interfere)
@@ -67,23 +65,20 @@ if [ &quot;$type&quot; != small ]; then
     TEST_ENV=&quot;http_proxy=http://squid.internal:3128 https_proxy=http://squid.internal:3128 $TEST_ENV&quot;
 fi
 
-# we pull docker image in advance
-if [ &quot;$type&quot; == medium ]; then
-    # TODO: don&apos;t skip on amd64
-    # we skip medium on non amd64, containers are 64 bits
-    #if [ &quot;$(arch)&quot; != x86_64 ]; then
-        echo &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;testsuite name=&quot;nosetests&quot; tests=&quot;1&quot; errors=&quot;0&quot; failures=&quot;0&quot; skip=&quot;0&quot;&gt;&lt;testcase classname=&quot;ignore&quot; name=&quot;medium._est_not_supported&quot; time=&quot;0.0&quot;&gt;{}&lt;/testcase&gt;&lt;/testsuite&gt;&apos; &gt; ${RESULT_DIR}/nosetests.xml
-        exit 0
-    #fi
-
-    # we need to restart docker.io so that first command gives the correct proxy env variables
-    sudo restart docker.io
-
+# we skip medium on non amd64, containers are 64 bits
+if [ &quot;$type&quot; == medium ] &amp;&amp; [ &quot;$(arch)&quot; != x86_64 ]; then
+    echo &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;testsuite name=&quot;nosetests&quot; tests=&quot;1&quot; errors=&quot;0&quot; failures=&quot;0&quot; skip=&quot;0&quot;&gt;&lt;testcase classname=&quot;ignore&quot; name=&quot;medium._test_not_supported&quot; time=&quot;0.0&quot;&gt;{}&lt;/testcase&gt;&lt;/testsuite&gt;&apos; &gt; ${RESULT_DIR}/nosetests.xml
+    exit 0
 fi
 
-sudo su $(whoami) -c &quot;$TEST_ENV dbus-launch eatmydata ./runtests --coverage --publish ${ADDITIONAL_OPTS} $type&quot; || true
+# We need a pseudo tty (even if we have no input) for medium tests to pass. That&apos;s why we &quot;ssh -t -t&quot;
+# sudo su is used because tests:
+# 1. are better run as non root (hence su whoami)
+# 2. need to be able to gain sudo priviledge when installing packages
+sshpass -p &quot;ubuntu&quot; ssh -o StrictHostKeyChecking=no -t -t 127.0.0.1 &quot;sudo su $(whoami) -c &apos;cd ~/ubuntu-make &amp;&amp; $TEST_ENV dbus-launch eatmydata ./runtests --coverage --publish ${ADDITIONAL_OPTS} $type&apos;&quot; || true
 
 # copy artefacts
+cd ~/ubuntu-make
 cp nosetests.* ${RESULT_DIR}
 cp .coverage ${RESULT_DIR}
 cp -a *coverage* ${RESULT_DIR}
