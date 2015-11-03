@@ -215,3 +215,19 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
         umake_command = self.command('{} ide arduino'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+
+class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
+    """This will test the NetBeans IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hostnames = ["www.netbeans.org"]
+        self.port = "443"
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "netbeans")
