@@ -1,3 +1,67 @@
+ubuntu-make (15.11) xenial; urgency=medium
+
+  [ Omer Sheikh ]
+  * Change default install path to ~/.local/share/umake/, depending on
+    $XDG_DATA_HOME.
+  * Add tests for those.
+  * Improve tests stability in different environment (particularly jenkins) by
+    creating wrapper around pexpect.spawnu. The wrapper sets the virtual
+    terminal dimensions before calling pexpect.spawnu. This is to solve the
+    problem of newline and carriage returns appearing in the stdout of created
+    processes when testing under jenkins.
+
+  [ Sebastian Schuberth ]
+  * Fix changelog name.
+  * Set the ANDROID_HOME and NDK_ROOT environment variables for android NDK
+    frameworks.
+
+  [ Jared Ravetch ]
+  * Fix user message when prompting user to restart shell session.
+
+  [ Didier Roche ]
+  * Add a --version option to print current ubuntu make version. The rules are:
+    - if the user is on a released version, then print this version
+    - if the user is on a git branch, use:
+      - version-#commits-shortsha1 if there is no local or staged changes
+      - version-#commits-shortsha1-dirty if there is some locals or staged
+        changes
+    - finally, if the user is a local checkout, but without git history, just
+      print: version+unknown
+  * Fix --remove when used before a category name. Now, you can properly
+    umake --remove <category> <framework> and the framework will be removed.
+  * Fix framework env variables not removed for zsh shells on --remove.
+  * Fix cmd list mangling for large Android NDK tests.
+  * Add some autoreleasing script, to bump version, add them to stage, tag and
+    commit.
+  * Enable multiple decompressions to end up in same directory and adapt
+    frameworks to this new framework API.
+  * Adjust DownloadCenter number of threads to match number of assets to
+    download.
+  * Make BaseInstaller supporting multiple assets downloads and fix it to only
+    reflect download progress when we have all download size data. We could
+    have one download finishing up (and so global being at 100%) while other
+    downloads didn't start yet. Ensure we have all assets size before reporting
+    first download global progress.
+  * Fix as well cleaned path to not be removed.
+  * Filter in BaseInstaller to not decompress assets that are files to copy.
+  * Add a bunch of small, medium and large tests for versioning, removal, env
+    variable cleanups, parallel decompressions in the same directory, done
+    callback counts for decompression and downloads.
+  * Add a way to specify multiple ports (and hosts) in medium tests. This will
+    be used in future frameworks which rely both on https and http downloads.
+    Test tools can now expose multiple ports inside the container.
+    Changed as well all medium tests to adapt to this new API.
+  * Ensure we source .profile when executing command in container.
+  * Various changes to run medium tests even on system installed version.
+  * Save new jenkins jobs enabling medium tests and add branch-targeted jenkins
+    job to test branches not merged yet into master.
+  * Better medium tests stability support and optimization.
+  * Package new version of pexpect and add dependency markers.
+  * Some PR post-merge fixes and various refactoring.
+  * Remove WIP marker in README.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 03 Nov 2015 10:39:04 +0100
+
 ubuntu-make (15.10) wily; urgency=medium
 
   * Fix Dartlang download due to its new website layout.

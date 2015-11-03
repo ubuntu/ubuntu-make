@@ -1171,13 +1171,13 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
 class TestProductionFrameworkLoader(BaseFrameworkLoader):
     """Load production framework-and ensure there is no warning and no error"""
 
-    def test_load_android(self):
+    def test_load_scala(self):
         """Can load production frameworks"""
         frameworks.load_frameworks()
         self.assertTrue(len(self.CategoryHandler.categories) > 0, str(self.CategoryHandler.categories))
         self.assertIsNotNone(self.CategoryHandler.main_category)
-        self.assertEqual(len(self.CategoryHandler.categories["android"].frameworks), 3,
-                         str(self.CategoryHandler.categories["android"].frameworks))
+        self.assertEqual(len(self.CategoryHandler.categories["scala"].frameworks), 1,
+                         str(self.CategoryHandler.categories["scala"].frameworks))
 
     def test_ignored_frameworks(self):
         """Ignored frameworks aren't loaded"""
