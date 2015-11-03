@@ -130,7 +130,8 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": "{}:{}".format(os.path.join(self.install_path, "rustc", "bin"),
                                              os.path.join(self.install_path, "cargo", "bin"))},
                                     "LD_LIBRARY_PATH": {"value": os.path.join(self.install_path, "rustc", "lib")}})
-        UI.delayed_display(DisplayMessage(_("You need to restart a shell session for your installation to work")))
+        UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation "
+                                            "to work properly").format(self.name)))
 
     @property
     def is_installed(self):
