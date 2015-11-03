@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dart SDK - Dart API docs</title>
+    <link rel="canonical" href="https://api.dartlang.org/stable/index.html">
+    <!-- required because all the links are pseudo-absolute -->
+    <base href=".">
+
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="static-assets/prettify.css">
+    <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static-assets/styles.css">
+
+    <meta name="description" content="Dart SDK API docs, for the Dart programming language.">
+    <link rel="icon" href="static-assets/favicon.png">
+
+    <!-- Do not remove placeholder -->
+    <!-- Header Placeholder -->
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header class="container-fluid" id="title">
+    <nav class="navbar navbar-fixed-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12 contents">
+              <ol class="breadcrumbs gt-separated hidden-xs">
+                  <li class="self-crumb">Dart SDK</li>
+              </ol>
+              <div class="self-name">Dart SDK</div>
+              <form class="search navbar-right" role="search">
+                <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+              </form>
+            </div> <!-- /col -->
+          </div> <!-- /row -->
+        </div> <!-- /container -->
+    </nav>
+
+    <div class="container masthead">
+      <div class="row">
+        <div class="col-sm-12 contents">
+          <ol class="breadcrumbs gt-separated visible-xs">
+          </ol>
+          <div class="title-description">
+              <h1 class="title">
+                  <div class="kind">&nbsp;</div> Dart SDK
+              </h1>
+          </div>
+          <ul class="subnav">
+              <li><a href="index.html#libraries">Libraries</a></li>
+          </ul>
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+
+</header>
+
+<div class="container body">
+  <div class="row">
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Dart SDK</h5>
+
+    <ol>
+      <li class="section-title"><a href="index.html#libraries">Libraries</a></li>
+      <li><a class="" href="dart-async/dart-async-library.html">dart:async</a></li>
+      <li><a class="" href="dart-collection/dart-collection-library.html">dart:collection</a></li>
+      <li><a class="" href="dart-convert/dart-convert-library.html">dart:convert</a></li>
+      <li><a class="" href="dart-core/dart-core-library.html">dart:core</a></li>
+      <li><a class="" href="dart-developer/dart-developer-library.html">dart:developer</a></li>
+      <li><a class="" href="dart-html/dart-html-library.html">dart:html</a></li>
+      <li><a class="" href="dart-indexed_db/dart-indexed_db-library.html">dart:indexed_db</a></li>
+      <li><a class="" href="dart-io/dart-io-library.html">dart:io</a></li>
+      <li><a class="" href="dart-isolate/dart-isolate-library.html">dart:isolate</a></li>
+      <li><a class="" href="dart-js/dart-js-library.html">dart:js</a></li>
+      <li><a class="" href="dart-math/dart-math-library.html">dart:math</a></li>
+      <li><a class="" href="dart-mirrors/dart-mirrors-library.html">dart:mirrors</a></li>
+      <li><a class="deprecated" href="dart-profiler/dart-profiler-library.html">dart:profiler</a></li>
+      <li><a class="" href="dart-svg/dart-svg-library.html">dart:svg</a></li>
+      <li><a class="" href="dart-typed_data/dart-typed_data-library.html">dart:typed_data</a></li>
+      <li><a class="" href="dart-web_audio/dart-web_audio-library.html">dart:web_audio</a></li>
+      <li><a class="" href="dart-web_gl/dart-web_gl-library.html">dart:web_gl</a></li>
+      <li><a class="" href="dart-web_sql/dart-web_sql-library.html">dart:web_sql</a></li>
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+
+      <section class="desc markdown">
+      
+            <p>Welcome to the Dart API reference documentation, covering the official Dart API
+libraries. Some of the most fundamental Dart libraries include:</p><ul><li><a href="dart-core/dart-core-library.html">dart:core</a>: Core functionality such as strings, numbers, collections, errors, dates, and URIs.</li><li><a href="dart-html/dart-html-library.html">dart:html</a>: DOM manipulation for web apps.</li><li><a href="dart-io/dart-io-library.html">dart:io</a>: I/O for command-line apps.</li></ul>
+<p>Except for <code>dart:core</code>, you must import a library before you can use it. Here's
+an example of importing <code>dart:html</code> and <code>dart:math</code>:</p>
+<pre class="dart"><code>import 'dart:html';
+import 'dart:math';
+</code></pre>
+<p>You can install more libraries using the pub package manager. For information
+on finding, using, and publishing libraries with pub, see 
+<a href="https://pub.dartlang.org">pub.dartlang.org</a>.</p>
+<p>The main site for learning and using Dart is
+<a href="https://www.dartlang.org">www.dartlang.org</a>. Check out these additional pages:</p><ul><li><a href="https://www.dartlang.org/docs/tutorials/">Tutorials</a></li><li><a href="https://www.dartlang.org/docs/">Programmer's Guide</a></li><li><a href="https://www.dartlang.org/samples/">Samples</a></li><li><a href="https://www.dartlang.org/docs/dart-up-and-running/contents/ch03.html">A Tour of the Dart Libraries</a></li></ul>
+<p>This API reference is automatically generated from the source code in the
+<a href="https://github.com/dart-lang/sdk">Dart project</a>. If you'd like to contribute to
+this documentation, see
+<a href="https://github.com/dart-lang/sdk/wiki/Contributing">Contributing</a>.</p>
+
+      
+      </section>
+
+    <section class="summary" id="libraries">
+      <h2>Libraries</h2>
+      <dl>
+          <dt id="dart:async">
+            <span class="name"><a class="" href="dart-async/dart-async-library.html">dart:async</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Support for asynchronous programming,
+with classes such as Future and Stream.
+              <a href="dart-async/dart-async-library.html">&hellip;</a>
+                          </p>
+          </dd>
+          <dt id="dart:collection">
+            <span class="name"><a class="" href="dart-collection/dart-collection-library.html">dart:collection</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Classes and utilities that supplement the collection support in dart:core.
+                          </p>
+          </dd>
+          <dt id="dart:convert">
+            <span class="name"><a class="" href="dart-convert/dart-convert-library.html">dart:convert</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Encoders and decoders for converting between different data representations,
+including JSON and UTF-8.
+              <a href="dart-convert/dart-convert-library.html">&hellip;</a>
+                          </p>
+          </dd>
+          <dt id="dart:core">
+            <span class="name"><a class="" href="dart-core/dart-core-library.html">dart:core</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Built-in types, collections,
+and other core functionality for every Dart program.
+              <a href="dart-core/dart-core-library.html">&hellip;</a>
+                          </p>
+          </dd>
+          <dt id="dart:developer">
+            <span class="name"><a class="" href="dart-developer/dart-developer-library.html">dart:developer</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Interact with developer tools such as the debugger and inspector.
+              <a href="dart-developer/dart-developer-library.html">&hellip;</a>
+                          </p>
+          </dd>
+          <dt id="dart:html">
+            <span class="name"><a class="" href="dart-html/dart-html-library.html">dart:html</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              HTML elements and other resources for web-based applications that need to
+interact with the browser and the DOM (Document Object Model).
+              <a href="dart-html/dart-html-library.html">&hellip;</a>
+                          </p>
+          </dd>
+          <dt id="dart:indexed_db">
+            <span class="name"><a class="" href="dart-indexed_db/dart-indexed_db-library.html">dart:indexed_db</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              A client-side key-value store with support for indexes.
+              <a href="dart-indexed_db/dart-indexed_db-library.html">&hellip;</a>
+                          </p>
+          </dd>
+          <dt id="dart:io">
+            <span class="name"><a class="" href="dart-io/dart-io-library.html">dart:io</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              File, socket, HTTP, and other I/O support for server applications.
+              <a href="dart-io/dart-io-library.html">&hellip;</a>
+                          </p>
+          </dd>
+          <dt id="dart:isolate">
+            <span class="name"><a class="" href="dart-isolate/dart-isolate-library.html">dart:isolate</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Concurrent programming using <em>isolates</em>:
+independent workers that are similar to threads
+but don't share memory,
+communicating only via messages.
+                          </p>
+          </dd>
+          <dt id="dart:js">
+            <span class="name"><a class="" href="dart-js/dart-js-library.html">dart:js</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Support for interoperating with JavaScript.
+              <a href="dart-js/dart-js-library.html">&hellip;</a>
+                          </p>
+          </dd>
+          <dt id="dart:math">
+            <span class="name"><a class="" href="dart-math/dart-math-library.html">dart:math</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Mathematical constants and functions, plus a random number generator.
+                          </p>
+          </dd>
+          <dt id="dart:mirrors">
+            <span class="name"><a class="" href="dart-mirrors/dart-mirrors-library.html">dart:mirrors</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Basic reflection in Dart,
+with support for introspection and dynamic invocation.
+              <a href="dart-mirrors/dart-mirrors-library.html">&hellip;</a>
+                          </p>
+          </dd>
+          <dt id="dart:profiler">
+            <span class="name"><a class="deprecated" href="dart-profiler/dart-profiler-library.html">dart:profiler</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Please see 'dart:developer'.
+                          </p>
+          </dd>
+          <dt id="dart:svg">
+            <span class="name"><a class="" href="dart-svg/dart-svg-library.html">dart:svg</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Scalable Vector Graphics:
+Two-dimensional vector graphics with support for events and animation.
+              <a href="dart-svg/dart-svg-library.html">&hellip;</a>
+                          </p>
+          </dd>
+          <dt id="dart:typed_data">
+            <span class="name"><a class="" href="dart-typed_data/dart-typed_data-library.html">dart:typed_data</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              Lists that efficiently handle fixed sized data
+(for example, unsigned 8 byte integers) and SIMD numeric types.
+                          </p>
+          </dd>
+          <dt id="dart:web_audio">
+            <span class="name"><a class="" href="dart-web_audio/dart-web_audio-library.html">dart:web_audio</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              High-fidelity audio programming in the browser.
+                          </p>
+          </dd>
+          <dt id="dart:web_gl">
+            <span class="name"><a class="" href="dart-web_gl/dart-web_gl-library.html">dart:web_gl</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              3D programming in the browser.
+                          </p>
+          </dd>
+          <dt id="dart:web_sql">
+            <span class="name"><a class="" href="dart-web_sql/dart-web_sql-library.html">dart:web_sql</a></span>
+          </dt>
+          <dd>
+            
+            <p>
+              An API for storing data in the browser that can be queried with SQL.
+              <a href="dart-web_sql/dart-web_sql-library.html">&hellip;</a>
+                          </p>
+          </dd>
+      </dl>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+
+  </div><!--/.sidebar-offcanvas-right-->
+
+  </div> <!-- row -->
+</div> <!-- container -->
+
+<footer>
+    <div class="container-fluid">
+        <div class="container">
+            <p class="text-center">
+                <span class="no-break">
+                  Dart SDK 1.12.1
+                </span>
+                &bull;
+                <span class="no-break">
+                  <a href="https://www.dartlang.org">
+                    <img src="static-assets/favicon.png" alt="Dart" title="Dart"width="16" height="16">
+                  </a>
+                </span>
+                &bull;
+                <span class="copyright no-break">
+                  <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc license</a>
+                </span>
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/prettify.js"></script>
+<script src="static-assets/script.js"></script>
+<!-- Do not remove placeholder -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26406144-9', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<script async src="//survey.g.doubleclick.net/async_survey?site=4vq7qmqpfn4zjduve64c4h6lqa">
+</script>
+
+
+<!-- Made with <3 by dartdoc version 0.7.0 -->
+</body>
+
+</html>

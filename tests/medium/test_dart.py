@@ -22,14 +22,21 @@
 from . import ContainerTests
 import os
 from ..large import test_dart
+from ..tools import get_data_dir, UMAKE
 
 
 class DartInContainer(ContainerTests, test_dart.DartEditorTests):
     """This will test the eclipse IDE integration inside a container"""
 
     def setUp(self):
-        self.hostname = "www.dartlang.org"
-        self.port = "443"
+        self.hosts = {443: ["api.dartlang.org", "storage.googleapis.com"]}
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/dart/dart-sdk".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "dart", "dart-sdk")
+
+    def test_install_with_changed_version_page(self):
+        """Installing dart sdk should fail if version page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.dartlang.org", "index.html")
+        umake_command = self.command('{} dart'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))

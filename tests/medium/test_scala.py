@@ -29,9 +29,8 @@ class ScalaInContainer(ContainerTests, test_scala.ScalaTests):
     """This will test the Scala integration inside a container"""
 
     def setUp(self):
-        self.hostname = "www.scala-lang.org"
-        self.port = "80"
+        self.hosts = {80: ["www.scala-lang.org"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'scala')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/scala/scala-lang".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "scala", "scala-lang")

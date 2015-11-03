@@ -18,9 +18,26 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 import os
+from xdg.BaseDirectory import xdg_data_home
 
-DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join("~", "tools"))
+DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join(xdg_data_home, "umake"))
 OLD_CONFIG_FILENAME = "udtc"
 CONFIG_FILENAME = "umake"
 LSB_RELEASE_FILE = "/etc/lsb-release"
 UMAKE_FRAMEWORKS_ENVIRON_VARIABLE = "UMAKE_FRAMEWORKS"
+
+from_dev = False
+
+
+def get_version():
+    '''Get version depending if on dev or released version'''
+    version = open(os.path.join(os.path.dirname(__file__), 'version'), 'r', encoding='utf-8').read().strip()
+    if not from_dev:
+        return version
+    import subprocess
+    try:
+        # use git describe to get a revision ref if running from a branch. Will append dirty if local changes
+        version = subprocess.check_output(["git", "describe", "--tags", "--dirty"]).decode('utf-8').strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        version += "+unknown"
+    return version

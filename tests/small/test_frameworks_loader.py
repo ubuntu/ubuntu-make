@@ -27,7 +27,7 @@ import shutil
 import sys
 import tempfile
 from ..data.testframeworks.uninstantiableframework import Uninstantiable, InheritedFromUninstantiable
-from ..tools import get_data_dir, change_xdg_path, patchelem, LoggedTestCase
+from ..tools import get_data_dir, change_xdg_path, patchelem, LoggedTestCase, INSTALL_DIR
 import umake
 from umake import frameworks
 from umake.frameworks.baseinstaller import BaseInstaller
@@ -219,12 +219,12 @@ class TestFrameworkLoader(BaseFrameworkLoader):
     def test_default_install_path(self):
         """Default install path is what we expect, based on category-and framework prog_name"""
         self.assertEqual(self.categoryA.frameworks["framework-b"].install_path,
-                         os.path.expanduser("~/tools/category-a/framework-b"))
+                         os.path.expanduser("~/{}/category-a/framework-b".format(INSTALL_DIR)))
 
     def test_specified_at_load_install_path(self):
         """Default install path is overriden by framework specified install path at load time"""
         self.assertEqual(self.categoryA.frameworks["framework-a"].install_path,
-                         os.path.expanduser("~/tools/custom/frameworka"))
+                         os.path.expanduser("~/{}/custom/frameworka".format(INSTALL_DIR)))
 
     def test_no_restriction_installable_framework(self):
         """Framework with an no arch or version restriction is installable"""
@@ -461,7 +461,7 @@ class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
                          "/home/didrocks/foo/bar/android-studio")
         # isn't in the config
         self.assertEqual(self.CategoryHandler.categories['category-c'].frameworks["framework-a"].install_path,
-                         os.path.expanduser("~/tools/category-c/framework-a"))
+                         os.path.expanduser("~/{}/category-c/framework-a".format(INSTALL_DIR)))
 
 
 class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
@@ -501,8 +501,9 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         self.assertEqual(ConfigHandler().config,
                          {'frameworks': {
                              'category-a': {
-                                 'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
-                             }}})
+                                 'framework-b': {
+                                     'path': os.path.expanduser('~/{}/category-a/framework-b'.format(INSTALL_DIR))
+                                 }}}})
 
     def test_call_setup_save_and_then_mark_in_config_tweaked_path(self):
         """Calling mark_in_config with a custom install path save it in the configuration"""
@@ -522,7 +523,7 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         """Calling remove_from_config remove a framework from the config"""
         ConfigHandler().config = {'frameworks': {
             'category-a': {
-                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+                'framework-b': {'path': os.path.expanduser('~/{}/category-a/framework-b'.format(INSTALL_DIR))}
             }}}
         self.categoryA.frameworks["framework-b"].remove_from_config()
 
@@ -532,22 +533,24 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         """Calling remove_from_config remove a framework from the config but keep others"""
         ConfigHandler().config = {'frameworks': {
             'category-a': {
-                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')},
-                'framework-c': {'path': os.path.expanduser('~/tools/category-a/framework-c')}
+                'framework-b': {'path': os.path.expanduser('~/{}/category-a/framework-b'.format(INSTALL_DIR))},
+                'framework-c': {'path': os.path.expanduser('~/{}/category-a/framework-c'.format(INSTALL_DIR))}
             },
             'category-b': {
-                'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
+                'framework-b': {'path': os.path.expanduser('~/{}/category-a/framework-b'.format(INSTALL_DIR))}
             }}}
         self.categoryA.frameworks["framework-b"].remove_from_config()
 
         self.assertEqual(ConfigHandler().config,
                          {'frameworks': {
                              'category-a': {
-                                 'framework-c': {'path': os.path.expanduser('~/tools/category-a/framework-c')}
-                             },
+                                 'framework-c': {
+                                     'path': os.path.expanduser('~/{}/category-a/framework-c'.format(INSTALL_DIR))
+                                 }},
                              'category-b': {
-                                 'framework-b': {'path': os.path.expanduser('~/tools/category-a/framework-b')}
-                             }}})
+                                 'framework-b': {
+                                     'path': os.path.expanduser('~/{}/category-a/framework-b'.format(INSTALL_DIR))
+                                 }}}})
 
 
 class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
@@ -994,6 +997,29 @@ class TestAbstractFrameworkLoader(BaseFrameworkLoader):
         self.expect_warn_error = False  # Should be silent.
 
 
+class TestInvalidFrameworksLoader(BaseFrameworkLoader):
+    """Test the loader handles badly formatted frameworks."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        sys.path.append(get_data_dir())
+        cls.testframeworks_dir = os.path.join(get_data_dir(), 'invalidframeworks')
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.path.remove(get_data_dir())
+        super().tearDownClass()
+
+    def test_invalid_framework_loading(self):
+        """Frameworks that don't have a Framework type aren't loaded"""
+        with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                patchelem(umake.frameworks, '__package__', "invalidframeworks"):
+            frameworks.load_frameworks()
+        self.assertEqual(len(self.CategoryHandler.categories["category-a"].frameworks), 0,
+                         self.CategoryHandler.categories["category-a"].frameworks)
+
+
 class TestFrameworkLoaderCustom(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with custom path"""
 
@@ -1145,13 +1171,13 @@ class TestFrameworkLoaderCustom(BaseFrameworkLoader):
 class TestProductionFrameworkLoader(BaseFrameworkLoader):
     """Load production framework-and ensure there is no warning and no error"""
 
-    def test_load_android(self):
+    def test_load_scala(self):
         """Can load production frameworks"""
         frameworks.load_frameworks()
         self.assertTrue(len(self.CategoryHandler.categories) > 0, str(self.CategoryHandler.categories))
         self.assertIsNotNone(self.CategoryHandler.main_category)
-        self.assertEqual(len(self.CategoryHandler.categories["android"].frameworks), 2,
-                         str(self.CategoryHandler.categories["android"].frameworks))
+        self.assertEqual(len(self.CategoryHandler.categories["scala"].frameworks), 1,
+                         str(self.CategoryHandler.categories["scala"].frameworks))
 
     def test_ignored_frameworks(self):
         """Ignored frameworks aren't loaded"""

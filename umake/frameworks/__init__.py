@@ -238,7 +238,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         """Method call to setup the Framework"""
         if not self.is_installable:
             logger.error(_("You can't install that framework on this machine"))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         if self.need_root_access and os.geteuid() != 0:
             logger.debug("Requesting root access")
@@ -277,7 +277,6 @@ class BaseFramework(metaclass=abc.ABCMeta):
             return False
         if not RequirementsHandler().is_bucket_installed(self.packages_requirements):
             return False
-        logger.debug("{} is installed".format(self.name))
         return True
 
     def install_framework_parser(self, parser):
@@ -299,7 +298,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
             if args.destdir:
                 message = "You can't specify a destination dir while removing a framework"
                 logger.error(message)
-                UI.return_main_screen()
+                UI.return_main_screen(status_code=1)
             self.remove()
         else:
             install_path = None
@@ -341,11 +340,8 @@ def load_module(module_abs_name, main_category):
     if current_category not in BaseCategory.categories.values():
         return
     for framework_name, FrameworkClass in inspect.getmembers(module, _is_frameworkclass):
-        try:
-            if FrameworkClass(current_category) is not None:
-                logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
-        except TypeError as e:
-            logger.error("Can't attach {} to {}: {}".format(framework_name, current_category.name, e))
+        if FrameworkClass(current_category) is not None:
+            logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
 
 
 def load_frameworks():

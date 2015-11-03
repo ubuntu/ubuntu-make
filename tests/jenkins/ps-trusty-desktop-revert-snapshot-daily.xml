@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.queueSorter.PrioritySorterJobProperty>
+      <priority>100</priority>
+    </hudson.queueSorter.PrioritySorterJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+set -ex
+
+ssh ubuntu@10.100.0.103 /usr/bin/virsh snapshot-revert ps-trusty-desktop-amd64-1 24022015
+ssh ubuntu@10.100.0.103 /usr/bin/virsh snapshot-revert ps-trusty-desktop-i386-1 24022015-i386
+
+both_started=false
+
+# start the domain until it&apos;s started and kept running (virsh will return in error if domain already started)
+while [ &quot;$both_started&quot; == false ]; do
+  echo &quot;trying to start both vms&quot;  
+  both_started=true
+
+  # virsh returns false is domain is already started, and so, true if just started it
+  ssh ubuntu@10.100.0.103 /usr/bin/virsh start ps-trusty-desktop-amd64-1 &amp;&amp; both_started=false
+  ssh ubuntu@10.100.0.103 /usr/bin/virsh start ps-trusty-desktop-i386-1 &amp;&amp; both_started=false
+  sleep 60
+done
+
+
+# trying to start the jenkins slave, and ensure they are kept running for at least one loop
+both_were_started=false
+while true; do
+
+  amd64_started=true
+  i386_started=true
+  ssh ubuntu@ps-trusty-desktop-amd64-1 /usr/bin/sudo status jenkins-slave | grep running || amd64_started=false
+  ssh ubuntu@ps-trusty-desktop-i386-1 /usr/bin/sudo status jenkins-slave | grep running || i386_started=false
+  if [ &quot;$amd64_started&quot; = true ] &amp;&amp; [ &quot;$i386_started&quot; = true ]; then
+    if [ &quot;$both_were_started&quot; = true ]; then
+      break;
+    fi
+    both_were_started=true
+  fi
+
+  if [ &quot;$both_were_started&quot; = false ]; then
+    ssh ubuntu@ps-trusty-desktop-amd64-1 /usr/bin/sudo start jenkins-slave || true
+    ssh ubuntu@ps-trusty-desktop-i386-1 /usr/bin/sudo start jenkins-slave || true
+    both_were_started=false
+  fi
+
+  # Let the service restarts if they do.
+  sleep 60
+done
+</command>
+    </hudson.tasks.Shell>
+    <hudson.plugins.parameterizedtrigger.TriggerBuilder>
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+          <configs class="java.util.Collections$EmptyList"/>
+          <projects>ps-trusty-desktop-update-daily</projects>
+          <condition>ALWAYS</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+          <block/>
+          <buildAllNodesWithLabel>false</buildAllNodesWithLabel>
+        </hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.TriggerBuilder>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+set -ex
+
+# reboot the slaves and wait for them to boot up
+ssh ubuntu@ps-trusty-desktop-amd64-1 /usr/bin/sudo reboot
+ssh ubuntu@ps-trusty-desktop-i386-1 /usr/bin/sudo reboot
+sleep 150
+
+
+# trying to start the jenkins slave, and ensure they are kept running for at least one loop
+both_were_started=false
+while true; do
+
+  amd64_started=true
+  i386_started=true
+  ssh ubuntu@ps-trusty-desktop-amd64-1 /usr/bin/sudo status jenkins-slave | grep running || amd64_started=false
+  ssh ubuntu@ps-trusty-desktop-i386-1 /usr/bin/sudo status jenkins-slave | grep running || i386_started=false
+  if [ &quot;$amd64_started&quot; = true ] &amp;&amp; [ &quot;$i386_started&quot; = true ]; then
+    if [ &quot;$both_were_started&quot; = true ]; then
+      break;
+    fi
+    both_were_started=true
+  fi
+
+  if [ &quot;$both_were_started&quot; = false ]; then
+    ssh ubuntu@ps-trusty-desktop-amd64-1 /usr/bin/sudo start jenkins-slave || true
+    ssh ubuntu@ps-trusty-desktop-i386-1 /usr/bin/sudo start jenkins-slave || true
+    both_were_started=false
+  fi
+
+  # Let the service restarts if they do.
+  sleep 60
+done
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

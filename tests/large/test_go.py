@@ -20,13 +20,11 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 """Tests for the Go category"""
-import platform
 import subprocess
 import os
-import pexpect
 import tempfile
 from tests.large import LargeFrameworkTests
-from tests.tools import UMAKE
+from tests.tools import UMAKE, spawn_process
 
 
 class GoTests(LargeFrameworkTests):
@@ -40,7 +38,7 @@ class GoTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/go/go-lang")
+        self.installed_path = os.path.join(self.install_base_path, "go", "go-lang")
         self.framework_name_for_profile = "Go Lang"
 
     @property
@@ -48,7 +46,7 @@ class GoTests(LargeFrameworkTests):
         return os.path.join(self.installed_path, "bin", "go")
 
     def test_default_go_install(self):
-        """Install eclipse from scratch test case"""
+        """Install Go from scratch test case"""
         if not self.in_container:
             self.example_prog_dir = tempfile.mkdtemp()
             self.additional_dirs.append(self.example_prog_dir)
@@ -58,11 +56,11 @@ class GoTests(LargeFrameworkTests):
         else:  # our mock expects getting that path
             compile_command = ["bash", "-l", "go run /tmp/hello.go"]
 
-        self.child = pexpect.spawnu(self.command('{} go'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} go'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         self.assert_exec_exists()
         self.assertTrue(self.is_in_path(self.exec_path))

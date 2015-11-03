@@ -347,7 +347,9 @@ def switch_to_current_user():
 
 def remove_framework_envs_from_user(framework_tag):
     """Remove all envs from user if found"""
-    profile_filepath = os.path.join(os.path.expanduser('~'), ".profile")
+    current_shell = os.getenv('SHELL').lower()
+    profile_filename = '.zprofile' if 'zsh' in current_shell else '.profile'
+    profile_filepath = os.path.join(os.path.expanduser('~'), profile_filename)
     content = ""
     framework_header = profile_tag.format(framework_tag)
     try:
@@ -377,6 +379,8 @@ def add_env_to_user(framework_tag, env_dict):
     env_dict is a dictionary of:
     { env_variable: { value: value,
                       keep: True/False }
+    }
+    value is either a list (in that case, it's concatenated) or a string
     If keep is set to True, we keep previous values with :$OLDERENV."""
 
     current_shell = os.getenv('SHELL').lower()
@@ -385,6 +389,8 @@ def add_env_to_user(framework_tag, env_dict):
     envs_to_insert = {}
     for env in env_dict:
         value = env_dict[env]["value"]
+        if isinstance(value, list):
+            value = os.pathsep.join(value)
         if env_dict[env].get("keep", True) and os.environ.get(env):
             os.environ[env] = value + os.pathsep + os.environ[env]
             value = "{}{}${}".format(value, os.pathsep, env)
@@ -396,7 +402,7 @@ def add_env_to_user(framework_tag, env_dict):
         f.write(profile_tag.format(framework_tag))
         for env in envs_to_insert:
             value = envs_to_insert[env]
-            logger.debug("Adding {} to user {} for {}".format(value, env, framework_tag))
+            logger.debug("Adding {} to user's {} for {}".format(value, env, framework_tag))
             export = ""
             if env != "PATH":
                 export = "export "

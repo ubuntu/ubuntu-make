@@ -28,8 +28,7 @@ class GoInContainer(ContainerTests, test_go.GoTests):
     """This will test the Go integration inside a container"""
 
     def setUp(self):
-        self.hostname = "golang.org"
-        self.port = "443"
+        self.hosts = {443: ["golang.org"]}
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/go/go-lang".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "go", "go-lang")

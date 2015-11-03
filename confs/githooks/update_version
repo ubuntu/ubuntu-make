@@ -1,0 +1,54 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2015 Canonical
+#
+# Authors:
+#  Didier Roche
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; version 3.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+import datetime
+import os
+import sys
+
+
+if __name__ == '__main__':
+    version_file_path = os.path.join(os.path.dirname(__file__), "..", "..", "umake", "version")
+    version_tempfile_path = "{}.new".format(version_file_path)
+
+    version = '{:%y.%m}'.format(datetime.datetime.now())
+
+    old_version = open(version_file_path, 'r', encoding='utf-8').read().strip()
+    if old_version[0:5] == version:
+        minor = old_version[6:]
+        # need to bump to a minor version
+        if minor:
+            try:
+                minor = int(minor) + 1
+                version += ".{}".format(minor)
+            except ValueError:
+                print("{} hasn't the expected format: YY.MM.<minor>".format(old_version))
+                sys.exit(1)
+        # there was no minor version, so add first one
+        else:
+            version += ".1"
+
+    # write new version file
+    with open(version_tempfile_path, 'w', encoding="utf-8") as f:
+        f.write(version)
+        f.flush()
+        os.fsync(f.fileno())
+
+    os.rename(version_tempfile_path, version_file_path)
+    print(version)

@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<matrix-project>
+  <actions/>
+  <description>Setup ubuntu make trusty job using an ubuntu make branch</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.queueSorter.PrioritySorterJobProperty>
+      <priority>100</priority>
+    </hudson.queueSorter.PrioritySorterJobProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>branch</name>
+          <description>git branch to test
+if not master, name the branch like &quot;https://github.com/oijazsh/ubuntu-make.git install_dir&quot;</description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>rebaseontrunk</name>
+          <description>Rebase on trunk</description>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <axes>
+    <hudson.matrix.LabelAxis>
+      <name>label</name>
+      <values>
+        <string>ps-trusty-desktop-amd64-1</string>
+        <string>ps-trusty-desktop-i386-1</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+  </axes>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash -eu
+
+CONFIG_PATH=/tmp/config
+
+# cleanup
+rm -rf ~/ubuntu-make*
+rm -rf ${CONFIG_PATH}
+
+# add ppa for external content and git
+sudo add-apt-repository -y ppa:ubuntu-desktop/ubuntu-make
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install -y git sloccount
+
+# merge with trunk or clone from given branch
+cd ~
+if [ &quot;$rebaseontrunk&quot; = true ]; then
+  git config --global user.email &quot;test@ubuntu.com&quot;
+  git config --global user.name &quot;Ubuntu desktop&quot;
+  git clone https://github.com/ubuntu/ubuntu-make
+
+  cd ubuntu-make
+  git pull --no-edit $branch
+else
+  git clone $branch ubuntu-make
+  cd ubuntu-make
+fi
+UBUNTU_MAKE_VERSION=$(git rev-parse HEAD)
+
+# install deps from debian/control
+sudo apt-get install -y $(tests/daily_runs/get_binary_depends ubuntu-make)
+
+# install test packages
+testpackages=$(grep Depends debian/tests/control | tr -d , | tr -d @ | sed &apos;s/Depends:  //&apos;)
+sudo apt-get install -y $testpackages
+sudo addgroup $(whoami) docker
+
+# ensure docker is using the CI proxy
+sudo bash -c &apos;echo export http_proxy=&quot;http://squid.internal:3128&quot; &gt;&gt; /etc/default/docker.io&apos;
+sudo restart docker
+
+# config save
+mkdir ${CONFIG_PATH}
+cd ${CONFIG_PATH}
+echo -e &quot;{\n  &apos;target&apos;: &apos;trunk&apos;,\n  &apos;version&apos;: &apos;${UBUNTU_MAKE_VERSION}&apos;,\n  &apos;date&apos;: {\n    &apos;timestamp&apos;: &apos;$(date +%s)&apos;,\n    &apos;utc&apos;: &apos;$(date -u)&apos; },\n  &apos;arch&apos;: &apos;$(arch)&apos;\n}&quot; &gt; ubuntu-make-version
+dpkg -l &gt; packages_list
+
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger>
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+              <properties>target=branch</properties>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <projects>tests, </projects>
+          <condition>UNSTABLE_OR_BETTER</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs class="java.util.Collections$EmptyList"/>
+          <projects>ps-trusty-desktop-revert-snapshot-daily</projects>
+          <condition>FAILED</condition>
+          <triggerWithNoParameters>true</triggerWithNoParameters>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
+  </publishers>
+  <buildWrappers/>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
+</matrix-project>

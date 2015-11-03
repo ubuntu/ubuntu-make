@@ -21,13 +21,11 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 """Tests for the Scala category"""
-import platform
 import subprocess
 import os
-import pexpect
 import tempfile
 from tests.large import LargeFrameworkTests
-from tests.tools import UMAKE
+from tests.tools import UMAKE, spawn_process
 
 
 class ScalaTests(LargeFrameworkTests):
@@ -41,7 +39,7 @@ class ScalaTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/scala/scala-lang")
+        self.installed_path = os.path.join(self.install_base_path, "scala", "scala-lang")
         self.framework_name_for_profile = "Scala Lang"
 
     @property
@@ -59,11 +57,11 @@ class ScalaTests(LargeFrameworkTests):
         else:  # our mock expects getting that path
             compile_command = ["bash", "-l", "scala /tmp/hello.scala"]
 
-        self.child = pexpect.spawnu(self.command('{} scala'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} scala'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_no_warn()
+        self.wait_and_close()
 
         self.assert_exec_exists()
         self.assertTrue(self.is_in_path(self.exec_path))

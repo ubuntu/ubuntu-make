@@ -22,7 +22,10 @@
 
 from . import ContainerTests
 import os
+import pexpect
+
 from ..large import test_ide
+from ..tools import get_data_dir, swap_file_and_restore, UMAKE, spawn_process
 
 
 class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
@@ -32,13 +35,12 @@ class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.eclipse.org"
-        self.port = "443"
+        self.hosts = {443: ["www.eclipse.org"]}
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
 
 
 class EclipseIDEInContainerFTP(ContainerTests, test_ide.EclipseIDETests):
@@ -48,14 +50,13 @@ class EclipseIDEInContainerFTP(ContainerTests, test_ide.EclipseIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.eclipse.org"
-        self.port = "443"
+        self.hosts = {443: ["www.eclipse.org"]}
         self.ftp = True
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/eclipse".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
 
 
 class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
@@ -65,13 +66,21 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.jetbrains.com"
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/idea".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "idea")
+
+    # This actually tests the code in BaseJetBrains
+    def test_install_with_changed_download_page(self):
+        """Installing IntelliJ Idea should fail if download page has changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.jetbrains.com", "idea",
+                                               "download", "download_thanks.jsp?edition=IC&os=linux")
+        umake_command = self.command('{} ide idea'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
 
 class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
@@ -81,13 +90,12 @@ class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.jetbrains.com"
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/idea-ultimate".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "idea-ultimate")
 
 
 class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
@@ -97,13 +105,12 @@ class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.jetbrains.com"
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/pycharm".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm")
 
 
 class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducationalIDETests):
@@ -113,13 +120,12 @@ class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducation
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.jetbrains.com"
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/pycharm-educational".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-educational")
 
 
 class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessionalIDETests):
@@ -129,13 +135,12 @@ class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessi
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.jetbrains.com"
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/pycharm-professional".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-professional")
 
 
 class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
@@ -145,13 +150,12 @@ class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.jetbrains.com"
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/rubymine".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "rubymine")
 
 
 class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
@@ -161,13 +165,12 @@ class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.jetbrains.com"
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/webstorm".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "webstorm")
 
 
 class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
@@ -177,13 +180,12 @@ class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.jetbrains.com"
-        self.port = "443"
+        self.hosts = {443: ["www.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/phpstorm".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "phpstorm")
 
 
 class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
@@ -193,9 +195,73 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.arduino.cc"
-        self.port = "80"
+        self.hosts = {80: ["www.arduino.cc"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'arduino')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/ide/arduino".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "ide", "arduino")
+
+    def test_install_with_changed_download_page(self):
+        """Installing arduino ide should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.arduino.cc", "en", "Main",
+                                               "Software")
+        umake_command = self.command('{} ide arduino'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_changed_checksum_page(self):
+        """Installing arduino ide should fail if checksum link is unparseable"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.arduino.cc",
+                                               "checksums.md5sum.txt")
+        umake_command = self.command('{} ide arduino'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+
+class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
+    """This will test the NetBeans IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+    TEST_CHECKSUM_NETBEANS_DATA = "1e07ec8775939ba6d35731831bdb7bf0"
+
+    def setUp(self):
+        self.hosts = {80: ["download.netbeans.org"], 443: ["netbeans.org"]}
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "netbeans")
+
+    def test_install_with_changed_download_page(self):
+        """Installing NetBeans ide should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "netbeans.org", "downloads",
+                                               "zip.html")
+        umake_command = self.command('{} ide netbeans'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_changed_download_reference_page(self):
+        """Installing NetBeans ide should fail if download reference page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "netbeans.org", "images_www",
+                                               "v6", "download", "8.0.42", "js", "files.js")
+        umake_command = self.command('{} ide netbeans'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_changed_checksum_page(self):
+        """Installing NetBeans ide should fail if checksum link is wrong"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "netbeans.org", "images_www",
+                                               "v6", "download", "8.0.42", "js", "files.js")
+        with swap_file_and_restore(download_page_file_path) as content:
+            with open(download_page_file_path, "w") as newfile:
+                newfile.write(content.replace(self.TEST_CHECKSUM_NETBEANS_DATA, "abcdef"))
+            self.child = spawn_process(self.command('{} ide netbeans'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn([pexpect.EOF, "Corrupted download? Aborting."],
+                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
+
+            # we have nothing installed
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))

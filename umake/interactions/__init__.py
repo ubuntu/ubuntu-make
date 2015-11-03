@@ -113,7 +113,7 @@ class LicenseAgreement(TextWithChoices):
     def __init__(self, content, callback_yes, callback_no):
         """License agreement text with accept/decline"""
         choices = [Choice(0, _("I Accept"), callback_yes, txt_shorcut=_("a")),
-                   Choice(1, _("I don't accept"), callback_no,  txt_shorcut=_("N"), is_default=True)]
+                   Choice(1, _("I don't accept"), callback_no, txt_shorcut=_("N"), is_default=True)]
         super().__init__(content, choices=choices, newline_before_option=True)
 
     @property

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2014 Canonical
+# Copyright (C) 2014-2015 Canonical
 #
 # Authors:
 #  Didier Roche
@@ -23,6 +23,7 @@
 from abc import ABCMeta, abstractmethod
 from bs4 import BeautifulSoup
 from concurrent import futures
+from contextlib import suppress
 from gettext import gettext as _
 import grp
 import logging
@@ -40,22 +41,21 @@ from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop
 from umake.ui import UI
 
-
 logger = logging.getLogger(__name__)
 
 
 def _add_to_group(user, group):
-        """Add user to group. Should only be used in an other process"""
-        # switch to root
-        os.seteuid(0)
-        os.setegid(0)
-        try:
-            output = subprocess.check_output(["adduser", user, group])
-            logger.debug("Added {} to {}: {}".format(user, group, output))
-            return True
-        except subprocess.CalledProcessError as e:
-            logger.error("Couldn't add {} to {}".format(user, group))
-            return False
+    """Add user to group. Should only be used in an other process"""
+    # switch to root
+    os.seteuid(0)
+    os.setegid(0)
+    try:
+        output = subprocess.check_output(["adduser", user, group])
+        logger.debug("Added {} to {}: {}".format(user, group, output))
+        return True
+    except subprocess.CalledProcessError as e:
+        logger.error("Couldn't add {} to {}".format(user, group))
+        return False
 
 
 class IdeCategory(umake.frameworks.BaseCategory):
@@ -78,6 +78,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page=None,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
+                         required_files_path=["eclipse"],
                          packages_requirements=['openjdk-7-jdk'])
 
     def download_provider_page(self):
@@ -94,7 +95,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
             md5_url = self.DOWNLOAD_URL_PAT.format(arch='-x86_64', suf='.md5')
         else:
             logger.error("Unsupported architecture: {}".format(arch))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         @MainLoop.in_mainloop_thread
         def done(download_result):
@@ -102,7 +103,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
 
             if res.error:
                 logger.error(res.error)
-                UI.return_main_screen()
+                UI.return_main_screen(status_code=1)
 
             # Should be ASCII anyway.
             md5 = res.buffer.getvalue().decode('utf-8').split()[0]
@@ -133,19 +134,17 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                                                      comment=comment,
                                                      categories=categories))
 
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not isfile(join(self.install_path, "eclipse")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
-
 
 class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
     """The base for all JetBrains installers."""
+
+    def __init__(self, *args, **kwargs):
+        """Add executable required file path to existing list"""
+        if self.executable:
+            current_required_files_path = kwargs.get("required_files_path", [])
+            current_required_files_path.append(os.path.join("bin", self.executable))
+            kwargs["required_files_path"] = current_required_files_path
+        super().__init__(*args, **kwargs)
 
     @property
     @abstractmethod
@@ -166,13 +165,13 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
         error_msg = page.error
         if error_msg:
             logger.error("An error occurred while downloading {}: {}".format(self.download_page_url, error_msg))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         soup = BeautifulSoup(page.buffer)
         link = soup.find('a', text="HTTPS")
         if link is None:
             logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
         download_url = link.attrs['href']
         checksum_url = download_url + '.sha256'
         logger.debug("Found download URL: " + download_url)
@@ -182,7 +181,7 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
             checksum_result = next(iter(results.values()))  # Just get the first.
             if checksum_result.error:
                 logger.error(checksum_result.error)
-                UI.return_main_screen()
+                UI.return_main_screen(status_code=1)
 
             checksum = checksum_result.buffer.getvalue().decode('utf-8').split()[0]
             logger.info('Obtained SHA256 checksum: ' + checksum)
@@ -207,16 +206,6 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
                                                      comment=comment,
                                                      categories=categories))
 
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not isfile(join(self.install_path, "bin", self.executable)):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
-
 
 class PyCharm(BaseJetBrains):
     """The JetBrains PyCharm Community Edition distribution."""
@@ -236,7 +225,7 @@ class PyCharm(BaseJetBrains):
 
 class PyCharmEducational(BaseJetBrains):
     """The JetBrains PyCharm Educational Edition distribution."""
-    download_page_url = "https://www.jetbrains.com/pycharm-educational/download/download_thanks.jsp?os=linux"
+    download_page_url = "https://www.jetbrains.com/pycharm-edu/download/download_thanks.jsp?os=linux"
     executable = "pycharm.sh"
 
     def __init__(self, category):
@@ -329,7 +318,7 @@ class WebStorm(BaseJetBrains):
                          dir_to_decompress_in_tarball='WebStorm-*',
                          desktop_filename='jetbrains-webstorm.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
-                         icon_filename='webide.png')
+                         icon_filename='webstorm.svg')
 
 
 class PhpStorm(BaseJetBrains):
@@ -389,25 +378,28 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         error_msg = result[self.download_page].error
         if error_msg:
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         soup = BeautifulSoup(result[self.download_page].buffer)
 
         # We need to avoid matching arduino-nightly-...
-        download_link_pat = r'arduino-(\d\.?){1,3}-linux' + self.bits + '.tar.xz$'
+        download_link_pat = r'arduino-[\d\.\-r]+-linux' + self.bits + '.tar.xz$'
 
-        self.scraped_download_url = soup.find('a', href=re.compile(download_link_pat))['href']
-        self.scraped_checksum_url = soup.find('a', text=re.compile('Checksums'))['href']
+        # Trap no match found, then, download/checksum url will be empty and will raise the error
+        # instead of crashing.
+        with suppress(TypeError):
+            self.scraped_download_url = soup.find('a', href=re.compile(download_link_pat))['href']
+            self.scraped_checksum_url = soup.find('a', text=re.compile('Checksums'))['href']
 
-        self.scraped_download_url = 'http:' + self.scraped_download_url
-        self.scraped_checksum_url = 'http:' + self.scraped_checksum_url
+            self.scraped_download_url = 'http:' + self.scraped_download_url
+            self.scraped_checksum_url = 'http:' + self.scraped_checksum_url
 
         if not self.scraped_download_url:
             logger.error("Can't parse the download link from %s.", self.download_page)
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
         if not self.scraped_checksum_url:
             logger.error("Can't parse the checksum link from %s.", self.download_page)
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         DownloadCenter([DownloadItem(self.scraped_download_url), DownloadItem(self.scraped_checksum_url)],
                        on_done=self.prepare_to_download_archive, download=False)
@@ -419,17 +411,17 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         checksum_page = results[self.scraped_checksum_url]
         if download_page.error:
             logger.error("Error fetching download page: %s", download_page.error)
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
         if checksum_page.error:
             logger.error("Error fetching checksums: %s", checksum_page.error)
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
-        match = re.search(r'^(\S+)\s+arduino-(\d\.?){1,3}-linux' + self.bits + '.tar.xz$',
+        match = re.search(r'^(\S+)\s+arduino-[\d\.\-r]+-linux' + self.bits + '.tar.xz$',
                           checksum_page.buffer.getvalue().decode('ascii'),
                           re.M)
         if not match:
-            logger.error("Can't parse the checksum.")
-            UI.return_main_screen()
+            logger.error("Can't find a checksum.")
+            UI.return_main_screen(status_code=1)
         checksum = match.group(1)
 
         soup = BeautifulSoup(download_page.buffer.getvalue())
@@ -437,7 +429,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
 
         if not btn:
             logger.error("Can't parse download button.")
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         base_url = download_page.final_url
         cookies = download_page.cookies
@@ -455,7 +447,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
             with futures.ProcessPoolExecutor(max_workers=1) as executor:
                 f = executor.submit(_add_to_group, self._current_user, self.ARDUINO_GROUP)
                 if not f.result():
-                    UI.return_main_screen()
+                    UI.return_main_screen(status_code=1)
 
         self.start_download_and_install()
 
@@ -473,3 +465,107 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
                                                      categories=categories))
         if not self.was_in_arduino_group:
             UI.delayed_display(DisplayMessage(_("You need to logout and login again for your installation to work")))
+
+
+class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
+    """The base for all Netbeans installers."""
+
+    BASE_URL = "http://download.netbeans.org/netbeans"
+    EXECUTABLE = "nb/netbeans"
+
+    def __init__(self, category, flavour=""):
+        """The constructor.
+        @param category The IDE category.
+        @param flavour The Netbeans flavour (plugins bundled).
+        """
+        # add a separator to the string, like -cpp
+        if flavour:
+            flavour = '-' + flavour
+        self.flavour = flavour
+
+        super().__init__(name="Netbeans",
+                         description=_("Netbeans IDE"),
+                         category=category,
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://netbeans.org/downloads/zip.html",
+                         dir_to_decompress_in_tarball="netbeans*",
+                         desktop_filename="netbeans{}.desktop".format(flavour),
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'])
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        """Get the latest version and trigger the download of the download_page file.
+        :param result: the file downloaded by DownloadCenter, contains a web page
+        """
+        # Processing the string to obtain metadata (version)
+        try:
+            url_version_str = result[self.download_page].buffer.read().decode('utf-8')
+        except AttributeError:
+            # The file could not be parsed or there is no network connection
+            logger.error("The download page changed its syntax or is not parsable")
+            UI.return_main_screen(status_code=1)
+
+        preg = re.compile(".*/images_www/v6/download/.*")
+        for line in url_version_str.split("\n"):
+            if preg.match(line):
+                line = line.replace("var PAGE_ARTIFACTS_LOCATION = \"/images"
+                                    "_www/v6/download/", "").replace("/\";", "")
+                self.version = line.strip()
+
+        if not self.version:
+            # Fallback
+            logger.error("Could not determine latest version")
+            UI.return_main_screen(status_code=1)
+
+        self.version_download_page = "https://netbeans.org/images_www/v6/download/" \
+                                     "{}/js/files.js".format(self.version)
+        DownloadCenter([DownloadItem(self.version_download_page)], self.parse_download_page_callback, download=False)
+
+    @MainLoop.in_mainloop_thread
+    def parse_download_page_callback(self, result):
+        """Get the download_url and trigger the download and installation of the app.
+        :param result: the file downloaded by DownloadCenter, contains js functions with download urls
+        """
+        logger.info("Netbeans {}".format(self.version))
+
+        # Processing the string to obtain metadata (download url)
+        try:
+            url_file = result[self.version_download_page].buffer.read().decode('utf-8')
+        except AttributeError:
+            # The file could not be parsed
+            logger.error("The download page changed its syntax or is not parsable")
+            UI.return_main_screen(status_code=1)
+
+        preg = re.compile('add_file\("zip/netbeans-{}-[0-9]{{12}}{}.zip"'.format(self.version, self.flavour))
+        for line in url_file.split("\n"):
+            if preg.match(line):
+                # Clean up the string from js (it's a function call)
+                line = line.replace("add_file(", "").replace(");", "").replace('"', "")
+                url_string = line
+
+        if not url_string:
+            # The file could not be parsed
+            logger.error("The download page changed its syntax or is not parsable")
+            UI.return_main_screen(status_code=1)
+
+        string_array = url_string.split(", ")
+        try:
+            url_suffix = string_array[0]
+            md5 = string_array[2]
+        except IndexError:
+            # The file could not be parsed
+            logger.error("The download page changed its syntax or is not parsable")
+            UI.return_main_screen(status_code=1)
+
+        download_url = "{}/{}/final/{}".format(self.BASE_URL, self.version, url_suffix)
+        self.download_requests.append(DownloadItem(download_url, Checksum(ChecksumType.md5, md5)))
+        self.start_download_and_install()
+
+    def post_install(self):
+        """Create the Netbeans launcher"""
+        create_launcher(self.desktop_filename,
+                        get_application_desktop_file(name=_("Netbeans IDE"),
+                                                     icon_path=join(self.install_path, "nb", "netbeans.png"),
+                                                     exec=join(self.install_path, "bin", "netbeans"),
+                                                     comment=_("Netbeans IDE"),
+                                                     categories="Development;IDE;"))

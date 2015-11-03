@@ -25,15 +25,28 @@ from ..large import test_games
 
 
 class StencylInContainer(ContainerTests, test_games.StencylTests):
-    """This will test the basic cli command class inside a container"""
+    """This will test the Stencyl editor inside a container"""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.stencyl.com"
-        self.port = "80"
+        self.hosts = {80: ["www.stencyl.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'stencyl')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/games/stencyl".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "games", "stencyl")
+
+
+class Unity3DInContainer(ContainerTests, test_games.Unity3DTests):
+    """This will test the Unity 3D editor inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {80: ["download.unity3d.com"]}
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'unity3d')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "games", "unity3d")

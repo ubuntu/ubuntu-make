@@ -22,6 +22,7 @@
 from . import ContainerTests
 import os
 from ..large import test_web
+from ..tools import get_data_dir, UMAKE
 
 
 class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
@@ -31,11 +32,18 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "www.mozilla.org"
-        self.port = "443"
+        self.hosts = {443: ["www.mozilla.org"]}
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/web/firefox-dev".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "web", "firefox-dev")
+
+    def test_install_with_changed_download_page(self):
+        """Installing firefox developer should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.mozilla.org", "en-US",
+                                               "firefox", "developer", "all")
+        umake_command = self.command('{} web firefox-dev'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
 
 class VisualStudioCodeContainer(ContainerTests, test_web.VisualStudioCodeTest):
@@ -45,9 +53,22 @@ class VisualStudioCodeContainer(ContainerTests, test_web.VisualStudioCodeTest):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostname = "code.visualstudio.com"
-        self.port = "443"
+        self.hosts = {443: ["code.visualstudio.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'vscode')
         super().setUp()
         # override with container path
-        self.installed_path = os.path.expanduser("/home/{}/tools/web/visual-studio-code".format(self.DOCKER_USER))
+        self.installed_path = os.path.join(self.install_base_path, "web", "visual-studio-code")
+
+    def test_install_with_changed_download_page(self):
+        """Installing visual studio code should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "code.visualstudio.com", "Docs")
+        umake_command = self.command('{} web visual-studio-code'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_changed_license_page(self):
+        """Installing visual studio code should fail if license page has significantly changed"""
+        license_page_file_path = os.path.join(get_data_dir(), "server-content", "code.visualstudio.com", "License")
+        umake_command = self.command('{} web visual-studio-code'.format(UMAKE))
+        self.bad_download_page_test(umake_command, license_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))

@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<matrix-project>
+  <actions/>
+  <description>Tests execution for ubuntu make on trusty using latest available ubuntu make test.</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.queueSorter.PrioritySorterJobProperty>
+      <priority>100</priority>
+    </hudson.queueSorter.PrioritySorterJobProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.TextParameterDefinition>
+          <name>target</name>
+          <description>Test target (system or trunk). This depends on which setup job previously executed and is just a tag here.</description>
+          <defaultValue></defaultValue>
+        </hudson.model.TextParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <axes>
+    <hudson.matrix.TextAxis>
+      <name>type</name>
+      <values>
+        <string>pep8</string>
+        <string>small</string>
+        <string>medium</string>
+        <string>large</string>
+      </values>
+    </hudson.matrix.TextAxis>
+    <hudson.matrix.LabelAxis>
+      <name>label</name>
+      <values>
+        <string>ps-trusty-desktop-amd64-1</string>
+        <string>ps-trusty-desktop-i386-1</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+  </axes>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash -eu
+
+RESULT_DIR=$PWD
+# remove old artefacts.
+rm -rf * .* 2&gt;/dev/null || true
+
+echo &quot;Testing $type tests on ubuntu make $target&quot;
+ADDITIONAL_OPTS=&quot;&quot;
+
+if [ &quot;$target&quot; == &quot;system&quot; ]; then
+    ADDITIONAL_OPTS=&quot;--system &quot;
+fi
+
+TEST_ENV=&quot;DISPLAY=:0&quot;
+
+# set proxy for all tests but small ones (proxy doesn&apos;t know about localhost and try to interfere)
+if [ &quot;$type&quot; != small ]; then
+    TEST_ENV=&quot;http_proxy=http://squid.internal:3128 https_proxy=http://squid.internal:3128 $TEST_ENV&quot;
+fi
+
+# we skip medium on non amd64, containers are 64 bits
+if [ &quot;$type&quot; == medium ] &amp;&amp; [ &quot;$(arch)&quot; != x86_64 ]; then
+    echo &apos;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;testsuite name=&quot;nosetests&quot; tests=&quot;1&quot; errors=&quot;0&quot; failures=&quot;0&quot; skip=&quot;0&quot;&gt;&lt;testcase classname=&quot;ignore&quot; name=&quot;medium._test_not_supported&quot; time=&quot;0.0&quot;&gt;{}&lt;/testcase&gt;&lt;/testsuite&gt;&apos; &gt; ${RESULT_DIR}/nosetests.xml
+    exit 0
+fi
+
+# We need a pseudo tty (even if we have no input) for medium tests to pass. That&apos;s why we &quot;ssh -t -t&quot;
+# sudo su is used because tests:
+# 1. are better run as non root (hence su whoami)
+# 2. need to be able to gain sudo priviledge when installing packages
+sshpass -p &quot;ubuntu&quot; ssh -o StrictHostKeyChecking=no -t -t 127.0.0.1 &quot;sudo su $(whoami) -c &apos;cd ~/ubuntu-make &amp;&amp; $TEST_ENV dbus-launch eatmydata ./runtests --coverage --publish ${ADDITIONAL_OPTS} $type&apos;&quot; || true
+
+# copy artefacts
+cd ~/ubuntu-make
+cp nosetests.* ${RESULT_DIR}
+cp .coverage ${RESULT_DIR}
+cp -a *coverage* ${RESULT_DIR}
+cp *.log ${RESULT_DIR}
+cp -a /tmp/config ${RESULT_DIR}</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>**</artifacts>
+      <latestOnly>false</latestOnly>
+    </hudson.tasks.ArtifactArchiver>
+    <hudson.tasks.junit.JUnitResultArchiver>
+      <testResults>**/nosetests.xml</testResults>
+      <keepLongStdio>false</keepLongStdio>
+      <testDataPublishers/>
+    </hudson.tasks.junit.JUnitResultArchiver>
+    <hudson.plugins.build__publisher.BuildPublisher>
+      <publishUnstableBuilds>true</publishUnstableBuilds>
+      <publishFailedBuilds>true</publishFailedBuilds>
+      <postActions class="vector"/>
+    </hudson.plugins.build__publisher.BuildPublisher>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger>
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs class="java.util.Collections$EmptyList"/>
+          <projects>tests-collect, </projects>
+          <condition>ALWAYS</condition>
+          <triggerWithNoParameters>true</triggerWithNoParameters>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
+  </publishers>
+  <buildWrappers/>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
+</matrix-project>

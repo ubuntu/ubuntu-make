@@ -5,8 +5,6 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 
 As a first step, it focuses on installing a full-fledged android development environment on the latest Ubuntu LTS (14.04).
 
-**/!\ WIP, not ready for consumption yet**
-
 ## Running the command line tool
 To run the tool:
 
@@ -146,6 +144,7 @@ For an easier development workflow, we encourage the use of virtualenv to test a
 $ virtualenv --python=python3 --system-site-packages env
 $ sudo apt-get install -qq apt apt-utils libapt-pkg-dev # those are the requirements to compile python-apt
 $ sudo apt-get install -qq python3-progressbar python3-gi python3-argcomplete
+$ sudo apt-get install -qq bzr python3-dev # requires for pip install -r
 $ env/bin/pip install -r requirements.txt
 $ source env/bin/activate
 $ bin/umake

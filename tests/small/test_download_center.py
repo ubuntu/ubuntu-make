@@ -19,6 +19,7 @@
 
 """Tests for the download center module using a local server"""
 
+from enum import Enum
 import os
 from os.path import join, getsize
 from time import time
@@ -223,6 +224,25 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.error)
 
+    def test_download_with_sha256sum(self):
+        """we deliver once successful download, matching sha256sum"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([DownloadItem(request,
+                                     Checksum(ChecksumType.sha256,
+                                              'b1b113c6ed8ab3a14779f7c54179eac2b87d39fcebbf65a50556b8d68caaa2fb'))],
+                       self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result.fd.read())
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.error)
+
     def test_download_with_no_checksum_value(self):
         """we deliver one successful download with a checksum type having no value"""
         filename = "simplefile"
@@ -288,6 +308,7 @@ class TestDownloadCenter(LoggedTestCase):
             with open(join(self.server_dir, filename), 'rb') as file_on_disk:
                 self.assertEqual(file_on_disk.read(),
                                  map_result[self.build_server_address(filename)].fd.read())
+        self.assertEqual(self.callback.call_count, 1, "Global done callback is only called once")
 
     def test_multiple_downloads_with_reports(self):
         """we deliver more than on download in parallel"""
@@ -309,6 +330,7 @@ class TestDownloadCenter(LoggedTestCase):
             result_dict[self.build_server_address(filename)] = {'size': file_size,
                                                                 'current': file_size}
         self.assertEqual(report.call_args, call(result_dict))
+        self.assertEqual(self.callback.call_count, 1, "Global done callback is only called once")
 
     def test_404_url(self):
         """we return an error for a request including a 404 url"""
@@ -324,6 +346,7 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.fd)
         self.expect_warn_error = True
+        self.assertEqual(self.callback.call_count, 1, "Global done callback is only called once")
 
     def test_multiple_with_one_404_url(self):
         """we raise an error when we try to download 404 urls"""
@@ -339,6 +362,7 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNotNone(map_result[self.build_server_address("does_not_exist")].error)
         self.assertIsNotNone(map_result[self.build_server_address("simplefile")].fd)
         self.expect_warn_error = True
+        self.assertEqual(self.callback.call_count, 1, "Global done callback is only called once")
 
     def test_in_memory_download(self):
         """we deliver download on memory objects"""
@@ -385,10 +409,23 @@ class TestDownloadCenter(LoggedTestCase):
         self.expect_warn_error = True
 
     def test_download_with_wrong_sha1(self):
-        """we raise an error if we don't have the correct md5sum"""
+        """we raise an error if we don't have the correct sha1"""
         filename = "simplefile"
         request = self.build_server_address(filename)
         DownloadCenter([DownloadItem(request, Checksum(ChecksumType.sha1, 'AAAAA'))], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertIn("Corrupted download", result.error)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.fd)
+        self.expect_warn_error = True
+
+    def test_download_with_wrong_sha256(self):
+        """we raise an error if we don't have the correct sha256"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([DownloadItem(request, Checksum(ChecksumType.sha256, 'AAAAA'))], self.callback)
         self.wait_for_callback(self.callback)
 
         result = self.callback.call_args[0][0][request]
@@ -419,6 +456,22 @@ class TestDownloadCenter(LoggedTestCase):
                          [call({self.build_server_address(filename): {'size': -1, 'current': 0}}),
                           call({self.build_server_address(filename): {'size': -1, 'current': 8192}})])
 
+    def test_download_with_wrong_checksumtype(self):
+        """we raise an error if we don't have a support checksum type"""
+        class WrongChecksumType(Enum):
+            didrocksha = "didrocksha"
+
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([DownloadItem(request, Checksum(WrongChecksumType.didrocksha, 'AAAAA'))], self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertIn("Unsupported checksum type", result.error)
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.fd)
+        self.expect_warn_error = True
+
 
 class TestDownloadCenterSecure(LoggedTestCase):
     """This will test the download center in secure mode by sending one or more download requests"""
@@ -429,7 +482,7 @@ class TestDownloadCenterSecure(LoggedTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.server_dir = join(get_data_dir(), "server-content")
-        cls.server = LocalHttp(cls.server_dir, use_ssl="localhost.pem")
+        cls.server = LocalHttp(cls.server_dir, use_ssl=["localhost"])
 
     @classmethod
     def tearDownClass(cls):

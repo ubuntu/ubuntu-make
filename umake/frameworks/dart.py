@@ -28,7 +28,8 @@ import platform
 import re
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.tools import add_env_to_user
+from umake.network.download_center import DownloadItem
+from umake.tools import add_env_to_user, MainLoop
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -54,33 +55,44 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Dart SDK", description=_("Dart SDK (default)"), is_category_default=True,
                          category=category, only_on_archs=_supported_archs,
-                         download_page="https://www.dartlang.org/downloads/linux.html",
-                         dir_to_decompress_in_tarball="dart-sdk")
+                         download_page="https://api.dartlang.org",
+                         dir_to_decompress_in_tarball="dart-sdk",
+                         required_files_path=[os.path.join("bin", "dart")])
 
-    def parse_download_link(self, line, in_download):
-        """Parse Dart Lang download link, expect to find a url"""
-        tag_machine = '64'
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        """Get latest version and append files to download"""
+        logger.debug("Set download metadata")
+
+        error_msg = result[self.download_page].error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        version = ''
+        version_re = r'Dart SDK ([\d\.]+)'
+        for line in result[self.download_page].buffer:
+            p = re.search(version_re, line.decode())
+            with suppress(AttributeError):
+                version = p.group(1)
+                break
+        else:
+            logger.error("Download page changed its syntax or is not parsable")
+            UI.return_main_screen(status_code=1)
+
+        tag_machine = 'x64'
         if platform.machine() == 'i686':
-            tag_machine = '32'
-        download_re = r'<a data-bits="{}" data-os="linux" data-tool="sdk".*href="(.*)">'.format(tag_machine)
+            tag_machine = 'ia32'
 
-        p = re.search(download_re, line)
-        with suppress(AttributeError):
-            url = p.group(1)
-            return ((url, None), True)
-        return ((None, None), False)
+        url = "https://storage.googleapis.com/dart-archive/channels/stable/release/{}/sdk/dartsdk-linux-{}-release.zip"\
+            .format(version, tag_machine)
+        logger.debug("Found download link for {}".format(url))
+
+        self.download_requests.append(DownloadItem(url, None))
+        self.start_download_and_install()
 
     def post_install(self):
         """Add go necessary env variables"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
-        UI.delayed_display(DisplayMessage(_("You need to restart a shell session for your installation to work")))
-
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.isfile(os.path.join(self.install_path, "bin", "dart")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
+        UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation "
+                                            "to work properly").format(self.name)))

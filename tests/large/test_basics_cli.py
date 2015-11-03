@@ -19,12 +19,28 @@
 
 """Tests for basic CLI commands"""
 
+from contextlib import suppress
+import os
 import subprocess
-from ..tools import LoggedTestCase, UMAKE
+from . import LargeFrameworkTests
+from ..tools import LoggedTestCase, UMAKE, get_root_dir
 
 
-class BasicCLI(LoggedTestCase):
+class BasicCLI(LargeFrameworkTests):
     """This will test the basic cli command class"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.log_cfg = None
+        with suppress(KeyError):
+            cls.log_cfg = os.environ.pop("LOG_CFG")
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        if (cls.log_cfg):
+            os.environ["LOG_CFG"] = cls.log_cfg
 
     def command_as_list(self, commands_input):
         """passthrough, return args"""
@@ -62,3 +78,19 @@ class BasicCLI(LoggedTestCase):
             self.assertNotIn("DEBUG:", self.return_without_first_output(e.output.decode("utf-8")))
             exception_raised = True
         self.assertTrue(exception_raised)
+
+    def test_setup_logging_level_with_env(self):
+        """Set logging option to debug via env var"""
+        env = {"LOG_CFG": os.path.join(get_root_dir(), "confs", "info.logcfg")}
+        env.update(os.environ)
+        commands = [UMAKE]
+        if self.in_container:
+            commands.insert(0, "LOG_CFG={}".format(env["LOG_CFG"]))
+        result = subprocess.check_output(self.command_as_list(commands), env=env,
+                                         stderr=subprocess.STDOUT)
+        self.assertIn("Logging level set to INFO", result.decode("utf-8"))
+
+    def test_version(self):
+        """We display a version"""
+        result = subprocess.check_output(self.command_as_list([UMAKE, '--version']))
+        self.assertNotEqual(result, "")

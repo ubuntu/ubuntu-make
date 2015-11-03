@@ -21,4 +21,5 @@ cd $1
 shift
 [[ $(env | grep VIRTUAL_ENV) == *env ]] && . env/bin/activate
 export $(dbus-launch)
-$@
+command=$@
+bash -l -c "$command"

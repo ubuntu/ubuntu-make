@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<matrix-project>
+  <actions/>
+  <description>Setup udtc trusty job using system ubuntu make	</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.queueSorter.PrioritySorterJobProperty>
+      <priority>100</priority>
+    </hudson.queueSorter.PrioritySorterJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector">
+    <hudson.triggers.TimerTrigger>
+      <spec>02 3,9,15,21 * * *</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <axes>
+    <hudson.matrix.LabelAxis>
+      <name>label</name>
+      <values>
+        <string>ps-trusty-desktop-amd64-1</string>
+        <string>ps-trusty-desktop-i386-1</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+  </axes>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash -eu
+
+CONFIG_PATH=/tmp/config
+
+# cleanup
+rm -rf ~/ubuntu-make*
+rm -rf ${CONFIG_PATH}
+
+# add ppa for external content and source package
+sudo add-apt-repository -y ppa:ubuntu-desktop/ubuntu-make
+sudo sed -i &apos;s/# deb-src/deb-src/&apos; /etc/apt/sources.list.d/ubuntu-desktop-ubuntu-make-trusty.list
+sudo apt-get update
+sudo apt-get install -y ubuntu-make
+sudo apt-get install -y dpkg-dev sloccount
+
+# install latest system version
+cd ~
+apt-get source ubuntu-make
+mv ubuntu-make-* ubuntu-make
+cd ubuntu-make
+mv umake umakelocal  # get umake dir out of the way for coverage report
+UBUNTU_MAKE_VERSION=$(dpkg-parsechangelog --show-field Version)
+
+# install test packages
+testpackages=$(grep Depends debian/tests/control | tr -d , | tr -d @ | sed &apos;s/Depends:  //&apos;)
+sudo apt-get install -y $testpackages
+sudo addgroup $(whoami) docker
+
+# ensure docker is using the CI proxy
+sudo bash -c &apos;echo export http_proxy=&quot;http://squid.internal:3128&quot; &gt;&gt; /etc/default/docker.io&apos;
+sudo restart docker
+
+# config save
+mkdir ${CONFIG_PATH}
+cd ${CONFIG_PATH}
+echo -e &quot;{\n  &apos;version&apos;: &apos;${UBUNTU_MAKE_VERSION}&apos;,\n  &apos;date&apos;: {\n    &apos;timestamp&apos;: &apos;$(date +%s)&apos;,\n    &apos;utc&apos;: &apos;$(date -u)&apos; },\n  &apos;arch&apos;: &apos;$(arch)&apos;\n}&quot; &gt; ubuntu-make-version
+dpkg -l &gt; packages_list
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger>
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+              <properties>target=system</properties>
+            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+          </configs>
+          <projects>tests, </projects>
+          <condition>UNSTABLE_OR_BETTER</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs class="java.util.Collections$EmptyList"/>
+          <projects>ps-trusty-desktop-revert-snapshot-daily</projects>
+          <condition>FAILED</condition>
+          <triggerWithNoParameters>true</triggerWithNoParameters>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
+  </publishers>
+  <buildWrappers/>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
+</matrix-project>

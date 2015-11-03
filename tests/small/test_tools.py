@@ -31,7 +31,7 @@ import tempfile
 from textwrap import dedent
 from time import time
 import threading
-from ..tools import change_xdg_path, get_data_dir, LoggedTestCase
+from ..tools import change_xdg_path, get_data_dir, LoggedTestCase, INSTALL_DIR
 from umake import settings, tools
 from umake.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
     create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_icon_path, get_launcher_path, copy_icon
@@ -114,6 +114,23 @@ class TestConfigHandler(LoggedTestCase):
         ConfigHandler()
 
         self.assertEqual(len(os.listdir(self.config_dir)), 0)
+
+    def test_transition_old_config(self):
+        """Transition udtc old config to new umake one"""
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            shutil.copy(os.path.join(self.config_dir_for_name("old"), "udtc"), tmpdirname)
+            change_xdg_path('XDG_CONFIG_HOME', tmpdirname)
+            self.assertEqual(ConfigHandler().config,
+                             {'frameworks': {
+                                 'category-a': {
+                                     'framework-a': {'path': '/home/didrocks/quickly/ubuntu-make/adt-eclipse'},
+                                     'framework-b': {'path': '/home/didrocks/foo/bar/android-studio'}
+                                 }
+                             }})
+
+            # file has been renamed
+            self.assertTrue(os.path.exists(os.path.join(tmpdirname, "umake")), "New umake config file exists")
+            self.assertFalse(os.path.exists(os.path.join(tmpdirname, "udtc")), "Old udtc config file is removed")
 
 
 class TestCompletionArchVersion(LoggedTestCase):
@@ -379,13 +396,13 @@ class TestLauncherIcons(LoggedTestCase):
                Version=1.0
                Type=Application
                Name=Android Studio
-               Icon=/home/didrocks/tools/android-studio/bin/studio.png
-               Exec="/home/didrocks/tools/android-studio/bin/studio.sh" %f
+               Icon=/home/didrocks/{install_dir}/android-studio/bin/studio.png
+               Exec="/home/didrocks/{install_dir}/android-studio/bin/studio.sh" %f
                Comment=Develop with pleasure!
                Categories=Development;IDE;
                Terminal=false
                StartupWMClass=jetbrains-android-studio
-               """)
+               """.format(install_dir=INSTALL_DIR))
 
     def write_desktop_file(self, filename):
         """Write a dummy filename to the applications dir and return filepath"""
@@ -420,13 +437,13 @@ class TestLauncherIcons(LoggedTestCase):
                Version=1.0
                Type=Application
                Name=Android Studio 2
-               Icon=/home/didrocks/tools/android-studio/bin/idea2.png
-               Exec="/home/didrocks/tools/android-studio/bin/studio2.sh" %f
+               Icon=/home/didrocks/{install_dir}/android-studio/bin/idea2.png
+               Exec="/home/didrocks/{install_dir}/android-studio/bin/studio2.sh" %f
                Comment=Develop with pleasure!
                Categories=Development;IDE;
                Terminal=false
                StartupWMClass=jetbrains-android-studio
-               """)
+               """.format(install_dir=INSTALL_DIR))
         create_launcher("foo.desktop", new_content)
 
         self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
@@ -731,6 +748,20 @@ class TestUserENV(LoggedTestCase):
         self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
 
     @patch("umake.tools.os.path.expanduser")
+    def test_add_env_to_user(self, expanderusermock):
+        """Test that adding to user env a list concatenate them to an existing .profile file"""
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".profile")
+        open(profile_file, 'w').write("Foo\nBar\n")
+        tools.add_env_to_user("one path addition", {"FOOO": {"value": ["bar", "baz"]}})
+
+        expanderusermock.assert_called_with('~')
+        profile_content = open(profile_file).read()
+        self.assertTrue("Foo\nBar\n" in profile_content, profile_content)  # we kept previous content
+        self.assertTrue("export FOOO=bar:baz\n" in profile_content, profile_content)
+        self.assertTrue("bar" in os.environ["FOOO"], os.environ["FOOO"])
+
+    @patch("umake.tools.os.path.expanduser")
     def test_add_env_to_user_with_shell_zsh(self, expanderusermock):
         """Test that adding to user env appending to an existing .zprofile file"""
         os.environ['SHELL'] = '/bin/zsh'
@@ -953,6 +984,19 @@ class TestUserENV(LoggedTestCase):
         profile_file = os.path.join(self.local_dir, ".profile")
         open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A\nexport BAR=bar\n\n"
                                       "# Ubuntu make installation of framework A\nexport FOO=bar\n\nexport BAR=baz")
+        tools.remove_framework_envs_from_user("framework A")
+
+        profile_content = open(profile_file).read()
+        self.assertEqual(profile_content, "Foo\nBar\nexport BAR=baz")
+
+    @patch("umake.tools.os.path.expanduser")
+    def test_remove_user_env_zsh(self, expanderusermock):
+        """Remove an env from a user setup using zsh"""
+        os.environ['SHELL'] = '/bin/zsh'
+        expanderusermock.return_value = self.local_dir
+        profile_file = os.path.join(self.local_dir, ".zprofile")
+        open(profile_file, 'w').write("Foo\nBar\n# Ubuntu make installation of framework A"
+                                      "\nexport FOO=bar\n\nexport BAR=baz")
         tools.remove_framework_envs_from_user("framework A")
 
         profile_content = open(profile_file).read()

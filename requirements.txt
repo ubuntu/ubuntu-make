@@ -11,5 +11,5 @@ nose
 nose-cov
 nose-json
 pep8
-pexpect
+pexpect>=4.0
 

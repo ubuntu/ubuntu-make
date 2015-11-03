@@ -24,10 +24,11 @@ import os
 import pexpect
 import shutil
 import signal
+import stat
 import subprocess
 from time import sleep
 from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned, remove_framework_envs_from_user
-from ..tools import LoggedTestCase, get_path_from_desktop_file, is_in_group
+from ..tools import LoggedTestCase, get_path_from_desktop_file, is_in_group, INSTALL_DIR
 
 
 class LargeFrameworkTests(LoggedTestCase):
@@ -39,6 +40,7 @@ class LargeFrameworkTests(LoggedTestCase):
         self.installed_path = ""
         self.framework_name_for_profile = ""
         self.conf_path = os.path.expanduser("~/.config/umake")
+        self.install_base_path = os.path.expanduser("~/{}".format(INSTALL_DIR))
         self.desktop_filename = ""
         self.child = None
         self.additional_dirs = []
@@ -151,6 +153,16 @@ class LargeFrameworkTests(LoggedTestCase):
         self.child.sendline("")
         self.wait_and_no_warn(expect_warn)
 
+    def close_and_check_status(self, exit_status=0):
+        """exit child process and check its exit status"""
+        self.child.close()
+        self.assertEqual(exit_status, self.child.exitstatus)
+
+    def wait_and_close(self, expect_warn=False, exit_status=0):
+        """wait for exiting and check exit status"""
+        self.wait_and_no_warn(expect_warn)
+        self.close_and_check_status(exit_status)
+
     def command(self, commands_to_run):
         """passthrough, return args"""
         return commands_to_run
@@ -159,6 +171,10 @@ class LargeFrameworkTests(LoggedTestCase):
         """passthrough, return args"""
         return commands_input
 
+    def get_launcher_path(self, desktop_filename):
+        """passthrough getting the launcher path from umake tools"""
+        return get_launcher_path(desktop_filename)
+
     def launcher_exists_and_is_pinned(self, desktop_filename):
         """passthrough to in process method"""
         return launcher_exists_and_is_pinned(desktop_filename)
@@ -166,6 +182,13 @@ class LargeFrameworkTests(LoggedTestCase):
     def path_exists(self, path):
         """passthrough to os.path.exists"""
         return os.path.exists(path)
+
+    def remove_path(self, path):
+        """Remove targeted path"""
+        try:
+            os.remove(path)
+        except OSError:
+            shutil.rmtree(path)
 
     def is_in_path(self, filename):
         """check that we have a directory in path"""
@@ -180,6 +203,10 @@ class LargeFrameworkTests(LoggedTestCase):
     def is_in_group(self, group):
         """return if current user is in a group"""
         return is_in_group(group)
+
+    def get_file_perms(self, path):
+        """return unix file perms string for path"""
+        return stat.filemode(os.stat(path).st_mode)
 
     def create_file(self, path, content):
         """passthrough to create a file on the disk"""

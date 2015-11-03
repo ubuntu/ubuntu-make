@@ -52,7 +52,8 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=_supported_archs,
                          download_page="https://www.mozilla.org/en-US/firefox/developer/all",
                          dir_to_decompress_in_tarball="firefox",
-                         desktop_filename="firefox-developer.desktop")
+                         desktop_filename="firefox-developer.desktop",
+                         required_files_path=["firefox"])
         self.arg_lang = None
 
     @MainLoop.in_mainloop_thread
@@ -70,7 +71,7 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
         error_msg = result[self.download_page].error
         if error_msg:
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         arch = platform.machine()
         arg_lang_url = None
@@ -105,12 +106,12 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
             logger.debug("Selecting {} lang".format(self.arg_lang))
             if not arg_lang_url:
                 logger.error("Could not find a download url for language {}".format(self.arg_lang))
-                UI.return_main_screen(1)
+                UI.return_main_screen(status_code=1)
             self.language_select_callback(arg_lang_url)
         else:
             if not languages:
                 logger.error("Download page changed its syntax or is not parsable")
-                UI.return_main_screen()
+                UI.return_main_screen(status_code=1)
             logger.debug("Check list of installable languages.")
             UI.delayed_display(TextWithChoices(_("Choose language: {}".format(default_label)), languages, True))
 
@@ -133,16 +134,6 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
             self.arg_lang = args.lang
         super().run_for(args)
 
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.isfile(os.path.join(self.install_path, "firefox")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
-
 
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -150,7 +141,9 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Visual Studio Code", description=_("Visual Studio focused on modern web and cloud"),
                          category=category, only_on_archs=_supported_archs, expect_license=True,
                          download_page="https://code.visualstudio.com/Docs",
-                         desktop_filename="visual-studio-code.desktop", dir_to_decompress_in_tarball="VSCode-linux-*",
+                         desktop_filename="visual-studio-code.desktop",
+                         required_files_path=["Code"],
+                         dir_to_decompress_in_tarball="VSCode-linux-*",
                          packages_requirements=["libgtk2.0-0"])
         self.license_url = "https://code.visualstudio.com/License"
         # we have to mock headers for visual studio code website to give us an answer
@@ -169,7 +162,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         error_msg = result[self.download_page].error
         if error_msg:
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         arch = platform.machine()
         download_re = r'\'linux64\': \'([^\']+)\''
@@ -185,7 +178,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
         if url is None:
             logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
         self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, None), headers=self.headers))
 
         if not self.auto_accept_license:
@@ -202,7 +195,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         error_msg = result[self.license_url].error
         if error_msg:
             logger.error("An error occurred while downloading {}: {}".format(self.license_url, error_msg))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         with StringIO() as license_txt:
             in_license = False
@@ -223,7 +216,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                                             UI.return_main_screen))
             else:
                 logger.error("We were expecting to find a license, we didn't.")
-                UI.return_main_screen()
+                UI.return_main_screen(status_code=1)
 
     def post_install(self):
         """Create the Visual Studio Code launcher"""
@@ -232,13 +225,3 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=os.path.join(self.install_path, "Code"),
                         comment=_("Visual Studio focused on modern web and cloud"),
                         categories="Development;IDE;"))
-
-    @property
-    def is_installed(self):
-        # check path and requirements
-        if not super().is_installed:
-            return False
-        if not os.path.isfile(os.path.join(self.install_path, "Code")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
