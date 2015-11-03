@@ -22,9 +22,10 @@
 
 from . import ContainerTests
 import os
+import pexpect
 
 from ..large import test_ide
-from ..tools import get_data_dir, UMAKE
+from ..tools import get_data_dir, swap_file_and_restore, UMAKE, spawn_process
 
 
 class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
@@ -222,6 +223,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
+    TEST_CHECKSUM_NETBEANS_DATA = "1e07ec8775939ba6d35731831bdb7bf0"
 
     def setUp(self):
         self.hosts = {80: ["download.netbeans.org"], 443: ["netbeans.org"]}
@@ -230,3 +232,36 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "netbeans")
+
+    def test_install_with_changed_download_page(self):
+        """Installing NetBeans ide should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "netbeans.org", "downloads",
+                                               "zip.html")
+        umake_command = self.command('{} ide netbeans'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_changed_download_reference_page(self):
+        """Installing NetBeans ide should fail if download reference page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "netbeans.org", "images_www",
+                                               "v6", "download", "8.0.42", "js", "files.js")
+        umake_command = self.command('{} ide netbeans'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_changed_checksum_page(self):
+        """Installing NetBeans ide should fail if checksum link is wrong"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "netbeans.org", "images_www",
+                                               "v6", "download", "8.0.42", "js", "files.js")
+        with swap_file_and_restore(download_page_file_path) as content:
+            with open(download_page_file_path, "w") as newfile:
+                newfile.write(content.replace(self.TEST_CHECKSUM_NETBEANS_DATA, "abcdef"))
+            self.child = spawn_process(self.command('{} ide netbeans'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn([pexpect.EOF, "Corrupted download? Aborting."],
+                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
+
+            # we have nothing installed
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
