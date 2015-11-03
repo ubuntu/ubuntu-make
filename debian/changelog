@@ -1,4 +1,4 @@
-ubuntu-make (15.10ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (15.11) xenial; urgency=medium
 
   [ Omer Sheikh ]
   * Change default install path to ~/.local/share/umake/, depending on
@@ -60,7 +60,7 @@ ubuntu-make (15.10ubuntu1) UNRELEASED; urgency=medium
   * Some PR post-merge fixes and various refactoring.
   * Remove WIP marker in README.
 
- -- Didier Roche <didrocks@ubuntu.com>  Tue, 03 Nov 2015 09:54:46 +0100
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 03 Nov 2015 10:39:04 +0100
 
 ubuntu-make (15.10) wily; urgency=medium
 
