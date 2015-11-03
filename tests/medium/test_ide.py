@@ -224,8 +224,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hostnames = ["www.netbeans.org"]
-        self.port = "443"
+        self.hosts = {80: ["download.netbeans.org"], 443: ["netbeans.org"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
