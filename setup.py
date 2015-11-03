@@ -137,7 +137,10 @@ setup(
         ],
     },
 
-    data_files=[("share/ubuntu-make/log-confs", glob('log-confs/*.yaml'))],
+    data_files=[
+        ('lib/python3/dist-packages/umake', ['umake/version']),
+        ("share/ubuntu-make/log-confs", glob('log-confs/*.yaml'))
+    ],
 
     # In addition to run all nose tests, that will as well show python warnings
     test_suite="nose.collector",
