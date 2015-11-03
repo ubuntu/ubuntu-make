@@ -470,8 +470,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
 class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
     """The base for all Netbeans installers."""
 
-    BASE_URL = "http://download.netbeans.org/netbeans/"
-    FALLBACK_VERSION = "8.0.2"
+    BASE_URL = "http://download.netbeans.org/netbeans"
     EXECUTABLE = "nb/netbeans"
 
     def __init__(self, category, flavour=""):
@@ -516,9 +515,8 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
 
         if not self.version:
             # Fallback
-            logger.warning("Could not determine latest version, using version "
-                           "{} as fallback...".format(self.FALLBACK_VERSION))
-            self.version = self.FALLBACK_VERSION
+            logger.error("Could not determine latest version")
+            UI.return_main_screen(status_code=1)
 
         self.version_download_page = "https://netbeans.org/images_www/v6/download/" \
                                      "{}/js/files.js".format(self.version)
