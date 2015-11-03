@@ -55,7 +55,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
                          description=_("The official Rust distribution"),
                          is_category_default=True,
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page="https://www.rust-lang.org/install.html",
+                         download_page="https://www.rust-lang.org/downloads.html",
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="rust-*")
 
@@ -94,7 +94,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
         soup = BeautifulSoup(page.buffer)
 
         link = (soup.find('div', class_="install")
-                .find('td', class_="inst-type", text="Linux binaries (.tar.gz)")
+                .find('td', class_="inst-type", text="Linux (.tar.gz)")
                 .parent
                 .find(text=self.arch_trans[get_current_arch()])
                 .parent
