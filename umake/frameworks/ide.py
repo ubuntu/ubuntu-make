@@ -502,8 +502,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
             url_version_str = result[self.download_page].buffer.read().decode('utf-8')
         except AttributeError:
             # The file could not be parsed or there is no network connection
-            logger.error("You either have no connection available or "
-                         "the download page changed its syntax or is not parsable")
+            logger.error("The download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
         preg = re.compile(".*/images_www/v6/download/.*")
