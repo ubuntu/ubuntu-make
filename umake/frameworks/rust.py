@@ -133,13 +133,3 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
                                     "LD_LIBRARY_PATH": {"value": os.path.join(self.install_path, "rustc", "lib")}})
         UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation "
                                             "to work properly").format(self.name)))
-
-    @property
-    def is_installed(self):
-        """Checks path and requirements for installation"""
-        if not super().is_installed:
-            return False
-        if not os.path.isfile(os.path.join(self.install_path, "rustc", "bin", "rustc")):
-            logger.debug("{} binary isn't installed".format(self.name))
-            return False
-        return True
