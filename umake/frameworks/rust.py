@@ -55,7 +55,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
                          description=_("The official Rust distribution"),
                          is_category_default=True,
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page="https://www.rust-lang.org/install.html",
+                         download_page="https://www.rust-lang.org/downloads.html",
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="rust-*")
 
@@ -94,7 +94,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
         soup = BeautifulSoup(page.buffer)
 
         link = (soup.find('div', class_="install")
-                .find('td', class_="inst-type", text="Linux binaries (.tar.gz)")
+                .find('td', class_="inst-type", text="Linux (.tar.gz)")
                 .parent
                 .find(text=self.arch_trans[get_current_arch()])
                 .parent
@@ -124,6 +124,13 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
             self.start_download_and_install()
 
         DownloadCenter([DownloadItem(checksum_url)], on_done=checksum_downloaded, download=False)
+
+    def post_install(self):
+        """Add rust necessary env variables"""
+        add_env_to_user(self.name, {"PATH": {"value": "{}:{}".format(os.path.join(self.install_path, "rustc", "bin"),
+                                             os.path.join(self.install_path, "cargo", "bin"))},
+                                    "LD_LIBRARY_PATH": {"value": os.path.join(self.install_path, "rustc", "lib")}})
+        UI.delayed_display(DisplayMessage(_("You need to restart a shell session for your installation to work")))
 
     @property
     def is_installed(self):
