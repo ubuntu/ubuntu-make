@@ -90,7 +90,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
         error_msg = page.error
         if error_msg:
             logger.error("An error occurred while downloading {}: {}".format(self.download_page_url, error_msg))
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         soup = BeautifulSoup(page.buffer)
 
@@ -103,7 +103,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
 
         if link is None:
             logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen()
+            UI.return_main_screen(status_code=1)
 
         download_url = link.attrs['href']
         checksum_url = download_url + '.sha256'
@@ -114,7 +114,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
             checksum_result = next(iter(results.values()))  # Just get the first.
             if checksum_result.error:
                 logger.error(checksum_result.error)
-                UI.return_main_screen()
+                UI.return_main_screen(status_code=1)
 
             checksum = checksum_result.buffer.getvalue().decode('utf-8').split()[0]
             logger.info('Obtained SHA256 checksum: ' + checksum)
