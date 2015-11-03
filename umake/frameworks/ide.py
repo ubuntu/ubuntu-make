@@ -488,7 +488,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
                          category=category,
                          only_on_archs=['i386', 'amd64'],
                          download_page="https://netbeans.org/downloads/zip.html",
-                         dir_to_decompress_in_tarball="*",
+                         dir_to_decompress_in_tarball="netbeans*",
                          desktop_filename="netbeans{}.desktop".format(flavour),
                          packages_requirements=['openjdk-7-jdk', 'jayatana'])
 
@@ -537,8 +537,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("The download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
-        preg = re.compile('add_file\("zip/netbeans-' + self.version +
-                          '-[0-9]{12}' + self.flavour + '.zip"')
+        preg = re.compile('add_file\("zip/netbeans-{}-[0-9]{{12}}{}.zip"'.format(self.version, self.flavour))
         for line in url_file.split("\n"):
             if preg.match(line):
                 # Clean up the string from js (it's a function call)
@@ -559,8 +558,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("The download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
-        self.complete_name = "netbeans{}".format(self.flavour)
-        download_url = "{}{}/final/{}".format(self.BASE_URL, self.version, url_suffix)
+        download_url = "{}/{}/final/{}".format(self.BASE_URL, self.version, url_suffix)
         self.download_requests.append(DownloadItem(download_url, Checksum(ChecksumType.md5, md5)))
         self.start_download_and_install()
 
