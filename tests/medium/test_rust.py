@@ -24,7 +24,7 @@ import os
 from ..large import test_rust
 
 
-class RustInContainer(ContainerTests, test_rust.GoTests):
+class RustInContainer(ContainerTests, test_rust.RustTests):
     """This will test the Rust integration inside a container"""
 
     def setUp(self):
