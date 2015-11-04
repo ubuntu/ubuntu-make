@@ -5,7 +5,6 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 [![Build Status](https://api.travis-ci.org/ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make) (pep8 and small tests)
 
 [All test results](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests/) and [Coverage report](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests-collect/1924/label=ps-trusty-desktop-amd64-1/artifact/html-coverage/index.html)
-As a first step, it focuses on installing a full-fledged android development environment on the latest Ubuntu LTS (14.04).
 
 ## Running the command line tool
 To run the tool:
