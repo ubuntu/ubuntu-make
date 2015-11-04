@@ -27,6 +27,7 @@ import os
 from setuptools import setup, find_packages
 import subprocess
 import umake  # that initializes the gettext domain
+from umake.settings import get_version
 
 I18N_DOMAIN = gettext.textdomain()
 PO_DIR = os.path.join(os.path.dirname(os.curdir), 'po')
@@ -127,7 +128,7 @@ class update_pot(cmd.Command):
 
 setup(
     name="Ubuntu Make",
-    version="0.0.1",
+    version=get_version(),
     packages=find_packages(exclude=["tests*"]),
     package_data={},
     entry_points={

@@ -1,9 +1,10 @@
 # Ubuntu Make
 Ubuntu Make is a project designed to enable quick and easy setup of common needs for developers on Ubuntu.
 
-<!---[![Build Status](https://api.travis-ci.org/didrocks/ubuntu-make.svg?branch=master)](https://travis-ci.org/didrocks/ubuntu-make) TRAVIS disabled until they support 14.04 (need python 3.4 with platform gi.repository)-->
+## Current project health
+[![Build Status](https://api.travis-ci.org/ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make) (pep8 and small tests)
 
-As a first step, it focuses on installing a full-fledged android development environment on the latest Ubuntu LTS (14.04).
+[All test results](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests/) and [Coverage report](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests-collect/label=ps-trusty-desktop-amd64-1/lastSuccessfulBuild/artifact/html-coverage/index.html)
 
 ## Running the command line tool
 To run the tool:
@@ -85,7 +86,7 @@ There are four types of tests that can be combined in runtests:
 * **medium**: Tests the whole workflow. It directly calls end user tools from the command line, but without effecting the local system. Requirements like installing packages are mocked, as well as the usage of a local webserver serving (smaller) content similar to what will be fetched in a real use case. The assets have the same formats and layout.
 * **large**: Runs the same tests as the medium test, but with real server downloads and installation of dpkg packages. Most of these tests need root privileges. Be aware that these tests only run on a graphical environment. It will interfere with it and it is likely to install or remove packages on your system.
 
-To run all the tests, with coverage report (like in Travis CI):
+To run all the tests, with coverage report, like in our jenkins infra:
 
 ```sh
 $ ./runtests
@@ -143,7 +144,7 @@ For an easier development workflow, we encourage the use of virtualenv to test a
 ```sh
 $ virtualenv --python=python3 --system-site-packages env
 $ sudo apt-get install -qq apt apt-utils libapt-pkg-dev # those are the requirements to compile python-apt
-$ sudo apt-get install -qq python3-progressbar python3-gi python3-argcomplete
+$ sudo apt-get install -qq python3-gi # not installable with pypi
 $ sudo apt-get install -qq bzr python3-dev # requires for pip install -r
 $ env/bin/pip install -r requirements.txt
 $ source env/bin/activate
