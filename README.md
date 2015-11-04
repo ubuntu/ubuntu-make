@@ -1,7 +1,7 @@
 # Ubuntu Make
 Ubuntu Make is a project designed to enable quick and easy setup of common needs for developers on Ubuntu.
 
-<!---[![Build Status](https://api.travis-ci.org/didrocks/ubuntu-make.svg?branch=master)](https://travis-ci.org/didrocks/ubuntu-make) TRAVIS disabled until they support 14.04 (need python 3.4 with platform gi.repository)-->
+[![Build Status](https://api.travis-ci.org/ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make)
 
 As a first step, it focuses on installing a full-fledged android development environment on the latest Ubuntu LTS (14.04).
 
