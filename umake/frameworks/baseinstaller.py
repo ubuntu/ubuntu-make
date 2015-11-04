@@ -306,12 +306,19 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.get_progress(total_current_size / total_size * 100, None)
 
     def requirement_done(self, result):
-        self.get_progress(None, 100)
+        # set requirement download as finished if no error
+        if not result.error:
+            self.get_progress(None, 100)
         self.result_requirement = result
         self.download_and_requirements_done()
 
     def download_done(self, result):
-        self.get_progress(100, None)
+        # set download as finished if no error
+        for url in result:
+            if result[url].error:
+                break
+        else:
+            self.get_progress(100, None)
         self.result_download = result
         self.download_and_requirements_done()
 
