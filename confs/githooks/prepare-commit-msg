@@ -9,7 +9,7 @@
 # 3. Bumping debian/changelog version as well
 # 4. Then, modifying the commit message itself to match the correct version
 
-grep -qri releas $1
+grep -qi "create release" $1
 found=$?
 
 # we are releasing a version, generate the version

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# use this wrapper as travis doesn't like sed with '/' inline
+echo $(grep Depends debian/tests/control | tr -d , | tr -d @ | sed 's/Depends:  //')

@@ -31,6 +31,7 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
+    TEST_URL_ANDROID_STUDIO_FAKE_DATA = "https://developer.android.com/android-studio-fake.tgz"
     TEST_CHECKSUM_ANDROID_STUDIO_FAKE_DATA = "d8362a0c2ffc07b1b19c4b9001c8532de5a4b8c3"
 
     def setUp(self):
@@ -68,6 +69,26 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
         umake_command = self.command("{} android android-studio".format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_android_studio_install_with_404(self):
+        """Install android studio when the download is 404 reports correctly"""
+        android_studio_file_path = os.path.join(get_data_dir(), "server-content", "developer.android.com",
+                                                "sdk", "index.html")
+        with swap_file_and_restore(android_studio_file_path) as content:
+            with open(android_studio_file_path, "w") as newfile:
+                newfile.write(content.replace(self.TEST_URL_ANDROID_STUDIO_FAKE_DATA,
+                                              "https://developer.android.com/android-studio-unexisting.tgz"))
+            self.child = spawn_process(self.command('{} android android-studio'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
+            self.child.sendline("a")
+            self.expect_and_no_warn([pexpect.EOF, "ERROR: 404 Client Error: File not found"],
+                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
+
+            # we have nothing installed
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
 
 class AndroidSDKContainer(ContainerTests, test_android.AndroidSDKTests):
