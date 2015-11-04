@@ -460,7 +460,7 @@ class BaseNetBeansTests(LargeFrameworkTests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.expanduser("~/tools/ide/netbeans")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "netbeans")
         self.desktop_filename = "netbeans.desktop"
 
     def test_default_install(self):
