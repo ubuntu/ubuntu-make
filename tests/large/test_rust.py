@@ -1,10 +1,10 @@
-
 # -*- coding: utf-8 -*-
-# Copyright (C) 2014 Canonical
+# Copyright (C) 2015 Canonical
 #
 # Authors:
 #  Didier Roche
 #  Tin Tvrtković
+#  Jared Ravetch
 #
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -32,7 +32,7 @@ class RustTests(LargeFrameworkTests):
 
     TIMEOUT_INSTALL_PROGRESS = 300
 
-    EXAMPLE_PROJECT = """fn main() {println!("Hello World!");}"""
+    EXAMPLE_PROJECT = """fn main() {println!("hello, world");}"""
 
     def setUp(self):
         super().setUp()
@@ -42,6 +42,10 @@ class RustTests(LargeFrameworkTests):
     @property
     def exec_path(self):
         return os.path.join(self.installed_path, "rustc", "bin", "rustc")
+
+    @property
+    def cargo_path(self):
+        return os.path.join(self.installed_path, "cargo", "bin", "cargo")
 
     def test_default_rust_install(self):
         """Install Rust from scratch test case"""
@@ -60,8 +64,16 @@ class RustTests(LargeFrameworkTests):
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
-        self.assert_exec_exists()
         self.assertTrue(self.is_in_path(self.exec_path))
+        self.assertTrue(self.is_in_path(self.cargo_path))
+        self.assert_exec_exists()
+        cmd_list = ["echo $LD_LIBRARY_PATH"]
+        if not self.in_container:
+            relogging_command = ["bash", "-l", "-c"]
+            relogging_command.extend(cmd_list)
+            cmd_list = relogging_command
+        self.assertEqual(subprocess.check_output(self.command_as_list(cmd_list)).decode("utf-8").strip(),
+                         self.installed_path)
 
         # compile a small project
         output = subprocess.check_output(self.command_as_list(compile_command)).decode()
@@ -69,4 +81,4 @@ class RustTests(LargeFrameworkTests):
         if self.in_container:
             self.assertEqual(output, "hello, world\r\n")
         else:
-            self.assertEqual(output, "hello, world")
+            self.assertEqual(output, "hello, world\n")
