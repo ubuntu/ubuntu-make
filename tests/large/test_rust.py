@@ -54,7 +54,7 @@ class RustTests(LargeFrameworkTests):
         else:  # our mock expects getting that path
             compile_command = ["bash", "-l", "rustc /tmp/hello.rs"]
 
-        self.child = spawn_process(self.command('{} rustc'.format(UMAKE)))
+        self.child = spawn_process(self.command('{} rust'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
