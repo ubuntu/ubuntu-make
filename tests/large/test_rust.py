@@ -50,9 +50,14 @@ class RustTests(LargeFrameworkTests):
             self.additional_dirs.append(self.example_prog_dir)
             example_file = os.path.join(self.example_prog_dir, "hello.rs")
             open(example_file, "w").write(self.EXAMPLE_PROJECT)
-            compile_command = ["bash", "-l", "-c", "rustc {}".format(example_file)]
+            # rust compile in pwd by default, do not pollute ubuntu make source code
+            compile_command = ["bash", "-l", "-c", "rustc --out-dir {} {}".format(self.example_prog_dir, example_file)]
         else:  # our mock expects getting that path
-            compile_command = ["bash", "-l", "rustc /tmp/hello.rs"]
+            self.example_prog_dir = "/tmp"
+            example_file = os.path.join(self.example_prog_dir, "hello.rs")
+            # rust compile in pwd by default, do not pollute ubuntu make source code
+            compile_command = ["bash", "-l", "rustc --out-dir {} {}".format(self.example_prog_dir, example_file)]
+        resulting_binary = os.path.join(self.example_prog_dir, "hello")
 
         self.child = spawn_process(self.command('{} rust'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
@@ -72,8 +77,10 @@ class RustTests(LargeFrameworkTests):
                          os.path.join(self.installed_path, "rustc", "lib"))
 
         # compile a small project
-        output = subprocess.check_output(self.command_as_list(compile_command)).decode()
+        subprocess.check_output(self.command_as_list(compile_command)).decode()
 
+        # run the compiled result
+        output = subprocess.check_output(self.command_as_list(resulting_binary)).decode()
         if self.in_container:
             self.assertEqual(output, "hello, world\r\n")
         else:
