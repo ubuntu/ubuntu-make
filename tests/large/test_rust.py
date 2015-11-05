@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2015 Canonical
+# Copyright (C) 2014-2015 Canonical
 #
 # Authors:
 #  Didier Roche
@@ -43,10 +43,6 @@ class RustTests(LargeFrameworkTests):
     def exec_path(self):
         return os.path.join(self.installed_path, "rustc", "bin", "rustc")
 
-    @property
-    def cargo_path(self):
-        return os.path.join(self.installed_path, "cargo", "bin", "cargo")
-
     def test_default_rust_install(self):
         """Install Rust from scratch test case"""
         if not self.in_container:
@@ -64,9 +60,9 @@ class RustTests(LargeFrameworkTests):
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
-        self.assertTrue(self.is_in_path(self.exec_path))
-        self.assertTrue(self.is_in_path(self.cargo_path))
         self.assert_exec_exists()
+        self.assertTrue(self.is_in_path(self.exec_path))
+        self.assertTrue(self.is_in_path(os.path.join(self.installed_path, "cargo", "bin", "cargo")))
         cmd_list = ["echo $LD_LIBRARY_PATH"]
         if not self.in_container:
             relogging_command = ["bash", "-l", "-c"]
