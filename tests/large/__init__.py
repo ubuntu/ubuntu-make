@@ -44,6 +44,9 @@ class LargeFrameworkTests(LoggedTestCase):
         self.desktop_filename = ""
         self.child = None
         self.additional_dirs = []
+        self.original_env = os.environ.copy()
+        # we want to standardize on bash environment for running large tests
+        os.environ["SHELL"] = "/bin/bash"
 
     def tearDown(self):
         # don't remove on machine paths if running within a container
@@ -60,6 +63,7 @@ class LargeFrameworkTests(LoggedTestCase):
             for dir in self.additional_dirs:
                 with suppress(OSError):
                     shutil.rmtree(dir)
+        os.environ = self.original_env
         super().tearDown()
 
     def _pid_for(self, process_grep):

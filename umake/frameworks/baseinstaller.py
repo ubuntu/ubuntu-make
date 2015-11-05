@@ -367,7 +367,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                     direct_copy = True
                     break
             if direct_copy:
-                shutil.copy2(fd.name, os.path.join(self.install_path, fd.name))
+                shutil.copy2(fd.name, os.path.join(self.install_path, os.path.basename(fd.name)))
             else:
                 decompress_fds[fd] = Decompressor.DecompressOrder(dir=self.dir_to_decompress_in_tarball,
                                                                   dest=self.install_path)
