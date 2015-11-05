@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-02-11 10:58+0100\n"
-"PO-Revision-Date: 2015-04-25 20:27+0000\n"
-"Last-Translator: Kacper Skrzyński <festiherst@gmail.com>\n"
+"PO-Revision-Date: 2015-10-22 17:29+0000\n"
+"Last-Translator: Bartek Budzyński <netsatan@povumo.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-04 07:08+0000\n"
-"X-Generator: Launchpad (build 17474)\n"
+"X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
+"X-Generator: Launchpad (build 17838)\n"
 
 #: umake/__init__.py:104
 msgid "* Command '{}':"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: umake/frameworks/ide.py:106
 msgid "The Eclipse Luna Integrated Development Environment"
-msgstr ""
+msgstr "Zintegrowane środowisko programistyczne Eclipse Luna"
 
 #: umake/frameworks/ide.py:109
 msgid "Eclipse Luna"
@@ -180,11 +180,11 @@ msgstr ""
 
 #: umake/frameworks/dart.py:46
 msgid "Dart SDK with editor (default)"
-msgstr ""
+msgstr "Dart SDK z edytorem"
 
 #: umake/frameworks/dart.py:70
 msgid "Dart Editor"
-msgstr ""
+msgstr "Edytor Dart"
 
 #: umake/frameworks/dart.py:73
 msgid "Dart Editor for the dart language"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
-msgstr ""
+msgstr "Język Go"
 
 #: umake/frameworks/go.py:46
 msgid "Google compiler (default)"
@@ -213,7 +213,7 @@ msgstr "Deweloperska Edycja Firefox"
 
 #: umake/frameworks/web.py:68
 msgid "Firefox Aurora with Developer tools"
-msgstr ""
+msgstr "Firefox Aurora z narzędziami deweloperskimi"
 
 #: umake/frameworks/android.py:42
 msgid "Android Development Environment"

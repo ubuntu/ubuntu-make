@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-02-11 10:58+0100\n"
-"PO-Revision-Date: 2015-04-23 16:16+0000\n"
-"Last-Translator: Niklas Resch <ro0kie4@ymail.com>\n"
+"PO-Revision-Date: 2015-10-27 10:42+0000\n"
+"Last-Translator: Oliver Jakobi <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-04 07:08+0000\n"
-"X-Generator: Launchpad (build 17474)\n"
+"X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
+"X-Generator: Launchpad (build 17838)\n"
 
 #: umake/__init__.py:104
 msgid "* Command '{}':"
@@ -117,7 +117,7 @@ msgstr "Nein"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't remove {} as it isn't installed"
-msgstr ""
+msgstr "{} kann nicht deinstalliert werden, da es nicht installiert ist"
 
 #: umake/frameworks/__init__.py:271
 msgid ""
@@ -132,7 +132,7 @@ msgstr "Entferne, falls installiert, das Framework"
 
 #: umake/frameworks/games.py:37
 msgid "Games Development Environment"
-msgstr ""
+msgstr "Spiele Entwicklungsumgebung"
 
 #: umake/frameworks/games.py:43
 msgid "Stencyl game developer IDE"
@@ -140,19 +140,19 @@ msgstr ""
 
 #: umake/frameworks/games.py:79
 msgid "Stencyl"
-msgstr ""
+msgstr "Stencyl"
 
 #: umake/frameworks/games.py:82
 msgid "Stencyl Game developer environment"
-msgstr ""
+msgstr "Stencyl Spiele Entwicklerumgebung"
 
 #: umake/frameworks/ide.py:42
 msgid "Generic IDEs"
-msgstr ""
+msgstr "Allgemeine integrierte Entwicklungsumgebungen"
 
 #: umake/frameworks/ide.py:55
 msgid "Pure Eclipse Luna (4.4)"
-msgstr ""
+msgstr "Pure Eclipse Luna (4.4)"
 
 #: umake/frameworks/ide.py:106
 msgid "The Eclipse Luna Integrated Development Environment"
@@ -160,43 +160,43 @@ msgstr ""
 
 #: umake/frameworks/ide.py:109
 msgid "Eclipse Luna"
-msgstr ""
+msgstr "Eclipse Luna"
 
 #: umake/frameworks/ide.py:208
 msgid "PyCharm Community Edition"
-msgstr ""
+msgstr "PyCharm Community Ausgabe"
 
 #: umake/frameworks/ide.py:224
 msgid "IntelliJ IDEA Community Edition"
-msgstr ""
+msgstr "IntelliJ IDEA Community Ausgabe"
 
 #: umake/frameworks/ide.py:240
 msgid "IntelliJ IDEA"
-msgstr ""
+msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/dart.py:40
 msgid "Dartlang Development Environment"
-msgstr ""
+msgstr "Dartlang Entwicklungsumgebung"
 
 #: umake/frameworks/dart.py:46
 msgid "Dart SDK with editor (default)"
-msgstr ""
+msgstr "Dart Software Development Kit mit Editor (Standard)"
 
 #: umake/frameworks/dart.py:70
 msgid "Dart Editor"
-msgstr ""
+msgstr "Dart Editor"
 
 #: umake/frameworks/dart.py:73
 msgid "Dart Editor for the dart language"
-msgstr ""
+msgstr "Dart Editor für die dart Programmiersprache"
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
-msgstr ""
+msgstr "Go Programmiersprache"
 
 #: umake/frameworks/go.py:46
 msgid "Google compiler (default)"
-msgstr ""
+msgstr "Google Compiler"
 
 #: umake/frameworks/go.py:76
 msgid "You need to restart a shell session for your installation to work"
@@ -204,15 +204,15 @@ msgstr ""
 
 #: umake/frameworks/web.py:39
 msgid "Web Developer Environment"
-msgstr ""
+msgstr "Web Entwicklerumgebung"
 
 #: umake/frameworks/web.py:45 umake/frameworks/web.py:65
 msgid "Firefox Developer Edition"
-msgstr ""
+msgstr "Firefox Entwicklerausgabe"
 
 #: umake/frameworks/web.py:68
 msgid "Firefox Aurora with Developer tools"
-msgstr ""
+msgstr "Firefox Aurora mit Entwicklerwerkzeugen"
 
 #: umake/frameworks/android.py:42
 msgid "Android Development Environment"
@@ -220,7 +220,7 @@ msgstr "Android Entwicklungsumgebung"
 
 #: umake/frameworks/android.py:80
 msgid "Android Studio (default)"
-msgstr ""
+msgstr "Android Studio"
 
 #: umake/frameworks/android.py:99
 msgid "Android Studio"
@@ -232,4 +232,4 @@ msgstr "Android Studio Entwicklungsumgebung"
 
 #: umake/frameworks/android.py:120
 msgid "Android NDK"
-msgstr ""
+msgstr "Android NDK"
