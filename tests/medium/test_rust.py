@@ -29,7 +29,7 @@ class RustInContainer(ContainerTests, test_rust.RustTests):
     """This will test the Rust integration inside a container"""
 
     def setUp(self):
-        self.hosts = {443: ["rust-lang.org"]}
+        self.hosts = {443: ["www.rust-lang.org"]}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "rust", "rust-lang")
