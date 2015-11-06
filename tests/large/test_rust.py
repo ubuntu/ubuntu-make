@@ -73,11 +73,11 @@ class RustTests(LargeFrameworkTests):
             relogging_command = ["bash", "-l", "-c"]
             relogging_command.extend(cmd_list)
             cmd_list = relogging_command
-        self.assertEqual(subprocess.check_output(self.command_as_list(cmd_list)).decode("utf-8").strip(),
-                         os.path.join(self.installed_path, "rustc", "lib"))
+        self.assertIn(os.path.join(self.installed_path, "rustc", "lib"),
+                      subprocess.check_output(self.command_as_list(cmd_list)).decode("utf-8").strip().split(":"))
 
         # compile a small project
-        subprocess.check_output(self.command_as_list(compile_command)).decode()
+        subprocess.check_call(self.command_as_list(compile_command))
 
         # run the compiled result
         output = subprocess.check_output(self.command_as_list(resulting_binary)).decode()
