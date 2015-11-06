@@ -1001,3 +1001,34 @@ class TestUserENV(LoggedTestCase):
 
         profile_content = open(profile_file).read()
         self.assertEqual(profile_content, "Foo\nBar\nexport BAR=baz")
+
+
+class TestUserShell(LoggedTestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.orig_environ = os.environ.copy()
+        os.environ['SHELL'] = '/bin/bash'
+
+    def tearDown(self):
+        os.environ = self.orig_environ.copy()
+        super().tearDown()
+
+    def test_return_shell_bash(self):
+        """Default setup should change the bash profile"""
+        self.assertTrue(tools._get_shell_profile_file_path().endswith(".profile"))
+
+    def test_can_override_zsh_with_SHELL(self):
+        """Can return zsh profile if set"""
+        os.environ['SHELL'] = '/bin/zsh'
+        self.assertTrue(tools._get_shell_profile_file_path().endswith(".zprofile"))
+
+    def test_return_bash_if_nosense(self):
+        """Return bash if content is garbage"""
+        os.environ['SHELL'] = 'contain_nothing'
+        self.assertTrue(tools._get_shell_profile_file_path().endswith(".profile"))
+
+    def test_return_bash_if_empty(self):
+        """Return bash if no key"""
+        os.environ.pop('SHELL')
+        self.assertTrue(tools._get_shell_profile_file_path().endswith(".profile"))
