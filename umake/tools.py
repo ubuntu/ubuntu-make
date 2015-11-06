@@ -340,11 +340,17 @@ def switch_to_current_user():
     os.seteuid(int(os.getenv("SUDO_UID", default=0)))
 
 
+# TODO: make that useful for more shells
+def _get_shell_profile_file_path():
+    """Return profile filepath for current preferred shell"""
+    current_shell = os.getenv('SHELL', '/bin/bash').lower()
+    profile_filename = '.zprofile' if 'zsh' in current_shell else '.profile'
+    return os.path.join(os.path.expanduser('~'), profile_filename)
+
+
 def remove_framework_envs_from_user(framework_tag):
     """Remove all envs from user if found"""
-    current_shell = os.getenv('SHELL').lower()
-    profile_filename = '.zprofile' if 'zsh' in current_shell else '.profile'
-    profile_filepath = os.path.join(os.path.expanduser('~'), profile_filename)
+    profile_filepath = _get_shell_profile_file_path()
     content = ""
     framework_header = profile_tag.format(framework_tag)
     try:
@@ -366,8 +372,6 @@ def remove_framework_envs_from_user(framework_tag):
     os.rename(profile_filepath + ".new", profile_filepath)
 
 
-# TODO: Make it useful for most shells
-# zsh, ksh, csh and etc.
 def add_env_to_user(framework_tag, env_dict):
     """Add args to user env in .profile (.zprofile if zsh) if the user doesn't have that env with those args
 
@@ -378,8 +382,7 @@ def add_env_to_user(framework_tag, env_dict):
     value is either a list (in that case, it's concatenated) or a string
     If keep is set to True, we keep previous values with :$OLDERENV."""
 
-    current_shell = os.getenv('SHELL').lower()
-    profile_filename = '.zprofile' if 'zsh' in current_shell else '.profile'
+    profile_filepath = _get_shell_profile_file_path()
     remove_framework_envs_from_user(framework_tag)
     envs_to_insert = {}
     for env in env_dict:
@@ -393,7 +396,7 @@ def add_env_to_user(framework_tag, env_dict):
             os.environ[env] = value
         envs_to_insert[env] = value
 
-    with open(os.path.join(os.path.expanduser('~'), profile_filename), "a", encoding='utf-8') as f:
+    with open(profile_filepath, "a", encoding='utf-8') as f:
         f.write(profile_tag.format(framework_tag))
         for env in envs_to_insert:
             value = envs_to_insert[env]
