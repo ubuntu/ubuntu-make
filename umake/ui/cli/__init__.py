@@ -114,7 +114,7 @@ def mangle_args_for_default_framework(args):
         # --remove is both installed as global and per-framework optional arguments. argparse will only analyze the
         # per framework one and will override the global one. So if --remove is before the category name, it will be
         # ignored. Mangle the arg and append it last then.
-        if not category_name and arg == "--remove":
+        if not category_name and arg in ("--remove", "-r"):
             args_to_append.append(arg)
             continue
         if not arg.startswith('-') and not skip_all:

@@ -200,3 +200,8 @@ class TestCLIFromFrameworks(LoggedTestCase):
         """We don't change the remove option if after framework"""
         self.assertEqual(mangle_args_for_default_framework(["category-a", "framework-a", "--remove", "--bar"]),
                          ["category-a", "framework-a", "--remove", "--bar"])
+
+    def test_mangle_args_for_category_with_short_remove_global_options(self):
+        """We mangle the -r remove option if global (before the category name) to append it to the framework option"""
+        self.assertEqual(mangle_args_for_default_framework(["-r", "category-a", "framework-a"]),
+                         ["category-a", "framework-a", "-r"])
