@@ -108,7 +108,7 @@ def _chrome_sandbox_setuid(path):
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
     # we will need to have a proper download page with md5sum
-    DOWNLOAD_URL = "http://download.unity3d.com/download_unity/unity-editor-installer-5.1.0f3+2015082501.sh"
+    DOWNLOAD_URL = "http://download.unity3d.com/download_unity/unity-editor-installer-5.1.0f3+2015091501.sh"
 
     def __init__(self, category):
         super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
@@ -124,9 +124,9 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                          packages_requirements=["gconf-service", "lib32gcc1", "lib32stdc++6", "libasound2", "libcairo2",
                                                 "libcap2", "libcups2", "libfontconfig1", "libfreetype6", "libgconf-2-4",
                                                 "libgdk-pixbuf2.0-0", "libgl1-mesa-glx", "libglu1-mesa", "libgtk2.0-0",
-                                                "libnspr4", "libnss3", "libpango1.0-0", "libxcomposite1", "libxcursor1",
-                                                "libxdamage1", "libxext6", "libxfixes3", "libxi6", "libxrandr2",
-                                                "libxrender1", "libxtst6",
+                                                "libnspr4", "libnss3", "libpango1.0-0", "libpq5", "libxcomposite1",
+                                                "libxcursor1", "libxdamage1", "libxext6", "libxfixes3", "libxi6",
+                                                "libxrandr2", "libxrender1", "libxtst6",
                                                 "monodevelop"])  # monodevelop is for mono deps, temporary
 
     def download_provider_page(self):
