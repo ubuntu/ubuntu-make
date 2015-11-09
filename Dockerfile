@@ -20,6 +20,7 @@ ADD tests/data/code.visualstudio.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/api.dartlang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/storage.googleapis.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/netbeans.org.crt /usr/local/share/ca-certificates/
+ADD tests/data/www.rust-lang.org.crt /usr/local/share/ca-certificates/
 ADD docker/create_packages.sh /tmp/
 
 # Refresh the image
