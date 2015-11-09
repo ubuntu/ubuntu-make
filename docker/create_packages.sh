@@ -139,6 +139,7 @@ create_package libgtk2.0-0
 create_package libnspr4
 create_package libnss3
 create_package libpango1.0-0
+create_package libpq5
 create_package libxcomposite1
 create_package libxcursor1
 create_package libxdamage1
