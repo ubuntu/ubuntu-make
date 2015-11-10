@@ -1,3 +1,55 @@
+ubuntu-make (15.11ubuntu1) UNRELEASED; urgency=medium
+
+  [ Fabio Colella ]
+  * Added support for Netbeans IDE, with possibility of extension to support
+    its flavours.
+  * Add large and initial support for medium tests.
+
+  [ Jared Ravetch ]
+  * Add Rust support, installing the latest rust compiler and tools version.
+  * Initial support for medium and large tests.
+  * Override GOROOT value instead of appending it (Go doesn't support GOROOT
+    having multiple values).
+
+  [ Eldar Khayrullin ]
+  * Update unity3d version up to 5.1.0f3+2015091501.
+
+  [ Sebastian Schuberth ]
+  * Change android NDK env variable to use NDK_ROOT instead of ANDROID_NDK.
+
+  [ Didier Roche ]
+  * Fix webstorm icon renamed upstream.
+  * Ship version file as part of the install (Now --version really works on
+    packaged flavor as well) + stamp generated binary with correct version.
+  * Fix BaseInstaller to not crash when all downloads assets are 404 + add
+    medium tests for this.
+  * Ensure -r global option behave like --remove.
+  * Some style, refactoring and formatting tidy up for recent merges and
+    changes.
+  * Add medium assets, certificates and additional failure test cases for
+    netbeans and rust.
+  * Update docker container for medium tests with new certificates.
+  * Readd Travis CI integration running pep8 and small tests (with badge
+    status and updated wording in README). New pushes and pull requests are
+    now automatically tested on those 2 kinds of tests.
+  * Fix and updates dependencies for package and pip virtualenv deps.
+  * Standardize the test environment so that people running tests using for
+    instance zsh are not impacted.
+  * Finish up shipping static files support for future frameworks.
+  * Using scala framework for loading tests and making autopkgtests pass on
+    armel64 (android not available on this arch).
+  * Improve releasing script and migrate gbp config to new headers.
+
+  [ Translators ]
+  * Refreshed translation template and updated translations. Thanks to all our
+    translators!
+    - new supported languages:
+      fa, pt_BR
+    - Updating the following languages:
+      de, en_AU, en_CA, en_GB, eu, hr, it, pl, ru, te, zh_CN, zh_HK
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 10 Nov 2015 08:20:53 +0100
+
 ubuntu-make (15.11) xenial; urgency=medium
 
   [ Omer Sheikh ]
