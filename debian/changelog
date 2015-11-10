@@ -1,4 +1,4 @@
-ubuntu-make (15.11ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (15.11.1) xenial; urgency=medium
 
   [ Fabio Colella ]
   * Added support for Netbeans IDE, with possibility of extension to support
@@ -48,7 +48,7 @@ ubuntu-make (15.11ubuntu1) UNRELEASED; urgency=medium
     - Updating the following languages:
       de, en_AU, en_CA, en_GB, eu, hr, it, pl, ru, te, zh_CN, zh_HK
 
- -- Didier Roche <didrocks@ubuntu.com>  Tue, 10 Nov 2015 08:20:53 +0100
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 10 Nov 2015 09:12:26 +0100
 
 ubuntu-make (15.11) xenial; urgency=medium
 
