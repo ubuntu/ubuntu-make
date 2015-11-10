@@ -12,6 +12,8 @@
 grep -qi "create release" $1
 found=$?
 
+set -e
+
 # we are releasing a version, generate the version
 if [ $found -eq 0 ]; then
     scriptdir=$(dirname $(readlink -f $0))
@@ -30,13 +32,11 @@ if [ $found -eq 0 ]; then
     fi
 
     # get a new valid version. This updates umake/version as well
-    set -e
     version=$(${scriptdir}/update_version
     git add ${rootdir}/umake/version)
     dch -v ${version} ""
-    dch -r ""
+    dch -r "" --distribution xenial
     git add ${rootdir}/debian/changelog
 
     echo "releasing package ubuntu-make ${version}" > $1
-    set +e
 fi
