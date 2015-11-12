@@ -166,8 +166,10 @@ def main(parser):
     argcomplete.autocomplete(parser)
     # autocomplete will stop there. Can start more expensive operations now.
 
-    # manipulate sys.argv for default frameworks:
-    arg_to_parse = mangle_args_for_default_framework(sys.argv[1:])
+    arg_to_parse = sys.argv[1:]
+    if "--help" not in arg_to_parse:
+        # manipulate sys.argv for default frameworks:
+        arg_to_parse = mangle_args_for_default_framework(arg_to_parse)
     args = parser.parse_args(arg_to_parse)
 
     if args.version:
