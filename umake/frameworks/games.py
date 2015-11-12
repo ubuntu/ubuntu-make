@@ -156,3 +156,49 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=os.path.join(self.install_path, "Editor", "Unity"),
                         comment=self.description,
                         categories="Development;IDE;"))
+
+
+class Twine(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Twine", description=_("Twine tool for creating interactive and nonlinear stories"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page="http://twinery.org/",
+                         dir_to_decompress_in_tarball='twine*',
+                         desktop_filename="twine.desktop",
+                         required_files_path=["Twine"])
+        # add logo download as the tar doesn't provide one
+        self.download_requests.append(DownloadItem("http://twinery.org/img/logo.svg", None))
+
+    def parse_download_link(self, line, in_download):
+        """Parse Twine download links"""
+        url = None
+        regexp = r'href="(.*)" .*linux64'
+        if get_current_arch() == "i386":
+            regexp = r'href="(.*)" .*linux32'
+        p = re.search(regexp, line)
+        with suppress(AttributeError):
+            url = p.group(1)
+        return ((url, None), False)
+
+    def decompress_and_install(self, fds):
+        # if icon, we grab the icon name to reference it later on
+        for fd in fds:
+            if fd.name.endswith(".svg"):
+                orig_icon_name = os.path.basename(fd.name)
+                break
+        else:
+            logger.error("We couldn't download the Twine icon")
+            UI.return_main_screen(exit_status=1)
+        super().decompress_and_install(fds)
+        # rename the asset logo
+        self.icon_name = "logo.svg"
+        os.rename(os.path.join(self.install_path, orig_icon_name), os.path.join(self.install_path, self.icon_name))
+
+    def post_install(self):
+        """Create the Twine launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Twine"),
+                        icon_path=os.path.join(self.install_path, self.icon_name),
+                        exec='"{}" %f'.format(os.path.join(self.install_path, "Twine")),
+                        comment=self.description,
+                        categories="Development;IDE;"))
