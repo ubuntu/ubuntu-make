@@ -105,6 +105,15 @@ class BasicCLI(LargeFrameworkTests):
         result = subprocess.check_output(self.command_as_list([UMAKE, 'ide', 'pycharm', '--help']))
         self.assertNotEqual(result, "")
 
+    def test_help_position_matters(self):
+        """The help option position matters"""
+        result1 = subprocess.check_output(self.command_as_list([UMAKE, 'ide', 'pycharm', '--help']))
+        result2 = subprocess.check_output(self.command_as_list([UMAKE, 'ide', '--help', 'pycharm']))
+        result3 = subprocess.check_output(self.command_as_list([UMAKE, '--help', 'ide', 'pycharm']))
+        self.assertNotEquals(result1, result2)
+        self.assertNotEquals(result2, result3)
+        self.assertNotEquals(result1, result3)
+
     def test_category_with_default_framework_help(self):
         """We display a help when there is a default framework"""
         result = subprocess.check_output(self.command_as_list([UMAKE, 'android', '--help']))
