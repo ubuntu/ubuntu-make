@@ -109,3 +109,9 @@ class BasicCLI(LargeFrameworkTests):
         """We display a help when there is a default framework"""
         result = subprocess.check_output(self.command_as_list([UMAKE, 'android', '--help']))
         self.assertNotEqual(result, "")
+
+    def test_only_category_help_with_default_framework(self):
+        """We display a category help which is different from the default framework one"""
+        result1 = subprocess.check_output(self.command_as_list([UMAKE, 'android', '--help']))
+        result2 = subprocess.check_output(self.command_as_list([UMAKE, 'android', 'android-studio', '--help']))
+        self.assertNotEquals(result1, result2)
