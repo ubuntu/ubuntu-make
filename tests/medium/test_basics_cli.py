@@ -19,9 +19,17 @@
 
 """Tests for basic CLI commands"""
 
+import os
+
 from ..large import test_basics_cli
 from . import ContainerTests
 
 
 class BasicCLIInContainer(ContainerTests, test_basics_cli.BasicCLI):
     """This will test the basic cli command class inside a container"""
+
+    def setUp(self):
+        # Reuse the Android Studio environment.(used in --help)
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+
