@@ -50,3 +50,16 @@ class Unity3DInContainer(ContainerTests, test_games.Unity3DTests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "games", "unity3d")
+
+
+class TwineInContainer(ContainerTests, test_games.TwineTests):
+    """This will test Twine inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {80: ["twinery.org"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "games", "twine")
