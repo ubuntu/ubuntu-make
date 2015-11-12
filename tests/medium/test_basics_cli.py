@@ -32,4 +32,3 @@ class BasicCLIInContainer(ContainerTests, test_basics_cli.BasicCLI):
         # Reuse the Android Studio environment.(used in --help)
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
-
