@@ -20,6 +20,7 @@
 import argparse
 import gettext
 from gettext import gettext as _
+import locale
 import logging
 import logging.config
 import os
@@ -29,8 +30,17 @@ from umake.tools import MainLoop
 from .ui import cli
 import yaml
 
-gettext.textdomain("ubuntu-make")
+
 logger = logging.getLogger(__name__)
+
+# if set locale isn't installed, don't load up translations (we don't know what's the locale
+# user encoding is and python3 will fallback to ANSI_X3.4-1968, which isn't UTF-8 and creates
+# thus UnicodeEncodeError)
+try:
+    locale.setlocale(locale.LC_ALL, '')
+    gettext.textdomain("ubuntu-make")
+except locale.Error:
+    logger.debug("Couldn't load default locale {}, fallback to English".format(locale.LC_ALL))
 
 _default_log_level = logging.WARNING
 _datadir = None
