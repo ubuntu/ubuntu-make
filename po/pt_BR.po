@@ -56,12 +56,12 @@ msgstr "Não há resposta adequada"
 
 #: umake/interactions/__init__.py:75
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
-msgstr "A sua entrada \" { }\" não é uma opção aceitável, as opções são: {}"
+msgstr "A sua entrada '{}' não é uma opção aceitável, as opções são: {}"
 
 #: umake/interactions/__init__.py:78
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
 msgstr ""
-"A sua entrada \" { }\" não é uma opção aceitável, as opções são: {} e {}"
+"A sua entrada '{}' não é uma opção aceitável, as opções são: {} e {}"
 
 #: umake/interactions/__init__.py:96
 msgid " ({})"
