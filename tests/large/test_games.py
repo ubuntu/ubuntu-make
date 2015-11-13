@@ -126,8 +126,8 @@ class TwineTests(LargeFrameworkTests):
         self.installed_path = os.path.join(self.install_base_path, "games", "twine")
         self.desktop_filename = "twine.desktop"
 
-    def test_default_unity3D_install(self):
-        """Install unity3D editor from scratch test case"""
+    def test_default_twine_install(self):
+        """Install twine editor from scratch test case"""
 
         self.child = spawn_process(self.command('{} games twine'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
