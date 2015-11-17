@@ -337,6 +337,22 @@ class PhpStorm(BaseJetBrains):
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='webide.png')
 
+class CLion(BaseJetBrains):
+    """The JetBrains CLion IDE"""
+    download_page_url = "https://www.jetbrains.com/clion/download/download_thanks.jsp?os=linux"
+    executable = "clion.sh"
+
+    def __init__(self, category):
+        super().__init__(name="CLion",
+                         description=_("CLion"),
+                         category=category,
+                         only_on_archs=['i386', 'amd64'],
+                         download_page=self.download_page_url,
+                         dir_to_decompress_in_tarball='clion-*',
+                         desktop_filename='jetbrains-clion.desktop',
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         icon_filename='clion.svg')
+
 
 class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     """The Arduino Software distribution."""
