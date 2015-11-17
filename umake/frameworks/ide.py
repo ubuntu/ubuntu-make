@@ -311,7 +311,7 @@ class WebStorm(BaseJetBrains):
 
     def __init__(self, category):
         super().__init__(name="WebStorm",
-                         description=_("WebStorm"),
+                         description=_("Complex client-side and server-side javascript IDE"),
                          category=category,
                          only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
@@ -328,7 +328,7 @@ class PhpStorm(BaseJetBrains):
 
     def __init__(self, category):
         super().__init__(name="PhpStorm",
-                         description=_("PhpStorm"),
+                         description=_("PHP and web development IDE"),
                          category=category,
                          only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
@@ -345,7 +345,7 @@ class CLion(BaseJetBrains):
 
     def __init__(self, category):
         super().__init__(name="CLion",
-                         description=_("CLion"),
+                         description=_("CLion integrated C/C++ IDE"),
                          category=category,
                          only_on_archs=['i386', 'amd64'],
                          download_page=self.download_page_url,
