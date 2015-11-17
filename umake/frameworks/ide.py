@@ -337,6 +337,7 @@ class PhpStorm(BaseJetBrains):
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
                          icon_filename='webide.png')
 
+
 class CLion(BaseJetBrains):
     """The JetBrains CLion IDE"""
     download_page_url = "https://www.jetbrains.com/clion/download/download_thanks.jsp?os=linux"
