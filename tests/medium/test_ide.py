@@ -173,6 +173,21 @@ class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
         self.installed_path = os.path.join(self.install_base_path, "ide", "webstorm")
 
 
+class CLionIDEInContainer(ContainerTests, test_ide.CLionIDETests):
+    """This will test the CLion IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["www.jetbrains.com"]}
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "clion")
+
+
 class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
     """This will test the PhpStorm IDE integration inside a container"""
 
