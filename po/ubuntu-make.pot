@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-05 14:54+0100\n"
+"POT-Creation-Date: 2015-11-17 09:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,33 +21,33 @@ msgstr ""
 msgid "# Ubuntu make installation of {}\n"
 msgstr ""
 
-#: umake/__init__.py:89
+#: umake/__init__.py:99
 msgid "* Command '{}':"
 msgstr ""
 
-#: umake/__init__.py:97
+#: umake/__init__.py:107
 msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr ""
 
-#: umake/__init__.py:98
+#: umake/__init__.py:108
 msgid ""
 "Note that you can also configure different debug logging behavior using "
 "LOG_CFG that points to a log yaml profile."
 msgstr ""
 
-#: umake/__init__.py:101
+#: umake/__init__.py:111
 msgid "Show this help"
 msgstr ""
 
-#: umake/__init__.py:102
+#: umake/__init__.py:112
 msgid "Increase output verbosity (2 levels)"
 msgstr ""
 
-#: umake/__init__.py:104
+#: umake/__init__.py:114
 msgid "Remove specified framework if installed"
 msgstr ""
 
-#: umake/__init__.py:106
+#: umake/__init__.py:116
 msgid "Print version and exit"
 msgstr ""
 
@@ -92,31 +92,35 @@ msgid "Ruby on Rails IDE"
 msgstr ""
 
 #: umake/frameworks/ide.py:314
-msgid "WebStorm"
+msgid "Complex client-side and server-side javascript IDE"
 msgstr ""
 
 #: umake/frameworks/ide.py:331
-msgid "PhpStorm"
+msgid "PHP and web development IDE"
 msgstr ""
 
-#: umake/frameworks/ide.py:359
+#: umake/frameworks/ide.py:348
+msgid "CLion integrated C/C++ IDE"
+msgstr ""
+
+#: umake/frameworks/ide.py:376
 msgid "The Arduino Software Distribution"
 msgstr ""
 
-#: umake/frameworks/ide.py:458
+#: umake/frameworks/ide.py:475
 msgid "The Arduino Software IDE"
 msgstr ""
 
-#: umake/frameworks/ide.py:461
+#: umake/frameworks/ide.py:478
 msgid "Arduino"
 msgstr ""
 
-#: umake/frameworks/ide.py:467
+#: umake/frameworks/ide.py:484
 msgid "You need to logout and login again for your installation to work"
 msgstr ""
 
-#: umake/frameworks/ide.py:487 umake/frameworks/ide.py:567
-#: umake/frameworks/ide.py:570
+#: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
+#: umake/frameworks/ide.py:587
 msgid "Netbeans IDE"
 msgstr ""
 
@@ -132,11 +136,20 @@ msgstr ""
 msgid "Dart SDK (default)"
 msgstr ""
 
-#: umake/frameworks/dart.py:97 umake/frameworks/scala.py:66
-#: umake/frameworks/go.py:76 umake/frameworks/android.py:135
+#: umake/frameworks/dart.py:97 umake/frameworks/rust.py:134
+#: umake/frameworks/scala.py:66 umake/frameworks/go.py:76
+#: umake/frameworks/android.py:135
 msgid ""
 "You need to restart your current shell session for your {} installation to "
 "work properly"
+msgstr ""
+
+#: umake/frameworks/rust.py:43
+msgid "Rust language"
+msgstr ""
+
+#: umake/frameworks/rust.py:56
+msgid "The official Rust distribution"
 msgstr ""
 
 #: umake/frameworks/scala.py:40
