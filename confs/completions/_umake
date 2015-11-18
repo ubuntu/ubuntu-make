@@ -1,0 +1,7 @@
+#compdef umake
+
+# we use bash global completion
+autoload -Uz bashcompinit
+bashcompinit
+
+source /etc/bash_completion.d/umake

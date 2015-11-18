@@ -155,7 +155,8 @@ setup(
 
     data_files=[
         ('lib/python3/dist-packages/umake', ['umake/version']),
-        ("share/ubuntu-make/log-confs", glob('log-confs/*.yaml'))
+        ("share/ubuntu-make/log-confs", glob('log-confs/*.yaml')),
+        ('share/zsh/vendor-completions', ['confs/completions/_umake']),
     ],
 
     # In addition to run all nose tests, that will as well show python warnings
