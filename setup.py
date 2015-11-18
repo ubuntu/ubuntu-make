@@ -126,6 +126,21 @@ class update_pot(cmd.Command):
         subprocess.call(cmd)
 
 
+class update_po(cmd.Command):
+    description = 'Update po from pot file'
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        source_pot = os.path.join(os.curdir, 'po', '{}.pot'.format(I18N_DOMAIN))
+        for po_file in glob(os.path.join(os.curdir, 'po', '*.po')):
+            subprocess.check_call(["msgmerge", "-U", po_file, source_pot])
+
 setup(
     name="Ubuntu Make",
     version=get_version(),
@@ -150,6 +165,7 @@ setup(
         'build': build,
         'build_trans': build_trans,
         'install_data': install_data,
-        'update_pot': update_pot
+        'update_pot': update_pot,
+        'update_po': update_po,
     }
 )
