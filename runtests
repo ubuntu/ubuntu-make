@@ -74,6 +74,11 @@ def set_logging_profile(log_config_file):
 
 if __name__ == '__main__':
 
+    # setup the environment in plain english so that we standardize the test bed (if some people have some .mo
+    # Ubuntu Make files installed while having a locale set to it) to avoid getting translated strings not
+    # matching our expectations.
+    os.environ["LANGUAGE"] = "C"
+
     parser = argparse.ArgumentParser(description="Run umake tests. Specified list of test run in debug mode. "
                                                  "Running a partial suite of tests is using a normal mode. "
                                                  "Running all tests is using coverage by default.")
