@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html>
+
+  <head>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width" />
+
+<meta name="Description" content="Download the official Android IDE and developer tools to build apps for Android phones, tablets, wearables, TVs, and more.">
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<title>Download Android Studio and SDK Tools | Android Developers</title>
+
+<!-- STYLESHEETS -->
+<link rel="stylesheet"
+href="//fonts.googleapis.com/css?family=Roboto+Condensed">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:light,regular,medium,thin,italic,mediumitalic,bold"
+  title="roboto">
+<link href="/assets/css/default.css?v=4" rel="stylesheet" type="text/css">
+
+
+
+<!-- JAVASCRIPT -->
+<script src="//www.google.com/jsapi" type="text/javascript"></script>
+<script src="/assets/js/android_3p-bundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var toRoot = "/";
+  var metaTags = ["download"];
+  var devsite = false;
+</script>
+<script src="/assets/js/docs.js?v=3" type="text/javascript"></script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-5831155-1', 'android.com');
+  ga('create', 'UA-49880327-2', 'android.com', {'name': 'universal'});  // New tracker);
+  ga('send', 'pageview');
+  ga('universal.send', 'pageview'); // Send page view for new tracker.
+</script>
+
+</head>
+
+
+<body class="gc-documentation
+  develop" itemscope itemtype="http://schema.org/CreativeWork">
+  <a name="top"></a>
+
+
+<a name="top"></a>
+
+<!-- dialog to prompt lang pref change when loaded from hardcoded URL
+<div id="langMessage" style="display:none">
+  <div>
+    <div class="lang en">
+      <p>You requested a page in English, would you like to proceed with this language setting?</p>
+    </div>
+    <div class="lang es">
+      <p>You requested a page in Spanish (Español), would you like to proceed with this language setting?</p>
+    </div>
+    <div class="lang ja">
+      <p>You requested a page in Japanese (日本語), would you like to proceed with this language setting?</p>
+    </div>
+    <div class="lang ko">
+      <p>You requested a page in Korean (한국어), would you like to proceed with this language setting?</p>
+    </div>
+    <div class="lang ru">
+      <p>You requested a page in Russian (Русский), would you like to proceed with this language setting?</p>
+    </div>
+    <div class="lang zh-cn">
+      <p>You requested a page in Simplified Chinese (简体中文), would you like to proceed with this language setting?</p>
+    </div>
+    <div class="lang zh-tw">
+      <p>You requested a page in Traditional Chinese (繁體中文), would you like to proceed with this language setting?</p>
+    </div>
+    <a href="#" class="button yes" onclick="return false;">
+      <span class="lang en">Yes</span>
+      <span class="lang es">Sí</span>
+      <span class="lang ja">Yes</span>
+      <span class="lang ko">Yes</span>
+      <span class="lang ru">Yes</span>
+      <span class="lang zh-cn">是的</span>
+      <span class="lang zh-tw">没有</span>
+    </a>
+    <a href="#" class="button" onclick="$('#langMessage').hide();return false;">
+      <span class="lang en">No</span>
+      <span class="lang es">No</span>
+      <span class="lang ja">No</span>
+      <span class="lang ko">No</span>
+      <span class="lang ru">No</span>
+      <span class="lang zh-cn">没有</span>
+      <span class="lang zh-tw">没有</span>
+    </a>
+  </div>
+</div> -->
+
+
+  <!-- Header -->
+  <div id="header-wrapper">
+    <div id="header">
+
+
+
+
+      <div class="wrap" id="header-wrap">
+        <div class="col-3 logo">
+          <a href="/index.html">
+            <img src="/assets/images/dac_logo.png"
+                srcset="/assets/images/dac_logo@2x.png 2x"
+                width="123" height="25" alt="Android Developers" />
+          </a>
+          <div class="btn-quicknav" id="btn-quicknav">
+            <a href="#" class="arrow-inactive">Quicknav</a>
+            <a href="#" class="arrow-active">Quicknav</a>
+          </div>
+        </div>
+        <ul class="nav-x col-9">
+            <li class="design">
+              <a href="/design/index.html"
+              zh-tw-lang="設計"
+              zh-cn-lang="设计"
+              ru-lang="Проектирование"
+              ko-lang="디자인"
+              ja-lang="設計"
+              es-lang="Diseñar"
+              >Design</a></li>
+            <li class="develop"><a href="/develop/index.html"
+              zh-tw-lang="開發"
+              zh-cn-lang="开发"
+              ru-lang="Разработка"
+              ko-lang="개발"
+              ja-lang="開発"
+              es-lang="Desarrollar"
+              >Develop</a></li>
+            <li class="distribute last"><a href="/distribute/index.html"
+              zh-tw-lang="發佈"
+              zh-cn-lang="分发"
+              ru-lang="Распространение"
+              ko-lang="배포"
+              ja-lang="配布"
+              es-lang="Distribuir"
+              >Distribute</a></li>
+        </ul>
+
+
+
+
+<div class="menu-container">
+  <div class="moremenu">
+    <div id="more-btn"></div>
+  </div>
+  <div class="morehover" id="moremenu">
+    <div class="top"></div>
+    <div class="mid">
+      <div class="header">Links</div>
+      <ul>
+        <li><a href="https://play.google.com/apps/publish/" target="_googleplay">Google Play Developer Console</a></li>
+        <li><a href="http://android-developers.blogspot.com/">Android Developers Blog</a></li>
+        <li><a href="/about/index.html">About Android</a></li>
+      </ul>
+      <div class="header">Android Sites</div>
+      <ul>
+        <li><a href="http://www.android.com">Android.com</a></li>
+        <li class="active"><a>Android Developers</a></li>
+        <li><a href="http://source.android.com">Android Open Source Project</a></li>
+      </ul>
+
+
+
+        <div class="header">Language</div>
+          <div id="language" class="locales">
+            <select name="language" onChange="changeLangPref(this.value, true)">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="ja">日本語</option>
+                <option value="ko">한국어</option>
+                <option value="ru">Русский</option>
+                <option value="zh-cn">中文（简体)</option>
+                <option value="zh-tw">中文（繁體)</option>
+            </select>
+          </div>
+        <script type="text/javascript">
+          <!--
+          loadLangPref();
+            //-->
+        </script>
+
+
+      <br class="clearfix" />
+    </div><!-- end 'mid' -->
+    <div class="bottom"></div>
+  </div><!-- end 'moremenu' -->
+
+  <div class="search" id="search-container">
+    <div class="search-inner">
+      <div id="search-btn"></div>
+      <div class="left"></div>
+      <form onsubmit="return submit_search()">
+        <input id="search_autocomplete" type="text" value="" autocomplete="off" name="q"
+          onfocus="search_focus_changed(this, true)" onblur="search_focus_changed(this, false)"
+          onkeydown="return search_changed(event, true, '/')"
+          onkeyup="return search_changed(event, false, '/')" />
+      </form>
+      <div class="right"></div>
+      <a class="close hide">close</a>
+      <div class="left"></div>
+      <div class="right"></div>
+    </div><!-- end search-inner -->
+  </div><!-- end search-container -->
+
+  <div class="search_filtered_wrapper reference">
+    <div class="suggest-card reference no-display">
+      <ul class="search_filtered">
+      </ul>
+    </div>
+  </div>
+
+  <div class="search_filtered_wrapper docs">
+    <div class="suggest-card dummy no-display">&nbsp;</div>
+    <div class="suggest-card develop no-display">
+      <ul class="search_filtered">
+      </ul>
+      <div class="child-card guides no-display">
+      </div>
+      <div class="child-card training no-display">
+      </div>
+      <div class="child-card samples no-display">
+      </div>
+    </div>
+    <div class="suggest-card design no-display">
+      <ul class="search_filtered">
+      </ul>
+    </div>
+    <div class="suggest-card distribute no-display">
+      <ul class="search_filtered">
+      </ul>
+    </div>
+  </div>
+</div><!-- end menu-container (search and menu widget) -->
+
+
+
+        <!-- Expanded quicknav -->
+        <div id="quicknav" class="col-13">
+          <ul>
+            <li class="about">
+              <ul>
+                <li><a href="/about/index.html">About</a></li>
+                <li><a href="/wear/index.html">Wear</a></li>
+                <li><a href="/tv/index.html">TV</a></li>
+                <li><a href="/auto/index.html">Auto</a></li>
+              </ul>
+            </li>
+            <li class="design">
+              <ul>
+                <li><a href="/design/index.html">Get Started</a></li>
+                <li><a href="/design/devices.html">Devices</a></li>
+                <li><a href="/design/style/index.html">Style</a></li>
+                <li><a href="/design/patterns/index.html">Patterns</a></li>
+                <li><a href="/design/building-blocks/index.html">Building Blocks</a></li>
+                <li><a href="/design/downloads/index.html">Downloads</a></li>
+                <li><a href="/design/videos/index.html">Videos</a></li>
+              </ul>
+            </li>
+            <li class="develop">
+              <ul>
+                <li><a href="/training/index.html"
+                  zh-tw-lang="訓練課程"
+                  zh-cn-lang="培训"
+                  ru-lang="Курсы"
+                  ko-lang="교육"
+                  ja-lang="トレーニング"
+                  es-lang="Capacitación"
+                  >Training</a></li>
+                <li><a href="/guide/index.html"
+                  zh-tw-lang="API 指南"
+                  zh-cn-lang="API 指南"
+                  ru-lang="Руководства по API"
+                  ko-lang="API 가이드"
+                  ja-lang="API ガイド"
+                  es-lang="Guías de la API"
+                  >API Guides</a></li>
+                <li><a href="/reference/packages.html"
+                  zh-tw-lang="參考資源"
+                  zh-cn-lang="参考"
+                  ru-lang="Справочник"
+                  ko-lang="참조문서"
+                  ja-lang="リファレンス"
+                  es-lang="Referencia"
+                  >Reference</a></li>
+                <li><a href="/sdk/index.html"
+                  zh-tw-lang="相關工具"
+                  zh-cn-lang="工具"
+                  ru-lang="Инструменты"
+                  ko-lang="도구"
+                  ja-lang="ツール"
+                  es-lang="Herramientas"
+                  >Tools</a>
+                </li>
+                <li><a href="/google/index.html">Google Services</a>
+                </li>
+
+                  <li><a href="/samples/index.html">Samples</a>
+                  </li>
+
+              </ul>
+            </li>
+            <li class="distribute last">
+              <ul>
+                <li><a href="/distribute/googleplay/index.html">Google Play</a></li>
+                <li><a href="/distribute/essentials/index.html">Essentials</a></li>
+                <li><a href="/distribute/users/index.html">Get Users</a></li>
+                <li><a href="/distribute/engage/index.html">Engage &amp; Retain</a></li>
+                <li><a href="/distribute/monetize/index.html">Monetize</a></li>
+                <li><a href="/distribute/tools/index.html">Tools &amp; Reference</a></li>
+                <li><a href="/distribute/stories/index.html">Developer Stories</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /Expanded quicknav -->
+      </div><!-- end header-wrap.wrap -->
+    </div><!-- end header -->
+
+
+    <!-- Secondary x-nav -->
+    <div id="nav-x">
+        <div class="wrap" style="position:relative;z-index:1">
+
+
+
+            <ul class="nav-x col-9 develop" style="width:100%">
+                <li class="training"><a href="/training/index.html"
+                  zh-tw-lang="訓練課程"
+                  zh-cn-lang="培训"
+                  ru-lang="Курсы"
+                  ko-lang="교육"
+                  ja-lang="トレーニング"
+                  es-lang="Capacitación"
+                  >Training</a></li>
+                <li class="guide"><a href="/guide/index.html"
+                  zh-tw-lang="API 指南"
+                  zh-cn-lang="API 指南"
+                  ru-lang="Руководства по API"
+                  ko-lang="API 가이드"
+                  ja-lang="API ガイド"
+                  es-lang="Guías de la API"
+                  >API Guides</a></li>
+                <li class="reference"><a href="/reference/packages.html"
+                  zh-tw-lang="參考資源"
+                  zh-cn-lang="参考"
+                  ru-lang="Справочник"
+                  ko-lang="참조문서"
+                  ja-lang="リファレンス"
+                  es-lang="Referencia"
+                  >Reference</a></li>
+                <li class="tools"><a href="/sdk/index.html"
+                  zh-tw-lang="相關工具"
+                  zh-cn-lang="工具"
+                  ru-lang="Инструменты"
+                  ko-lang="도구"
+                  ja-lang="ツール"
+                  es-lang="Herramientas"
+                  >Tools</a></li>
+                <li class="google"><a href="/google/index.html"
+                  >Google Services</a>
+                </li>
+
+                  <li class="samples"><a href="/samples/index.html"
+                    >Samples</a>
+                  </li>
+
+            </ul>
+        </div>
+    </div>
+    <!-- /Sendondary x-nav DEVELOP -->
+
+
+
+    <div id="searchResults" class="wrap" style="display:none;">
+      <h2 id="searchTitle">Results</h2>
+      <div id="leftSearchControl" class="search-control">Loading...</div>
+    </div>
+  </div> <!--end header-wrapper -->
+
+  <div id="sticky-header">
+    <div>
+      <a class="logo" href="#top"></a>
+      <a class="top" href="#top"></a>
+      <ul class="breadcrumb">
+
+        <li class="current">Download Android Studio and SDK Tools</li>
+      </ul>
+    </div>
+  </div>
+
+
+
+
+  <div class="wrap clearfix" id="body-content">
+    <div class="col-3" id="side-nav" itemscope itemtype="http://schema.org/SiteNavigationElement">
+      <div id="devdoc-nav" class="scroll-pane">
+<ul id="nav">
+
+  <li class="nav-section">
+    <div class="nav-section-header"><a href="/sdk/index.html"><span class="en">Download</span></a></div>
+    <ul>
+      <li><a href="/sdk/installing/index.html">
+          <span class="en">Installing the SDK</span></a></li>
+
+      <li><a href="/sdk/installing/adding-packages.html">
+          <span class="en">Adding SDK Packages</span></a></li>
+    </ul>
+  </li>
+
+
+<!-- Android Studio menu-->
+
+ <li class="nav-section">
+    <div class="nav-section-header">
+      <a href="/tools/studio/index.html">Android Studio</a>
+    </div>
+    <ul>
+      <li><a href="/sdk/installing/studio-tips.html">
+          Tips and Tricks</a></li>
+    </ul>
+
+ </li><!-- End of Android Studio menu -->
+
+
+<!-- Workflow menu-->
+
+  <li class="nav-section">
+    <div class="nav-section-header">
+        <a href="/tools/workflow/index.html"><span class="en">Workflow</span></a>
+    </div>
+    <ul>
+      <li class="nav-section">
+        <div class="nav-section-header"><a href="/tools/devices/index.html"><span class="en">Setting Up Virtual Devices</span></a></div>
+        <ul>
+          <li><a href="/tools/devices/managing-avds.html"><span class="en">With AVD Manager</span></a></li>
+          <li><a href="/tools/devices/managing-avds-cmdline.html"><span class="en">From the Command Line</span></a></li>
+          <li><a href="/tools/devices/emulator.html"><span class="en">Using the Emulator</span></a></li>
+        </ul>
+      </li>
+      <li class="nav-section">
+        <div class="nav-section-header"><a href="/tools/device.html"><span class="en">Using Hardware Devices</span></a></div>
+        <ul>
+          <li><a href="/tools/extras/oem-usb.html"><span
+            class="en">USB Drivers</span></a></li>
+        </ul>
+      </li>
+      <li class="nav-section">
+        <div class="nav-section-header"><a href="/tools/projects/index.html"><span class="en">Managing Projects</span></a></div>
+        <ul>
+          <li><a href="/tools/projects/projects-studio.html"><span class="en">From Android Studio</span></a></li>
+          <li><a href="/tools/projects/projects-cmdline.html"><span class="en">From the Command Line</span></a></li>
+          <li><a href="/tools/projects/templates.html"><span class="en">Using Code Templates</span></a></li>
+        </ul>
+      </li>
+
+
+      <li class="nav-section">
+        <div class="nav-section-header">
+          <a href="/tools/building/index.html">
+          <span class="en">Building and Running</span></a>
+        </div>
+        <ul>
+          <li><a href="/tools/building/building-studio.html">
+            <span class="en">From Android Studio</span></a></li>
+          <li><a href="/tools/building/building-cmdline.html">
+            <span class="en">From the Command Line</span></a></li>
+        </ul>
+      </li>
+
+
+  <li class="nav-section">
+        <div class="nav-section-header"><a href="/tools/testing/index.html">
+            <span class="en">Testing</span>
+          </a></div>
+        <ul>
+          <li>
+            <a href="/tools/testing/testing_android.html">
+            <span class="en">Fundamentals</span></a>
+          </li>
+          <li><a href="/tools/testing/testing_eclipse.html">
+            <span class="en">From Eclipse</span></a>
+          </li>
+          <li><a href="/tools/testing/testing_otheride.html">
+            <span class="en">From Other IDEs</span></a>
+          </li>
+          <li>
+            <a href="/tools/testing/activity_testing.html">
+            <span class="en">Activity Testing</span></a>
+          </li>
+          <li>
+            <a href="/tools/testing/service_testing.html">
+            <span class="en">Service Testing</span></a>
+          </li>
+          <li>
+            <a href="/tools/testing/contentprovider_testing.html">
+            <span class="en">Content Provider Testing</span></a>
+          </li>
+          <li>
+            <a href="/tools/testing/testing_accessibility.html">
+            <span class="en">Accessibility Testing</span></a>
+          </li>
+           <li>
+            <a href="/tools/testing/testing_ui.html">
+            <span class="en">UI Testing</span></a>
+          </li>
+          <li>
+            <a href="/tools/testing/what_to_test.html">
+            <span class="en">What To Test</span></a>
+          </li>
+          <li>
+            <a href="/tools/testing/activity_test.html">
+            <span class="en">Activity Testing Tutorial</span></a>
+          </li>
+        </ul>
+  </li><!-- end of testing -->
+
+  <li class="nav-section">
+    <div class="nav-section-header"><a href="/tools/debugging/index.html"><span class="en">Debugging</span></a></div>
+    <ul>
+      <li><a href="/tools/debugging/debugging-studio.html"><span class="en">From Android Studio</span></a></li>
+      <li><a href="/tools/debugging/debugging-projects-cmdline.html"><span class="en">From Other IDEs</span></a></li>
+      <li><a href="/tools/debugging/ddms.html"><span class="en">Using DDMS</span></a></li>
+      <li><a href="/tools/debugging/debugging-log.html"><span class="en">Reading and Writing Logs</span></a></li>
+      <li><a href="/tools/debugging/improving-w-lint.html"><span class="en">Improving Your Code with lint</span></a></li>
+      <li><a href="/tools/debugging/debugging-ui.html"><span class="en">Optimizing your UI</span></a></li>
+      <li><a href="/tools/debugging/debugging-tracing.html"><span class="en">Profiling with Traceview and dmtracedump</span></a></li>
+      <li><a href="/tools/debugging/systrace.html"><span class="en">Analyzing Display and Performance</span></a></li>
+      <li><a href="/tools/debugging/debugging-memory.html">Investigating Your RAM Usage</a></li>
+      <li><a href="/tools/debugging/debugging-devtools.html"><span class="en">Using the Dev Tools App</span></a></li>
+    </ul>
+  </li>
+      <li class="nav-section">
+        <div class="nav-section-header"><a href="/tools/publishing/publishing_overview.html" zh-cn-lang="发布概述"><span class="en">Publishing</span></a></div>
+        <ul>
+          <li><a href="/tools/publishing/preparing.html" zh-cn-lang="准备发布"><span class="en">Preparing for Release</span></a></li>
+          <li><a href="/tools/publishing/versioning.html"><span class="en">Versioning Your Apps</span></a></li>
+          <li><a href="/tools/publishing/app-signing.html"><span class="en">Signing Your Apps</span></a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+
+
+  <li class="nav-section">
+    <div class="nav-section-header"><a href="/tools/help/index.html"><span
+class="en">Tools Help</span></a></div>
+    <ul>
+      <li><a href="/tools/help/adb.html">adb</a></li>
+      <li><a href="/tools/help/android.html">android</a></li>
+      <li><a href="/tools/help/avd-manager.html">AVD Manager</a></li>
+      <li><a href="/tools/help/bmgr.html">bmgr</a>
+      <li><a href="/tools/help/monitor.html">Device Monitor</a></li>
+      <li><a href="/tools/help/dmtracedump.html">dmtracedump</a></li>
+      <li><a href="/tools/help/draw9patch.html">Draw 9-Patch</a></li>
+      <li><a href="/tools/help/emulator.html">Emulator</a></li>
+      <li><a href="/tools/help/etc1tool.html">etc1tool</a></li>
+      <li><a href="/tools/help/hierarchy-viewer.html">Hierarchy Viewer</a></li>
+      <li><a href="/tools/help/hprof-conv.html">hprof-conv</a></li>
+      <li><a href="/tools/help/jobb.html">jobb</a></li>
+      <li><a href="/tools/help/lint.html">lint</span></a></li>
+      <li><a href="/tools/help/logcat.html">logcat</a></li>
+      <li><a href="/tools/help/mksdcard.html">mksdcard</a></li>
+      <li><a href="/tools/help/monkey.html">monkey</a></li>
+      <li class="nav-section">
+        <div class="nav-section-header"><a href="/tools/help/monkeyrunner_concepts.html"><span class="en">monkeyrunner</span></a></div>
+        <ul>
+          <li><a href="/tools/help/MonkeyDevice.html"><span
+class="en">MonkeyDevice</span></a></li>
+          <li><a href="/tools/help/MonkeyImage.html"><span
+class="en">MonkeyImage</span></a></li>
+          <li><a href="/tools/help/MonkeyRunner.html"><span
+class="en">MonkeyRunner</span></a></li>
+        </ul>
+      </li>
+       <li><a href="/tools/help/proguard.html" zh-cn-lang="ProGuard">ProGuard</a></li>
+       <li><a href="/tools/help/sdk-manager.html">SDK Manager</a></li>
+       <li><a href="/tools/help/systrace.html">Systrace</a></li>
+       <li><a href="/tools/help/gltracer.html">Tracer for OpenGL ES</a></li>
+       <li><a href="/tools/help/traceview.html">Traceview</a></li>
+       <li class="nav-section">
+          <div class="nav-section-header"><a href="/tools/help/uiautomator/index.html"><span class="en">uiautomator</span></a></div>
+          <ul>
+             <li><a href="/tools/help/uiautomator/Configurator.html"><span class="en">Configurator</span></a></li>
+             <li><a href="/tools/help/uiautomator/IAutomationSupport.html"><span class="en">IAutomationSupport</span></a></li>
+             <li><a href="/tools/help/uiautomator/UiAutomatorTestCase.html"><span class="en">UiAutomatorTestCase</span></a></li>
+             <li><a href="/tools/help/uiautomator/UiCollection.html"><span class="en">UiCollection</span></a></li>
+             <li><a href="/tools/help/uiautomator/UiDevice.html"><span class="en">UiDevice</span></a></li>
+             <li><a href="/tools/help/uiautomator/UiObject.html"><span class="en">UiObject</span></a></li>
+             <li><a href="/tools/help/uiautomator/UiObjectNotFoundException.html"><span class="en">UiObjectNotFoundException</span></a></li>
+             <li><a href="/tools/help/uiautomator/UiScrollable.html"><span class="en">UiScrollable</span></a></li>
+             <li><a href="/tools/help/uiautomator/UiSelector.html"><span class="en">UiSelector</span></a></li>
+             <li><a href="/tools/help/uiautomator/UiWatcher.html"><span class="en">UiWatcher</span></a></li>
+          </ul>
+       </li>
+       <li><a href="/tools/help/zipalign.html">zipalign</a></li>
+    </ul>
+  </li>
+
+  </li><!-- end of tools help -->
+
+
+<!-- Build System menu-->
+
+  <li class="nav-section">
+    <div class="nav-section-header">
+      <a href="/sdk/installing/studio-build.html">Build System</a>
+    </div>
+    <ul>
+      <li><a href="/tools/building/configuring-gradle.html">
+        <span class="en">Configuring Gradle Builds</span></a></li>
+      <li><a href="/tools/building/plugin-for-gradle.html">
+        <span class="en">Android Plugin for Gradle</span></a></li>
+      <li><a href="/tools/building/multidex.html">
+        <span class="en">Apps Over 65K Methods</span></a></li>
+      </ul>
+  </li><!-- end of build system -->
+
+
+<!-- Support Library menu-->
+
+  <li class="nav-section">
+    <div class="nav-section-header"><a href="/tools/support-library/index.html"><span
+class="en">Support Library</span></a></div>
+    <ul>
+      <li><a href="/tools/support-library/features.html">Features</a></li>
+      <li><a href="/tools/support-library/setup.html">Setup</a></li>
+    </ul>
+  </li><!-- end of support library -->
+
+
+<!-- Revision menu-->
+
+  <li class="nav-section">
+    <div class="nav-section-header"><a href="/tools/revisions/index.html"><span class="en">Revisions</span></a></div>
+    <ul>
+      <li><a href="/tools/revisions/studio.html">
+        <span class="en">Android Studio</span>
+      </a></li>
+      <li><a href="/tools/sdk/tools-notes.html">
+        <span class="en">SDK Tools</span>
+      </a></li>
+      <li><a href="/tools/revisions/build-tools.html">
+        <span class="en">SDK Build Tools</span>
+      </a></li>
+      <li><a href="/tools/revisions/platforms.html">
+        <span class="en">SDK Platforms</span></a></li>
+      <li><a href="/tools/sdk/eclipse-adt.html">
+        <span class="en">ADT Plugin</span></a></li>
+    </ul>
+  </li>
+
+  <li class="nav-section">
+    <div class="nav-section-header empty">
+      <a href="/tools/sdk/ndk/index.html">NDK</a>
+    </div>
+  </li>
+
+  <li class="nav-section">
+    <div class="nav-section-header">
+    <a href="/tools/adk/index.html">
+      <span class="en">ADK</span></a>
+    </div>
+    <ul>
+      <li><a href="/tools/adk/adk2.html">ADK 2012 Guide</a></li>
+      <li><a href="/tools/adk/adk.html">ADK 2011 Guide</a></li>
+    </ul>
+  </li>
+
+
+<!-- Eclipse ADT menu-->
+
+  <li class="nav-section">
+    <div class="nav-section-header">
+    <a href="/tools/help/adt.html">
+      <span class="en">Eclipse with ADT</span></a>
+    </div>
+    <ul>
+    <li><a href="/sdk/installing/migrate.html">Migrating to Android Studio</a></li>
+    <li><a href="/sdk/installing/installing-adt.html">
+        <span class="en">Installing the Eclipse Plugin</span></a></li>
+    <li><a href="/tools/projects/projects-eclipse.html">Managing Projects</a></li>
+    <li><a href="/tools/building/building-eclipse.html">Building and Running</a></li>
+    <li><a href="/tools/building/building-cmdline-ant.html">Building with Ant</a></li>
+    <li><a href="/tools/testing/testing_eclipse.html">Testing</a></li>
+    <li><a href="/tools/debugging/debugging-projects.html">Debugging</a></li>
+    <li><a href="/tools/publishing/app-signing-eclipse.html">Signing Your Apps</a></li>
+    </ul>
+  </li><!-- end of Eclipse  -->
+
+
+</ul><!-- nav -->
+
+<script type="text/javascript">
+<!--
+    buildToggleLists();
+    changeNavLang(getLangPref());
+//-->
+</script>
+
+
+
+      </div>
+    </div> <!-- end side-nav -->
+    <script>
+      $(document).ready(function() {
+        scrollIntoView("devdoc-nav");
+        });
+    </script>
+
+
+
+
+
+<div class="col-13" id="doc-col" >
+
+
+
+
+
+  <div id="jd-content" itemprop="description">
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+  .offline {display:none;}
+  a.download-bundle-button {display:block;}
+  h2.feature {
+    padding-top:30px;
+    margin-top:0;
+    clear:both;
+  }
+  .feature-blurb {
+  margin:0px; font-size:16px; font-weight:300;
+  padding:40px 0 0 0;
+  }
+
+  .landing-button.green {
+    font-size:16px;
+    background-color:#90c653;
+    padding:8px 10px 10px;
+    margin:0;
+    width:206px;
+    text-align:center;
+  }
+
+  .landing-button.green:hover {
+    background-color:#85b84f;
+  }
+
+  .landing-button .small {
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 12px;
+    display: block;
+  }
+
+  h1.studio-logo {
+    width:226px;
+    height:78px;
+    display:block;
+    padding:0;
+    white-space: nowrap;
+    text-indent: 10000px;
+    font-size:0px;
+    background: url(../images/tools/studio-logo.png);
+    background-image: -webkit-image-set(url(../images/tools/studio-logo.png) 1x, url(../images/tools/studio-logo_2x.png) 2x);
+    background-size: 226px 78px;
+  }
+
+</style>
+
+
+
+
+
+<div style="position:relative;">
+
+
+<div class="wrap" id="tos" style="display:none;width:inherit;height:650px">
+<div class="col-13" style="margin:0;">&nbsp;</div><!-- provides top margin for content -->
+
+<h1 id="tos-header" style="margin-top:0">Download</h1>
+
+<p class="sdk-terms-intro">Before installing Android Studio or the standalone SDK tools,
+you must agree to the following terms and conditions.</p>
+
+<div class="sdk-terms" onfocus="this.blur()">
+<h2 class="norule">Terms and Conditions</h2>
+This is the Android Software Development Kit License Agreement
+
+<h3>1. Introduction</h3>
+1.1 The Android Software Development Kit (referred to in this License Agreement as the "SDK" and specifically including the Android system files, packaged APIs, and Google APIs add-ons) is licensed to you subject to the terms of this License Agreement. This License Agreement forms a legally binding contract between you and Google in relation to your use of the SDK.
+
+1.2 "Android" means the Android software stack for devices, as made available under the Android Open Source Project, which is located at the following URL: http://source.android.com/, as updated from time to time.
+
+1.3 "Google" means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
+
+
+<h3>2. Accepting this License Agreement</h3>
+2.1 In order to use the SDK, you must first agree to this License Agreement. You may not use the SDK if you do not accept this License Agreement.
+
+2.2 By clicking to accept, you hereby agree to the terms of this License Agreement.
+
+2.3 You may not use the SDK and may not accept the License Agreement if you are a person barred from receiving the SDK under the laws of the United States or other countries including the country in which you are resident or from which you use the SDK.
+
+2.4 If you are agreeing to be bound by this License Agreement on behalf of your employer or other entity, you represent and warrant that you have full legal authority to bind your employer or such entity to this License Agreement. If you do not have the requisite authority, you may not accept the License Agreement or use the SDK on behalf of your employer or other entity.
+
+
+<h3>3. SDK License from Google</h3>
+3.1 Subject to the terms of this License Agreement, Google grants you a limited, worldwide, royalty-free, non-assignable and non-exclusive license to use the SDK solely to develop applications to run on the Android platform.
+
+3.2 You agree that Google or third parties own all legal right, title and interest in and to the SDK, including any Intellectual Property Rights that subsist in the SDK. "Intellectual Property Rights" means any and all rights under patent law, copyright law, trade secret law, trademark law, and any and all other proprietary rights. Google reserves all rights not expressly granted to you.
+
+3.3 You may not use the SDK for any purpose not expressly permitted by this License Agreement.  Except to the extent required by applicable third party licenses, you may not: (a) copy (except for backup purposes), modify, adapt, redistribute, decompile, reverse engineer, disassemble, or create derivative works of the SDK or any part of the SDK; or (b) load any part of the SDK onto a mobile handset or any other hardware device except a personal computer, combine any part of the SDK with other software, or distribute any software or device incorporating a part of the SDK.
+
+3.4 You agree that you will not take any actions that may cause or result in the fragmentation of Android, including but not limited to distributing, participating in the creation of, or promoting in any way a software development kit derived from the SDK.
+
+3.5 Use, reproduction and distribution of components of the SDK licensed under an open source software license are governed solely by the terms of that open source software license and not this License Agreement.
+
+3.6 You agree that the form and nature of the SDK that Google provides may change without prior notice to you and that future versions of the SDK may be incompatible with applications developed on previous versions of the SDK. You agree that Google may stop (permanently or temporarily) providing the SDK (or any features within the SDK) to you or to users generally at Google's sole discretion, without prior notice to you.
+
+3.7 Nothing in this License Agreement gives you a right to use any of Google's trade names, trademarks, service marks, logos, domain names, or other distinctive brand features.
+
+3.8 You agree that you will not remove, obscure, or alter any proprietary rights notices (including copyright and trademark notices) that may be affixed to or contained within the SDK.
+
+
+<h3>4. Use of the SDK by You</h3>
+4.1 Google agrees that it obtains no right, title or interest from you (or your licensors) under this License Agreement in or to any software applications that you develop using the SDK, including any intellectual property rights that subsist in those applications.
+
+4.2 You agree to use the SDK and write applications only for purposes that are permitted by (a) this License Agreement and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
+
+4.3 You agree that if you use the SDK to develop applications for general public users, you will protect the privacy and legal rights of those users. If the users provide you with user names, passwords, or other login information or personal information, you must make the users aware that the information will be available to your application, and you must provide legally adequate privacy notice and protection for those users. If your application stores personal or sensitive information provided by users, it must do so securely. If the user provides your application with Google Account information, your application may only use that information to access the user's Google Account when, and for the limited purposes for which, the user has given you permission to do so.
+
+4.4 You agree that you will not engage in any activity with the SDK, including the development or distribution of an application, that interferes with, disrupts, damages, or accesses in an unauthorized manner the servers, networks, or other properties or services of any third party including, but not limited to, Google or any mobile communications carrier.
+
+4.5 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any data, content, or resources that you create, transmit or display through Android and/or applications for Android, and for the consequences of your actions (including any loss or damage which Google may suffer) by doing so.
+
+4.6 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any breach of your obligations under this License Agreement, any applicable third party contract or Terms of Service, or any applicable law or regulation, and for the consequences (including any loss or damage which Google or any third party may suffer) of any such breach.
+
+
+<h3>5. Your Developer Credentials</h3>
+5.1 You agree that you are responsible for maintaining the confidentiality of any developer credentials that may be issued to you by Google or which you may choose yourself and that you will be solely responsible for all applications that are developed under your developer credentials.
+
+
+<h3>6. Privacy and Information</h3>
+6.1 In order to continually innovate and improve the SDK, Google may collect certain usage statistics from the software including but not limited to a unique identifier, associated IP address, version number of the software, and information on which tools and/or services in the SDK are being used and how they are being used. Before any of this information is collected, the SDK will notify you and seek your consent. If you withhold consent, the information will not be collected.
+
+6.2 The data collected is examined in the aggregate to improve the SDK and is maintained in accordance with Google's Privacy Policy.
+
+
+<h3>7. Third Party Applications</h3>
+7.1 If you use the SDK to run applications developed by a third party or that access data, content or resources provided by a third party, you agree that Google is not responsible for those applications, data, content, or resources. You understand that all data, content or resources which you may access through such third party applications are the sole responsibility of the person from which they originated and that Google is not liable for any loss or damage that you may experience as a result of the use or access of any of those third party applications, data, content, or resources.
+
+7.2 You should be aware the data, content, and resources presented to you through such a third party application may be protected by intellectual property rights which are owned by the providers (or by other persons or companies on their behalf). You may not modify, rent, lease, loan, sell, distribute or create derivative works based on these data, content, or resources (either in whole or in part) unless you have been specifically given permission to do so by the relevant owners.
+
+7.3 You acknowledge that your use of such third party applications, data, content, or resources may be subject to separate terms between you and the relevant third party. In that case, this License Agreement does not affect your legal relationship with these third parties.
+
+
+<h3>8. Using Android APIs</h3>
+8.1 Google Data APIs
+
+8.1.1 If you use any API to retrieve data from Google, you acknowledge that the data may be protected by intellectual property rights which are owned by Google or those parties that provide the data (or by other persons or companies on their behalf). Your use of any such API may be subject to additional Terms of Service. You may not modify, rent, lease, loan, sell, distribute or create derivative works based on this data (either in whole or in part) unless allowed by the relevant Terms of Service.
+
+8.1.2 If you use any API to retrieve a user's data from Google, you acknowledge and agree that you shall retrieve data only with the user's explicit consent and only when, and for the limited purposes for which, the user has given you permission to do so.
+
+
+<h3>9. Terminating this License Agreement</h3>
+9.1 This License Agreement will continue to apply until terminated by either you or Google as set out below.
+
+9.2 If you want to terminate this License Agreement, you may do so by ceasing your use of the SDK and any relevant developer credentials.
+
+9.3 Google may at any time, terminate this License Agreement with you if:
+(A) you have breached any provision of this License Agreement; or
+(B) Google is required to do so by law; or
+(C) the partner with whom Google offered certain parts of SDK (such as APIs) to you has terminated its relationship with Google or ceased to offer certain parts of the SDK to you; or
+(D) Google decides to no longer provide the SDK or certain parts of the SDK to users in the country in which you are resident or from which you use the service, or the provision of the SDK or certain SDK services to you by Google is, in Google's sole discretion, no longer commercially viable.
+
+9.4 When this License Agreement comes to an end, all of the legal rights, obligations and liabilities that you and Google have benefited from, been subject to (or which have accrued over time whilst this License Agreement has been in force) or which are expressed to continue indefinitely, shall be unaffected by this cessation, and the provisions of paragraph 14.7 shall continue to apply to such rights, obligations and liabilities indefinitely.
+
+
+<h3>10. DISCLAIMER OF WARRANTIES</h3>
+10.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT YOUR USE OF THE SDK IS AT YOUR SOLE RISK AND THAT THE SDK IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND FROM GOOGLE.
+
+10.2 YOUR USE OF THE SDK AND ANY MATERIAL DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE USE OF THE SDK IS AT YOUR OWN DISCRETION AND RISK AND YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR OTHER DEVICE OR LOSS OF DATA THAT RESULTS FROM SUCH USE.
+
+10.3 GOOGLE FURTHER EXPRESSLY DISCLAIMS ALL WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+
+
+<h3>11. LIMITATION OF LIABILITY</h3>
+11.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT GOOGLE, ITS SUBSIDIARIES AND AFFILIATES, AND ITS LICENSORS SHALL NOT BE LIABLE TO YOU UNDER ANY THEORY OF LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR EXEMPLARY DAMAGES THAT MAY BE INCURRED BY YOU, INCLUDING ANY LOSS OF DATA, WHETHER OR NOT GOOGLE OR ITS REPRESENTATIVES HAVE BEEN ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING.
+
+
+<h3>12. Indemnification</h3>
+12.1 To the maximum extent permitted by law, you agree to defend, indemnify and hold harmless Google, its affiliates and their respective directors, officers, employees and agents from and against any and all claims, actions, suits or proceedings, as well as any and all losses, liabilities, damages, costs and expenses (including reasonable attorneys fees) arising out of or accruing from (a) your use of the SDK, (b) any application you develop on the SDK that infringes any copyright, trademark, trade secret, trade dress, patent or other intellectual property right of any person or defames any person or violates their rights of publicity or privacy, and (c) any non-compliance by you with this License Agreement.
+
+
+<h3>13. Changes to the License Agreement</h3>
+13.1 Google may make changes to the License Agreement as it distributes new versions of the SDK. When these changes are made, Google will make a new version of the License Agreement available on the website where the SDK is made available.
+
+
+<h3>14. General Legal Terms</h3>
+14.1 This License Agreement constitutes the whole legal agreement between you and Google and governs your use of the SDK (excluding any services which Google may provide to you under a separate written agreement), and completely replaces any prior agreements between you and Google in relation to the SDK.
+
+14.2 You agree that if Google does not exercise or enforce any legal right or remedy which is contained in this License Agreement (or which Google has the benefit of under any applicable law), this will not be taken to be a formal waiver of Google's rights and that those rights or remedies will still be available to Google.
+
+14.3 If any court of law, having the jurisdiction to decide on this matter, rules that any provision of this License Agreement is invalid, then that provision will be removed from this License Agreement without affecting the rest of this License Agreement. The remaining provisions of this License Agreement will continue to be valid and enforceable.
+
+14.4 You acknowledge and agree that each member of the group of companies of which Google is the parent shall be third party beneficiaries to this License Agreement and that such other companies shall be entitled to directly enforce, and rely upon, any provision of this License Agreement that confers a benefit on (or rights in favor of) them. Other than this, no other person or company shall be third party beneficiaries to this License Agreement.
+
+14.5 EXPORT RESTRICTIONS. THE SDK IS SUBJECT TO UNITED STATES EXPORT LAWS AND REGULATIONS. YOU MUST COMPLY WITH ALL DOMESTIC AND INTERNATIONAL EXPORT LAWS AND REGULATIONS THAT APPLY TO THE SDK. THESE LAWS INCLUDE RESTRICTIONS ON DESTINATIONS, END USERS AND END USE.
+
+14.6 The rights granted in this License Agreement may not be assigned or transferred by either you or Google without the prior written approval of the other party. Neither you nor Google shall be permitted to delegate their responsibilities or obligations under this License Agreement without the prior written approval of the other party.
+
+14.7 This License Agreement, and your relationship with Google under this License Agreement, shall be governed by the laws of the State of California without regard to its conflict of laws provisions. You and Google agree to submit to the exclusive jurisdiction of the courts located within the county of Santa Clara, California to resolve any legal matter arising from this License Agreement. Notwithstanding this, you agree that Google shall still be allowed to apply for injunctive remedies (or an equivalent type of urgent legal relief) in any jurisdiction.
+
+
+<em>November 13, 2012</em>
+</div>
+
+
+
+
+
+<div id="next-steps" style="display:none;position:absolute;width:inherit">
+  <p>You're just a few steps away from building apps for Android!</p>
+  <p>In a moment, you'll be redirected to
+  <a id="next-link" href="/sdk/installing/index.html">Installing the Android SDK</a>.</p>
+
+</div><!-- end next-steps -->
+
+
+
+<div id="sdk-terms-form">
+<p>
+<input id="agree" type="checkbox" name="agree" value="1" onclick="onAgreeChecked()" />
+<label id="agreeLabel" for="agree">I have read and agree with the above terms and conditions</label>
+</p>
+<p><a href="" class="button disabled" id="downloadForRealz" onclick="return onDownloadForRealz(this);"></a></p>
+</div>
+
+
+</div><!-- end TOS -->
+
+
+
+
+
+
+<div id="landing">
+
+<div class="col-13">&nbsp;</div><!-- provides top margin for content -->
+
+<img src="/images/tools/studio-hero.png"
+srcset="/images/tools/studio-hero_2x.png 2x, /images/tools/studio-hero.png 1x"
+width="760" height="400" alt="" style="margin-bottom:80px" />
+
+<div style="color: #fff; width:226px; height:0; overflow:visible; position:absolute; top:40px; left:25px">
+
+<h1 class="studio-logo" style="margin:0 0 35px !important">Android Studio</h1>
+
+<p style="font-size: 16px; color:#bbb; position: absolute;left: 297px; top: 5px; display: block;
+width: 400px;text-align: center;">The official Android IDE</p>
+
+<ul style="font-size:12px">
+<li>Android Studio IDE</li>
+<li>Android SDK tools</li>
+<li>Android 5.0 (Lollipop) Platform</li>
+<li>Android 5.0 emulator system image with Google APIs</li>
+</ul>
+
+
+<a class="online landing-button green download-bundle-button" style="margin-top:30px;"
+href="#Other" >Download Android Studio</a>
+
+<!-- this appears when viewing the offline docs -->
+<p class="offline">
+To get Android Studio or stand-alone SDK tools, visit <a
+href="http://developer.android.com/sdk/index.html">developer.android.com/sdk/</a>
+</p>
+
+<ul style="margin-top:50px;color:#444">
+  <li><a href="#Requirements">System Requirements</a></li>
+  <li><a href="#Other">Other Download Options</a></li>
+  <li><a href="/sdk/installing/migrate.html">Migrating to Android Studio</a></li>
+  <li><a href="https://docs.google.com/a/google.com/forms/d/1mjsyfzv3HAnDY-_Kfj-3QJKdpuksyMFs9e73CRwmT6Q/viewform"
+target="_blank">Take a Survey</a></li>
+</ul>
+
+</div>
+
+
+
+
+<h2 class="feature norule" >Intelligent code editor</h2>
+
+<div class="col-9" style="margin:0 20px 0 0">
+  <img src="/images/tools/studio-hero-code.png"
+srcset="/images/tools/studio-hero-code_2x.png 2x, /images/tools/studio-hero-code.png 1x" width="520" />
+</div><!-- end col-9 (left column) -->
+
+<div class="col-4 feature-blurb">
+  <p>At the core of Android Studio is an intelligent code editor capable of advanced
+  code completion, refactoring, and code analysis.</p>
+  <p>The powerful code editor helps you be a more productive Android app developer.</p>
+</div>
+
+
+
+
+
+<h2 class="feature norule">Code templates and GitHub integration</h2>
+
+<div class="col-9" style="margin:0 20px 0 0">
+  <img src="/images/tools/studio-hero-import.png"
+srcset="/images/tools/studio-hero-import_2x.png 2x, /images/tools/studio-hero-import.png 1x" width="520" />
+</div><!-- end col-9 (left column) -->
+
+<div class="col-4 feature-blurb">
+  <p>New project wizards make it easier than ever to start a new project.</p>
+
+  <p>Start projects using template code for patterns such as navigation drawer and view pagers,
+  and even import Google code samples from GitHub.</p>
+</div>
+
+
+
+
+<h2 class="feature norule">Multi-screen app development</h2>
+
+<div class="col-9" style="margin:0 20px 0 0">
+  <img src="/images/tools/studio-hero-screens.png"
+srcset="/images/tools/studio-hero-screens_2x.png 2x, /images/tools/studio-hero-screens.png 1x" width="520" />
+</div><!-- end col-9 (left column) -->
+
+<div class="col-4 feature-blurb">
+  <p>Build apps for Android phones, tablets, Android Wear,
+  Android TV, Android Auto and Google Glass.</p>
+  <p>With the new Android Project View and module support in Android Studio, it's easier
+  to manage app projects and resources.
+</div>
+
+
+
+
+<h2 class="feature norule">Virtual devices for all shapes and sizes</h2>
+
+<div class="col-9" style="margin:0 20px 0 0">
+  <img src="/images/tools/studio-hero-avds.png"
+srcset="/images/tools/studio-hero-avds_2x.png 2x, /images/tools/studio-hero-avds.png 1x" width="520" />
+</div><!-- end col-9 (left column) -->
+
+<div class="col-4 feature-blurb">
+  <p>Android Studio comes pre-configured with an optimized emulator image.</p>
+  <p>The updated and streamlined Virtual Device Manager provides
+  pre-defined device profiles for common Android devices.</p>
+</div>
+
+
+
+
+<h2 class="feature norule">
+Android builds evolved, with Gradle</h2>
+
+<div class="col-9" style="margin:0 20px 0 0">
+  <img src="/images/tools/studio-hero-gradle.png"
+srcset="/images/tools/studio-hero-gradle_2x.png 2x, /images/tools/studio-hero-gradle.png 1x" width="520" />
+</div><!-- end col-9 (left column) -->
+
+<div class="col-4 feature-blurb">
+  <p>Create multiple APKs for your Android app with different features using the same project.</p>
+  <p>Manage app dependencies with Maven.</p>
+  <p>Build APKs from Android Studio or the command line.</p>
+</div>
+
+
+
+
+<h2 class="feature norule">More about Android Studio</h2>
+<div style="background:#424242;padding:30px; color:#fff;margin:0 0 15px;">
+
+<a class="online landing-button green download-bundle-button"
+style="margin:0 0 40px 60px;float:right"
+href="" >Download Android Studio</a>
+
+  <ul>
+  <li>Built on IntelliJ IDEA Community Edition, the popular Java IDE by JetBrains.</li>
+  <li>Flexible Gradle-based build system.</li>
+  <li>Build variants and multiple APK generation.</li>
+  <li>Expanded template support for Google Services and various device types.</li>
+  <li>Rich layout editor with support for theme editing.</li>
+  <li>Lint tools to catch performance, usability, version compatibility, and other problems.</li>
+  <li>ProGuard and app-signing capabilities.</li>
+  <li>Built-in support for Google Cloud Platform, making it easy to integrate Google Cloud Messaging and App Engine.</li>
+  </ul>
+
+<p style="margin:0">
+For more details about features available in Android Studio,
+read the guide to <a href="/tools/studio/index.html"
+  >Android Studio Basics</a>.</p>
+</div>
+
+
+<p>If you have been using Eclipse with ADT, be aware that Android Studio is now the official IDE
+for Android, so you should migrate to Android Studio to receive all the
+latest IDE updates. For help moving projects,
+see <a href="/sdk/installing/migrate.html">Migrating to Android
+Studio</a>.</p>
+
+
+
+
+
+
+
+<h2 id="Requirements">System Requirements</h2>
+
+<h3>Windows</h3>
+
+<ul>
+<li>Microsoft&reg;  Windows&reg;  8/7/Vista/2003 (32 or 64-bit)</li>
+<li>2 GB RAM minimum, 4 GB RAM recommended</li>
+<li>400 MB hard disk space + at least 1 G for Android SDK, emulator system images, and caches</li>
+<li>1280 x 800  minimum screen resolution</li>
+<li>Java Development Kit (JDK) 7 </li>
+<li>Optional for accelerated emulator: Intel® processor with support for Intel® VT-x, Intel® EM64T
+(Intel® 64), and Execute Disable (XD) Bit functionality</li>
+</ul>
+
+
+<h3>Mac OS X</h3>
+
+<ul>
+<li>Mac&reg;  OS X&reg;  10.8.5 or higher, up to 10.9 (Mavericks)</li>
+<li>2 GB RAM minimum, 4 GB RAM recommended</li>
+<li>400 MB hard disk space</li>
+<li>At least 1 GB for Android SDK, emulator system images, and caches</li>
+<li>1280 x 800 minimum screen resolution</li>
+<li>Java Runtime Environment (JRE) 6</li>
+<li>Java Development Kit (JDK) 7</li>
+<li>Optional for accelerated emulator: Intel® processor with support for Intel® VT-x, Intel® EM64T
+(Intel® 64), and Execute Disable (XD) Bit functionality</li>
+</ul>
+
+<p>On Mac OS, run Android Studio with Java Runtime Environment (JRE) 6 for optimized font
+rendering. You can then configure your project to use Java Development Kit (JDK) 6 or JDK 7.</p>
+
+
+
+<h3>Linux</h3>
+
+<ul>
+<li>GNOME or KDE desktop</li>
+<li>GNU C Library (glibc) 2.11 or later</li>
+<li>2 GB RAM minimum, 4 GB RAM recommended</li>
+<li>400 MB hard disk space</li>
+<li>At least 1 GB for Android SDK, emulator system images, and caches</li>
+<li>1280 x 800 minimum screen resolution</li>
+<li>Oracle&reg;  Java Development Kit (JDK) 7 </li>
+</ul>
+<p>Tested on Ubuntu&reg;  12.04, Precise Pangolin (64-bit distribution capable of running
+32-bit applications.</p>
+
+
+
+
+<h2 id="Other" style="clear:left">Other Download Options</h2>
+
+<!-- alternative SDK options follows -->
+
+
+
+
+
+<div class="pax col-13 online" style="margin:0;">
+
+
+<h3>SDK Tools Only</h3>
+
+<p>If you prefer to use a different IDE or run the tools from the
+command line or with build scripts, you can instead download the stand-alone Android SDK Tools.
+These packages provide the basic SDK tools for app development, without an IDE.
+Also see the <a href="/tools/sdk/tools-notes.html">SDK tools release notes</a>.</p>
+
+  <table class="download">
+    <tr>
+      <th>Platform</th>
+      <th>Package</th>
+      <th>Size</th>
+      <th>SHA-1 Checksum</th>
+  </tr>
+  <tr>
+    <td rowspan="2">Windows</td>
+    <td>
+  <a onclick="return onDownload(this)" id="win-tools" href="http://dl.google.com/android/installer_r24.0.1-windows.exe">installer_r24.0.1-windows.exe</a> (Recommended)
+    </td>
+    <td>92180986 bytes</td>
+    <td>505d7a95647bccc194b7aa707854422d9c7288d5</td>
+  </tr>
+  <tr>
+    <!-- blank TD from Windows rowspan -->
+    <td>
+  <a onclick="return onDownload(this)" href="http://dl.google.com/android/android-sdk_r24.0.1-windows.zip">android-sdk_r24.0.1-windows.zip</a>
+    </td>
+    <td>140743633 bytes</td>
+    <td>cc49974e8bfcc865ffe0d887e9a74cf52085c632</td>
+  </tr>
+  <tr>
+    <td><nobr>Mac OS X</nobr></td>
+    <td>
+  <a onclick="return onDownload(this)" id="mac-tools" href="http://dl.google.com/android/android-sdk_r24.0.1-macosx.zip">android-sdk_r24.0.1-macosx.zip</a>
+    </td>
+    <td>88535741 bytes</td>
+    <td>7097c09c72645d7ad33c81a37b1a1363a9df2a54</td>
+  </tr>
+  <tr>
+    <td>Linux</td>
+    <td>
+  <a onclick="return onDownload(this)" id="linux-tools" href="https://developer.android.com/android-sdk_r24.0.1-linuz.tgz">android-sdk_r24.0.1-linux.tgz</a>
+    </td>
+    <td>141304203 bytes</td>
+    <td>bc1ccd6b05beb06f59a2011c5a7f2bbab8e87f02</td>
+  </tr>
+  </table>
+
+
+
+<h3>All Android Studio Packages</h3>
+
+<p>Select a specific Android Studio package for your platform. Also see the
+<a href="/tools/revisions/studio.html">Android Studio release notes</a>.</p>
+
+  <table class="download">
+    <tr>
+      <th>Platform</th>
+      <th>Package</th>
+      <th>Size</th>
+      <th>SHA-1 Checksum</th>
+  </tr>
+
+  <tr>
+    <td rowspan="3">Windows</td>
+    <td>
+  <a onclick="return onDownload(this)" id="win-bundle"
+    href="https://dl.google.com/dl/android/studio/install/1.0.1/android-studio-bundle-135.1641136.exe"
+    >android-studio-bundle-135.1641136.exe</a><br>(Recommended)
+    </td>
+    <td>868344232 bytes</td>
+    <td>1931dbaeadb52f5e0a8ba6e2ae60d9df20b2076b</td>
+  </tr>
+
+  <tr>
+    <!-- blank TD from Windows rowspan -->
+    <td>
+  <a onclick="return onDownload(this)"
+    href="https://dl.google.com/dl/android/studio/install/1.0.1/android-studio-ide-135.1641136.exe"
+    >android-studio-ide-135.1641136.exe</a><br>(No SDK tools included)
+    </td>
+    <td>260272840 bytes</td>
+    <td>464d1c5497ab3d1bdef441365791ab36c89cd5ae</td>
+  </tr>
+
+  <tr>
+    <!-- blank TD from Windows rowspan -->
+    <td>
+  <a onclick="return onDownload(this)"
+    href="https://dl.google.com/dl/android/studio/ide-zips/1.0.1/android-studio-ide-135.1641136-windows.zip"
+    >android-studio-ide-135.1641136-windows.zip</a>
+    </td>
+    <td>246249059 bytes</td>
+    <td>6d6856aca83f6ff747ca40b10f70edfbbcccd91c</td>
+  </tr>
+
+  <tr>
+    <td><nobr>Mac OS X</nobr></td>
+    <td>
+  <a onclick="return onDownload(this)" id="mac-bundle"
+    href="https://dl.google.com/dl/android/studio/install/1.0.1/android-studio-ide-1641136.dmg"
+    >android-studio-ide-1641136.dmg</a>
+    </td>
+    <td>245729073 bytes</td>
+    <td>49506ba2cf6b56be4f7d07e6a00c4ec3ba2249d5</td>
+  </tr>
+
+  <tr>
+    <td>Linux</td>
+    <td>
+  <a onclick="return onDownload(this)" id="linux-bundle64"
+    href="http://localhost:8765/base-framework-fake64.tgz"
+    >android-studio-ide-135.1641136-linux.zip</a>
+    </td>
+    <td>243917559 bytes</td>
+    <td>4a582c6e35700f00332783b0b83783f73499aa60</td>
+  </tr>
+
+  <tr>
+    <td>Linux</td>
+    <td>
+  <a onclick="return onDownload(this)" id="linux-bundle32"
+    href="http://localhost:8765/base-framework-fake32.tgz"
+    >android-studio-ide-135.1641136-linux.zip</a>
+    </td>
+    <td>243917559 bytes</td>
+    <td>4f64664ebe496cc6d54f417f25a1707f156d74d2</td>
+  </tr>
+  </table>
+
+
+
+</div><!-- end pax -->
+
+
+
+</div><!-- end col-13 for lower-half content -->
+
+
+
+
+<script>
+  if (location.hash == "#Requirements") {
+    $('.reqs').show();
+  } else if (location.hash == "#ExistingIDE") {
+	 $('.ide').show();
+  }
+
+  var os;
+  var bundlename;
+  var $toolslink;
+
+  if (navigator.appVersion.indexOf("Mobile")!=-1) {
+    // Do nothing for any "mobile" user agent
+  } else if (navigator.appVersion.indexOf("Win")!=-1) {
+    os = "Windows";
+    bundlename = '#win-bundle';
+    $toolslink = $('#win-tools');
+  } else if (navigator.appVersion.indexOf("Mac")!=-1) {
+    os = "Mac";
+    bundlename = '#mac-bundle';
+    $toolslink = $('#mac-tools');
+  } else if (navigator.appVersion.indexOf("Linux")!=-1 && navigator.appVersion.indexOf("Android")==-1) {
+    os = "Linux";
+    bundlename = '#linux-bundle';
+    $toolslink = $('#linux-tools');
+  }
+
+  if (os != undefined) {
+    $('#not-supported').hide();
+
+    /* set up primary Android Studio download button */
+    $('.download-bundle-button').append(" <br/><span class='small'>for " + os + "</span>");
+    $('.download-bundle-button').click(function() {return onDownload(this,true,true);}).attr('href', bundlename);
+  }
+
+
+  function onDownload(link, button, bundle) {
+
+    /* set text for download button */
+    if (button) {
+      $("#downloadForRealz").html($(link).text());
+    } else {
+      $("#downloadForRealz").html("Download " + $(link).text());
+    }
+
+    $("#downloadForRealz").attr('bundle', bundle);
+    $("a#downloadForRealz").attr("name", $(link).attr('href'));
+
+    $("#tos").show();
+    $("#landing").hide();
+
+    location.hash = "top";
+    return false;
+  }
+
+
+  function onAgreeChecked() {
+    /* verify that the TOS is agreed */
+    if ($("input#agree").is(":checked")) {
+
+      /* if downloading the bundle */
+      if ($("#downloadForRealz").attr('bundle')) {
+        /* construct the name of the link we want */
+        linkId = $("a#downloadForRealz").attr("name");
+        /* set the real url for download */
+        $("a#downloadForRealz").attr("href", $(linkId).attr("href"));
+      } else {
+        $("a#downloadForRealz").attr("href", $("a#downloadForRealz").attr("name"));
+      }
+
+      /* reveal the download button */
+      $("a#downloadForRealz").removeClass('disabled');
+    } else {
+      $("a#downloadForRealz").addClass('disabled');
+    }
+  }
+
+  function onDownloadForRealz(link) {
+    if ($("input#agree").is(':checked')) {
+      location.hash = "";
+      location.hash = "top";
+      $("div.sdk-terms").slideUp();
+      $("h1#tos-header").text('Now downloading...');
+      $(".sdk-terms-intro").text('You\'ll be redirected to the install instructions in a moment.');
+      $("#sdk-terms-form").fadeOut('slow', function() {
+        setTimeout(function() {
+          if ($("#downloadForRealz").attr('bundle') == 'true') {
+            // User downloaded the studio Bundle
+            window.location = "/sdk/installing/index.html?pkg=studio";
+          } else {
+            // User downloaded the SDK Tools
+            window.location = "/sdk/installing/index.html?pkg=tools";
+          }
+        }, 3000);
+      });
+      ga('send', 'event', 'SDK', 'IDE and Tools', $("#downloadForRealz").html());
+      return true;
+    } else {
+      $("label#agreeLabel").parent().stop().animate({color: "#258AAF"}, 200,
+        function() {$("label#agreeLabel").parent().stop().animate({color: "#222"}, 200)}
+      );
+      return false;
+    }
+  }
+
+  $(window).hashchange( function(){
+    if (location.hash == "") {
+      location.reload();
+    }
+  });
+
+</script>
+
+
+
+</div><!-- end the wrapper used for relative/absolute positions  -->
+
+
+
+
+
+
+
+
+
+
+
+
+</div><!-- end jd-content -->
+
+
+<div id="footer" class="wrap" >
+
+
+  <div id="copyright">
+
+  Except as noted, this content is
+  licensed under <a href="http://creativecommons.org/licenses/by/2.5/">
+  Creative Commons Attribution 2.5</a>. For details and
+  restrictions, see the <a href="/license.html">Content
+  License</a>.
+  </div>
+
+
+  <div id="footerlinks">
+
+  <p>
+    <a href="/about/index.html">About Android</a>&nbsp;&nbsp;|&nbsp;
+    <a href="/legal.html">Legal</a>&nbsp;&nbsp;|&nbsp;
+    <a href="/support.html">Support</a>
+  </p>
+  </div>
+
+</div> <!-- end footer -->
+
+
+</div><!-- end g-unit -->
+
+</div> <!-- end body-content -->
+
+
+
+
+
+
+<!-- Start of Tag -->
+<script type="text/javascript">
+var axel = Math.random() + "";
+var a = axel * 10000000000000;
+document.write('<iframe src="https://2507573.fls.doubleclick.net/activityi;src=2507573;type=other026;cat=googl348;ord=' + a + '?" width="1" height="1" frameborder="0" style="display:none"></iframe>');
+</script>
+<noscript>
+<iframe src="https://2507573.fls.doubleclick.net/activityi;src=2507573;type=other026;cat=googl348;ord=1?" width="1" height="1" frameborder="0" style="display:none"></iframe>
+</noscript>
+<!-- End of Tag -->
+</body>
+</html>
+
+
+
