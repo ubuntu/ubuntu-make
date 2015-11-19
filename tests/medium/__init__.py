@@ -21,10 +21,9 @@
 
 import os
 import subprocess
-from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path, get_data_dir, \
-    swap_file_and_restore, INSTALL_DIR, spawn_process, BRANCH_TESTS, SYSTEM_UMAKE_DIR
+from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path, get_data_dir, INSTALL_DIR, \
+    BRANCH_TESTS, SYSTEM_UMAKE_DIR
 from time import sleep
-from nose.tools import nottest
 
 
 class ContainerTests(LoggedTestCase):
@@ -209,14 +208,3 @@ class ContainerTests(LoggedTestCase):
         command = self.command_as_list(["mkdir", "-p", dir_path, path])
         if not self._exec_command(command)[0]:
             raise BaseException("Couldn't create {} in container".format(path))
-
-    @nottest
-    def bad_download_page_test(self, command, content_file_path):
-        """Helper for running a test to confirm failure on a significantly changed download page."""
-        with swap_file_and_restore(content_file_path):
-            with open(content_file_path, "w") as newfile:
-                newfile.write("foo")
-            self.child = spawn_process(command)
-            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
-            self.child.sendline("")
-            self.wait_and_close(expect_warn=True, exit_status=1)

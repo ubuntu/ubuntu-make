@@ -20,6 +20,7 @@
 """Basic large tests class"""
 
 from contextlib import suppress
+from nose.tools import nottest
 import os
 import pexpect
 import shutil
@@ -215,3 +216,14 @@ class LargeFrameworkTests(LoggedTestCase):
     def create_file(self, path, content):
         """passthrough to create a file on the disk"""
         open(path, 'w').write(content)
+
+    @nottest
+    def bad_download_page_test(self, command, content_file_path):
+        """Helper for running a test to confirm failure on a significantly changed download page."""
+        with swap_file_and_restore(content_file_path):
+            with open(content_file_path, "w") as newfile:
+                newfile.write("foo")
+            self.child = spawn_process(command)
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.wait_and_close(expect_warn=True, exit_status=1)
