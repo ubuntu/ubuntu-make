@@ -426,8 +426,8 @@ class BaseInstallerTests(LargeFrameworkTests):
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
-    def test_install_with_changed_download_page(self):
-        """Installing should fail if download page has significantly changed"""
+    def test_install_with_no_license_in_download_page(self):
+        """Installing should fail if not even license i dowload page"""
         umake_command = self.command("{} base base-framework".format(UMAKE))
         self.bad_download_page_test(umake_command, self.download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
