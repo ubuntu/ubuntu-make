@@ -46,6 +46,9 @@ class BaseInstallerTests(LargeFrameworkTests):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.proxy_env = {"http_proxy": None, "https_proxy": None}
+        for key in cls.proxy_env:
+            cls.proxy_env[key] = os.environ.pop(key, None)
         cls.download_page_file_path = os.path.join(get_data_dir(), "server-content", "localhost", "index.html")
         if not cls.in_container:
             server_dir = os.path.join(get_data_dir(), "server-content", "localhost")
@@ -62,6 +65,9 @@ class BaseInstallerTests(LargeFrameworkTests):
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
+        for key, value in cls.proxy_env.items():
+            if value:
+                os.environ[key] = value
         if not cls.in_container:
             os.remove(cls.testframework)
             cls.server.stop()
