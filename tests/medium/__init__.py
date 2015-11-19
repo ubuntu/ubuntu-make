@@ -44,11 +44,19 @@ class ContainerTests(LoggedTestCase):
         self.image_name = self.DOCKER_TESTIMAGE
         if not hasattr(self, "hosts"):
             self.hosts = {}
+        if not hasattr(self, "additional_local_frameworks"):
+            self.additional_local_frameworks = []
         command = [get_docker_path(), "run"]
 
         # bind master used for testing tools code inside the container
         runner_cmd = "mkdir -p {}; ln -s {}/ {};".format(os.path.dirname(get_root_dir()), self.UMAKE_TOOLS_IN_CONTAINER,
                                                          get_root_dir())
+
+        local_framework_dir = "/home/{}/.umake/frameworks/".format(self.DOCKER_USER)
+        runner_cmd += "mkdir -p {};".format(local_framework_dir)
+        for additional_framework in self.additional_local_frameworks:
+            runner_cmd += "cp {} {};".format(
+                os.path.join(self.UMAKE_TOOLS_IN_CONTAINER, additional_framework), local_framework_dir)
 
         if not BRANCH_TESTS:
             # create a system binary which will use system umake version (without having the package installed)
