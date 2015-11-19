@@ -47,10 +47,11 @@ class BaseInstallerTests(LargeFrameworkTests):
     def setUpClass(cls):
         super().setUpClass()
         cls.download_page_file_path = os.path.join(get_data_dir(), "server-content", "localhost", "index.html")
-        server_dir = os.path.join(get_data_dir(), "server-content", "localhost")
-        cls.server = LocalHttp(server_dir, port=8765)
-        cls.testframework = os.path.expanduser(os.path.join('~', '.umake', 'frameworks', 'baseinstallerfake.py'))
-        shutil.copy(os.path.join(get_data_dir(), "testframeworks", "baseinstallerfake.py"), cls.testframework)
+        if not cls.in_container:
+            server_dir = os.path.join(get_data_dir(), "server-content", "localhost")
+            cls.server = LocalHttp(server_dir, port=8765)
+            cls.testframework = os.path.expanduser(os.path.join('~', '.umake', 'frameworks', 'baseinstallerfake.py'))
+            shutil.copy(os.path.join(get_data_dir(), "testframeworks", "baseinstallerfake.py"), cls.testframework)
         if platform.machine() != "x86_64":
             cls.TEST_URL_FAKE_DATA = "http://localhost:8765/base-framework-fake32.tgz"
             cls.TEST_CHECKSUM_FAKE_DATA = "4f64664ebe496cc6d54f417f25a1707f156d74d2"
@@ -59,8 +60,9 @@ class BaseInstallerTests(LargeFrameworkTests):
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
-        os.remove(cls.testframework)
-        cls.server.stop()
+        if not cls.in_container:
+            os.remove(cls.testframework)
+            cls.server.stop()
 
     def setUp(self):
         super().setUp()
