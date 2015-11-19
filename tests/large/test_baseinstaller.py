@@ -432,6 +432,20 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.bad_download_page_test(umake_command, self.download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
+    def test_install_with_no_download_links(self):
+        """Installing should fail if no valid download links are found"""
+        with swap_file_and_restore(self.download_page_file_path) as content:
+            with open(self.download_page_file_path, "w") as newfile:
+                newfile.write(content.replace('id="linux-bundle', ""))
+            self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn([pexpect.EOF], timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
+
+            # we have nothing installed
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
     def test_install_with_404(self):
         """Installing should fail with a 404 download asset reported correctly"""
         with swap_file_and_restore(self.download_page_file_path) as content:
@@ -450,3 +464,16 @@ class BaseInstallerTests(LargeFrameworkTests):
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
+    def test_download_page_404(self):
+        """Download page changed address or is just 404 should be reported correctly"""
+        with swap_file_and_restore(self.download_page_file_path):
+            os.remove(self.download_page_file_path)
+            self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn([pexpect.EOF, "ERROR: 404 Client Error: File not found"],
+                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
+
+            # we have nothing installed
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
