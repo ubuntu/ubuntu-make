@@ -21,12 +21,13 @@
 
 from . import LargeFrameworkTests
 import os
+import pexpect
 import platform
 import shutil
 import subprocess
 import tempfile
 
-from ..tools import UMAKE, spawn_process, get_data_dir
+from ..tools import UMAKE, spawn_process, get_data_dir, swap_file_and_restore
 from ..tools.local_server import LocalHttp
 
 
@@ -38,16 +39,21 @@ class BaseInstallerTests(LargeFrameworkTests):
     TIMEOUT_STOP = 1
 
     server = None
+    TEST_URL_FAKE_DATA = "http://localhost:8765/base-framework-fake64.tgz"
+    TEST_CHECKSUM_FAKE_DATA = "4a582c6e35700f00332783b0b83783f73499aa60"
     JAVAEXEC = "java-fake64"
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.download_page_file_path = os.path.join(get_data_dir(), "server-content", "localhost", "index.html")
         server_dir = os.path.join(get_data_dir(), "server-content", "localhost")
         cls.server = LocalHttp(server_dir, port=8765)
         cls.testframework = os.path.expanduser(os.path.join('~', '.umake', 'frameworks', 'baseinstallerfake.py'))
         shutil.copy(os.path.join(get_data_dir(), "testframeworks", "baseinstallerfake.py"), cls.testframework)
         if platform.machine() != "x86_64":
+            cls.TEST_URL_FAKE_DATA = "http://localhost:8765/base-framework-fake32.tgz"
+            cls.TEST_CHECKSUM_FAKE_DATA = "4f64664ebe496cc6d54f417f25a1707f156d74d2"
             cls.JAVAEXEC = "java-fake32"
 
     @classmethod
@@ -396,3 +402,47 @@ class BaseInstallerTests(LargeFrameworkTests):
         """Trying to remove an uninstalled framework will fail"""
         self.child = spawn_process(self.command('{} base base-framework --remove'.format(UMAKE)))
         self.wait_and_close(expect_warn=True, exit_status=1)
+
+    # additional test with fake md5sum
+    def test_install_with_wrong_md5sum(self):
+        """Install requires a md5sum, and a wrong one is rejected"""
+        with swap_file_and_restore(self.download_page_file_path) as content:
+            with open(self.download_page_file_path, "w") as newfile:
+                newfile.write(content.replace(self.TEST_CHECKSUM_FAKE_DATA,
+                                              "c8362a0c2ffc07b1b19c4b9001c8532de5a4b8c3"))
+            self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
+            self.child.sendline("a")
+            self.expect_and_no_warn([pexpect.EOF, "Corrupted download? Aborting."],
+                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
+
+            # we have nothing installed
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_changed_download_page(self):
+        """Installing should fail if download page has significantly changed"""
+        umake_command = self.command("{} base base-framework".format(UMAKE))
+        self.bad_download_page_test(umake_command, self.download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_404(self):
+        """Installing should fail with a 404 download asset reported correctly"""
+        with swap_file_and_restore(self.download_page_file_path) as content:
+            with open(self.download_page_file_path, "w") as newfile:
+                newfile.write(content.replace(self.TEST_URL_FAKE_DATA,
+                                              "https://localhost:8765/android-studio-unexisting.tgz"))
+            self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
+            self.child.sendline("a")
+            self.expect_and_no_warn([pexpect.EOF, "ERROR: 404 Client Error: File not found"],
+                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
+
+            # we have nothing installed
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
