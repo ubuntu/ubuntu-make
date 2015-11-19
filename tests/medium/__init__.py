@@ -35,9 +35,10 @@ class ContainerTests(LoggedTestCase):
     UMAKE_TOOLS_IN_CONTAINER = "/umake"
     APT_FAKE_REPO_PATH = "/apt-fake-repo"
 
+    in_container = True
+
     def setUp(self):
         super().setUp()  # this will call other parents of ContainerTests ancestors, like LargeFrameworkTests
-        self.in_container = True
         self.umake_path = get_root_dir()
         self.install_base_path = os.path.expanduser("/home/{}/{}".format(self.DOCKER_USER, INSTALL_DIR))
         self.image_name = self.DOCKER_TESTIMAGE

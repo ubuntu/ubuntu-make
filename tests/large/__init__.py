@@ -29,15 +29,17 @@ import stat
 import subprocess
 from time import sleep
 from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned, remove_framework_envs_from_user
-from ..tools import LoggedTestCase, get_path_from_desktop_file, is_in_group, INSTALL_DIR
+from ..tools import LoggedTestCase, get_path_from_desktop_file, is_in_group, INSTALL_DIR, swap_file_and_restore, \
+    spawn_process
 
 
 class LargeFrameworkTests(LoggedTestCase):
     """Large framework base utilities"""
 
+    in_container = False
+
     def setUp(self):
         super().setUp()
-        self.in_container = False
         self.installed_path = ""
         self.framework_name_for_profile = ""
         self.conf_path = os.path.expanduser("~/.config/umake")
