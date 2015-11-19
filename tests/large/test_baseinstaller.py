@@ -50,7 +50,9 @@ class BaseInstallerTests(LargeFrameworkTests):
         if not cls.in_container:
             server_dir = os.path.join(get_data_dir(), "server-content", "localhost")
             cls.server = LocalHttp(server_dir, port=8765)
-            cls.testframework = os.path.expanduser(os.path.join('~', '.umake', 'frameworks', 'baseinstallerfake.py'))
+            framework_dir = os.path.expanduser(os.path.join('~', '.umake', 'frameworks'))
+            cls.testframework = (os.path.join(framework_dir, 'baseinstallerfake.py'))
+            os.makedirs(framework_dir, exist_ok=True)
             shutil.copy(os.path.join(get_data_dir(), "testframeworks", "baseinstallerfake.py"), cls.testframework)
         if platform.machine() != "x86_64":
             cls.TEST_URL_FAKE_DATA = "http://localhost:8765/base-framework-fake32.tgz"
