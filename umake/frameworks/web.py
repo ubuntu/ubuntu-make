@@ -221,7 +221,8 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Create the Visual Studio Code launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Visual Studio Code"),
-                        icon_path=os.path.join(self.install_path, "resources", "app", "vso.png"),
+                        icon_path=os.path.join(self.install_path, "resources", "app", "resources", "linux",
+                                               "vscode.png"),
                         exec=os.path.join(self.install_path, "Code"),
                         comment=_("Visual Studio focused on modern web and cloud"),
                         categories="Development;IDE;"))
