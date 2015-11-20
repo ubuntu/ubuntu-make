@@ -278,10 +278,23 @@ class BaseInstallerTests(LargeFrameworkTests):
     def test_custom_install_path(self):
         """We install Base Framework in a custom path"""
         # We skip the existing directory prompt
-        self.child = spawn_process(self.command('{} base base-framework /tmp/foo'.format(UMAKE)))
+        self.installed_path = "/tmp/foo"
+        self.child = spawn_process(self.command('{} base base-framework {}'.format(UMAKE, self.installed_path)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
-        self.accept_default_and_wait()
-        self.close_and_check_status()
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        # we have an installed launcher, added to the launcher
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+        self.check_and_kill_process([self.JAVAEXEC, self.installed_path], wait_before=self.TIMEOUT_START)
+        self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
 
     def test_start_install_on_empty_dir(self):
         """We try to install on an existing empty dir"""
@@ -335,11 +348,23 @@ class BaseInstallerTests(LargeFrameworkTests):
 
     def test_is_default_framework_with_user_path(self):
         """Base Framework isn't selected for default framework with path without separator"""
-        # TODO: once a baseinstaller test: do a real install to check the path
-        self.child = spawn_process(self.command('{} base ~/foo'.format(UMAKE)))
+        self.installed_path = os.path.expanduser("~/foo")
+        self.child = spawn_process(self.command('{} base {}'.format(UMAKE, self.installed_path)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
-        self.accept_default_and_wait()
-        self.close_and_check_status()
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        # we have an installed launcher, added to the launcher
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+        self.check_and_kill_process([self.JAVAEXEC, self.installed_path], wait_before=self.TIMEOUT_START)
+        self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
 
     def test_removal(self):
         """Remove Base Framework with default path"""
