@@ -347,7 +347,7 @@ class CLion(BaseJetBrains):
         super().__init__(name="CLion",
                          description=_("CLion integrated C/C++ IDE"),
                          category=category,
-                         only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['amd64'],
                          download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='clion-*',
                          desktop_filename='jetbrains-clion.desktop',
