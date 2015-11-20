@@ -373,7 +373,7 @@ class BaseInstallerTests(LargeFrameworkTests):
 
     def test_is_default_framework_with_user_path(self):
         """Base Framework isn't selected for default framework with path without separator"""
-        self.installed_path = os.path.expanduser("~/foo")
+        self.installed_path = "/tmp/foo"
         self.child = spawn_process(self.command('{} base {}'.format(UMAKE, self.installed_path)))
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license as the first question
         self.child.sendline("a")
