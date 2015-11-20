@@ -309,9 +309,8 @@ class BaseInstallerTests(LargeFrameworkTests):
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
-    # FIXME: should do a real install to check everything's fine
-    def test_start_install_on_existing_dir(self):
-        """We prompt if we try to install on an existing directory which isn't empty"""
+    def test_start_install_on_existing_dir_refuse(self):
+        """We prompt if we try to install on an existing directory which isn't empty. Refusing doesn't install"""
         if not self.in_container:
             self.installed_path = tempfile.mkdtemp()
         else:  # we still give a path for the container
@@ -323,6 +322,32 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.close_and_check_status()
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_start_install_on_existing_dir_accept(self):
+        """We prompt if we try to install on an existing directory which isn't empty. Accepting install"""
+        if not self.in_container:
+            self.installed_path = tempfile.mkdtemp()
+        else:  # we still give a path for the container
+            self.installed_path = os.path.join(tempfile.gettempdir(), "tmptests")
+        self.create_file(os.path.join(self.installed_path, "bar"), "foo")
+        self.child = spawn_process(self.command('{} base base-framework {}'.format(UMAKE, self.installed_path)))
+        self.expect_and_no_warn("{} isn't an empty directory.*there\? \[.*\] ".format(self.installed_path))
+        self.child.sendline("y")
+        self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        # we have an installed launcher, added to the launcher
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+        self.check_and_kill_process([self.JAVAEXEC, self.installed_path], wait_before=self.TIMEOUT_START)
+        self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
 
     def test_is_default_framework(self):
         """Base Framework is chosen as the default framework"""
