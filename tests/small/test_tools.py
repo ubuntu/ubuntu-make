@@ -730,7 +730,10 @@ class TestUserENV(LoggedTestCase):
 
     def tearDown(self):
         shutil.rmtree(self.local_dir)
-        os.environ = self.orig_environ.copy()
+        # restore original environment. Do not use the dict copy which erases the object and doesn't have the magical
+        # _Environ which setenv() for subprocess
+        os.environ.clear()
+        os.environ.update(self.orig_environ)
         super().tearDown()
 
     @patch("umake.tools.os.path.expanduser")

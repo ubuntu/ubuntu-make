@@ -66,7 +66,10 @@ class LargeFrameworkTests(LoggedTestCase):
             for dir in self.additional_dirs:
                 with suppress(OSError):
                     shutil.rmtree(dir)
-        os.environ = self.original_env
+        # restore original environment. Do not use the dict copy which erases the object and doesn't have the magical
+        # _Environ which setenv() for subprocess
+        os.environ.clear()
+        os.environ.update(self.original_env)
         super().tearDown()
 
     def _pid_for(self, process_grep):

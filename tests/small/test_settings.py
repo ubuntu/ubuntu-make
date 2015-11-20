@@ -45,7 +45,10 @@ class TestVersionHandler(LoggedTestCase):
         # remove caching
         shutil.rmtree(self.version_dir)
         settings.from_dev = self.from_dev_opt
-        os.environ = self.initial_env
+        # restore original environment. Do not use the dict copy which erases the object and doesn't have the magical
+        # _Environ which setenv() for subprocess
+        os.environ.clear()
+        os.environ.update(self.initial_env)
         os.path.join = self.initial_os_path_join
         super().tearDown()
 
