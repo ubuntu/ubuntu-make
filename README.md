@@ -6,6 +6,15 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 
 [All test results](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests/) and [Coverage report](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests-collect/label=ps-trusty-desktop-amd64-1/lastSuccessfulBuild/artifact/html-coverage/index.html)
 
+## Installing
+We recommend to use the Ubuntu Make ppa to ensure you always have the latest and greatest version, even on older supported released. We are available on the currenctly supported Ubuntu version.
+
+```sh
+$ sudo add-apt-repository ppa:ubuntu-desktop/ubuntu-make
+$ sudo apt update
+$ sudo apt install ubuntu-make
+```
+
 ## Running the command line tool
 To run the tool:
 
