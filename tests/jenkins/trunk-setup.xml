@@ -1,19 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<matrix-project>
+<matrix-project plugin="matrix-project@1.4.1">
   <actions/>
   <description>Setup ubuntu make trusty job using ubuntu make	 trunk</description>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <hudson.queueSorter.PrioritySorterJobProperty>
+    <hudson.queueSorter.PrioritySorterJobProperty plugin="PrioritySorter@1.4-SNAPSHOT">
       <priority>100</priority>
     </hudson.queueSorter.PrioritySorterJobProperty>
+    <hudson.plugins.libvirt.BeforeJobSnapshotJobProperty plugin="libvirt-slave@1.8.5"/>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers class="vector">
+  <triggers>
     <hudson.triggers.TimerTrigger>
       <spec>2 */6 * * *</spec>
     </hudson.triggers.TimerTrigger>
@@ -70,14 +71,14 @@ sudo restart docker
 # config save
 mkdir ${CONFIG_PATH}
 cd ${CONFIG_PATH}
-echo -e &quot;{\n  &apos;target&apos;: &apos;trunk&apos;,\n  &apos;version&apos;: &apos;${UBUNTU_MAKE_VERSION}&apos;,\n  &apos;date&apos;: {\n    &apos;timestamp&apos;: &apos;$(date +%s)&apos;,\n    &apos;utc&apos;: &apos;$(date -u)&apos; },\n  &apos;arch&apos;: &apos;$(arch)&apos;\n}&quot; &gt; ubuntu-make-version
+echo -e &quot;{\n  &apos;target&apos;: &apos;trunk&apos;,\n  &apos;version&apos;: &apos;${UBUNTU_MAKE_VERSION}&apos;,\n  &apos;date&apos;: {\n    &apos;timestamp&apos;: &apos;$(date +%s)&apos;,\n    &apos;utc&apos;: &apos;$(date -u)&apos; },\n  &apos;arch&apos;: &apoapos;$(arch)&apos;\n}&quot; &gt; ubuntu-make-version
 dpkg -l &gt; packages_list
 
 </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.plugins.parameterizedtrigger.BuildTrigger>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.14-SNAPSHOT">
       <configs>
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
           <configs>
@@ -90,7 +91,7 @@ dpkg -l &gt; packages_list
           <triggerWithNoParameters>false</triggerWithNoParameters>
         </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
-          <configs class="java.util.Collections$EmptyList"/>
+          <configs class="empty-list"/>
           <projects>ps-trusty-desktop-revert-snapshot-daily</projects>
           <condition>FAILED</condition>
           <triggerWithNoParameters>true</triggerWithNoParameters>
