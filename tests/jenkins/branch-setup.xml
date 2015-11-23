@@ -12,7 +12,8 @@
         <hudson.model.StringParameterDefinition>
           <name>branch</name>
           <description>git branch to test
-if not master, name the branch like &quot;https://github.com/oijazsh/ubuntu-make.git install_dir&quot;</description>
+if not master, name the branch can take github url like: &quot;https://github.com/ubuntu/ubuntu-make/tree/test_set_c&quot;,
+or &quot;&lt;repo&gt; &lt;branch&gt;&quot; like &quot;https://github.com/ubuntu/ubuntu-make.git test_set_c&quot;</description>
           <defaultValue></defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.BooleanParameterDefinition>
@@ -54,6 +55,12 @@ sudo add-apt-repository -y ppa:ubuntu-desktop/ubuntu-make
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y git sloccount
+
+# split branch name if github url given instead of &quot;&lt;repo&gt; &lt;branch&gt;&quot;
+repo=${branch%/tree/*}
+if [ &quot;$repo&quot; != &quot;$branch&quot; ]; then
+  branch=&quot;${repo}.git ${branch##*/tree/}&quot;
+fi
 
 # merge with trunk or clone from given branch
 cd ~
