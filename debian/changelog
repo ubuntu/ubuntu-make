@@ -1,4 +1,4 @@
-ubuntu-make (15.11.1ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (15.11.2) xenial; urgency=medium
 
   [ Abigail Buccaneer ]
   * Add JetBrains CLion C/C++ IDE support.
@@ -39,7 +39,7 @@ ubuntu-make (15.11.1ubuntu1) UNRELEASED; urgency=medium
   * Update French translations.
   * Update translation template for new and updated frameworks.
 
- -- Didier Roche <didrocks@ubuntu.com>  Tue, 24 Nov 2015 08:04:53 +0100
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 24 Nov 2015 08:06:03 +0100
 
 ubuntu-make (15.11.1) xenial; urgency=medium
 
