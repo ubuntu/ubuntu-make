@@ -1,3 +1,46 @@
+ubuntu-make (15.11.1ubuntu1) UNRELEASED; urgency=medium
+
+  [ Abigail Buccaneer ]
+  * Add JetBrains CLion C/C++ IDE support.
+
+  [ Eldar Khayrullin ]
+  * Complete Russian translation.
+
+  [ Translation team ]
+  * Refresh po files with latest community translations. Thanks to all our
+    translator community!
+
+  [ Didier Roche ]
+  * Add Twine game editor support.
+  * Ensure --help always show category help when following category, even
+    if it has default frameworks.
+  * Add tests (small/medium/large) to cover those.
+  * Add ZSH completion to the same level as bash completion.
+  * Fix visual studio icon which changed its path (detected thanks to our
+    testsuite).
+  * Add medium and large tests for CLion.
+  * Fallback to plain english if language support isn't fully installed.
+  * Fix incorrect pt_BR translations.
+  * Add better description for jetbrain IDEs.
+  * Create and move a bunch of Android tests to a mock BaseInstaller based
+    one. This enables us to cut large test time by a magnitude of 2. Using
+    that opportunity to add more tests and complete existing ones.
+  * Standardize language test bed to run in plain english whatever your
+    configuration is.
+  * Misc. tests enhancements and tools fixes.
+  * Move build dependencies only needed for tests to another ppa
+    (ppa:ubuntu-desktop/ubuntu-make-builddeps) and add it in jenkins tests.
+    This way, people using Ubuntu Make on older release are not impacted by
+    the need of newer version of tests frameworks like pexpect and won't
+    install them. Hook that ppa in Travis CI, our jenkins infra and refresh
+    contributor intro to ask adding that ppa for testing.
+  * Enhance our jenkins job for testing a pull request branch and other minor
+    test job enhancements.
+  * Update French translations.
+  * Update translation template for new and updated frameworks.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 24 Nov 2015 08:04:53 +0100
+
 ubuntu-make (15.11.1) xenial; urgency=medium
 
   [ Fabio Colella ]
