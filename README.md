@@ -162,7 +162,7 @@ $ bin/umake
 
 ### Developing using system package
 
-Instead of using a virtual environment, you can install system packages to be able to run the Ubuntu Make tests. The build dependencies are listed in *debian/control* and should be available in latest development ubuntu version. If you are using the latest LTS, you should find them in a dedicated [Ubuntu Make Build-dep ppa](https://launchpad.net/~ubuntu-desktop/+archive/ubuntu/ubuntu-make-builddep).
+Instead of using a virtual environment, you can install system packages to be able to run the Ubuntu Make tests. The build dependencies are listed in *debian/control* and should be available in latest development ubuntu version. If you are using the latest LTS, you should find them in a dedicated [Ubuntu Make Build-dep ppa](https://launchpad.net/~ubuntu-desktop/+archive/ubuntu/ubuntu-make-builddeps).
 
 ## Release management
 Refresh .pot files:
