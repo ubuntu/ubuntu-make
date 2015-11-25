@@ -104,6 +104,10 @@ class _HelpAction(argparse._HelpAction):
 def main():
     """Main entry point of the program"""
 
+    if "udtc" in sys.argv[0]:
+        print(_("WARNING: 'udtc' command is the previous name of Ubuntu Make. Please use the 'umake' command from now "
+                "on providing the exact same features. The 'udtc' command will be removed soon."))
+
     parser = argparse.ArgumentParser(description=_("Deploy and setup developers environment easily on ubuntu"),
                                      epilog=_("Note that you can also configure different debug logging behavior using "
                                               "LOG_CFG that points to a log yaml profile."),
