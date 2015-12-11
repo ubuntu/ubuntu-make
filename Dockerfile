@@ -35,9 +35,6 @@ RUN \
   add-apt-repository -y ppa:ubuntu-desktop/ubuntu-make && \
   apt-get update && \
 
-# install system umake (from latest released version)
-#RUN apt-get install -y ubuntu-make
-
 # install umake build-deps
   mk-build-deps /tmp/control -i --tool 'apt-get --yes' && \
 
@@ -65,6 +62,5 @@ RUN \
 
 # clean up stuff
   apt-get clean -y && \
-  apt-get remove --purge -y software-properties-common devscripts equivs && \
-  apt-get autoremove -y
+  apt-get remove --purge -y software-properties-common devscripts equivs
 
