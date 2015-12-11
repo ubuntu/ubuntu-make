@@ -13,7 +13,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ADD debian/control /tmp/
 ADD tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.eclipse.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/www.jetbrains.com.crt /usr/local/share/ca-certificates/
+ADD tests/data/data.services.jetbrains.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/golang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.mozilla.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/code.visualstudio.com.crt /usr/local/share/ca-certificates/
