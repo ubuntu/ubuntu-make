@@ -108,7 +108,7 @@ def _chrome_sandbox_setuid(path):
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
     # we will need to have a proper download page with md5sum
-    DOWNLOAD_URL = "http://download.unity3d.com/download_unity/unity-editor-installer-5.1.0f3+2015091501.sh"
+    DOWNLOAD_URL = "http://files.unity3d.com/levi/unity-editor-installer-5.2.2f1+20151018.sh"
 
     def __init__(self, category):
         super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
