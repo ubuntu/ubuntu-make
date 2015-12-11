@@ -26,6 +26,7 @@ from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
 import grp
+import json
 import logging
 import os
 from os.path import join, isfile
@@ -144,11 +145,13 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
             current_required_files_path = kwargs.get("required_files_path", [])
             current_required_files_path.append(os.path.join("bin", self.executable))
             kwargs["required_files_path"] = current_required_files_path
+        download_page = "https://data.services.jetbrains.com/products/releases?code={}".format(self.download_keyword)
+        kwargs["download_page"] = download_page
         super().__init__(*args, **kwargs)
 
     @property
     @abstractmethod
-    def download_page_url(self):
+    def download_keyword(self):
         pass
 
     @property
@@ -164,16 +167,16 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
 
         error_msg = page.error
         if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page_url, error_msg))
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen(status_code=1)
 
-        soup = BeautifulSoup(page.buffer)
-        link = soup.find('a', text="HTTPS")
-        if link is None:
+        try:
+            key, content = json.loads(page.buffer.read().decode()).popitem()
+            download_url = content[0]['downloads']['linux']['link']
+            checksum_url = content[0]['downloads']['linux']['checksumLink']
+        except (json.JSONDecodeError, IndexError):
             logger.error("Can't parse the download URL from the download page.")
             UI.return_main_screen(status_code=1)
-        download_url = link.attrs['href']
-        checksum_url = download_url + '.sha256'
         logger.debug("Found download URL: " + download_url)
         logger.debug("Downloading checksum first, from " + checksum_url)
 
