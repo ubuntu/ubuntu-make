@@ -212,14 +212,13 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
 
 class PyCharm(BaseJetBrains):
     """The JetBrains PyCharm Community Edition distribution."""
-    download_page_url = "https://www.jetbrains.com/pycharm/download/download_thanks.jsp?edition=comm&os=linux"
+    download_keyword = 'PCC'
     executable = "pycharm.sh"
 
     def __init__(self, category):
         super().__init__(name="PyCharm",
                          description=_("PyCharm Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='pycharm-community-*',
                          desktop_filename='jetbrains-pycharm.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
@@ -228,14 +227,13 @@ class PyCharm(BaseJetBrains):
 
 class PyCharmEducational(BaseJetBrains):
     """The JetBrains PyCharm Educational Edition distribution."""
-    download_page_url = "https://www.jetbrains.com/pycharm-edu/download/download_thanks.jsp?os=linux"
+    download_keyword = 'PCE'
     executable = "pycharm.sh"
 
     def __init__(self, category):
         super().__init__(name="PyCharm Educational",
                          description=_("PyCharm Educational Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='pycharm-edu*',
                          desktop_filename='jetbrains-pycharm.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
@@ -244,14 +242,13 @@ class PyCharmEducational(BaseJetBrains):
 
 class PyCharmProfessional(BaseJetBrains):
     """The JetBrains PyCharm Professional Edition distribution."""
-    download_page_url = "https://www.jetbrains.com/pycharm/download/download_thanks.jsp?os=linux"
+    download_keyword = 'PCP'
     executable = "pycharm.sh"
 
     def __init__(self, category):
         super().__init__(name="PyCharm Professional",
                          description=_("PyCharm Professional Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='pycharm-*',
                          desktop_filename='jetbrains-pycharm.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
@@ -260,14 +257,13 @@ class PyCharmProfessional(BaseJetBrains):
 
 class Idea(BaseJetBrains):
     """The JetBrains IntelliJ Idea Community Edition distribution."""
-    download_page_url = "https://www.jetbrains.com/idea/download/download_thanks.jsp?edition=IC&os=linux"
+    download_keyword = 'IIC'
     executable = "idea.sh"
 
     def __init__(self, category):
         super().__init__(name="Idea",
                          description=_("IntelliJ IDEA Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='idea-IC-*',
                          desktop_filename='jetbrains-idea.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
@@ -276,14 +272,13 @@ class Idea(BaseJetBrains):
 
 class IdeaUltimate(BaseJetBrains):
     """The JetBrains IntelliJ Idea Ultimate Edition distribution."""
-    download_page_url = "https://www.jetbrains.com/idea/download/download_thanks.jsp?edition=IU&os=linux"
+    download_keyword = 'IIU'
     executable = "idea.sh"
 
     def __init__(self, category):
         super().__init__(name="Idea Ultimate",
                          description=_("IntelliJ IDEA"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='idea-IU-*',
                          desktop_filename='jetbrains-idea.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
@@ -292,7 +287,7 @@ class IdeaUltimate(BaseJetBrains):
 
 class RubyMine(BaseJetBrains):
     """The JetBrains RubyMine IDE"""
-    download_page_url = "https://www.jetbrains.com/ruby/download/download_thanks.jsp?os=linux"
+    download_keyword = 'RM'
     executable = "rubymine.sh"
 
     def __init__(self, category):
@@ -300,7 +295,6 @@ class RubyMine(BaseJetBrains):
                          description=_("Ruby on Rails IDE"),
                          category=category,
                          only_on_archs=['i386', 'amd64'],
-                         download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='RubyMine-*',
                          desktop_filename='jetbrains-rubymine.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
@@ -309,7 +303,7 @@ class RubyMine(BaseJetBrains):
 
 class WebStorm(BaseJetBrains):
     """The JetBrains WebStorm IDE"""
-    download_page_url = "https://www.jetbrains.com/webstorm/download/download_thanks.jsp?os=linux"
+    download_keyword = 'WS'
     executable = "webstorm.sh"
 
     def __init__(self, category):
@@ -317,7 +311,6 @@ class WebStorm(BaseJetBrains):
                          description=_("Complex client-side and server-side javascript IDE"),
                          category=category,
                          only_on_archs=['i386', 'amd64'],
-                         download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='WebStorm-*',
                          desktop_filename='jetbrains-webstorm.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
@@ -326,7 +319,7 @@ class WebStorm(BaseJetBrains):
 
 class PhpStorm(BaseJetBrains):
     """The JetBrains PhpStorm IDE"""
-    download_page_url = "https://www.jetbrains.com/phpstorm/download/download_thanks.jsp?os=linux"
+    download_keyword = 'PS'
     executable = "phpstorm.sh"
 
     def __init__(self, category):
@@ -334,7 +327,6 @@ class PhpStorm(BaseJetBrains):
                          description=_("PHP and web development IDE"),
                          category=category,
                          only_on_archs=['i386', 'amd64'],
-                         download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='PhpStorm-*',
                          desktop_filename='jetbrains-phpstorm.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
@@ -343,7 +335,7 @@ class PhpStorm(BaseJetBrains):
 
 class CLion(BaseJetBrains):
     """The JetBrains CLion IDE"""
-    download_page_url = "https://www.jetbrains.com/clion/download/download_thanks.jsp?os=linux"
+    download_keyword = 'CL'
     executable = "clion.sh"
 
     def __init__(self, category):
@@ -351,7 +343,6 @@ class CLion(BaseJetBrains):
                          description=_("CLion integrated C/C++ IDE"),
                          category=category,
                          only_on_archs=['amd64'],
-                         download_page=self.download_page_url,
                          dir_to_decompress_in_tarball='clion-*',
                          desktop_filename='jetbrains-clion.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
