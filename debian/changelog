@@ -1,3 +1,12 @@
+ubuntu-make (15.12) UNRELEASED; urgency=medium
+
+  * Fix JetBrain's based IDE due to their new website deployement:
+    - Use now their API directly.
+    - Adapt medium tests and assets to follow that new structure.
+  * Add a deprecation warning on udtc command (will be removed after 16.04 LTS)
+
+ -- Didier Roche <didrocks@ubuntu.com>  Fri, 11 Dec 2015 10:48:51 +0100
+
 ubuntu-make (15.11.2) xenial; urgency=medium
 
   [ Abigail Buccaneer ]
