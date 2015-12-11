@@ -66,7 +66,7 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -76,8 +76,8 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     # This actually tests the code in BaseJetBrains
     def test_install_with_changed_download_page(self):
         """Installing IntelliJ Idea should fail if download page has changed"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.jetbrains.com", "idea",
-                                               "download", "download_thanks.jsp?edition=IC&os=linux")
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "data.services.jetbrains.com",
+                                               "products", "releases?code=IIC")
         umake_command = self.command('{} ide idea'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -90,7 +90,7 @@ class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -105,7 +105,7 @@ class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -120,7 +120,7 @@ class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducation
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -135,7 +135,7 @@ class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessi
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -150,7 +150,7 @@ class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -165,7 +165,7 @@ class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -180,7 +180,7 @@ class CLionIDEInContainer(ContainerTests, test_ide.CLionIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -195,7 +195,7 @@ class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
