@@ -391,7 +391,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen(status_code=1)
 
-        soup = BeautifulSoup(result[self.download_page].buffer)
+        soup = BeautifulSoup(result[self.download_page].buffer, 'html.parser')
 
         # We need to avoid matching arduino-nightly-...
         download_link_pat = r'arduino-[\d\.\-r]+-linux' + self.bits + '.tar.xz$'
@@ -435,7 +435,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen(status_code=1)
         checksum = match.group(1)
 
-        soup = BeautifulSoup(download_page.buffer.getvalue())
+        soup = BeautifulSoup(download_page.buffer.getvalue(), 'html.parser')
         btn = soup.find('button', text=re.compile('JUST DOWNLOAD'))
 
         if not btn:

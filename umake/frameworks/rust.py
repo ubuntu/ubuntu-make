@@ -92,7 +92,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page_url, error_msg))
             UI.return_main_screen(status_code=1)
 
-        soup = BeautifulSoup(page.buffer)
+        soup = BeautifulSoup(page.buffer, 'html.parser')
 
         link = (soup.find('div', class_="install")
                 .find('td', class_="inst-type", text="Linux (.tar.gz)")
