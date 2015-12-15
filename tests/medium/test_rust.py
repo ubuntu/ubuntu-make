@@ -31,7 +31,7 @@ from ..tools import get_data_dir, UMAKE, swap_file_and_restore, spawn_process
 class RustInContainer(ContainerTests, test_rust.RustTests):
     """This will test the Rust integration inside a container"""
 
-    TEST_CHECKSUM_RUST_DATA = "1eef6a898e0c8f3de9055aba7da2ff5ff1ef3aa139d8fea253687a06e32c5596"
+    TEST_CHECKSUM_RUST_DATA = "2a0db6efe370a900491d9e9db13e53ffd00b01dcd8458486f9f3fc3177f96af3"
 
     def setUp(self):
         self.hosts = {443: ["www.rust-lang.org"]}
