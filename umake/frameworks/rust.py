@@ -23,6 +23,7 @@
 
 from contextlib import suppress
 from gettext import gettext as _
+from glob import glob
 import logging
 import os
 import re
@@ -131,5 +132,12 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": "{}:{}".format(os.path.join(self.install_path, "rustc", "bin"),
                                                                      os.path.join(self.install_path, "cargo", "bin"))},
                                     "LD_LIBRARY_PATH": {"value": os.path.join(self.install_path, "rustc", "lib")}})
+
+        # adjust for rust 1.5 some symlinks magic to have stdlib craft available
+        os.chdir(os.path.join(self.install_path, "rustc", "lib"))
+        os.rename("rustlib", "rustlib.init")
+        os.symlink(glob(os.path.join('..', '..', 'rust-std-*', 'lib', 'rustlib'))[0], 'rustlib')
+        os.symlink(os.path.join('..', 'rustlib.init', 'etc'), os.path.join('rustlib', 'etc'))
+
         UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation "
                                             "to work properly").format(self.name)))
