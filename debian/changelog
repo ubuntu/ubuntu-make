@@ -1,3 +1,16 @@
+ubuntu-make (15.12ubuntu1) UNRELEASED; urgency=medium
+
+  [ Eldar Khayrullin ]
+  * Update Unity3D link to latest
+
+  [ Didier Roche ]
+  * Fix rust for their latest release as they changed rustlib directory
+  * Adapt rust medium assets
+  * Fix medium tests by changing unity server host
+  * Some tidy up on BeautifulSoup latest release
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 17 Dec 2015 07:29:54 +0100
+
 ubuntu-make (15.12) xenial; urgency=medium
 
   * Fix JetBrain's based IDE due to their new website deployement:
