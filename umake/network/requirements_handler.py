@@ -26,6 +26,7 @@ from collections import namedtuple
 from concurrent import futures
 from contextlib import suppress
 import fcntl
+from gettext import gettext as _
 import logging
 import os
 import subprocess
@@ -150,7 +151,7 @@ class RequirementsHandler(object, metaclass=Singleton):
                             os.seteuid(0)
                             os.setegid(0)
                             if subprocess.call(["dpkg", "--add-architecture", arch], stdout=f) != 0:
-                                msg = "Can't add foreign foreign architecture {}".format(arch)
+                                msg = _("Can't add foreign architecture {}").format(arch)
                                 raise BaseException(msg)
                             self.cache.update()
                         finally:
