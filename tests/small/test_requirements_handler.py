@@ -57,7 +57,8 @@ class TestRequirementsHandler(LoggedTestCase):
         os.makedirs(os.path.join(self.chroot_path, "usr", "bin"))
         self.dpkg = os.path.join(self.chroot_path, "usr", "bin", "dpkg")
         with open(self.dpkg, "w") as f:
-            f.write("#!/bin/sh\nfakeroot /usr/bin/dpkg --root={root} --force-not-root --force-bad-path "
+            f.write("#!/bin/sh\nprependfakeroot=''\nif [ -z \"$FAKEROOTKEY\" ]; then\nprependfakeroot=fakeroot\nfi\n "
+                    "$prependfakeroot /usr/bin/dpkg --root={root} --force-not-root --force-bad-path "
                     "--log={root}/var/log/dpkg.log \"$@\"".format(root=self.chroot_path))
         st = os.stat(self.dpkg)
         os.chmod(self.dpkg, st.st_mode | stat.S_IEXEC)
