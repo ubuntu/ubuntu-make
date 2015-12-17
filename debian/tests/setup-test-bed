@@ -1,0 +1,38 @@
+#!/bin/sh
+# setup an ubuntu-desktop machine with autologin and dependencies
+# Author: Didier Roche <didrocks@ubuntu.com>
+set -e
+
+if [ -n "$ADT_REBOOT_MARK" ]; then
+    exit 0
+fi
+
+sudo apt update
+sudo apt install -y ubuntu-desktop
+
+# configure docker
+sudo addgroup $(whoami) docker
+# TODO: get it from /etc/environment
+echo export http_proxy="http://squid.internal:3128" | sudo tee /etc/default/docker.io
+
+# workaround for https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=808203
+sudo rm -f /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config
+
+# enable autologin to get unity started
+if [ ! -r /etc/lightdm/lightdm.conf.d/umaketests.conf ]; then
+    sudo mkdir -p /etc/lightdm/lightdm.conf.d
+    cat << EOF | sudo tee /etc/lightdm/lightdm.conf.d/umaketests.conf
+[SeatDefaults]
+autologin-user=ubuntu
+EOF
+fi
+
+# install ubuntu-make dependencies (we don't use @ in control as then, all tests will have to declare it and remove
+# as the first step to reuse the testbed)
+sudo apt install ubuntu-make
+
+#TODO: condition on running system tests
+# remove it if we are not running system tests (we only needed its dep)
+sudo apt remove -y ubuntu-make
+
+sudo /tmp/autopkgtest-reboot ready

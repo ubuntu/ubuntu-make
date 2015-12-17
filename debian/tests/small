@@ -1,0 +1,5 @@
+#!/bin/sh
+# Author: Didier Roche <didrocks@ubuntu.com>
+set -e
+
+./runtests --publish --coverage small
