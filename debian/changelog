@@ -1,4 +1,4 @@
-ubuntu-make (15.12ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (15.12.1) xenial; urgency=medium
 
   [ Eldar Khayrullin ]
   * Update Unity3D link to latest
@@ -9,7 +9,7 @@ ubuntu-make (15.12ubuntu1) UNRELEASED; urgency=medium
   * Fix medium tests by changing unity server host
   * Some tidy up on BeautifulSoup latest release
 
- -- Didier Roche <didrocks@ubuntu.com>  Thu, 17 Dec 2015 07:29:54 +0100
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 17 Dec 2015 07:36:45 +0100
 
 ubuntu-make (15.12) xenial; urgency=medium
 
