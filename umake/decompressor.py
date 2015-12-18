@@ -88,6 +88,7 @@ class Decompressor:
         # We don't use shutil to automatically select the right codec as we need to ensure that zipfile
         # will keep the original perms.
         archive = None
+        is_archive = False
         try:
             try:
                 # the fd isn't forcibly at position 0 (like in Unity3D where we offset the script part)
@@ -96,10 +97,14 @@ class Decompressor:
             except tarfile.ReadError:
                 archive = self.ZipFileWithPerm(fd.name)
                 logger.debug("zip file")
+            is_archive = True
             archive.extractall(tempdest)
         except:
             # try to treat it as self-extractable, some format don't like being opened at the same time though, so link
             # it.
+            # error out if we had a valid archive which had an issue extracting
+            if is_archive:
+                raise
             name = "{}.safe".format(fd.name)
             os.link(fd.name, name)
             fd.close()
