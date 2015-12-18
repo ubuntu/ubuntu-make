@@ -60,8 +60,7 @@ UBUNTU_MAKE_VERSION=$(git rev-parse HEAD)
 sudo apt install -y $(tests/daily_runs/get_binary_depends ubuntu-make)
 
 # install test packages
-testpackages=$(grep Depends debian/tests/control | tr -d , | tr -d @ | sed &apos;s/Depends:  //&apos;)
-sudo apt install -y $testpackages
+sudo tests/daily_runs/install_build_tests_depends
 sudo addgroup $(whoami) docker
 
 # ensure docker is using the CI proxy

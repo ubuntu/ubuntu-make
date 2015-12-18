@@ -62,8 +62,7 @@ mv umake umakelocal  # get umake dir out of the way for coverage report
 UBUNTU_MAKE_VERSION=$(dpkg-parsechangelog --show-field Version)
 
 # install test packages
-testpackages=$(grep Depends debian/tests/control | tr -d , | tr -d @ | sed &apos;s/Depends:  //&apos;)
-sudo apt install -y $testpackages
+sudo tests/daily_runs/install_build_tests_depends
 sudo addgroup $(whoami) docker
 
 # ensure docker is using the CI proxy
