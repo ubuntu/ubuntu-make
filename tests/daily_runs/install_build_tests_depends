@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# install test depends from autopkgtests requirements and build-deps
+# devscripts is needed for mk-build-deps
+apt -y --no-install-recommends install $(grep Depends debian/tests/control | tr -d , | tr -d @ | sed 's/Depends: builddeps//') devscripts
+mk-build-deps -i -t "apt -y --no-install-recommends"
