@@ -51,7 +51,7 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="stencyl.desktop",
                          required_files_path=["Stencyl"],
                          packages_requirements=["libxtst6:i386", "libxext6:i386", "libxi6:i386", "libncurses5:i386",
-                                                "libxt6:i386", "libxpm4:i386", "libxmu6:i386", "libxp6:i386",
+                                                "libxt6:i386", "libxpm4:i386", "libxmu6:i386",
                                                 "libgtk2.0-0:i386", "libatk1.0-0:i386", "libc6:i386", "libcairo2:i386",
                                                 "libexpat1:i386", "libfontconfig1:i386", "libfreetype6:i386",
                                                 "libglib2.0-0:i386", "libice6:i386", "libpango1.0-0:i386",
