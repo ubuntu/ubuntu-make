@@ -1,5 +1,5 @@
 # Setup an ubuntu-desktop install which can logout and login
-Tests: setup-test-bed
+Tests: setup-testbed
 Depends: @builddeps@
 Restrictions: rw-build-tree, isolation-machine, allow-stderr
 
