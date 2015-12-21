@@ -40,4 +40,38 @@ if [ "$(is_package_test)" = "false" ]; then
     sudo apt remove -y ubuntu-make
 fi
 
+# store ubuntu make version and packages
+config_dir="$ADT_ARTIFACTS/config"
+mkdir -p $config_dir
+
+# discover target: package/branch, origin
+if [ "$(is_package_test)" = "true" ]; then
+    type="system"
+    origin="$(apt-cache policy ubuntu-make | sed -n '/\*\*\*/ {n;p}' | cut -d' ' -f 10)"
+else
+    type="branch"
+    upstream_short="$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))"
+    IFS=/ read repo branch <<< $upstream_short
+    repo_url=$(git config --get remote.${repo}.url)
+    origin="${repo_url} $branch"
+fi
+
+cat << EOF | sudo tee "$config_dir/version"
+{
+    'target': {
+       'type': '$type',
+       'origin': '$origin',
+       'version': '$(bin/umake --version)',
+    },
+    'date': {
+        'timestamp': '$(date +%s)',
+        'utc': '$(date -u)'
+    },
+    'arch': '$(arch)'
+}
+EOF
+dpkg -l > "$config_dir/packages_list"
+
+sloccount * | head -n -17 | tail -17 | tee "$config_dir/stats"
+
 sudo /tmp/autopkgtest-reboot ready
