@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Author: Didier Roche <didrocks@ubuntu.com>
 set -e
 

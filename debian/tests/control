@@ -1,9 +1,9 @@
 # Setup an ubuntu-desktop install which can logout and login
 Tests: setup-test-bed
-Depends: @builddeps@, docker.io, sshpass, fakeroot, eatmydata, sloccount
+Depends: @builddeps@
 Restrictions: rw-build-tree, isolation-machine, allow-stderr
 
 Tests: small
-Depends: @builddeps@, docker.io, sshpass, fakeroot, eatmydata, sloccount
+Depends: @builddeps@
 Restrictions: rw-build-tree, isolation-machine, allow-stderr
 

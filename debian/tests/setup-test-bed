@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # setup an ubuntu-desktop machine with autologin and dependencies
 # Author: Didier Roche <didrocks@ubuntu.com>
 set -e
@@ -9,6 +9,9 @@ fi
 
 sudo apt update
 sudo apt install -y ubuntu-desktop
+
+# install test collect and runtime dependencies
+sudo apt install -y git docker.io sshpass sloccount libjs-jquery libjs-jquery-hotkeys libjs-jquery-isonscreen libjs-jquery-tablesorter
 
 # configure docker
 sudo addgroup $(whoami) docker
