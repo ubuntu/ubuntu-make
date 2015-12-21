@@ -1,0 +1,19 @@
+#!/bin/bash
+# collect and generate global coverage report
+# Author: Didier Roche <didrocks@ubuntu.com>
+set -e
+. `dirname $0`/utils
+
+# combine the reports
+cd $coverage_dir
+python3-coverage combine
+
+python3-coverage html -d html-coverage
+python3-coverage xml
+
+# archive the results
+cp .coverage ${ADT_ARTIFACTS}
+cp -a *coverage* ${ADT_ARTIFACTS}
+
+# print on stdout as well
+python3-coverage report

@@ -1,6 +1,8 @@
 #!/bin/bash
 # Author: Didier Roche <didrocks@ubuntu.com>
 
+coverage_dir=/tmp/global-coverage
+
 # publish test results for given test run. Keep a secondary coverage copy (as the first one is cleaned) for collect step
 function publish_results {
     test_type=$(basename $0)
@@ -12,7 +14,6 @@ function publish_results {
     mv *coverage* ${output_dir}
     mv *.log ${output_dir}
 
-    coverage_dir=/tmp/globalcoverage
     mkdir -p $coverage_dir
     cp ${output_dir}/.coverage ${coverage_dir}/.coverage.${test_type}
 }
