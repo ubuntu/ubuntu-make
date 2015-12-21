@@ -3,7 +3,19 @@ Tests: setup-testbed
 Depends: @builddeps@
 Restrictions: rw-build-tree, isolation-machine, allow-stderr
 
+Tests: pep8
+Depends: @builddeps@
+Restrictions: rw-build-tree, isolation-machine, allow-stderr
+
 Tests: small
+Depends: @builddeps@
+Restrictions: rw-build-tree, isolation-machine, allow-stderr
+
+Tests: medium
+Depends: @builddeps@
+Restrictions: rw-build-tree, isolation-machine, allow-stderr
+
+Tests: large
 Depends: @builddeps@
 Restrictions: rw-build-tree, isolation-machine, allow-stderr
 
