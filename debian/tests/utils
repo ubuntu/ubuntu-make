@@ -34,3 +34,18 @@ function add_runtests_opts {
         return
     fi
 }
+
+# skip current test if not "all" or in the list of $TESTS
+# if the test variable is empty, we still want to run some tests as per of package testing
+function skip_if_no_in_list {
+    # tests to run if nothing was provided
+    [ -z "$TESTS" ] && TESTS="small"
+
+    test_type=$(basename $0)
+
+    if [[ "${test_type}" =~ "$TESTS" ]] || [[ "${test_type}" =~ "all" ]]; then
+        return
+    fi
+    echo "$test_type isn't provided in \$TESTS; skipping test"
+    exit 0
+}
