@@ -1,0 +1,11 @@
+#!/bin/bash
+# Author: Didier Roche <didrocks@ubuntu.com>
+
+# this function need to be run in ubuntu make directory"
+function is_package_test {
+    if [ -d ".git" ]; then
+        echo "false"
+        return
+    fi
+    echo "true"
+}

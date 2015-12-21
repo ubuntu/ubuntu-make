@@ -2,6 +2,7 @@
 # setup an ubuntu-desktop machine with autologin and dependencies
 # Author: Didier Roche <didrocks@ubuntu.com>
 set -e
+. `dirname $0`/utils
 
 if [ -n "$ADT_REBOOT_MARK" ]; then
     exit 0
@@ -34,8 +35,9 @@ fi
 # as the first step to reuse the testbed)
 sudo apt install ubuntu-make
 
-#TODO: condition on running system tests
 # remove it if we are not running system tests (we only needed its dep)
-sudo apt remove -y ubuntu-make
+if [ "$(is_package_test)" = "false" ]; then
+    sudo apt remove -y ubuntu-make
+fi
 
 sudo /tmp/autopkgtest-reboot ready
