@@ -1,6 +1,22 @@
 #!/bin/bash
 # Author: Didier Roche <didrocks@ubuntu.com>
 
+# publish test results for given test run. Keep a secondary coverage copy (as the first one is cleaned) for collect step
+function publish_results {
+    test_type=$(basename $0)
+    output_dir="$ADT_ARTIFACTS/$test_type"
+    mkdir -p $output_dir
+
+    mv nosetests.* ${output_dir}
+    mv .coverage ${output_dir}
+    mv *coverage* ${output_dir}
+    mv *.log ${output_dir}
+
+    coverage_dir=/tmp/globalcoverage
+    mkdir -p $coverage_dir
+    cp ${output_dir}/.coverage ${coverage_dir}/.coverage.${test_type}
+}
+
 # this function need to be run in ubuntu make directory"
 function is_package_test {
     if [ -d ".git" ]; then
@@ -8,4 +24,12 @@ function is_package_test {
         return
     fi
     echo "true"
+}
+
+# add --system if we run from a package dir
+function add_runtests_opts {
+    if [ "$(is_package_test)" = true ]; then
+        echo "--system"
+        return
+    fi
 }
