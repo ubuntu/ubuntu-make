@@ -1,5 +1,8 @@
 #!/bin/bash
 # Author: Didier Roche <didrocks@ubuntu.com>
 set -e
+. `dirname $0`/utils
 
-./runtests --publish --coverage small
+./runtests --publish --coverage $(add_runtests_opts) small
+
+publish_results
