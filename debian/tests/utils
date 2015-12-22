@@ -43,9 +43,23 @@ function skip_if_no_in_list {
 
     test_type=$(basename $0)
 
-    if [[ "${test_type}" =~ "$TESTS" ]] || [[ "${test_type}" =~ "all" ]]; then
+    re=\\btests[\./]
+    # we are in the custom type test flavor
+    if [[ "$TESTS" =~ $re ]] && [[ "$test_type" = "custom" ]]; then
         return
     fi
-    echo "$test_type isn't provided in \$TESTS; skipping test"
+
+    # if we run only some tests of the current type, (tests.<type>.), disable all and this category
+    if [[ "$TESTS" =~ $re ]]; then
+        echo "Specific tests required, skipping general ones."
+        exit 0
+    fi
+
+    retype=\\b${test_type}\\b
+    reall=\\ball\\b
+    if [[ "$TESTS" =~ $retype ]] || [[ "$TESTS" =~ $reall ]]; then
+        return
+    fi
+    echo "$test_type isn't mentioned in \$TESTS; skipping test"
     exit 0
 }
