@@ -80,8 +80,7 @@ class RustTests(LargeFrameworkTests):
         subprocess.check_call(self.command_as_list(compile_command))
 
         # run the compiled result
-        output = subprocess.check_output(self.command_as_list(resulting_binary)).decode()
-        if self.in_container:
-            self.assertEqual(output, "hello, world\r\n")
-        else:
-            self.assertEqual(output, "hello, world\n")
+        output = subprocess.check_output(self.command_as_list(resulting_binary)).decode()\
+            .replace('\r', '').replace('\n', '')
+
+        self.assertEqual(output, "hello, world")

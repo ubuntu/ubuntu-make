@@ -67,9 +67,7 @@ class ScalaTests(LargeFrameworkTests):
         self.assertTrue(self.is_in_path(self.exec_path))
 
         # compile a small project
-        output = subprocess.check_output(self.command_as_list(compile_command)).decode()
+        output = subprocess.check_output(self.command_as_list(compile_command)).decode()\
+            .replace('\r', '').replace('\n', '')
 
-        if self.in_container:
-            self.assertEqual(output, "hello, world\r\n")
-        else:
-            self.assertEqual(output, "hello, world\n")
+        self.assertEqual(output, "hello, world")
