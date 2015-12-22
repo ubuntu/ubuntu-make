@@ -20,6 +20,7 @@
 """Tests for basic CLI commands"""
 
 import os
+import pwd
 import subprocess
 from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path, get_data_dir, INSTALL_DIR, \
     BRANCH_TESTS, SYSTEM_UMAKE_DIR
@@ -212,7 +213,12 @@ class ContainerTests(LoggedTestCase):
 
     def create_file(self, path, content):
         """Create file inside the container.replace in path current user with the docker user"""
-        path = path.replace(os.getlogin(), self.DOCKER_USER)
+        try:
+            src_user = os.getlogin()
+        except FileNotFoundError:
+            # fallback for container issues when trying to get login
+            src_user = pwd.getpwuid(os.getuid())[0]
+        path = path.replace(src_user, self.DOCKER_USER)
         dir_path = os.path.dirname(path)
         command = self.command_as_list(["mkdir", "-p", dir_path, path])
         if not self._exec_command(command)[0]:
