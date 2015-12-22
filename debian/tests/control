@@ -19,6 +19,10 @@ Tests: large
 Depends: @builddeps@
 Restrictions: rw-build-tree, isolation-machine, allow-stderr
 
+Tests: custom
+Depends: @builddeps@
+Restrictions: rw-build-tree, isolation-machine, allow-stderr
+
 Tests: collect-coverage
 Depends: @builddeps@
 Restrictions: rw-build-tree, isolation-machine, allow-stderr

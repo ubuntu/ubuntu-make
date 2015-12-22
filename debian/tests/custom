@@ -1,0 +1,10 @@
+#!/bin/bash
+# Author: Didier Roche <didrocks@ubuntu.com>
+set -e
+. `dirname $0`/utils
+
+# skip tests if not requested
+skip_if_no_in_list
+
+DISPLAY=:0 dbus-launch ./runtests --publish --coverage $(add_runtests_opts) $TESTS
+publish_results
