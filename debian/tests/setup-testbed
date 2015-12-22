@@ -72,6 +72,7 @@ cat << EOF | sudo tee "$config_dir/version"
 EOF
 dpkg -l > "$config_dir/packages_list"
 
+echo -e "\nStats:"
 sloccount * | head -n -17 | tail -17 | tee "$config_dir/stats"
 
 sudo /tmp/autopkgtest-reboot ready
