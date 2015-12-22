@@ -33,7 +33,7 @@ for pid in os.listdir('/proc'):
     with suppress(IOError):
         cmdline = open(os.path.join('/proc', pid, 'cmdline'), 'r').read()
         for process_elem in process_grep:
-            if process_elem not in cmdline or sys.argv[0] in cmdline:
+            if process_elem not in cmdline or "run_in_umake_dir" in cmdline or sys.argv[0] in cmdline:
                 break
         # we found it
         else:
