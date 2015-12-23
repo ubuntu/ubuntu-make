@@ -69,7 +69,7 @@ class CliUI(UI):
                 elif isinstance(contentType, UnknownProgress):
                     if not contentType.bar:
                         contentType.bar = ProgressBar(widgets=[BouncingBar()])
-                    with suppress(StopIteration):
+                    with suppress(StopIteration, AttributeError):
                         # pulse and add a timeout callback
                         contentType.bar(contentType._iterator()).next()
                         UI.delayed_display(contentType)
