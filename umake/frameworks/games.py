@@ -27,6 +27,8 @@ import logging
 import os
 import re
 import stat
+from bs4 import BeautifulSoup
+import requests
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem
@@ -108,7 +110,13 @@ def _chrome_sandbox_setuid(path):
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
     # we will need to have a proper download page with md5sum
-    DOWNLOAD_URL = "http://files.unity3d.com/levi/unity-editor-installer-5.2.2f1+20151018.sh"
+    s = requests.Session()
+    r = s.get("http://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/")
+    soup = BeautifulSoup(r.content)
+    for line in soup.find_all('a'):
+        if line.get('href') is not None and "sh" in line.get('href'):
+            DOWNLOAD_URL = line.get('href')
+    # DOWNLOAD_URL = "http://files.unity3d.com/levi/unity-editor-installer-5.2.2f1+20151018.sh"
 
     def __init__(self, category):
         super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
