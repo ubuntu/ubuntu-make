@@ -31,6 +31,10 @@ autologin-user=ubuntu
 EOF
 fi
 
+# enable localhost ssh connection without pass
+ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
 # install ubuntu-make dependencies (we don't use @ in control as then, all tests will have to declare it and remove
 # as the first step to reuse the testbed)
 sudo apt install ubuntu-make

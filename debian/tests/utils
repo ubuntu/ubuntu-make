@@ -63,3 +63,8 @@ function skip_if_no_in_list {
     echo "$test_type isn't mentioned in \$TESTS; skipping test"
     exit 0
 }
+
+# we need to run in a ssh subshell to get a real terminal connexion so that ssh can returns when subprocess are killed
+function run_tests {
+    ssh -o StrictHostKeyChecking=no -t -t 127.0.0.1 "cd $PWD; DISPLAY=:0 dbus-launch ./runtests --publish --coverage $(add_runtests_opts) $@"
+}

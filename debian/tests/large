@@ -6,6 +6,6 @@ set -e
 # skip tests if not requested
 skip_if_no_in_list
 
-DISPLAY=:0 dbus-launch ./runtests --publish --coverage $(add_runtests_opts) large
+run_tests large
 
 publish_results
