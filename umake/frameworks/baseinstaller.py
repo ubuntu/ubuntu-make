@@ -58,8 +58,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.required_files_path = kwargs.get("required_files_path", [])
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
+        self.match_last_link = kwargs.get("match_last_link", False)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
-                          "desktop_filename", "icon_filename", "required_files_path"]:
+                          "desktop_filename", "icon_filename", "required_files_path", "match_last_link"]:
             with suppress(KeyError):
                 kwargs.pop(extra_arg)
         super().__init__(*args, **kwargs)
@@ -191,9 +192,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                 if self.expect_license and not self.auto_accept_license:
                     in_license = self.parse_license(line_content, license_txt, in_license)
 
-                # always take the first valid (url, checksum):
+                # always take the first valid (url, checksum) if not match_last_link is set to True:
                 download = None
-                if url is None or (self.checksum_type and not checksum):
+                if url is None or (self.checksum_type and not checksum) or self.match_last_link:
                     (download, in_download) = self.parse_download_link(line_content, in_download)
                 if download is not None:
                     (newurl, new_checksum) = download
