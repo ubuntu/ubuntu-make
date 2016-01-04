@@ -111,6 +111,7 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
                          category=category, only_on_archs=['amd64'],
                          download_page="http://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/",
+                         match_last_link=True,
                          dir_to_decompress_in_tarball='unity-editor*',
                          desktop_filename="unity3d-editor.desktop",
                          required_files_path=[os.path.join("Editor", "Unity")],
@@ -128,19 +129,18 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         """Parse Unity3d download links"""
-        url, md5sum = (None, None)
+        url, sha1 = (None, None)
         if "unity-editor-installer" in line:
             in_download = True
         if in_download:
-            regexp = r'href="(.*)" target'
-            p = re.search(regexp, line)
+            p = re.search(r'href="(.*)" target', line)
             with suppress(AttributeError):
                 url = p.group(1)
             p = re.search(r'sha1sum (\w+)', line)
             with suppress(AttributeError):
                 sha1 = p.group(1)
 
-        if url is None:
+        if url is None or sha1 is None:
             return (None, in_download)
         return ((url, sha1), in_download)
 
