@@ -30,7 +30,7 @@ import stat
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem
-from umake.tools import create_launcher, get_application_desktop_file, get_current_arch
+from umake.tools import create_launcher, get_application_desktop_file, get_current_arch, ChecksumType
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -113,6 +113,7 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="http://forum.unity3d.com/threads/" +
                                        "unity-on-linux-release-notes-and-known-issues.350256/",
                          match_last_link=True,
+                         checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball='unity-editor*',
                          desktop_filename="unity3d-editor.desktop",
                          required_files_path=[os.path.join("Editor", "Unity")],
@@ -131,7 +132,7 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse Unity3d download links"""
         url, sha1 = (None, None)
-        if "unity-editor-installer" in line:
+        if ".sh" in line:
             in_download = True
         if in_download:
             p = re.search(r'href="(.*)" target', line)
