@@ -131,7 +131,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         """Install visual studio from scratch test case"""
 
         self.child = spawn_process(self.command('{} web visual-studio-code'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path), expect_warn=True)
         self.child.sendline("")
         self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
         self.child.sendline("a")
@@ -153,6 +153,6 @@ class VisualStudioCodeTest(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command('{} web visual-studio-code'.format(UMAKE)))
-        self.expect_and_no_warn("Visual Studio Code is already installed.*\[.*\] ")
+        self.expect_and_no_warn("Visual Studio Code is already installed.*\[.*\] ", expect_warn=True)
         self.child.sendline()
         self.wait_and_close()
