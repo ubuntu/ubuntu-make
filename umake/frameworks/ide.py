@@ -26,10 +26,11 @@ from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
 import grp
+from io import StringIO
 import json
 import logging
 import os
-from os.path import join, isfile
+from os.path import join
 import pwd
 import platform
 import re
@@ -37,9 +38,9 @@ import subprocess
 from urllib import parse
 
 import umake.frameworks.baseinstaller
-from umake.interactions import DisplayMessage
+from umake.interactions import DisplayMessage, LicenseAgreement
 from umake.network.download_center import DownloadCenter, DownloadItem
-from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop
+from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop, strip_tags
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -580,3 +581,96 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
                                                      exec=join(self.install_path, "bin", "netbeans"),
                                                      comment=_("Netbeans IDE"),
                                                      categories="Development;IDE;"))
+
+
+class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Visual Studio Code", description=_("Visual Studio focused on modern web and cloud"),
+                         category=category, only_on_archs=['i386', 'amd64'], expect_license=True,
+                         download_page="https://code.visualstudio.com/Docs",
+                         desktop_filename="visual-studio-code.desktop",
+                         required_files_path=["Code"],
+                         dir_to_decompress_in_tarball="VSCode-linux-*",
+                         packages_requirements=["libgtk2.0-0"])
+        self.license_url = "https://code.visualstudio.com/License"
+        # we have to mock headers for visual studio code website to give us an answer
+        self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
+                                      "Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36"}
+
+    def download_provider_page(self):
+        logger.debug("Download application provider page")
+        DownloadCenter([DownloadItem(self.download_page, headers=self.headers)], self.get_metadata, download=False)
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata(self, result):
+        """Download files to download + and download license license and check it"""
+        logger.debug("Parse download metadata")
+
+        error_msg = result[self.download_page].error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        arch = platform.machine()
+        download_re = r'\'linux64\': \'([^\']+)\''
+        if arch == 'i686':
+            download_re = r'\'linux32\': \'([^\']+)\''
+        url = None
+        for line in result[self.download_page].buffer:
+            line = line.decode()
+            p = re.search(download_re, line)
+            with suppress(AttributeError):
+                url = p.group(1)
+                logger.debug("Found download link for {}".format(url))
+
+        if url is None:
+            logger.error("Download page changed its syntax or is not parsable")
+            UI.return_main_screen(status_code=1)
+        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, None), headers=self.headers))
+
+        if not self.auto_accept_license:
+            logger.debug("Downloading License page")
+            DownloadCenter([DownloadItem(self.license_url, headers=self.headers)], self.check_external_license,
+                           download=False)
+        else:
+            self.start_download_and_install()
+
+    @MainLoop.in_mainloop_thread
+    def check_external_license(self, result):
+        """Check external license which is in a separate page (can be factorized in BaseInstaller)"""
+        logger.debug("Parse license page")
+        error_msg = result[self.license_url].error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.license_url, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        with StringIO() as license_txt:
+            in_license = False
+            for line in result[self.license_url].buffer:
+                line = line.decode()
+                if ('SOFTWARE LICENSE TERMS' in line):
+                    in_license = True
+                if in_license and "<strong>*   *   *</strong>" in line:
+                    in_license = False
+                    continue
+                if in_license:
+                    license_txt.write(line.strip() + "\n")
+
+            if license_txt.getvalue() != "":
+                logger.debug("Check license agreement.")
+                UI.display(LicenseAgreement(strip_tags(license_txt.getvalue()).strip(),
+                                            self.start_download_and_install,
+                                            UI.return_main_screen))
+            else:
+                logger.error("We were expecting to find a license, we didn't.")
+                UI.return_main_screen(status_code=1)
+
+    def post_install(self):
+        """Create the Visual Studio Code launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Visual Studio Code"),
+                        icon_path=os.path.join(self.install_path, "resources", "app", "resources", "linux",
+                                               "vscode.png"),
+                        exec=os.path.join(self.install_path, "Code"),
+                        comment=_("Visual Studio focused on modern web and cloud"),
+                        categories="Development;IDE;"))

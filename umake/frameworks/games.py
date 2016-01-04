@@ -27,8 +27,6 @@ import logging
 import os
 import re
 import stat
-from bs4 import BeautifulSoup
-import requests
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem
@@ -109,19 +107,10 @@ def _chrome_sandbox_setuid(path):
 
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
-    # we will need to have a proper download page with md5sum
-    s = requests.Session()
-    r = s.get("http://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/")
-    soup = BeautifulSoup(r.content)
-    for line in soup.find_all('a'):
-        if line.get('href') is not None and "sh" in line.get('href'):
-            DOWNLOAD_URL = line.get('href')
-    # DOWNLOAD_URL = "http://files.unity3d.com/levi/unity-editor-installer-5.2.2f1+20151018.sh"
-
     def __init__(self, category):
         super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
                          category=category, only_on_archs=['amd64'],
-                         download_page=None,
+                         download_page="http://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/",
                          dir_to_decompress_in_tarball='unity-editor*',
                          desktop_filename="unity3d-editor.desktop",
                          required_files_path=[os.path.join("Editor", "Unity")],
@@ -137,11 +126,23 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                                                 "libxrandr2", "libxrender1", "libxtst6",
                                                 "monodevelop"])  # monodevelop is for mono deps, temporary
 
-    def download_provider_page(self):
-        """kick off the proceedings."""
-        # as soon as we have checksums, we'll use them
-        self.download_requests.append(DownloadItem(self.DOWNLOAD_URL, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        """Parse Unity3d download links"""
+        url, md5sum = (None, None)
+        if "unity-editor-installer" in line:
+            in_download = True
+        if in_download:
+            regexp = r'href="(.*)" target'
+            p = re.search(regexp, line)
+            with suppress(AttributeError):
+                url = p.group(1)
+            p = re.search(r'sha1sum (\w+)', line)
+            with suppress(AttributeError):
+                sha1 = p.group(1)
+
+        if url is None:
+            return (None, in_download)
+        return ((url, sha1), in_download)
 
     def decompress_and_install(self, fds):
         """Override to strip the unwanted shell header part"""
