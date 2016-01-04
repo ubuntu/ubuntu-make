@@ -30,7 +30,7 @@ from io import StringIO
 import json
 import logging
 import os
-from os.path import join, isfile
+from os.path import join
 import pwd
 import platform
 import re

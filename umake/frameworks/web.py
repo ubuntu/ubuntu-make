@@ -23,16 +23,16 @@
 from contextlib import suppress
 from functools import partial
 from gettext import gettext as _
-from io import StringIO
 import logging
 import os
 import platform
 import re
 import umake.frameworks.baseinstaller
-from umake.interactions import Choice, LicenseAgreement, TextWithChoices
-from umake.network.download_center import DownloadCenter, DownloadItem
+from umake.frameworks.ide import VisualStudioCode
+from umake.interactions import Choice, TextWithChoices
+from umake.network.download_center import DownloadItem
 from umake.ui import UI
-from umake.tools import create_launcher, get_application_desktop_file, Checksum, MainLoop, strip_tags
+from umake.tools import create_launcher, get_application_desktop_file, MainLoop
 
 logger = logging.getLogger(__name__)
 
