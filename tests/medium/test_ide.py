@@ -280,3 +280,31 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
 
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+
+class VisualStudioCodeContainer(ContainerTests, test_ide.VisualStudioCodeTest):
+    """This will test the Visual Studio Code integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["code.visualstudio.com"]}
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'vscode')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "visual-studio-code")
+
+    def test_install_with_changed_download_page(self):
+        """Installing visual studio code should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "code.visualstudio.com", "Docs")
+        umake_command = self.command('{} web visual-studio-code'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_changed_license_page(self):
+        """Installing visual studio code should fail if license page has significantly changed"""
+        license_page_file_path = os.path.join(get_data_dir(), "server-content", "code.visualstudio.com", "License")
+        umake_command = self.command('{} web visual-studio-code'.format(UMAKE))
+        self.bad_download_page_test(umake_command, license_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
