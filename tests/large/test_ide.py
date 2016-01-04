@@ -536,3 +536,46 @@ class BaseNetBeansTests(LargeFrameworkTests):
         self.expect_and_no_warn("Netbeans is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
+
+
+class VisualStudioCodeTest(LargeFrameworkTests):
+    """Tests for Visual Studio Code"""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 20
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "ide", "visual-studio-code")
+        self.desktop_filename = "visual-studio-code.desktop"
+
+    def test_default_install(self):
+        """Install visual studio from scratch test case"""
+
+        self.child = spawn_process(self.command('{} ide visual-studio-code'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process(["Code", self.installed_path],
+                                    wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = spawn_process(self.command('{} ide visual-studio-code'.format(UMAKE)))
+        self.expect_and_no_warn("Visual Studio Code is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_close()
