@@ -298,13 +298,13 @@ class VisualStudioCodeContainer(ContainerTests, test_ide.VisualStudioCodeTest):
     def test_install_with_changed_download_page(self):
         """Installing visual studio code should fail if download page has significantly changed"""
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "code.visualstudio.com", "Docs")
-        umake_command = self.command('{} web visual-studio-code'.format(UMAKE))
+        umake_command = self.command('{} ide visual-studio-code'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
     def test_install_with_changed_license_page(self):
         """Installing visual studio code should fail if license page has significantly changed"""
         license_page_file_path = os.path.join(get_data_dir(), "server-content", "code.visualstudio.com", "License")
-        umake_command = self.command('{} web visual-studio-code'.format(UMAKE))
+        umake_command = self.command('{} ide visual-studio-code'.format(UMAKE))
         self.bad_download_page_test(umake_command, license_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
