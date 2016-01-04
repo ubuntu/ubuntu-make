@@ -137,9 +137,9 @@ class BaseCategory():
 
 class BaseFramework(metaclass=abc.ABCMeta):
 
-    def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None,
-                 only_on_archs=None, only_ubuntu_version=None, packages_requirements=None, only_for_removal=False,
-                 expect_license=False, need_root_access=False):
+    def __init__(self, name, description, category, force_loading=False, logo_path=None, is_category_default=False,
+                 install_path_dir=None, only_on_archs=None, only_ubuntu_version=None, packages_requirements=None,
+                 only_for_removal=False, expect_license=False, need_root_access=False):
         self.name = name
         self.description = description
         self.logo_path = None
@@ -197,7 +197,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
             pass
 
         # This requires install_path and will register need_root or not
-        if not self.is_installed and not self.is_installable:
+        if not force_loading and not self.is_installed and not self.is_installable:
             logger.info("Don't register {} as it's not installable on this configuration.".format(name))
             return
 
@@ -329,7 +329,7 @@ def _is_frameworkclass(o):
     return inspect.isclass(o) and issubclass(o, BaseFramework) and not inspect.isabstract(o)
 
 
-def load_module(module_abs_name, main_category):
+def load_module(module_abs_name, main_category, force_loading):
     logger.debug("New framework module: {}".format(module_abs_name))
     if module_abs_name not in sys.modules:
         import_module(module_abs_name)
@@ -344,7 +344,7 @@ def load_module(module_abs_name, main_category):
     if current_category not in BaseCategory.categories.values():
         return
     for framework_name, FrameworkClass in inspect.getmembers(module, _is_frameworkclass):
-        if FrameworkClass(current_category) is not None:
+        if FrameworkClass(current_category, force_loading) is not None:
             logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
 
 
@@ -400,7 +400,7 @@ def list_frameworks():
     return categories_dict
 
 
-def load_frameworks():
+def load_frameworks(force_loading=False):
     """Load all modules and assign to correct category"""
     main_category = MainCategory()
 
@@ -414,7 +414,7 @@ def load_frameworks():
         local_paths.insert(0, environment_path)
 
     for loader, module_name, ispkg in pkgutil.iter_modules(path=local_paths):
-        load_module(module_name, main_category)
+        load_module(module_name, main_category, force_loading)
     for loader, module_name, ispkg in pkgutil.iter_modules(path=[os.path.dirname(__file__)]):
         module_name = "{}.{}".format(__package__, module_name)
-        load_module(module_name, main_category)
+        load_module(module_name, main_category, force_loading)
