@@ -21,6 +21,7 @@
 
 import argcomplete
 from contextlib import suppress
+from gettext import gettext as _
 import logging
 import os
 from progressbar import ProgressBar, BouncingBar
@@ -28,7 +29,7 @@ import readline
 import sys
 from umake.interactions import InputText, TextWithChoices, LicenseAgreement, DisplayMessage, UnknownProgress
 from umake.ui import UI
-from umake.frameworks import BaseCategory
+from umake.frameworks import BaseCategory, list_frameworks
 from umake.tools import InputError, MainLoop
 from umake.settings import get_version
 
@@ -155,6 +156,68 @@ def mangle_args_for_default_framework(args):
     result_args.extend(pending_args)
     result_args.extend(args_to_append)
     return result_args
+
+
+def get_frameworks_list_output(args):
+    """
+    Get a frameworks list based on the arguments. It returns a string ready to be printed.
+    Multiple forms of the frameworks list can ge given:
+        - List with all frameworks
+        - List with just only installed frameworks
+        - List with just installable frameworks
+    """
+    categories = list_frameworks()
+    print_result = str()
+
+    if args.list or args.list_available:
+        # Sort the categories to prevent a random list at each new program execution
+        for category in sorted(categories, key=lambda cat: cat["category_name"]):
+            if category["category_name"] == "main" and len(category["frameworks"]) == 0:
+                continue
+
+            print_result += "{}: {}".format(category["category_name"], category["category_description"])
+
+            cat_is_installed = str()
+            if category["is_installed"] == BaseCategory.NOT_INSTALLED:
+                cat_is_installed = _("not installed")
+            elif category["is_installed"] == BaseCategory.PARTIALLY_INSTALLED:
+                cat_is_installed = _("partially installed")
+            elif category["is_installed"] == BaseCategory.FULLY_INSTALLED:
+                cat_is_installed = _("fully installed")
+
+            if cat_is_installed:
+                print_result = "{} [{}]".format(print_result, cat_is_installed)
+
+            print_result += "\n"
+
+            # Sort the frameworks to prevent a random list at each new program execution
+            for framework in sorted(category["frameworks"], key=lambda fram: fram["framework_name"]):
+                if args.list_available:
+                    if not framework["is_installable"]:
+                        continue
+
+                print_result += "\t{}: {}".format(framework["framework_name"], framework["framework_description"])
+
+                if not framework["is_installable"]:
+                    print_result = _("{} [not installable on this machine]".format(print_result))
+                elif framework["is_installed"]:
+                    print_result = _("{} [installed]".format(print_result))
+
+                print_result += '\n'
+    elif args.list_installed:
+        # Sort the categories to prevent a random list at each new program execution
+        for category in sorted(categories, key=lambda cat: cat["category_name"]):
+            # Sort the frameworks to prevent a random list at each new program execution
+            for framework in sorted(category["frameworks"], key=lambda fram: fram["framework_name"]):
+                if framework["is_installed"]:
+                    print_result += "{}: {}\n".format(framework["framework_name"],
+                                                      framework["framework_description"])
+                    print_result += "\t{}: {}\n".format(_("path"), framework["install_path"])
+
+        if not print_result:
+            print_result = _("No frameworks are currently installed")
+
+    return print_result
 
 
 def main(parser):

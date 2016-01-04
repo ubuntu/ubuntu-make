@@ -348,6 +348,58 @@ def load_module(module_abs_name, main_category):
             logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
 
 
+def list_frameworks():
+    """ Return frameworks and categories description as:
+        [
+            {
+                'category_name':
+                'category_description':
+                'is_installed': BaseCategory.NOT_INSTALLED or
+                                BaseCategory.PARTIALLY_INSTALLED or
+                                BaseCategory.FULLY_INSTALLED
+                'frameworks':
+                    [
+                        {
+                            'framework_name':
+                            'framework_description':
+                            'install_path': None or Path string
+                            'is_installed': True or False
+                            'is_installable': True or False
+                            'is_category_default': True or False
+                            'only_for_removal': True or False
+                        },
+                    ]
+            },
+        ]
+    """
+    categories_dict = list()
+    for category in BaseCategory.categories.values():
+        frameworks_dict = list()
+        for framework in category.frameworks.values():
+            new_fram = {
+                "framework_name": framework.prog_name,
+                "framework_description": framework.description,
+                "install_path": framework.install_path,
+                "is_installed": framework.is_installed,
+                "is_installable": framework.is_installable,
+                "is_category_default": framework.is_category_default,
+                "only_for_removal": framework.only_for_removal
+            }
+
+            frameworks_dict.append(new_fram)
+
+        new_cat = {
+            "category_name": category.prog_name,
+            "category_description": category.description,
+            "is_installed": category.is_installed,
+            "frameworks": frameworks_dict
+        }
+
+        categories_dict.append(new_cat)
+
+    return categories_dict
+
+
 def load_frameworks():
     """Load all modules and assign to correct category"""
     main_category = MainCategory()
