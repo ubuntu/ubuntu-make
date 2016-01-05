@@ -31,7 +31,7 @@ import tempfile
 import requests
 import requests.exceptions
 from umake.network.ftp_adapter import FTPAdapter
-from umake.tools import ChecksumType
+from umake.tools import ChecksumType, root_lock
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +91,10 @@ class DownloadCenter:
                 # http://bugs.python.org/issue21044
                 # also, ensure we keep the same suffix
                 path, ext = os.path.splitext(url_request.url)
+                # We want to ensure that we don't create files as root
+                root_lock.acquire()
                 dest = tempfile.NamedTemporaryFile(suffix=ext)
+                root_lock.release()
                 logger.info("Start downloading {} to a temp file".format(url_request))
             else:
                 dest = BytesIO()

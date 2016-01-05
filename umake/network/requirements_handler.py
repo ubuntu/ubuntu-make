@@ -32,7 +32,8 @@ import os
 import subprocess
 import tempfile
 import time
-from umake.tools import Singleton, add_foreign_arch, get_foreign_archs, get_current_arch, switch_to_current_user
+from umake.tools import Singleton, add_foreign_arch, get_foreign_archs, get_current_arch, switch_to_current_user,\
+    root_lock
 
 logger = logging.getLogger(__name__)
 
@@ -148,11 +149,13 @@ class RequirementsHandler(object, metaclass=Singleton):
 
         if need_cache_reload:
             try:
+                root_lock.acquire()
                 os.seteuid(0)
                 os.setegid(0)
                 self.cache.update()
             finally:
                 switch_to_current_user()
+                root_lock.release()
             self._force_reload_apt_cache()
 
         # mark for install and so on
@@ -177,6 +180,8 @@ class RequirementsHandler(object, metaclass=Singleton):
 
         # this can raise on installedArchives() exception if the commit() fails
         try:
+            # block all other threads making sensitive operations
+            root_lock.acquire()
             os.seteuid(0)
             os.setegid(0)
             self.cache.commit(fetch_progress=self._FetchProgress(current_bucket,
@@ -189,6 +194,7 @@ class RequirementsHandler(object, metaclass=Singleton):
                                                                      self.apt_fd.name))
         finally:
             switch_to_current_user()
+            root_lock.release()
 
         return True
 

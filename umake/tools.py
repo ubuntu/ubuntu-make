@@ -32,6 +32,7 @@ import subprocess
 import sys
 from textwrap import dedent
 from time import sleep
+from threading import Lock
 from umake import settings
 from xdg.BaseDirectory import load_first_config, xdg_config_home, xdg_data_home
 import yaml
@@ -46,6 +47,8 @@ _foreign_arch = None
 _version = None
 
 profile_tag = _("# Ubuntu make installation of {}\n")
+
+root_lock = Lock()
 
 
 @unique
@@ -213,6 +216,7 @@ def add_foreign_arch(new_arch):
         logger.info("Adding foreign arch: {}".format(new_arch))
         with open(os.devnull, "w") as f:
             try:
+                root_lock.acquire()
                 os.seteuid(0)
                 os.setegid(0)
                 if subprocess.call(["dpkg", "--add-architecture", new_arch], stdout=f) != 0:
@@ -223,6 +227,7 @@ def add_foreign_arch(new_arch):
                 _foreign_arch = None
             finally:
                 switch_to_current_user()
+                root_lock.release()
     return arch_added
 
 
