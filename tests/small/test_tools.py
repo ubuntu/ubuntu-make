@@ -133,26 +133,78 @@ class TestConfigHandler(LoggedTestCase):
             self.assertFalse(os.path.exists(os.path.join(tmpdirname, "udtc")), "Old udtc config file is removed")
 
 
-class TestCompletionArchVersion(LoggedTestCase):
+class TestGetUbuntuVersion(LoggedTestCase):
+
+    def setUp(self):
+        """Reset previously cached values"""
+        super().setUp()
+        tools._version = None
+
+    def tearDown(self):
+        """Reset cached values"""
+        tools._version = None
+        super().tearDown()
+
+    def get_lsb_release_filepath(self, name):
+        return os.path.join(get_data_dir(), 'lsb_releases', name)
+
+    @patch("umake.tools.settings")
+    def test_get_current_ubuntu_version(self, settings_module):
+        """Current ubuntu version is reported from our lsb_release local file"""
+        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("valid")
+        self.assertEqual(get_current_ubuntu_version(), '14.04')
+
+    @patch("umake.tools.settings")
+    def test_get_current_ubuntu_version_invalid(self, settings_module):
+        """Raise an error when parsing an invalid lsb release file"""
+        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("invalid")
+        self.assertRaises(BaseException, get_current_ubuntu_version)
+        self.expect_warn_error = True
+
+    @patch("umake.tools.settings")
+    def test_get_current_ubuntu_version_no_lsb_release(self, settings_module):
+        """Raise an error when there is no lsb release file"""
+        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("notexist")
+        self.assertRaises(BaseException, get_current_ubuntu_version)
+        self.expect_warn_error = True
+
+
+class TestCompletion(LoggedTestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.initial_env = os.environ.copy()
+
+    def tearDown(self):
+        # restore original environment. Do not use the dict copy which erases the object and doesn't have the magical
+        # _Environ which setenv() for subprocess
+        os.environ.clear()
+        os.environ.update(self.initial_env)
+        super().tearDown()
+
+    def test_in_completion_mode(self):
+        """We return if we are in completion mode"""
+        os.environ["_ARGCOMPLETE"] = "1"
+        self.assertTrue(tools.is_completion_mode())
+
+    def test_not_incompletion_mode(self):
+        """We are not in completion mode by default"""
+        self.assertFalse(tools.is_completion_mode())
+
+
+class TestArchVersion(LoggedTestCase):
 
     def setUp(self):
         """Reset previously cached values"""
         super().setUp()
         tools._current_arch = None
         tools._foreign_arch = None
-        tools._version = None
 
     def tearDown(self):
         """Reset cached values"""
         tools._current_arch = None
         tools._foreign_arch = None
-        tools._version = None
-        with suppress(KeyError):
-            os.environ.pop("_ARGCOMPLETE")
         super().tearDown()
-
-    def get_lsb_release_filepath(self, name):
-        return os.path.join(get_data_dir(), 'lsb_releases', name)
 
     @contextmanager
     def create_dpkg(self, content):
@@ -184,26 +236,6 @@ class TestCompletionArchVersion(LoggedTestCase):
         with self.create_dpkg("exit 1"):
             self.assertRaises(subprocess.CalledProcessError, get_current_arch)
 
-    @patch("umake.tools.settings")
-    def test_get_current_ubuntu_version(self, settings_module):
-        """Current ubuntu version is reported from our lsb_release local file"""
-        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("valid")
-        self.assertEqual(get_current_ubuntu_version(), '14.04')
-
-    @patch("umake.tools.settings")
-    def test_get_current_ubuntu_version_invalid(self, settings_module):
-        """Raise an error when parsing an invalid lsb release file"""
-        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("invalid")
-        self.assertRaises(BaseException, get_current_ubuntu_version)
-        self.expect_warn_error = True
-
-    @patch("umake.tools.settings")
-    def test_get_current_ubuntu_version_no_lsb_release(self, settings_module):
-        """Raise an error when there is no lsb release file"""
-        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("notexist")
-        self.assertRaises(BaseException, get_current_ubuntu_version)
-        self.expect_warn_error = True
-
     def test_get_foreign_arch(self):
         """Get current foreign arch (one)"""
         with self.create_dpkg("echo fooarch"):
@@ -218,15 +250,6 @@ class TestCompletionArchVersion(LoggedTestCase):
         """Get current foreign arch raises an exception if dpkg is in error"""
         with self.create_dpkg("exit 1"):
             self.assertRaises(subprocess.CalledProcessError, get_foreign_archs)
-
-    def test_in_completion_mode(self):
-        """We return if we are in completion mode"""
-        os.environ["_ARGCOMPLETE"] = "1"
-        self.assertTrue(tools.is_completion_mode())
-
-    def test_not_incompletion_mode(self):
-        """We are not in completion mode by default"""
-        self.assertFalse(tools.is_completion_mode())
 
 
 class TestToolsThreads(LoggedTestCase):
