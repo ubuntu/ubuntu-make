@@ -26,11 +26,10 @@ from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
 import grp
-from io import StringIO
 import json
 import logging
 import os
-from os.path import join
+from os.path import join, isfile
 import pwd
 import platform
 import re
@@ -38,9 +37,9 @@ import subprocess
 from urllib import parse
 
 import umake.frameworks.baseinstaller
-from umake.interactions import DisplayMessage, LicenseAgreement
+from umake.interactions import DisplayMessage
 from umake.network.download_center import DownloadCenter, DownloadItem
-from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop, strip_tags
+from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -68,69 +67,69 @@ class IdeCategory(umake.frameworks.BaseCategory):
 
 class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
     """The Eclipse Foundation distribution."""
-    DOWNLOAD_URL_PAT = "https://www.eclipse.org/downloads/download.php?" \
-                       "file=/technology/epp/downloads/release/luna/R/" \
-                       "eclipse-standard-luna-R-linux-gtk{arch}.tar.gz{suf}" \
-                       "&r=1"
 
     def __init__(self, category):
         super().__init__(name="Eclipse",
-                         description=_("Pure Eclipse Luna (4.4)"),
+                         description=_("Eclipse Java"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=None,
+                         download_page='https://www.eclipse.org/downloads/',
+                         checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
                          required_files_path=["eclipse"],
-                         packages_requirements=['openjdk-7-jdk'])
+                         packages_requirements=['openjdk-8-jdk'])
 
-    def download_provider_page(self):
-        """First, we need to fetch the MD5, then kick off the proceedings.
+        self.bits = '' if platform.machine() == 'i686' else 'x86_64'
 
-        This could actually be done in parallel, in a future version.
-        """
-        logger.debug("Preparing to download MD5.")
+    def download_sha1(self, sha1_url):
+        logger.debug("Preparing to Download SHA1")
+        self.sha1 = None
 
-        arch = platform.machine()
-        if arch == 'i686':
-            md5_url = self.DOWNLOAD_URL_PAT.format(arch='', suf='.md5')
-        elif arch == 'x86_64':
-            md5_url = self.DOWNLOAD_URL_PAT.format(arch='-x86_64', suf='.md5')
-        else:
-            logger.error("Unsupported architecture: {}".format(arch))
-            UI.return_main_screen(status_code=1)
-
-        @MainLoop.in_mainloop_thread
         def done(download_result):
-            res = download_result[md5_url]
+            res = download_result[sha1_url]
 
             if res.error:
                 logger.error(res.error)
                 UI.return_main_screen(status_code=1)
 
             # Should be ASCII anyway.
-            md5 = res.buffer.getvalue().decode('utf-8').split()[0]
-            logger.debug("Downloaded MD5 is {}".format(md5))
+            self.sha1 = res.buffer.getvalue().decode('utf-8').split()[0]
+            logger.debug("Downloaded SHA1 is {}".format(self.sha1))
+        DownloadCenter(urls=[DownloadItem(sha1_url, None)], on_done=done, download=False)
+        # It has to wait for the download and decode of the sha1sum
+        while self.sha1 is None:
+            pass
+        logger.debug("Downloaded SHA1 is now {}".format(self.sha1))
+        return self.sha1
 
-            logger.debug("Preparing to download the main archive.")
-            if arch == 'i686':
-                download_url = self.DOWNLOAD_URL_PAT.format(arch='', suf='')
-            elif arch == 'x86_64':
-                download_url = self.DOWNLOAD_URL_PAT.format(arch='-x86_64',
-                                                            suf='')
-            self.download_requests.append(DownloadItem(download_url, Checksum(ChecksumType.md5, md5)))
-            self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        """Parse Eclipse download links"""
+        url, sha1 = (None, None)
+        if "eclipse-java" in line and self.bits in line:
+            in_download = True
+        else:
+            in_download = False
+        if in_download:
+            p = re.search(r'href="(.*)" title', line)
+            with suppress(AttributeError):
+                url = self.download_page + p.group(1) + '&r=1'
+                sha1_url = self.download_page + p.group(1) + '.sha1&r=1'
+                sha1 = self.download_sha1(sha1_url)
+                logger.debug("SHA1 in parser is: " + str(sha1))
 
-        DownloadCenter(urls=[DownloadItem(md5_url, None)], on_done=done, download=False)
+        if url is None and sha1 is None:
+            return (None, in_download)
+        return ((url, sha1), in_download)
 
     def post_install(self):
-        """Create the Luna launcher"""
+        """Create the Eclipse launcher"""
         icon_filename = "icon.xpm"
         icon_path = join(self.install_path, icon_filename)
         exec_path = '"{}" %f'.format(join(self.install_path, "eclipse"))
-        comment = _("The Eclipse Luna Integrated Development Environment")
+        comment = _("The Eclipse Integrated Development Environment")
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
-                        get_application_desktop_file(name=_("Eclipse Luna"),
+                        get_application_desktop_file(name=_("Eclipse"),
                                                      icon_path=icon_path,
                                                      exec=exec_path,
                                                      comment=comment,
