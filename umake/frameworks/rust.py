@@ -52,14 +52,15 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
         "i386": "32-bit"
     }
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Rust Lang",
                          description=_("The official Rust distribution"),
                          is_category_default=True,
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          download_page="https://www.rust-lang.org/downloads.html",
                          checksum_type=ChecksumType.sha256,
-                         dir_to_decompress_in_tarball="rust-*")
+                         dir_to_decompress_in_tarball="rust-*",
+                         **kwargs)
 
     def parse_download_link(self, line, in_download):
         """Parse Rust download link, expect to find a url"""

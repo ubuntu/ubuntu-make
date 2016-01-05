@@ -47,13 +47,13 @@ class WebCategory(umake.frameworks.BaseCategory):
 
 class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Firefox Dev", description=_("Firefox Developer Edition"),
-                         category=category, only_on_archs=_supported_archs,
+                         only_on_archs=_supported_archs,
                          download_page="https://www.mozilla.org/en-US/firefox/developer/all",
                          dir_to_decompress_in_tarball="firefox",
                          desktop_filename="firefox-developer.desktop",
-                         required_files_path=["firefox"])
+                         required_files_path=["firefox"], **kwargs)
         self.arg_lang = None
 
     @MainLoop.in_mainloop_thread

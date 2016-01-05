@@ -40,13 +40,14 @@ class KotlinCategory(umake.frameworks.BaseCategory):
 
 class KotlinLang(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Kotlin Lang", description=_("Kotlin language standalone compiler"),
-                         is_category_default=True, category=category,
+                         is_category_default=True,
                          packages_requirements=["openjdk-7-jre | openjdk-8-jre"],
                          download_page="https://api.github.com/repos/Jetbrains/kotlin/releases/latest",
                          dir_to_decompress_in_tarball="kotlinc",
-                         required_files_path=[os.path.join("bin", "kotlinc")])
+                         required_files_path=[os.path.join("bin", "kotlinc")],
+                         **kwargs)
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
