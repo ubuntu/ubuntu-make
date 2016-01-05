@@ -344,7 +344,7 @@ def load_module(module_abs_name, main_category, force_loading):
     if current_category not in BaseCategory.categories.values():
         return
     for framework_name, FrameworkClass in inspect.getmembers(module, _is_frameworkclass):
-        if FrameworkClass(current_category, force_loading) is not None:
+        if FrameworkClass(category=current_category, force_loading=force_loading) is not None:
             logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
 
 

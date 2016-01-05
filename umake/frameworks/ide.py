@@ -177,14 +177,15 @@ class EclipseJava(BaseEclipse):
     download_keyword = 'eclipse-java-'
     executable = 'eclipse'
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Eclipse",
                          description=_("Eclipse Java IDE"),
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-java.desktop',
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-                         icon_filename='java.png')
+                         icon_filename='java.png',
+                         **kwargs)
 
 
 class EclipseJEE(BaseEclipse):
@@ -192,14 +193,15 @@ class EclipseJEE(BaseEclipse):
     download_keyword = 'eclipse-jee-'
     executable = 'eclipse'
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Eclipse JEE",
                          description=_("Eclipse JEE IDE"),
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-jee.desktop',
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-                         icon_filename='javaee.png')
+                         icon_filename='javaee.png',
+                         **kwargs)
 
 
 class EclipsePHP(BaseEclipse):
@@ -207,14 +209,15 @@ class EclipsePHP(BaseEclipse):
     download_keyword = 'eclipse-php-'
     executable = 'eclipse'
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Eclipse PHP",
                          description=_("Eclipse PHP IDE"),
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-php.desktop',
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-                         icon_filename='php.png')
+                         icon_filename='php.png',
+                         **kwargs)
 
 
 class EclipseJS(BaseEclipse):
@@ -237,14 +240,15 @@ class EclipseCPP(BaseEclipse):
     download_keyword = 'eclipse-cpp-'
     executable = 'eclipse'
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Eclipse CPP",
                          description=_("Eclipse C/C++ IDE"),
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-cpp.desktop',
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-                         icon_filename='cdt.png')
+                         icon_filename='cdt.png',
+                         **kwargs)
 
 
 class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
@@ -352,14 +356,15 @@ class PyCharm(BaseJetBrains):
     download_keyword = 'PCC'
     executable = "pycharm.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="PyCharm",
                          description=_("PyCharm Community Edition"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['python', 'python3'],
                          dir_to_decompress_in_tarball='pycharm-community-*',
                          desktop_filename='jetbrains-pycharm-ce.desktop',
-                         icon_filename='pycharm.png')
+                         icon_filename='pycharm.png',
+                         **kwargs)
 
 
 class PyCharmEducational(BaseJetBrains):
@@ -367,14 +372,15 @@ class PyCharmEducational(BaseJetBrains):
     download_keyword = 'PCE'
     executable = "pycharm.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="PyCharm Educational",
                          description=_("PyCharm Educational Edition"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['python', 'python3'],
                          dir_to_decompress_in_tarball='pycharm-edu*',
                          desktop_filename='jetbrains-pycharm-edu.desktop',
-                         icon_filename='pycharm.png')
+                         icon_filename='pycharm.png',
+                         **kwargs)
 
 
 class PyCharmProfessional(BaseJetBrains):
@@ -382,14 +388,15 @@ class PyCharmProfessional(BaseJetBrains):
     download_keyword = 'PCP'
     executable = "pycharm.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="PyCharm Professional",
                          description=_("PyCharm Professional Edition"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['python', 'python3'],
                          dir_to_decompress_in_tarball='pycharm-*',
                          desktop_filename='jetbrains-pycharm.desktop',
-                         icon_filename='pycharm.png')
+                         icon_filename='pycharm.png',
+                         **kwargs)
 
 
 class Idea(BaseJetBrains):
@@ -397,14 +404,15 @@ class Idea(BaseJetBrains):
     download_keyword = 'IIC'
     executable = "idea.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Idea",
                          description=_("IntelliJ IDEA Community Edition"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          dir_to_decompress_in_tarball='idea-IC-*',
                          desktop_filename='jetbrains-idea-ce.desktop',
-                         icon_filename='idea.png')
+                         icon_filename='idea.png',
+                         **kwargs)
 
 
 class IdeaUltimate(BaseJetBrains):
@@ -412,14 +420,15 @@ class IdeaUltimate(BaseJetBrains):
     download_keyword = 'IIU'
     executable = "idea.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Idea Ultimate",
                          description=_("IntelliJ IDEA"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          dir_to_decompress_in_tarball='idea-IU-*',
                          desktop_filename='jetbrains-idea.desktop',
-                         icon_filename='idea.png')
+                         icon_filename='idea.png',
+                         **kwargs)
 
 
 class RubyMine(BaseJetBrains):
@@ -427,30 +436,29 @@ class RubyMine(BaseJetBrains):
     download_keyword = 'RM'
     executable = "rubymine.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="RubyMine",
                          description=_("Ruby on Rails IDE"),
-                         category=category,
                          only_on_archs=['i386', 'amd64'],
                          packages_requirements=['ruby'],
                          dir_to_decompress_in_tarball='RubyMine-*',
                          desktop_filename='jetbrains-rubymine.desktop',
-                         icon_filename='RMlogo.svg')
-
+                         icon_filename='rubymine.png',
+                         **kwargs)
 
 class WebStorm(BaseJetBrains):
     """The JetBrains WebStorm IDE"""
     download_keyword = 'WS'
     executable = "webstorm.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="WebStorm",
                          description=_("Complex client-side and server-side javascript IDE"),
-                         category=category,
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='WebStorm-*',
                          desktop_filename='jetbrains-webstorm.desktop',
-                         icon_filename='webstorm.svg')
+                         icon_filename='webstorm.svg',
+                         **kwargs)
 
 
 class PhpStorm(BaseJetBrains):
@@ -458,14 +466,14 @@ class PhpStorm(BaseJetBrains):
     download_keyword = 'PS'
     executable = "phpstorm.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="PhpStorm",
                          description=_("PHP and web development IDE"),
-                         category=category,
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='PhpStorm-*',
                          desktop_filename='jetbrains-phpstorm.desktop',
-                         icon_filename='phpstorm.png')
+                         icon_filename='phpstorm.png',
+                         **kwargs)
 
 
 class CLion(BaseJetBrains):
@@ -473,14 +481,14 @@ class CLion(BaseJetBrains):
     download_keyword = 'CL'
     executable = "clion.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="CLion",
                          description=_("CLion integrated C/C++ IDE"),
-                         category=category,
                          only_on_archs=['amd64'],
                          dir_to_decompress_in_tarball='clion-*',
                          desktop_filename='jetbrains-clion.desktop',
-                         icon_filename='clion.svg')
+                         icon_filename='clion.svg',
+                         **kwargs)
 
 
 class DataGrip(BaseJetBrains):
@@ -488,14 +496,14 @@ class DataGrip(BaseJetBrains):
     download_keyword = 'DG'
     executable = "datagrip.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="DataGrip",
                          description=_("DataGrip SQL and databases IDE"),
-                         category=category,
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='DataGrip-*',
                          desktop_filename='jetbrains-datagrip.desktop',
-                         icon_filename='datagrip.png')
+                         icon_filename='datagrip.png',
+                         **kwargs)
 
 
 class GogLand(BaseJetBrains):
@@ -510,7 +518,8 @@ class GogLand(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='Gogland-*',
                          desktop_filename='jetbrains-gogland.desktop',
-                         icon_filename='gogland.png')
+                         icon_filename='gogland.png',
+                         **kwargs)
 
 
 class Rider(BaseJetBrains):
@@ -525,7 +534,8 @@ class Rider(BaseJetBrains):
                          packages_requirements=['mono-devel'],
                          dir_to_decompress_in_tarball='rider-*',
                          desktop_filename='jetbrains-rider.desktop',
-                         icon_filename='rider.png')
+                         icon_filename='rider.png',
+                         **kwargs)
 
 
 class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
@@ -533,7 +543,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
 
     ARDUINO_GROUP = "dialout"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
 
         if os.geteuid() != 0:
             self._current_user = os.getenv("USER")
@@ -547,13 +557,14 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
 
         super().__init__(name="Arduino",
                          description=_("The Arduino Software Distribution"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          download_page='http://www.arduino.cc/en/Main/Software',
                          dir_to_decompress_in_tarball='arduino-*',
                          desktop_filename='arduino.desktop',
                          packages_requirements=['gcc-avr', 'avr-libc'],
                          need_root_access=not self.was_in_arduino_group,
-                         required_files_path=["arduino"])
+                         required_files_path=["arduino"],
+                         **kwargs)
         self.scraped_checksum_url = None
         self.scraped_download_url = None
 
@@ -663,7 +674,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
     BASE_URL = "http://download.netbeans.org/netbeans"
     EXECUTABLE = "nb/netbeans"
 
-    def __init__(self, category, flavour=""):
+    def __init__(self, flavour="", **kwargs):
         """The constructor.
         @param category The IDE category.
         @param flavour The Netbeans flavour (plugins bundled).
@@ -675,13 +686,13 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
 
         super().__init__(name="Netbeans",
                          description=_("Netbeans IDE"),
-                         category=category,
                          only_on_archs=['i386', 'amd64'],
                          download_page="https://netbeans.org/downloads/zip.html",
                          dir_to_decompress_in_tarball="netbeans*",
                          desktop_filename="netbeans{}.desktop".format(flavour),
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-                         required_files_path=[os.path.join("bin", "netbeans")])
+                         required_files_path=[os.path.join("bin", "netbeans")],
+                         **kwargs)
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -772,14 +783,15 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         "x86_64-insiders": "https://go.microsoft.com/fwlink/?LinkId=723968"
     }
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Visual Studio Code", description=_("Visual Studio focused on modern web and cloud"),
-                         category=category, only_on_archs=['i386', 'amd64'], expect_license=True,
+                         only_on_archs=['i386', 'amd64'], expect_license=True,
                          download_page="https://code.visualstudio.com/License",
                          desktop_filename="visual-studio-code.desktop",
                          required_files_path=["bin/code"],
                          dir_to_decompress_in_tarball="VSCode-linux-*",
-                         packages_requirements=["libgtk2.0-0"])
+                         packages_requirements=["libgtk2.0-0"],
+                         **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
@@ -830,14 +842,15 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
 class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="LightTable", description=_("LightTable code editor"),
-                         category=category, only_on_archs=['amd64'],
+                         only_on_archs=['amd64'],
                          download_page="https://api.github.com/repos/LightTable/LightTable/releases/latest",
                          desktop_filename="lighttable.desktop",
                          required_files_path=["LightTable"],
                          dir_to_decompress_in_tarball="lighttable-*",
-                         checksum_type=ChecksumType.md5)
+                         checksum_type=ChecksumType.md5,
+                         **kwargs)
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -924,13 +937,14 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
 
 class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Sublime Text", description=_("Sophisticated text editor for code, markup and prose"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          download_page="https://sublimetext.com/3",
                          desktop_filename="sublime-text.desktop",
                          required_files_path=["sublime_text"],
-                         dir_to_decompress_in_tarball="sublime_text_*")
+                         dir_to_decompress_in_tarball="sublime_text_*",
+                         **kwargs)
 
     arch_trans = {
         "amd64": "x64",
@@ -956,7 +970,8 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
 
 
 class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
-    def __init__(self, category):
+    def __init__(self, **kwargs):
+        return
         super().__init__(name="Spring Tools Suite",
                          description=_("Spring Tools Suite IDE"),
                          download_page="https://spring.io/tools/sts/all",
@@ -966,7 +981,8 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=['i386', 'amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='icon.xpm',
-                         required_files_path=["STS"])
+                         required_files_path=["STS"],
+                         **kwargs)
         self.arch = '' if platform.machine() == 'i686' else '-x86_64'
         self.checksum_url = None
 

@@ -44,13 +44,14 @@ class NodejsCategory(umake.frameworks.BaseCategory):
 
 class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Nodejs Lang", description=_("Nodejs stable"), is_category_default=True,
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page="https://nodejs.org/en/download/current",
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="node*",
-                         required_files_path=[os.path.join("bin", "node")])
+                         required_files_path=[os.path.join("bin", "node")],
+                         **kwargs)
     arch_trans = {
         "amd64": "x64",
         "i386": "x86"

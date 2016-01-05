@@ -42,13 +42,14 @@ class GoCategory(umake.frameworks.BaseCategory):
 
 class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Go Lang", description=_("Google compiler (default)"), is_category_default=True,
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          download_page="https://golang.org/dl/",
-                         checksum_type=ChecksumType.sha256,
+                         checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="go",
-                         required_files_path=[os.path.join("bin", "go")])
+                         required_files_path=[os.path.join("bin", "go")],
+                         **kwargs)
 
     def parse_download_link(self, line, in_download):
         """Parse Go download link, expect to find a sha and a url"""

@@ -46,9 +46,9 @@ class GamesCategory(umake.frameworks.BaseCategory):
 
 class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Stencyl", description=_("Stencyl game developer IDE"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          download_page="http://www.stencyl.com/download/",
                          desktop_filename="stencyl.desktop",
                          required_files_path=["Stencyl"],
@@ -61,7 +61,8 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
                                                 "libxdmcp6:i386", "libxfixes3:i386", "libx11-6:i386",
                                                 "libxinerama1:i386", "libxrandr2:i386", "libxrender1:i386",
                                                 "zlib1g:i386", "libnss3-1d:i386", "libnspr4-0d:i386", "libcurl3:i386",
-                                                "libasound2:i386"])
+                                                "libasound2:i386"],
+                         **kwargs)
 
     def parse_download_link(self, line, in_download):
         """Parse Stencyl download links"""
@@ -176,9 +177,9 @@ def _chrome_sandbox_setuid(path):
 
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
-                         category=category, only_on_archs=['amd64'],
+                         only_on_archs=['amd64'],
                          download_page="https://forum.unity3d.com/" +
                                        "threads/unity-on-linux-release-notes-and-known-issues.350256/page-2",
                          match_last_link=True,
@@ -199,7 +200,8 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                              "libnspr4", "libnss3", "libpango1.0-0", "libpq5", "libxcomposite1",
                              "libxcursor1", "libxdamage1", "libxext6", "libxfixes3", "libxi6",
                              "libxrandr2", "libxrender1", "libxtst6",
-                             "monodevelop"])  # monodevelop is for mono deps, temporary
+                             "monodevelop"],
+                         **kwargs)  # monodevelop is for mono deps, temporary
         self.download_url = None
         self.checksum = None
 
@@ -284,13 +286,14 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
 class Twine(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Twine", description=_("Twine tool for creating interactive and nonlinear stories"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          download_page="http://twinery.org/",
                          dir_to_decompress_in_tarball='twine*',
                          desktop_filename="twine.desktop",
-                         required_files_path=["Twine"])
+                         required_files_path=["Twine"],
+                         **kwargs)
         # add logo download as the tar doesn't provide one
         self.download_requests.append(DownloadItem("http://twinery.org/img/logo.svg", None))
 
@@ -330,13 +333,14 @@ class Twine(umake.frameworks.baseinstaller.BaseInstaller):
 
 class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Superpowers", description=_("The HTML5 2D+3D game maker"),
-                         category=category, only_on_archs=['i386', 'amd64'],
-                         download_page="https://api.github.com/repos/superpowers/superpowers-app/releases/latest",
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://api.github.com/repos/superpowers/superpowers-core/releases/latest",
                          dir_to_decompress_in_tarball='superpowers*',
                          desktop_filename="superpowers.desktop",
-                         required_files_path=["Superpowers"])
+                         required_files_path=["Superpowers"],
+                         **kwargs)
 
     arch_trans = {
         "amd64": "x64",
