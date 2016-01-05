@@ -32,7 +32,7 @@ import os
 import subprocess
 import tempfile
 import time
-from umake.tools import Singleton, get_foreign_archs, get_current_arch, switch_to_current_user
+from umake.tools import Singleton, add_foreign_arch, get_foreign_archs, get_current_arch, switch_to_current_user
 
 logger = logging.getLogger(__name__)
 
@@ -140,23 +140,20 @@ class RequirementsHandler(object, metaclass=Singleton):
         if self.is_bucket_uptodate(bucket):
             return True
 
+        need_cache_reload = False
         for pkg_name in bucket:
             if ":" in pkg_name:
                 arch = pkg_name.split(":", -1)[-1]
-                # try to add the arch
-                if arch not in get_foreign_archs() and arch != get_current_arch():
-                    logger.info("Adding foreign arch: {}".format(arch))
-                    with open(os.devnull, "w") as f:
-                        try:
-                            os.seteuid(0)
-                            os.setegid(0)
-                            if subprocess.call(["dpkg", "--add-architecture", arch], stdout=f) != 0:
-                                msg = _("Can't add foreign architecture {}").format(arch)
-                                raise BaseException(msg)
-                            self.cache.update()
-                        finally:
-                            switch_to_current_user()
-                        self._force_reload_apt_cache()
+                need_cache_reload = need_cache_reload or add_foreign_arch(arch)
+
+        if need_cache_reload:
+            try:
+                os.seteuid(0)
+                os.setegid(0)
+                self.cache.update()
+            finally:
+                switch_to_current_user()
+            self._force_reload_apt_cache()
 
         # mark for install and so on
         for pkg_name in bucket:
