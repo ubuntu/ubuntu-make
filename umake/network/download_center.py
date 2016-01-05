@@ -155,6 +155,8 @@ class DownloadCenter:
                 actual_checksum = self.md5_for_fd(dest)
             elif checksum_type is ChecksumType.sha256:
                 actual_checksum = self.sha256_for_fd(dest)
+            elif checksum_type is ChecksumType.sha512:
+                actual_checksum = self.sha512_for_fd(dest)
             else:
                 msg = "Unsupported checksum type: {}.".format(checksum_type)
                 raise BaseException(msg)
@@ -220,3 +222,7 @@ class DownloadCenter:
     @classmethod
     def sha256_for_fd(cls, f, block_size=2 ** 20):
         return cls._checksum_for_fd(hashlib.sha256, f, block_size)
+
+    @classmethod
+    def sha512_for_fd(cls, f, block_size=2 ** 20):
+        return cls._checksum_for_fd(hashlib.sha512, f, block_size)

@@ -73,7 +73,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                          description=_("Eclipse Java"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          download_page='https://www.eclipse.org/downloads/',
-                         checksum_type=ChecksumType.sha1,
+                         checksum_type=ChecksumType.sha512,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
                          required_files_path=["eclipse"],
@@ -81,30 +81,27 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
 
         self.bits = '' if platform.machine() == 'i686' else 'x86_64'
 
-    def download_sha1(self, sha1_url):
+    def download_sha512(self, sha512_url):
         logger.debug("Preparing to Download SHA1")
-        self.sha1 = None
 
         def done(download_result):
-            res = download_result[sha1_url]
+            res = download_result[sha512_url]
 
             if res.error:
                 logger.error(res.error)
                 UI.return_main_screen(status_code=1)
 
             # Should be ASCII anyway.
-            self.sha1 = res.buffer.getvalue().decode('utf-8').split()[0]
-            logger.debug("Downloaded SHA1 is {}".format(self.sha1))
-        DownloadCenter(urls=[DownloadItem(sha1_url, None)], on_done=done, download=False)
-        # It has to wait for the download and decode of the sha1sum
-        while self.sha1 is None:
+            self.sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
+        DownloadCenter(urls=[DownloadItem(sha512_url, None)], on_done=done, download=False)
+        # It has to wait for the download and decode of the sha512sum
+        while self.sha512 is None:
             pass
-        logger.debug("Downloaded SHA1 is now {}".format(self.sha1))
-        return self.sha1
+        logger.debug("Downloaded SHA512 is {}".format(self.sha512))
 
     def parse_download_link(self, line, in_download):
         """Parse Eclipse download links"""
-        url, sha1 = (None, None)
+        url, self.sha512 = (None, None)
         if "eclipse-java" in line and self.bits in line:
             in_download = True
         else:
@@ -113,13 +110,13 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
             p = re.search(r'href="(.*)" title', line)
             with suppress(AttributeError):
                 url = self.download_page + p.group(1) + '&r=1'
-                sha1_url = self.download_page + p.group(1) + '.sha1&r=1'
-                sha1 = self.download_sha1(sha1_url)
-                logger.debug("SHA1 in parser is: " + str(sha1))
+                sha512_url = self.download_page + p.group(1) + '.sha512&r=1'
+                self.download_sha512(sha512_url)
+                logger.debug("SHA512 in parser is: " + str(self.sha512))
 
-        if url is None and sha1 is None:
+        if url is None and self.sha512 is None:
             return (None, in_download)
-        return ((url, sha1), in_download)
+        return ((url, self.sha512), in_download)
 
     def post_install(self):
         """Create the Eclipse launcher"""
