@@ -30,7 +30,7 @@ import stat
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem
-from umake.tools import create_launcher, get_application_desktop_file, get_current_arch
+from umake.tools import create_launcher, get_application_desktop_file, get_current_arch, ChecksumType
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -107,13 +107,13 @@ def _chrome_sandbox_setuid(path):
 
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
-    # we will need to have a proper download page with md5sum
-    DOWNLOAD_URL = "http://files.unity3d.com/levi/unity-editor-installer-5.2.2f1+20151018.sh"
-
     def __init__(self, category):
         super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
                          category=category, only_on_archs=['amd64'],
-                         download_page=None,
+                         download_page="http://forum.unity3d.com/threads/" +
+                                       "unity-on-linux-release-notes-and-known-issues.350256/",
+                         match_last_link=True,
+                         checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball='unity-editor*',
                          desktop_filename="unity3d-editor.desktop",
                          required_files_path=[os.path.join("Editor", "Unity")],
@@ -129,11 +129,22 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                                                 "libxrandr2", "libxrender1", "libxtst6",
                                                 "monodevelop"])  # monodevelop is for mono deps, temporary
 
-    def download_provider_page(self):
-        """kick off the proceedings."""
-        # as soon as we have checksums, we'll use them
-        self.download_requests.append(DownloadItem(self.DOWNLOAD_URL, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        """Parse Unity3d download links"""
+        url, sha1 = (None, None)
+        if ".sh" in line:
+            in_download = True
+        if in_download:
+            p = re.search(r'href="(.*)" target', line)
+            with suppress(AttributeError):
+                url = p.group(1)
+            p = re.search(r'sha1sum (\w+)', line)
+            with suppress(AttributeError):
+                sha1 = p.group(1)
+
+        if url is None or sha1 is None:
+            return (None, in_download)
+        return ((url, sha1), in_download)
 
     def decompress_and_install(self, fds):
         """Override to strip the unwanted shell header part"""
