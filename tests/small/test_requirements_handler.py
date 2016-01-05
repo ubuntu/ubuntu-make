@@ -439,7 +439,8 @@ class TestRequirementsHandler(DpkgAptSetup):
         self.handler.cache.open()  # reopen the cache with the new added architecture
 
         bucket = ["testpackagefoo:foo", "testpackage1"]
-        with patch("umake.network.requirements_handler.subprocess") as subprocess_mock:
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.check_output.side_effect = subprocess.check_output
             self.handler.install_bucket(bucket, lambda x: "", self.done_callback)
             self.wait_for_callback(self.done_callback)
 
@@ -461,7 +462,7 @@ class TestRequirementsHandler(DpkgAptSetup):
     def test_install_with_foreign_foreign_arch_add_fails(self):
         """Install packages with a foreign arch, where adding a foreign arch fails"""
         bucket = ["testpackagefoo:foo", "testpackage1"]
-        with patch("umake.network.requirements_handler.subprocess") as subprocess_mock:
+        with patch("umake.tools.subprocess") as subprocess_mock:
             subprocess_mock.call.return_value = 1
             self.handler.install_bucket(bucket, lambda x: "", self.done_callback)
             self.wait_for_callback(self.done_callback)
