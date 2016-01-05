@@ -33,6 +33,11 @@ from umake import tools
 class TestRequirementsHandler(DpkgAptSetup):
     """This will test the download center by sending one or more download requests"""
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.handler = RequirementsHandler()
+
     def count_number_progress_call(self, call_args_list, tag):
         """Count the number of tag in progress call and return it"""
         count = 0

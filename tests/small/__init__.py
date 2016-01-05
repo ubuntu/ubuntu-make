@@ -26,7 +26,6 @@ import stat
 import tempfile
 from ..tools import get_data_dir, LoggedTestCase, manipulate_path_env
 from unittest.mock import Mock
-from umake.network.requirements_handler import RequirementsHandler
 from umake import tools
 
 
@@ -36,7 +35,6 @@ class DpkgAptSetup(LoggedTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.handler = RequirementsHandler()
 
         apt.apt_pkg.config.set("Dir::Cache::pkgcache", "")
         apt.apt_pkg.config.set("Dir::Cache::srcpkgcache", "")
@@ -87,7 +85,8 @@ class DpkgAptSetup(LoggedTestCase):
         apt.apt_pkg.config.set("Dir::Bin::dpkg", self.dpkg)  # must be called after initializing the rootdir cache
         cache.update()
         cache.open()
-        self.handler.cache = cache
+        if hasattr(self, "handler"):
+            self.handler.cache = cache
 
         self.done_callback = Mock()
 
