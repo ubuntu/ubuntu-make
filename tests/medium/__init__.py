@@ -31,7 +31,6 @@ class ContainerTests(LoggedTestCase):
     """Container-based tests utilities"""
 
     DOCKER_USER = "user"
-    DOCKER_PASSWORD = "user"
     DOCKER_TESTIMAGE = "didrocks/docker-umake-manual"
     UMAKE_TOOLS_IN_CONTAINER = "/umake"
     APT_FAKE_REPO_PATH = "/apt-fake-repo"
@@ -122,8 +121,8 @@ class ContainerTests(LoggedTestCase):
 
         if isinstance(commands_to_run, list):
             commands_to_run = " ".join(commands_to_run)
-        return ["sshpass", "-p", self.DOCKER_PASSWORD, "ssh", "-o", "UserKnownHostsFile=/dev/null", "-o",
-                "StrictHostKeyChecking=no", "-t", "-q",
+        return ["ssh", "-i", os.path.join(get_root_dir(), "docker", "umake_docker"),
+                "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=no", "-t", "-q",
                 "{}@{}".format(self.DOCKER_USER, self.container_ip),
                 "{} {} '{}'".format(os.path.join(get_tools_helper_dir(), "run_in_umake_dir"),
                                     self.UMAKE_TOOLS_IN_CONTAINER, commands_to_run)]

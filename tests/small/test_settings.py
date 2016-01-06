@@ -62,7 +62,8 @@ class TestVersionHandler(LoggedTestCase):
     def test_version_release(self, path_join_result):
         """Ensure we are returning the right version for a release"""
         path_join_result.side_effect = self.return_fake_version_path
-        os.environ = self.initial_env
+        os.environ.clear()
+        os.environ.update(self.initial_env)
         self.assertEquals(settings.get_version(), "42.02")
 
     @patch("os.path.join")

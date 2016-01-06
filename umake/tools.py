@@ -32,6 +32,7 @@ import subprocess
 import sys
 from textwrap import dedent
 from time import sleep
+from threading import Lock
 from umake import settings
 from xdg.BaseDirectory import load_first_config, xdg_config_home, xdg_data_home
 import yaml
@@ -46,6 +47,8 @@ _foreign_arch = None
 _version = None
 
 profile_tag = _("# Ubuntu make installation of {}\n")
+
+root_lock = Lock()
 
 
 @unique
@@ -202,6 +205,31 @@ def get_foreign_archs():
         _foreign_arch = subprocess.check_output(["dpkg", "--print-foreign-architectures"], universal_newlines=True)\
             .rstrip("\n").split()
     return _foreign_arch
+
+
+def add_foreign_arch(new_arch):
+    """Add a new architecture if not already loaded. Return if new arch was added"""
+    global _foreign_arch
+
+    # try to add the arch if not already present
+    arch_added = False
+    if new_arch not in get_foreign_archs() and new_arch != get_current_arch():
+        logger.info("Adding foreign arch: {}".format(new_arch))
+        with open(os.devnull, "w") as f:
+            try:
+                root_lock.acquire()
+                os.seteuid(0)
+                os.setegid(0)
+                if subprocess.call(["dpkg", "--add-architecture", new_arch], stdout=f) != 0:
+                    msg = _("Can't add foreign architecture {}").format(new_arch)
+                    raise BaseException(msg)
+                # mark the new arch as added and invalidate the cache
+                arch_added = True
+                _foreign_arch = None
+            finally:
+                switch_to_current_user()
+                root_lock.release()
+    return arch_added
 
 
 def get_current_ubuntu_version():

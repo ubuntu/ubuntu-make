@@ -31,6 +31,7 @@ import tempfile
 from textwrap import dedent
 from time import time
 import threading
+from . import DpkgAptSetup
 from ..tools import change_xdg_path, get_data_dir, LoggedTestCase, INSTALL_DIR
 from umake import settings, tools
 from umake.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
@@ -133,56 +134,20 @@ class TestConfigHandler(LoggedTestCase):
             self.assertFalse(os.path.exists(os.path.join(tmpdirname, "udtc")), "Old udtc config file is removed")
 
 
-class TestCompletionArchVersion(LoggedTestCase):
+class TestGetUbuntuVersion(LoggedTestCase):
 
     def setUp(self):
         """Reset previously cached values"""
         super().setUp()
-        tools._current_arch = None
-        tools._foreign_arch = None
         tools._version = None
 
     def tearDown(self):
         """Reset cached values"""
-        tools._current_arch = None
-        tools._foreign_arch = None
         tools._version = None
-        with suppress(KeyError):
-            os.environ.pop("_ARGCOMPLETE")
         super().tearDown()
 
     def get_lsb_release_filepath(self, name):
         return os.path.join(get_data_dir(), 'lsb_releases', name)
-
-    @contextmanager
-    def create_dpkg(self, content):
-        """Create a temporary dpkg which can be used as context"""
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            sys.path.insert(0, tmpdirname)
-            dpkg_file_path = os.path.join(tmpdirname, "dpkg")
-            with open(dpkg_file_path, mode='w') as f:
-                f.write("#!/bin/sh\n{}".format(content))
-            os.environ['PATH'] = '{}:{}'.format(tmpdirname, os.getenv('PATH'))
-            st = os.stat(dpkg_file_path)
-            os.chmod(dpkg_file_path, st.st_mode | stat.S_IEXEC)
-            yield
-            sys.path.remove(tmpdirname)
-
-    def test_get_current_arch(self):
-        """Current arch is reported"""
-        with self.create_dpkg("echo fooarch"):
-            self.assertEqual(get_current_arch(), "fooarch")
-
-    def test_get_current_arch_twice(self):
-        """Current arch is reported twice and the same"""
-        with self.create_dpkg("echo fooarch"):
-            self.assertEqual(get_current_arch(), "fooarch")
-            self.assertEqual(get_current_arch(), "fooarch")
-
-    def test_get_current_arch_no_dpkg(self):
-        """Assert an error if dpkg exit with an error"""
-        with self.create_dpkg("exit 1"):
-            self.assertRaises(subprocess.CalledProcessError, get_current_arch)
 
     @patch("umake.tools.settings")
     def test_get_current_ubuntu_version(self, settings_module):
@@ -204,20 +169,19 @@ class TestCompletionArchVersion(LoggedTestCase):
         self.assertRaises(BaseException, get_current_ubuntu_version)
         self.expect_warn_error = True
 
-    def test_get_foreign_arch(self):
-        """Get current foreign arch (one)"""
-        with self.create_dpkg("echo fooarch"):
-            self.assertEqual(get_foreign_archs(), ["fooarch"])
 
-    def test_get_foreign_archs(self):
-        """Get current foreign arch (multiple)"""
-        with self.create_dpkg("echo fooarch\necho bararch\necho bazarch"):
-            self.assertEqual(get_foreign_archs(), ["fooarch", "bararch", "bazarch"])
+class TestCompletion(LoggedTestCase):
 
-    def test_get_foreign_archs_error(self):
-        """Get current foreign arch raises an exception if dpkg is in error"""
-        with self.create_dpkg("exit 1"):
-            self.assertRaises(subprocess.CalledProcessError, get_foreign_archs)
+    def setUp(self):
+        super().setUp()
+        self.initial_env = os.environ.copy()
+
+    def tearDown(self):
+        # restore original environment. Do not use the dict copy which erases the object and doesn't have the magical
+        # _Environ which setenv() for subprocess
+        os.environ.clear()
+        os.environ.update(self.initial_env)
+        super().tearDown()
 
     def test_in_completion_mode(self):
         """We return if we are in completion mode"""
@@ -227,6 +191,91 @@ class TestCompletionArchVersion(LoggedTestCase):
     def test_not_incompletion_mode(self):
         """We are not in completion mode by default"""
         self.assertFalse(tools.is_completion_mode())
+
+
+class TestArchVersion(DpkgAptSetup):
+
+    def setUp(self):
+        """Reset previously cached values"""
+        super().setUp()
+        tools._current_arch = None
+        tools._foreign_arch = None
+
+    def tearDown(self):
+        """Reset cached values"""
+        tools._current_arch = None
+        tools._foreign_arch = None
+        super().tearDown()
+
+    def dpkg_error(self, *args, **kwargs):
+        """Simulate a dpkg failure"""
+        raise subprocess.CalledProcessError("dpkg failure", cmd="dpkg")
+
+    def test_get_current_arch(self):
+        """Current arch is reported"""
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.check_output.return_value = "fooarch"
+            self.assertEqual(get_current_arch(), "fooarch")
+
+    def test_get_current_arch_twice(self):
+        """Current arch is reported twice and the same"""
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.check_output.return_value = "fooarch"
+            self.assertEqual(get_current_arch(), "fooarch")
+            self.assertEqual(get_current_arch(), "fooarch")
+            self.assertEquals(subprocess_mock.check_output.call_count, 1, "We cache older value")
+
+    def test_get_current_arch_no_dpkg(self):
+        """Assert an error if dpkg exit with an error"""
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.check_output.side_effect = self.dpkg_error
+            self.assertRaises(subprocess.CalledProcessError, get_current_arch)
+
+    def test_get_foreign_arch(self):
+        """Get current foreign arch (one)"""
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.check_output.return_value = "fooarch"
+            self.assertEqual(get_foreign_archs(), ["fooarch"])
+
+    def test_get_foreign_archs(self):
+        """Get current foreign arch (multiple)"""
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.check_output.return_value = "fooarch\nbararch\nbazarch"
+            self.assertEqual(get_foreign_archs(), ["fooarch", "bararch", "bazarch"])
+
+    def test_get_foreign_archs_error(self):
+        """Get current foreign arch raises an exception if dpkg is in error"""
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.check_output.side_effect = self.dpkg_error
+            self.assertRaises(subprocess.CalledProcessError, get_foreign_archs)
+
+    def test_add_new_foreign_arch(self):
+        """Add a new foreign arch and check that we can retrieve it (cache invalidated)"""
+        tools.add_foreign_arch("foo")
+        self.assertEqual(get_foreign_archs(), ["foo"])
+
+    def test_add_foreign_arch_already_in(self):
+        """Add a foreign arch which was already there should be a noop"""
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.check_output.return_value = "foo"
+            subprocess_mock.call.side_effect = subprocess.call
+            tools.add_foreign_arch("foo")
+
+            self.assertFalse(subprocess_mock.call.called)
+
+    def test_add_current_arch(self):
+        """Add the current arch should be a noop"""
+        tools._current_arch = "foo"
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.call.side_effect = subprocess.call
+            tools.add_foreign_arch("foo")
+
+    def test_add_new_foreign_arch_fail(self):
+        """Add a new foreign arch, but failing should raise an exception"""
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.call.return_value = 1
+
+            self.assertRaises(BaseException, tools.add_foreign_arch, "foo")
 
 
 class TestToolsThreads(LoggedTestCase):

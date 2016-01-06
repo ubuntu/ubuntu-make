@@ -19,117 +19,24 @@
 
 """Tests for the download center module using a local server"""
 
-import apt
 import os
 import shutil
-import stat
 import subprocess
-import tempfile
 from time import time
-from ..tools import get_data_dir, LoggedTestCase, manipulate_path_env
 from unittest.mock import Mock, call, patch
 import umake
+from . import DpkgAptSetup
 from umake.network.requirements_handler import RequirementsHandler
 from umake import tools
 
 
-class TestRequirementsHandler(LoggedTestCase):
+class TestRequirementsHandler(DpkgAptSetup):
     """This will test the download center by sending one or more download requests"""
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.handler = RequirementsHandler()
-
-        apt.apt_pkg.config.set("Dir::Cache::pkgcache", "")
-        apt.apt_pkg.config.set("Dir::Cache::srcpkgcache", "")
-        apt.apt_pkg.config.clear("APT::Update::Post-Invoke")
-        apt.apt_pkg.config.clear("APT::Update::Post-Invoke-Success")
-        apt.apt_pkg.config.clear("DPkg::Post-Invoke")
-        cls.apt_package_dir = os.path.join(get_data_dir(), "apt")
-        cls.apt_status_dir = os.path.join(cls.apt_package_dir, "states")
-
-    def setUp(self):
-        super().setUp()
-        self.chroot_path = tempfile.mkdtemp()
-
-        # create the fake dpkg wrapper
-        os.makedirs(os.path.join(self.chroot_path, "usr", "bin"))
-        self.dpkg = os.path.join(self.chroot_path, "usr", "bin", "dpkg")
-        with open(self.dpkg, "w") as f:
-            # Don't nest fakeroot calls when having some dpkg hook scripts
-            f.write("#!/bin/sh\nprependfakeroot=''\nif [ -z \"$FAKEROOTKEY\" ]; then\nprependfakeroot=fakeroot\nfi\n "
-                    "$prependfakeroot /usr/bin/dpkg --root={root} --force-not-root --force-bad-path "
-                    "--log={root}/var/log/dpkg.log \"$@\"".format(root=self.chroot_path))
-        st = os.stat(self.dpkg)
-        os.chmod(self.dpkg, st.st_mode | stat.S_IEXEC)
-
-        # for arch cache support
-        tools._current_arch = None
-        tools._foreign_arch = None
-        manipulate_path_env(os.path.dirname(self.dpkg))
-
-        # apt requirements
-        apt_etc = os.path.join(self.chroot_path, 'etc', 'apt')
-        os.makedirs(apt_etc)
-        os.makedirs(os.path.join(self.chroot_path, 'var', 'log', 'apt'))
-        with open(os.path.join(apt_etc, 'sources.list'), 'w') as f:
-            f.write('deb file:{} /'.format(self.apt_package_dir))
-
-        # dpkg requirements
-        dpkg_dir = os.path.join(self.chroot_path, 'var', 'lib', 'dpkg')
-        os.makedirs(dpkg_dir)
-        os.mkdir(os.path.join(os.path.join(dpkg_dir, 'info')))
-        os.mkdir(os.path.join(os.path.join(dpkg_dir, 'triggers')))
-        os.mkdir(os.path.join(os.path.join(dpkg_dir, 'updates')))
-        open(os.path.join(dpkg_dir, 'status'), 'w').close()
-        open(os.path.join(dpkg_dir, 'available'), 'w').close()
-        self.dpkg_dir = dpkg_dir
-
-        cache = apt.Cache(rootdir=self.chroot_path)
-        apt.apt_pkg.config.set("Dir::Bin::dpkg", self.dpkg)  # must be called after initializing the rootdir cache
-        cache.update()
-        cache.open()
-        self.handler.cache = cache
-
-        self.done_callback = Mock()
-
-        self._saved_seteuid_fn = os.seteuid
-        self._saved_setegid_fn = os.setegid
-        self._saved_geteuid_fn = os.geteuid
-        self._saved_getenv = os.getenv
-
-        self.user_uid, self.user_gid = (4242, 4242)
-
-        os.seteuid = Mock()
-        os.setegid = Mock()
-        os.geteuid = Mock()
-        os.geteuid.return_value = self.user_uid
-        os.getenv = Mock(side_effect=self._mock_get_env)
-
-    def tearDown(self):
-        # remove arch cache support
-        manipulate_path_env(os.path.dirname(self.dpkg), remove=True)
-
-        tools._current_arch = None
-        tools._foreign_arch = None
-
-        shutil.rmtree(self.chroot_path)
-
-        os.seteuid = self._saved_seteuid_fn
-        os.setegid = self._saved_setegid_fn
-        os.geteuid = self._saved_geteuid_fn
-        os.getenv = self._saved_getenv
-
-        super().tearDown()
-
-    def _mock_get_env(self, env, default=None):
-        if os.geteuid() == 0:
-            if env == "SUDO_UID":
-                return str(self.user_uid)
-            elif env == "SUDO_GID":
-                return str(self.user_gid)
-        return self._saved_getenv(env)
 
     def count_number_progress_call(self, call_args_list, tag):
         """Count the number of tag in progress call and return it"""
@@ -537,7 +444,8 @@ class TestRequirementsHandler(LoggedTestCase):
         self.handler.cache.open()  # reopen the cache with the new added architecture
 
         bucket = ["testpackagefoo:foo", "testpackage1"]
-        with patch("umake.network.requirements_handler.subprocess") as subprocess_mock:
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.check_output.side_effect = subprocess.check_output
             self.handler.install_bucket(bucket, lambda x: "", self.done_callback)
             self.wait_for_callback(self.done_callback)
 
@@ -559,7 +467,7 @@ class TestRequirementsHandler(LoggedTestCase):
     def test_install_with_foreign_foreign_arch_add_fails(self):
         """Install packages with a foreign arch, where adding a foreign arch fails"""
         bucket = ["testpackagefoo:foo", "testpackage1"]
-        with patch("umake.network.requirements_handler.subprocess") as subprocess_mock:
+        with patch("umake.tools.subprocess") as subprocess_mock:
             subprocess_mock.call.return_value = 1
             self.handler.install_bucket(bucket, lambda x: "", self.done_callback)
             self.wait_for_callback(self.done_callback)

@@ -51,6 +51,10 @@ CONFIG_PATH=/tmp/config
 rm -rf ~/ubuntu-make*
 rm -rf ${CONFIG_PATH}
 
+# enable localhost ssh connection without pass
+ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
 # add ppa for external content assets like jayatana
 sudo add-apt-repository -y ppa:ubuntu-desktop/ubuntu-make
 
