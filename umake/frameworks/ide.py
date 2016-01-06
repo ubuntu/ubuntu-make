@@ -26,10 +26,11 @@ from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
 import grp
+from io import StringIO
 import json
 import logging
 import os
-from os.path import join, isfile
+from os.path import join
 import pwd
 import platform
 import re
@@ -37,9 +38,9 @@ import subprocess
 from urllib import parse
 
 import umake.frameworks.baseinstaller
-from umake.interactions import DisplayMessage
+from umake.interactions import DisplayMessage, LicenseAgreement
 from umake.network.download_center import DownloadCenter, DownloadItem
-from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop
+from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop, strip_tags
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -77,7 +78,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
                          required_files_path=["eclipse"],
-                         packages_requirements=['openjdk-8-jdk'])
+                         packages_requirements=['openjdk-7-jdk'])
 
         self.bits = '' if platform.machine() == 'i686' else 'x86_64'
 
