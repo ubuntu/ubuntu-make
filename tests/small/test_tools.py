@@ -249,6 +249,34 @@ class TestArchVersion(DpkgAptSetup):
             subprocess_mock.check_output.side_effect = self.dpkg_error
             self.assertRaises(subprocess.CalledProcessError, get_foreign_archs)
 
+    def test_add_new_foreign_arch(self):
+        """Add a new foreign arch and check that we can retrieve it (cache invalidated)"""
+        tools.add_foreign_arch("foo")
+        self.assertEqual(get_foreign_archs(), ["foo"])
+
+    def test_add_foreign_arch_already_in(self):
+        """Add a foreign arch which was already there should be a noop"""
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.check_output.return_value = "foo"
+            subprocess_mock.call.side_effect = subprocess.call
+            tools.add_foreign_arch("foo")
+
+            self.assertFalse(subprocess_mock.call.called)
+
+    def test_add_current_arch(self):
+        """Add the current arch should be a noop"""
+        tools._current_arch = "foo"
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.call.side_effect = subprocess.call
+            tools.add_foreign_arch("foo")
+
+    def test_add_new_foreign_arch_fail(self):
+        """Add a new foreign arch, but failing should raise an exception"""
+        with patch("umake.tools.subprocess") as subprocess_mock:
+            subprocess_mock.call.return_value = 1
+
+            self.assertRaises(BaseException, tools.add_foreign_arch, "foo")
+
 
 class TestToolsThreads(LoggedTestCase):
     """Test main loop threading helpers"""
