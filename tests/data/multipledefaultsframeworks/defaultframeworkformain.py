@@ -25,9 +25,9 @@ import umake.frameworks
 
 class FrameworkA(umake.frameworks.BaseFramework):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Framework A", description="Description for framework A", is_category_default=True,
-                         category=category, install_path_dir="custom/frameworka")
+                         install_path_dir="custom/frameworka", **kwargs)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()

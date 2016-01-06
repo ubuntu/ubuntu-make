@@ -31,9 +31,9 @@ class RCategory(umake.frameworks.BaseCategory):
 
 class FrameworkRuninstalled(umake.frameworks.BaseFramework):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Framework R uninstalled", description="For removal", only_for_removal=True,
-                         category=category)
+                         **kwargs)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
@@ -44,9 +44,9 @@ class FrameworkRuninstalled(umake.frameworks.BaseFramework):
 
 class FrameworkRinstalled(umake.frameworks.BaseFramework):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Framework R installed", description="For removal", only_for_removal=True,
-                         category=category)
+                         **kwargs)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
@@ -61,9 +61,9 @@ class FrameworkRinstalled(umake.frameworks.BaseFramework):
 
 class FrameworkRinstallednotinstallable(umake.frameworks.BaseFramework):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Framework R installed not installable",
-                         description="For removal without only for removal", category=category)
+                         description="For removal without only for removal", **kwargs)
 
     def setup(self, install_path=None, auto_accept_license=False):
         print("here")
