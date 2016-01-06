@@ -43,6 +43,6 @@ class Uninstantiable(umake.frameworks.BaseFramework):
 
 class InheritedFromUninstantiable(Uninstantiable):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Inherited From Uninstantiable", description="Framework Inheriting Uninstantiable",
-                         category=category)
+                         **kwargs)
