@@ -11,6 +11,7 @@ MAINTAINER	Didier Roche <didrocks@ubuntu.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 ADD debian/control /tmp/
+ADD docker/umake_docker.pub /tmp/
 ADD tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.eclipse.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/data.services.jetbrains.com.crt /usr/local/share/ca-certificates/
@@ -49,6 +50,11 @@ RUN \
   echo "user ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/bar && \
   adduser --disabled-password --gecos "" user && \
   echo user:user | chpasswd && \
+
+# add the ubuntu make ssh key to the list of authorized ones
+  mkdir -p /home/user/.ssh && \
+  cat /tmp/umake_docker.pub >> /home/user/.ssh/authorized_keys && \
+  chown -R user:user /home/user/ && \
 
 # Twisted for a mock FTP server.
   apt-get install python-twisted-core -y && \
