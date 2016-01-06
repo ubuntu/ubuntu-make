@@ -151,7 +151,7 @@ class TestDownloadCenter(LoggedTestCase):
         """Ensure we perform (or don't) content decoding properly."""
 
         # Use an existing .gz file, at data/server-content/www.eclipse.org/.../eclipse-standard-luna-R-linux-gtk.tar.gz
-        filename = "www.eclipse.org/technology/epp/downloads/release/luna/R/eclipse-standard-luna-R-linux-gtk.tar.gz"
+        filename = "www.eclipse.org/technology/epp/downloads/release/version/point_release/eclipse-java-linux-gtk.tar.gz"
         length = 10240
         compressed_length = 266
         url = self.build_server_address(filename + '-setheaders?content-encoding=gzip')
