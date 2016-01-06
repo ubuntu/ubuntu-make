@@ -12,7 +12,7 @@ sudo apt update
 sudo apt install -y ubuntu-desktop
 
 # install test collect and runtime dependencies
-sudo apt install -y git docker.io sshpass sloccount libjs-jquery libjs-jquery-hotkeys libjs-jquery-isonscreen libjs-jquery-tablesorter
+sudo apt install -y git docker.io sloccount libjs-jquery libjs-jquery-hotkeys libjs-jquery-isonscreen libjs-jquery-tablesorter
 
 # configure docker
 sudo addgroup $(whoami) docker
