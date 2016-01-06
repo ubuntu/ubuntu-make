@@ -152,6 +152,7 @@ class RequirementsHandler(object, metaclass=Singleton):
                 root_lock.acquire()
                 os.seteuid(0)
                 os.setegid(0)
+                self._force_reload_apt_cache()
                 self.cache.update()
             finally:
                 switch_to_current_user()
