@@ -42,6 +42,23 @@ class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
 
+    def test_install_with_changed_download_page(self):
+        """Installing eclipse ide should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.eclipse.org", "downloads",
+                                               "index.html")
+        umake_command = self.command('{} ide eclipse'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_with_changed_checksum_page(self):
+        """Installing eclipse ide should fail if checksum link is unparseable"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.eclipse.org", "technology", "epp",
+                                               "downloads", "release", "version", "point_release",
+                                               "eclipse-java-linux-gtk-x86_64.tar.gz.sha512")
+        umake_command = self.command('{} ide eclipse'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
 
 class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     """This will test the Idea IDE integration inside a container"""
