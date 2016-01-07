@@ -151,7 +151,8 @@ class TestDownloadCenter(LoggedTestCase):
         """Ensure we perform (or don't) content decoding properly."""
 
         # Use an existing .gz file, at data/server-content/www.eclipse.org/.../eclipse-standard-luna-R-linux-gtk.tar.gz
-        filename = "www.eclipse.org/technology/epp/downloads/release/luna/R/eclipse-standard-luna-R-linux-gtk.tar.gz"
+        filename = "www.eclipse.org/technology/epp/downloads/release/version/"\
+                   "point_release/eclipse-java-linux-gtk.tar.gz"
         length = 10240
         compressed_length = 266
         url = self.build_server_address(filename + '-setheaders?content-encoding=gzip')
@@ -231,6 +232,26 @@ class TestDownloadCenter(LoggedTestCase):
         DownloadCenter([DownloadItem(request,
                                      Checksum(ChecksumType.sha256,
                                               'b1b113c6ed8ab3a14779f7c54179eac2b87d39fcebbf65a50556b8d68caaa2fb'))],
+                       self.callback)
+        self.wait_for_callback(self.callback)
+
+        result = self.callback.call_args[0][0][request]
+        self.assertTrue(self.callback.called)
+        self.assertEqual(self.callback.call_count, 1)
+        with open(join(self.server_dir, filename), 'rb') as file_on_disk:
+            self.assertEqual(file_on_disk.read(),
+                             result.fd.read())
+        self.assertIsNone(result.buffer)
+        self.assertIsNone(result.error)
+
+    def test_download_with_sha512sum(self):
+        """we deliver once successful download, matching sha512sum"""
+        filename = "simplefile"
+        request = self.build_server_address(filename)
+        DownloadCenter([DownloadItem(request,
+                                     Checksum(ChecksumType.sha512,
+                                              '74e20d520ba4ecfdb59d98ac213deccecf591c9c6bfc5996ac158ab6facd6611cce7dd2'
+                                              '2120b63ebe9217f159506f352ce0ee6c0c2a1d200841ae21635dc5f9a'))],
                        self.callback)
         self.wait_for_callback(self.callback)
 

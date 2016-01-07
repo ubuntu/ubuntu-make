@@ -68,69 +68,92 @@ class IdeCategory(umake.frameworks.BaseCategory):
 
 class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
     """The Eclipse Foundation distribution."""
-    DOWNLOAD_URL_PAT = "https://www.eclipse.org/downloads/download.php?" \
-                       "file=/technology/epp/downloads/release/luna/R/" \
-                       "eclipse-standard-luna-R-linux-gtk{arch}.tar.gz{suf}" \
-                       "&r=1"
 
     def __init__(self, category):
         super().__init__(name="Eclipse",
-                         description=_("Pure Eclipse Luna (4.4)"),
+                         description=_("Eclipse Java"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page=None,
+                         download_page='https://www.eclipse.org/downloads/?os=Linux',
+                         checksum_type=ChecksumType.sha512,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
                          required_files_path=["eclipse"],
                          packages_requirements=['openjdk-7-jdk'])
 
-    def download_provider_page(self):
-        """First, we need to fetch the MD5, then kick off the proceedings.
+        self.bits = '' if platform.machine() == 'i686' else 'x86_64'
 
-        This could actually be done in parallel, in a future version.
-        """
-        logger.debug("Preparing to download MD5.")
+    @MainLoop.in_mainloop_thread
+    def get_sha_and_start_download(self, download_result):
+        res = download_result[self.sha512_url]
+        sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
+        # you get and store self.download_url
+        url = re.sub('.sha512', '', self.sha512_url)
+        if url is None:
+            logger.error("Missing url")
+            UI.return_main_screen(status_code=1)
+        if sha512 is None:
+            logger.error("Missin sha512")
+            UI.return_main_screen(status_code=1)
+        logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
+        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, sha512)))
+        self.start_download_and_install()
 
-        arch = platform.machine()
-        if arch == 'i686':
-            md5_url = self.DOWNLOAD_URL_PAT.format(arch='', suf='.md5')
-        elif arch == 'x86_64':
-            md5_url = self.DOWNLOAD_URL_PAT.format(arch='-x86_64', suf='.md5')
+    def parse_download_link(self, line, in_download):
+        """Parse Eclipse download links"""
+        url, sha512 = (None, None)
+        if "eclipse-java" in line and "eclipse-java-ee" not in line and "linux" in line and self.bits in line:
+            in_download = True
         else:
-            logger.error("Unsupported architecture: {}".format(arch))
+            in_download = False
+        if in_download:
+            p = re.search(r'href="(.*)" title', line)
+            with suppress(AttributeError):
+                self.sha512_url = str(self.download_page).replace('?os=Linux', '')
+                self.sha512_url = self.sha512_url + p.group(1) + '.sha512&r=1'
+                DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
+                               on_done=self.get_sha_and_start_download, download=False)
+        return (None, in_download)
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        """Download files to download + license and check it"""
+        logger.debug("Parse download metadata")
+
+        error_msg = result[self.download_page].error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen(status_code=1)
 
-        @MainLoop.in_mainloop_thread
-        def done(download_result):
-            res = download_result[md5_url]
+        url, checksum = (None, None)
+        in_download = False
+        for line in result[self.download_page].buffer:
+            line_content = line.decode()
 
-            if res.error:
-                logger.error(res.error)
-                UI.return_main_screen(status_code=1)
+            if self.expect_license and not self.auto_accept_license:
+                in_license = self.parse_license(line_content, license_txt, in_license)
 
-            # Should be ASCII anyway.
-            md5 = res.buffer.getvalue().decode('utf-8').split()[0]
-            logger.debug("Downloaded MD5 is {}".format(md5))
-
-            logger.debug("Preparing to download the main archive.")
-            if arch == 'i686':
-                download_url = self.DOWNLOAD_URL_PAT.format(arch='', suf='')
-            elif arch == 'x86_64':
-                download_url = self.DOWNLOAD_URL_PAT.format(arch='-x86_64',
-                                                            suf='')
-            self.download_requests.append(DownloadItem(download_url, Checksum(ChecksumType.md5, md5)))
-            self.start_download_and_install()
-
-        DownloadCenter(urls=[DownloadItem(md5_url, None)], on_done=done, download=False)
+            # always take the first valid (url, checksum) if not match_last_link is set to True:
+            download = None
+            (download, in_download) = self.parse_download_link(line_content, in_download)
+            if download is not None:
+                (newurl, new_checksum) = download
+                url = newurl if newurl is not None else url
+                checksum = new_checksum if new_checksum is not None else checksum
+                if url is not None:
+                    if self.checksum_type and checksum:
+                        logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
+                    elif not self.checksum_type:
+                        logger.debug("Found download link for {}".format(url))
 
     def post_install(self):
-        """Create the Luna launcher"""
+        """Create the Eclipse launcher"""
         icon_filename = "icon.xpm"
         icon_path = join(self.install_path, icon_filename)
         exec_path = '"{}" %f'.format(join(self.install_path, "eclipse"))
-        comment = _("The Eclipse Luna Integrated Development Environment")
+        comment = _("The Eclipse Integrated Development Environment")
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
-                        get_application_desktop_file(name=_("Eclipse Luna"),
+                        get_application_desktop_file(name=_("Eclipse"),
                                                      icon_path=icon_path,
                                                      exec=exec_path,
                                                      comment=comment,
