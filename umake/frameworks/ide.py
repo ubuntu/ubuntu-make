@@ -82,42 +82,66 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
 
         self.bits = '' if platform.machine() == 'i686' else 'x86_64'
 
-    def download_sha512(self, sha512_url):
-        logger.debug("Preparing to Download SHA1")
-
-        def done(download_result):
-            res = download_result[sha512_url]
-
-            if res.error:
-                logger.error(res.error)
-                UI.return_main_screen(status_code=1)
-
-            # Should be ASCII anyway.
-            self.sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
-        DownloadCenter(urls=[DownloadItem(sha512_url, None)], on_done=done, download=False)
-        # It has to wait for the download and decode of the sha512sum
-        while self.sha512 is None:
-            pass
-        logger.debug("Downloaded SHA512 is {}".format(self.sha512))
+    @MainLoop.in_mainloop_thread
+    def get_sha_and_start_download(self, download_result):
+        res = download_result[self.sha512_url]
+        sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
+        # you get and store self.download_url
+        url = re.sub('.sha512', '', self.sha512_url)
+        logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
+        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, sha512)))
+        self.start_download_and_install()
 
     def parse_download_link(self, line, in_download):
         """Parse Eclipse download links"""
-        url, self.sha512 = (None, None)
-        if "eclipse-java" in line and self.bits in line:
+        url, sha512 = (None, None)
+        if "eclipse-java" in line and "eclipse-java-ee" not in line and "linux" in line and self.bits in line:
             in_download = True
         else:
             in_download = False
         if in_download:
             p = re.search(r'href="(.*)" title', line)
             with suppress(AttributeError):
-                url = self.download_page + p.group(1) + '&r=1'
-                sha512_url = self.download_page + p.group(1) + '.sha512&r=1'
-                self.download_sha512(sha512_url)
-                logger.debug("SHA512 in parser is: " + str(self.sha512))
+                # self.url = self.download_page + p.group(1) + '&r=1'
+                self.sha512_url = self.download_page + p.group(1) + '.sha512&r=1'
+                DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
+                               on_done=self.get_sha_and_start_download, download=False)
 
-        if url is None and self.sha512 is None:
+        if sha512 is None:
             return (None, in_download)
-        return ((url, self.sha512), in_download)
+        return ((None, sha512), in_download)
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        """Download files to download + license and check it"""
+        logger.debug("Parse download metadata")
+
+        error_msg = result[self.download_page].error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        url, checksum = (None, None)
+        in_download = False
+        for line in result[self.download_page].buffer:
+            line_content = line.decode()
+
+            if self.expect_license and not self.auto_accept_license:
+                in_license = self.parse_license(line_content, license_txt, in_license)
+
+            # always take the first valid (url, checksum) if not match_last_link is set to True:
+            download = None
+            if url is None or (self.checksum_type and not checksum) or self.match_last_link:
+                (download, in_download) = self.parse_download_link(line_content, in_download)
+            if download is not None:
+                (newurl, new_checksum) = download
+                url = newurl if newurl is not None else url
+                checksum = new_checksum if new_checksum is not None else checksum
+                if url is not None:
+                    if self.checksum_type and checksum:
+                        logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
+                    elif not self.checksum_type:
+                        logger.debug("Found download link for {}".format(url))
 
     def post_install(self):
         """Create the Eclipse launcher"""
