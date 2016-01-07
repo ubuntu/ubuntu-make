@@ -88,6 +88,12 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
         # you get and store self.download_url
         url = re.sub('.sha512', '', self.sha512_url)
+        if url is None:
+            logger.error("Missing url")
+            UI.return_main_screen(status_code=1)
+        if sha512 is None:
+            logger.error("Missin sha512")
+            UI.return_main_screen(status_code=1)
         logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
         self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, sha512)))
         self.start_download_and_install()
@@ -106,10 +112,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                 self.sha512_url = self.sha512_url + p.group(1) + '.sha512&r=1'
                 DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
                                on_done=self.get_sha_and_start_download, download=False)
-
-        if sha512 is None:
-            return (None, in_download)
-        return ((None, sha512), in_download)
+        return (None, in_download)
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -131,8 +134,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
 
             # always take the first valid (url, checksum) if not match_last_link is set to True:
             download = None
-            if url is None or (self.checksum_type and not checksum) or self.match_last_link:
-                (download, in_download) = self.parse_download_link(line_content, in_download)
+            (download, in_download) = self.parse_download_link(line_content, in_download)
             if download is not None:
                 (newurl, new_checksum) = download
                 url = newurl if newurl is not None else url
