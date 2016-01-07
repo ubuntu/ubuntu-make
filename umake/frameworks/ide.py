@@ -73,7 +73,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Eclipse",
                          description=_("Eclipse Java"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page='https://www.eclipse.org/downloads/',
+                         download_page='https://www.eclipse.org/downloads/?os=Linux',
                          checksum_type=ChecksumType.sha512,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
@@ -102,8 +102,8 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         if in_download:
             p = re.search(r'href="(.*)" title', line)
             with suppress(AttributeError):
-                # self.url = self.download_page + p.group(1) + '&r=1'
-                self.sha512_url = self.download_page + p.group(1) + '.sha512&r=1'
+                self.sha512_url = str(self.download_page).replace('?os=Linux', '')
+                self.sha512_url = self.sha512_url + p.group(1) + '.sha512&r=1'
                 DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
                                on_done=self.get_sha_and_start_download, download=False)
 
