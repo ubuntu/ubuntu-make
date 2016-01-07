@@ -30,7 +30,7 @@ import stat
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem
-from umake.tools import create_launcher, get_application_desktop_file, get_current_arch, ChecksumType
+from umake.tools import as_root, create_launcher, get_application_desktop_file, get_current_arch, ChecksumType
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -93,16 +93,15 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
 def _chrome_sandbox_setuid(path):
     """Chown and setUID to chrome sandbox"""
     # switch to root
-    os.seteuid(0)
-    os.setegid(0)
-    try:
-        os.chown(path, 0, -1)
-        os.chmod(path, stat.S_ISUID | stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
-        logger.debug("Changed setUID mode {}".format(path))
-        return True
-    except Exception as e:
-        logger.error("Couldn't change owner and file perm to {}: {}".format(path, e))
-        return False
+    with as_root():
+        try:
+            os.chown(path, 0, -1)
+            os.chmod(path, stat.S_ISUID | stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+            logger.debug("Changed setUID mode {}".format(path))
+            return True
+        except Exception as e:
+            logger.error("Couldn't change owner and file perm to {}: {}".format(path, e))
+            return False
 
 
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):

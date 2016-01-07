@@ -40,24 +40,24 @@ from urllib import parse
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage, LicenseAgreement
 from umake.network.download_center import DownloadCenter, DownloadItem
-from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop, strip_tags
+from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop,\
+    strip_tags
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
 
 
 def _add_to_group(user, group):
-    """Add user to group. Should only be used in an other process"""
+    """Add user to group"""
     # switch to root
-    os.seteuid(0)
-    os.setegid(0)
-    try:
-        output = subprocess.check_output(["adduser", user, group])
-        logger.debug("Added {} to {}: {}".format(user, group, output))
-        return True
-    except subprocess.CalledProcessError as e:
-        logger.error("Couldn't add {} to {}".format(user, group))
-        return False
+    with as_root():
+        try:
+            output = subprocess.check_output(["adduser", user, group])
+            logger.debug("Added {} to {}: {}".format(user, group, output))
+            return True
+        except subprocess.CalledProcessError as e:
+            logger.error("Couldn't add {} to {}".format(user, group))
+            return False
 
 
 class IdeCategory(umake.frameworks.BaseCategory):

@@ -215,19 +215,13 @@ def add_foreign_arch(new_arch):
     if new_arch not in get_foreign_archs() and new_arch != get_current_arch():
         logger.info("Adding foreign arch: {}".format(new_arch))
         with open(os.devnull, "w") as f:
-            try:
-                root_lock.acquire()
-                os.seteuid(0)
-                os.setegid(0)
+            with as_root():
                 if subprocess.call(["dpkg", "--add-architecture", new_arch], stdout=f) != 0:
                     msg = _("Can't add foreign architecture {}").format(new_arch)
                     raise BaseException(msg)
-                # mark the new arch as added and invalidate the cache
-                arch_added = True
-                _foreign_arch = None
-            finally:
-                switch_to_current_user()
-                root_lock.release()
+    # mark the new arch as added and invalidate the cache
+    arch_added = True
+    _foreign_arch = None
     return arch_added
 
 
