@@ -73,7 +73,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Eclipse",
                          description=_("Eclipse Java"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page='https://www.eclipse.org/downloads/?os=Linux',
+                         download_page='https://www.eclipse.org/downloads/',
                          checksum_type=ChecksumType.sha512,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
@@ -81,6 +81,8 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                          packages_requirements=['openjdk-7-jdk'])
 
         self.bits = '' if platform.machine() == 'i686' else 'x86_64'
+        self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
+                                      "Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36"}
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
@@ -97,6 +99,10 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
         self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, sha512)))
         self.start_download_and_install()
+
+    def download_provider_page(self):
+        logger.debug("Download application provider page")
+        DownloadCenter([DownloadItem(self.download_page, headers=self.headers)], self.get_metadata, download=False)
 
     def parse_download_link(self, line, in_download):
         """Parse Eclipse download links"""
@@ -115,7 +121,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         return (None, in_download)
 
     @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
+    def get_metadata(self, result):
         """Download files to download + license and check it"""
         logger.debug("Parse download metadata")
 
