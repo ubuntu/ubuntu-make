@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 from collections import namedtuple
-from contextlib import suppress
+from contextlib import contextmanager, suppress
 from enum import unique, Enum
 from gettext import gettext as _
 from gi.repository import GLib, Gio
@@ -371,6 +371,19 @@ def switch_to_current_user():
     # fallback to root user if no SUDO_GID (should be su - root)
     os.setegid(int(os.getenv("SUDO_GID", default=0)))
     os.seteuid(int(os.getenv("SUDO_UID", default=0)))
+
+
+@contextmanager
+def as_root():
+    # block all other threads making sensitive operations
+    root_lock.acquire()
+    try:
+        os.seteuid(0)
+        os.setegid(0)
+        yield
+    finally:
+        switch_to_current_user()
+        root_lock.release()
 
 
 # TODO: make that useful for more shells
