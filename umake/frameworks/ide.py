@@ -84,22 +84,6 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
                                       "Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36"}
 
-    @MainLoop.in_mainloop_thread
-    def get_sha_and_start_download(self, download_result):
-        res = download_result[self.sha512_url]
-        sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
-        # you get and store self.download_url
-        url = re.sub('.sha512', '', self.sha512_url)
-        if url is None:
-            logger.error("Download page changed its syntax or is not parsable (missing url)")
-            UI.return_main_screen(status_code=1)
-        if sha512 is None:
-            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
-        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, sha512)))
-        self.start_download_and_install()
-
     def download_provider_page(self):
         logger.debug("Download application provider page")
         DownloadCenter([DownloadItem(self.download_page, headers=self.headers)], self.get_metadata, download=False)
@@ -142,6 +126,22 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         if not url_found:
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
+
+    @MainLoop.in_mainloop_thread
+    def get_sha_and_start_download(self, download_result):
+        res = download_result[self.sha512_url]
+        sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
+        # you get and store self.download_url
+        url = re.sub('.sha512', '', self.sha512_url)
+        if url is None:
+            logger.error("Download page changed its syntax or is not parsable (missing url)")
+            UI.return_main_screen(status_code=1)
+        if sha512 is None:
+            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
+            UI.return_main_screen(status_code=1)
+        logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
+        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, sha512)))
+        self.start_download_and_install()
 
     def post_install(self):
         """Create the Eclipse launcher"""
