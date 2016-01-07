@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 from collections import namedtuple
-from contextlib import suppress
+from contextlib import contextmanager, suppress
 from enum import unique, Enum
 from gettext import gettext as _
 from gi.repository import GLib, Gio
@@ -216,19 +216,13 @@ def add_foreign_arch(new_arch):
     if new_arch not in get_foreign_archs() and new_arch != get_current_arch():
         logger.info("Adding foreign arch: {}".format(new_arch))
         with open(os.devnull, "w") as f:
-            try:
-                root_lock.acquire()
-                os.seteuid(0)
-                os.setegid(0)
+            with as_root():
                 if subprocess.call(["dpkg", "--add-architecture", new_arch], stdout=f) != 0:
                     msg = _("Can't add foreign architecture {}").format(new_arch)
                     raise BaseException(msg)
-                # mark the new arch as added and invalidate the cache
-                arch_added = True
-                _foreign_arch = None
-            finally:
-                switch_to_current_user()
-                root_lock.release()
+    # mark the new arch as added and invalidate the cache
+    arch_added = True
+    _foreign_arch = None
     return arch_added
 
 
@@ -372,6 +366,19 @@ def switch_to_current_user():
     # fallback to root user if no SUDO_GID (should be su - root)
     os.setegid(int(os.getenv("SUDO_GID", default=0)))
     os.seteuid(int(os.getenv("SUDO_UID", default=0)))
+
+
+@contextmanager
+def as_root():
+    # block all other threads making sensitive operations
+    root_lock.acquire()
+    try:
+        os.seteuid(0)
+        os.setegid(0)
+        yield
+    finally:
+        switch_to_current_user()
+        root_lock.release()
 
 
 # TODO: make that useful for more shells

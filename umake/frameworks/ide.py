@@ -40,24 +40,24 @@ from urllib import parse
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage, LicenseAgreement
 from umake.network.download_center import DownloadCenter, DownloadItem
-from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop, strip_tags
+from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop,\
+    strip_tags
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
 
 
 def _add_to_group(user, group):
-    """Add user to group. Should only be used in an other process"""
+    """Add user to group"""
     # switch to root
-    os.seteuid(0)
-    os.setegid(0)
-    try:
-        output = subprocess.check_output(["adduser", user, group])
-        logger.debug("Added {} to {}: {}".format(user, group, output))
-        return True
-    except subprocess.CalledProcessError as e:
-        logger.error("Couldn't add {} to {}".format(user, group))
-        return False
+    with as_root():
+        try:
+            output = subprocess.check_output(["adduser", user, group])
+            logger.debug("Added {} to {}: {}".format(user, group, output))
+            return True
+        except subprocess.CalledProcessError as e:
+            logger.error("Couldn't add {} to {}".format(user, group))
+            return False
 
 
 class IdeCategory(umake.frameworks.BaseCategory):
@@ -73,7 +73,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Eclipse",
                          description=_("Eclipse Java"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page='https://www.eclipse.org/downloads/?os=Linux',
+                         download_page='https://www.eclipse.org/downloads/',
                          checksum_type=ChecksumType.sha512,
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse.desktop',
@@ -81,26 +81,16 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
                          packages_requirements=['openjdk-7-jdk'])
 
         self.bits = '' if platform.machine() == 'i686' else 'x86_64'
+        self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
+                                      "Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36"}
 
-    @MainLoop.in_mainloop_thread
-    def get_sha_and_start_download(self, download_result):
-        res = download_result[self.sha512_url]
-        sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
-        # you get and store self.download_url
-        url = re.sub('.sha512', '', self.sha512_url)
-        if url is None:
-            logger.error("Missing url")
-            UI.return_main_screen(status_code=1)
-        if sha512 is None:
-            logger.error("Missin sha512")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
-        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, sha512)))
-        self.start_download_and_install()
+    def download_provider_page(self):
+        logger.debug("Download application provider page")
+        DownloadCenter([DownloadItem(self.download_page, headers=self.headers)], self.get_metadata, download=False)
 
     def parse_download_link(self, line, in_download):
         """Parse Eclipse download links"""
-        url, sha512 = (None, None)
+        url_found = False
         if "eclipse-java" in line and "eclipse-java-ee" not in line and "linux" in line and self.bits in line:
             in_download = True
         else:
@@ -110,12 +100,13 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
             with suppress(AttributeError):
                 self.sha512_url = str(self.download_page).replace('?os=Linux', '')
                 self.sha512_url = self.sha512_url + p.group(1) + '.sha512&r=1'
+                url_found = True
                 DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
                                on_done=self.get_sha_and_start_download, download=False)
-        return (None, in_download)
+        return (url_found, in_download)
 
     @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
+    def get_metadata(self, result):
         """Download files to download + license and check it"""
         logger.debug("Parse download metadata")
 
@@ -124,26 +115,33 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen(status_code=1)
 
-        url, checksum = (None, None)
         in_download = False
+        url_found = False
         for line in result[self.download_page].buffer:
             line_content = line.decode()
+            (_url_found, in_download) = self.parse_download_link(line_content, in_download)
+            if not url_found:
+                url_found = _url_found
 
-            if self.expect_license and not self.auto_accept_license:
-                in_license = self.parse_license(line_content, license_txt, in_license)
+        if not url_found:
+            logger.error("Download page changed its syntax or is not parsable")
+            UI.return_main_screen(status_code=1)
 
-            # always take the first valid (url, checksum) if not match_last_link is set to True:
-            download = None
-            (download, in_download) = self.parse_download_link(line_content, in_download)
-            if download is not None:
-                (newurl, new_checksum) = download
-                url = newurl if newurl is not None else url
-                checksum = new_checksum if new_checksum is not None else checksum
-                if url is not None:
-                    if self.checksum_type and checksum:
-                        logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
-                    elif not self.checksum_type:
-                        logger.debug("Found download link for {}".format(url))
+    @MainLoop.in_mainloop_thread
+    def get_sha_and_start_download(self, download_result):
+        res = download_result[self.sha512_url]
+        sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
+        # you get and store self.download_url
+        url = re.sub('.sha512', '', self.sha512_url)
+        if url is None:
+            logger.error("Download page changed its syntax or is not parsable (missing url)")
+            UI.return_main_screen(status_code=1)
+        if sha512 is None:
+            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
+            UI.return_main_screen(status_code=1)
+        logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
+        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, sha512)))
+        self.start_download_and_install()
 
     def post_install(self):
         """Create the Eclipse launcher"""
