@@ -36,7 +36,7 @@ from ..tools import change_xdg_path, get_data_dir, LoggedTestCase, INSTALL_DIR
 from umake import settings, tools
 from umake.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
     create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_icon_path, get_launcher_path, copy_icon
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 
 class TestConfigHandler(LoggedTestCase):
@@ -767,6 +767,76 @@ class TestMiscTools(LoggedTestCase):
 
         osmock.setegid.assert_called_once_with(0)
         osmock.seteuid.assert_called_once_with(0)
+
+    @patch("umake.tools.os")
+    @patch("umake.tools.switch_to_current_user")
+    def test_as_root(self, switch_to_current_usermock, osmock):
+        """Switch as root when everything is permitted"""
+        with tools.as_root():
+            osmock.seteuid.assert_called_once_with(0)
+            osmock.setegid.assert_called_once_with(0)
+            self.assertFalse(switch_to_current_usermock.called, "didn't switch to current user in context")
+        self.assertTrue(switch_to_current_usermock.called, "switch back to user when exiting context")
+
+    @patch("umake.tools.os")
+    @patch("umake.tools.switch_to_current_user")
+    def test_as_root_euid_perm_denied(self, switch_to_current_usermock, osmock):
+        """Switch as root raise exception when euid permission is denied"""
+        def raiseException(self):
+            raise PermissionError("")
+        osmock.seteuid.side_effect = raiseException
+        exception_raised = False
+        try:
+            with tools.as_root():
+                pass
+        except PermissionError:
+            exception_raised = True
+        self.assertTrue(exception_raised, "Permission Error was raised")
+        self.assertTrue(switch_to_current_usermock.called, "switch back to user when exiting context")
+
+    @patch("umake.tools.os")
+    @patch("umake.tools.switch_to_current_user")
+    def test_as_root_egid_perm_denied(self, switch_to_current_usermock, osmock):
+        """Switch as root raise exception when egid permission is denied"""
+        def raiseException(self):
+            raise PermissionError("")
+        osmock.setegid.side_effect = raiseException
+        exception_raised = False
+        try:
+            with tools.as_root():
+                pass
+        except PermissionError:
+            exception_raised = True
+        self.assertTrue(exception_raised, "Permission Error was raised")
+        self.assertTrue(switch_to_current_usermock.called, "switch back to user when exiting context")
+
+    @patch("umake.tools.os")
+    @patch("umake.tools.switch_to_current_user")
+    def test_as_root_with_lock(self, switch_to_current_usermock, osmock):
+        """Ensure we don't try to switch as root before the lock is released"""
+        def as_root_function():
+            with tools.as_root():
+                method_called_as_root()
+
+        method_called_as_root = Mock()
+        executor = futures.ThreadPoolExecutor(max_workers=1)
+
+        # take main lock in that thread and start other one
+        tools.root_lock.acquire()
+        future = executor.submit(as_root_function)
+
+        # we didn't get any root switch
+        self.assertFalse(osmock.seteuid.called, "we didn't switch to root yet with seteuid")
+        self.assertFalse(osmock.setegid.called, "we didn't switch to root yet with setegid")
+
+        # release it
+        tools.root_lock.release()
+
+        # wait for the executor to finish in 1s and ensure that root was called
+        future.result(1)
+        osmock.seteuid.assert_called_once_with(0)
+        osmock.setegid.assert_called_once_with(0)
+        self.assertTrue(switch_to_current_usermock.called, "switch back to user when exiting context")
 
 
 class TestUserENV(LoggedTestCase):
