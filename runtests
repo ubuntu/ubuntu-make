@@ -79,6 +79,9 @@ if __name__ == '__main__':
     # matching our expectations.
     os.environ["LANGUAGE"] = "C"
 
+    # ensure we have the right chmod on the ssh key to connect to docker containers (git by default reverts to x44)
+    os.chmod(os.path.join(root_dir, "docker", "umake_docker"), 0o600)
+
     parser = argparse.ArgumentParser(description="Run umake tests. Specified list of test run in debug mode. "
                                                  "Running a partial suite of tests is using a normal mode. "
                                                  "Running all tests is using coverage by default.")
