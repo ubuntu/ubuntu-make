@@ -91,10 +91,10 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         # you get and store self.download_url
         url = re.sub('.sha512', '', self.sha512_url)
         if url is None:
-            logger.error("Missing url")
+            logger.error("Download page changed its syntax or is not parsable (missing url)")
             UI.return_main_screen(status_code=1)
         if sha512 is None:
-            logger.error("Missin sha512")
+            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
             UI.return_main_screen(status_code=1)
         logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
         self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, sha512)))
