@@ -138,7 +138,7 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
             with suppress(AttributeError):
                 url = p.group(1)
         if in_download is True and ')<br />' in line:
-            p = re.search(r'(\w+)', line)
+            p = re.search(r'(\w+)\)', line)
             with suppress(AttributeError):
                 sha1 = p.group(1)
         return ((url, sha1), in_download)
