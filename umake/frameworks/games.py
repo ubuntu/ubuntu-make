@@ -30,7 +30,8 @@ import stat
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem
-from umake.tools import as_root, create_launcher, get_application_desktop_file, get_current_arch, ChecksumType
+from umake.tools import as_root, create_launcher, get_application_desktop_file, get_current_arch,\
+    ChecksumType, MainLoop, Checksum
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -133,16 +134,13 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
         url, sha1 = (None, None)
         if ".sh" in line:
             in_download = True
-        if in_download:
-            p = re.search(r'href="(.*)" target', line)
+            p = re.search(r'href="(.*.sh)" target', line)
             with suppress(AttributeError):
                 url = p.group(1)
-            p = re.search(r'sha1sum (\w+)', line)
+        if in_download is True and ')<br />' in line:
+            p = re.search(r'(\w+)\)', line)
             with suppress(AttributeError):
                 sha1 = p.group(1)
-
-        if url is None or sha1 is None:
-            return (None, in_download)
         return ((url, sha1), in_download)
 
     def decompress_and_install(self, fds):

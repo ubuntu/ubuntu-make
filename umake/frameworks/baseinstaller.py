@@ -206,8 +206,12 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                         elif not self.checksum_type:
                             logger.debug("Found download link for {}".format(url))
 
-            if url is None or (self.checksum_type and checksum is None):
-                logger.error("Download page changed its syntax or is not parsable")
+            if url is None:
+                logger.error("Download page changed its syntax or is not parsable (url missing)")
+                UI.return_main_screen(status_code=1)
+            if (self.checksum_type and checksum is None):
+                logger.error("Download page changed its syntax or is not parsable (checksum missing)")
+                logger.error("URL is: {}".format(url))
                 UI.return_main_screen(status_code=1)
             self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
 
