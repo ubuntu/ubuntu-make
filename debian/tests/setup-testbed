@@ -50,6 +50,9 @@ mkdir -p $config_dir
 
 # discover target: package/branch, origin
 if [ "$(is_package_test)" = "true" ]; then
+    # clean the source package to ensure we don't have duplicated files after
+    # build for sloccount
+    debian/rules clean
     type="system"
     origin="$(apt-cache policy ubuntu-make | sed -n '/\*\*\*/ {n;p}' | cut -d' ' -f 10)"
 else
@@ -78,5 +81,10 @@ dpkg -l > "$config_dir/packages_list"
 
 echo -e "\nStats:"
 sloccount * | head -n -17 | tail -17 | tee "$config_dir/stats"
+
+# remove umake directory for coverage reporting on real used files
+if [ "$type" = "system" ]; then
+    rm -r umake/
+fi
 
 sudo /tmp/autopkgtest-reboot ready
