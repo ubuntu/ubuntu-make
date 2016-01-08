@@ -9,17 +9,17 @@ if [ -n "$ADT_REBOOT_MARK" ]; then
 fi
 
 # configure docker
-sudo addgroup $(whoami) docker
+sudo -n addgroup $(whoami) docker
 # TODO: get it from /etc/environment
-echo export http_proxy="http://squid.internal:3128" | sudo tee /etc/default/docker.io
+echo export http_proxy="http://squid.internal:3128" | sudo -n tee /etc/default/docker.io
 
 # workaround for https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=808203
-sudo rm -f /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config
+sudo -n rm -f /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config
 
 # enable autologin to get unity started
 if [ ! -r /etc/lightdm/lightdm.conf.d/umaketests.conf ]; then
-    sudo mkdir -p /etc/lightdm/lightdm.conf.d
-    cat << EOF | sudo tee /etc/lightdm/lightdm.conf.d/umaketests.conf
+    sudo -n mkdir -p /etc/lightdm/lightdm.conf.d
+    cat << EOF | sudo -n tee /etc/lightdm/lightdm.conf.d/umaketests.conf
 [SeatDefaults]
 autologin-user=ubuntu
 EOF
@@ -29,13 +29,10 @@ fi
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
-# install ubuntu-make dependencies (we don't use @ in control as then, all tests will have to declare it and remove
-# as the first step to reuse the testbed)
-sudo apt install ubuntu-make
-
+# ubuntu-make was installed for its dependencies
 # remove it if we are not running system tests (we only needed its dep)
 if [ "$(is_package_test)" = "false" ]; then
-    sudo apt remove -y ubuntu-make
+    sudo -n apt remove -y ubuntu-make
 fi
 
 # store ubuntu make version and packages
@@ -60,7 +57,7 @@ else
     version="$(bin/umake --version)'"
 fi
 
-cat << EOF | sudo tee "$config_dir/version"
+cat << EOF | tee "$config_dir/version"
 {
     'target': {
        'type': '$type',
@@ -84,4 +81,4 @@ if [ "$type" = "system" ]; then
     rm -r umake/
 fi
 
-sudo /tmp/autopkgtest-reboot ready
+sudo -n /tmp/autopkgtest-reboot ready
