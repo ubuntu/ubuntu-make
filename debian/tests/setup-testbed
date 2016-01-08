@@ -9,10 +9,10 @@ if [ -n "$ADT_REBOOT_MARK" ]; then
 fi
 
 sudo apt update
-sudo apt install -y ubuntu-desktop
+$(which eatmydata 2>/dev/null) sudo apt install -y ubuntu-desktop
 
 # install test collect and runtime dependencies
-sudo apt install -y git docker.io sloccount libjs-jquery libjs-jquery-hotkeys libjs-jquery-isonscreen libjs-jquery-tablesorter
+$(which eatmydata 2>/dev/null) sudo apt install -y git docker.io sloccount libjs-jquery libjs-jquery-hotkeys libjs-jquery-isonscreen libjs-jquery-tablesorter
 
 # configure docker
 sudo addgroup $(whoami) docker
