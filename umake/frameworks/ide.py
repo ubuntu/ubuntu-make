@@ -98,8 +98,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
         if in_download:
             p = re.search(r'href="(.*)" title', line)
             with suppress(AttributeError):
-                self.sha512_url = str(self.download_page).replace('?os=Linux', '')
-                self.sha512_url = self.sha512_url + p.group(1) + '.sha512&r=1'
+                self.sha512_url = self.download_page + p.group(1) + '.sha512&r=1'
                 url_found = True
                 DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
                                on_done=self.get_sha_and_start_download, download=False)
