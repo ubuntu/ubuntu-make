@@ -26,10 +26,8 @@ from collections import namedtuple
 from concurrent import futures
 from contextlib import suppress
 import fcntl
-from gettext import gettext as _
 import logging
 import os
-import subprocess
 import tempfile
 import time
 from umake.tools import Singleton, add_foreign_arch, get_foreign_archs, get_current_arch, as_root
