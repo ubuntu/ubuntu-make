@@ -142,40 +142,7 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
             p = re.search(r'(\w+)', line)
             with suppress(AttributeError):
                 sha1 = p.group(1)
-
         return ((url, sha1), in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        """Download files to download + license and check it"""
-        logger.debug("Parse download metadata")
-
-        error_msg = result[self.download_page].error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        url, checksum = (None, None)
-        in_download = False
-        for line in result[self.download_page].buffer:
-            line_content = line.decode()
-
-            # always take the first valid (url, checksum) if not match_last_link is set to True:
-            download = None
-            (download, in_download) = self.parse_download_link(line_content, in_download)
-            if download is not None:
-                (newurl, new_checksum) = download
-                url = newurl if newurl is not None else url
-                checksum = new_checksum if new_checksum is not None else checksum
-                if url is not None and checksum is not None:
-                    if self.checksum_type and checksum:
-                        logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
-                    elif not self.checksum_type:
-                        logger.debug("Found download link for {}".format(url))
-
-        self.download_requests.append(DownloadItem(url,
-                                                   checksum=Checksum(ChecksumType.sha1, checksum)))
-        self.start_download_and_install()
 
     def decompress_and_install(self, fds):
         """Override to strip the unwanted shell header part"""
