@@ -137,8 +137,7 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
             p = re.search(r'href="(.*.sh)" target', line)
             with suppress(AttributeError):
                 url = p.group(1)
-        if line.endswith(')<br />'):
-            in_download = True
+        if in_download is True and ')<br />' in line:
             p = re.search(r'(\w+)', line)
             with suppress(AttributeError):
                 sha1 = p.group(1)
