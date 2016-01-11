@@ -10,8 +10,7 @@ fi
 
 # configure docker
 sudo -n addgroup $(whoami) docker
-# TODO: get it from /etc/environment
-echo export http_proxy="http://squid.internal:3128" | sudo -n tee /etc/default/docker.io
+cat /etc/environment | sudo -n tee /etc/default/docker.io
 
 # workaround for https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=808203
 sudo -n rm -f /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config
