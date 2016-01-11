@@ -74,7 +74,6 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
         if error_msg:
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen(status_code=1)
-
         in_download = False
         sig_url = None
         for line in result[self.download_page].buffer:
@@ -85,12 +84,12 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
                 if tmp_release <= get_current_ubuntu_version():
                     sig_url = new_sig_url
 
-        if sig_url:
-            DownloadCenter(urls=[DownloadItem(sig_url, None)],
-                           on_done=self.check_gpg_and_start_download, download=False)
-        else:
+        if not sig_url:
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
+
+        DownloadCenter(urls=[DownloadItem(sig_url, None)],
+                       on_done=self.check_gpg_and_start_download, download=False)
 
     @MainLoop.in_mainloop_thread
     def check_gpg_and_start_download(self, download_result):
