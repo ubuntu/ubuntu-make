@@ -52,7 +52,6 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://swift.org/download/",
                          dir_to_decompress_in_tarball="swift*",
                          required_files_path=[os.path.join("usr", "bin", "swift")])
-        self.release = get_current_ubuntu_version()
 
     def parse_download_link(self, line, in_download):
         """Parse Swift download link, expect to find a .sig file"""
@@ -83,13 +82,13 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
             (new_sig_url, in_download) = self.parse_download_link(line_content, in_download)
             if str(new_sig_url) > str(sig_url):
                 tmp_release = re.search("ubuntu(.....).tar", new_sig_url).group(1)
-                if tmp_release <= self.release:
+                if tmp_release <= get_current_ubuntu_version():
                     sig_url = new_sig_url
 
         if sig_url:
             DownloadCenter(urls=[DownloadItem(sig_url, None)],
                            on_done=self.check_gpg_and_start_download, download=False)
-        if not sig_url:
+        else:
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
