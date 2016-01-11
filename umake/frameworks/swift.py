@@ -29,7 +29,7 @@ import gnupg
 
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.tools import get_current_arch, add_env_to_user, ChecksumType, MainLoop, get_current_ubuntu_version
+from umake.tools import add_env_to_user, MainLoop, get_current_ubuntu_version
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.ui import UI
 
