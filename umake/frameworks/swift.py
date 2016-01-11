@@ -98,7 +98,15 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
         sig_url = list(download_result.keys())[0]
         res = download_result[sig_url]
         sig = res.buffer.getvalue().decode('utf-8').split()[0]
-        verify = gnupg.GPG().verify(sig)
+        gpg = gnupg.GPG()
+        # TODO: Instead of hardcoding the keyserver it would be better to download the .asc
+        imported_keys = gpg.recv_keys('hkp://pool.sks-keyservers.net',\
+                                      '7463 A81A 4B2E EA1B 551F  FBCF D441 C977 412B 37AD',\
+                                      '1BE1 E29A 084C B305 F397  D62A 9F59 7F4D 21A5 6D5F')
+        if imported_keys.count == 0:
+            logger.error("Keys not valid")
+            UI.return_main_screen(status_code=1)
+        verify = gpg.verify(sig)
         if verify is False:
             logger.error("Signature not valid")
             UI.return_main_screen(status_code=1)
