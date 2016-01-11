@@ -29,11 +29,14 @@ fi
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
-# ubuntu-make was installed for its dependencies
-# remove it if we are not running system tests (we only needed its dep)
-if [ "$(is_package_test)" = "false" ]; then
-    sudo -n apt remove -y ubuntu-make
+# install ubuntu-make if we are running system tests, otherwise install only deps from debian/control
+if [ "$(is_package_test)" = "true" ]; then
+    PACKAGES="ubuntu-make"
+else
+    PACKAGES=$(tests/daily_runs/get_binary_depends ubuntu-make)
 fi
+export DEBIAN_FRONTEND=noninteractive
+sudo -n -E apt install -y $PACKAGES
 
 # store ubuntu make version and packages
 config_dir="$ADT_ARTIFACTS/config"
