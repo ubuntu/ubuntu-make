@@ -66,7 +66,6 @@ class SwiftTests(LargeFrameworkTests):
         self.assert_exec_exists()
         self.assertTrue(self.is_in_path(self.exec_path))
         resulting_binary = self.example_prog_dir + "/.build/" + "debug/" + self.example_prog_dir.split('/')[-1]
-        print(resulting_binary)
 
         # compile a small project
         subprocess.check_call(self.command_as_list(compile_command), cwd=self.example_prog_dir)
