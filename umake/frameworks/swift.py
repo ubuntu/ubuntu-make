@@ -100,8 +100,8 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
         sig = res.buffer.getvalue().decode('utf-8').split()[0]
         gpg = gnupg.GPG()
         # TODO: Instead of hardcoding the keyserver it would be better to download the .asc
-        imported_keys = gpg.recv_keys('hkp://pool.sks-keyservers.net',\
-                                      '7463 A81A 4B2E EA1B 551F  FBCF D441 C977 412B 37AD',\
+        imported_keys = gpg.recv_keys('hkp://pool.sks-keyservers.net',
+                                      '7463 A81A 4B2E EA1B 551F  FBCF D441 C977 412B 37AD',
                                       '1BE1 E29A 084C B305 F397  D62A 9F59 7F4D 21A5 6D5F')
         if imported_keys.count == 0:
             logger.error("Keys not valid")
