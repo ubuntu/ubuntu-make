@@ -35,7 +35,6 @@ class SwiftInContainer(ContainerTests, test_swift.SwiftTests):
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "swift", "swift-lang")
 
-            
     def test_install_with_changed_download_page(self):
         """Installing swift ide should fail if download page has significantly changed"""
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "swift.org", "download",
