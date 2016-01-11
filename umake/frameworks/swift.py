@@ -52,6 +52,7 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://swift.org/download/",
                          dir_to_decompress_in_tarball="swift*",
                          required_files_path=[os.path.join("usr", "bin", "swift")])
+        self.asc_url = "https://swift.org/keys/all-keys.asc"
 
     def parse_download_link(self, line, in_download):
         """Parse Swift download link, expect to find a .sig file"""
@@ -88,19 +89,17 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
-        DownloadCenter(urls=[DownloadItem(sig_url, None)],
+        DownloadCenter(urls=[DownloadItem(sig_url, None), DownloadItem(self.asc_url, None)],
                        on_done=self.check_gpg_and_start_download, download=False)
 
     @MainLoop.in_mainloop_thread
     def check_gpg_and_start_download(self, download_result):
+        asc_content = download_result.pop(self.asc_url).buffer.getvalue().decode('utf-8')
         sig_url = list(download_result.keys())[0]
         res = download_result[sig_url]
         sig = res.buffer.getvalue().decode('utf-8').split()[0]
         gpg = gnupg.GPG()
-        # TODO: Instead of hardcoding the keyserver it would be better to download the .asc
-        imported_keys = gpg.recv_keys('hkp://pool.sks-keyservers.net',
-                                      '7463 A81A 4B2E EA1B 551F  FBCF D441 C977 412B 37AD',
-                                      '1BE1 E29A 084C B305 F397  D62A 9F59 7F4D 21A5 6D5F')
+        imported_keys = gpg.import_keys(asc_content)
         if imported_keys.count == 0:
             logger.error("Keys not valid")
             UI.return_main_screen(status_code=1)
