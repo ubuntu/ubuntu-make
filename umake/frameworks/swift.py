@@ -47,7 +47,7 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Swift Lang", description=_("Swift compiler (default)"), is_category_default=True,
-                         packages_requirements=["clang"],
+                         packages_requirements=["clang", "libicu-dev"],
                          category=category, only_on_archs=['amd64'],
                          download_page="https://swift.org/download/",
                          dir_to_decompress_in_tarball="swift*",
@@ -57,18 +57,15 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse Swift download link, expect to find a .sig file"""
         url_found = False
-        if self.release in line and '.tar.gz.sig' in line:
+        if '.tar.gz.sig' in line:
             in_download = True
-        else:
-            in_download = False
         if in_download:
             p = re.search(r'href="(.*)" title="PGP Signature"', line)
             with suppress(AttributeError):
                 self.sig_url = "https://swift.org" + p.group(1)
                 logger.debug(self.sig_url)
                 url_found = True
-                DownloadCenter(urls=[DownloadItem(self.sig_url, None)],
-                               on_done=self.check_gpg_and_start_download, download=False)
+                logger.debug("Found signature link: {}".format(self.sig_url))
         return (url_found, in_download)
 
     @MainLoop.in_mainloop_thread
@@ -82,13 +79,15 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen(status_code=1)
 
         in_download = False
-        url_found = False
         for line in result[self.download_page].buffer:
             line_content = line.decode()
-            if not url_found:
-                (_url_found, in_download) = self.parse_download_link(line_content, in_download)
-            if not url_found:
-                url_found = _url_found
+            (url_found, in_download) = self.parse_download_link(line_content, in_download)
+            if url_found:
+                tmp_release = re.search("ubuntu(.....).tar", self.sig_url)
+                if tmp_release.group(1) <= self.release:
+                    DownloadCenter(urls=[DownloadItem(self.sig_url, None)],
+                                         on_done=self.check_gpg_and_start_download, download=False)
+                    break
 
         if not url_found:
             logger.error("Download page changed its syntax or is not parsable")
