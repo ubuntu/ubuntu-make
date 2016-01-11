@@ -56,17 +56,15 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         """Parse Swift download link, expect to find a .sig file"""
-        url_found = False
+        sig_url = None
         if '.tar.gz.sig' in line:
             in_download = True
         if in_download:
             p = re.search(r'href="(.*)" title="PGP Signature"', line)
             with suppress(AttributeError):
-                self.sig_url = "https://swift.org" + p.group(1)
-                logger.debug(self.sig_url)
-                url_found = True
-                logger.debug("Found signature link: {}".format(self.sig_url))
-        return (url_found, in_download)
+                sig_url = "https://swift.org" + p.group(1)
+                logger.debug("Found signature link: {}".format(sig_url))
+        return (sig_url, in_download)
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -79,30 +77,32 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen(status_code=1)
 
         in_download = False
+        sig_url = None
         for line in result[self.download_page].buffer:
             line_content = line.decode()
-            (url_found, in_download) = self.parse_download_link(line_content, in_download)
-            if url_found:
-                tmp_release = re.search("ubuntu(.....).tar", self.sig_url)
-                if tmp_release.group(1) <= self.release:
-                    DownloadCenter(urls=[DownloadItem(self.sig_url, None)],
-                                         on_done=self.check_gpg_and_start_download, download=False)
-                    break
+            (new_sig_url, in_download) = self.parse_download_link(line_content, in_download)
+            if str(new_sig_url) > str(sig_url):
+                tmp_release = re.search("ubuntu(.....).tar", new_sig_url).group(1)
+                if tmp_release <= self.release:
+                    sig_url = new_sig_url
 
-        if not url_found:
+        if sig_url:
+            DownloadCenter(urls=[DownloadItem(sig_url, None)],
+                           on_done=self.check_gpg_and_start_download, download=False)
+        if not sig_url:
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
     @MainLoop.in_mainloop_thread
     def check_gpg_and_start_download(self, download_result):
-        res = download_result[self.sig_url]
+        res = download_result[sig_url]
         sig = res.buffer.getvalue().decode('utf-8').split()[0]
         verify = gnupg.GPG().verify(sig)
         if verify is False:
             logger.error("Signature not valid")
             UI.return_main_screen(status_code=1)
         # you get and store self.download_url
-        url = re.sub('.sig', '', self.sig_url)
+        url = re.sub('.sig', '', sig_url)
         if url is None:
             logger.error("Download page changed its syntax or is not parsable (missing url)")
             UI.return_main_screen(status_code=1)
