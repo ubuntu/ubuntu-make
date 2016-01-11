@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 # Copyright (C) 2014 Canonical
 #
@@ -54,7 +53,7 @@ class SwiftTests(LargeFrameworkTests):
             example_file = os.path.join(self.example_prog_dir, "Sources", "main.swift")
             open(example_file, "w").write(self.EXAMPLE_PROJECT)
             compile_command = ["bash", "-l", "-c", "swift build"]
-        else:  # our mock expects getting that path
+        else:  # our mock expects getting that command parameter
             compile_command = ["bash", "-l", "swift build"]
 
         self.child = spawn_process(self.command('{} swift'.format(UMAKE)))
