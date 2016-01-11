@@ -25,12 +25,11 @@ from gettext import gettext as _
 import logging
 import os
 import re
-import lsb_release
 import gnupg
 
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.tools import get_current_arch, add_env_to_user, ChecksumType, MainLoop
+from umake.tools import get_current_arch, add_env_to_user, ChecksumType, MainLoop, get_current_ubuntu_version
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.ui import UI
 
@@ -48,12 +47,12 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Swift Lang", description=_("Swift compiler (default)"), is_category_default=True,
-                         packages_requirements=["clang", "python3-gnupg"],
+                         packages_requirements=["clang"],
                          category=category, only_on_archs=['amd64'],
                          download_page="https://swift.org/download/",
                          dir_to_decompress_in_tarball="swift*",
                          required_files_path=[os.path.join("usr", "bin", "swift")])
-        self.release = lsb_release.get_distro_information()['RELEASE']
+        self.release = get_current_ubuntu_version()
 
     def parse_download_link(self, line, in_download):
         """Parse Swift download link, expect to find a .sig file"""
@@ -99,8 +98,7 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
     def check_gpg_and_start_download(self, download_result):
         res = download_result[self.sig_url]
         sig = res.buffer.getvalue().decode('utf-8').split()[0]
-        gpg = gnupg.GPG()
-        verify = gpg.verify(sig)
+        verify = gnupg.GPG().verify(sig)
         if verify is False:
             logger.error("Signature not valid")
             UI.return_main_screen(status_code=1)
