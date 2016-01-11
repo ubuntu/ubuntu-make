@@ -95,6 +95,7 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     @MainLoop.in_mainloop_thread
     def check_gpg_and_start_download(self, download_result):
+        sig_url = list(download_result.keys())[0]
         res = download_result[sig_url]
         sig = res.buffer.getvalue().decode('utf-8').split()[0]
         verify = gnupg.GPG().verify(sig)
