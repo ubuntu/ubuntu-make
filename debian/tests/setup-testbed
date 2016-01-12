@@ -12,7 +12,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # configure docker
 sudo -n addgroup $(whoami) docker
-cat /etc/environment | sudo -n tee /etc/default/docker.io
+sed -n '/proxy/ { s/^/export /; p}' /etc/environment | sudo -n tee -a /etc/default/docker
 # ensure we have a cgroup controller installed (systemd for wily and on, cgroup-lite for trusty)
 if ! `dpkg -l systemd-sysv 1>/dev/null 2>&1`; then
     sudo -n apt --no-install-recommends install -y cgroup-lite
