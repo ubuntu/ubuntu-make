@@ -36,6 +36,7 @@ import platform
 import re
 import subprocess
 from urllib import parse
+import shutil
 
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage, LicenseAgreement
@@ -66,23 +67,31 @@ class IdeCategory(umake.frameworks.BaseCategory):
                          logo_path=None)
 
 
-class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
+class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
     """The Eclipse Foundation distribution."""
 
-    def __init__(self, category):
-        super().__init__(name="Eclipse",
-                         description=_("Eclipse Java"),
-                         category=category, only_on_archs=['i386', 'amd64'],
-                         download_page='https://www.eclipse.org/downloads/',
-                         checksum_type=ChecksumType.sha512,
-                         dir_to_decompress_in_tarball='eclipse',
-                         desktop_filename='eclipse.desktop',
-                         required_files_path=["eclipse"],
-                         packages_requirements=['openjdk-7-jdk'])
-
+    def __init__(self, *args, **kwargs):
+        if self.executable:
+            current_required_files_path = kwargs.get("required_files_path", [])
+            current_required_files_path.append(os.path.join(self.executable))
+            kwargs["required_files_path"] = current_required_files_path
+        download_page = 'https://www.eclipse.org/downloads/'
+        kwargs["download_page"] = download_page
+        super().__init__(*args, **kwargs)
+        self.icon_url = os.path.join(self.download_page, "images", self.icon_filename)
         self.bits = '' if platform.machine() == 'i686' else 'x86_64'
         self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
                                       "Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36"}
+
+    @property
+    @abstractmethod
+    def download_keyword(self):
+        pass
+
+    @property
+    @abstractmethod
+    def executable(self):
+        pass
 
     def download_provider_page(self):
         logger.debug("Download application provider page")
@@ -91,7 +100,7 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse Eclipse download links"""
         url_found = False
-        if "eclipse-java" in line and "eclipse-java-ee" not in line and "linux" in line and self.bits in line:
+        if self.download_keyword in line and self.bits in line:
             in_download = True
         else:
             in_download = False
@@ -139,22 +148,75 @@ class Eclipse(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("Download page changed its syntax or is not parsable (missing sha512)")
             UI.return_main_screen(status_code=1)
         logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
-        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, sha512)))
+        self.download_requests.append(DownloadItem(url, Checksum(ChecksumType.sha512, sha512)))
         self.start_download_and_install()
 
     def post_install(self):
         """Create the Eclipse launcher"""
-        icon_filename = "icon.xpm"
-        icon_path = join(self.install_path, icon_filename)
+        DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
+                       on_done=self.save_icon, download=True)
+
+        icon_path = join(self.install_path, self.icon_filename)
         exec_path = '"{}" %f'.format(join(self.install_path, "eclipse"))
-        comment = _("The Eclipse Integrated Development Environment")
+        comment = self.description
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
-                        get_application_desktop_file(name=_("Eclipse"),
+                        get_application_desktop_file(name=self.name,
                                                      icon_path=icon_path,
                                                      exec=exec_path,
                                                      comment=comment,
                                                      categories=categories))
+
+    def save_icon(self, download_result):
+        """Save correct Eclipse icon"""
+        icon = download_result.pop(self.icon_url).fd.name
+        shutil.copy(icon, join(self.install_path, self.icon_filename))
+        logger.debug(str(icon))
+
+
+class EclipseJava(BaseEclipse):
+    """The Eclipse Java Edition distribution."""
+    download_keyword = 'eclipse-java'
+    executable = 'eclipse'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse",
+                         description=_("Eclipse Java IDE"),
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-java.desktop',
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['openjdk-7-jdk'],
+                         icon_filename='java.png')
+
+
+class EclipsePHP(BaseEclipse):
+    """The Eclipse PHP Edition distribution."""
+    download_keyword = 'eclipse-php'
+    executable = 'eclipse'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse PHP",
+                         description=_("Eclipse PHP IDE"),
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-php.desktop',
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['openjdk-7-jdk'],
+                         icon_filename='php.png')
+
+
+class EclipseCPP(BaseEclipse):
+    """The Eclipse CPP Edition distribution."""
+    download_keyword = 'eclipse-cpp'
+    executable = 'eclipse'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse CPP",
+                         description=_("Eclipse C/C++ IDE"),
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-cpp.desktop',
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['openjdk-7-jdk'],
+                         icon_filename='cdt.png')
 
 
 class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
