@@ -8,9 +8,15 @@ if [ -n "$ADT_REBOOT_MARK" ]; then
     exit 0
 fi
 
+export DEBIAN_FRONTEND=noninteractive
+
 # configure docker
 sudo -n addgroup $(whoami) docker
 cat /etc/environment | sudo -n tee /etc/default/docker.io
+# ensure we have a cgroup controller installed (systemd for wily and on, cgroup-lite for trusty)
+if ! `dpkg -l systemd-sysv 1>/dev/null 2>&1`; then
+    sudo -n apt --no-install-recommends install -y cgroup-lite
+fi
 
 # workaround for https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=808203
 sudo -n rm -f /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config
@@ -34,7 +40,6 @@ if [ "$(is_package_test)" = "true" ]; then
 else
     PACKAGES=$(tests/daily_runs/get_binary_depends ubuntu-make)
 fi
-export DEBIAN_FRONTEND=noninteractive
 sudo -n -E apt install -y $PACKAGES
 
 # store ubuntu make version and packages
