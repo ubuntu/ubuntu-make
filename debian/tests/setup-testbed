@@ -21,6 +21,15 @@ fi
 # workaround for https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=808203
 sudo -n rm -f /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config
 
+# enable xserver dummy driver
+sudo -n apt --no-install-recommends install -y xserver-xorg-video-dummy
+cat <<EOF | sudo tee /etc/X11/xorg.conf
+Section "Device"
+   Identifier "test"
+   Driver "dummy"
+EndSection
+EOF
+
 # enable autologin to get unity started
 if [ ! -r /etc/lightdm/lightdm.conf.d/umaketests.conf ]; then
     sudo -n mkdir -p /etc/lightdm/lightdm.conf.d
