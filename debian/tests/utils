@@ -68,3 +68,17 @@ function skip_if_no_in_list {
 function run_tests {
     ssh -o StrictHostKeyChecking=no -t -t 127.0.0.1 "cd $PWD; DISPLAY=:0 dbus-launch ./runtests --publish --coverage $(add_runtests_opts) $@"
 }
+
+# wait for compiz to start, exit 1 after a timeout if not running.
+function wait_for_compiz {
+    timeout=100
+    while [ ! `pgrep -c top` -gt 0 ]; do
+        if [ $timeout -le 0 ]; then
+            echo "compiz didn't start"
+            exit 1
+        fi
+        timeout=$((timeout - 5))
+        sleep 5
+        echo "waiting for compiz to start... (${timeout}s left)"
+    done
+}
