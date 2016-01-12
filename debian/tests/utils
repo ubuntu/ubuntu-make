@@ -45,8 +45,13 @@ function skip_if_no_in_list {
 
     re=\\btests[\./]
     # we are in the custom type test flavor
-    if [[ "$TESTS" =~ $re ]] && [[ "$test_type" = "custom" ]]; then
-        return
+    if [[ "$test_type" = "custom" ]]; then
+        if [[ "$TESTS" =~ $re ]]; then
+            return
+        else
+            echo "No specific mentioned in \$TESTS; skipping test"
+            exit 0
+        fi
     fi
 
     # if we run only some tests of the current type, (tests.<type>.), disable all and this category
