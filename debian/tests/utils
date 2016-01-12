@@ -77,7 +77,7 @@ function run_tests {
 # wait for compiz to start, exit 1 after a timeout if not running.
 function wait_for_compiz {
     timeout=100
-    while [ ! `pgrep -c top` -gt 0 ]; do
+    while [ ! `pgrep -c compiz` -gt 0 ]; do
         if [ $timeout -le 0 ]; then
             echo "compiz didn't start"
             echo "------------- /var/log/lightdm/x-0.log -------------"
