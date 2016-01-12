@@ -1,4 +1,4 @@
-ubuntu-make (16.01) UNRELEASED; urgency=medium
+ubuntu-make (16.01) xenial; urgency=medium
 
   [ Galileo Sartor ]
   * Always deliver the latest Unity3D version (beta) to our users.
@@ -50,7 +50,7 @@ ubuntu-make (16.01) UNRELEASED; urgency=medium
       leaks bugs.
     - Import cleanups.
 
- -- Didier Roche <didrocks@ubuntu.com>  Tue, 12 Jan 2016 08:30:11 +0100
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 12 Jan 2016 09:39:08 +0100
 
 ubuntu-make (15.12.1) xenial; urgency=medium
 
