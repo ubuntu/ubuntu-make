@@ -1,3 +1,57 @@
+ubuntu-make (16.01) UNRELEASED; urgency=medium
+
+  [ Galileo Sartor ]
+  * Always deliver the latest Unity3D version (beta) to our users.
+  * Ensure we always download latest available eclipse java IDE version. This
+    enables users to now get eclipse Mars from Ubuntu Make!
+
+  [ Didier Roche ]
+  * Enable setting up Firefox Dev as default browser.
+  * Move Visual Studio Code to IDE category. Keep it still on the web category
+    for backward compatiblity. Adapts tests to ensure both category works
+    (with a warning on the web one).
+  * Move the testing infrastructure from jenkins to ubuntu autopkgtests:
+    - create pep8/small/medium/large/all targets to mimic runautopkgtests
+      behavior.
+    - add a setup test bed, installing an ubuntu-desktop image, grabbing
+      git branch or system package and generating stats info.
+    - add another collecting coverage test to generate and copy stats
+      to artefacts directory.
+    - a custom target is triggered when one or more specific tests are desired
+      like --env="TESTS=tests/small/<foo>.py
+      tests.small.foo:TestClass:test_bar".
+    - all those tests are handled by a TESTS env variable. If not set, we run
+      pep8 and small tests.
+    - creating utils and scripts to factorize most of the logic.
+  * Protect against invalid tar archive that can be opened but not fully
+    extracted.
+  * Remove libxp6 dep from Stencyl as optional and not available from wily.
+  * Install test dependencies from package and autopkgtests list.
+    Use that logic in both autopkgtest infra and jenkins.
+  * Make test_install_progress more robust as apt 1.1.5 changed its update
+    signaling behavior.
+  * Add in baseinstaller some way to only match last link when parsing.
+  * Rework foreign architecture addition and detection to ensure we only
+    call it once (we were calling them once per package previously), fix some
+    races in cache handling. Move this facility to tools and restructure tests
+     for this, while adding some more.
+  * Add locks to avoid a race condition when creating temp file (to not create
+    them as root) and add a new contextwrapper for as_root() with its tests.
+  * Drop sshpass in favor of ssh key for docker image connection.
+  * Some misc fixes:
+    - Change some error messages and making them localizable.
+    - fix an issue to avoid nested fakeroot calls.
+    - Ensure we always kill children process and not the wrapper in container.
+    - Add a fallback when os.getlogin() returns transient errors.
+    - Normalize end of line tests comparaison.
+    - Fix some possible failure when issuing a progressbar update.
+    - Restructure, decouple and grab additional mocks for tests
+    - Restore properly the initial environment in test_settings to avoid env
+      leaks bugs.
+    - Import cleanups.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 12 Jan 2016 08:30:11 +0100
+
 ubuntu-make (15.12.1) xenial; urgency=medium
 
   [ Eldar Khayrullin ]
