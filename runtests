@@ -25,6 +25,7 @@ import logging.config
 import nose
 import os
 import yaml
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -182,8 +183,13 @@ def adt_run(args):
     # add emulator options
     cmds.extend(['---', 'qemu', '-o', '/var/tmp', args.image])
 
-    return_code = subprocess.call(cmds)
-    print("Artefacts are available at {}".format(artefacts_dir))
+    try:
+        return_code = subprocess.call(cmds)
+        print("Artefacts are available at {}".format(artefacts_dir))
+    except FileNotFoundError:
+        print("adt-run isn't installed.")
+        shutil.rmtree(artefacts_dir)
+        return_code = 1
     sys.exit(return_code)
 
 
