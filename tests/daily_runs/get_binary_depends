@@ -47,8 +47,10 @@ if __name__ == '__main__':
                     line = line.replace("Recommends: ", "")
                     in_depends_section = True
                 else:
-                    # we are getting out of the depends section parts
-                    if not line or line[0] != " ":
+                    # we are getting out of the depends or binary sections
+                    if not line:
+                        in_binary_section = False
+                    elif line[0] != " ":
                         in_depends_section = False
                 if not in_depends_section:
                     continue
