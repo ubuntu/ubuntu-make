@@ -41,7 +41,6 @@ class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
-        self.umake_command_args = '{} ide eclipse'.format(UMAKE)
         self.bad_download_page_file_path = os.path.join(get_data_dir(),
                                                         "server-content", "www.eclipse.org", "technology", "epp",
                                                         "downloads", "release", "version", "point_release",
@@ -73,7 +72,6 @@ class EclipsePHPIDEInContainer(ContainerTests, test_ide.EclipsePHPIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-php")
-        self.umake_command_args = '{} ide eclipse'.format(UMAKE)
         self.bad_download_page_file_path = os.path.join(get_data_dir(),
                                                         "server-content", "www.eclipse.org", "technology", "epp",
                                                         "downloads", "release", "version", "point_release",
@@ -93,7 +91,6 @@ class EclipseCPPIDEInContainer(ContainerTests, test_ide.EclipseCPPIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-cpp")
-        self.umake_command_args = '{} ide eclipse'.format(UMAKE)
         self.bad_download_page_file_path = os.path.join(get_data_dir(),
                                                         "server-content", "www.eclipse.org", "technology", "epp",
                                                         "downloads", "release", "version", "point_release",
