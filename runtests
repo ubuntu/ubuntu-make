@@ -25,7 +25,9 @@ import logging.config
 import nose
 import os
 import yaml
+import subprocess
 import sys
+import tempfile
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
 config_dir = os.path.join(root_dir, 'confs')
@@ -148,6 +150,43 @@ def local_run(args):
 def adt_run(args):
     """Run the tests on a qemu vm"""
 
+    artefacts_dir = tempfile.mkdtemp(prefix="umake-test-artefacts-")
+
+
+    cmds = ['adt-run', '-s',
+            # add ubuntu-make and ubuntu-make-builddeps ppas with their gpg key
+            '--setup-commands',
+            """apt-key adv --keyserver keyserver.ubuntu.com --recv-key 399B698EEA9EF163B6F9A0F62CC98497A1231595;
+            echo "deb http://ppa.launchpad.net/ubuntu-desktop/ubuntu-make-builddeps/ubuntu trusty main" > /etc/apt/sources.list.d/autopkgtest-ubuntu-desktop-ubuntu-make-builddeps.list;
+            echo "deb-src http://ppa.launchpad.net/ubuntu-desktop/ubuntu-make-builddeps/ubuntu trusty main" >> /etc/apt/sources.list.d/autopkgtest-ubuntu-desktop-ubuntu-make-builddeps.list;
+            echo "deb http://ppa.launchpad.net/ubuntu-desktop/ubuntu-make/ubuntu trusty main" > /etc/apt/sources.list.d/autopkgtest-ubuntu-desktop-ubuntu-make.list;
+            echo "deb-src http://ppa.launchpad.net/ubuntu-desktop/ubuntu-make/ubuntu trusty main" >> /etc/apt/sources.list.d/autopkgtest-ubuntu-desktop-ubuntu-make.list; apt-get update""",
+            # artefacts saving
+            "--output-dir", artefacts_dir,
+            # env variables setting up tests
+            '--env', "'TESTS={}'".format(' '.join(args.tests))]
+
+    # default target to test is current tree
+    target = ['--built-tree', '.']
+    # test package from archive or ppa (the most recent)
+    if args.test_package:
+        target = ["--apt-source", "ubuntu-make"]
+    # git checkout testing
+    if args.test_git:
+        target = ["--git-source", args.test_git]
+    # local source package testing
+    if args.test_source:
+        target = ["--source", args.test_source]
+    cmds.extend(target)
+
+    # add emulator options
+    cmds.extend(['---', 'qemu', '-o', '/var/tmp', args.image])
+
+    return_code = subprocess.call(cmds)
+    print("Artefacts are available at {}".format(artefacts_dir))
+    sys.exit(return_code)
+
+
 def remote_run(args):
     """Start a run on the official ubuntu instances"""
 
@@ -200,9 +239,26 @@ if __name__ == '__main__':
     ## adt options
     adt_mode.set_defaults(run=adt_run)
 
-    adt_mode.add_argument('image')
+    adt_mode.add_argument('image', metavar="image_path", help="Image against which running the tests. This is what "
+                                                              "determines as well the release and arch against which "
+                                                              "we are testing on. You can build one cloud image via: "
+                                                              "'adt-buildvm-ubuntu-cloud -r trusty' for instance.")
     add_tests_arg(adt_mode)
-    adt_mode.add_argument('--git-branch')
+
+    target_group = adt_mode.add_argument_group('Ubuntu Make test target',
+                                                 description="This defines which Ubuntu Make you want to test. Default "
+                                                             "is the local tree (what's your pwd). You can change it "
+                                                             "for a git tree/branch or package from archive.")\
+        .add_mutually_exclusive_group()
+    target_group.add_argument("--test-git", metavar='GITURL [branchname]',
+                              help="A single URL or URL branchname. The test will be git cloned from "
+                                "that URL and ran from the checkout. This will not build binary "
+                                "packages from the branch and run tests against those, the test "
+                                "dependencies will be taken from the archive, or Ubuntu Make PPA.")
+    target_group.add_argument("--test-package", action="store_true", help="Test the ubuntu-make package (system run) "
+                                                                          "from the archive or Ubuntu Make PPA.")
+    target_group.add_argument("--test-source", metavar='DSC or some/pkg.dsc',
+                                help='build DSC and use its tests and/or generated binary packages')
 
 
     ## remote options
