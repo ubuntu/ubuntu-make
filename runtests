@@ -72,41 +72,8 @@ def set_logging_profile(log_config_file):
         os.environ["LOG_CFG"] = TESTING_SUBPROCESS_LOG_CONFIG
 
 
-if __name__ == '__main__':
-
-    # setup the environment in plain english so that we standardize the test bed (if some people have some .mo
-    # Ubuntu Make files installed while having a locale set to it) to avoid getting translated strings not
-    # matching our expectations.
-    os.environ["LANGUAGE"] = "C"
-
-    # ensure we have the right chmod on the ssh key to connect to docker containers (git by default reverts to x44)
-    os.chmod(os.path.join(root_dir, "docker", "umake_docker"), 0o600)
-
-    parser = argparse.ArgumentParser(description="Run umake tests. Specified list of test run in debug mode. "
-                                                 "Running a partial suite of tests is using a normal mode. "
-                                                 "Running all tests is using coverage by default.")
-    parser.add_argument('-s', "--system", action="store_true", help="Use system umake instead of local one")
-    parser.add_argument("--publish", action="store_true", help="Publish xunit results format")
-
-    parser.add_argument("tests", nargs='*', help="Action to perform: all (or omitted) to run all tests. "
-                                                 "small/medium/large/pep8 or nose syntax: "
-                                                 "tests.small.test_frameworks_loader:TestFrameworkLoaderSaveConfig.foo")
-
-    config_group = parser.add_argument_group('Run configuration options',
-                                             description="The default configuration is to use the debug profile when "
-                                                         "running some manually specific list of tests. No profile is "
-                                                         "selected when running some suites of tests and coverage "
-                                                         "profile when selecting all tests.")\
-        .add_mutually_exclusive_group()
-    config_group.add_argument("-c", "--config", help="Force using a particular nose profile, disable autoselection")
-    config_group.add_argument("--coverage", action="store_true", help="Force using coverage profile even when some "
-                                                                      "tests or tessuite")
-    config_group.add_argument("--debug", action="store_true", help="Force using debug profile even when running "
-                                                                   "all tests")
-    config_group.add_argument("--no-config", action="store_true", help="Disable any automated or manual config "
-                                                                       "selection")
-
-    args = parser.parse_args()
+def local_run(args):
+    """Run directly the tests on the host"""
 
     nose_args = []
     # nosetests captured logs format
@@ -171,3 +138,81 @@ if __name__ == '__main__':
     ## need a fake $0 argument
     nose_args.insert(0, "")
     nose.main(argv=nose_args)
+
+
+def adt_run(args):
+    """Run the tests on a qemu vm"""
+
+def remote_run(args):
+    """Start a run on the official ubuntu instances"""
+
+
+def add_tests_arg(parser):
+    """add the generic tests arguments to the parser"""
+    parser.add_argument("tests", nargs='*', help="Action to perform: all (or omitted) to run all tests. "
+                                                 "small/medium/large/pep8 or nose syntax: "
+                                                 "tests.small.test_frameworks_loader:TestFrameworkLoaderSaveConfig.foo")
+
+
+if __name__ == '__main__':
+
+    # setup the environment in plain english so that we standardize the test bed (if some people have some .mo
+    # Ubuntu Make files installed while having a locale set to it) to avoid getting translated strings not
+    # matching our expectations.
+    os.environ["LANGUAGE"] = "C"
+
+    # ensure we have the right chmod on the ssh key to connect to docker containers (git by default reverts to x44)
+    os.chmod(os.path.join(root_dir, "docker", "umake_docker"), 0o600)
+
+    parser = argparse.ArgumentParser(description="Run umake tests. Specified list of test run in debug mode. "
+                                                 "Running a partial suite of tests is using a normal mode. "
+                                                 "Running all tests is using coverage by default.")
+
+    command_group = parser.add_subparsers(help='What to run test on')
+    local_mode = command_group.add_parser('local', help='run tests locally (default). Enable easy debugging but large '
+                                                        'tests requires sudo and impact your sessions.')
+    adt_mode = command_group.add_parser('adt', help='run tests with adt running on a qemu image.')
+    remote_mode = command_group.add_parser('remote', help='run on official autopkgtests ubuntu instances (only for '
+                                                          'ubuntu archive admins or release team members)')
+
+    ## local options
+    local_mode.set_defaults(run=local_run)
+
+    add_tests_arg(local_mode)
+
+    local_mode.add_argument('-s', "--system", action="store_true", help="Use system umake instead of local one")
+    local_mode.add_argument("--publish", action="store_true", help="Publish xunit results format")
+
+    config_group = local_mode.add_argument_group('Run configuration options',
+                                                 description="The default configuration is to use the debug profile "
+                                                    "when running some manually specific list of tests. No profile is "
+                                                    "selected when running some suites of tests and coverage "
+                                                    "profile when selecting all tests.")\
+        .add_mutually_exclusive_group()
+    config_group.add_argument("-c", "--config", help="Force using a particular nose profile, disable autoselection")
+    config_group.add_argument("--coverage", action="store_true", help="Force using coverage profile even when some "
+                                                                      "tests or tessuite")
+    config_group.add_argument("--debug", action="store_true", help="Force using debug profile even when running "
+                                                                   "all tests")
+    config_group.add_argument("--no-config", action="store_true", help="Disable any automated or manual config "
+                                                                       "selection")
+
+    ## adt options
+    adt_mode.set_defaults(run=adt_run)
+
+    adt_mode.add_argument('image')
+    add_tests_arg(adt_mode)
+    adt_mode.add_argument('--git-branch')
+
+
+    ## remote options
+    remote_mode.set_defaults(run=remote_run)
+    add_tests_arg(remote_mode)
+
+    # set local as default and parse
+    cmd = sys.argv[1:]
+    if cmd[0] not in ["local", "adt", "remote"]:
+        cmd.insert(0, "local")
+    args = parser.parse_args(cmd)
+
+    args.run(args)
