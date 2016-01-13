@@ -196,6 +196,31 @@ def adt_run(args):
 def remote_run(args):
     """Start a run on the official ubuntu instances"""
 
+    # Note that we wrap arguments containing spaces with double quoting as they are passed through ssh
+
+    # ssh connection to snakefruit
+    cmds = ["ssh", "snakefruit.canonical.com", "sudo", "-i", "-u", "ubuntu-archive",
+            # run-autopkgtest command
+            "run-autopkgtest", "-s", args.series,
+            # ensure we always add the ppa to be in correct swift container archive
+            "--ppa", "ubuntu-desktop/ubuntu-make-builddeps", "--ppa", "ubuntu-desktop/ubuntu-make",
+            # env variables setting up tests (with double quoting
+            '--env', "'TESTS={}'".format(' '.join(args.tests))]
+
+    # add architectures if any:
+    for arch in args.architecture:
+        cmds.extend(["-a", arch])
+
+    target = []
+    if args.test_package:
+        target = ["ubuntu-make"]
+    # git checkout testing, put results under ubuntu-make-git tag
+    if args.test_git:
+        target = ["--test-git", "'{}'".format(args.test_git), "ubuntu-make-git"]
+    cmds.extend(target)
+
+    sys.exit(subprocess.call(cmds))
+
 
 def add_tests_arg(parser):
     """add the generic tests arguments to the parser"""
@@ -269,7 +294,25 @@ if __name__ == '__main__':
 
     ## remote options
     remote_mode.set_defaults(run=remote_run)
+
+    remote_mode.add_argument("series", help='Distro series name.')
     add_tests_arg(remote_mode)
+
+    remote_mode.add_argument('-a', '--architecture', action='append', default=[],
+                                help='Only run test(s) on given architecture name(s). '
+                                'Can be specified multiple times (default: all).')
+    target_group = remote_mode.add_argument_group('Ubuntu Make test target',
+                                                    description="This defines which Ubuntu Make you want to test. You "
+                                                                 "can change between a git tree/branch of package from "
+                                                                 "archive.")\
+        .add_mutually_exclusive_group(required=True)
+    target_group.add_argument("--test-package", action="store_true", help="Test the ubuntu-make package (system run) "
+                                                                          "from the archive or Ubuntu Make PPA.")
+    target_group.add_argument("--test-git", metavar='GITURL [branchname]',
+                              help="A single URL or URL branchname. The test will be git cloned from "
+                                "that URL and ran from the checkout. This will not build binary "
+                                "packages from the branch and run tests against those, the test "
+                                "dependencies will be taken from the archive, or Ubuntu Make PPA.")
 
     # set local as default and parse
     cmd = sys.argv[1:]
