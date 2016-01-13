@@ -22,11 +22,11 @@
 
 from contextlib import suppress
 from gettext import gettext as _
+import gnupg
 import logging
 import os
 import re
 import tempfile
-import gnupg
 
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
