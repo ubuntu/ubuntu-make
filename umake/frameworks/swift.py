@@ -22,14 +22,15 @@
 
 from contextlib import suppress
 from gettext import gettext as _
+import gnupg
 import logging
 import os
 import re
-import gnupg
+import tempfile
 
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.tools import add_env_to_user, MainLoop, get_current_ubuntu_version
+from umake.tools import add_env_to_user, as_root, MainLoop, get_current_ubuntu_version
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.ui import UI
 
@@ -92,13 +93,9 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
         DownloadCenter(urls=[DownloadItem(sig_url, None), DownloadItem(self.asc_url, None)],
                        on_done=self.check_gpg_and_start_download, download=False)
 
-    @MainLoop.in_mainloop_thread
-    def check_gpg_and_start_download(self, download_result):
-        asc_content = download_result.pop(self.asc_url).buffer.getvalue().decode('utf-8')
-        sig_url = list(download_result.keys())[0]
-        res = download_result[sig_url]
-        sig = res.buffer.getvalue().decode('utf-8').split()[0]
-        gpg = gnupg.GPG()
+    def _check_gpg_signature(self, gnupgdir, asc_content, sig):
+        """check gpg signature (temporary stock in dir)"""
+        gpg = gnupg.GPG(gnupghome=gnupgdir)
         imported_keys = gpg.import_keys(asc_content)
         if imported_keys.count == 0:
             logger.error("Keys not valid")
@@ -107,6 +104,32 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
         if verify is False:
             logger.error("Signature not valid")
             UI.return_main_screen(status_code=1)
+
+    @MainLoop.in_mainloop_thread
+    def check_gpg_and_start_download(self, download_result):
+        asc_content = download_result.pop(self.asc_url).buffer.getvalue().decode('utf-8')
+        sig_url = list(download_result.keys())[0]
+        res = download_result[sig_url]
+        sig = res.buffer.getvalue().decode('utf-8').split()[0]
+
+        # When we install new packages, we are executing as root and then dropping
+        # as the user for extracting and such. However, for signature verification,
+        # we use gpg. This one doesn't like priviledge drop (if uid = 0 and
+        # euid = 1000) and asserts if uid != euid.
+        # Importing the key as root as well creates new gnupg files owned as root if
+        # new keys weren't imported first.
+        # Consequently, run gpg as root if we needed root access or as the user
+        # otherwise. We store the gpg public key in a temporary gnupg directory that
+        # will be removed under the same user rights (this directory needs to be owned
+        # by the same user id to not be rejected by gpg).Z
+        if self.need_root_access:
+            with as_root():
+                with tempfile.TemporaryDirectory() as tmpdirname:
+                    self._check_gpg_signature(tmpdirname, asc_content, sig)
+        else:
+            with tempfile.TemporaryDirectory() as tmpdirname:
+                self._check_gpg_signature(tmpdirname, asc_content, sig)
+
         # you get and store self.download_url
         url = re.sub('.sig', '', sig_url)
         if url is None:
