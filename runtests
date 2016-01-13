@@ -173,7 +173,7 @@ def adt_run(args):
         target = ["--apt-source", "ubuntu-make"]
     # git checkout testing
     if args.test_git:
-        target = ["--git-source", args.test_git]
+        target = ['--no-built-binaries', "--git-source", args.test_git]
     # local source package testing
     if args.test_source:
         target = ["--source", args.test_source]
