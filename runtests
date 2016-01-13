@@ -267,8 +267,9 @@ if __name__ == '__main__':
 
     # set local as default and parse
     cmd = sys.argv[1:]
-    if cmd[0] not in ["local", "adt", "remote"]:
-        cmd.insert(0, "local")
+    if "--help" not in cmd:
+        if cmd[0] not in ["local", "adt", "remote"]:
+            cmd.insert(0, "local")
     args = parser.parse_args(cmd)
 
     args.run(args)
