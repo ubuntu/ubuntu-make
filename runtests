@@ -164,7 +164,7 @@ def adt_run(args):
             # artefacts saving
             "--output-dir", artefacts_dir,
             # env variables setting up tests
-            '--env', "'TESTS={}'".format(' '.join(args.tests))]
+            '--env', "TESTS={}".format(' '.join(args.tests))]
 
     # default target to test is current tree
     target = ['--built-tree', '.']
