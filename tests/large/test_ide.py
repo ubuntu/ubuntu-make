@@ -42,7 +42,7 @@ class EclipseJavaIDETests(LargeFrameworkTests):
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
         self.desktop_filename = "eclipse-java.desktop"
         self.command_args = '{} ide eclipse'.format(UMAKE)
-        self.name = "Eclipse Java"
+        self.name = "Eclipse"
 
     @property
     def arch_option(self):
