@@ -148,7 +148,7 @@ def local_run(args):
     nose.main(argv=nose_args)
 
 
-def adt_run(args):
+def vm_run(args):
     """Run the tests on a qemu vm"""
 
     artefacts_dir = tempfile.mkdtemp(prefix="umake-test-artefacts-")
@@ -241,7 +241,7 @@ if __name__ == '__main__':
     command_group = parser.add_subparsers(help='What to run test on')
     local_mode = command_group.add_parser('local', help='run tests locally (default). Enable easy debugging but large '
                                                         'tests requires sudo and impact your sessions.')
-    adt_mode = command_group.add_parser('adt', help='run tests with adt running on a qemu image.')
+    vm_mode = command_group.add_parser('vm', help='run tests with vm_mode running on a qemu image.')
     remote_mode = command_group.add_parser('remote', help='run on official autopkgtests ubuntu instances (only for '
                                                           'ubuntu archive admins or release team members)')
 
@@ -267,16 +267,16 @@ if __name__ == '__main__':
     config_group.add_argument("--no-config", action="store_true", help="Disable any automated or manual config "
                                                                        "selection")
 
-    ## adt options
-    adt_mode.set_defaults(run=adt_run)
+    ## vm options
+    vm_mode.set_defaults(run=vm_run)
 
-    adt_mode.add_argument('image', metavar="image_path", help="Image against which running the tests. This is what "
+    vm_mode.add_argument('image', metavar="image_path", help="Image against which running the tests. This is what "
                                                               "determines as well the release and arch against which "
                                                               "we are testing on. You can build one cloud image via: "
-                                                              "'adt-buildvm-ubuntu-cloud -r trusty' for instance.")
-    add_tests_arg(adt_mode)
+                                                              "'vm_mode-buildvm-ubuntu-cloud -r trusty' for instance.")
+    add_tests_arg(vm_mode)
 
-    target_group = adt_mode.add_argument_group('Ubuntu Make test target',
+    target_group = vm_mode.add_argument_group('Ubuntu Make test target',
                                                  description="This defines which Ubuntu Make you want to test. Default "
                                                              "is the local tree (what's your pwd). You can change it "
                                                              "for a git tree/branch or package from archive.")\
@@ -289,7 +289,7 @@ if __name__ == '__main__':
     target_group.add_argument("--test-package", action="store_true", help="Test the ubuntu-make package (system run) "
                                                                           "from the archive or Ubuntu Make PPA.")
     target_group.add_argument("--test-source", metavar='DSC or some/pkg.dsc',
-                                help='build DSC and use its tests and/or generated binary packages')
+                                help='Build DSC and use its tests and/or generated binary packages')
 
 
     ## remote options
@@ -317,7 +317,7 @@ if __name__ == '__main__':
     # set local as default and parse
     cmd = sys.argv[1:]
     if "--help" not in cmd:
-        if cmd[0] not in ["local", "adt", "remote"]:
+        if cmd[0] not in ["local", "vm", "remote"]:
             cmd.insert(0, "local")
     args = parser.parse_args(cmd)
 
