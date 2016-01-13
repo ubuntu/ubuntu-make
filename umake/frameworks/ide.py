@@ -155,7 +155,6 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         """Create the Eclipse launcher"""
         DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
                        on_done=self.save_icon, download=True)
-
         icon_path = join(self.install_path, self.icon_filename)
         exec_path = '"{}" %f'.format(join(self.install_path, "eclipse"))
         comment = self.description
@@ -171,7 +170,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         """Save correct Eclipse icon"""
         icon = download_result.pop(self.icon_url).fd.name
         shutil.copy(icon, join(self.install_path, self.icon_filename))
-        logger.debug(str(icon))
+        logger.debug("Copied icon: {}".format(self.icon_url))
 
 
 class EclipseJava(BaseEclipse):

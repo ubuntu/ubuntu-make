@@ -42,9 +42,10 @@ class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
         self.umake_command_args = '{} ide eclipse'.format(UMAKE)
-        self.bad_download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.eclipse.org", "technology", "epp",
-                                               "downloads", "release", "version", "point_release",
-                                               "eclipse-java-linux-gtk-x86_64.tar.gz.sha512")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "www.eclipse.org", "technology", "epp",
+                                                        "downloads", "release", "version", "point_release",
+                                                        "eclipse-java-linux-gtk-x86_64.tar.gz.sha512")
 
     def test_install_with_changed_download_page(self):
         """Installing eclipse ide should fail if download page has significantly changed"""
@@ -73,9 +74,10 @@ class EclipsePHPIDEInContainer(ContainerTests, test_ide.EclipsePHPIDETests):
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-php")
         self.umake_command_args = '{} ide eclipse'.format(UMAKE)
-        self.bad_download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.eclipse.org", "technology", "epp",
-                                               "downloads", "release", "version", "point_release",
-                                               "eclipse-php-linux-gtk-x86_64.tar.gz.sha512")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "www.eclipse.org", "technology", "epp",
+                                                        "downloads", "release", "version", "point_release",
+                                                        "eclipse-php-linux-gtk-x86_64.tar.gz.sha512")
 
 
 class EclipseCPPIDEInContainer(ContainerTests, test_ide.EclipseCPPIDETests):
@@ -92,9 +94,10 @@ class EclipseCPPIDEInContainer(ContainerTests, test_ide.EclipseCPPIDETests):
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-cpp")
         self.umake_command_args = '{} ide eclipse'.format(UMAKE)
-        self.bad_download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.eclipse.org", "technology", "epp",
-                                               "downloads", "release", "version", "point_release",
-                                               "eclipse-cpp-linux-gtk-x86_64.tar.gz.sha512")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "www.eclipse.org", "technology", "epp",
+                                                        "downloads", "release", "version", "point_release",
+                                                        "eclipse-cpp-linux-gtk-x86_64.tar.gz.sha512")
 
 
 class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
