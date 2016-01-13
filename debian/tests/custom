@@ -6,6 +6,9 @@ set -e
 # skip tests if not requested
 skip_if_no_in_list
 
+# require compiz to run as we might right large tests
+wait_for_compiz
+
 run_tests $TESTS
 
 publish_results
