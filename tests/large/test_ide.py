@@ -30,7 +30,7 @@ from tests.tools import UMAKE, spawn_process
 logger = logging.getLogger(__name__)
 
 
-class EclipseIDETests(LargeFrameworkTests):
+class EclipseJavaIDETests(LargeFrameworkTests):
     """The Eclipse distribution from the IDE collection."""
 
     TIMEOUT_INSTALL_PROGRESS = 120
@@ -40,7 +40,9 @@ class EclipseIDETests(LargeFrameworkTests):
     def setUp(self):
         super().setUp()
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
-        self.desktop_filename = "eclipse.desktop"
+        self.desktop_filename = "eclipse-java.desktop"
+        self.command_args = '{} ide eclipse'.format(UMAKE)
+        self.name = "Eclipse"
 
     @property
     def arch_option(self):
@@ -49,7 +51,7 @@ class EclipseIDETests(LargeFrameworkTests):
 
     def test_default_eclipse_ide_install(self):
         """Install eclipse from scratch test case"""
-        self.child = spawn_process(self.command('{} ide eclipse'.format(UMAKE)))
+        self.child = spawn_process(self.command(self.command_args))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -74,10 +76,32 @@ class EclipseIDETests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = spawn_process(self.command('{} ide eclipse'.format(UMAKE)))
-        self.expect_and_no_warn("Eclipse is already installed.*\[.*\] ")
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
         self.child.sendline()
         self.wait_and_close()
+
+
+class EclipsePHPIDETests(EclipseJavaIDETests):
+    """The Eclipse distribution from the IDE collection."""
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-php")
+        self.desktop_filename = "eclipse-php.desktop"
+        self.command_args = '{} ide eclipse-php'.format(UMAKE)
+        self.name = "Eclipse PHP"
+
+
+class EclipseCPPIDETests(EclipseJavaIDETests):
+    """The Eclipse distribution from the IDE collection."""
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-cpp")
+        self.desktop_filename = "eclipse-cpp.desktop"
+        self.command_args = '{} ide eclipse-cpp'.format(UMAKE)
+        self.name = "Eclipse CPP"
 
 
 class IdeaIDETests(LargeFrameworkTests):

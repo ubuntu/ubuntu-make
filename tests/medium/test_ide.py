@@ -28,7 +28,7 @@ from ..large import test_ide
 from ..tools import get_data_dir, swap_file_and_restore, UMAKE, spawn_process
 
 
-class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
+class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
     """This will test the eclipse IDE integration inside a container"""
 
     TIMEOUT_START = 20
@@ -41,23 +41,60 @@ class EclipseIDEInContainer(ContainerTests, test_ide.EclipseIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "www.eclipse.org", "technology", "epp",
+                                                        "downloads", "release", "version", "point_release",
+                                                        "eclipse-java-linux-gtk-x86_64.tar.gz.sha512")
 
     def test_install_with_changed_download_page(self):
         """Installing eclipse ide should fail if download page has significantly changed"""
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.eclipse.org", "downloads",
                                                "index.html")
-        umake_command = self.command('{} ide eclipse'.format(UMAKE))
-        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
     def test_install_with_changed_checksum_page(self):
         """Installing eclipse ide should fail if checksum link is unparseable"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.eclipse.org", "technology", "epp",
-                                               "downloads", "release", "version", "point_release",
-                                               "eclipse-java-linux-gtk-x86_64.tar.gz.sha512")
-        umake_command = self.command('{} ide eclipse'.format(UMAKE))
-        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.bad_download_page_test(self.command(self.command_args), self.bad_download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+
+class EclipsePHPIDEInContainer(ContainerTests, test_ide.EclipsePHPIDETests):
+    """This will test the eclipse IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["www.eclipse.org"]}
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-php")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "www.eclipse.org", "technology", "epp",
+                                                        "downloads", "release", "version", "point_release",
+                                                        "eclipse-php-linux-gtk-x86_64.tar.gz.sha512")
+
+
+class EclipseCPPIDEInContainer(ContainerTests, test_ide.EclipseCPPIDETests):
+    """This will test the eclipse IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["www.eclipse.org"]}
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-cpp")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "www.eclipse.org", "technology", "epp",
+                                                        "downloads", "release", "version", "point_release",
+                                                        "eclipse-cpp-linux-gtk-x86_64.tar.gz.sha512")
 
 
 class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
