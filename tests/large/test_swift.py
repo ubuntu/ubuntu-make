@@ -54,6 +54,7 @@ class SwiftTests(LargeFrameworkTests):
             open(example_file, "w").write(self.EXAMPLE_PROJECT)
             compile_command = ["bash", "-l", "-c", "swift build"]
         else:  # our mock expects getting that command parameter
+            self.example_prog_dir = "/tmp"
             compile_command = ["bash", "-l", "swift build"]
 
         self.child = spawn_process(self.command('{} swift'.format(UMAKE)))
@@ -70,7 +71,7 @@ class SwiftTests(LargeFrameworkTests):
         subprocess.check_call(self.command_as_list(compile_command), cwd=self.example_prog_dir)
 
         # run the compiled result
-        output = subprocess.check_output(resulting_binary, cwd=self.example_prog_dir, shell=True).decode()\
+        output = subprocess.check_output(self.command(resulting_binary), cwd=self.example_prog_dir, shell=True).decode()\
             .replace('\r', '').replace('\n', '')
 
         self.assertEqual(output, "Hello, world!")

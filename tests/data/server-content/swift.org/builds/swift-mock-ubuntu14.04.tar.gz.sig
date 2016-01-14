@@ -1,7 +1,1 @@
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iF4EABEIAAYFAlaXXLoACgkQ6hDx4sXgduKQyQD9Ej5Ze+io9zwCmItkrON/HqgI
-0qF4Hd0k6bDwyy1WSRcBAJPwg9zUUn8k3gXzg+7+IlcnMQ4ffhwkmBPHfBni7ejP
-=8pwJ
------END PGP SIGNATURE-----
+/home/galileo/Documents/Projects/ubuntu-make/tests/data/server-content/swift.org/builds/swift-mock-ubuntu15.10.tar.gz.sig
