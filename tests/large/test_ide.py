@@ -100,7 +100,7 @@ class EclipseCPPIDETests(EclipseJavaIDETests):
         super().setUp()
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-cpp")
         self.desktop_filename = "eclipse-cpp.desktop"
-        self.test_command = '{} ide eclipse-cpp'.format(UMAKE)
+        self.command_args = '{} ide eclipse-cpp'.format(UMAKE)
         self.name = "Eclipse CPP"
 
 
