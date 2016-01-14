@@ -1,3 +1,20 @@
+ubuntu-make (16.01.1) UNRELEASED; urgency=medium
+
+  * Fix Go support as of 1.5.3, they now publishes a sha256 instead of a sha1
+    checksum.
+  * Adapt tests to it.
+  * A lot of work on tests:
+    - add local/vm/remote args to runtests to easily run tests in locally,
+      in an adt environment or remotely on the official infrastructure.
+    - minimizing autopkgtests installation
+    - docker fixes with proxy for medium tests
+    - ensure we run with a dummy xorg driver
+    - ensure compiz is running before running large and custom tests
+    - fix TESTS=all triggering custom tests
+    - fix not installing ubuntu-make package itself for git tests
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 14 Jan 2016 12:21:58 +0100
+
 ubuntu-make (16.01) xenial; urgency=medium
 
   [ Galileo Sartor ]
