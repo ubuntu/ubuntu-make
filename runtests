@@ -228,6 +228,21 @@ def add_tests_arg(parser):
                                                  "small/medium/large/pep8 or nose syntax: "
                                                  "tests.small.test_frameworks_loader:TestFrameworkLoaderSaveConfig.foo")
 
+class _GlobalHelp(argparse._HelpAction):
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        parser.print_help()
+
+        # retrieve local subparser from parser
+        subparsers_actions = [
+            action for action in parser._actions
+            if isinstance(action, argparse._SubParsersAction)]
+        print("""
+-------------------------------------------
+Default mode is 'local' and can be omitted.
+-------------------------------------------""")
+        subparsers_actions[0].choices['local'].print_help()
+        parser.exit()
 
 if __name__ == '__main__':
 
@@ -236,9 +251,11 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Run umake tests. Specified list of test run in debug mode. "
                                                  "Running a partial suite of tests is using a normal mode. "
-                                                 "Running all tests is using coverage by default.")
+                                                 "Running all tests is using coverage by default.",
+                                     add_help=False)
+    parser.add_argument('--help', action=_GlobalHelp, help='Show this help')
 
-    command_group = parser.add_subparsers(help='What to run test on')
+    command_group = parser.add_subparsers(help='What mode to run tests with')
     local_mode = command_group.add_parser('local', help='run tests locally (default). Enable easy debugging but large '
                                                         'tests requires sudo and impact your sessions.')
     vm_mode = command_group.add_parser('vm', help='run tests with vm_mode running on a qemu image.')
