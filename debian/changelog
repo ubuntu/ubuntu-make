@@ -1,4 +1,4 @@
-ubuntu-make (16.01.1) UNRELEASED; urgency=medium
+ubuntu-make (16.01.1) xenial; urgency=medium
 
   * Fix Go support as of 1.5.3, they now publishes a sha256 instead of a sha1
     checksum.
@@ -13,7 +13,7 @@ ubuntu-make (16.01.1) UNRELEASED; urgency=medium
     - fix TESTS=all triggering custom tests
     - fix not installing ubuntu-make package itself for git tests
 
- -- Didier Roche <didrocks@ubuntu.com>  Thu, 14 Jan 2016 12:21:58 +0100
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 14 Jan 2016 12:26:52 +0100
 
 ubuntu-make (16.01) xenial; urgency=medium
 
