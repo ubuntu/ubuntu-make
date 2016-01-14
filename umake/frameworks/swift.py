@@ -141,6 +141,6 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Add swift necessary env variables"""
-        add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "usr/bin")}})
+        add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "usr", "bin")}})
         UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation "
                                             "to work properly").format(self.name)))
