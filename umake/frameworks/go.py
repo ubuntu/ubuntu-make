@@ -51,8 +51,8 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=[os.path.join("bin", "go")])
 
     def parse_download_link(self, line, in_download):
-        """Parse Go download link, expect to find a sha1 and a url"""
-        url, sha1 = (None, None)
+        """Parse Go download link, expect to find a sha and a url"""
+        url, sha = (None, None)
         if "linux-{}".format(get_current_arch().replace("i386", "386")) in line:
             in_download = True
         if in_download:
@@ -61,13 +61,13 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
                 url = p.group(1)
             p = re.search(r'<td><tt>(\w+)</tt></td>', line)
             with suppress(AttributeError):
-                sha1 = p.group(1)
+                sha = p.group(1)
             if "</tr>" in line:
                 in_download = False
 
-        if url is None and sha1 is None:
+        if url is None and sha is None:
             return (None, in_download)
-        return ((url, sha1), in_download)
+        return ((url, sha), in_download)
 
     def post_install(self):
         """Add go necessary env variables"""
