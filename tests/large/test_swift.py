@@ -71,7 +71,8 @@ class SwiftTests(LargeFrameworkTests):
         subprocess.check_call(self.command_as_list(compile_command), cwd=self.example_prog_dir)
 
         # run the compiled result
-        output = subprocess.check_output(self.command(resulting_binary), cwd=self.example_prog_dir, shell=True).decode()\
+        output = subprocess.check_output(self.command(resulting_binary),
+                                         cwd=self.example_prog_dir, shell=True).decode()\
             .replace('\r', '').replace('\n', '')
 
         self.assertEqual(output, "Hello, world!")
