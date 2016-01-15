@@ -23,6 +23,7 @@ ADD tests/data/storage.googleapis.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/netbeans.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.rust-lang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/swift.org.crt /usr/local/share/ca-certificates/
+ADD tests/data/nodejs.org.crt /usr/local/share/ca-certificates/
 ADD docker/create_packages.sh /tmp/
 
 # Refresh the image
@@ -70,4 +71,3 @@ RUN \
 # clean up stuff
   apt-get clean -y && \
   apt-get remove --purge -y software-properties-common devscripts equivs
-
