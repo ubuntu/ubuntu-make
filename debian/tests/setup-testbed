@@ -103,5 +103,8 @@ sloccount * | head -n -17 | tail -17 | tee "$config_dir/stats"
 if [ "$type" = "system" ]; then
     rm -r umake/
 fi
+# compile local python file under current user to avoid some root-owned compile
+# file like for local server
+python3 -m compileall .
 
 sudo -n /tmp/autopkgtest-reboot ready
