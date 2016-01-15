@@ -119,6 +119,13 @@ cd $repo_root_dir/scala
 create_package default-jre
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 
+# swift deps
+mkdir -p $repo_root_dir/swift
+cd $repo_root_dir/swift
+create_package clang
+create_package libicu-dev
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
 # unity3d deps
 mkdir -p $repo_root_dir/unity3d
 cd $repo_root_dir/unity3d

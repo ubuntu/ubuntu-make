@@ -1,0 +1,31 @@
+#!/bin/sh
+set -e
+
+usage="$(basename "$0") [-h] file_to_sign asc_public_sig -- create a temporary gpg key, sign and publish a public signature
+
+where:
+    -h  show this help text
+    file_to_sign: path to the file to sign with this new gpg key. a .sig file alongside will be created.
+    asc_public_sig: path to the public gpg key signature. This one will be appended
+
+A temporary gpg key is created and then deleted"
+
+if [ $# -ne 2 ] || [ $1 = '-h' ] || [ $2 = '-h' ]; then
+    echo "$usage"
+    exit
+fi
+
+
+tmpdir=`mktemp -d`
+chmod 700 $tmpdir
+gpg --homedir $tmpdir --gen-key --batch << EOF
+Key-Type: DSA
+Name-Email: ubuntu-make@ubuntu.com
+Expire-Date: 0
+EOF
+
+gpg --homedir $tmpdir --armor -b --sign $1
+mv $1.asc $1.sig
+gpg --homedir $tmpdir --armor --export >> $2
+
+rm -rf $tmpdir
