@@ -58,10 +58,10 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
         """Parse Nodejs download link, expect to find a sha1 and a url"""
         url, shasum = (None, None)
         arch = get_current_arch()
-        if "linux-{}.tar.gz".format(self.arch_trans[arch]) in line:
+        if "linux-{}.tar.xz".format(self.arch_trans[arch]) in line:
             in_download = True
         if in_download:
-            url = "https://nodejs.org/dist/latest/" + line.split(' ')[2].rstrip()
+            url = self.download_page.strip("SHASUMS256.txt") + line.split(' ')[2].rstrip()
             shasum = line.split(' ')[0]
 
         if url is None and shasum is None:
