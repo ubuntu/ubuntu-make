@@ -1,3 +1,3 @@
-de0c6951461e42d118eec22ed1118e00681d82326c2b32307fbe5ad8608f19fd  node-mock-linux-x64.tar.xz
-de0c6951461e42d118eec22ed1118e00681d82326c2b32307fbe5ad8608f19fd  node-mock-linux-x86.tar.xz
+eaf279914e42155357c62fac8f933f068cea5720e4096c47c6dadc73fe4d7deb  node-mock-linux-x64.tar.xz
+eaf279914e42155357c62fac8f933f068cea5720e4096c47c6dadc73fe4d7deb  node-mock-linux-x86.tar.xz
 
