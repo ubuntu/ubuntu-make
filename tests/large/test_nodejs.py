@@ -71,7 +71,7 @@ class NodejsTests(LargeFrameworkTests):
             .replace('\r', '').replace('\n', '')
 
         # set npm prefix
-        npm_command = ["bash", "-l", "npm", "config", "set", "prefix", "~/.node_modules"]
+        npm_command = ["bash", "-l", os.path.join(self.installed_path, "bin", "npm"), "config set prefix ~/.node_modules"]
         npm_output = subprocess.check_output(self.command_as_list(npm_command)).decode()\
             .replace('\r', '').replace('\n', '')
 
