@@ -25,7 +25,6 @@ from gettext import gettext as _
 import logging
 import os
 import subprocess
-import re
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
 from umake.tools import get_current_arch, add_env_to_user, ChecksumType
@@ -72,6 +71,6 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Add nodejs necessary env variables and move module folder"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
-        # subprocess.call([os.path.join(self.install_path, "bin", "npm"), "config", "set", "prefix", "~/.node_modules"])
+        subprocess.call([os.path.join(self.install_path, "bin", "npm"), "config", "set", "prefix", "~/.node_modules"])
         UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation "
                                             "to work properly").format(self.name)))

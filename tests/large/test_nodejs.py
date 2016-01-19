@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 # Copyright (C) 2014 Canonical
 #
@@ -52,7 +51,7 @@ class NodejsTests(LargeFrameworkTests):
             open(example_file, "w").write(self.EXAMPLE_PROJECT)
             compile_command = ["bash", "-l", "-c", "node {}".format(example_file)]
         else:  # our mock expects getting that path
-            compile_command = ["bash", "-l", "node run /tmp/hello.js"]
+            compile_command = ["bash", "-l", "node /tmp/hello.js"]
 
         self.child = spawn_process(self.command('{} nodejs'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
@@ -63,8 +62,18 @@ class NodejsTests(LargeFrameworkTests):
         self.assert_exec_exists()
         self.assertTrue(self.is_in_path(self.exec_path))
 
+        npm_path = os.path.join(self.installed_path, "bin", "npm")
+        self.assertTrue(self.path_exists(npm_path))
+        self.assertTrue(self.is_in_path(npm_path))
+
         # compile a small project
         output = subprocess.check_output(self.command_as_list(compile_command)).decode()\
             .replace('\r', '').replace('\n', '')
 
+        # set npm prefix
+        npm_command = ["bash", "-l", "npm", "config", "set", "prefix", "~/.node_modules"]
+        npm_output = subprocess.check_output(self.command_as_list(npm_command)).decode()\
+            .replace('\r', '').replace('\n', '')
+
         self.assertEqual(output, "Hello World")
+        self.assertEqual(npm_output, "hello, world")
