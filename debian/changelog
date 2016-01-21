@@ -1,4 +1,4 @@
-ubuntu-make (16.01.1ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (16.01.2) xenial; urgency=medium
 
   [ Galileo Sartor ]
   * Add swift lang support with according tests.
@@ -14,7 +14,7 @@ ubuntu-make (16.01.1ubuntu1) UNRELEASED; urgency=medium
     working around some uid != euid limitations.
   * Compile local python file under current user name in tests.
 
- -- Didier Roche <didrocks@ubuntu.com>  Wed, 20 Jan 2016 17:29:01 -0800
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 20 Jan 2016 17:38:39 -0800
 
 ubuntu-make (16.01.1) xenial; urgency=medium
 
