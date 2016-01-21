@@ -7,3 +7,12 @@
 
 override_dh_auto_test:
 	./runtests pep8 small
+
+override_dh_installman:
+	help2man -n "Deploy and setup developers environment easily on ubuntu" -o debian/umake.1 bin/umake
+	sed -i s/+unknown//g debian/umake.1
+	dh_installman
+
+override_dh_clean:
+	rm -f debian/umake.1
+	dh_clean
