@@ -1,3 +1,21 @@
+ubuntu-make (16.01.1ubuntu1) UNRELEASED; urgency=medium
+
+  [ Galileo Sartor ]
+  * Add swift lang support with according tests.
+  * Add support for Eclipse php with tests.
+  * Add support for Eclipse cpp with tests.
+
+  [ Evan McIntire ]
+  * dd manpage that is generated from the --help text.
+
+  [ Didier Roche ]
+  * Fix, and implements some testing for Swift, Eclipse php and cpp.
+  * Add gpg key support so that we can mock and add it to frameworks,
+    working around some uid != euid limitations.
+  * Compile local python file under current user name in tests.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 20 Jan 2016 17:29:01 -0800
+
 ubuntu-make (16.01.1) xenial; urgency=medium
 
   * Fix Go support as of 1.5.3, they now publishes a sha256 instead of a sha1
