@@ -72,5 +72,6 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
         """Add nodejs necessary env variables and move module folder"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
         subprocess.call([os.path.join(self.install_path, "bin", "npm"), "config", "set", "prefix", "~/.node_modules"])
+        add_env_to_user(self.name, {"PATH": {"value": os.path.join("~/.node_modules", "bin")}})
         UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation "
                                             "to work properly").format(self.name)))
