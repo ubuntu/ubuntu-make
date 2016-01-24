@@ -50,11 +50,9 @@ class NodejsTests(LargeFrameworkTests):
             example_file = os.path.join(self.example_prog_dir, "hello.js")
             open(example_file, "w").write(self.EXAMPLE_PROJECT)
             compile_command = ["bash", "-l", "-c", "node {}".format(example_file)]
-            npm_path = os.path.join(self.installed_path, "bin", "npm")
             npm_command = ["bash", "-l", "-c", "npm config get prefix"]
         else:  # our mock expects getting that path
             compile_command = ["bash", "-l", "node /tmp/hello.js"]
-            npm_path = os.path.join(self.installed_path, "bin", "npm")
             npm_command = ["bash", "-l", "npm config get prefix"]
 
         self.child = spawn_process(self.command('{} nodejs'.format(UMAKE)))
@@ -66,6 +64,7 @@ class NodejsTests(LargeFrameworkTests):
         self.assert_exec_exists()
         self.assertTrue(self.is_in_path(self.exec_path))
 
+        npm_path = os.path.join(self.installed_path, "bin", "npm")
         self.assertTrue(self.path_exists(npm_path))
         self.assertTrue(self.is_in_path(npm_path))
 
