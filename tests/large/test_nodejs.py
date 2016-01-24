@@ -51,11 +51,11 @@ class NodejsTests(LargeFrameworkTests):
             open(example_file, "w").write(self.EXAMPLE_PROJECT)
             compile_command = ["bash", "-l", "-c", "node {}".format(example_file)]
             npm_path = os.path.join(self.installed_path, "bin", "npm")
-            npm_command = ["bash", "-l", "-c", npm_path + " config get prefix"]
+            npm_command = ["bash", "-l", "-c", "npm config get prefix"]
         else:  # our mock expects getting that path
             compile_command = ["bash", "-l", "node /tmp/hello.js"]
             npm_path = os.path.join(self.installed_path, "bin", "npm")
-            npm_command = ["bash", "-l", npm_path + " config get prefix"]
+            npm_command = ["bash", "-l", "npm config get prefix"]
 
         self.child = spawn_process(self.command('{} nodejs'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
