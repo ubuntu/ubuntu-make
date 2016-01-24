@@ -50,8 +50,12 @@ class NodejsTests(LargeFrameworkTests):
             example_file = os.path.join(self.example_prog_dir, "hello.js")
             open(example_file, "w").write(self.EXAMPLE_PROJECT)
             compile_command = ["bash", "-l", "-c", "node {}".format(example_file)]
+            npm_path = os.path.join(self.installed_path, "bin", "npm")
+            npm_command = ["bash", "-l", "-c", npm_path + " config get prefix"]
         else:  # our mock expects getting that path
             compile_command = ["bash", "-l", "node /tmp/hello.js"]
+            npm_path = os.path.join(self.installed_path, "bin", "npm")
+            npm_command = ["bash", "-l", npm_path + " config get prefix"]
 
         self.child = spawn_process(self.command('{} nodejs'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
@@ -62,7 +66,6 @@ class NodejsTests(LargeFrameworkTests):
         self.assert_exec_exists()
         self.assertTrue(self.is_in_path(self.exec_path))
 
-        npm_path = os.path.join(self.installed_path, "bin", "npm")
         self.assertTrue(self.path_exists(npm_path))
         self.assertTrue(self.is_in_path(npm_path))
 
@@ -71,10 +74,10 @@ class NodejsTests(LargeFrameworkTests):
             .replace('\r', '').replace('\n', '')
 
         # set npm prefix
-        npm_command = ["bash", "-l", os.path.join(self.installed_path, "bin", "npm"),
-                       "config set prefix ~/.node_modules"]
         npm_output = subprocess.check_output(self.command_as_list(npm_command)).decode()\
             .replace('\r', '').replace('\n', '')
 
         self.assertEqual(output, "Hello World")
-        self.assertEqual(npm_output, "hello, world")
+        self.assertEqual(npm_output, "{}/.node_modules".format(os.path.join("/",
+                                                                            self.installed_path.split('/')[1],
+                                                                            self.installed_path.split('/')[2])))
