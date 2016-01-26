@@ -290,7 +290,7 @@ if __name__ == '__main__':
     vm_mode.add_argument('image', metavar="image_path", help="Image against which running the tests. This is what "
                                                               "determines as well the release and arch against which "
                                                               "we are testing on. You can build one cloud image via: "
-                                                              "'vm_mode-buildvm-ubuntu-cloud -r trusty' for instance.")
+                                                              "'buildvm-ubuntu-cloud -r trusty' for instance.")
     add_tests_arg(vm_mode)
 
     target_group = vm_mode.add_argument_group('Ubuntu Make test target',
