@@ -6,6 +6,7 @@ progressbar
 pyyaml
 requests
 pyxdg
+python-gnupg
 
 # test tools
 nose
