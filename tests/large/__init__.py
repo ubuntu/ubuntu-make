@@ -30,7 +30,7 @@ import subprocess
 from time import sleep
 from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned, remove_framework_envs_from_user
 from ..tools import LoggedTestCase, get_path_from_desktop_file, is_in_group, INSTALL_DIR, swap_file_and_restore, \
-    spawn_process
+    spawn_process, BINARY_DIR
 
 
 class LargeFrameworkTests(LoggedTestCase):
@@ -44,6 +44,7 @@ class LargeFrameworkTests(LoggedTestCase):
         self.framework_name_for_profile = ""
         self.conf_path = os.path.expanduser("~/.config/umake")
         self.install_base_path = os.path.expanduser("~/{}".format(INSTALL_DIR))
+        self.binary_dir = os.path.expanduser("~/{}".format(BINARY_DIR))
         self.desktop_filename = ""
         self.child = None
         self.additional_dirs = []

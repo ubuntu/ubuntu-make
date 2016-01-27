@@ -60,6 +60,7 @@ class EclipseJavaIDETests(LargeFrameworkTests):
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
+        self.assertTrue(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
@@ -588,6 +589,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
+        self.assertTrue(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,

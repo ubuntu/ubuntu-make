@@ -42,7 +42,7 @@ import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage, LicenseAgreement
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop,\
-    strip_tags
+    strip_tags, add_env_to_user, add_exec_link
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -77,6 +77,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
             kwargs["required_files_path"] = current_required_files_path
         download_page = 'https://www.eclipse.org/downloads/'
         kwargs["download_page"] = download_page
+        kwargs["add_link"] = True
         super().__init__(*args, **kwargs)
         self.icon_url = os.path.join(self.download_page, "images", self.icon_filename)
         self.bits = '' if platform.machine() == 'i686' else 'x86_64'
@@ -156,15 +157,16 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
                        on_done=self.save_icon, download=True)
         icon_path = join(self.install_path, self.icon_filename)
-        exec_path = '"{}" %f'.format(join(self.install_path, "eclipse"))
+        exec_path = join(self.install_path, "eclipse")
         comment = self.description
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=self.name,
                                                      icon_path=icon_path,
-                                                     exec=exec_path,
+                                                     exec='"{}" %f'.format(exec_path),
                                                      comment=comment,
                                                      categories=categories))
+        add_exec_link(exec_path, self.desktop_filename.split('.')[0])
 
     def save_icon(self, download_result):
         """Save correct Eclipse icon"""
@@ -545,7 +547,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         self.start_download_and_install()
 
     def post_install(self):
-        """Create the Luna launcher"""
+        """Create the Arduino launcher"""
         icon_path = join(self.install_path, 'lib', 'arduino_icon.ico')
         exec_path = '"{}" %f'.format(join(self.install_path, "arduino"))
         comment = _("The Arduino Software IDE")
@@ -673,7 +675,8 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="visual-studio-code.desktop",
                          required_files_path=["Code"],
                          dir_to_decompress_in_tarball="VSCode-linux-*",
-                         packages_requirements=["libgtk2.0-0"])
+                         packages_requirements=["libgtk2.0-0"],
+                         add_link=True)
         self.license_url = "https://code.visualstudio.com/License"
         # we have to mock headers for visual studio code website to give us an answer
         self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
@@ -749,9 +752,11 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Visual Studio Code launcher"""
+        exec_path = os.path.join(self.install_path, "Code")
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Visual Studio Code"),
                         icon_path=os.path.join(self.install_path, "resources", "app", "resources", "linux",
                                                "vscode.png"),
-                        exec=os.path.join(self.install_path, "Code"),
+                        exec=exec_path,
                         comment=_("Visual Studio focused on modern web and cloud"),
                         categories="Development;IDE;"))
+        add_exec_link(exec_path, self.desktop_filename.split('.')[0])

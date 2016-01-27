@@ -337,6 +337,15 @@ def create_launcher(desktop_filename, content):
         gsettings.set_strv("favorites", launcher_list)
 
 
+def add_exec_link(exec_path, destination_name):
+        bin_folder = os.path.join(os.path.expanduser("~"), '.bin')
+        with suppress(FileExistsError):
+            os.mkdir(bin_folder)
+        add_env_to_user("Umake symlink", {"PATH": {"value": bin_folder}})
+        os.symlink(exec_path,
+                   os.path.join(bin_folder, destination_name))
+
+
 def get_application_desktop_file(name="", icon_path="", exec="", comment="", categories="", extra=""):
     """Get a desktop file string content"""
     return dedent("""\

@@ -23,7 +23,7 @@ import os
 import pwd
 import subprocess
 from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path, get_data_dir, INSTALL_DIR, \
-    BRANCH_TESTS, SYSTEM_UMAKE_DIR
+    BRANCH_TESTS, SYSTEM_UMAKE_DIR, BINARY_DIR
 from time import sleep
 
 
@@ -41,6 +41,7 @@ class ContainerTests(LoggedTestCase):
         super().setUp()  # this will call other parents of ContainerTests ancestors, like LargeFrameworkTests
         self.umake_path = get_root_dir()
         self.install_base_path = os.path.expanduser("/home/{}/{}".format(self.DOCKER_USER, INSTALL_DIR))
+        self.binary_dir = os.path.expanduser("/home/{}/{}".format(self.DOCKER_USER, BINARY_DIR))
         self.image_name = self.DOCKER_TESTIMAGE
         if not hasattr(self, "hosts"):
             self.hosts = {}

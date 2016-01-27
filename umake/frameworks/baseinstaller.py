@@ -59,6 +59,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
         self.match_last_link = kwargs.get("match_last_link", False)
+        self.add_link = kwargs.get("add_link", False)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
                           "desktop_filename", "icon_filename", "required_files_path", "match_last_link"]:
             with suppress(KeyError):
@@ -117,6 +118,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         if self.icon_filename:
             with suppress(FileNotFoundError):
                 os.remove(get_icon_path(self.icon_filename))
+        if self.add_link is True:
+            with suppress(FileNotFoundError):
+                os.remove(os.path.join(os.path.expanduser("~"), '.bin', self.desktop_filename.split('.')[0]))
         with suppress(FileNotFoundError):
             shutil.rmtree(self.install_path)
         remove_framework_envs_from_user(self.name)

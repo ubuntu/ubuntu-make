@@ -139,7 +139,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
 
     def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None,
                  only_on_archs=None, only_ubuntu_version=None, packages_requirements=None, only_for_removal=False,
-                 expect_license=False, need_root_access=False):
+                 expect_license=False, need_root_access=False, add_link=False):
         self.name = name
         self.description = description
         self.logo_path = None
@@ -151,6 +151,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.packages_requirements.extend(self.category.packages_requirements)
         self.only_for_removal = only_for_removal
         self.expect_license = expect_license
+        self.add_link = add_link
 
         # don't detect anything for completion mode (as we need to be quick), so avoid opening apt cache and detect
         # if it's installed.

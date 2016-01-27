@@ -42,6 +42,7 @@ DOCKER = None
 UMAKE = "umake"
 INSTALL_DIR = ".local/share/umake"
 SYSTEM_UMAKE_DIR = "/usr/lib/python3/dist-packages/umake"
+BINARY_DIR = ".bin"
 
 
 class LoggedTestCase(TestCase):
