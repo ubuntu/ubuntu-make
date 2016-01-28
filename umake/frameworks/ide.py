@@ -77,7 +77,6 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
             kwargs["required_files_path"] = current_required_files_path
         download_page = 'https://www.eclipse.org/downloads/'
         kwargs["download_page"] = download_page
-        kwargs["add_link"] = True
         super().__init__(*args, **kwargs)
         self.icon_url = os.path.join(self.download_page, "images", self.icon_filename)
         self.bits = '' if platform.machine() == 'i686' else 'x86_64'
@@ -675,8 +674,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="visual-studio-code.desktop",
                          required_files_path=["Code"],
                          dir_to_decompress_in_tarball="VSCode-linux-*",
-                         packages_requirements=["libgtk2.0-0"],
-                         add_link=True)
+                         packages_requirements=["libgtk2.0-0"])
         self.license_url = "https://code.visualstudio.com/License"
         # we have to mock headers for visual studio code website to give us an answer
         self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "

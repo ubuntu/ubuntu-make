@@ -31,7 +31,7 @@ import pkgutil
 import sys
 import subprocess
 from umake.network.requirements_handler import RequirementsHandler
-from umake.settings import DEFAULT_INSTALL_TOOLS_PATH, UMAKE_FRAMEWORKS_ENVIRON_VARIABLE
+from umake.settings import DEFAULT_INSTALL_TOOLS_PATH, UMAKE_FRAMEWORKS_ENVIRON_VARIABLE, DEFAULT_BINARY_LINK_PATH
 from umake.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
     is_completion_mode, switch_to_current_user, MainLoop, get_user_frameworks_path
 from umake.ui import UI
@@ -139,7 +139,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
 
     def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None,
                  only_on_archs=None, only_ubuntu_version=None, packages_requirements=None, only_for_removal=False,
-                 expect_license=False, need_root_access=False, add_link=False):
+                 expect_license=False, need_root_access=False):
         self.name = name
         self.description = description
         self.logo_path = None
@@ -151,7 +151,6 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.packages_requirements.extend(self.category.packages_requirements)
         self.only_for_removal = only_for_removal
         self.expect_license = expect_license
-        self.add_link = add_link
 
         # don't detect anything for completion mode (as we need to be quick), so avoid opening apt cache and detect
         # if it's installed.
@@ -188,6 +187,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         if not install_path_dir:
             install_path_dir = os.path.join("" if category.is_main_category else category.prog_name, self.prog_name)
         self.default_install_path = os.path.join(DEFAULT_INSTALL_TOOLS_PATH, install_path_dir)
+        self.default_binary_link_path = DEFAULT_BINARY_LINK_PATH
         self.install_path = self.default_install_path
         # check if we have an install path previously set
         config = ConfigHandler().config

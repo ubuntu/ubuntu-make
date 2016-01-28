@@ -41,7 +41,7 @@ class ContainerTests(LoggedTestCase):
         super().setUp()  # this will call other parents of ContainerTests ancestors, like LargeFrameworkTests
         self.umake_path = get_root_dir()
         self.install_base_path = os.path.expanduser("/home/{}/{}".format(self.DOCKER_USER, INSTALL_DIR))
-        self.binary_dir = os.path.expanduser("/home/{}/{}".format(self.DOCKER_USER, BINARY_DIR))
+        self.binary_dir = os.path.join(self.install_base_path, BINARY_DIR)
         self.image_name = self.DOCKER_TESTIMAGE
         if not hasattr(self, "hosts"):
             self.hosts = {}
