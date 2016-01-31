@@ -24,7 +24,8 @@ ADD tests/data/netbeans.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.rust-lang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/swift.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/nodejs.org.crt /usr/local/share/ca-certificates/
-add tests/data/github.com.crt /usr/local/share/ca-certificates/
+ADD tests/data/github.com.crt /usr/local/share/ca-certificates/
+ADD tests/data/spring.io.crt /usr/local/share/ca-certificates/
 ADD docker/create_packages.sh /tmp/
 
 # Refresh the image
