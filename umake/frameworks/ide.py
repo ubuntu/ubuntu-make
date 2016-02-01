@@ -156,13 +156,13 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
                        on_done=self.save_icon, download=True)
         icon_path = join(self.install_path, self.icon_filename)
-        exec_path = join(self.install_path, "eclipse")
+        self.exec_path = join(self.install_path, "eclipse")
         comment = self.description
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=self.name,
                                                      icon_path=icon_path,
-                                                     exec='"{}" %f'.format(exec_path),
+                                                     exec='"{}" %f'.format(self.exec_path),
                                                      comment=comment,
                                                      categories=categories))
 
@@ -281,13 +281,13 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
     def post_install(self):
         """Create the appropriate JetBrains launcher."""
         icon_path = join(self.install_path, 'bin', self.icon_filename)
-        exec_path = join(self.install_path, "bin", self.executable)
+        self.exec_path = join(self.install_path, "bin", self.executable)
         comment = self.description + " (UDTC)"
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=self.description,
                                                      icon_path=icon_path,
-                                                     exec='"{}" %f'.format(exec_path),
+                                                     exec='"{}" %f'.format(self.exec_path),
                                                      comment=comment,
                                                      categories=categories))
 
@@ -547,13 +547,13 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Create the Arduino launcher"""
         icon_path = join(self.install_path, 'lib', 'arduino_icon.ico')
-        exec_path = join(self.install_path, "arduino")
+        self.exec_path = join(self.install_path, "arduino")
         comment = _("The Arduino Software IDE")
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=_("Arduino"),
                                                      icon_path=icon_path,
-                                                     exec='"{}" %f'.format(exec_path),
+                                                     exec='"{}" %f'.format(self.exec_path),
                                                      comment=comment,
                                                      categories=categories))
         if not self.was_in_arduino_group:
@@ -656,11 +656,11 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Netbeans launcher"""
-        exec_path(os.path.join(self.install_path, "bin", "netbeans"))
+        self.exec_path(os.path.join(self.install_path, "bin", "netbeans"))
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=_("Netbeans IDE"),
                                                      icon_path=join(self.install_path, "nb", "netbeans.png"),
-                                                     exec=exec_path,
+                                                     exec=self.exec_path,
                                                      comment=_("Netbeans IDE"),
                                                      categories="Development;IDE;"))
 
@@ -754,6 +754,6 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Visual Studio Code"),
                         icon_path=os.path.join(self.install_path, "resources", "app", "resources", "linux",
                                                "vscode.png"),
-                        exec=exec_path,
+                        exec=self.exec_path,
                         comment=_("Visual Studio focused on modern web and cloud"),
                         categories="Development;IDE;"))
