@@ -72,6 +72,12 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.download_requests = []
 
     @property
+    def exec_link_name(self):
+        if self.desktop_filename:
+            return self.desktop_filename.split('.')[0]
+        return None
+
+    @property
     def is_installed(self):
         # check path and requirements
         if not super().is_installed:
@@ -115,7 +121,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         if self.desktop_filename:
             with suppress(FileNotFoundError):
                 os.remove(get_launcher_path(self.desktop_filename))
-                os.remove(os.path.join(self.default_binary_link_path, self.desktop_filename.split('.')[0]))
+                os.remove(os.path.join(self.default_binary_link_path, exec_link_name))
         if self.icon_filename:
             with suppress(FileNotFoundError):
                 os.remove(get_icon_path(self.icon_filename))
@@ -399,7 +405,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
         self.post_install()
         if self.desktop_filename:
-            add_exec_link(self.exec_path, self.desktop_filename.split('.')[0])
+            add_exec_link(self.exec_path, exec_link_name)
         # Mark as installation done in configuration
         self.mark_in_config()
 
