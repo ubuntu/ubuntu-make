@@ -347,12 +347,10 @@ class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTest)
         umake_command = self.command('{} ide visual-studio-code'.format(UMAKE))
         self.bad_download_page_test(umake_command, license_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-<<<<<<< HEAD
         self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
-=======
 
 
-class LightTableContainer(ContainerTests, test_ide.LightTableTest):
+class LightTableInContainer(ContainerTests, test_ide.LightTableTest):
     """This will test the LightTable integration inside a container"""
 
     TIMEOUT_START = 20
@@ -372,4 +370,4 @@ class LightTableContainer(ContainerTests, test_ide.LightTableTest):
         umake_command = self.command('{} ide lighttable'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
->>>>>>> master
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))

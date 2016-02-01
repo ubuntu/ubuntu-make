@@ -121,7 +121,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         if self.desktop_filename:
             with suppress(FileNotFoundError):
                 os.remove(get_launcher_path(self.desktop_filename))
-                os.remove(os.path.join(self.default_binary_link_path, exec_link_name))
+                os.remove(os.path.join(self.default_binary_link_path, self.exec_link_name))
         if self.icon_filename:
             with suppress(FileNotFoundError):
                 os.remove(get_icon_path(self.icon_filename))

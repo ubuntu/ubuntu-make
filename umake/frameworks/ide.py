@@ -786,10 +786,10 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the LightTable Code launcher"""
-        exec_path = os.path.join(self.install_path, "LightTable")
+        self.exec_path = os.path.join(self.install_path, "LightTable")
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("LightTable"),
                         icon_path=os.path.join(self.install_path, "resources", "app", "core", "img",
                                                "lticon.png"),
-                        exec=exec_path,
+                        exec=self.exec_path,
                         comment=_("LightTable code editor"),
                         categories="Development;IDE;"))
