@@ -757,3 +757,39 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_path,
                         comment=_("Visual Studio focused on modern web and cloud"),
                         categories="Development;IDE;"))
+
+
+class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="LightTable", description=_("LightTable code editor"),
+                         category=category, only_on_archs=['amd64'],
+                         download_page="https://github.com/LightTable/LightTable/releases",
+                         desktop_filename="lighttable.desktop",
+                         required_files_path=["LightTable"],
+                         dir_to_decompress_in_tarball="lighttable-*",
+                         checksum_type=ChecksumType.md5)
+
+    def parse_download_link(self, line, in_download):
+        """Parse LightTable download links"""
+        url, md5 = (None, None)
+        if '<li>Ubuntu' in line:
+            in_download = True
+            p = re.search(r'(\w+)</li>', line)
+            with suppress(AttributeError):
+                md5 = p.group(1)
+        if in_download is True and "-linux.tar.gz" in line:
+            p = re.search(r'href="(.*.-linux.tar.gz)"', line)
+            with suppress(AttributeError):
+                url = "https://github.com" + p.group(1)
+        return ((url, md5), in_download)
+
+    def post_install(self):
+        """Create the LightTable Code launcher"""
+        exec_path = os.path.join(self.install_path, "LightTable")
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("LightTable"),
+                        icon_path=os.path.join(self.install_path, "resources", "app", "core", "img",
+                                               "lticon.png"),
+                        exec=exec_path,
+                        comment=_("LightTable code editor"),
+                        categories="Development;IDE;"))

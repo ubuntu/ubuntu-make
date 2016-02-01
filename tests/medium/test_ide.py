@@ -347,4 +347,29 @@ class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTest)
         umake_command = self.command('{} ide visual-studio-code'.format(UMAKE))
         self.bad_download_page_test(umake_command, license_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+<<<<<<< HEAD
         self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+=======
+
+
+class LightTableContainer(ContainerTests, test_ide.LightTableTest):
+    """This will test the LightTable integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["github.com"]}
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'LightTable')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "lighttable")
+
+    def test_install_with_changed_download_page(self):
+        """Installing LightTable should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "github.com", "LightTable",
+                                               "LightTable", "releases", "index.html")
+        umake_command = self.command('{} ide lighttable'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+>>>>>>> master
