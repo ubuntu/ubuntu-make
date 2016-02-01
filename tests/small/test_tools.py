@@ -35,7 +35,8 @@ from . import DpkgAptSetup
 from ..tools import change_xdg_path, get_data_dir, LoggedTestCase, INSTALL_DIR
 from umake import settings, tools
 from umake.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
-    create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_icon_path, get_launcher_path, copy_icon
+    create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_icon_path, get_launcher_path, copy_icon,\
+    add_exec_link
 from unittest.mock import patch, Mock
 
 
@@ -654,6 +655,11 @@ class TestLauncherIcons(LoggedTestCase):
     def test_get_launcher_path(self):
         """Get correct launcher path"""
         self.assertEqual(get_launcher_path("foo.desktop"), os.path.join(self.local_dir, "applications", "foo.desktop"))
+
+    def test_create_exec_path(self):
+        """Create link to the executable"""
+        add_exec_link(os.path.join(self.server_dir, "simplefile"), "foo")
+        self.assertTrue(os.path.exists(os.path.join(self.local_dir, ".local", "share", "umake", "bin", "foo")))
 
 
 class TestMiscTools(LoggedTestCase):

@@ -405,7 +405,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
         self.post_install()
         if self.desktop_filename:
-            add_exec_link(self.exec_path, exec_link_name)
+            add_exec_link(self.exec_path, self.exec_link_name)
         # Mark as installation done in configuration
         self.mark_in_config()
 
