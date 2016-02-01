@@ -756,6 +756,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                         comment=_("Visual Studio focused on modern web and cloud"),
                         categories="Development;IDE;"))
 
+
 class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
