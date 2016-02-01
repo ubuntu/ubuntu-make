@@ -320,7 +320,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
 
-class VisualStudioCodeContainer(ContainerTests, test_ide.VisualStudioCodeTest):
+class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTest):
     """This will test the Visual Studio Code integration inside a container"""
 
     TIMEOUT_START = 20

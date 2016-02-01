@@ -121,7 +121,6 @@ class LargeFrameworkTests(LoggedTestCase):
 
     def assert_exec_link_exists(self):
         """Assert that the link to the binary exists"""
-        print(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0]))
         self.assertTrue(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
     def assert_for_warn(self, content, expect_warn=False):
