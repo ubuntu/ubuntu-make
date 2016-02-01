@@ -54,7 +54,6 @@ class BaseCategory():
         self.default = None
         self.frameworks = NoneDict()
         self.packages_requirements = [] if packages_requirements is None else packages_requirements
-        self.exec_path = None
         if self.prog_name in self.categories:
             logger.warning("There is already a registered category with {} as a name. Don't register the second one."
                            .format(name))

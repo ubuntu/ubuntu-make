@@ -33,7 +33,7 @@ from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.network.requirements_handler import RequirementsHandler
 from umake.ui import UI
 from umake.tools import MainLoop, strip_tags, launcher_exists, get_icon_path, get_launcher_path, \
-    Checksum, remove_framework_envs_from_user
+    Checksum, remove_framework_envs_from_user, add_exec_link
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +59,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
         self.match_last_link = kwargs.get("match_last_link", False)
-        self.exec_path = None
+        self.exec_path = kwargs.get("exec_path", False)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
                           "desktop_filename", "icon_filename", "required_files_path", "match_last_link"]:
             with suppress(KeyError):
@@ -399,7 +399,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
         self.post_install()
         if self.desktop_filename:
-            add_exec_link(exec_path, self.desktop_filename.split('.')[0])
+            add_exec_link(self.exec_path, self.desktop_filename.split('.')[0])
         # Mark as installation done in configuration
         self.mark_in_config()
 
