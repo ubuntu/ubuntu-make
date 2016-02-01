@@ -59,6 +59,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
         self.match_last_link = kwargs.get("match_last_link", False)
+        self.exec_path = None
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
                           "desktop_filename", "icon_filename", "required_files_path", "match_last_link"]:
             with suppress(KeyError):
@@ -397,7 +398,8 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             UI.return_main_screen(status_code=1)
 
         self.post_install()
-
+        if self.desktop_filename:
+            add_exec_link(exec_path, self.desktop_filename.split('.')[0])
         # Mark as installation done in configuration
         self.mark_in_config()
 
