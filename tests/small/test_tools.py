@@ -656,10 +656,12 @@ class TestLauncherIcons(LoggedTestCase):
         """Get correct launcher path"""
         self.assertEqual(get_launcher_path("foo.desktop"), os.path.join(self.local_dir, "applications", "foo.desktop"))
 
-    def test_create_exec_path(self):
+    @patch("umake.tools.settings")
+    def test_create_exec_path(self, settings_module):
         """Create link to the executable"""
+        settings_module.DEFAULT_BINARY_LINK_PATH = os.path.join(self.local_dir, ".local", "share", "umake", "bin")
         add_exec_link(os.path.join(self.server_dir, "simplefile"), "foo")
-        self.assertTrue(os.path.exists(os.path.join(self.local_dir, ".local", "share", "umake", "bin", "foo")))
+        self.assertTrue(os.path.exists(os.path.join(settings_module.DEFAULT_BINARY_LINK_PATH, "foo")))
 
 
 class TestMiscTools(LoggedTestCase):
