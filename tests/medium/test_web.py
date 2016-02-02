@@ -44,6 +44,7 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
         umake_command = self.command('{} web firefox-dev'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
 class VisualStudioCodeContainer(ContainerTests, test_web.VisualStudioCodeTest):
