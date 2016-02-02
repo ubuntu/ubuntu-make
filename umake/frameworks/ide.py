@@ -229,7 +229,6 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
             kwargs["required_files_path"] = current_required_files_path
         download_page = "https://data.services.jetbrains.com/products/releases?code={}".format(self.download_keyword)
         kwargs["download_page"] = download_page
-        kwargs["exec_rel_path"] = os.path.join("bin", self.executable)
         super().__init__(*args, **kwargs)
 
     @property
