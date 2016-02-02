@@ -229,6 +229,21 @@ class CLionIDEInContainer(ContainerTests, test_ide.CLionIDETests):
         self.installed_path = os.path.join(self.install_base_path, "ide", "clion")
 
 
+class DataGripIDEInContainer(ContainerTests, test_ide.DataGripIDETests):
+    """This will test the DataGrip IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["data.services.jetbrains.com"]}
+        # Reuse the Android Studio environment.
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "datagrip")
+
+
 class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
     """This will test the PhpStorm IDE integration inside a container"""
 
