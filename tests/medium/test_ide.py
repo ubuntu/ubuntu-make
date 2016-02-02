@@ -52,11 +52,13 @@ class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
                                                "index.html")
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
     def test_install_with_changed_checksum_page(self):
         """Installing eclipse ide should fail if checksum link is unparseable"""
         self.bad_download_page_test(self.command(self.command_args), self.bad_download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
 class EclipsePHPIDEInContainer(ContainerTests, test_ide.EclipsePHPIDETests):
@@ -119,6 +121,7 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
         umake_command = self.command('{} ide idea'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
 class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
@@ -261,6 +264,7 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
         umake_command = self.command('{} ide arduino'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
     def test_install_with_changed_checksum_page(self):
         """Installing arduino ide should fail if checksum link is unparseable"""
@@ -269,6 +273,7 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
         umake_command = self.command('{} ide arduino'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
 class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
@@ -293,6 +298,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
         umake_command = self.command('{} ide netbeans'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
     def test_install_with_changed_download_reference_page(self):
         """Installing NetBeans ide should fail if download reference page has significantly changed"""
@@ -301,6 +307,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
         umake_command = self.command('{} ide netbeans'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
     def test_install_with_changed_checksum_page(self):
         """Installing NetBeans ide should fail if checksum link is wrong"""
@@ -318,6 +325,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
 
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
 class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTest):
