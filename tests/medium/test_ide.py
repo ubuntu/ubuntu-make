@@ -52,11 +52,13 @@ class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
                                                "index.html")
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
     def test_install_with_changed_checksum_page(self):
         """Installing eclipse ide should fail if checksum link is unparseable"""
         self.bad_download_page_test(self.command(self.command_args), self.bad_download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
 class EclipsePHPIDEInContainer(ContainerTests, test_ide.EclipsePHPIDETests):
@@ -119,6 +121,7 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
         umake_command = self.command('{} ide idea'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
 class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
@@ -276,6 +279,7 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
         umake_command = self.command('{} ide arduino'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
     def test_install_with_changed_checksum_page(self):
         """Installing arduino ide should fail if checksum link is unparseable"""
@@ -284,6 +288,7 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
         umake_command = self.command('{} ide arduino'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
 class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
@@ -308,6 +313,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
         umake_command = self.command('{} ide netbeans'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
     def test_install_with_changed_download_reference_page(self):
         """Installing NetBeans ide should fail if download reference page has significantly changed"""
@@ -316,6 +322,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
         umake_command = self.command('{} ide netbeans'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
     def test_install_with_changed_checksum_page(self):
         """Installing NetBeans ide should fail if checksum link is wrong"""
@@ -333,9 +340,10 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
 
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
-class VisualStudioCodeContainer(ContainerTests, test_ide.VisualStudioCodeTest):
+class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTest):
     """This will test the Visual Studio Code integration inside a container"""
 
     TIMEOUT_START = 20
@@ -354,6 +362,7 @@ class VisualStudioCodeContainer(ContainerTests, test_ide.VisualStudioCodeTest):
         umake_command = self.command('{} ide visual-studio-code'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
     def test_install_with_changed_license_page(self):
         """Installing visual studio code should fail if license page has significantly changed"""
@@ -361,9 +370,10 @@ class VisualStudioCodeContainer(ContainerTests, test_ide.VisualStudioCodeTest):
         umake_command = self.command('{} ide visual-studio-code'.format(UMAKE))
         self.bad_download_page_test(umake_command, license_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
-class LightTableContainer(ContainerTests, test_ide.LightTableTest):
+class LightTableInContainer(ContainerTests, test_ide.LightTableTest):
     """This will test the LightTable integration inside a container"""
 
     TIMEOUT_START = 20
@@ -383,3 +393,4 @@ class LightTableContainer(ContainerTests, test_ide.LightTableTest):
         umake_command = self.command('{} ide lighttable'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))

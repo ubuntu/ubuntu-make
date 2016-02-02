@@ -31,6 +31,7 @@ from time import sleep
 from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned, remove_framework_envs_from_user
 from ..tools import LoggedTestCase, get_path_from_desktop_file, is_in_group, INSTALL_DIR, swap_file_and_restore, \
     spawn_process
+from umake.settings import DEFAULT_BINARY_LINK_PATH
 
 
 class LargeFrameworkTests(LoggedTestCase):
@@ -44,6 +45,7 @@ class LargeFrameworkTests(LoggedTestCase):
         self.framework_name_for_profile = ""
         self.conf_path = os.path.expanduser("~/.config/umake")
         self.install_base_path = os.path.expanduser("~/{}".format(INSTALL_DIR))
+        self.binary_dir = DEFAULT_BINARY_LINK_PATH
         self.desktop_filename = ""
         self.child = None
         self.additional_dirs = []
@@ -116,6 +118,10 @@ class LargeFrameworkTests(LoggedTestCase):
     def assert_icon_exists(self):
         """Assert that the icon path exists"""
         self.assertTrue(self.path_exists(self._get_path_from_desktop_file('Icon', get_icon_path)))
+
+    def assert_exec_link_exists(self):
+        """Assert that the link to the binary exists"""
+        self.assertTrue(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
     def assert_for_warn(self, content, expect_warn=False):
         """assert if there is any warn"""

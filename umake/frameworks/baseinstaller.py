@@ -33,7 +33,7 @@ from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.network.requirements_handler import RequirementsHandler
 from umake.ui import UI
 from umake.tools import MainLoop, strip_tags, launcher_exists, get_icon_path, get_launcher_path, \
-    Checksum, remove_framework_envs_from_user
+    Checksum, remove_framework_envs_from_user, add_exec_link
 
 logger = logging.getLogger(__name__)
 
@@ -59,8 +59,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
         self.match_last_link = kwargs.get("match_last_link", False)
+        self.exec_rel_path = kwargs.get("exec_rel_path", None)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
-                          "desktop_filename", "icon_filename", "required_files_path", "match_last_link"]:
+                          "desktop_filename", "icon_filename", "required_files_path",
+                          "match_last_link", "exec_rel_path"]:
             with suppress(KeyError):
                 kwargs.pop(extra_arg)
         super().__init__(*args, **kwargs)
@@ -69,6 +71,12 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self._paths_to_clean = set()
         self._arg_install_path = None
         self.download_requests = []
+
+    @property
+    def exec_link_name(self):
+        if self.desktop_filename:
+            return self.desktop_filename.split('.')[0]
+        return None
 
     @property
     def is_installed(self):
@@ -114,6 +122,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         if self.desktop_filename:
             with suppress(FileNotFoundError):
                 os.remove(get_launcher_path(self.desktop_filename))
+                os.remove(os.path.join(self.default_binary_link_path, self.exec_link_name))
         if self.icon_filename:
             with suppress(FileNotFoundError):
                 os.remove(get_icon_path(self.icon_filename))
@@ -147,6 +156,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                                      "there?".format(path_dir), self.set_installdir_to_clean, UI.return_main_screen))
                     return
         self.install_path = path_dir
+        if self.desktop_filename:
+            self.exec_path = os.path.join(self.install_path, self.required_files_path[0])
+        # if self.exec_rel_path:
+        #     self.exec_path = os.path.join(self.install_path, self.exec_rel_path)
         self.download_provider_page()
 
     def set_installdir_to_clean(self):
@@ -396,7 +409,8 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             UI.return_main_screen(status_code=1)
 
         self.post_install()
-
+        if self.exec_link_name:
+            add_exec_link(self.exec_path, self.exec_link_name)
         # Mark as installation done in configuration
         self.mark_in_config()
 

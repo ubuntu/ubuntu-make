@@ -50,6 +50,7 @@ class StencylTests(LargeFrameworkTests):
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
+        self.assert_exec_link_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         use_cwd = self.installed_path
@@ -96,6 +97,7 @@ class Unity3DTests(LargeFrameworkTests):
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
+        self.assert_exec_link_exists()
 
         # ensure setuid
         self.assertEqual(self.get_file_perms(os.path.join(self.installed_path, "Editor", "chrome-sandbox")),
@@ -139,6 +141,7 @@ class TwineTests(LargeFrameworkTests):
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
+        self.assert_exec_link_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,

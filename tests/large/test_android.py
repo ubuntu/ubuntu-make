@@ -51,6 +51,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
+        self.assert_exec_link_exists()
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,

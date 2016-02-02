@@ -31,7 +31,7 @@ import pkgutil
 import sys
 import subprocess
 from umake.network.requirements_handler import RequirementsHandler
-from umake.settings import DEFAULT_INSTALL_TOOLS_PATH, UMAKE_FRAMEWORKS_ENVIRON_VARIABLE
+from umake.settings import DEFAULT_INSTALL_TOOLS_PATH, UMAKE_FRAMEWORKS_ENVIRON_VARIABLE, DEFAULT_BINARY_LINK_PATH
 from umake.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
     is_completion_mode, switch_to_current_user, MainLoop, get_user_frameworks_path
 from umake.ui import UI
@@ -187,6 +187,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         if not install_path_dir:
             install_path_dir = os.path.join("" if category.is_main_category else category.prog_name, self.prog_name)
         self.default_install_path = os.path.join(DEFAULT_INSTALL_TOOLS_PATH, install_path_dir)
+        self.default_binary_link_path = DEFAULT_BINARY_LINK_PATH
         self.install_path = self.default_install_path
         # check if we have an install path previously set
         config = ConfigHandler().config

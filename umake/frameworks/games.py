@@ -85,7 +85,7 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the Stencyl launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Stencyl"),
                         icon_path=os.path.join(self.install_path, "data", "other", "icon-30x30.png"),
-                        exec='"{}" %f'.format(os.path.join(self.install_path, "Stencyl")),
+                        exec='"{}" %f'.format(self.exec_path),
                         comment=self.description,
                         categories="Development;IDE;",
                         extra="Path={}\nStartupWMClass=stencyl-sw-Launcher".format(self.install_path)))
@@ -161,7 +161,7 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                 UI.return_main_screen(exit_status=1)
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Unity3D Editor"),
                         icon_path=os.path.join(self.install_path, "unity-editor-icon.png"),
-                        exec=os.path.join(self.install_path, "Editor", "Unity"),
+                        exec=self.exec_path,
                         comment=self.description,
                         categories="Development;IDE;"))
 
@@ -207,6 +207,6 @@ class Twine(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the Twine launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Twine"),
                         icon_path=os.path.join(self.install_path, self.icon_name),
-                        exec='"{}" %f'.format(os.path.join(self.install_path, "Twine")),
+                        exec='"{}" %f'.format(self.exec_path),
                         comment=self.description,
                         categories="Development;IDE;"))
