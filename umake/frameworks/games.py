@@ -51,6 +51,7 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="http://www.stencyl.com/download/",
                          desktop_filename="stencyl.desktop",
                          required_files_path=["Stencyl"],
+                         exec_rel_path="Stencyl",
                          packages_requirements=["libxtst6:i386", "libxext6:i386", "libxi6:i386", "libncurses5:i386",
                                                 "libxt6:i386", "libxpm4:i386", "libxmu6:i386",
                                                 "libgtk2.0-0:i386", "libatk1.0-0:i386", "libc6:i386", "libcairo2:i386",
@@ -83,7 +84,6 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Stencyl launcher"""
-        self.exec_path = os.path.join(self.install_path, "Stencyl")
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Stencyl"),
                         icon_path=os.path.join(self.install_path, "data", "other", "icon-30x30.png"),
                         exec='"{}" %f'.format(self.exec_path),
@@ -118,6 +118,7 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball='unity-editor*',
                          desktop_filename="unity3d-editor.desktop",
                          required_files_path=[os.path.join("Editor", "Unity")],
+                         exec_rel_path=os.path.join("Editor", "Unity"),
                          # we need root access for chrome sandbox setUID
                          need_root_access=True,
                          # Note that some packages requirements essential to the system itself are not listed (we
@@ -155,7 +156,6 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Unity 3D launcher and setuid chrome sandbox"""
-        self.exec_path = os.path.join(self.install_path, "Editor", "Unity")
         with futures.ProcessPoolExecutor(max_workers=1) as executor:
             # chrome sandbox requires this: https//code.google.com/p/chromium/wiki/LinuxSUIDSandbox
             f = executor.submit(_chrome_sandbox_setuid, os.path.join(self.install_path, "Editor", "chrome-sandbox"))
@@ -176,7 +176,8 @@ class Twine(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="http://twinery.org/",
                          dir_to_decompress_in_tarball='twine*',
                          desktop_filename="twine.desktop",
-                         required_files_path=["Twine"])
+                         required_files_path=["Twine"],
+                         exec_rel_path="Twine")
         # add logo download as the tar doesn't provide one
         self.download_requests.append(DownloadItem("http://twinery.org/img/logo.svg", None))
 
@@ -207,7 +208,6 @@ class Twine(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Twine launcher"""
-        self.exec_path = os.path.join(self.install_path, "Twine")
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Twine"),
                         icon_path=os.path.join(self.install_path, self.icon_name),
                         exec='"{}" %f'.format(self.exec_path),

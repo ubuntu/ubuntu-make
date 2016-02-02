@@ -77,6 +77,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
             kwargs["required_files_path"] = current_required_files_path
         download_page = 'https://www.eclipse.org/downloads/'
         kwargs["download_page"] = download_page
+        kwargs["exec_rel_path"] = "eclipse"
         super().__init__(*args, **kwargs)
         self.icon_url = os.path.join(self.download_page, "images", self.icon_filename)
         self.bits = '' if platform.machine() == 'i686' else 'x86_64'
@@ -156,7 +157,6 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
                        on_done=self.save_icon, download=True)
         icon_path = join(self.install_path, self.icon_filename)
-        self.exec_path = join(self.install_path, "eclipse")
         comment = self.description
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
@@ -229,6 +229,7 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
             kwargs["required_files_path"] = current_required_files_path
         download_page = "https://data.services.jetbrains.com/products/releases?code={}".format(self.download_keyword)
         kwargs["download_page"] = download_page
+        kwargs["exec_rel_path"] = os.path.join("bin", self.executable)
         super().__init__(*args, **kwargs)
 
     @property
@@ -281,7 +282,6 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
     def post_install(self):
         """Create the appropriate JetBrains launcher."""
         icon_path = join(self.install_path, 'bin', self.icon_filename)
-        self.exec_path = join(self.install_path, "bin", self.executable)
         comment = self.description + " (UDTC)"
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
@@ -455,7 +455,8 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball='arduino-*',
                          desktop_filename='arduino.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana', 'gcc-avr', 'avr-libc'],
-                         need_root_access=not self.was_in_arduino_group)
+                         need_root_access=not self.was_in_arduino_group,
+                         exec_rel_path="arduino")
         self.scraped_checksum_url = None
         self.scraped_download_url = None
 
@@ -547,7 +548,6 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Create the Arduino launcher"""
         icon_path = join(self.install_path, 'lib', 'arduino_icon.ico')
-        self.exec_path = join(self.install_path, "arduino")
         comment = _("The Arduino Software IDE")
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
@@ -583,7 +583,8 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://netbeans.org/downloads/zip.html",
                          dir_to_decompress_in_tarball="netbeans*",
                          desktop_filename="netbeans{}.desktop".format(flavour),
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'])
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         exec_rel_path=os.path.join("bin", "netbeans"))
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -656,7 +657,6 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Netbeans launcher"""
-        self.exec_path(os.path.join(self.install_path, "bin", "netbeans"))
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=_("Netbeans IDE"),
                                                      icon_path=join(self.install_path, "nb", "netbeans.png"),
@@ -674,7 +674,8 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="visual-studio-code.desktop",
                          required_files_path=["Code"],
                          dir_to_decompress_in_tarball="VSCode-linux-*",
-                         packages_requirements=["libgtk2.0-0"])
+                         packages_requirements=["libgtk2.0-0"],
+                         exec_rel_path="Code")
         self.license_url = "https://code.visualstudio.com/License"
         # we have to mock headers for visual studio code website to give us an answer
         self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
@@ -750,7 +751,6 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Visual Studio Code launcher"""
-        self.exec_path = os.path.join(self.install_path, "Code")
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Visual Studio Code"),
                         icon_path=os.path.join(self.install_path, "resources", "app", "resources", "linux",
                                                "vscode.png"),
@@ -768,7 +768,8 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="lighttable.desktop",
                          required_files_path=["LightTable"],
                          dir_to_decompress_in_tarball="lighttable-*",
-                         checksum_type=ChecksumType.md5)
+                         checksum_type=ChecksumType.md5,
+                         exec_rel_path="LightTable")
 
     def parse_download_link(self, line, in_download):
         """Parse LightTable download links"""
@@ -786,7 +787,6 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the LightTable Code launcher"""
-        self.exec_path = os.path.join(self.install_path, "LightTable")
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("LightTable"),
                         icon_path=os.path.join(self.install_path, "resources", "app", "core", "img",
                                                "lticon.png"),
