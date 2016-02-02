@@ -156,8 +156,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                                      "there?".format(path_dir), self.set_installdir_to_clean, UI.return_main_screen))
                     return
         self.install_path = path_dir
-        if self.exec_rel_path:
-            self.exec_path = os.path.join(self.install_path, self.exec_rel_path)
+        if self.desktop_filename:
+            self.exec_path = os.path.join(self.install_path, self.required_files_path[0])
+        # if self.exec_rel_path:
+        #     self.exec_path = os.path.join(self.install_path, self.exec_rel_path)
         self.download_provider_page()
 
     def set_installdir_to_clean(self):

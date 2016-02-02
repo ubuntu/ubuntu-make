@@ -340,7 +340,7 @@ def create_launcher(desktop_filename, content):
 def add_exec_link(exec_path, destination_name):
     bin_folder = settings.DEFAULT_BINARY_LINK_PATH
     os.makedirs(bin_folder, exist_ok=True)
-    add_env_to_user("Umake symlink", {"PATH": {"value": bin_folder}})
+    add_env_to_user("Ubuntu Make binary symlink", {"PATH": {"value": bin_folder}})
     os.symlink(exec_path,
                os.path.join(bin_folder, destination_name))
 

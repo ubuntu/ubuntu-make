@@ -456,7 +456,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename='arduino.desktop',
                          packages_requirements=['openjdk-7-jdk', 'jayatana', 'gcc-avr', 'avr-libc'],
                          need_root_access=not self.was_in_arduino_group,
-                         exec_rel_path="arduino")
+                         required_files_path=["arduino"])
         self.scraped_checksum_url = None
         self.scraped_download_url = None
 
@@ -584,7 +584,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="netbeans*",
                          desktop_filename="netbeans{}.desktop".format(flavour),
                          packages_requirements=['openjdk-7-jdk', 'jayatana'],
-                         exec_rel_path=os.path.join("bin", "netbeans"))
+                         required_files_path=[os.path.join("bin", "netbeans")])
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -674,8 +674,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="visual-studio-code.desktop",
                          required_files_path=["Code"],
                          dir_to_decompress_in_tarball="VSCode-linux-*",
-                         packages_requirements=["libgtk2.0-0"],
-                         exec_rel_path="Code")
+                         packages_requirements=["libgtk2.0-0"])
         self.license_url = "https://code.visualstudio.com/License"
         # we have to mock headers for visual studio code website to give us an answer
         self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
@@ -768,8 +767,7 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="lighttable.desktop",
                          required_files_path=["LightTable"],
                          dir_to_decompress_in_tarball="lighttable-*",
-                         checksum_type=ChecksumType.md5,
-                         exec_rel_path="LightTable")
+                         checksum_type=ChecksumType.md5)
 
     def parse_download_link(self, line, in_download):
         """Parse LightTable download links"""
