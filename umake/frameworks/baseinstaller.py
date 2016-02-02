@@ -61,7 +61,8 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.match_last_link = kwargs.get("match_last_link", False)
         self.exec_rel_path = kwargs.get("exec_rel_path", None)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
-                          "desktop_filename", "icon_filename", "required_files_path", "match_last_link", "exec_rel_path"]:
+                          "desktop_filename", "icon_filename", "required_files_path",
+                          "match_last_link", "exec_rel_path"]:
             with suppress(KeyError):
                 kwargs.pop(extra_arg)
         super().__init__(*args, **kwargs)
