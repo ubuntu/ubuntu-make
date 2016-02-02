@@ -431,6 +431,22 @@ class CLion(BaseJetBrains):
                          icon_filename='clion.svg')
 
 
+class DataGrip(BaseJetBrains):
+    """The JetBrains DataGrip IDE"""
+    download_keyword = 'DG'
+    executable = "datagrip.sh"
+
+    def __init__(self, category):
+        super().__init__(name="DataGrip",
+                         description=_("DataGrip SQL and databases IDE"),
+                         category=category,
+                         only_on_archs=['i386', 'amd64'],
+                         dir_to_decompress_in_tarball='DataGrip-*',
+                         desktop_filename='jetbrains-datagrip.desktop',
+                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         icon_filename='product.png')
+
+
 class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     """The Arduino Software distribution."""
 
