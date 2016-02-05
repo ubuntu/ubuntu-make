@@ -341,8 +341,10 @@ def add_exec_link(exec_path, destination_name):
     bin_folder = settings.DEFAULT_BINARY_LINK_PATH
     os.makedirs(bin_folder, exist_ok=True)
     add_env_to_user("Ubuntu Make binary symlink", {"PATH": {"value": bin_folder}})
-    os.symlink(exec_path,
-               os.path.join(bin_folder, destination_name))
+    full_dest_path = os.path.join(bin_folder, destination_name)
+    if os.path.exists(full_dest_path):
+        os.remove(full_dest_path)
+    os.symlink(exec_path, full_dest_path)
 
 
 def get_application_desktop_file(name="", icon_path="", exec="", comment="", categories="", extra=""):
