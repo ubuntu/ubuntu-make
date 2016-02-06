@@ -235,6 +235,10 @@ def main(parser):
         arg_to_parse = mangle_args_for_default_framework(arg_to_parse)
     args = parser.parse_args(arg_to_parse)
 
+    if args.list or args.list_installed or args.list_available:
+        print(get_frameworks_list_output(args))
+        sys.exit(0)
+
     if args.version:
         print(get_version())
         sys.exit(0)

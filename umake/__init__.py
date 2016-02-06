@@ -85,6 +85,15 @@ def set_logging_from_args(args, parser):
         _setup_logging()
 
 
+def should_load_all_frameworks(args):
+    """Set partial or complete framework loading condition based on arg"""
+    for arg in args[1:]:
+        if arg in ["-l", "--list", "--list-installed", "--list-available"]:
+            return True
+
+    return False
+
+
 class _HelpAction(argparse._HelpAction):
 
     def __call__(self, parser, namespace, values, option_string=None):
@@ -117,6 +126,11 @@ def main():
 
     parser.add_argument('-r', '--remove', action="store_true", help=_("Remove specified framework if installed"))
 
+    list_group = parser.add_argument_group("List frameworks").add_mutually_exclusive_group()
+    list_group.add_argument('-l', '--list', action="store_true", help=_("List all frameworks"))
+    list_group.add_argument('--list-installed', action="store_true", help=_("List installed frameworks"))
+    list_group.add_argument('--list-available', action="store_true", help=_("List installable frameworks"))
+
     parser.add_argument('--version', action="store_true", help=_("Print version and exit"))
 
     # set logging ignoring unknown options
@@ -124,8 +138,10 @@ def main():
 
     mainloop = MainLoop()
 
-    # load frameworks and initialize parser
-    load_frameworks()
+    # load frameworks
+    load_frameworks(force_loading=should_load_all_frameworks(sys.argv))
+
+    # initialize parser
     cli.main(parser)
 
     mainloop.run()
