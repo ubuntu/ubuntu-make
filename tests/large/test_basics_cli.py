@@ -124,3 +124,66 @@ class BasicCLI(LargeFrameworkTests):
         result1 = subprocess.check_output(self.command_as_list([UMAKE, 'android', '--help']))
         result2 = subprocess.check_output(self.command_as_list([UMAKE, 'android', 'android-studio', '--help']))
         self.assertNotEquals(result1, result2)
+
+    def test_listing_all_frameworks(self):
+        """We display all the frameworks"""
+        result = subprocess.check_output(self.command_as_list([UMAKE, '--list']))
+        self.assertNotEqual(result, "")
+
+        result = subprocess.check_output(self.command_as_list([UMAKE, '-l']))
+        self.assertNotEqual(result, "")
+
+    def test_listing_installed_frameworks(self):
+        """We display just installed frameworks"""
+        result = subprocess.check_output(self.command_as_list([UMAKE, '--list-installed']))
+        self.assertNotEqual(result, "")
+
+    def test_listing_available_frameworks(self):
+        """We display just available frameworks"""
+        result = subprocess.check_output(self.command_as_list([UMAKE, '--list-available']))
+        self.assertNotEqual(result, "")
+
+    def test_combine_listing_all_frameworks_and_available_frameworks(self):
+        """Try to list all frameworks and available frameworks"""
+        with self.assertRaises(subprocess.CalledProcessError):
+            subprocess.check_output(self.command_as_list([UMAKE, '--list', '--list-available']),
+                                    stderr=subprocess.STDOUT)
+
+    def test_combine_listing_all_frameworks_and_installed_frameworks(self):
+        """Try to list all frameworks and installed frameworks"""
+        with self.assertRaises(subprocess.CalledProcessError):
+            subprocess.check_output(self.command_as_list([UMAKE, '--list', '--list-installed']),
+                                    stderr=subprocess.STDOUT)
+
+    def test_combine_listing_available_frameworks_and_installed_frameworks(self):
+        """Try to list available frameworks and installed frameworks"""
+        with self.assertRaises(subprocess.CalledProcessError):
+            subprocess.check_output(self.command_as_list([UMAKE, '--list-available', '--list-installed']),
+                                    stderr=subprocess.STDOUT)
+
+    def test_listing_all_frameworks_and_check_categories_by_order(self):
+        """List all frameworks and check if categories appear by order"""
+        result = subprocess.check_output(self.command_as_list([UMAKE, '--list']))
+
+        previous_category = None
+        for element in result.split(b"\n"):
+            if element and not element.startswith(b"\t"):
+                current_category = element[:element.find(b":")]
+                if previous_category:
+                    self.assertTrue(previous_category < current_category)
+                previous_category = current_category
+
+    def test_listing_all_frameworks_and_check_frameworks_by_order(self):
+        """List all frameworks and check if frameworks appear by order"""
+        result = subprocess.check_output(self.command_as_list([UMAKE, '--list']))
+
+        previous_framework = None
+        for element in result.split(b"\n"):
+            if element.startswith(b"\t"):
+                current_framework = element[:element.find(b":")]
+                if previous_framework:
+                    self.assertTrue(previous_framework < current_framework)
+
+                previous_framework = current_framework
+            else:
+                previous_framework = None
