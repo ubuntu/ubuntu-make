@@ -210,3 +210,46 @@ class Twine(umake.frameworks.baseinstaller.BaseInstaller):
                         exec='"{}" %f'.format(self.exec_path),
                         comment=self.description,
                         categories="Development;IDE;"))
+
+
+class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Superpowers", description=_("The HTML5 2D+3D game maker"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page="https://github.com/superpowers/superpowers-core/releases",
+                         dir_to_decompress_in_tarball='superpowers*',
+                         desktop_filename="superpowers.desktop",
+                         required_files_path=["Superpowers"])
+
+    arch_trans = {
+        "amd64": "x64",
+        "i386": "ia32"
+    }
+
+    def parse_download_link(self, line, in_download):
+        """Parse Superpowers download links.
+        We parse from the beginning to the end, we will always have the latest download link"""
+        url = None
+        if "-linux-" in line:
+            in_download = True
+
+        if in_download:
+            regexp = r'href="(.*-{}.zip)"'.format(self.arch_trans[get_current_arch()])
+
+            p = re.search(regexp, line)
+            with suppress(AttributeError):
+                url = p.group(1)
+
+                url = "{}{}".format(self.download_page[:self.download_page.find("superpowers/") - 1], url)
+
+        return ((url, None), False)
+
+    def post_install(self):
+        """Create the Superpowers launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Superpowers"),
+                        icon_path=os.path.join(self.install_path, "resources", "app", "launcher", "public", "images",
+                                               "icon.png"),
+                        exec='"{}" %f'.format(self.exec_path),
+                        comment=self.description,
+                        categories="Development;IDE;"))
