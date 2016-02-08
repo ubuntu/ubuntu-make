@@ -47,12 +47,24 @@ class RequirementsHandler(object, metaclass=Singleton):
         self.cache = apt.Cache()
         self.executor = futures.ThreadPoolExecutor(max_workers=1)
 
+    def get_latest_jdk(self, bucket):
+        """Check that we install the latest openjdk version available.
+        If we want to use this we include openjdk-latest in the requirements."""
+        java_versions = [8, 7]
+        for value in java_versions:
+            if "openjdk-{}-jdk".format(value) in self.cache:
+                bucket.remove("openjdk-latest")
+                bucket.append("openjdk-{}-jdk".format(value))
+                break
+
     def is_bucket_installed(self, bucket):
         """Check if the bucket is installed
 
         The bucket is a list of packages to check if installed."""
         logger.debug("Check if {} is installed".format(bucket))
         is_installed = True
+        if "openjdk-latest" in bucket:
+            self.get_latest_jdk(bucket)
         for pkg_name in bucket:
             # /!\ danger: if current arch == ':appended_arch', on a non multiarch system, dpkg doesn't
             # understand that. strip :arch then
