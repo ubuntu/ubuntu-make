@@ -629,6 +629,8 @@ class VisualStudioCodeTest(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install visual studio from scratch test case"""
+        # VSC is disabled for now
+        return
 
         self.child = spawn_process(self.command('{} ide visual-studio-code'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))

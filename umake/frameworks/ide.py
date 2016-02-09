@@ -695,6 +695,12 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
                                       "Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36"}
 
+    # Disable Visual Studio Code installation for now: The pages don't offer any more hook to download it
+    # and use client side javascript only to refer to random url to download both flavors.
+    @property
+    def is_installable(self):
+        return False
+
     def download_provider_page(self):
         logger.debug("Download application provider page")
         DownloadCenter([DownloadItem(self.download_page, headers=self.headers)], self.get_metadata, download=False)
