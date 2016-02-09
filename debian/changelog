@@ -1,4 +1,4 @@
-ubuntu-make (16.01.2ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (16.02) xenial; urgency=medium
 
   [ Galileo Sartor ]
   * Add Nodejs support with always latest node and npm now available!
@@ -18,7 +18,7 @@ ubuntu-make (16.01.2ubuntu1) UNRELEASED; urgency=medium
   * Disable Visual Studio Code installation for now. Adapt tests for that
     change.
 
- -- Didier Roche <didrocks@ubuntu.com>  Tue, 09 Feb 2016 08:38:57 +0100
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 09 Feb 2016 08:47:49 +0100
 
 ubuntu-make (16.01.2) xenial; urgency=medium
 
