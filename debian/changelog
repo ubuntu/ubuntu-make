@@ -1,4 +1,4 @@
-ubuntu-make (16.02) xenial; urgency=medium
+ubuntu-make (16.02~wily1) wily; urgency=medium
 
   [ Galileo Sartor ]
   * Add Nodejs support with always latest node and npm now available!
@@ -12,6 +12,7 @@ ubuntu-make (16.02) xenial; urgency=medium
   * Add Spring Tools Suite and its testsuite.
 
   [ Omer Sheikh ]
+  * Add JetBrains Datagrip with tests
   * Add python-gnupg to requirements.txt.
 
   [ Didier Roche ]
