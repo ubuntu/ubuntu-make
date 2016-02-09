@@ -47,14 +47,14 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
         self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
-class VisualStudioCodeContainer(ContainerTests, test_web.VisualStudioCodeTest):
+class VisualStudioCodeInContainer(ContainerTests, test_web.VisualStudioCodeTest):
     """This will test the Visual Studio Code integration inside a container"""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["code.visualstudio.com"]}
+        self.hosts = {443: ["code.visualstudio.com"], 80: ["go.microsoft.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'vscode')
         super().setUp()
         # override with container path
