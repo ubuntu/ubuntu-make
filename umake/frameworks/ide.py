@@ -696,7 +696,6 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="VSCode-linux-*",
                          packages_requirements=["libgtk2.0-0"])
 
-
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
         if 'SOFTWARE LICENSE TERMS' in line:
@@ -710,10 +709,9 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         """We have persistent links for Visual Studio Code, return it right away"""
-        try:
+        url = None
+        with suppress(KeyError):
             url = self.PERM_DOWNLOAD_LINKS[platform.machine()]
-        except KeyError:
-            raise BaseException("Unexpected machine architecture: {}".format(platform.machine()))
         return ((url, None), in_download)
 
     def post_install(self):
