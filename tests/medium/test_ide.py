@@ -350,26 +350,14 @@ class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTest)
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["code.visualstudio.com"]}
+        self.hosts = {443: ["code.visualstudio.com"], 80: ["go.microsoft.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'vscode')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "visual-studio-code")
 
-    def test_install_with_changed_download_page(self):
-        """Installing visual studio code should fail if download page has significantly changed"""
-        # VSC is disabled for now
-        return
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "code.visualstudio.com", "Docs")
-        umake_command = self.command('{} ide visual-studio-code'.format(UMAKE))
-        self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
-
     def test_install_with_changed_license_page(self):
         """Installing visual studio code should fail if license page has significantly changed"""
-        # VSC is disabled for now
-        return
         license_page_file_path = os.path.join(get_data_dir(), "server-content", "code.visualstudio.com", "License")
         umake_command = self.command('{} ide visual-studio-code'.format(UMAKE))
         self.bad_download_page_test(umake_command, license_page_file_path)
