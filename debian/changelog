@@ -1,3 +1,25 @@
+ubuntu-make (16.01.2ubuntu1) UNRELEASED; urgency=medium
+
+  [ Galileo Sartor ]
+  * Add Nodejs support with always latest node and npm now available!
+  * Add Lighttable IDE support.
+  * Create symlinks in a bin/ directory which is now added to user's PATH
+    for each .desktop file created. That way, people can run their app
+    from the command line as well.
+  * All of those covered by small medium and large tests.
+
+  [ Patricio Pérez ]
+  * Add Spring Tools Suite and its testsuite.
+
+  [ Omer Sheikh ]
+  * Add python-gnupg to requirements.txt.
+
+  [ Didier Roche ]
+  * Disable Visual Studio Code installation for now. Adapt tests for that
+    change.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 09 Feb 2016 08:38:57 +0100
+
 ubuntu-make (16.01.2) xenial; urgency=medium
 
   [ Galileo Sartor ]
