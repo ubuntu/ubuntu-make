@@ -1,3 +1,12 @@
+ubuntu-make (16.02ubuntu1) UNRELEASED; urgency=medium
+
+  [ Galileo Sartor ]
+  [ Didier Roche ]
+  * Fix Visual Studio Code to use permanent links as the website changed.
+    Adapt tests to it.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 10 Feb 2016 09:41:47 +0100
+
 ubuntu-make (16.02) xenial; urgency=medium
 
   [ Galileo Sartor ]
