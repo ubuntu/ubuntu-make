@@ -486,3 +486,27 @@ class TestRequirementsHandler(DpkgAptSetup):
         self.assertIsNotNone(self.done_callback.call_args[0][0].error)
         self.assertFalse(self.handler.is_bucket_installed(["testpackage"]))
         self.expect_warn_error = True
+
+    def test_or_option_none_installed(self):
+        self.assertFalse(self.handler.is_bucket_installed(["testpackage | testpackage0"]))
+
+    def test_or_option_first_installed(self):
+        shutil.copy(os.path.join(self.apt_status_dir, "testpackage_installed_dpkg_status"),
+                    os.path.join(self.dpkg_dir, "status"))
+        self.handler.cache.open()
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage | testpackage0"]))
+
+    def test_or_option_second_installed(self):
+        shutil.copy(os.path.join(self.apt_status_dir, "testpackage_installed_dpkg_status"),
+                    os.path.join(self.dpkg_dir, "status"))
+        self.handler.cache.open()
+        self.assertTrue(self.handler.is_bucket_installed(["testpackage0 | testpackage"]))
+
+    def test_or_option_is_first_available(self):
+        self.assertTrue(self.handler.is_bucket_available(['testpackage | testpackage42']))
+
+    def test_or_option_is_second_available(self):
+        self.assertTrue(self.handler.is_bucket_available(['testpackage42 | testpackage']))
+
+    def test_or_option_is_none_available(self):
+        self.assertFalse(self.handler.is_bucket_available(['testpackage42 | testpackage404']))
