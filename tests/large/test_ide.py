@@ -82,6 +82,17 @@ class EclipseJavaIDETests(LargeFrameworkTests):
         self.wait_and_close()
 
 
+class EclipseJEEIDETests(EclipseJavaIDETests):
+    """The Eclipse distribution from the IDE collection."""
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-jee")
+        self.desktop_filename = "eclipse-jee.desktop"
+        self.command_args = '{} ide eclipse-jee'.format(UMAKE)
+        self.name = "Eclipse JEE"
+
+
 class EclipsePHPIDETests(EclipseJavaIDETests):
     """The Eclipse distribution from the IDE collection."""
 

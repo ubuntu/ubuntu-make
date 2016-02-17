@@ -188,6 +188,21 @@ class EclipseJava(BaseEclipse):
                          icon_filename='java.png')
 
 
+class EclipseJEE(BaseEclipse):
+    """The Eclipse JEE Edition distribution."""
+    download_keyword = 'eclipse-jee'
+    executable = 'eclipse'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse JEE",
+                         description=_("Eclipse JEE IDE"),
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-jee.desktop',
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=["openjdk-7-jdk"],
+                         icon_filename='javaee.png')
+
+
 class EclipsePHP(BaseEclipse):
     """The Eclipse PHP Edition distribution."""
     download_keyword = 'eclipse-php'
