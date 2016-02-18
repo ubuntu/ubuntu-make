@@ -184,7 +184,7 @@ class EclipseJava(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-java.desktop',
                          category=category, only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk'],
+                         packages_requirements=["openjdk-latest"],
                          icon_filename='java.png')
 
 
@@ -214,7 +214,7 @@ class EclipsePHP(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-php.desktop',
                          category=category, only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk'],
+                         packages_requirements=['openjdk-latest'],
                          icon_filename='php.png')
 
 
@@ -229,7 +229,7 @@ class EclipseCPP(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-cpp.desktop',
                          category=category, only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk'],
+                         packages_requirements=['openjdk-latest'],
                          icon_filename='cdt.png')
 
 
@@ -317,7 +317,7 @@ class PyCharm(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='pycharm-community-*',
                          desktop_filename='jetbrains-pycharm.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-latest', 'jayatana'],
                          icon_filename='pycharm.png')
 
 
@@ -332,7 +332,7 @@ class PyCharmEducational(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='pycharm-edu*',
                          desktop_filename='jetbrains-pycharm.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-latest', 'jayatana'],
                          icon_filename='pycharm.png')
 
 
@@ -347,7 +347,7 @@ class PyCharmProfessional(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='pycharm-*',
                          desktop_filename='jetbrains-pycharm.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-latest', 'jayatana'],
                          icon_filename='pycharm.png')
 
 
@@ -362,7 +362,7 @@ class Idea(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='idea-IC-*',
                          desktop_filename='jetbrains-idea.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-latest', 'jayatana'],
                          icon_filename='idea.png')
 
 
@@ -377,7 +377,7 @@ class IdeaUltimate(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='idea-IU-*',
                          desktop_filename='jetbrains-idea.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-latest', 'jayatana'],
                          icon_filename='idea.png')
 
 
@@ -393,7 +393,7 @@ class RubyMine(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='RubyMine-*',
                          desktop_filename='jetbrains-rubymine.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-latest', 'jayatana'],
                          icon_filename='rubymine.png')
 
 
@@ -409,7 +409,7 @@ class WebStorm(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='WebStorm-*',
                          desktop_filename='jetbrains-webstorm.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-latest', 'jayatana'],
                          icon_filename='webstorm.svg')
 
 
@@ -425,7 +425,7 @@ class PhpStorm(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='PhpStorm-*',
                          desktop_filename='jetbrains-phpstorm.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-latest', 'jayatana'],
                          icon_filename='webide.png')
 
 
@@ -441,7 +441,7 @@ class CLion(BaseJetBrains):
                          only_on_archs=['amd64'],
                          dir_to_decompress_in_tarball='clion-*',
                          desktop_filename='jetbrains-clion.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-latest', 'jayatana'],
                          icon_filename='clion.svg')
 
 
@@ -457,7 +457,7 @@ class DataGrip(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='DataGrip-*',
                          desktop_filename='jetbrains-datagrip.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-latest', 'jayatana'],
                          icon_filename='product.png')
 
 
@@ -484,7 +484,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page='http://www.arduino.cc/en/Main/Software',
                          dir_to_decompress_in_tarball='arduino-*',
                          desktop_filename='arduino.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana', 'gcc-avr', 'avr-libc'],
+                         packages_requirements=['openjdk-latest', 'jayatana', 'gcc-avr', 'avr-libc'],
                          need_root_access=not self.was_in_arduino_group,
                          required_files_path=["arduino"])
         self.scraped_checksum_url = None
@@ -613,7 +613,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://netbeans.org/downloads/zip.html",
                          dir_to_decompress_in_tarball="netbeans*",
                          desktop_filename="netbeans{}.desktop".format(flavour),
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-latest', 'jayatana'],
                          required_files_path=[os.path.join("bin", "netbeans")])
 
     @MainLoop.in_mainloop_thread
@@ -782,7 +782,7 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball='sts-bundle/sts-*',
                          desktop_filename='STS.desktop',
                          category=category, only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk'],
+                         packages_requirements=['openjdk-latest'],
                          icon_filename='icon.xpm',
                          required_files_path=["STS"])
         self.arch = '' if platform.machine() == 'i686' else '-x86_64'

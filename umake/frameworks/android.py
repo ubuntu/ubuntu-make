@@ -79,7 +79,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Android Studio", description=_("Android Studio (default)"), is_category_default=True,
                          category=category, only_on_archs=_supported_archs, expect_license=True,
-                         packages_requirements=["openjdk-7-jdk", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386",
+                         packages_requirements=["openjdk-latest", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386",
                                                 "jayatana"],
                          download_page="https://developer.android.com/sdk/index.html",
                          checksum_type=ChecksumType.sha1,
@@ -110,7 +110,7 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Android SDK", description=_("Android SDK"),
                          category=category, only_on_archs=_supported_archs, expect_license=True,
-                         packages_requirements=["openjdk-7-jdk", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386",
+                         packages_requirements=["openjdk-latest", "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386",
                                                 "jayatana"],
                          download_page="https://developer.android.com/sdk/index.html",
                          checksum_type=ChecksumType.sha1,
