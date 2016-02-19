@@ -54,6 +54,13 @@ class RequirementsHandler(object, metaclass=Singleton):
         logger.debug("Check if {} is installed".format(bucket))
         is_installed = True
         for pkg_name in bucket:
+            if ' | ' in pkg_name:
+                for package in pkg_name.split(' | '):
+                    if self.is_bucket_installed([package]):
+                        bucket.remove(pkg_name)
+                        bucket.append(package)
+                        pkg_name = package
+                        break
             # /!\ danger: if current arch == ':appended_arch', on a non multiarch system, dpkg doesn't
             # understand that. strip :arch then
             if ":" in pkg_name:
@@ -69,6 +76,13 @@ class RequirementsHandler(object, metaclass=Singleton):
         """Check if bucket available on the platform"""
         all_in_cache = True
         for pkg_name in bucket:
+            if ' | ' in pkg_name:
+                for package in pkg_name.split(' | '):
+                    if self.is_bucket_available([package]):
+                        bucket.remove(pkg_name)
+                        bucket.append(package)
+                        pkg_name = package
+                        break
             if pkg_name not in self.cache:
                 # this can be also a foo:arch and we don't have <arch> added. Tell is may be available
                 if ":" in pkg_name:
