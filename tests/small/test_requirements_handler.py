@@ -491,22 +491,46 @@ class TestRequirementsHandler(DpkgAptSetup):
         self.assertFalse(self.handler.is_bucket_installed(["testpackage | testpackage0"]))
 
     def test_or_option_first_installed(self):
+        test_bucket = ["testpackage | testpackage1 | testpackage0"]
         shutil.copy(os.path.join(self.apt_status_dir, "testpackage_installed_dpkg_status"),
                     os.path.join(self.dpkg_dir, "status"))
         self.handler.cache.open()
-        self.assertTrue(self.handler.is_bucket_installed(["testpackage | testpackage0"]))
+        self.assertTrue(self.handler.is_bucket_installed(test_bucket))
+        self.assertTrue(test_bucket == ['testpackage'])
 
     def test_or_option_second_installed(self):
+        test_bucket = ["testpackage0 | testpackage | testpackage1", "testpackage2"]
         shutil.copy(os.path.join(self.apt_status_dir, "testpackage_installed_dpkg_status"),
                     os.path.join(self.dpkg_dir, "status"))
         self.handler.cache.open()
-        self.assertTrue(self.handler.is_bucket_installed(["testpackage0 | testpackage"]))
+        self.assertTrue(self.handler.is_bucket_installed(test_bucket))
+        self.assertTrue(test_bucket == ['testpackage2', 'testpackage'])
+
+    def test_or_option_third_installed(self):
+        test_bucket = ["testpackage0 | testpackage1 | testpackage", "testpackage2"]
+        shutil.copy(os.path.join(self.apt_status_dir, "testpackage_installed_dpkg_status"),
+                    os.path.join(self.dpkg_dir, "status"))
+        self.handler.cache.open()
+        self.assertTrue(self.handler.is_bucket_installed(test_bucket))
+        self.assertTrue(test_bucket == ['testpackage2', 'testpackage'])
 
     def test_or_option_is_first_available(self):
-        self.assertTrue(self.handler.is_bucket_available(['testpackage | testpackage42']))
+        test_bucket = ["testpackage | testpackage42", "testpackage1"]
+        self.handler.cache.open()
+        self.assertTrue(self.handler.is_bucket_available(test_bucket))
+        self.assertTrue(test_bucket == ['testpackage1', 'testpackage'])
 
     def test_or_option_is_second_available(self):
-        self.assertTrue(self.handler.is_bucket_available(['testpackage42 | testpackage']))
+        test_bucket = ["testpackage42 | testpackage"]
+        self.handler.cache.open()
+        self.assertTrue(self.handler.is_bucket_available(test_bucket))
+        self.assertTrue(test_bucket == ['testpackage'])
 
     def test_or_option_is_none_available(self):
         self.assertFalse(self.handler.is_bucket_available(['testpackage42 | testpackage404']))
+
+    def test_or_option_both_available(self):
+        test_bucket = ['testpackage | testpackage0', 'testpackage1']
+        self.handler.cache.open()
+        self.assertTrue(self.handler.is_bucket_available(test_bucket))
+        self.assertTrue(test_bucket == ['testpackage1', 'testpackage'])
