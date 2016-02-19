@@ -496,7 +496,7 @@ class TestRequirementsHandler(DpkgAptSetup):
                     os.path.join(self.dpkg_dir, "status"))
         self.handler.cache.open()
         self.assertTrue(self.handler.is_bucket_installed(test_bucket))
-        self.assertTrue(test_bucket == ['testpackage'])
+        self.assertEqual(test_bucket, ['testpackage'])
 
     def test_or_option_second_installed(self):
         test_bucket = ["testpackage0 | testpackage | testpackage1", "testpackage2"]
@@ -504,7 +504,7 @@ class TestRequirementsHandler(DpkgAptSetup):
                     os.path.join(self.dpkg_dir, "status"))
         self.handler.cache.open()
         self.assertTrue(self.handler.is_bucket_installed(test_bucket))
-        self.assertTrue(test_bucket == ['testpackage2', 'testpackage'])
+        self.assertEqual(test_bucket, ['testpackage2', 'testpackage'])
 
     def test_or_option_third_installed(self):
         test_bucket = ["testpackage0 | testpackage1 | testpackage", "testpackage2"]
@@ -512,19 +512,19 @@ class TestRequirementsHandler(DpkgAptSetup):
                     os.path.join(self.dpkg_dir, "status"))
         self.handler.cache.open()
         self.assertTrue(self.handler.is_bucket_installed(test_bucket))
-        self.assertTrue(test_bucket == ['testpackage2', 'testpackage'])
+        self.assertEqual(test_bucket, ['testpackage2', 'testpackage'])
 
     def test_or_option_is_first_available(self):
         test_bucket = ["testpackage | testpackage42", "testpackage1"]
         self.handler.cache.open()
         self.assertTrue(self.handler.is_bucket_available(test_bucket))
-        self.assertTrue(test_bucket == ['testpackage1', 'testpackage'])
+        self.assertEqual(test_bucket, ['testpackage1', 'testpackage'])
 
     def test_or_option_is_second_available(self):
         test_bucket = ["testpackage42 | testpackage"]
         self.handler.cache.open()
         self.assertTrue(self.handler.is_bucket_available(test_bucket))
-        self.assertTrue(test_bucket == ['testpackage'])
+        self.assertEqual(test_bucket, ['testpackage'])
 
     def test_or_option_is_none_available(self):
         self.assertFalse(self.handler.is_bucket_available(['testpackage42 | testpackage404']))
@@ -533,4 +533,4 @@ class TestRequirementsHandler(DpkgAptSetup):
         test_bucket = ['testpackage | testpackage0', 'testpackage1']
         self.handler.cache.open()
         self.assertTrue(self.handler.is_bucket_available(test_bucket))
-        self.assertTrue(test_bucket == ['testpackage1', 'testpackage'])
+        self.assertEqual(test_bucket, ['testpackage1', 'testpackage'])
