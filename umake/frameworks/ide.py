@@ -457,7 +457,7 @@ class DataGrip(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='DataGrip-*',
                          desktop_filename='jetbrains-datagrip.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['jayatana'],
                          icon_filename='product.png')
 
 
