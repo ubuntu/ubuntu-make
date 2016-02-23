@@ -121,14 +121,15 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                          need_root_access=True,
                          # Note that some packages requirements essential to the system itself are not listed (we
                          # don't want to create fake packages and kill the container for medium tests)
-                         packages_requirements=["gconf-service", "lib32gcc1", "lib32stdc++6", "libasound2", "libcairo2",
-                                                "libcap2", "libcups2", "libfontconfig1", "libfreetype6", "libgconf-2-4",
-                                                "libgdk-pixbuf2.0-0", "libglu1-mesa", "libgtk2.0-0",
-                                                "libgl1-mesa-glx | libgl1-mesa-glx-lts-vivid | libgl1-mesa-glx-lts-wily",
-                                                "libnspr4", "libnss3", "libpango1.0-0", "libpq5", "libxcomposite1",
-                                                "libxcursor1", "libxdamage1", "libxext6", "libxfixes3", "libxi6",
-                                                "libxrandr2", "libxrender1", "libxtst6",
-                                                "monodevelop"])  # monodevelop is for mono deps, temporary
+                         packages_requirements=[
+                             "gconf-service", "lib32gcc1", "lib32stdc++6", "libasound2", "libcairo2",
+                             "libcap2", "libcups2", "libfontconfig1", "libfreetype6", "libgconf-2-4",
+                             "libgdk-pixbuf2.0-0", "libglu1-mesa", "libgtk2.0-0",
+                             "libgl1-mesa-glx | libgl1-mesa-glx-lts-vivid | libgl1-mesa-glx-lts-wily",
+                             "libnspr4", "libnss3", "libpango1.0-0", "libpq5", "libxcomposite1",
+                             "libxcursor1", "libxdamage1", "libxext6", "libxfixes3", "libxi6",
+                             "libxrandr2", "libxrender1", "libxtst6",
+                             "monodevelop"])  # monodevelop is for mono deps, temporary
 
     def parse_download_link(self, line, in_download):
         """Parse Unity3d download links"""
