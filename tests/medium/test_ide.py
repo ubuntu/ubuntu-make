@@ -131,14 +131,14 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "idea")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "data.services.jetbrains.com",
+                                                        "products", "releases?code=IIC")
 
     # This actually tests the code in BaseJetBrains
     def test_install_with_changed_download_page(self):
         """Installing IntelliJ Idea should fail if download page has changed"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "data.services.jetbrains.com",
-                                               "products", "releases?code=IIC")
-        umake_command = self.command('{} ide idea'.format(UMAKE))
-        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.bad_download_page_test(self.command_args, self.bad_download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
@@ -156,6 +156,9 @@ class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "idea-ultimate")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "data.services.jetbrains.com",
+                                                        "products", "releases?code=IIU")
 
 
 class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
@@ -171,6 +174,9 @@ class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "data.services.jetbrains.com",
+                                                        "products", "releases?code=PCC")
 
 
 class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducationalIDETests):
@@ -186,6 +192,9 @@ class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducation
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-educational")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "data.services.jetbrains.com",
+                                                        "products", "releases?code=PCE")
 
 
 class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessionalIDETests):
@@ -201,6 +210,9 @@ class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessi
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-professional")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "data.services.jetbrains.com",
+                                                        "products", "releases?code=PCP")
 
 
 class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
@@ -216,6 +228,9 @@ class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "rubymine")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "data.services.jetbrains.com",
+                                                        "products", "releases?code=RM")
 
 
 class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
@@ -231,6 +246,9 @@ class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "webstorm")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "data.services.jetbrains.com",
+                                                        "products", "releases?code=WS")
 
 
 class CLionIDEInContainer(ContainerTests, test_ide.CLionIDETests):
@@ -246,6 +264,9 @@ class CLionIDEInContainer(ContainerTests, test_ide.CLionIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "clion")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "data.services.jetbrains.com",
+                                                        "products", "releases?code=CL")
 
 
 class DataGripIDEInContainer(ContainerTests, test_ide.DataGripIDETests):
@@ -261,6 +282,9 @@ class DataGripIDEInContainer(ContainerTests, test_ide.DataGripIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "datagrip")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "data.services.jetbrains.com",
+                                                        "products", "releases?code=DG")
 
 
 class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
@@ -276,6 +300,9 @@ class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "phpstorm")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "data.services.jetbrains.com",
+                                                        "products", "releases?code=PS")
 
 
 class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
