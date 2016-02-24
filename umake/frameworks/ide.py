@@ -320,7 +320,7 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
     def run_for(self, args):
         if args.eap:
             self.download_page += '&type=eap'
-            self.packages_requirements=['openjdk-8-jdk']
+            self.packages_requirements = ['openjdk-8-jdk']
         super().run_for(args)
 
 
