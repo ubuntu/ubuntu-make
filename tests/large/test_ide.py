@@ -163,7 +163,8 @@ class IdeaIDETests(LargeFrameworkTests):
         self.name += ' EAP'
 
         self.child = spawn_process(self.command_args)
-        result = self.expect_and_no_warn(["ERROR: No EAP version available.*\[.*\]", "Choose installation path: {}".format(self.installed_path)])
+        result = self.expect_and_no_warn(["ERROR: No EAP version available.*\[.*\]",
+                                          "Choose installation path: {}".format(self.installed_path)])
         if result == 1:
             self.child.sendline("")
             self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
