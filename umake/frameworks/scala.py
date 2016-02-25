@@ -44,7 +44,8 @@ class ScalaLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Scala Lang", description=_("Scala compiler and interpreter (default)"),
-                         is_category_default=True, category=category, packages_requirements=["default-jre"],
+                         is_category_default=True, category=category,
+                         packages_requirements=["openjdk-7-jre | openjdk-8-jre"],
                          download_page="http://www.scala-lang.org/download/",
                          dir_to_decompress_in_tarball="scala-*",
                          required_files_path=[os.path.join("bin", "scala")])

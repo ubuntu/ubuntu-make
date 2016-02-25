@@ -116,7 +116,15 @@ dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 # scala deps
 mkdir -p $repo_root_dir/scala
 cd $repo_root_dir/scala
-create_package default-jre
+create_package openjdk-7-jre
+create_package openjdk-8-jre
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+# kotlin deps
+mkdir -p $repo_root_dir/kotlin
+cd $repo_root_dir/kotlin
+create_package openjdk-7-jre
+create_package openjdk-8-jre
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 
 # swift deps
