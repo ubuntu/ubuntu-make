@@ -271,7 +271,13 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
             key, content = json.loads(page.buffer.read().decode()).popitem()
             download_url = content[0]['downloads']['linux']['link']
             checksum_url = content[0]['downloads']['linux']['checksumLink']
-        except (json.JSONDecodeError, IndexError):
+        except (IndexError):
+            if '&type=eap' in self.download_page:
+                logger.error("No EAP version available.")
+            else:
+                logger.error("Can't parse the download URL from the download page.")
+            UI.return_main_screen(status_code=1)
+        except (json.JSONDecodeError):
             logger.error("Can't parse the download URL from the download page.")
             UI.return_main_screen(status_code=1)
         logger.debug("Found download URL: " + download_url)
@@ -304,6 +310,22 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
                                                      exec='"{}" %f'.format(self.exec_path),
                                                      comment=comment,
                                                      categories=categories))
+
+    def install_framework_parser(self, parser):
+        this_framework_parser = super().install_framework_parser(parser)
+        this_framework_parser.add_argument('--eap', action="store_true",
+                                           help=_("Install EAP version if available"))
+        return this_framework_parser
+
+    def run_for(self, args):
+        if args.eap:
+            self.download_page += '&type=eap'
+            self.packages_requirements = ['openjdk-8-jdk']
+            self.name += " EAP"
+            self.description += " EAP"
+            self.desktop_filename = self.desktop_filename.replace(".desktop", "-eap.desktop")
+            self.install_path += "-eap"
+        super().run_for(args)
 
 
 class PyCharm(BaseJetBrains):
