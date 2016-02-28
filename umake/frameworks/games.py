@@ -124,7 +124,8 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                          packages_requirements=[
                              "gconf-service", "lib32gcc1", "lib32stdc++6", "libasound2", "libcairo2",
                              "libcap2", "libcups2", "libfontconfig1", "libfreetype6", "libgconf-2-4",
-                             "libgdk-pixbuf2.0-0", "libglu1-mesa", "libgtk2.0-0",
+                             "libgdk-pixbuf2.0-0", "libgtk2.0-0",
+                             "libglu1-mesa | libglu1-mesa-lts-vivid | libglu1-mesa-lts-wily",
                              "libgl1-mesa-glx | libgl1-mesa-glx-lts-vivid | libgl1-mesa-glx-lts-wily",
                              "libnspr4", "libnss3", "libpango1.0-0", "libpq5", "libxcomposite1",
                              "libxcursor1", "libxdamage1", "libxext6", "libxfixes3", "libxi6",
