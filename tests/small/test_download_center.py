@@ -493,6 +493,14 @@ class TestDownloadCenter(LoggedTestCase):
         self.assertIsNone(result.fd)
         self.expect_warn_error = True
 
+    def test_download_timeout(self):
+        """we fail a download with timeout"""
+        filename = "simplefile"
+        url = self.build_server_address(filename + '-timeout')
+        request = DownloadItem(url, None)
+        DownloadCenter([request], self.callback)
+        self.assertIsNone(self.callback.call_args)
+
 
 class TestDownloadCenterSecure(LoggedTestCase):
     """This will test the download center in secure mode by sending one or more download requests"""
