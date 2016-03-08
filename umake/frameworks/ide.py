@@ -736,7 +736,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         """Parse Android Studio download page for license"""
         if 'SOFTWARE LICENSE TERMS' in line:
             in_license = True
-        if in_license and "<strong>*   *   *</strong>" in line:
+        if in_license and "<footer>" in line:
             in_license = False
 
         if in_license:
