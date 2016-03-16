@@ -54,7 +54,7 @@ class AndroidNDKContainer(ContainerTests, test_android.AndroidNDKTests):
 
     def setUp(self):
         self.hosts = {443: ["developer.android.com"]}
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android-ndk')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "android", "android-ndk")
