@@ -305,7 +305,8 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
         comment = self.description + " (UDTC)"
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
-                        get_application_desktop_file(name=self.description,
+                        get_application_desktop_file(name=self.name,
+                                                     description=self.description,
                                                      icon_path=icon_path,
                                                      exec='"{}" %f'.format(self.exec_path),
                                                      comment=comment,
