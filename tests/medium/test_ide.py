@@ -138,7 +138,7 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     # This actually tests the code in BaseJetBrains
     def test_install_with_changed_download_page(self):
         """Installing IntelliJ Idea should fail if download page has changed"""
-        self.bad_download_page_test(self.command_args, self.bad_download_page_file_path)
+        self.bad_download_page_test(self.command(self.command_args), self.bad_download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 

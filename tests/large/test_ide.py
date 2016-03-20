@@ -131,7 +131,7 @@ class IdeaIDETests(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install from scratch test case"""
-        self.child = spawn_process(self.command_args)
+        self.child = spawn_process(self.command(self.command_args))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -147,22 +147,23 @@ class IdeaIDETests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
 
-        self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+        self.check_and_kill_process(self.exec_path,
+                                    wait_before=self.TIMEOUT_START, send_sigkill=True)
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = spawn_process(self.command_args)
+        self.child = spawn_process(self.command(self.command_args))
         self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
         self.child.sendline()
         self.wait_and_close()
 
     def test_eap_install(self):
-        self.installed_path += "-eap"
+        self.installed_path += '-eap'
         self.desktop_filename.replace('.desktop', '-eap.desktop')
         self.command_args += ' --eap'
         self.name += ' EAP'
 
-        self.child = spawn_process(self.command_args)
+        self.child = spawn_process(self.command(self.command_args))
         result = self.expect_and_no_warn(["ERROR: No EAP version available.*\[.*\]",
                                           "Choose installation path: {}".format(self.installed_path)])
         if result == 1:
@@ -180,11 +181,12 @@ class IdeaIDETests(LargeFrameworkTests):
             proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                     stderr=subprocess.DEVNULL)
 
-            self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+            self.check_and_kill_process(self.exec_path,
+                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
             proc.wait(self.TIMEOUT_STOP)
 
             # ensure that it's detected as installed:
-            self.child = spawn_process(self.command_args)
+            self.child = spawn_process(self.command(self.command_args))
             self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
             self.child.sendline()
             self.wait_and_close()

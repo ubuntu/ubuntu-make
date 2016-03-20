@@ -59,10 +59,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
         self.match_last_link = kwargs.get("match_last_link", False)
-        self.exec_rel_path = kwargs.get("exec_rel_path", None)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
                           "desktop_filename", "icon_filename", "required_files_path",
-                          "match_last_link", "exec_rel_path"]:
+                          "match_last_link"]:
             with suppress(KeyError):
                 kwargs.pop(extra_arg)
         super().__init__(*args, **kwargs)
@@ -137,6 +136,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
     def confirm_path(self, path_dir=""):
         """Confirm path dir"""
 
+        if self.desktop_filename:
+            self.exec_path = os.path.join(self.install_path, self.required_files_path[0])
+
         if not path_dir:
             logger.debug("No installation path provided. Requesting one.")
             UI.display(InputText("Choose installation path:", self.confirm_path, self.install_path))
@@ -156,10 +158,6 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                                      "there?".format(path_dir), self.set_installdir_to_clean, UI.return_main_screen))
                     return
         self.install_path = path_dir
-        if self.desktop_filename:
-            self.exec_path = os.path.join(self.install_path, self.required_files_path[0])
-        # if self.exec_rel_path:
-        #     self.exec_path = os.path.join(self.install_path, self.exec_rel_path)
         self.download_provider_page()
 
     def set_installdir_to_clean(self):
