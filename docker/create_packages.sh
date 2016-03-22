@@ -49,6 +49,7 @@ mkdir -p $repo_root_dir/android
 cd $repo_root_dir/android
 create_package clang
 create_package openjdk-7-jdk
+create_package openjdk-8-jdk
 create_package jayatana
 create_package libncurses5 i386
 create_package libstdc++6 i386

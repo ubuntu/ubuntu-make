@@ -76,6 +76,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.join(self.install_base_path, "base", "base-framework")
         self.desktop_filename = "base-framework.desktop"
+        self.required_files_path = ["base"]
 
     @property
     def arch_option(self):
