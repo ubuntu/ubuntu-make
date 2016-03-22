@@ -53,8 +53,8 @@ class AndroidCategory(umake.frameworks.BaseCategory):
         return in_license
 
     def parse_download_link(self, tag, line, in_download):
-        """Parse Android download links, expect to find a md5sum and a url"""
-        url, md5sum = (None, None)
+        """Parse Android download links, expect to find a sha1sum and a url"""
+        url, sha1sum = (None, None)
         if tag in line:
             in_download = True
         if in_download:
@@ -65,13 +65,13 @@ class AndroidCategory(umake.frameworks.BaseCategory):
             with suppress(AttributeError):
                 # ensure the size can match a md5 or sha1 checksum
                 if len(p.group(1)) > 15:
-                    md5sum = p.group(1)
+                    sha1sum = p.group(1)
             if "</tr>" in line:
                 in_download = False
 
-        if url is None and md5sum is None:
+        if url is None and sha1sum is None:
             return (None, in_download)
-        return ((url, md5sum), in_download)
+        return ((url, sha1sum), in_download)
 
 
 class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
@@ -92,7 +92,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
         return self.category.parse_license('<p class="sdk-terms-intro">', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
-        """Parse Android Studio download link, expect to find a md5sum and a url"""
+        """Parse Android Studio download link, expect to find a sha1sum and a url"""
         return self.category.parse_download_link('id="linux-bundle"', line, in_download)
 
     def post_install(self):
@@ -145,9 +145,10 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Android NDK", description=_("Android NDK"),
-                         category=category, only_on_archs=_supported_archs, expect_license=True,
+                         category=category, only_on_archs='amd64', expect_license=True,
                          download_page="https://developer.android.com/ndk/downloads/index.html",
-                         checksum_type=ChecksumType.md5,
+                         checksum_type=ChecksumType.sha1,
+                         packages_requirements=['clang'],
                          dir_to_decompress_in_tarball="android-ndk-*",
                          required_files_path=[os.path.join("ndk-build")])
 
@@ -156,12 +157,8 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
         return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
-        """Parse Android NDK download link, expect to find a md5sum and a url"""
-        arch = platform.machine()
-        tag_machine = '64'
-        if arch == 'i686':
-            tag_machine = '32'
-        return self.category.parse_download_link('<td>Linux {}'.format(tag_machine), line, in_download)
+        """Parse Android NDK download link, expect to find a sha1sum and a url"""
+        return self.category.parse_download_link('<td>Linux ', line, in_download)
 
     def post_install(self):
         """Add necessary environment variables"""

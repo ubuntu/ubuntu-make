@@ -117,7 +117,7 @@ class AndroidNDKTests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "ndk-which")
+        return os.path.join(self.installed_path, "ndk-build")
 
     def test_default_android_ndk_install(self):
         """Install android ndk from scratch test case"""
@@ -131,19 +131,7 @@ class AndroidNDKTests(LargeFrameworkTests):
 
         # we have an installed ndk exec
         self.assert_exec_exists()
-        cmd_list = ["echo $NDK_ROOT"]
-        if not self.in_container:
-            relogging_command = ["bash", "-l", "-c"]
-            relogging_command.extend(cmd_list)
-            cmd_list = relogging_command
-        self.assertEqual(subprocess.check_output(self.command_as_list(cmd_list)).decode("utf-8").strip(),
-                         self.installed_path)
-
-        # launch it, send SIGTERM and check that it exits fine
-        self.assertEqual(subprocess.check_call(self.command_as_list([self.exec_path, "gcc"]),
-                                               stdout=subprocess.DEVNULL,
-                                               stderr=subprocess.DEVNULL),
-                         0)
+        self.assertTrue(self.is_in_path(self.exec_path))
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command('{} android android-ndk'.format(UMAKE)))

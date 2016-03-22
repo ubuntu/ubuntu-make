@@ -47,6 +47,7 @@ generate_package $package_name $version $arch
 # android studio and adt deps
 mkdir -p $repo_root_dir/android
 cd $repo_root_dir/android
+create_package clang
 create_package openjdk-7-jdk
 create_package jayatana
 create_package libncurses5 i386
