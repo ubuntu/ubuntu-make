@@ -860,7 +860,7 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("Download page changed its syntax or is not parsable (missing url)")
             UI.return_main_screen(status_code=1)
         if sha1 is None:
-            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
+            logger.error("Download page changed its syntax or is not parsable (missing checksum)")
             UI.return_main_screen(status_code=1)
         logger.debug("Found download link for {}, checksum: {}".format(url, sha1))
         self.download_requests.append(DownloadItem(url, Checksum(ChecksumType.sha1, sha1)))

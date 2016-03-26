@@ -64,6 +64,7 @@ class LargeFrameworkTests(LoggedTestCase):
             if self.desktop_filename:
                 with suppress(FileNotFoundError):
                     os.remove(get_launcher_path(self.desktop_filename))
+                    os.remove(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0]))
             remove_framework_envs_from_user(self.framework_name_for_profile)
             for dir in self.additional_dirs:
                 with suppress(OSError):
