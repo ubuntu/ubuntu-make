@@ -64,7 +64,7 @@ class SwiftTests(LargeFrameworkTests):
         self.assertTrue(self.is_in_path(self.exec_path))
 
         # run the compiled result
-        output = subprocess.check_output(self.command(compile_command)).decode()\
+        output = subprocess.check_output(self.command_as_list(compile_command)).decode()\
             .replace('\r', '').replace('\n', '')
 
         self.assertEqual(output, "Hello, world!")
