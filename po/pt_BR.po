@@ -326,7 +326,7 @@ msgstr "Eu aceito"
 
 #: umake/interactions/__init__.py:115
 msgid "a"
-msgstr "um(a)"
+msgstr "a"
 
 #: umake/interactions/__init__.py:116
 msgid "I don't accept"
