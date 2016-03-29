@@ -29,7 +29,7 @@ msgstr "* Comando '{}':"
 #: umake/__init__.py:107
 msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr ""
-"Instala e configura de maneira fácil um ambiente de programação no Ubuntu"
+"Instala e configura de maneira fácil um ambiente de desenvolvimento no Ubuntu"
 
 #: umake/__init__.py:108
 #, fuzzy
@@ -42,7 +42,7 @@ msgstr ""
 
 #: umake/__init__.py:111
 msgid "Show this help"
-msgstr "Mostrar essa ajuda"
+msgstr "Mostrar ajuda"
 
 #: umake/__init__.py:112
 msgid "Increase output verbosity (2 levels)"
@@ -54,7 +54,7 @@ msgstr "Remove um determinado framework se estiver instalado"
 
 #: umake/__init__.py:116
 msgid "Print version and exit"
-msgstr ""
+msgstr "Exibir versão e sair"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
@@ -96,32 +96,32 @@ msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
 msgid "Ruby on Rails IDE"
-msgstr ""
+msgstr "Ruby on Rails IDE"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
-msgstr ""
+msgstr "IDE Javascript lado cliente e lado servidor"
 
 #: umake/frameworks/ide.py:331
 #, fuzzy
 msgid "PHP and web development IDE"
-msgstr "IDE Stencyl para desenvolvimento de jogos"
+msgstr "IDE PHP e desenvolvimento web"
 
 #: umake/frameworks/ide.py:348
 msgid "CLion integrated C/C++ IDE"
-msgstr ""
+msgstr "IDE Clion integrado C/C++"
 
 #: umake/frameworks/ide.py:376
 msgid "The Arduino Software Distribution"
-msgstr ""
+msgstr "Distribuição de software Arduino"
 
 #: umake/frameworks/ide.py:475
 msgid "The Arduino Software IDE"
-msgstr ""
+msgstr "IDE Software Arduino"
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
-msgstr ""
+msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
 #, fuzzy
@@ -131,7 +131,7 @@ msgstr "Você precisa reiniciar a sessão shell para que sua instalação funcio
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
 msgid "Netbeans IDE"
-msgstr ""
+msgstr "Netbeans IDE"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
@@ -140,7 +140,7 @@ msgstr "Ambiente de desenvolvimento Dartlang"
 #: umake/frameworks/dart.py:49
 #, fuzzy
 msgid "Dart SDK with editor (not supported upstream anyymore)"
-msgstr "Dart SDK com editor (padrão)"
+msgstr "Dart SDK com editor (sem suporte upstream)"
 
 #: umake/frameworks/dart.py:56
 #, fuzzy
@@ -163,16 +163,16 @@ msgstr "Linguagem Go"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
-msgstr ""
+msgstr "Distribuição official Rust"
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
-msgstr ""
+msgstr "Linguagem de programação Scala"
 
 #: umake/frameworks/scala.py:46
 #, fuzzy
 msgid "Scala compiler and interpreter (default)"
-msgstr "Compilador Google (padrão)"
+msgstr "Compilador e interpretador Scala (padrão)"
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
@@ -201,7 +201,7 @@ msgstr "Ambiente de desenvolvimento Android Studio"
 #: umake/frameworks/android.py:111
 #, fuzzy
 msgid "Android SDK"
-msgstr "Android NDK"
+msgstr "Android SDK"
 
 #: umake/frameworks/android.py:147
 msgid "Android NDK"
@@ -209,11 +209,11 @@ msgstr "Android NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
-msgstr ""
+msgstr "Um framework padrão é necessário para a categoria {} quando não existe nenhum"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't install that framework on this machine"
-msgstr ""
+msgstr "Você não pode instalar esse framework neste computador"
 
 #: umake/frameworks/__init__.py:256
 msgid "You can't remove {} as it isn't installed"
@@ -232,7 +232,7 @@ msgstr "Remove o framework se estiver instalado"
 
 #: umake/frameworks/__init__.py:291
 msgid "Accept license without prompting"
-msgstr ""
+msgstr "Aceitar licença sem avisos"
 
 #: umake/frameworks/web.py:45
 msgid "Web Developer Environment"
@@ -245,7 +245,7 @@ msgstr "Firefox Developer Edition"
 #: umake/frameworks/web.py:116
 #, fuzzy
 msgid "Choose language: {}"
-msgstr "Linguagem Go"
+msgstr "Escolha a linguagem: {}"
 
 #: umake/frameworks/web.py:123
 msgid "Firefox Aurora with Developer tools"
@@ -253,15 +253,15 @@ msgstr "Firefox Aurora com ferramentas para desenvolvedores"
 
 #: umake/frameworks/web.py:129
 msgid "Install in given language without prompting"
-msgstr ""
+msgstr "Instalar em dada linguagem sem avisos"
 
 #: umake/frameworks/web.py:141 umake/frameworks/web.py:226
 msgid "Visual Studio focused on modern web and cloud"
-msgstr ""
+msgstr "Visual Studio focado em web moderna e Cloud"
 
 #: umake/frameworks/web.py:223
 msgid "Visual Studio Code"
-msgstr ""
+msgstr "Visual Studio Code"
 
 #: umake/frameworks/games.py:42
 msgid "Games Development Environment"
@@ -277,20 +277,20 @@ msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
-msgstr ""
+msgstr "Unity 3D Editor Linux suporte experimental"
 
 #: umake/frameworks/games.py:154
 #, fuzzy
 msgid "Unity3D Editor"
-msgstr "Editor Dart"
+msgstr "Editor Unity3D"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
-msgstr ""
+msgstr "Ferramenta Twine para criar histórias interativas e não lineares"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
-msgstr ""
+msgstr "Twine"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
