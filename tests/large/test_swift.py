@@ -30,7 +30,8 @@ class SwiftTests(LargeFrameworkTests):
 
     TIMEOUT_INSTALL_PROGRESS = 300
 
-    EXAMPLE_PROJECT = """print("Hello, world!")"""
+    EXAMPLE_PROJECT = """print("Hello, world!")
+                         """
 
     def setUp(self):
         super().setUp()
@@ -46,15 +47,12 @@ class SwiftTests(LargeFrameworkTests):
         if not self.in_container:
             self.example_prog_dir = tempfile.mkdtemp()
             self.additional_dirs.append(self.example_prog_dir)
-            example_file = os.path.join(self.example_prog_dir, "Package.swift")
-            open(example_file, "w").write("")
-            os.mkdir(os.path.join(self.example_prog_dir, "Sources"))
-            example_file = os.path.join(self.example_prog_dir, "Sources", "main.swift")
+            example_file = os.path.join(self.example_prog_dir, "main.swift")
             open(example_file, "w").write(self.EXAMPLE_PROJECT)
-            compile_command = ["bash", "-l", "-c", "swift build"]
+            compile_command = ["bash", "-l", "-c", "swift {}".format(example_file)]
         else:  # our mock expects getting that command parameter
             self.example_prog_dir = "/tmp"
-            compile_command = ["bash", "-l", "swift build"]
+            compile_command = ["bash", "-l", "swift /tmp/main.swift"]
 
         self.child = spawn_process(self.command('{} swift'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
@@ -64,14 +62,9 @@ class SwiftTests(LargeFrameworkTests):
 
         self.assert_exec_exists()
         self.assertTrue(self.is_in_path(self.exec_path))
-        resulting_binary = os.path.join(self.example_prog_dir, ".build", "debug", self.example_prog_dir.split('/')[-1])
-
-        # compile a small project
-        subprocess.check_call(self.command_as_list(compile_command), cwd=self.example_prog_dir)
 
         # run the compiled result
-        output = subprocess.check_output(self.command(resulting_binary),
-                                         cwd=self.example_prog_dir, shell=True).decode()\
+        output = subprocess.check_output(self.command_as_list(compile_command)).decode()\
             .replace('\r', '').replace('\n', '')
 
         self.assertEqual(output, "Hello, world!")
