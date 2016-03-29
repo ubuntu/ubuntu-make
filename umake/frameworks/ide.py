@@ -796,6 +796,7 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
 
 class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
+        return
         super().__init__(name="Spring Tools Suite",
                          description=_("Spring Tools Suite IDE"),
                          download_page="https://spring.io/tools/sts/all",

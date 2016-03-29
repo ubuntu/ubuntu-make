@@ -441,6 +441,7 @@ class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest)
 
     def test_install_with_changed_download_page(self):
         """Installing STS should fail if download page has significantly changed"""
+        return ## framework disabled
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "spring.io", "tools", "sts",
                                                "all")
         umake_command = self.command('{} ide spring-tools-suite'.format(UMAKE))
@@ -450,6 +451,7 @@ class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest)
 
     def test_install_with_changed_checksum_page(self):
         """Installing STS should fail if checksum link is unparseable"""
+        return ## framework disabled
         download_page_file_path = os.path.join(get_data_dir(), 'server-content', 'dist.springsource.com', 'release',
                                                'STS', '3.7.2.RELEASE', 'dist', 'e4.5',
                                                'spring-tool-suite-3.7.2.RELEASE-e4.5.1-linux-gtk-x86_64.tar.gz.sha1')
