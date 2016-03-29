@@ -64,7 +64,7 @@ class LargeFrameworkTests(LoggedTestCase):
             if self.desktop_filename:
                 with suppress(FileNotFoundError):
                     os.remove(get_launcher_path(self.desktop_filename))
-                    os.remove(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0]))
+                    os.remove(self.exec_link)
             remove_framework_envs_from_user(self.framework_name_for_profile)
             for dir in self.additional_dirs:
                 with suppress(OSError):
@@ -101,6 +101,10 @@ class LargeFrameworkTests(LoggedTestCase):
             os.kill(pid, signal.SIGTERM)
 
     @property
+    def exec_link(self):
+        return os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])
+
+    @property
     def exec_path(self):
         return self._get_path_from_desktop_file("Exec")
 
@@ -122,7 +126,7 @@ class LargeFrameworkTests(LoggedTestCase):
 
     def assert_exec_link_exists(self):
         """Assert that the link to the binary exists"""
-        self.assertTrue(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+        self.assertTrue(self.is_in_path(self.exec_link))
 
     def assert_for_warn(self, content, expect_warn=False):
         """assert if there is any warn"""
