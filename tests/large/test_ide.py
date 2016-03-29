@@ -521,7 +521,7 @@ class SpringToolsSuiteTest(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install STS from scratch test case"""
-        return ## framework disabled
+        return  # framework disabled
 
         self.child = spawn_process(self.command(self.command_args))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
