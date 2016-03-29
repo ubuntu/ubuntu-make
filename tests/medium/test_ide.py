@@ -52,13 +52,13 @@ class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
                                                "index.html")
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+        self.assertFalse(self.is_in_path(self.exec_link))
 
     def test_install_with_changed_checksum_page(self):
         """Installing eclipse ide should fail if checksum link is unparseable"""
         self.bad_download_page_test(self.command(self.command_args), self.bad_download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+        self.assertFalse(self.is_in_path(self.exec_link))
 
 
 class EclipseJEEIDEInContainer(ContainerTests, test_ide.EclipseJEEIDETests):
@@ -140,7 +140,7 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
         """Installing IntelliJ Idea should fail if download page has changed"""
         self.bad_download_page_test(self.command(self.command_args), self.bad_download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+        self.assertFalse(self.is_in_path(self.exec_link))
 
 
 class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
@@ -325,7 +325,7 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
         umake_command = self.command('{} ide arduino'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+        self.assertFalse(self.is_in_path(self.exec_link))
 
     def test_install_with_changed_checksum_page(self):
         """Installing arduino ide should fail if checksum link is unparseable"""
@@ -334,7 +334,7 @@ class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
         umake_command = self.command('{} ide arduino'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+        self.assertFalse(self.is_in_path(self.exec_link))
 
 
 class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
@@ -359,7 +359,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
         umake_command = self.command('{} ide netbeans'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+        self.assertFalse(self.is_in_path(self.exec_link))
 
     def test_install_with_changed_download_reference_page(self):
         """Installing NetBeans ide should fail if download reference page has significantly changed"""
@@ -368,7 +368,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
         umake_command = self.command('{} ide netbeans'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+        self.assertFalse(self.is_in_path(self.exec_link))
 
     def test_install_with_changed_checksum_page(self):
         """Installing NetBeans ide should fail if checksum link is wrong"""
@@ -386,7 +386,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
 
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-            self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+            self.assertFalse(self.is_in_path(self.exec_link))
 
 
 class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTest):
@@ -423,7 +423,7 @@ class LightTableInContainer(ContainerTests, test_ide.LightTableTest):
         umake_command = self.command('{} ide lighttable'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+        self.assertFalse(self.is_in_path(self.exec_link))
 
 
 class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest):
@@ -446,7 +446,7 @@ class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest)
         umake_command = self.command('{} ide spring-tools-suite'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+        self.assertFalse(self.is_in_path(self.exec_link))
 
     def test_install_with_changed_checksum_page(self):
         """Installing STS should fail if checksum link is unparseable"""
@@ -455,4 +455,4 @@ class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest)
                                                'spring-tool-suite-3.7.2.RELEASE-e4.5.1-linux-gtk-x86_64.tar.gz.sha1')
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
+        self.assertFalse(self.is_in_path(self.exec_link))
