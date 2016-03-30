@@ -120,9 +120,10 @@ class TestRequirementsHandler(DpkgAptSetup):
                                                          RequirementsHandler.STATUS_INSTALLING)
         self.assertTrue(downloading_msg > 1)
         self.assertTrue(installing_msg > 1)
-        # the first download call is at 0% of progress. testpackage is 1byte to download
-        self.assertEqual(progress_callback.call_args_list[0][0][0],
-                         {'step': 0, 'pkg_size_download': 1, 'percentage': 0.0})
+        # the first download call is at 0% of progress. testpackage is 1byte to download on != xenial
+        self.assertIn(progress_callback.call_args_list[0][0][0],
+                      [{'step': 0, 'pkg_size_download': 1, 'percentage': 0.0},
+                       {'step': 0, 'pkg_size_download': 3412, 'percentage': 0.0}])
         callfound = False
         for call in progress_callback.call_args_list:
             if call[0][0] == {'step': 1, 'percentage': 0.0}:
@@ -151,9 +152,10 @@ class TestRequirementsHandler(DpkgAptSetup):
                                                          RequirementsHandler.STATUS_INSTALLING)
         self.assertTrue(downloading_msg > 1)
         self.assertTrue(installing_msg > 1)
-        # the first download call is at 0% of progress. testpackage is 1byte to download
-        self.assertEqual(progress_callback.call_args_list[0][0][0],
-                         {'step': 0, 'pkg_size_download': 1, 'percentage': 0.0})
+        # the first download call is at 0% of progress. testpackage is 1byte to download on != xenial
+        self.assertIn(progress_callback.call_args_list[0][0][0],
+                      [{'step': 0, 'pkg_size_download': 1, 'percentage': 0.0},
+                       {'step': 0, 'pkg_size_download': 3412, 'percentage': 0.0}])
 
     def test_install_pending(self):
         """Appending two installations and wait for results. Only the first call should have progress"""
