@@ -1,3 +1,39 @@
+ubuntu-make (16.02.1ubuntu1) UNRELEASED; urgency=medium
+
+  [ Galileo Sartor ]
+  * Add Eclipse JEE support
+  * Add Intellij EAP support
+  * Fix Unity3D on lts mesa
+  * Fix VSCode license page due to server changes
+  * Fix Android-NDK due to server changes
+  * Fix Clang support due to server changes
+  * Fix Intellij .desktop file
+  * Add a "or" package logic to the dependency check and install
+  * Remove jayatana from intellij
+  * Adapt large and medium tests to those changes
+
+  [ Tankypon ]
+  * Add Superpowers game editor framework
+
+  [ Omer Sheikh ]
+  * Add Kotlin compiler support
+  * Remove openjdk from datagrip requirements
+
+  [ Eakkapat Pattarathamrong ]
+  * Add more test for Visual Studio Code
+
+  [ Almeida ]
+  * Update pt_BR translation
+
+  [ Didier Roche ]
+  * Change StartupWMClass to match the one Android Studio creates
+  * Fix EULA acceptance translations in pt
+  * Add more tests on symlinks creation and removal
+  * Fix and make more reliable test infrastructure + some cleanup logic
+  * Adapt large and medium tests to those changes
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 30 Mar 2016 08:11:37 +0200
+
 ubuntu-make (16.02.1) xenial; urgency=medium
 
   [ Galileo Sartor ]
