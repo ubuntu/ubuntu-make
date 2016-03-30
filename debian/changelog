@@ -1,3 +1,9 @@
+ubuntu-make (16.03.1ubuntu1) UNRELEASED; urgency=medium
+
+  * Fixup number for xenial
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 30 Mar 2016 09:14:22 +0200
+
 ubuntu-make (16.03.1) xenial; urgency=medium
 
   * Fix test as python 3.5 downloader can return bigger size (on xenial)
