@@ -1,4 +1,4 @@
-ubuntu-make (16.02.1ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (16.03) xenial; urgency=medium
 
   [ Galileo Sartor ]
   * Add Eclipse JEE support
@@ -32,7 +32,7 @@ ubuntu-make (16.02.1ubuntu1) UNRELEASED; urgency=medium
   * Fix and make more reliable test infrastructure + some cleanup logic
   * Adapt large and medium tests to those changes
 
- -- Didier Roche <didrocks@ubuntu.com>  Wed, 30 Mar 2016 08:11:37 +0200
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 30 Mar 2016 08:22:24 +0200
 
 ubuntu-make (16.02.1) xenial; urgency=medium
 
