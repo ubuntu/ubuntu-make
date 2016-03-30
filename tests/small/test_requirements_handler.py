@@ -123,7 +123,7 @@ class TestRequirementsHandler(DpkgAptSetup):
         # the first download call is at 0% of progress. testpackage is 1byte to download on != xenial
         self.assertIn(progress_callback.call_args_list[0][0][0],
                       [{'step': 0, 'pkg_size_download': 1, 'percentage': 0.0},
-                       {'step': 0, 'pkg_size_download': 3412, 'percentage': 0.0}])
+                       {'step': 0, 'pkg_size_download': 1698, 'percentage': 0.0}])
         callfound = False
         for call in progress_callback.call_args_list:
             if call[0][0] == {'step': 1, 'percentage': 0.0}:
