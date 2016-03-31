@@ -410,20 +410,11 @@ class LightTableInContainer(ContainerTests, test_ide.LightTableTest):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["github.com"]}
+        self.hosts = {443: ["api.github.com", "github.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'LightTable')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "lighttable")
-
-    def test_install_with_changed_download_page(self):
-        """Installing LightTable should fail if download page has significantly changed"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "github.com", "LightTable",
-                                               "LightTable", "releases", "index.html")
-        umake_command = self.command('{} ide lighttable'.format(UMAKE))
-        self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(self.exec_link))
 
 
 class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest):
