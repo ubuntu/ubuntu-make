@@ -770,7 +770,6 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="lighttable-*",
                          checksum_type=ChecksumType.md5)
 
-
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
         logger.debug("Fetched download page, parsing.")
