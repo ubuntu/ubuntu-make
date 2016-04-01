@@ -338,7 +338,6 @@ class PyCharm(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='pycharm-community-*',
                          desktop_filename='jetbrains-pycharm.desktop',
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='pycharm.png')
 
 
@@ -353,7 +352,6 @@ class PyCharmEducational(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='pycharm-edu*',
                          desktop_filename='jetbrains-pycharm.desktop',
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='pycharm.png')
 
 
@@ -368,7 +366,6 @@ class PyCharmProfessional(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='pycharm-*',
                          desktop_filename='jetbrains-pycharm.desktop',
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='pycharm.png')
 
 
@@ -383,7 +380,6 @@ class Idea(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='idea-IC-*',
                          desktop_filename='jetbrains-idea.desktop',
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='idea.png')
 
 
@@ -398,7 +394,6 @@ class IdeaUltimate(BaseJetBrains):
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='idea-IU-*',
                          desktop_filename='jetbrains-idea.desktop',
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='idea.png')
 
 
@@ -414,7 +409,6 @@ class RubyMine(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='RubyMine-*',
                          desktop_filename='jetbrains-rubymine.desktop',
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='rubymine.png')
 
 
@@ -430,7 +424,6 @@ class WebStorm(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='WebStorm-*',
                          desktop_filename='jetbrains-webstorm.desktop',
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='webstorm.svg')
 
 
@@ -446,7 +439,6 @@ class PhpStorm(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='PhpStorm-*',
                          desktop_filename='jetbrains-phpstorm.desktop',
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='webide.png')
 
 
@@ -462,7 +454,6 @@ class CLion(BaseJetBrains):
                          only_on_archs=['amd64'],
                          dir_to_decompress_in_tarball='clion-*',
                          desktop_filename='jetbrains-clion.desktop',
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='clion.svg')
 
 
