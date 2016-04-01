@@ -78,3 +78,12 @@ class SuperpowersInContainer(ContainerTests, test_games.SuperpowersTests):
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "games", "superpowers")
+
+    def test_install_with_changed_download_page(self):
+        """Installing Superpowers should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
+                                               "repos", "superpowers", "superpowers-core", "releases", "latest")
+        umake_command = self.command('{} games superpowers'.format(UMAKE))
+        self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(self.exec_link))

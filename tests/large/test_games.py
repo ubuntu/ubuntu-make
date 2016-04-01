@@ -167,11 +167,12 @@ class SuperpowersTests(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.join(self.install_base_path, "games", "superpowers")
         self.desktop_filename = "superpowers.desktop"
+        self.command_args = '{} games superpowers'.format(UMAKE)
 
     def test_default_superpowers_install(self):
         """Install Superpowers editor from scratch test case"""
 
-        self.child = spawn_process(self.command('{} games superpowers'.format(UMAKE)))
+        self.child = spawn_process(self.command(self.command_args))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -190,7 +191,7 @@ class SuperpowersTests(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = spawn_process(self.command('{} games superpowers'.format(UMAKE)))
+        self.child = spawn_process(self.command(self.command_args))
         self.expect_and_no_warn("Superpowers is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
