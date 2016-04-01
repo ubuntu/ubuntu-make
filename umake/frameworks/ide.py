@@ -319,7 +319,6 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
     def run_for(self, args):
         if args.eap:
             self.download_page += '&type=eap'
-            self.packages_requirements = ['openjdk-8-jdk']
             self.name += " EAP"
             self.description += " EAP"
             self.desktop_filename = self.desktop_filename.replace(".desktop", "-eap.desktop")

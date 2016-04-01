@@ -126,8 +126,6 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
-        # Reuse the Android Studio environment.
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "idea")
@@ -151,8 +149,6 @@ class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
-        # Reuse the Android Studio environment.
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "idea-ultimate")
@@ -169,8 +165,6 @@ class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
-        # Reuse the Android Studio environment.
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm")
@@ -187,8 +181,6 @@ class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducation
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
-        # Reuse the Android Studio environment.
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-educational")
@@ -205,8 +197,6 @@ class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessi
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
-        # Reuse the Android Studio environment.
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-professional")
@@ -223,8 +213,6 @@ class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
-        # Reuse the Android Studio environment.
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "rubymine")
@@ -241,8 +229,6 @@ class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
-        # Reuse the Android Studio environment.
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "webstorm")
@@ -259,8 +245,6 @@ class CLionIDEInContainer(ContainerTests, test_ide.CLionIDETests):
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
-        # Reuse the Android Studio environment.
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "clion")
@@ -277,8 +261,6 @@ class DataGripIDEInContainer(ContainerTests, test_ide.DataGripIDETests):
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
-        # Reuse the Android Studio environment.
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "datagrip")
@@ -295,8 +277,6 @@ class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
-        # Reuse the Android Studio environment.
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "phpstorm")
