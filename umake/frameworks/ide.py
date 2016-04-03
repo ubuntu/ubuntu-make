@@ -336,7 +336,7 @@ class PyCharm(BaseJetBrains):
                          description=_("PyCharm Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='pycharm-community-*',
-                         desktop_filename='jetbrains-pycharm.desktop',
+                         desktop_filename='jetbrains-pycharm-ce.desktop',
                          icon_filename='pycharm.png')
 
 
@@ -350,7 +350,7 @@ class PyCharmEducational(BaseJetBrains):
                          description=_("PyCharm Educational Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='pycharm-edu*',
-                         desktop_filename='jetbrains-pycharm.desktop',
+                         desktop_filename='jetbrains-pycharm-edu.desktop',
                          icon_filename='pycharm.png')
 
 
@@ -377,8 +377,9 @@ class Idea(BaseJetBrains):
         super().__init__(name="Idea",
                          description=_("IntelliJ IDEA Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          dir_to_decompress_in_tarball='idea-IC-*',
-                         desktop_filename='jetbrains-idea.desktop',
+                         desktop_filename='jetbrains-idea-ce.desktop',
                          icon_filename='idea.png')
 
 
@@ -391,6 +392,7 @@ class IdeaUltimate(BaseJetBrains):
         super().__init__(name="Idea Ultimate",
                          description=_("IntelliJ IDEA"),
                          category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          dir_to_decompress_in_tarball='idea-IU-*',
                          desktop_filename='jetbrains-idea.desktop',
                          icon_filename='idea.png')

@@ -37,7 +37,7 @@ class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
     def setUp(self):
         self.hosts = {443: ["www.eclipse.org"]}
         # we reuse the android-studio repo
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse")
@@ -70,7 +70,7 @@ class EclipseJEEIDEInContainer(ContainerTests, test_ide.EclipseJEEIDETests):
     def setUp(self):
         self.hosts = {443: ["www.eclipse.org"]}
         # we reuse the android-studio repo
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-jee")
@@ -89,7 +89,7 @@ class EclipsePHPIDEInContainer(ContainerTests, test_ide.EclipsePHPIDETests):
     def setUp(self):
         self.hosts = {443: ["www.eclipse.org"]}
         # we reuse the android-studio repo
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-php")
@@ -108,7 +108,7 @@ class EclipseCPPIDEInContainer(ContainerTests, test_ide.EclipseCPPIDETests):
     def setUp(self):
         self.hosts = {443: ["www.eclipse.org"]}
         # we reuse the android-studio repo
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-cpp")
@@ -126,6 +126,8 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "idea")
@@ -149,6 +151,8 @@ class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "idea-ultimate")
