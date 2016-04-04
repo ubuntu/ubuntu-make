@@ -217,6 +217,7 @@ class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
 
     def setUp(self):
         self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'rubymine')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "rubymine")

@@ -335,6 +335,7 @@ class PyCharm(BaseJetBrains):
         super().__init__(name="PyCharm",
                          description=_("PyCharm Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['python', 'python3'],
                          dir_to_decompress_in_tarball='pycharm-community-*',
                          desktop_filename='jetbrains-pycharm-ce.desktop',
                          icon_filename='pycharm.png')
@@ -349,6 +350,7 @@ class PyCharmEducational(BaseJetBrains):
         super().__init__(name="PyCharm Educational",
                          description=_("PyCharm Educational Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['python', 'python3'],
                          dir_to_decompress_in_tarball='pycharm-edu*',
                          desktop_filename='jetbrains-pycharm-edu.desktop',
                          icon_filename='pycharm.png')
@@ -363,6 +365,7 @@ class PyCharmProfessional(BaseJetBrains):
         super().__init__(name="PyCharm Professional",
                          description=_("PyCharm Professional Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['python', 'python3'],
                          dir_to_decompress_in_tarball='pycharm-*',
                          desktop_filename='jetbrains-pycharm.desktop',
                          icon_filename='pycharm.png')
@@ -408,6 +411,7 @@ class RubyMine(BaseJetBrains):
                          description=_("Ruby on Rails IDE"),
                          category=category,
                          only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['ruby'],
                          dir_to_decompress_in_tarball='RubyMine-*',
                          desktop_filename='jetbrains-rubymine.desktop',
                          icon_filename='rubymine.png')
