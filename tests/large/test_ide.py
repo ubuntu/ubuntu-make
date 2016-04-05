@@ -125,7 +125,7 @@ class IdeaIDETests(LargeFrameworkTests):
     def setUp(self):
         super().setUp()
         self.installed_path = os.path.join(self.install_base_path, "ide", "idea")
-        self.desktop_filename = 'jetbrains-idea.desktop'
+        self.desktop_filename = 'jetbrains-idea-ce.desktop'
         self.command_args = '{} ide idea'.format(UMAKE)
         self.name = 'Idea'
 
@@ -216,7 +216,7 @@ class PyCharmIDETests(IdeaIDETests):
     def setUp(self):
         super().setUp()
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm")
-        self.desktop_filename = 'jetbrains-pycharm.desktop'
+        self.desktop_filename = 'jetbrains-pycharm-ce.desktop'
         self.command_args = '{} ide pycharm'.format(UMAKE)
         self.name = 'PyCharm'
 
@@ -231,7 +231,7 @@ class PyCharmEducationalIDETests(IdeaIDETests):
     def setUp(self):
         super().setUp()
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-educational")
-        self.desktop_filename = 'jetbrains-pycharm.desktop'
+        self.desktop_filename = 'jetbrains-pycharm-edu.desktop'
         self.command_args = '{} ide pycharm-educational'.format(UMAKE)
         self.name = 'PyCharm Educational'
 

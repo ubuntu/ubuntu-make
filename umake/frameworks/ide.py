@@ -183,7 +183,7 @@ class EclipseJava(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-java.desktop',
                          category=category, only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='java.png')
 
 
@@ -198,7 +198,7 @@ class EclipseJEE(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-jee.desktop',
                          category=category, only_on_archs=['i386', 'amd64'],
-                         packages_requirements=["openjdk-7-jdk"],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='javaee.png')
 
 
@@ -213,7 +213,7 @@ class EclipsePHP(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-php.desktop',
                          category=category, only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='php.png')
 
 
@@ -228,7 +228,7 @@ class EclipseCPP(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-cpp.desktop',
                          category=category, only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='cdt.png')
 
 
@@ -319,7 +319,6 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
     def run_for(self, args):
         if args.eap:
             self.download_page += '&type=eap'
-            self.packages_requirements = ['openjdk-8-jdk']
             self.name += " EAP"
             self.description += " EAP"
             self.desktop_filename = self.desktop_filename.replace(".desktop", "-eap.desktop")
@@ -336,9 +335,9 @@ class PyCharm(BaseJetBrains):
         super().__init__(name="PyCharm",
                          description=_("PyCharm Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['python', 'python3'],
                          dir_to_decompress_in_tarball='pycharm-community-*',
-                         desktop_filename='jetbrains-pycharm.desktop',
-                         packages_requirements=['openjdk-7-jdk'],
+                         desktop_filename='jetbrains-pycharm-ce.desktop',
                          icon_filename='pycharm.png')
 
 
@@ -351,9 +350,9 @@ class PyCharmEducational(BaseJetBrains):
         super().__init__(name="PyCharm Educational",
                          description=_("PyCharm Educational Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['python', 'python3'],
                          dir_to_decompress_in_tarball='pycharm-edu*',
-                         desktop_filename='jetbrains-pycharm.desktop',
-                         packages_requirements=['openjdk-7-jdk'],
+                         desktop_filename='jetbrains-pycharm-edu.desktop',
                          icon_filename='pycharm.png')
 
 
@@ -366,9 +365,9 @@ class PyCharmProfessional(BaseJetBrains):
         super().__init__(name="PyCharm Professional",
                          description=_("PyCharm Professional Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['python', 'python3'],
                          dir_to_decompress_in_tarball='pycharm-*',
                          desktop_filename='jetbrains-pycharm.desktop',
-                         packages_requirements=['openjdk-7-jdk'],
                          icon_filename='pycharm.png')
 
 
@@ -381,9 +380,9 @@ class Idea(BaseJetBrains):
         super().__init__(name="Idea",
                          description=_("IntelliJ IDEA Community Edition"),
                          category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          dir_to_decompress_in_tarball='idea-IC-*',
-                         desktop_filename='jetbrains-idea.desktop',
-                         packages_requirements=['openjdk-7-jdk'],
+                         desktop_filename='jetbrains-idea-ce.desktop',
                          icon_filename='idea.png')
 
 
@@ -396,9 +395,9 @@ class IdeaUltimate(BaseJetBrains):
         super().__init__(name="Idea Ultimate",
                          description=_("IntelliJ IDEA"),
                          category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          dir_to_decompress_in_tarball='idea-IU-*',
                          desktop_filename='jetbrains-idea.desktop',
-                         packages_requirements=['openjdk-7-jdk'],
                          icon_filename='idea.png')
 
 
@@ -412,9 +411,9 @@ class RubyMine(BaseJetBrains):
                          description=_("Ruby on Rails IDE"),
                          category=category,
                          only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['ruby'],
                          dir_to_decompress_in_tarball='RubyMine-*',
                          desktop_filename='jetbrains-rubymine.desktop',
-                         packages_requirements=['openjdk-7-jdk'],
                          icon_filename='rubymine.png')
 
 
@@ -430,7 +429,6 @@ class WebStorm(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='WebStorm-*',
                          desktop_filename='jetbrains-webstorm.desktop',
-                         packages_requirements=['openjdk-7-jdk'],
                          icon_filename='webstorm.svg')
 
 
@@ -446,7 +444,6 @@ class PhpStorm(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='PhpStorm-*',
                          desktop_filename='jetbrains-phpstorm.desktop',
-                         packages_requirements=['openjdk-7-jdk'],
                          icon_filename='webide.png')
 
 
@@ -462,7 +459,6 @@ class CLion(BaseJetBrains):
                          only_on_archs=['amd64'],
                          dir_to_decompress_in_tarball='clion-*',
                          desktop_filename='jetbrains-clion.desktop',
-                         packages_requirements=['openjdk-7-jdk'],
                          icon_filename='clion.svg')
 
 
@@ -803,7 +799,7 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball='sts-bundle/sts-*',
                          desktop_filename='STS.desktop',
                          category=category, only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='icon.xpm',
                          required_files_path=["STS"])
         self.arch = '' if platform.machine() == 'i686' else '-x86_64'
