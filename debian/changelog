@@ -1,4 +1,4 @@
-ubuntu-make (16.03.2ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (16.04) xenial; urgency=medium
 
   [ Galileo Sartor ]
   * Fix Xenial by adding an openjdk-8-jdk as a dependency to eclipse
@@ -9,7 +9,7 @@ ubuntu-make (16.03.2ubuntu1) UNRELEASED; urgency=medium
   [ Didier Roche ]
   * Write some future test strategy for pycharm/python medium tests
 
- -- Didier Roche <didrocks@ubuntu.com>  Tue, 05 Apr 2016 09:20:54 +0200
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 05 Apr 2016 09:24:55 +0200
 
 ubuntu-make (16.03.2) xenial; urgency=medium
 
