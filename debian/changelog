@@ -1,3 +1,16 @@
+ubuntu-make (16.03.2ubuntu1) UNRELEASED; urgency=medium
+
+  [ Galileo Sartor ]
+  * Fix Xenial by adding an openjdk-8-jdk as a dependency to eclipse
+    and intellij. (Fixes: #279)
+  * Add language dependencies on IDEs specific to one language only
+    (pycharm, rubymine…)
+
+  [ Didier Roche ]
+  * Write some future test strategy for pycharm/python medium tests
+
+ -- Didier Roche <didrocks@ubuntu.com>  Tue, 05 Apr 2016 09:20:54 +0200
+
 ubuntu-make (16.03.2) xenial; urgency=medium
 
   * Fixup number for xenial
