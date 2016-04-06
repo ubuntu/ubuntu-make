@@ -629,7 +629,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://netbeans.org/downloads/zip.html",
                          dir_to_decompress_in_tarball="netbeans*",
                          desktop_filename="netbeans{}.desktop".format(flavour),
-                         packages_requirements=['openjdk-7-jdk', 'jayatana'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          required_files_path=[os.path.join("bin", "netbeans")])
 
     @MainLoop.in_mainloop_thread
