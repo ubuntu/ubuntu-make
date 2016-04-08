@@ -42,7 +42,7 @@ import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage, LicenseAgreement
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop,\
-    strip_tags, add_env_to_user, add_exec_link
+    strip_tags, add_env_to_user, add_exec_link, get_current_arch
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -796,6 +796,39 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_path,
                         comment=_("LightTable code editor"),
                         categories="Development;IDE;"))
+
+
+class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Sublime Text", description=_("Sophisticated text editor for code, markup and prose"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page="https://sublimetext.com/3",
+                         desktop_filename="sublime-text.desktop",
+                         required_files_path=["sublime_text"],
+                         dir_to_decompress_in_tarball="sublime_text_*")
+
+    arch_trans = {
+        "amd64": "x64",
+        "i386": "x32"
+    }
+
+    def parse_download_link(self, line, in_download):
+        """Parse LightTable download links"""
+        url = None
+        if '{}.tar.bz2'.format(self.arch_trans[get_current_arch()]) in line:
+            p = re.search(r'also available as a <a href="(.*.tar.bz2)"', line)
+            with suppress(AttributeError):
+                url = p.group(1)
+        return ((url, None), in_download)
+
+    def post_install(self):
+        """Create the Sublime Text Code launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Sublime Text"),
+                        icon_path=os.path.join(self.install_path, "Icon", "128x128", "sublime-text.png"),
+                        exec=self.exec_path,
+                        comment=_("Sophisticated text editor for code, markup and prose"),
+                        categories="Development;TextEditor;"))
 
 
 class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):

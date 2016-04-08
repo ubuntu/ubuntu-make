@@ -32,6 +32,8 @@ ADD tests/data/github.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/api.github.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/spring.io.crt /usr/local/share/ca-certificates/
 ADD tests/data/dl.google.com.crt /usr/local/share/ca-certificates/
+ADD tests/data/sublimetext.com.crt /usr/local/share/ca-certificates/
+ADD tests/data/download.sublimetext.com.crt /usr/local/share/ca-certificates/
 ADD docker/create_packages.sh /tmp/
 
 # Refresh the image
