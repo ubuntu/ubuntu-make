@@ -71,6 +71,8 @@ class AndroidCategory(umake.frameworks.BaseCategory):
 
         if url is None and sha1sum is None:
             return (None, in_download)
+        if url and url.startswith("//"):
+            url = "https:" + url
         return ((url, sha1sum), in_download)
 
 
@@ -89,7 +91,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
-        return self.category.parse_license('<p class="sdk-terms-intro">', line, license_txt, in_license)
+        return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
         """Parse Android Studio download link, expect to find a sha1sum and a url"""
@@ -119,7 +121,7 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android SDK download page for license"""
-        return self.category.parse_license('<p class="sdk-terms-intro">', line, license_txt, in_license)
+        return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
         """Parse Android SDK download link, expect to find a SHA-1 and a url"""
