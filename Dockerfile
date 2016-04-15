@@ -10,6 +10,10 @@ MAINTAINER	Didier Roche <didrocks@ubuntu.com>
 # Set the env variable DEBIAN_FRONTEND to noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
+#Set default locale
+ENV LANG C.UTF-8
+RUN locale-gen en_US.UTF-8
+
 ADD debian/control /tmp/
 ADD docker/umake_docker.pub /tmp/
 ADD tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
