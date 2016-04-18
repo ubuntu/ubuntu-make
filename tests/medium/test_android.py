@@ -31,25 +31,25 @@ class AndroidStudioInContainer(ContainerTests, test_android.AndroidStudioTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["developer.android.com"]}
+        self.hosts = {443: ["developer.android.com", "dl.google.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "android", "android-studio")
 
 
-class AndroidSDKContainer(ContainerTests, test_android.AndroidSDKTests):
+class AndroidSDKInContainer(ContainerTests, test_android.AndroidSDKTests):
     """This will install Android SDK inside a container"""
 
     def setUp(self):
-        self.hosts = {443: ["developer.android.com"]}
+        self.hosts = {443: ["developer.android.com", "dl.google.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "android", "android-sdk")
 
 
-class AndroidNDKContainer(ContainerTests, test_android.AndroidNDKTests):
+class AndroidNDKInContainer(ContainerTests, test_android.AndroidNDKTests):
     """This will install Android NDK inside a container"""
 
     def setUp(self):
