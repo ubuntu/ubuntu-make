@@ -27,6 +27,7 @@ import logging
 import os
 import re
 import stat
+import json
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem
@@ -220,7 +221,7 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Superpowers", description=_("The HTML5 2D+3D game maker"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page="https://github.com/superpowers/superpowers-core/releases",
+                         download_page="https://api.github.com/repos/superpowers/superpowers-core/releases/latest",
                          dir_to_decompress_in_tarball='superpowers*',
                          desktop_filename="superpowers.desktop",
                          required_files_path=["Superpowers"])
@@ -230,23 +231,27 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
         "i386": "ia32"
     }
 
-    def parse_download_link(self, line, in_download):
-        """Parse Superpowers download links.
-        We parse from the beginning to the end, we will always have the latest download link"""
-        url = None
-        if "-linux-" in line:
-            in_download = True
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        logger.debug("Fetched download page, parsing.")
+        page = result[self.download_page]
+        error_msg = page.error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
 
-        if in_download:
-            regexp = r'href="(.*-{}.zip)"'.format(self.arch_trans[get_current_arch()])
+        try:
+            assets = json.loads(page.buffer.read().decode())["assets"]
+            for asset in assets:
+                if "linux-{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                    download_url = asset["browser_download_url"]
+        except (json.JSONDecodeError, IndexError):
+            logger.error("Can't parse the download URL from the download page.")
+            UI.return_main_screen(status_code=1)
+        logger.debug("Found download URL: " + download_url)
 
-            p = re.search(regexp, line)
-            with suppress(AttributeError):
-                url = p.group(1)
-
-                url = "{}{}".format(self.download_page[:self.download_page.find("superpowers/") - 1], url)
-
-        return ((url, None), False)
+        self.download_requests.append(DownloadItem(download_url, None))
+        self.start_download_and_install()
 
     def post_install(self):
         """Create the Superpowers launcher"""

@@ -73,7 +73,7 @@ class SuperpowersInContainer(ContainerTests, test_games.SuperpowersTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["github.com"]}
+        self.hosts = {443: ["api.github.com", "github.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'superpowers')
         super().setUp()
         # override with container path
@@ -81,8 +81,9 @@ class SuperpowersInContainer(ContainerTests, test_games.SuperpowersTests):
 
     def test_install_with_changed_download_page(self):
         """Installing Superpowers should fail if download page has significantly changed"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "github.com", "superpowers",
-                                               "superpowers-core", "releases", "index.html")
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
+                                               "repos", "superpowers", "superpowers-core", "releases", "latest")
         umake_command = self.command('{} games superpowers'.format(UMAKE))
-        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(self.exec_link))

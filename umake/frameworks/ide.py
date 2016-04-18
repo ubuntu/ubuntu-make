@@ -760,25 +760,33 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="LightTable", description=_("LightTable code editor"),
                          category=category, only_on_archs=['amd64'],
-                         download_page="https://github.com/LightTable/LightTable/releases",
+                         download_page="https://api.github.com/repos/LightTable/LightTable/releases/latest",
                          desktop_filename="lighttable.desktop",
                          required_files_path=["LightTable"],
                          dir_to_decompress_in_tarball="lighttable-*",
                          checksum_type=ChecksumType.md5)
 
-    def parse_download_link(self, line, in_download):
-        """Parse LightTable download links"""
-        url, md5 = (None, None)
-        if '<li>Ubuntu' in line:
-            in_download = True
-            p = re.search(r'(\w+)</li>', line)
-            with suppress(AttributeError):
-                md5 = p.group(1)
-        if in_download is True and "-linux.tar.gz" in line:
-            p = re.search(r'href="(.*.-linux.tar.gz)"', line)
-            with suppress(AttributeError):
-                url = "https://github.com" + p.group(1)
-        return ((url, md5), in_download)
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        logger.debug("Fetched download page, parsing.")
+        page = result[self.download_page]
+        error_msg = page.error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        try:
+            assets = json.loads(page.buffer.read().decode())["assets"]
+            for asset in assets:
+                if "linux" in asset["browser_download_url"]:
+                    download_url = asset["browser_download_url"]
+        except (json.JSONDecodeError, IndexError):
+            logger.error("Can't parse the download URL from the download page.")
+            UI.return_main_screen(status_code=1)
+        logger.debug("Found download URL: " + download_url)
+
+        self.download_requests.append(DownloadItem(download_url, None))
+        self.start_download_and_install()
 
     def post_install(self):
         """Create the LightTable Code launcher"""

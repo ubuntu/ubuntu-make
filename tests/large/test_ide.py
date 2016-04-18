@@ -469,11 +469,12 @@ class LightTableTest(LargeFrameworkTests):
         super().setUp()
         self.installed_path = os.path.join(self.install_base_path, "ide", "lighttable")
         self.desktop_filename = "lighttable.desktop"
+        self.command_args = '{} ide lighttable'.format(UMAKE)
 
     def test_default_install(self):
         """Install LightTable from scratch test case"""
 
-        self.child = spawn_process(self.command('{} ide lighttable'.format(UMAKE)))
+        self.child = spawn_process(self.command(self.command_args))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -494,7 +495,7 @@ class LightTableTest(LargeFrameworkTests):
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
-        self.child = spawn_process(self.command('{} ide lighttable'.format(UMAKE)))
+        self.child = spawn_process(self.command(self.command_args))
         self.expect_and_no_warn("LightTable is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
