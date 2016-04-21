@@ -109,8 +109,6 @@ dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 # arduino deps
 mkdir -p $repo_root_dir/arduino
 cd $repo_root_dir/arduino
-create_package openjdk-7-jdk
-create_package jayatana
 create_package gcc-avr
 create_package avr-libc
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
