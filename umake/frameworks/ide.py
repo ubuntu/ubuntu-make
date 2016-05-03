@@ -500,7 +500,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page='http://www.arduino.cc/en/Main/Software',
                          dir_to_decompress_in_tarball='arduino-*',
                          desktop_filename='arduino.desktop',
-                         packages_requirements=['openjdk-7-jdk', 'jayatana', 'gcc-avr', 'avr-libc'],
+                         packages_requirements=['gcc-avr', 'avr-libc'],
                          need_root_access=not self.was_in_arduino_group,
                          required_files_path=["arduino"])
         self.scraped_checksum_url = None
