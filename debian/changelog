@@ -1,4 +1,4 @@
-ubuntu-make (16.04ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (16.05) yakkety; urgency=medium
 
   [ Galileo Sartor ]
   * Fix Android-Studio and Android-SDK frameworks with newer website
@@ -16,7 +16,7 @@ ubuntu-make (16.04ubuntu1) UNRELEASED; urgency=medium
   * Done misc reviews on previous contributions
   * Change release hook to point to yakkety
 
- -- Didier Roche <didrocks@ubuntu.com>  Wed, 04 May 2016 13:27:30 +0200
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 04 May 2016 13:40:18 +0200
 
 ubuntu-make (16.04) xenial; urgency=medium
 
