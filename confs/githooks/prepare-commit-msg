@@ -35,7 +35,7 @@ if [ $found -eq 0 ]; then
     version=$(${scriptdir}/update_version
     git add ${rootdir}/umake/version)
     dch -v ${version} ""
-    dch -r "" --distribution xenial
+    dch -r "" --distribution yakkety
     git add ${rootdir}/debian/changelog
 
     echo "releasing package ubuntu-make ${version}" > $1
