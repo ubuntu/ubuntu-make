@@ -1,3 +1,23 @@
+ubuntu-make (16.04ubuntu1) UNRELEASED; urgency=medium
+
+  [ Galileo Sartor ]
+  * Fix Android-Studio and Android-SDK frameworks with newer website
+  * Use github api for LightTable and superpowers frameworks
+  * Add openjdk-8-jdk to android studio/sdk
+  * Remove openjdk dependency for arduino
+
+  [ Fabio Colella ]
+  * Updated requirements for Netbeans to work on Xenial
+
+  [ Jared Ravetch ]
+  * Fix locale in tests
+
+  [ Didier Roche ]
+  * Done misc reviews on previous contributions
+  * Change release hook to point to yakkety
+
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 04 May 2016 13:27:30 +0200
+
 ubuntu-make (16.04) xenial; urgency=medium
 
   [ Galileo Sartor ]
