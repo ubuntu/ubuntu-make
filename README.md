@@ -7,7 +7,7 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 [All test results](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests/) and [Coverage report](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests-collect/label=ps-trusty-desktop-amd64-1/lastSuccessfulBuild/artifact/html-coverage/index.html)
 
 ## Installing
-We recommend to use the Ubuntu Make ppa to ensure you always have the latest and greatest version, even on older supported released. We are available on the currenctly supported Ubuntu version.
+We recommend to use the Ubuntu Make ppa to ensure you always have the latest and greatest version, even on older supported releases. We are available on the currently supported Ubuntu version.
 
 ```sh
 $ sudo add-apt-repository ppa:ubuntu-desktop/ubuntu-make
@@ -92,7 +92,7 @@ There are four types of tests that can be combined in runtests:
 
 * **pep8**: Run the pep8 tests on all the umake and test code.
 * **small**: Tests modules and components with mock content around them. Note that this uses a local webserver (http and https) to serve mock content.
-* **medium**: Tests the whole workflow. It directly calls end user tools from the command line, but without effecting the local system. Requirements like installing packages are mocked, as well as the usage of a local webserver serving (smaller) content similar to what will be fetched in a real use case. The assets have the same formats and layout.
+* **medium**: Tests the whole workflow. It directly calls end user tools from the command line, but without affecting the local system. Requirements like installing packages are mocked, as well as the usage of a local webserver serving (smaller) content similar to what will be fetched in a real use case. The assets have the same formats and layout.
 * **large**: Runs the same tests as the medium test, but with real server downloads and installation of dpkg packages. Most of these tests need root privileges. Be aware that these tests only run on a graphical environment. It will interfere with it and it is likely to install or remove packages on your system.
 
 To run all the tests, with coverage report, like in our jenkins infra:
