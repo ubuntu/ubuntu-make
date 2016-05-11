@@ -70,7 +70,13 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Add nodejs necessary env variables and move module folder"""
-        subprocess.call([os.path.join(self.install_path, "bin", "npm"), "config", "set", "prefix", "~/.node_modules"])
+        #subprocess.call([os.path.join(self.install_path, "bin", "npm"), "config", "set", "prefix", "~/.node_modules"])
+        with open('{}/.npmrc'.format(os.path.expanduser('~')), 'a+') as file:
+            for line in file:
+                if line.startswith("PREFIX="):
+                    pass
+            file.write("PREFIX={}/.node_modules\n".format(os.path.expanduser('~')))
+
         add_env_to_user(self.name, {"PATH": {"value": "{}:{}".format(os.path.join(self.install_path, "bin"),
                                                                      os.path.join(os.path.expanduser('~'),
                                                                                   ".node_modules", "bin"))}})
