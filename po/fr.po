@@ -50,7 +50,7 @@ msgstr "Augmenter la verbosité de la sortie (2 niveaux)"
 
 #: umake/__init__.py:114
 msgid "Remove specified framework if installed"
-msgstr "Supprimer un environnement spécifique si installé"
+msgstr "Supprimer l'environnement spécifié si installé"
 
 #: umake/__init__.py:116
 msgid "Print version and exit"
@@ -74,7 +74,7 @@ msgstr "Eclipse Luna"
 
 #: umake/frameworks/ide.py:217
 msgid "PyCharm Community Edition"
-msgstr "Pycharm Édition Communautaire"
+msgstr "PyCharm Édition Communautaire"
 
 #: umake/frameworks/ide.py:233
 msgid "PyCharm Educational Edition"
@@ -99,7 +99,7 @@ msgstr "IDE Ruby on Rails"
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
 msgstr ""
-"IDE pour le développement d'applications javascript clientes et server"
+"IDE pour le développement d'applications javascript clientes et serveur"
 
 #: umake/frameworks/ide.py:331
 msgid "PHP and web development IDE"
@@ -124,7 +124,7 @@ msgstr "Arduino"
 #: umake/frameworks/ide.py:484
 msgid "You need to logout and login again for your installation to work"
 msgstr ""
-"We devez vous déconnecter et vous reconnecter pour que votre installation "
+"Vous devez vous déconnecter et vous reconnecter pour que votre installation "
 "fonctionne"
 
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
@@ -152,7 +152,7 @@ msgid ""
 "work properly"
 msgstr ""
 "Vous devez redémarrer votre shell courant pour que votre installation {} "
-"fonctionne"
+"fonctionne correctement"
 
 #: umake/frameworks/rust.py:43
 msgid "Rust language"
@@ -205,7 +205,7 @@ msgstr "Android NDK"
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
 msgstr ""
-"Un framework par défaut pour la catégorie {} a été demandée, mais il n'y en "
+"Un framework par défaut pour la catégorie {} est requis, mais il n'y en "
 "a aucun"
 
 #: umake/frameworks/__init__.py:240
