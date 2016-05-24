@@ -411,6 +411,19 @@ class LightTableInContainer(ContainerTests, test_ide.LightTableTest):
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
+class SublimeTextInContainer(ContainerTests, test_ide.SublimeTextTests):
+    """This will test the Sublime Text integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["sublimetext.com", "download.sublimetext.com"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "sublime-text")
+
+
 class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest):
     """This will test Spring Tools Suite IDE integration inside a container"""
 
