@@ -715,7 +715,9 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     PERM_DOWNLOAD_LINKS = {
         "i686": "http://go.microsoft.com/fwlink/?LinkID=620885",
-        "x86_64": "http://go.microsoft.com/fwlink/?LinkID=620884"
+        "x86_64": "http://go.microsoft.com/fwlink/?LinkID=620884",
+        "i686-insiders": "https://go.microsoft.com/fwlink/?LinkId=723969",
+        "x86_64-insiders": "https://go.microsoft.com/fwlink/?LinkId=723968"
     }
 
     def __init__(self, category):
@@ -726,6 +728,23 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["code"],
                          dir_to_decompress_in_tarball="VSCode-linux-*",
                          packages_requirements=["libgtk2.0-0"])
+
+    def install_framework_parser(self, parser):
+        this_framework_parser = super().install_framework_parser(parser)
+        this_framework_parser.add_argument('--insiders', action="store_true",
+                                           help=_("Install Insiders version if available"))
+        return this_framework_parser
+
+    def run_for(self, args):
+        self.args = ""
+        if args.insiders:
+            self.args = "-insiders"
+            self.name += " insiders"
+            self.description += " insiders"
+            self.desktop_filename = self.desktop_filename.replace(".desktop", self.args+".desktop")
+            self.install_path += "-insiders"
+            self.required_files_path=["code"+self.args]
+        super().run_for(args)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
@@ -742,12 +761,12 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         """We have persistent links for Visual Studio Code, return it right away"""
         url = None
         with suppress(KeyError):
-            url = self.PERM_DOWNLOAD_LINKS[platform.machine()]
+            url = self.PERM_DOWNLOAD_LINKS[platform.machine()+self.args]
         return ((url, None), in_download)
 
     def post_install(self):
         """Create the Visual Studio Code launcher"""
-        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Visual Studio Code"),
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Visual Studio Code"+self.args),
                         icon_path=os.path.join(self.install_path, "resources", "app", "resources", "linux",
                                                "code.png"),
                         exec=self.exec_path,
