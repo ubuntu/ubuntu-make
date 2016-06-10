@@ -458,7 +458,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         self.wait_and_close()
 
     def test_insiders_install(self):
-        """Install visual studio insiders from scratch test case"""
+        """Install visual studio insiders"""
 
         self.installed_path += '-insiders'
         self.desktop_filename.replace('.desktop', '-insiders.desktop')
