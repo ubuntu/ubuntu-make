@@ -731,15 +731,15 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     def install_framework_parser(self, parser):
         this_framework_parser = super().install_framework_parser(parser)
-        this_framework_parser.add_argument('--insiders', action = "store_true",
-                                           help = _("Install Insiders version if available"))
+        this_framework_parser.add_argument('--insiders', action="store_true",
+                                           help=_("Install Insiders version if available"))
         return this_framework_parser
 
     def run_for(self, args):
         self.args = ""
         if args.insiders:
             self.args = "-insiders"
-            self.name += " insiders"
+            self.name += " Insiders"
             self.description += " insiders"
             self.desktop_filename = self.desktop_filename.replace(".desktop", self.args + ".desktop")
             self.install_path += "-insiders"
