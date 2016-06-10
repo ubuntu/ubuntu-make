@@ -462,8 +462,6 @@ class VisualStudioCodeTest(LargeFrameworkTests):
 
         self.installed_path += '-insiders'
         self.desktop_filename.replace('.desktop', '-insiders.desktop')
-        self.command_args += ' --insiders'
-        self.name += ' insiders'
 
         self.child = spawn_process(self.command('{} ide visual-studio-code --insiders'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
