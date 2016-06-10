@@ -493,7 +493,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         self.wait_and_close()
 
 
-  class LightTableTest(LargeFrameworkTests):
+class LightTableTest(LargeFrameworkTests):
     """Tests for LightTable"""
 
     TIMEOUT_INSTALL_PROGRESS = 120

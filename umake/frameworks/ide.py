@@ -736,14 +736,14 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         return this_framework_parser
 
     def run_for(self, args):
-        self.command_args = ""
+        self.args = ""
         if args.insiders:
-            self.command_args = "-insiders"
+            self.args = "-insiders"
             self.name += " Insiders"
             self.description += " insiders"
-            self.desktop_filename = self.desktop_filename.replace(".desktop", self.command_args + ".desktop")
+            self.desktop_filename = self.desktop_filename.replace(".desktop", self.args + ".desktop")
             self.install_path += "-insiders"
-            self.required_files_path = ["code" + self.command_args]
+            self.required_files_path = ["code" + self.args]
         super().run_for(args)
 
     def parse_license(self, line, license_txt, in_license):
@@ -761,12 +761,12 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         """We have persistent links for Visual Studio Code, return it right away"""
         url = None
         with suppress(KeyError):
-            url = self.PERM_DOWNLOAD_LINKS[platform.machine() + self.command_args]
+            url = self.PERM_DOWNLOAD_LINKS[platform.machine() + self.args]
         return ((url, None), in_download)
 
     def post_install(self):
         """Create the Visual Studio Code launcher"""
-        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Visual Studio Code" + self.command_args),
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Visual Studio Code" + self.args),
                         icon_path=os.path.join(self.install_path, "resources", "app", "resources", "linux",
                                                "code.png"),
                         exec=self.exec_path,
