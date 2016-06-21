@@ -75,10 +75,10 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
             current_required_files_path = kwargs.get("required_files_path", [])
             current_required_files_path.append(os.path.join(self.executable))
             kwargs["required_files_path"] = current_required_files_path
-        download_page = 'https://www.eclipse.org/downloads/'
+        download_page = 'https://www.eclipse.org/downloads/eclipse-packages/'
         kwargs["download_page"] = download_page
         super().__init__(*args, **kwargs)
-        self.icon_url = os.path.join(self.download_page, "images", self.icon_filename)
+        self.icon_url = os.path.join("https://www.eclipse.org/downloads/", "images", self.icon_filename)
         self.bits = '' if platform.machine() == 'i686' else 'x86_64'
         self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
                                       "Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36"}
@@ -107,7 +107,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         if in_download:
             p = re.search(r'href="(.*)" title', line)
             with suppress(AttributeError):
-                self.sha512_url = self.download_page + p.group(1) + '.sha512&r=1'
+                self.sha512_url = "https://www.eclipse.org/" + p.group(1) + '.sha512&r=1'
                 url_found = True
                 DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
                                on_done=self.get_sha_and_start_download, download=False)
