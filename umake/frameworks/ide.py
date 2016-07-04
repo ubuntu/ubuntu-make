@@ -798,6 +798,48 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                         categories="Development;IDE;"))
 
 
+class Atom(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Atom", description=_("The hackable text editor"),
+                         category=category, only_on_archs=['amd64'],
+                         download_page="https://api.github.com/repos/Atom/Atom/releases/latest",
+                         desktop_filename="atom.desktop",
+                         required_files_path=["atom"],
+                         dir_to_decompress_in_tarball="atom-*",
+                         checksum_type=ChecksumType.md5)
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        logger.debug("Fetched download page, parsing.")
+        page = result[self.download_page]
+        error_msg = page.error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        try:
+            assets = json.loads(page.buffer.read().decode())["assets"]
+            for asset in assets:
+                if "tar.gz" in asset["browser_download_url"]:
+                    download_url = asset["browser_download_url"]
+        except (json.JSONDecodeError, IndexError):
+            logger.error("Can't parse the download URL from the download page.")
+            UI.return_main_screen(status_code=1)
+        logger.debug("Found download URL: " + download_url)
+
+        self.download_requests.append(DownloadItem(download_url, None))
+        self.start_download_and_install()
+
+    def post_install(self):
+        """Create the Atom Code launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Atom"),
+                        icon_path=os.path.join(self.install_path, "atom.png"),
+                        exec=self.exec_path,
+                        comment=_("The hackable text editor"),
+                        categories="Development;IDE;"))
+
+
 class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
@@ -814,7 +856,7 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
     }
 
     def parse_download_link(self, line, in_download):
-        """Parse LightTable download links"""
+        """Parse SublimeText download links"""
         url = None
         if '{}.tar.bz2'.format(self.arch_trans[get_current_arch()]) in line:
             p = re.search(r'also available as a <a href="(.*.tar.bz2)"', line)
