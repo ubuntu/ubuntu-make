@@ -174,7 +174,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
 
 class EclipseJava(BaseEclipse):
     """The Eclipse Java Edition distribution."""
-    download_keyword = 'eclipse-java'
+    download_keyword = 'eclipse-java-'
     executable = 'eclipse'
 
     def __init__(self, category):
@@ -189,7 +189,7 @@ class EclipseJava(BaseEclipse):
 
 class EclipseJEE(BaseEclipse):
     """The Eclipse JEE Edition distribution."""
-    download_keyword = 'eclipse-jee'
+    download_keyword = 'eclipse-jee-'
     executable = 'eclipse'
 
     def __init__(self, category):
@@ -204,7 +204,7 @@ class EclipseJEE(BaseEclipse):
 
 class EclipsePHP(BaseEclipse):
     """The Eclipse PHP Edition distribution."""
-    download_keyword = 'eclipse-php'
+    download_keyword = 'eclipse-php-'
     executable = 'eclipse'
 
     def __init__(self, category):
@@ -219,7 +219,7 @@ class EclipsePHP(BaseEclipse):
 
 class EclipseCPP(BaseEclipse):
     """The Eclipse CPP Edition distribution."""
-    download_keyword = 'eclipse-cpp'
+    download_keyword = 'eclipse-cpp-'
     executable = 'eclipse'
 
     def __init__(self, category):
