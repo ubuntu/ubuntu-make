@@ -78,9 +78,9 @@ class AndroidCategory(umake.frameworks.BaseCategory):
 
 class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Android Studio", description=_("Android Studio (default)"), is_category_default=True,
-                         category=category, only_on_archs=_supported_archs, expect_license=True,
+                         only_on_archs=_supported_archs, expect_license=True,
                          packages_requirements=["openjdk-7-jdk | openjdk-8-jdk",
                                                 "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386",
                                                 "jayatana"],
@@ -88,7 +88,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="android-studio",
                          desktop_filename="android-studio.desktop",
-                         required_files_path=[os.path.join("bin", "studio.sh")])
+                         required_files_path=[os.path.join("bin", "studio.sh")], **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
@@ -110,16 +110,16 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
 class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Android SDK", description=_("Android SDK"),
-                         category=category, only_on_archs=_supported_archs, expect_license=True,
+                         only_on_archs=_supported_archs, expect_license=True,
                          packages_requirements=["openjdk-7-jdk | openjdk-8-jdk",
                                                 "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386",
                                                 "jayatana"],
                          download_page="https://developer.android.com/sdk/index.html",
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="android-sdk-linux",
-                         required_files_path=[os.path.join("tools", "android")])
+                         required_files_path=[os.path.join("tools", "android")], **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android SDK download page for license"""
@@ -147,14 +147,14 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
 
 class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Android NDK", description=_("Android NDK"),
-                         category=category, only_on_archs='amd64', expect_license=True,
+                         only_on_archs='amd64', expect_license=True,
                          download_page="https://developer.android.com/ndk/downloads/index.html",
                          checksum_type=ChecksumType.sha1,
                          packages_requirements=['clang'],
                          dir_to_decompress_in_tarball="android-ndk-*",
-                         required_files_path=[os.path.join("ndk-build")])
+                         required_files_path=[os.path.join("ndk-build")], **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android NDK download page for license"""
@@ -176,6 +176,6 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
 class EclipseADTForRemoval(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Eclipse ADT", description="For removal only (not supported upstream anymore)",
-                         download_page=None, category=category, only_on_archs=_supported_archs, only_for_removal=True)
+                         download_page=None, only_on_archs=_supported_archs, only_for_removal=True, **kwargs)

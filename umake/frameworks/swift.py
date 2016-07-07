@@ -46,13 +46,14 @@ class SwiftCategory(umake.frameworks.BaseCategory):
 
 class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Swift Lang", description=_("Swift compiler (default)"), is_category_default=True,
                          packages_requirements=["clang", "libicu-dev"],
-                         category=category, only_on_archs=['amd64'],
+                         only_on_archs=['amd64'],
                          download_page="https://swift.org/download/",
                          dir_to_decompress_in_tarball="swift*",
-                         required_files_path=[os.path.join("usr", "bin", "swift")])
+                         required_files_path=[os.path.join("usr", "bin", "swift")],
+                         **kwargs)
         self.asc_url = "https://swift.org/keys/all-keys.asc"
 
     def parse_download_link(self, line, in_download):

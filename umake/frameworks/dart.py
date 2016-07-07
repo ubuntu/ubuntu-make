@@ -45,19 +45,20 @@ class DartCategory(umake.frameworks.BaseCategory):
 
 class DartLangEditorRemoval(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Dart Editor", description=_("Dart SDK with editor (not supported upstream anyymore)"),
-                         download_page=None, category=category, only_on_archs=_supported_archs, only_for_removal=True)
+                         download_page=None, only_on_archs=_supported_archs, only_for_removal=True, **kwargs)
 
 
 class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Dart SDK", description=_("Dart SDK (default)"), is_category_default=True,
-                         category=category, only_on_archs=_supported_archs,
+                         only_on_archs=_supported_archs,
                          download_page="https://api.dartlang.org",
                          dir_to_decompress_in_tarball="dart-sdk",
-                         required_files_path=[os.path.join("bin", "dart")])
+                         required_files_path=[os.path.join("bin", "dart")],
+                         **kwargs)
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):

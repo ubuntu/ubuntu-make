@@ -31,9 +31,9 @@ class ECategory(umake.frameworks.BaseCategory):
 
 class FrameworkA(umake.frameworks.BaseFramework):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Framework A", description="Description for framework A (installable chained to parent)",
-                         category=category)
+                         **kwargs)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
@@ -48,11 +48,11 @@ class FrameworkA(umake.frameworks.BaseFramework):
 
 class FrameworkB(umake.frameworks.BaseFramework):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Framework B", description="Description for framework B (installable forced to True even "
                                                          "with archs restrictions)",
-                         category=category, only_on_archs=["archswhichdontexist"],
-                         only_ubuntu_version=["versionwhichdontexist"])
+                         only_on_archs=["archswhichdontexist"], only_ubuntu_version=["versionwhichdontexist"],
+                         **kwargs)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
@@ -68,10 +68,10 @@ class FrameworkB(umake.frameworks.BaseFramework):
 
 class FrameworkC(umake.frameworks.BaseFramework):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Framework C", description="Description for framework C (installable forced to False "
                                                          "even with no restriction",
-                         category=category)
+                         **kwargs)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
