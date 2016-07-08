@@ -111,8 +111,8 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
                          category=category, only_on_archs=['amd64'],
-                         download_page="http://forum.unity3d.com/threads/" +
-                                       "unity-on-linux-release-notes-and-known-issues.350256/",
+                         download_page="https://community.unity.com/t5/" +
+                                       "Linux-Editor/Unity-on-Linux-Release-Notes-and-Known-Issues/m-p/2323665",
                          match_last_link=True,
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball='unity-editor*',
@@ -138,11 +138,11 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
         url, sha1 = (None, None)
         if ".sh" in line:
             in_download = True
-            p = re.search(r'href="(.*.sh)" target', line)
+            p = re.search(r'.deb.*.href="(.*.sh)"', line)
             with suppress(AttributeError):
                 url = p.group(1)
-        if in_download is True and ')<br />' in line:
-            p = re.search(r'(\w+)\)', line)
+        if in_download is True:
+            p = re.search(r'sha1sum (\w+)\)<BR /><BR />Torrent', line)
             with suppress(AttributeError):
                 sha1 = p.group(1)
         return ((url, sha1), in_download)
