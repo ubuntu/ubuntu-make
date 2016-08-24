@@ -51,7 +51,7 @@ class RustInContainer(ContainerTests, test_rust.RustTests):
         """Installing Rust should fail if checksum is wrong"""
         # we only modify the amd64 sha as docker only run on it
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "static.rust-lang.org",
-                                               "rust-fake-x86_64-unknown-linux-gnu.tar.gz.sha256")
+                                               "dist", "rust-fake-x86_64-unknown-linux-gnu.tar.gz.sha256")
         with swap_file_and_restore(download_page_file_path) as content:
             with open(download_page_file_path, "w") as newfile:
                 newfile.write(content.replace(self.TEST_CHECKSUM_RUST_DATA, "abcdef"))
