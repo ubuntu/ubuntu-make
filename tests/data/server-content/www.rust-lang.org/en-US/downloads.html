@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<!-- Page last generated 2015-11-04 17:22:43 +0000 -->
+<!-- Page last generated 2016-08-23 23:22:37 +0000 -->
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Downloads &middot; The Rust Programming Language</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Downloads &middot; The Rust Programming Language</title>
     <meta name="keywords" content="Rust, Rust programming language, rustlang, rust-lang, Mozilla Rust">
-    <meta name="description" content="A systems programming language that runs blazingly fast, prevents almost all crashes, and eliminates data races.">
+    <meta name="description" content="A systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety.">
+
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/style.css">
   </head>
@@ -17,54 +19,33 @@
     </a>
 
     <header>
+      <ul class="row menu">
+	<li class="col-xs-12 col-md-2">
+          <a href="/index.html">
+            <img class="img-responsive" src="/logos/rust-logo-blk.svg" onerror="this.src='/logos/rust-logo-256x256-blk.png'" height="128" width="128" alt="Rust logo" />
+          </a>
+	</li>
+	<li class="col-xs-12 col-md-10 menu">
+	  <h2><a href="/documentation.html">Documentation</a></h2>
+	  <h2><a href="/community.html">Community</a></h2>
+	  <h2><a href="/downloads.html">Downloads</a></h2>
+	  <h2><a href="/contribute.html">Contribute</a></h2>
+	</li>
+      </ul>
+    </header>
 
-    <ul class="row menu">
-      <li class="col-xs-12 col-md-2">
-        <a href="index.html">
-          <img class="img-responsive" src="logos/rust-logo-blk.svg" onerror="this.src='logos/rust-logo-256x256-blk.png'" height="128" width="128" alt="Rust logo" />
-        </a>
-      </li>
-      <li class="col-xs-4 col-md-2"><h2>Docs (1.4.0)</h2>
-        <ul>
-          <li><a href="https://doc.rust-lang.org/stable/book/">Book</a></li>
-          <li><a href="https://doc.rust-lang.org/stable/reference.html">Reference</a></li>
-          <li>
-            <a href="https://doc.rust-lang.org/stable/std/">API docs</a></li>
-            <li><a href="https://doc.rust-lang.org/stable/">All docs</a>
-          </li>
-        </ul>
-      </li>
-      <li class="col-xs-4 col-md-2"><h2>Docs (Nightly)</h2>
-        <ul>
-          <li><a href="https://doc.rust-lang.org/nightly/book/">Book</a></li>
-          <li><a href="https://doc.rust-lang.org/nightly/reference.html">Reference</a></li>
-          <li>
-            <a href="https://doc.rust-lang.org/nightly/std/index.html">API docs</a></li>
-            <li><a href="https://doc.rust-lang.org/nightly/index.html">All docs</a>
-          </li>
-        </ul>
-      </li>
-      <li class="col-xs-4 col-md-2"><h2>Community</h2>
-        <ul>
-          <li>
-            <a href="http://this-week-in-rust.org/">News</a>
-          </li>
-	  <li>
-	    <a href="community.html">Community</a>
-	  </li>
-          <li>
-            <a href="legal.html">Legal</a>
-          </li>
-        </ul>
-      </li>
-  </header>
-          <div class="row install">
+    <div class="content">
+      <h1>Downloads</h1>
+
+    <hr>
+
+    <div class="row install">
       <div class="col-md-4 side-header">
-        <h2>1.4.0&nbsp;</h2>
-        <h3>October 29, 2015</h3>
+        <h2 id="stable">1.11.0&nbsp;</h2>
+        <h3>August 18, 2016</h3>
         <p>
 	  The
-	  <a href="http://blog.rust-lang.org/2015/10/29/Rust-1.4.html">
+          <a href="http://blog.rust-lang.org/2016/08/18/Rust-1.11.html">
 	    current stable release of Rust
 	  </a>
 	  , updated every six weeks and backwards-compatible.
@@ -74,28 +55,28 @@
         <table class="table-features table-installers"><tbody>
           <tr>
           <td class="inst-type">Linux (.tar.gz)</td>
-          <td><a href="https://www.rust-lang.org/rust-fake-x86_64-unknown-linux-gnu.tar.gz"><div class="inst-button">64-bit</div></a></td>
-          <td><a href="https://www.rust-lang.org/rust-fake-i686-unknown-linux-gnu.tar.gz"><div class="inst-button">32-bit</div></a></td>
+          <td><a href="https://static.rust-lang.org/dist/rust-fake-x86_64-unknown-linux-gnu.tar.gz"><div class="inst-button">64-bit</div></a></td>
+          <td><a href="https://static.rust-lang.org/dist/rust-fake-i686-unknown-linux-gnu.tar.gz"><div class="inst-button">32-bit</div></a></td>
           </tr>
           <tr>
           <td class="inst-type">Mac (.pkg)</td>
-          <td><a href="https://static.rust-lang.org/dist/rust-1.4.0-x86_64-apple-darwin.pkg"><div class="inst-button">64-bit</div></a></td>
-          <td><a href="https://static.rust-lang.org/dist/rust-1.4.0-i686-apple-darwin.pkg"><div class="inst-button">32-bit</div></a></td>
+          <td><a href="https://static.rust-lang.org/dist/rust-1.11.0-x86_64-apple-darwin.pkg"><div class="inst-button">64-bit</div></a></td>
+          <td><a href="https://static.rust-lang.org/dist/rust-1.11.0-i686-apple-darwin.pkg"><div class="inst-button">32-bit</div></a></td>
           </tr>
           <tr>
           <td class="inst-type">Windows (<a href="#win-foot">GNU ABI <sup>†</sup></a>) (.msi)</td>
-          <td><a href="https://static.rust-lang.org/dist/rust-1.4.0-x86_64-pc-windows-gnu.msi"><div class="inst-button">64-bit</div></a></td>
-          <td><a href="https://static.rust-lang.org/dist/rust-1.4.0-i686-pc-windows-gnu.msi"><div class="inst-button">32-bit</div></a></td>
+          <td><a href="https://static.rust-lang.org/dist/rust-1.11.0-x86_64-pc-windows-gnu.msi"><div class="inst-button">64-bit</div></a></td>
+          <td><a href="https://static.rust-lang.org/dist/rust-1.11.0-i686-pc-windows-gnu.msi"><div class="inst-button">32-bit</div></a></td>
           </tr>
           <tr>
           <td class="inst-type">Windows (<a href="#win-foot">MSVC ABI <sup>†</sup></a>) (.msi) </td>
-          <td><a href="https://static.rust-lang.org/dist/rust-1.4.0-x86_64-pc-windows-msvc.msi"><div class="inst-button">64-bit</div></a></td>
-          <td></td>
+          <td><a href="https://static.rust-lang.org/dist/rust-1.11.0-x86_64-pc-windows-msvc.msi"><div class="inst-button">64-bit</div></a></td>
+          <td><a href="https://static.rust-lang.org/dist/rust-1.11.0-i686-pc-windows-msvc.msi"><div class="inst-button">32-bit</div></a></td>
           </tr>
           <tr><td>&nbsp;</td></tr>
           <tr>
           <td class="inst-type"></td>
-          <td colspan="2"><a href="https://static.rust-lang.org/dist/rustc-1.4.0-src.tar.gz"><div class="inst-button">Source</div></a></td>
+          <td colspan="2"><a href="https://static.rust-lang.org/dist/rustc-1.11.0-src.tar.gz"><div class="inst-button">Source</div></a></td>
           </tr>
         </tbody></table>
       </div>
@@ -104,20 +85,20 @@
      <div class="row">
       <div class="col-md-10 col-md-offset-1">
         <p>An easy way to install the stable binaries for Linux and Mac is to run this in your shell:</p>
-        <pre><code>$ curl -sSf https://static.rust-lang.org/rustup.sh | sh</code></pre>
+        <pre><code>curl -sSf https://static.rust-lang.org/rustup.sh | sh</code></pre>
       </div>
     </div>
 
     <hr/>
 
-    <div class="row">
+    <div class="row install">
       <div class="col-md-4 side-header">
-        <h2>Beta&nbsp; (1.5)</h2>
+        <h2 id="beta">Beta&nbsp; (1.12)</h2>
         <p>
 	A preview of the upcoming stable release, intended for testing by
-	crate authors. Updated as needed.
+	crate authors. Updated every six weeks and as needed.
         </p>
-        <p><em>Scheduled for stable release<br/>December 10, 2015</em>.<p>
+        <p><em>Scheduled for stable release<br/>September 29, 2016</em>.<p>
       </div>
       <div class="col-md-8">
         <table class="table-features table-installers"><tbody>
@@ -139,6 +120,7 @@
           <tr>
           <td class="inst-type">Windows (<a href="#win-foot">MSVC ABI <sup>†</sup></a>) (.msi) </td>
           <td><a href="https://static.rust-lang.org/dist/rust-beta-x86_64-pc-windows-msvc.msi"><div class="inst-button">64-bit</div></a></td>
+          <td><a href="https://static.rust-lang.org/dist/rust-beta-i686-pc-windows-msvc.msi"><div class="inst-button">32-bit</div></a></td>
           <td></td>
           </tr>
           <tr><td>&nbsp;</td></tr>
@@ -153,19 +135,19 @@
      <div class="row">
       <div class="col-md-10 col-md-offset-1">
         <p>An easy way to install the beta binaries for Linux and Mac is to run this in your shell:</p>
-        <pre><code>$ curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --channel=beta</code></pre>
+        <pre><code>curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --channel=beta</code></pre>
       </div>
     </div>
 
     <hr/>
 
-    <div class="row">
+    <div class="row install">
       <div class="col-md-4 side-header">
-        <h2>Nightly&nbsp; (1.6)</h2>
+        <h2 id="nightly">Nightly&nbsp; (1.13)</h2>
         <p>
         The current development branch.
 	It includes
-	<a href="http://doc.rust-lang.org/book/nightly-rust.html">unstable features</a>
+	<a href="https://doc.rust-lang.org/book/nightly-rust.html">unstable features</a>
 	that are not available in the betas or stable releases.
         </p>
       </div>
@@ -181,6 +163,7 @@
           <td><a href="https://static.rust-lang.org/dist/rust-nightly-x86_64-apple-darwin.pkg"><div class="inst-button">64-bit</div></a></td>
           <td><a href="https://static.rust-lang.org/dist/rust-nightly-i686-apple-darwin.pkg"><div class="inst-button">32-bit</div></a></td>
           </tr>
+          <tr>
           <td class="inst-type">Windows (<a href="#win-foot">GNU ABI <sup>†</sup></a>) (.msi)</td>
           <td><a href="https://static.rust-lang.org/dist/rust-nightly-x86_64-pc-windows-gnu.msi"><div class="inst-button">64-bit</div></a></td>
           <td><a href="https://static.rust-lang.org/dist/rust-nightly-i686-pc-windows-gnu.msi"><div class="inst-button">32-bit</div></a></td>
@@ -191,7 +174,6 @@
           <td><a href="https://static.rust-lang.org/dist/rust-nightly-i686-pc-windows-msvc.msi"><div class="inst-button">32-bit</div></a></td>
           <td></td>
           </tr>
-          <tr>
           <tr><td>&nbsp;</td></tr>
           <tr>
           <td class="inst-type"></td>
@@ -204,7 +186,7 @@
      <div class="row">
       <div class="col-md-10 col-md-offset-1">
         <p>An easy way to install the nightly binaries for Linux and Mac is to run this in your shell:</p>
-        <pre><code>$ curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --channel=nightly</code></pre>
+        <pre><code>curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --channel=nightly</code></pre>
       </div>
     </div>
 
@@ -213,7 +195,7 @@
     <div class="row">
       <div class="col-md-12">
       <p>
-        Discover other downloads in <a href="http://static.rust-lang.org/dist/index.html">the archives.</a>
+        Discover other downloads in <a href="https://static.rust-lang.org/dist/index.html">the archives.</a>
       </p>
       </div>
     </div>
@@ -222,7 +204,7 @@
 
     <div class="row">
       <div class="col-md-12">
-	<a name="win-foot"></a>
+	<a id="win-foot"></a>
 	<p>
 	  <em>†</em>
 	  There are two prominent
@@ -238,17 +220,24 @@
 	  use the GNU build.
 	</p>
 	<p>
-	  MSVC builds of Rust additionally require an
-	  <a href="https://www.visualstudio.com/downloads">installation of Visual Studio 2013 (or later)</a>
-	  so rustc can use its linker.
+	  MSVC builds of Rust additionally require the Microsoft Visual
+          C++ build tools for Visual Studio 2013 or later.
+	  The easiest way to acquire the build tools is by installing
+	  <a href="http://landinghub.visualstudio.com/visual-cpp-build-tools">
+	  Microsoft Visual C++ Build Tools 2015</a>
+	  which provides just the Visual C++ build tools.
+	  Alternately, you can <a href="https://www.visualstudio.com/downloads/">install</a>
+	  Visual Studio 2015 or Visual Studio 2013 and during install select the "C++ tools".
 	  No additional software installation is necessary for basic use of the GNU build.
 	</p>
 	<p>
 	  Rust's support for the GNU ABI is more mature, and is recommended for typical
 	  uses.
 	</p>
-      </div>
     </div>
+  </div>
+
+</div>
 
 
     <script>
