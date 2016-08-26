@@ -26,6 +26,7 @@ ADD tests/data/api.dartlang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/storage.googleapis.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/netbeans.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.rust-lang.org.crt /usr/local/share/ca-certificates/
+ADD tests/data/static.rust-lang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/swift.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/nodejs.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/github.com.crt /usr/local/share/ca-certificates/

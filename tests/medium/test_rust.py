@@ -34,14 +34,15 @@ class RustInContainer(ContainerTests, test_rust.RustTests):
     TEST_CHECKSUM_RUST_DATA = "2a0db6efe370a900491d9e9db13e53ffd00b01dcd8458486f9f3fc3177f96af3"
 
     def setUp(self):
-        self.hosts = {443: ["www.rust-lang.org"]}
+        self.hosts = {443: ["www.rust-lang.org", "static.rust-lang.org"]}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "rust", "rust-lang")
 
     def test_install_with_changed_download_reference_page(self):
         """Installing Rust should fail if download reference page has significantly changed"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.rust-lang.org", "downloads.html")
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.rust-lang.org",
+                                               "en-US", "downloads.html")
         umake_command = self.command('{} rust'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.path_exists(self.exec_path))
@@ -49,8 +50,8 @@ class RustInContainer(ContainerTests, test_rust.RustTests):
     def test_install_with_wrong_sha(self):
         """Installing Rust should fail if checksum is wrong"""
         # we only modify the amd64 sha as docker only run on it
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.rust-lang.org",
-                                               "rust-fake-x86_64-unknown-linux-gnu.tar.gz.sha256")
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "static.rust-lang.org",
+                                               "dist", "rust-fake-x86_64-unknown-linux-gnu.tar.gz.sha256")
         with swap_file_and_restore(download_page_file_path) as content:
             with open(download_page_file_path, "w") as newfile:
                 newfile.write(content.replace(self.TEST_CHECKSUM_RUST_DATA, "abcdef"))

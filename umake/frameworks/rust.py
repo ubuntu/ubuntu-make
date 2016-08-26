@@ -57,7 +57,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
                          description=_("The official Rust distribution"),
                          is_category_default=True,
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page="https://www.rust-lang.org/downloads.html",
+                         download_page="https://www.rust-lang.org/en-US/downloads.html",
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="rust-*")
 
