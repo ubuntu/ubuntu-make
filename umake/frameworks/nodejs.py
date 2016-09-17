@@ -78,7 +78,6 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Add nodejs necessary env variables and move module folder"""
-        #subprocess.call([os.path.join(self.install_path, "bin", "npm"), "config", "set", "prefix", "~/.node_modules"])
         if not self.prefix_set():
             with open('{}/.npmrc'.format(os.path.expanduser('~')), 'a+') as file:
                 file.write("prefix = ${HOME}/.npm-packages")
