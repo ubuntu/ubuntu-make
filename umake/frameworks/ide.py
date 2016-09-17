@@ -723,7 +723,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=['i386', 'amd64'], expect_license=True,
                          download_page="https://code.visualstudio.com/License",
                          desktop_filename="visual-studio-code.desktop",
-                         required_files_path=["code"],
+                         required_files_path=["bin/code"],
                          dir_to_decompress_in_tarball="VSCode-linux-*",
                          packages_requirements=["libgtk2.0-0"])
 
