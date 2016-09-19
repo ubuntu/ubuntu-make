@@ -76,6 +76,14 @@ class NodejsTests(LargeFrameworkTests):
             .replace('\r', '').replace('\n', '')
 
         self.assertEqual(output, "Hello World")
-        self.assertEqual(npm_output, "{}/.node_modules".format(os.path.join("/",
+        self.assertEqual(npm_output, "{}/.npm_modules".format(os.path.join("/",
                                                                             self.installed_path.split('/')[1],
                                                                             self.installed_path.split('/')[2])))
+
+    def test_lts_select_install(self):
+        """Install nodejs lts"""
+        self.child = spawn_process(self.command('{} nodejs --lts').format(UMAKE))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()

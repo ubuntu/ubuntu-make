@@ -80,10 +80,22 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
         """Add nodejs necessary env variables and move module folder"""
         if not self.prefix_set():
             with open('{}/.npmrc'.format(os.path.expanduser('~')), 'a+') as file:
-                file.write("prefix = ${HOME}/.npm-packages")
+                file.write("prefix = ${HOME}/.npm_modules")
 
         add_env_to_user(self.name, {"PATH": {"value": "{}:{}".format(os.path.join(self.install_path, "bin"),
                                                                      os.path.join(os.path.expanduser('~'),
-                                                                                  ".node_modules", "bin"))}})
+                                                                                  ".npm_modules", "bin"))}})
         UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation "
                                             "to work properly").format(self.name)))
+
+    def install_framework_parser(self, parser):
+        this_framework_parser = super().install_framework_parser(parser)
+        this_framework_parser.add_argument('--lts', action="store_true",
+                                           help=_("Install lts version"))
+        return this_framework_parser
+
+    def run_for(self, args):
+        if args.lts:
+            self.download_page = "https://nodejs.org/dist/latest-argon/SHASUMS256.txt"
+        print('Download from {}'.format(self.download_page))
+        super().run_for(args)
