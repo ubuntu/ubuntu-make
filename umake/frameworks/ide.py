@@ -955,3 +955,43 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                                                                             exec='"{}" %f'.format(self.exec_path),
                                                                             comment=_(self.description),
                                                                             categories=categories))
+
+
+class EclipseChe(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse Che", description=_("Eclipse Che is a developer workspace server and cloud IDE"),
+                         category=category, only_on_archs=['amd64'],
+                         download_page='https://www.eclipse.org/che/download/',
+                         desktop_filename="eclipse-che.desktop",
+                         required_files_path=["bin/che.sh"],
+                         dir_to_decompress_in_tarball="eclipse-che*",
+                         packages_requirements=['openjdk-8-jre', 'maven', 'docker.io'])
+        self.icon_url = 'https://www.eclipse.org/che/images/logo-eclipseche.svg'
+        self.icon_filename = 'eclipse-che.svg'
+
+    def parse_download_link(self, line, in_download):
+        """We have persistent links for Eclipse Che, return it right away"""
+        url = "https://www.eclipse.org/downloads/download.php?file=/che/eclipse-che-latest.zip&r=1"
+        return ((url, None), in_download)
+
+    def post_install(self):
+        """Create the Eclipse launcher"""
+        add_env_to_user(self.name, {"JAVA_HOME": {"value": "/usr"}})
+        DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
+                       on_done=self.save_icon, download=True)
+        icon_path = join(self.install_path, self.icon_filename)
+        comment = self.description
+        categories = "Development;IDE;"
+        create_launcher(self.desktop_filename,
+                        get_application_desktop_file(name=self.name,
+                                                     icon_path=icon_path,
+                                                     exec='"{}" %f'.format(self.exec_path),
+                                                     comment=comment,
+                                                     categories=categories))
+
+    def save_icon(self, download_result):
+        """Save correct Eclipse icon"""
+        icon = download_result.pop(self.icon_url).fd.name
+        shutil.copy(icon, join(self.install_path, self.icon_filename))
+        logger.debug("Copied icon: {}".format(self.icon_url))
