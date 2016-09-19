@@ -80,7 +80,7 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
         if arch == 'x86_64':
             tag_machine = '64'
 
-        reg_expression = '<td class="download linux{}"><a href="(.*)" title'.format(tag_machine)
+        reg_expression = r'href="(\S+os=linux{}&amp;lang=\S+)"'.format(tag_machine)
         languages = []
         decoded_page = result[self.download_page].buffer.getvalue().decode()
         for index, p in enumerate(re.finditer(reg_expression, decoded_page)):
