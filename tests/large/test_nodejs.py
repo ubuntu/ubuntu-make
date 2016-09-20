@@ -77,8 +77,8 @@ class NodejsTests(LargeFrameworkTests):
 
         self.assertEqual(output, "Hello World")
         self.assertEqual(npm_output, "{}/.npm_modules".format(os.path.join("/",
-                                                                            self.installed_path.split('/')[1],
-                                                                            self.installed_path.split('/')[2])))
+                                                              self.installed_path.split('/')[1],
+                                                              self.installed_path.split('/')[2])))
 
     def test_lts_select_install(self):
         """Install nodejs lts"""
