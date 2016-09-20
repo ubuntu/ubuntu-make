@@ -49,4 +49,4 @@ class NodejsInContainer(ContainerTests, test_nodejs.NodejsTests):
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         result = subprocess.check_output(self.command_as_list(['cat', '''~/.npmrc''']))
-        self.assertEqual(result.decode(), 'test = 123\r\nprefix = ${HOME}/.npm-packages')
+        self.assertEqual(result.decode(), 'test = 123\r\nprefix = ${HOME}/.npm_modules')
