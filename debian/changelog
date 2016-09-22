@@ -1,3 +1,31 @@
+ubuntu-make (16.09) yakkety; urgency=medium
+
+  [ Galileo Sartor ]
+  * Add Sublime Text 3 support
+  * Add Atom Support
+  * Fix node_modules folder setting for respecting npmrc and
+    add Node LTS
+  * Fix eclipse download url
+  * Change eclipse download-keyword to avoid conflicts
+  * Fix firefox-dev install and exec
+  * Fix unity 3D url
+  * Adapt to new VSCode binary path
+
+  [ Igor Vuk ]
+  * Fix a few typos in README.md
+
+  [ neopi21 ]
+  * French translation update
+
+  [ Jared Ravetch ]
+  * Update Rust download url, add SSL cert for static.rust-lang.org,
+    update tests
+
+  [ Didier Roche ]
+  * Have autopkgtest depend on libjs-jquery-throttle-debounce
+
+ -- Didier Roche <didrocks@ubuntu.com>  Thu, 22 Sep 2016 09:22:13 +0200
+
 ubuntu-make (16.05) yakkety; urgency=medium
 
   [ Galileo Sartor ]
