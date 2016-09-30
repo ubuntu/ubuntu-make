@@ -136,7 +136,7 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
         # the SDK manager
         add_env_to_user(self.name, {"PATH": {"value": [os.path.join("$ANDROID_HOME", "tools"),
                                                        os.path.join("$ANDROID_HOME", "platform-tools")]}})
-        UI.delayed_display(DisplayMessage(self.POST_INSTALL_WARN.format(self.name)))
+        UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
         # print wiki page message
         UI.delayed_display(DisplayMessage("SDK installed in {}. More information on how to use it on {}".format(

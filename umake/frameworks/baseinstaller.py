@@ -21,6 +21,7 @@
 """Downloader abstract module"""
 
 from contextlib import suppress
+from gettext import gettext as _
 from io import StringIO
 import logging
 from progressbar import ProgressBar
@@ -43,9 +44,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
     DIRECT_COPY_EXT = ['.svg', '.png', '.ico', '.jpg', '.jpeg']
     # Framework environment variables are added to `~/.profile` which may
     # require logging back into your session for the changes to be picked up.
-    # Use `POST_INSTALL_WARN` to alert users to this fact, in `post_install`
+    # Use `RELOGIN_REQUIRE_MSG` to alert users to this fact, in `post_install`
     # function. {} in replaced with the framework name at runtime.
-    POST_INSTALL_WARN = "You may need to log back in for your {} installation to work properly"
+    RELOGIN_REQUIRE_MSG = _("You may need to log back in for your {} installation to work properly")
 
     def __new__(cls, *args, **kwargs):
         "This class is not meant to be instantiated, so __new__ returns None."

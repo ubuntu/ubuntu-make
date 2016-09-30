@@ -64,4 +64,4 @@ class ScalaLang(umake.frameworks.baseinstaller.BaseInstaller):
         """Add the necessary Scala environment variables"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")},
                                     "SCALA_HOME": {"value": self.install_path}})
-        UI.delayed_display(DisplayMessage(self.POST_INSTALL_WARN.format(self.name)))
+        UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
