@@ -85,8 +85,7 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": "{}:{}".format(os.path.join(self.install_path, "bin"),
                                                                      os.path.join(os.path.expanduser('~'),
                                                                                   ".npm_modules", "bin"))}})
-        UI.delayed_display(DisplayMessage(_("You may need to log back in for your {} installation "
-                                            "to work properly").format(self.name)))
+        UI.delayed_display(DisplayMessage(_(super().POST_INSTALL_WARN).format(self.name)))
 
     def install_framework_parser(self, parser):
         this_framework_parser = super().install_framework_parser(parser)
