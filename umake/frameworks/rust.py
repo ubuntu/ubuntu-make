@@ -139,5 +139,4 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
         os.symlink(glob(os.path.join('..', '..', 'rust-std-*', 'lib', 'rustlib'))[0], 'rustlib')
         os.symlink(os.path.join('..', 'rustlib.init', 'etc'), os.path.join('rustlib', 'etc'))
 
-        UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation "
-                                            "to work properly").format(self.name)))
+        UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))

@@ -73,5 +73,4 @@ class KotlinLang(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Add the Kotlin binary dir to PATH"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
-        UI.delayed_display(DisplayMessage(_("You need to restart your current shell session for your {} installation "
-                                            "to work properly").format(self.name)))
+        UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
