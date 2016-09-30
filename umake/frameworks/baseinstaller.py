@@ -44,9 +44,8 @@ class BaseInstaller(umake.frameworks.BaseFramework):
     # Framework environment variables are added to `~/.profile` which may
     # require logging back into your session for the changes to be picked up.
     # Use `POST_INSTALL_WARN` to alert users to this fact, in `post_install`
-    # function. {} in replaced with the framework name at runtime. 
-    POST_INSTALL_WARN = "You may need to log back in for your {} installation " \
-                        "to work properly"
+    # function. {} in replaced with the framework name at runtime.
+    POST_INSTALL_WARN = "You may need to log back in for your {} installation to work properly"
 
     def __new__(cls, *args, **kwargs):
         "This class is not meant to be instantiated, so __new__ returns None."
