@@ -139,4 +139,4 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
         os.symlink(glob(os.path.join('..', '..', 'rust-std-*', 'lib', 'rustlib'))[0], 'rustlib')
         os.symlink(os.path.join('..', 'rustlib.init', 'etc'), os.path.join('rustlib', 'etc'))
 
-        UI.delayed_display(DisplayMessage(_(super().POST_INSTALL_WARN).format(self.name)))
+        UI.delayed_display(DisplayMessage(self.POST_INSTALL_WARN.format(self.name)))

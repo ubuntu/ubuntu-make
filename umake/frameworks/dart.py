@@ -94,4 +94,4 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Add go necessary env variables"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
-        UI.delayed_display(DisplayMessage(_(super().POST_INSTALL_WARN).format(self.name)))
+        UI.delayed_display(DisplayMessage(self.POST_INSTALL_WARN.format(self.name)))
