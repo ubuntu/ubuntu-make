@@ -1,8 +1,8 @@
 {
-  "url": "https://api.github.com/repos/superpowers/superpowers-core/releases/2424025",
-  "assets_url": "https://api.github.com/repos/superpowers/superpowers-core/releases/2424025/assets",
-  "upload_url": "https://uploads.github.com/repos/superpowers/superpowers-core/releases/2424025/assets{?name,label}",
-  "html_url": "https://github.com/superpowers/superpowers-core/releases/tag/vmock",
+  "url": "https://api.github.com/repos/superpowers/superpowers-app/releases/2424025",
+  "assets_url": "https://api.github.com/repos/superpowers/superpowers-app/releases/2424025/assets",
+  "upload_url": "https://uploads.github.com/repos/superpowers/superpowers-app/releases/2424025/assets{?name,label}",
+  "html_url": "https://github.com/superpowers/superpowers-app/releases/tag/vmock",
   "id": 2424025,
   "tag_name": "vmock",
   "target_commitish": "master",
@@ -32,9 +32,9 @@
   "published_at": "2016-01-14T03:21:49Z",
   "assets": [
     {
-      "url": "https://api.github.com/repos/superpowers/superpowers-core/releases/assets/1308704",
+      "url": "https://api.github.com/repos/superpowers/superpowers-app/releases/assets/1308704",
       "id": 1308704,
-      "name": "superpowers-mock-core.zip",
+      "name": "superpowers-mock-app.zip",
       "label": null,
       "uploader": {
         "login": "bilou84",
@@ -61,10 +61,10 @@
       "download_count": 86,
       "created_at": "2016-02-13T18:46:23Z",
       "updated_at": "2016-02-13T18:47:38Z",
-      "browser_download_url": "https://github.com/superpowers/superpowers-core/releases/download/vmock/superpowers-mock-core.zip"
+      "browser_download_url": "https://github.com/superpowers/superpowers-app/releases/download/vmock/superpowers-mock-app.zip"
     },
     {
-      "url": "https://api.github.com/repos/superpowers/superpowers-core/releases/assets/1208948",
+      "url": "https://api.github.com/repos/superpowers/superpowers-app/releases/assets/1208948",
       "id": 1208948,
       "name": "superpowers-mock-linux-ia32.zip",
       "label": null,
@@ -93,10 +93,10 @@
       "download_count": 402,
       "created_at": "2016-01-14T00:58:35Z",
       "updated_at": "2016-01-14T01:10:13Z",
-      "browser_download_url": "https://github.com/superpowers/superpowers-core/releases/download/vmock/superpowers-mock-linux-ia32.zip"
+      "browser_download_url": "https://github.com/superpowers/superpowers-app/releases/download/vmock/superpowers-mock-linux-ia32.zip"
     },
     {
-      "url": "https://api.github.com/repos/superpowers/superpowers-core/releases/assets/1209114",
+      "url": "https://api.github.com/repos/superpowers/superpowers-app/releases/assets/1209114",
       "id": 1209114,
       "name": "superpowers-mock-linux-x64.zip",
       "label": null,
@@ -125,10 +125,10 @@
       "download_count": 2030,
       "created_at": "2016-01-14T02:08:36Z",
       "updated_at": "2016-01-14T02:18:21Z",
-      "browser_download_url": "https://github.com/superpowers/superpowers-core/releases/download/vmock/superpowers-mock-linux-x64.zip"
+      "browser_download_url": "https://github.com/superpowers/superpowers-app/releases/download/vmock/superpowers-mock-linux-x64.zip"
     },
     {
-      "url": "https://api.github.com/repos/superpowers/superpowers-core/releases/assets/1209188",
+      "url": "https://api.github.com/repos/superpowers/superpowers-app/releases/assets/1209188",
       "id": 1209188,
       "name": "superpowers-mock-osx-x64.zip",
       "label": null,
@@ -157,10 +157,10 @@
       "download_count": 2029,
       "created_at": "2016-01-14T02:34:28Z",
       "updated_at": "2016-01-14T02:42:31Z",
-      "browser_download_url": "https://github.com/superpowers/superpowers-core/releases/download/vmock/superpowers-mock-osx-x64.zip"
+      "browser_download_url": "https://github.com/superpowers/superpowers-app/releases/download/vmock/superpowers-mock-osx-x64.zip"
     },
     {
-      "url": "https://api.github.com/repos/superpowers/superpowers-core/releases/assets/1209066",
+      "url": "https://api.github.com/repos/superpowers/superpowers-app/releases/assets/1209066",
       "id": 1209066,
       "name": "superpowers-mock-win-ia32.zip",
       "label": null,
@@ -189,10 +189,10 @@
       "download_count": 1831,
       "created_at": "2016-01-14T01:51:28Z",
       "updated_at": "2016-01-14T01:59:49Z",
-      "browser_download_url": "https://github.com/superpowers/superpowers-core/releases/download/vmock/superpowers-mock-win-ia32.zip"
+      "browser_download_url": "https://github.com/superpowers/superpowers-app/releases/download/vmock/superpowers-mock-win-ia32.zip"
     },
     {
-      "url": "https://api.github.com/repos/superpowers/superpowers-core/releases/assets/1209052",
+      "url": "https://api.github.com/repos/superpowers/superpowers-app/releases/assets/1209052",
       "id": 1209052,
       "name": "superpowers-mock-win-x64.zip",
       "label": null,
@@ -221,10 +221,10 @@
       "download_count": 7238,
       "created_at": "2016-01-14T01:40:50Z",
       "updated_at": "2016-01-14T01:50:28Z",
-      "browser_download_url": "https://github.com/superpowers/superpowers-core/releases/download/vmock/superpowers-mock-win-x64.zip"
+      "browser_download_url": "https://github.com/superpowers/superpowers-app/releases/download/vmock/superpowers-mock-win-x64.zip"
     }
   ],
-  "tarball_url": "https://api.github.com/repos/superpowers/superpowers-core/tarball/vmock",
-  "zipball_url": "https://api.github.com/repos/superpowers/superpowers-core/zipball/vmock",
-  "body": "## First week of Open Source\r\n\r\nIt's been almost a full week since we went open source. Some highlights:\r\n\r\n *  :star2:  Superpowers has been [starred over 500 times](https://github.com/superpowers/superpowers/stargazers), taking [the top weekly spot for TypeScript](https://github.com/trending?l=typescript&since=weekly)\r\n * :+1: We [were on the front page of Hacker News](https://news.ycombinator.com/item?id=10882766), [the top of r/gamedev](https://www.reddit.com/r/gamedev/comments/3zw1b2/superpowers_html5_2d3d_game_maker_going_open/) and featured in [HTML5Weekly](http://html5weekly.com/issues/222)\r\n * :heart: Our [all-new Patreon page](http://patreon.com/SparklinLabs) went from $0 to $167/month and we [received over 40 donations](sparklinlabs.itch.io/superpowers).\r\n * :octocat: 36 pull requests were submitted across all repos, 32 of them have been merged or closed\r\n * :chart_with_upwards_trend: Superpowers has been downloaded ~4000 times!\r\n\r\nWe're thrilled with the warm welcome and the many contributions popping up!\r\n\r\nAll commits in this release: https://github.com/superpowers/superpowers/compare/v0.18.1...vmock and https://github.com/superpowers/superpowers-game/compare/v0.18.1...vmock\r\n\r\n## Continuous integration!\r\n\r\nThanks to @BaptisteDixneuf (#26) and some work on our end to [correctly report build errors](https://github.com/superpowers/superpowers/commit/24b518930a4a63f2538d1961d5ff830d7a9860ad), every pull request and push made to the core repository is [now automatically checked for build errors on Travis](https://travis-ci.org/superpowers/superpowers). The other repositories will be following soon.\r\n\r\n## Registry and system installation\r\n\r\nFollowing an interesting experiment by @risq (#15), we've spent more time exploring how systems and plugins should be installed and updated. We've set up [a registry of systems and plugins](https://github.com/superpowers/superpowers/blob/master/registry.json) and added support for installing systems from the command line:\r\n\r\n```bash\r\n# List all available systems from the registry\r\nnode server install\r\n# Install Superpowers LÖVE\r\nnode server install love2d\r\n```\r\n\r\nSystem releases are automatically fetched from GitHub. Support for installing individual plugins, as well as updating it all, is planned for soon. The redesigned launcher will feature a graphical user interface to manage it all.\r\n\r\n**NOTE:** If you run your server from the command line, you must now start it with `node server start` rather than just `node server`.\r\n\r\n## Work on the redesigned launcher\r\n\r\nCoding on the [upcoming redesigned launcher](https://github.com/superpowers/superpowers-launcher) itself hasn't resumed yet but community member Kilkonie has started [a very interesting discussion](http://itch.io/t/13632/startup-sequence) and created some quality mockups:\r\n\r\n![](http://i.imgur.com/SHZtfma.png)\r\n\r\n## Noteworthy fixes and improvements in this release\r\n\r\n * **Superpowers** ([all commits](https://github.com/superpowers/superpowers/compare/v0.18.1...vmock))\r\n   * The core of Superpowers is now available [in 8 different languages!](https://github.com/superpowers/superpowers/tree/master/public/locales)\r\n   * There is now a 32-bit package for Linux\r\n   * Dashes are now accepted in usernames and there's better feedback for invalid usernames.\r\n   * You can now use an URL ending with `?build=latest` to access the latest build of a project\r\n   * The Documentation tool actually displays something again\r\n   * You can now open the documentation page for an editor by pressing F1 while it is focused\r\n   * Cut-Copy-Paste in the OS X app has been fixed\r\n   * A crash when exporting on OS X has been fixed\r\n   * Worked around a major layout bug in Microsoft Edge. Oh and [Superpowers runs on Xbox One!](http://itch.io/t/13535/solved-updates-for-edge-support-further-down-the-line-pcxbox-one)\r\n   * Project migration should now be more robust\r\n   * Now shipping with Electron v0.36.3\r\n * **Superpowers Game** ([all commits](https://github.com/superpowers/superpowers-game/compare/v0.18.1...vmock))\r\n   * The \"Stretch\" transform mode in the cubic model editor has been fixed\r\n   * The API for editing shader uniforms has been improved\r\n\r\n## For plugin developers\r\n\r\n### Documentation\r\n\r\n[The documentation for extending Superpowers](http://docs.superpowers-html5.com/en/development/extending-superpowers) has been massively improved. [A repository has been created](https://github.com/superpowers/superpowers-dummy) to host a simple and heavily-commented example system. Work on it will start soon.\r\n\r\n### Setting up new systems and plugins easily\r\n\r\nThe server has gained a new command for generating the basic structure of a system or plugin:\r\n\r\n * `node server init $SYSTEM_ID` will generate a new system skeleton in `systems/$SYSTEM_ID`\r\n * `node server init $SYSTEM_ID:$AUTHOR/$NAME` will generate a new plugin skeleton in `systems/$SYSTEM_ID/plugins/$AUTHOR/$NAME`\r\n\r\n### Systems now require a `package.json` file\r\n\r\nSee Superpowers Dummy's [package.json](https://github.com/superpowers/superpowers-dummy/blob/master/package.json) for an example.\r\n\r\n * `superpowers.systemId` must contain a unique lowercase identifier for the system\r\n * `publishedPluginBundles` was added in v0.18.0 and lists the names of the Browserify-ied JavaScript bundles that should be published for runtime use for each plugin when exporting the project. Previously, this list was hard-coded."
+  "tarball_url": "https://api.github.com/repos/superpowers/superpowers-app/tarball/vmock",
+  "zipball_url": "https://api.github.com/repos/superpowers/superpowers-app/zipball/vmock",
+  "body": "## First week of Open Source\r\n\r\nIt's been almost a full week since we went open source. Some highlights:\r\n\r\n *  :star2:  Superpowers has been [starred over 500 times](https://github.com/superpowers/superpowers/stargazers), taking [the top weekly spot for TypeScript](https://github.com/trending?l=typescript&since=weekly)\r\n * :+1: We [were on the front page of Hacker News](https://news.ycombinator.com/item?id=10882766), [the top of r/gamedev](https://www.reddit.com/r/gamedev/comments/3zw1b2/superpowers_html5_2d3d_game_maker_going_open/) and featured in [HTML5Weekly](http://html5weekly.com/issues/222)\r\n * :heart: Our [all-new Patreon page](http://patreon.com/SparklinLabs) went from $0 to $167/month and we [received over 40 donations](sparklinlabs.itch.io/superpowers).\r\n * :octocat: 36 pull requests were submitted across all repos, 32 of them have been merged or closed\r\n * :chart_with_upwards_trend: Superpowers has been downloaded ~4000 times!\r\n\r\nWe're thrilled with the warm welcome and the many contributions popping up!\r\n\r\nAll commits in this release: https://github.com/superpowers/superpowers/compare/v0.18.1...vmock and https://github.com/superpowers/superpowers-game/compare/v0.18.1...vmock\r\n\r\n## Continuous integration!\r\n\r\nThanks to @BaptisteDixneuf (#26) and some work on our end to [correctly report build errors](https://github.com/superpowers/superpowers/commit/24b518930a4a63f2538d1961d5ff830d7a9860ad), every pull request and push made to the app repository is [now automatically checked for build errors on Travis](https://travis-ci.org/superpowers/superpowers). The other repositories will be following soon.\r\n\r\n## Registry and system installation\r\n\r\nFollowing an interesting experiment by @risq (#15), we've spent more time exploring how systems and plugins should be installed and updated. We've set up [a registry of systems and plugins](https://github.com/superpowers/superpowers/blob/master/registry.json) and added support for installing systems from the command line:\r\n\r\n```bash\r\n# List all available systems from the registry\r\nnode server install\r\n# Install Superpowers LÖVE\r\nnode server install love2d\r\n```\r\n\r\nSystem releases are automatically fetched from GitHub. Support for installing individual plugins, as well as updating it all, is planned for soon. The redesigned launcher will feature a graphical user interface to manage it all.\r\n\r\n**NOTE:** If you run your server from the command line, you must now start it with `node server start` rather than just `node server`.\r\n\r\n## Work on the redesigned launcher\r\n\r\nCoding on the [upcoming redesigned launcher](https://github.com/superpowers/superpowers-launcher) itself hasn't resumed yet but community member Kilkonie has started [a very interesting discussion](http://itch.io/t/13632/startup-sequence) and created some quality mockups:\r\n\r\n![](http://i.imgur.com/SHZtfma.png)\r\n\r\n## Noteworthy fixes and improvements in this release\r\n\r\n * **Superpowers** ([all commits](https://github.com/superpowers/superpowers/compare/v0.18.1...vmock))\r\n   * The app of Superpowers is now available [in 8 different languages!](https://github.com/superpowers/superpowers/tree/master/public/locales)\r\n   * There is now a 32-bit package for Linux\r\n   * Dashes are now accepted in usernames and there's better feedback for invalid usernames.\r\n   * You can now use an URL ending with `?build=latest` to access the latest build of a project\r\n   * The Documentation tool actually displays something again\r\n   * You can now open the documentation page for an editor by pressing F1 while it is focused\r\n   * Cut-Copy-Paste in the OS X app has been fixed\r\n   * A crash when exporting on OS X has been fixed\r\n   * Worked around a major layout bug in Microsoft Edge. Oh and [Superpowers runs on Xbox One!](http://itch.io/t/13535/solved-updates-for-edge-support-further-down-the-line-pcxbox-one)\r\n   * Project migration should now be more robust\r\n   * Now shipping with Electron v0.36.3\r\n * **Superpowers Game** ([all commits](https://github.com/superpowers/superpowers-game/compare/v0.18.1...vmock))\r\n   * The \"Stretch\" transform mode in the cubic model editor has been fixed\r\n   * The API for editing shader uniforms has been improved\r\n\r\n## For plugin developers\r\n\r\n### Documentation\r\n\r\n[The documentation for extending Superpowers](http://docs.superpowers-html5.com/en/development/extending-superpowers) has been massively improved. [A repository has been created](https://github.com/superpowers/superpowers-dummy) to host a simple and heavily-commented example system. Work on it will start soon.\r\n\r\n### Setting up new systems and plugins easily\r\n\r\nThe server has gained a new command for generating the basic structure of a system or plugin:\r\n\r\n * `node server init $SYSTEM_ID` will generate a new system skeleton in `systems/$SYSTEM_ID`\r\n * `node server init $SYSTEM_ID:$AUTHOR/$NAME` will generate a new plugin skeleton in `systems/$SYSTEM_ID/plugins/$AUTHOR/$NAME`\r\n\r\n### Systems now require a `package.json` file\r\n\r\nSee Superpowers Dummy's [package.json](https://github.com/superpowers/superpowers-dummy/blob/master/package.json) for an example.\r\n\r\n * `superpowers.systemId` must contain a unique lowercase identifier for the system\r\n * `publishedPluginBundles` was added in v0.18.0 and lists the names of the Browserify-ied JavaScript bundles that should be published for runtime use for each plugin when exporting the project. Previously, this list was hard-coded."
 }
