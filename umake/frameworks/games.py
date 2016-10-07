@@ -221,7 +221,7 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Superpowers", description=_("The HTML5 2D+3D game maker"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page="https://api.github.com/repos/superpowers/superpowers-core/releases/latest",
+                         download_page="https://api.github.com/repos/superpowers/superpowers-app/releases/latest",
                          dir_to_decompress_in_tarball='superpowers*',
                          desktop_filename="superpowers.desktop",
                          required_files_path=["Superpowers"])
@@ -256,8 +256,8 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Create the Superpowers launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Superpowers"),
-                        icon_path=os.path.join(self.install_path, "resources", "app", "launcher", "public", "images",
-                                               "icon.png"),
+                        icon_path=os.path.join(self.install_path, "resources", "app", "renderer",
+                                               "images", "superpowers-256.png"),
                         exec='"{}" %f'.format(self.exec_path),
                         comment=self.description,
                         categories="Development;IDE;"))
