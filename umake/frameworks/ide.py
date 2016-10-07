@@ -780,6 +780,8 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
             for asset in assets:
                 if "linux" in asset["browser_download_url"]:
                     download_url = asset["browser_download_url"]
+                else:
+                    raise IndexError
         except (json.JSONDecodeError, IndexError):
             logger.error("Can't parse the download URL from the download page.")
             UI.return_main_screen(status_code=1)
@@ -823,6 +825,8 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
             for asset in assets:
                 if "tar.gz" in asset["browser_download_url"]:
                     download_url = asset["browser_download_url"]
+                else:
+                    raise IndexError
         except (json.JSONDecodeError, IndexError):
             logger.error("Can't parse the download URL from the download page.")
             UI.return_main_screen(status_code=1)
