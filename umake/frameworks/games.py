@@ -242,9 +242,12 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
 
         try:
             assets = json.loads(page.buffer.read().decode())["assets"]
+            download_url = None
             for asset in assets:
                 if "linux-{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
                     download_url = asset["browser_download_url"]
+            if not download_url:
+                raise IndexError
         except (json.JSONDecodeError, IndexError):
             logger.error("Can't parse the download URL from the download page.")
             UI.return_main_screen(status_code=1)
