@@ -98,7 +98,18 @@ class Decompressor:
                 archive = self.ZipFileWithPerm(fd.name)
                 logger.debug("zip file")
             is_archive = True
-            archive.extractall(tempdest)
+            # This is a band aid: if extractall can't successfully extract the file, we perform another approach:
+            # exec tar xf and hope for the best (tar binary seems to be more acceptive of slightly misformed
+            # archives)
+            try:
+                archive.extractall(tempdest)
+            except tarfile.ReadError:
+                logger.debug("Trigger fallback direct tar execution")
+                shutil.rmtree(tempdest)
+                os.makedirs(tempdest)
+                archive = subprocess.Popen(["tar", "xf", fd.name, "-C", tempdest])
+                archive.communicate()
+                fd.close()
         except:
             # try to treat it as self-extractable, some format don't like being opened at the same time though, so link
             # it.
