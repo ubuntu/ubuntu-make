@@ -649,7 +649,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
         for line in url_version_str.split("\n"):
             if preg.match(line):
                 line = line.replace("var PAGE_ARTIFACTS_LOCATION = \"/images"
-                                    "_www/v6/download/", "").replace("/\";", "")
+                                    "_www/v6/download/", "").replace("/\";", "").replace('/final', '')
                 self.version = line.strip()
 
         if not self.version:
@@ -658,7 +658,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen(status_code=1)
 
         self.version_download_page = "https://netbeans.org/images_www/v6/download/" \
-                                     "{}/js/files.js".format(self.version)
+                                     "{}/final/js/files.js".format(self.version)
         DownloadCenter([DownloadItem(self.version_download_page)], self.parse_download_page_callback, download=False)
 
     @MainLoop.in_mainloop_thread
@@ -676,7 +676,8 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("The download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
-        preg = re.compile('add_file\("zip/netbeans-{}-[0-9]{{12}}{}.zip"'.format(self.version, self.flavour))
+        preg = re.compile('add_file\("zip/netbeans-{}-[0-9]{{12}}{}.zip"'.format(self.version,
+                                                                                 self.flavour))
         for line in url_file.split("\n"):
             if preg.match(line):
                 # Clean up the string from js (it's a function call)
