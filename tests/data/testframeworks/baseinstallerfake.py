@@ -125,7 +125,7 @@ class BaseFramework(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Base Framework"),
                         icon_path=os.path.join(self.install_path, "bin", "studio.png"),
-                        exec='"{}" %f'.format(os.path.join(self.install_path, "bin", "studio.sh")),
+                        exec='"{}" %f'.format(self.exec_path),
                         comment=_("Base Framework developer environment"),
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-base-framework"))

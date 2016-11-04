@@ -142,9 +142,6 @@ class BaseInstaller(umake.frameworks.BaseFramework):
     def confirm_path(self, path_dir=""):
         """Confirm path dir"""
 
-        if self.desktop_filename:
-            self.exec_path = os.path.join(self.install_path, self.required_files_path[0])
-
         if not path_dir:
             logger.debug("No installation path provided. Requesting one.")
             UI.display(InputText("Choose installation path:", self.confirm_path, self.install_path))
@@ -164,6 +161,8 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                                      "there?".format(path_dir), self.set_installdir_to_clean, UI.return_main_screen))
                     return
         self.install_path = path_dir
+        if self.desktop_filename:
+            self.exec_path = os.path.join(self.install_path, self.required_files_path[0])
         self.download_provider_page()
 
     def set_installdir_to_clean(self):
