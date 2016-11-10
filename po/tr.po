@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
 "PO-Revision-Date: 2015-04-24 08:17+0000\n"
-"Last-Translator: Julian <julianwhettam@gmail.com>\n"
+"Last-Translator: Julian <julianwhettam@gmail.com> & Mehmet <mkececi@mehemtkececi.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -20,21 +20,23 @@ msgstr ""
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
-msgstr ""
+msgstr "{}\n'in Ubuntu make kurulumu"
 
 #: umake/__init__.py:99
 msgid "* Command '{}':"
-msgstr ""
+msgstr "* Komut '{}':"
 
 #: umake/__init__.py:107
 msgid "Deploy and setup developers environment easily on ubuntu"
-msgstr ""
+msgstr "Ubuntuda dağıtım ve kurulum geliştiricileri ortamını kolayca yapabilirsiniz"
 
 #: umake/__init__.py:108
 msgid ""
 "Note that you can also configure different debug logging behavior using "
 "LOG_CFG that points to a log yaml profile."
 msgstr ""
+"Ayrıca farklı hata ayıklama logu davranış yapılandırabileceğiniz kullanarak "
+"LOG_CFG bir log yaml profilini işaret eder."
 
 #: umake/__init__.py:111
 msgid "Show this help"
@@ -42,100 +44,100 @@ msgstr "Bu yardımı göster"
 
 #: umake/__init__.py:112
 msgid "Increase output verbosity (2 levels)"
-msgstr ""
+msgstr "Çıkış ayrıntısını arttırma (2 seviye)"
 
 #: umake/__init__.py:114
 msgid "Remove specified framework if installed"
-msgstr ""
+msgstr "Eğer yüklü ise belirtilen çerçeveyi kaldır"
 
 #: umake/__init__.py:116
 msgid "Print version and exit"
-msgstr ""
+msgstr "Sürümü yaz ve çık"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
-msgstr ""
+msgstr "Genel IDEler"
 
 #: umake/frameworks/ide.py:76
 msgid "Pure Eclipse Luna (4.4)"
-msgstr ""
+msgstr "Pure Eclipse Luna (4.4)"
 
 #: umake/frameworks/ide.py:128
 msgid "The Eclipse Luna Integrated Development Environment"
-msgstr ""
+msgstr "Eclipse Luna "
 
 #: umake/frameworks/ide.py:131
 msgid "Eclipse Luna"
-msgstr "Eclipse Luna"
+msgstr "Eclipse Luna Tümleşik Geliştirme Ortamı (IDE)"
 
 #: umake/frameworks/ide.py:217
 msgid "PyCharm Community Edition"
-msgstr ""
+msgstr "PyCharm Topluluk Sürümü "
 
 #: umake/frameworks/ide.py:233
 msgid "PyCharm Educational Edition"
-msgstr ""
+msgstr "PyCharm Eğitim Sürümü"
 
 #: umake/frameworks/ide.py:249
 msgid "PyCharm Professional Edition"
-msgstr ""
+msgstr "PyCharm Profesyonel Sürümü"
 
 #: umake/frameworks/ide.py:265
 msgid "IntelliJ IDEA Community Edition"
-msgstr ""
+msgstr "IntelliJ IDEA Topluluk Sürümü"
 
 #: umake/frameworks/ide.py:281
 msgid "IntelliJ IDEA"
-msgstr ""
+msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
 msgid "Ruby on Rails IDE"
-msgstr ""
+msgstr "Ruby on Rails IDE"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
-msgstr ""
+msgstr "Kompleks istemci-tarası ve server-tarafı javascript IDE"
 
 #: umake/frameworks/ide.py:331
 msgid "PHP and web development IDE"
-msgstr ""
+msgstr "PHP ve web geliştirme IDEsi"
 
 #: umake/frameworks/ide.py:348
 msgid "CLion integrated C/C++ IDE"
-msgstr ""
+msgstr "CLion entegrelenmiş C/C++ IDE"
 
 #: umake/frameworks/ide.py:376
 msgid "The Arduino Software Distribution"
-msgstr ""
+msgstr "Arduino Yazılım Dağıtımı"
 
 #: umake/frameworks/ide.py:475
 msgid "The Arduino Software IDE"
-msgstr ""
+msgstr "Arduino Yazılım IDEsi"
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
-msgstr ""
+msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
 msgid "You need to logout and login again for your installation to work"
-msgstr ""
+msgstr "Kurulumunuzun çalışabilmesi için tekrar çıkış ve giriş yapmaya ihtiyacınız vardır"
 
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
 msgid "Netbeans IDE"
-msgstr ""
+msgstr "Netbeans IDE"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
-msgstr ""
+msgstr "Dartlang Geliştirme Ortamı"
 
 #: umake/frameworks/dart.py:49
-msgid "Dart SDK with editor (not supported upstream anyymore)"
-msgstr ""
+msgid "Dart SDK with editor (not supported upstream anymore)"
+msgstr "Düzenleyici ile Dart SDK (bundan sonra güncellemeleri desteklenmeyecek)"
 
 #: umake/frameworks/dart.py:56
 msgid "Dart SDK (default)"
-msgstr ""
+msgstr "Dart SDK (varsayılan)"
 
 #: umake/frameworks/dart.py:97 umake/frameworks/rust.py:134
 #: umake/frameworks/scala.py:66 umake/frameworks/go.py:76
@@ -144,115 +146,118 @@ msgid ""
 "You need to restart your current shell session for your {} installation to "
 "work properly"
 msgstr ""
+"{} Kurulumunun düzgün çalışabilmesi için geçerli kabuk oturumunuzun "
+"tekrar başlatılmasına ihtiyaç vardır"
 
 #: umake/frameworks/rust.py:43
 msgid "Rust language"
-msgstr ""
+msgstr "Rust dili"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
-msgstr ""
+msgstr "Resmi Rust Dağıtımı"
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
-msgstr ""
+msgstr "Scala Programlama Dili"
 
 #: umake/frameworks/scala.py:46
 msgid "Scala compiler and interpreter (default)"
-msgstr ""
+msgstr "Scala derleyici ve yorumlayıcı (varsayılan)"
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
-msgstr ""
+msgstr "Go dili"
 
 #: umake/frameworks/go.py:46
 msgid "Google compiler (default)"
-msgstr ""
+msgstr "Google derleyicisi (varsayılan)"
 
 #: umake/frameworks/android.py:42
 msgid "Android Development Environment"
-msgstr ""
+msgstr "Android Geliştirme Ortamı"
 
 #: umake/frameworks/android.py:80
 msgid "Android Studio (default)"
-msgstr ""
+msgstr "Android Studio (varsayılan)"
 
 #: umake/frameworks/android.py:100
 msgid "Android Studio"
-msgstr ""
+msgstr "Android Studio"
 
 #: umake/frameworks/android.py:103
 msgid "Android Studio developer environment"
-msgstr ""
+msgstr "Android Studio geliştirici ortamı"
 
 #: umake/frameworks/android.py:111
 msgid "Android SDK"
-msgstr ""
+msgstr "Android SDK"
 
 #: umake/frameworks/android.py:147
 msgid "Android NDK"
-msgstr ""
+msgstr "Android NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
-msgstr ""
+msgstr "Hiçbiri yoksa {} kategorisi için varsayılan çerçeve talep edilmiştir"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't install that framework on this machine"
-msgstr ""
+msgstr "Bu makinaya bu çerçeveyi kuramayabilirsiniz"
 
 #: umake/frameworks/__init__.py:256
 msgid "You can't remove {} as it isn't installed"
-msgstr ""
+msgstr "{} kurulmamış iken kaldıramazsınız"
 
 #: umake/frameworks/__init__.py:285
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
 msgstr ""
+"Varsayılan çerçevenin adı sağlamıyorsa, hedefdizin bir / içermelidir"
 
 #: umake/frameworks/__init__.py:288
 msgid "Remove framework if installed"
-msgstr ""
+msgstr "Kurulmuşsa çerçeveyi kaldır"
 
 #: umake/frameworks/__init__.py:291
 msgid "Accept license without prompting"
-msgstr ""
+msgstr "Lisansı telkinsiz kabul et"
 
 #: umake/frameworks/web.py:45
 msgid "Web Developer Environment"
-msgstr ""
+msgstr "Web Geliştirme Ortamı"
 
 #: umake/frameworks/web.py:51 umake/frameworks/web.py:120
 msgid "Firefox Developer Edition"
-msgstr ""
+msgstr "Firefox Geliştirici Sürümü"
 
 #: umake/frameworks/web.py:116
 msgid "Choose language: {}"
-msgstr ""
+msgstr "Bir dil seçiniz: {}"
 
 #: umake/frameworks/web.py:123
 msgid "Firefox Aurora with Developer tools"
-msgstr ""
+msgstr "Firefox Aurora ile Geliştirici araçları"
 
 #: umake/frameworks/web.py:129
 msgid "Install in given language without prompting"
-msgstr ""
+msgstr "Verilen dili telkinsiz kur"
 
 #: umake/frameworks/web.py:141 umake/frameworks/web.py:226
 msgid "Visual Studio focused on modern web and cloud"
-msgstr ""
+msgstr "Visual Studio moden web ve bulut'a odaklanmıştır"
 
 #: umake/frameworks/web.py:223
 msgid "Visual Studio Code"
-msgstr ""
+msgstr "Visual Studio Kodu"
 
 #: umake/frameworks/games.py:42
 msgid "Games Development Environment"
-msgstr ""
+msgstr "Oyun Geliştirme Ortamları"
 
 #: umake/frameworks/games.py:48
 msgid "Stencyl game developer IDE"
-msgstr ""
+msgstr "Stencyl oyun geliştirici IDEsi"
 
 #: umake/frameworks/games.py:85
 msgid "Stencyl"
@@ -260,45 +265,47 @@ msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
-msgstr ""
+msgstr "Unity 3D Editörü Linux deneysel desteği"
 
 #: umake/frameworks/games.py:154
 msgid "Unity3D Editor"
-msgstr ""
+msgstr "Unity3D Editörü"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
-msgstr ""
+msgstr "Etkileşimli ve nonlineer hikayeleri oluşturma için Twine aracı"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
-msgstr ""
+msgstr "Twine"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
-msgstr ""
+msgstr "Uygun cevap sağlanmamıştır"
 
 #: umake/interactions/__init__.py:75 umake/interactions/__init__.py:83
-msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
-msgstr ""
+msgid "Your entry '{}' isn't an acceptable choice. Choices are: {}"
+msgstr "Sizin girişiniz '{}' kabul edilebilir bir seçim değildir. Seçimler: {}"
 
 #: umake/interactions/__init__.py:80
-msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
-msgstr ""
+msgid "Your entry '{}' isn't an acceptable choice. Choices are: {} and {}"
+msgstr "Sizin girişiniz '{}' kabul edilebilir bir seçim değildir. Seçimler: {} ve {}"
 
 #: umake/interactions/__init__.py:100
 msgid " ({})"
-msgstr ""
+msgstr " ({})"
 
 #: umake/interactions/__init__.py:104
 msgid ""
 "{}\n"
 "[{}] "
 msgstr ""
+"{}\n"
+"[{}] "
 
 #: umake/interactions/__init__.py:107
 msgid "{} [{}] "
-msgstr ""
+msgstr "{} [{}] "
 
 #: umake/interactions/__init__.py:115
 msgid "I Accept"
@@ -306,7 +313,7 @@ msgstr "Kabul ediyorum"
 
 #: umake/interactions/__init__.py:115
 msgid "a"
-msgstr ""
+msgstr "a"
 
 #: umake/interactions/__init__.py:116
 msgid "I don't accept"
@@ -314,15 +321,15 @@ msgstr "Kabul etmiyorum"
 
 #: umake/interactions/__init__.py:116 umake/interactions/__init__.py:149
 msgid "N"
-msgstr ""
+msgstr "N"
 
 #: umake/interactions/__init__.py:125 umake/interactions/__init__.py:126
 msgid "{} ({})"
-msgstr ""
+msgstr "{} ({})"
 
 #: umake/interactions/__init__.py:129
 msgid "[{}] "
-msgstr ""
+msgstr "[{}] "
 
 #: umake/interactions/__init__.py:148
 msgid "Yes"
@@ -330,8 +337,8 @@ msgstr "Evet"
 
 #: umake/interactions/__init__.py:148
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: umake/interactions/__init__.py:149
 msgid "No"
-msgstr ""
+msgstr "Hayır"
