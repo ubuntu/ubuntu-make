@@ -105,7 +105,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                         exec='"{}" %f'.format(os.path.join(self.install_path, "bin", "studio.sh")),
                         comment=_("Android Studio developer environment"),
                         categories="Development;IDE;",
-                        extra="StartupWMClass=jetbrains-android"))
+                        extra="StartupWMClass=jetbrains-studio"))
 
 
 class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
