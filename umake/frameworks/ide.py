@@ -692,14 +692,14 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
         string_array = url_string.split(", ")
         try:
             url_suffix = string_array[0]
-            md5 = string_array[2]
+            sha256 = string_array[2]
         except IndexError:
             # The file could not be parsed
             logger.error("The download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
         download_url = "{}/{}/final/{}".format(self.BASE_URL, self.version, url_suffix)
-        self.download_requests.append(DownloadItem(download_url, Checksum(ChecksumType.md5, md5)))
+        self.download_requests.append(DownloadItem(download_url, Checksum(ChecksumType.sha256, sha256)))
         self.start_download_and_install()
 
     def post_install(self):
