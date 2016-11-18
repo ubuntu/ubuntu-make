@@ -69,7 +69,7 @@ class DpkgAptSetup(LoggedTestCase):
         os.makedirs(apt_etc)
         os.makedirs(os.path.join(self.chroot_path, 'var', 'log', 'apt'))
         with open(os.path.join(apt_etc, 'sources.list'), 'w') as f:
-            f.write('deb file:{} /'.format(self.apt_package_dir))
+            f.write('deb [trusted=yes] file:{} /'.format(self.apt_package_dir))
 
         # dpkg requirements
         dpkg_dir = os.path.join(self.chroot_path, 'var', 'lib', 'dpkg')
