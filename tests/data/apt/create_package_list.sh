@@ -17,4 +17,5 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+dpkg-scanpackages . /dev/null > Packages
+apt-ftparchive release . > Release
