@@ -1,0 +1,82 @@
+Package: testpackage
+Version: 0.0.1
+Architecture: all
+Maintainer: Didier Roche <didrocks@ubuntu.com>
+Installed-Size: 26
+Filename: ./testpackage_0.0.1_all.deb
+Size: 1698
+MD5sum: 09c049be56996d2856d63a1fff8bc5fe
+SHA1: c51ac45e9a9d5f6dcc78de7db33d766d24f80b4f
+SHA256: a51e9128ccc800f6ab36bf25d7ced128cbbadfffb34d243198795913fd72e7c4
+Section: misc
+Priority: extra
+Description: Dummy package for testing
+ Package used for testing debs installation
+
+Package: testpackage0
+Source: testpackage
+Version: 0.0.1
+Architecture: all
+Maintainer: Didier Roche <didrocks@ubuntu.com>
+Installed-Size: 26
+Filename: ./testpackage0_0.0.1_all.deb
+Size: 1714
+MD5sum: 6805bc475b48d82af3766f82c36e14aa
+SHA1: 8e6f1924aff2086afc2bbc9c9aa6ac8c9464fb04
+SHA256: 152d328d7bd757bc11f2e5f0dd496768c745038946151cb5c5191e17f08e66ff
+Section: misc
+Priority: extra
+Description: Dummy package for testinga - other
+ Package used for other testing debs installation
+
+Package: testpackage1
+Source: testpackage
+Version: 0.0.1
+Architecture: all
+Maintainer: Didier Roche <didrocks@ubuntu.com>
+Installed-Size: 26
+Depends: testpackage
+Filename: ./testpackage1_0.0.1_all.deb
+Size: 1722
+MD5sum: a7e3f78b1371a282c39ea3b4748ec983
+SHA1: cb64e24b8cd567160cd2e912f8cd878e13b6d6cc
+SHA256: 26ba2636e06ef1a8d637f5b37dfdf2d14be7971a20ccbae09481e63bb158cf7e
+Section: misc
+Priority: extra
+Description: Dummy package for testing - dep
+ Package used for testing debs installation with dep
+
+Package: testpackage2
+Source: testpackage
+Version: 0.0.1
+Architecture: all
+Maintainer: Didier Roche <didrocks@ubuntu.com>
+Installed-Size: 26
+Conflicts: testpackage (<< 0.2)
+Filename: ./testpackage2_0.0.1_all.deb
+Size: 1732
+MD5sum: f141d37818d53249b0468982a3f9d3e6
+SHA1: d8474882876dd15c69e8a904612440782379f17d
+SHA256: 51d581dd1f6502c179fae4c5e00440906b13ab01d6e7a5462da6b324f62a5241
+Section: misc
+Priority: extra
+Description: Dummy package for testing - breaks
+ Package used for testing debs installation with break
+
+Package: testpackagefoo
+Source: testpackage
+Version: 0.0.1
+Architecture: foo
+Maintainer: Didier Roche <didrocks@ubuntu.com>
+Installed-Size: 26
+Filename: ./testpackagefoo_0.0.1_foo.deb
+Size: 1726
+MD5sum: 394ae0f62d30e74d81efda4d90a9fea5
+SHA1: e2cc8783b86694b576ec8d268919c81f1bef06e1
+SHA256: a78ff29d30d85b2acd83ee0cae2d0961eb5e685cc77f921f61cb928140c7b559
+Section: misc
+Priority: extra
+Multi-Arch: foreign
+Description: Dummy package for testing - only available on foo
+ Package used for testing debs installation
+
