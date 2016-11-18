@@ -1,4 +1,4 @@
-ubuntu-make (16.09ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (16.11) zesty; urgency=medium
 
   [ Galileo Sartor ]
   * Removed jayatana dependency from android-studio
@@ -29,7 +29,7 @@ ubuntu-make (16.09ubuntu1) UNRELEASED; urgency=medium
     can now be uncompressed)
   * Prepare for zesty releases
 
- -- Didier Roche <didrocks@ubuntu.com>  Fri, 18 Nov 2016 09:22:29 +0100
+ -- Didier Roche <didrocks@ubuntu.com>  Fri, 18 Nov 2016 09:31:22 +0100
 
 ubuntu-make (16.09) yakkety; urgency=medium
 
