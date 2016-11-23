@@ -290,6 +290,22 @@ class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
                                                         "products", "releases?code=PS")
 
 
+class RiderIDEInContainer(ContainerTests, test_ide.RiderIDETests):
+    """This will test the Rider IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["data.services.jetbrains.com"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "rider")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "data.services.jetbrains.com",
+                                                        "products", "releases?code=RD")
+
+
 class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
     """This will test the Arduino IDE integration inside a container"""
 

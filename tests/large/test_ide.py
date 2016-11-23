@@ -326,6 +326,21 @@ class DataGripIDETests(IdeaIDETests):
         self.name = 'DataGrip'
 
 
+class RiderIDETests(IdeaIDETests):
+    """Rider from the IDE collection."""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 60
+    TIMEOUT_STOP = 60
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "ide", "rider")
+        self.desktop_filename = 'jetbrains-rider.desktop'
+        self.command_args = '{} ide rider'.format(UMAKE)
+        self.name = 'Rider'
+
+
 class ArduinoIDETests(LargeFrameworkTests):
     """The Arduino Software distribution from the IDE collection."""
 

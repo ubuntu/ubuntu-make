@@ -477,6 +477,21 @@ class DataGrip(BaseJetBrains):
                          icon_filename='product.png')
 
 
+class Rider(BaseJetBrains):
+    """The JetBrains  cross-platform .NET IDE"""
+    download_keyword = 'RD'
+    executable = "rider.sh"
+
+    def __init__(self, category):
+        super().__init__(name="Rider",
+                         description=_("The JetBrains  cross-platform .NET IDE"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         dir_to_decompress_in_tarball='riderRS-*',
+                         desktop_filename='jetbrains-rider.desktop',
+                         icon_filename='Rider_128.png')
+
+
 class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     """The Arduino Software distribution."""
 
