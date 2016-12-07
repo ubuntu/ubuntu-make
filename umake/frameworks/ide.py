@@ -486,7 +486,7 @@ class Rider(BaseJetBrains):
         super().__init__(name="Rider",
                          description=_("The JetBrains  cross-platform .NET IDE"),
                          category=category, only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['mono-complete'],
+                         packages_requirements=['mono-devel'],
                          dir_to_decompress_in_tarball='riderRS-*',
                          desktop_filename='jetbrains-rider.desktop',
                          icon_filename='Rider_128.png')
