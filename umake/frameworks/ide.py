@@ -491,6 +491,12 @@ class Rider(BaseJetBrains):
                          desktop_filename='jetbrains-rider.desktop',
                          icon_filename='Rider_128.png')
 
+    # TODO - remove once Rider will be released
+    def run_for(self, args):
+        """Enforce EAP version"""
+        args.eap = True
+        super().run_for(args)
+
 
 class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     """The Arduino Software distribution."""
