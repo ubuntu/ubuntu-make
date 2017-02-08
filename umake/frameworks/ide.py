@@ -487,9 +487,9 @@ class Rider(BaseJetBrains):
                          description=_("The JetBrains  cross-platform .NET IDE"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          packages_requirements=['mono-devel'],
-                         dir_to_decompress_in_tarball='riderRS-*',
+                         dir_to_decompress_in_tarball='Rider-*',
                          desktop_filename='jetbrains-rider.desktop',
-                         icon_filename='Rider_128.png')
+                         icon_filename='rider.png')
 
     # TODO - remove once Rider will be released
     def run_for(self, args):

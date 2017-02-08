@@ -303,7 +303,7 @@ class RiderIDEInContainer(ContainerTests, test_ide.RiderIDETests):
         self.installed_path = os.path.join(self.install_base_path, "ide", "rider")
         self.bad_download_page_file_path = os.path.join(get_data_dir(),
                                                         "server-content", "data.services.jetbrains.com",
-                                                        "products", "releases?code=RD")
+                                                        "products", "releases?code=RD&type=aep")
 
 
 class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
