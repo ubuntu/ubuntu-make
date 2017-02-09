@@ -1,3 +1,43 @@
+ubuntu-make (16.11.1) zesty; urgency=medium
+
+  * Enable small tests passing on yakkety+ with a more modern trusted
+    local repository layout.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Fri, 18 Nov 2016 12:08:37 +0100
+
+ubuntu-make (16.11) zesty; urgency=medium
+
+  [ Galileo Sartor ]
+  * Removed jayatana dependency from android-studio
+  * Change netbeans link
+  * Support incorrect use of download_url when using GitHub API
+  * Change superpowers repo
+
+  [ Mehmet Keçeci ]
+  * Update tr.po
+  * Update ubuntu-make.pot
+
+  [ Hannes De Valkeneer ]
+  * Change netbeans checksum from md5 to sha256
+
+  [ Michael Chou ]
+  * Android Studio duplicate icons in launcher fix
+
+  [ Trent Schafer ]
+  * Update post install message for all frameworks when needing to relogging
+
+  [ Wilsen Hernandez ]
+  * Spanish translation strings updated
+
+  [ Didier Roche ]
+  * Fix regression where Exec wasn't pointing at the correct install path
+    when using a custom location
+  * Decompress even slightly corrupted tar files. (latest golang release
+    can now be uncompressed)
+  * Prepare for zesty releases
+
+ -- Didier Roche <didrocks@ubuntu.com>  Fri, 18 Nov 2016 09:31:22 +0100
+
 ubuntu-make (16.09) yakkety; urgency=medium
 
   [ Galileo Sartor ]

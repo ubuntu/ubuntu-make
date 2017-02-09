@@ -130,6 +130,11 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Add necessary environment variables"""
         add_env_to_user(self.name, {"ANDROID_HOME": {"value": self.install_path, "keep": False}})
+
+        # add a few fall-back variables that might be used by some tools
+        add_env_to_user(self.name, {"ANDROID_SDK": {"value": "$ANDROID_HOME", "keep": False}})
+        # do not set ANDROID_SDK_HOME here as that is the path of the preference folder expected by the Android tools
+
         # add "platform-tools" to PATH to ensure "adb" can be run once the platform tools are installed via
         # the SDK manager
         add_env_to_user(self.name, {"PATH": {"value": [os.path.join("$ANDROID_HOME", "tools"),
@@ -164,6 +169,10 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Add necessary environment variables"""
         add_env_to_user(self.name, {"NDK_ROOT": {"value": self.install_path, "keep": False}})
+
+        # add a few fall-back variables that might be used by some tools
+        add_env_to_user(self.name, {"ANDROID_NDK": {"value": "$NDK_ROOT", "keep": False}})
+        add_env_to_user(self.name, {"ANDROID_NDK_HOME": {"value": "$NDK_ROOT", "keep": False}})
 
         # print wiki page message
         UI.display(DisplayMessage("NDK installed in {}. More information on how to use it on {}".format(

@@ -21,7 +21,7 @@
 import os
 import sys
 # Run local umake from this helper
-root_dir = os.path.dirname(os.path.dirname(__file__))
+root_dir = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.insert(0, root_dir)
 
 from umake import main
