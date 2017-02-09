@@ -484,7 +484,7 @@ class Rider(BaseJetBrains):
 
     def __init__(self, category):
         super().__init__(name="Rider",
-                         description=_("The JetBrains  cross-platform .NET IDE"),
+                         description=_("The JetBrains cross-platform .NET IDE"),
                          category=category, only_on_archs=['i386', 'amd64'],
                          packages_requirements=['mono-devel'],
                          dir_to_decompress_in_tarball='Rider-*',

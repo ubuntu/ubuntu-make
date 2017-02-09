@@ -336,9 +336,9 @@ class RiderIDETests(IdeaIDETests):
     def setUp(self):
         super().setUp()
         self.installed_path = os.path.join(self.install_base_path, "ide", "rider")
-        self.desktop_filename = 'jetbrains-rider-eap.desktop'
+        self.desktop_filename = 'jetbrains-rider.desktop'
         self.command_args = '{} ide rider'.format(UMAKE)
-        self.name = 'Rider EAP'
+        self.name = 'Rider'
 
 
 class ArduinoIDETests(LargeFrameworkTests):
