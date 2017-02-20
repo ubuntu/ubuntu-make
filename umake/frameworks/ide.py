@@ -444,7 +444,7 @@ class PhpStorm(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='PhpStorm-*',
                          desktop_filename='jetbrains-phpstorm.desktop',
-                         icon_filename='webide.png')
+                         icon_filename='phpstorm.png')
 
 
 class CLion(BaseJetBrains):
