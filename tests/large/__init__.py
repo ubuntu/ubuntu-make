@@ -167,7 +167,7 @@ class LargeFrameworkTests(LoggedTestCase):
         """run the expect query and check that there is no warning or error
 
         It doesn't fail on the given timeout if stdout is progressing"""
-        self.return_and_wait_expect(expect_query, timeout, expect_warn)
+        self.return_and_wait_expect(expect_query, timeout)
         self.assert_for_warn(self.child.before, expect_warn)
 
     def wait_and_no_warn(self, expect_warn=False):
