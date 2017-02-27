@@ -48,8 +48,8 @@ class RustCategory(umake.frameworks.BaseCategory):
 class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
     # Button labels on the download page.
     arch_trans = {
-        "amd64": "64-bit",
-        "i386": "32-bit"
+        "amd64": "x86_64",
+        "i386": "i686"
     }
 
     def __init__(self, category):
@@ -57,75 +57,21 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
                          description=_("The official Rust distribution"),
                          is_category_default=True,
                          category=category, only_on_archs=['i386', 'amd64'],
-                         download_page="https://www.rust-lang.org/en-US/downloads.html",
-                         checksum_type=ChecksumType.sha256,
+                         download_page="https://www.rust-lang.org/en-US/other-installers.html",
                          dir_to_decompress_in_tarball="rust-*")
+        self.arch = get_current_arch()
 
     def parse_download_link(self, line, in_download):
         """Parse Rust download link, expect to find a url"""
-        url, sha1 = (None, None)
-        arch = get_current_arch()
-        if "{}-unknown-linux-gnu.tar.gz".format(self.arch_trans[arch]) in line:
+        url = None
+        if '{}-unknown-linux-gnu.tar.gz">'.format(self.arch_trans[self.arch]) in line:
             in_download = True
         if in_download:
             p = re.search(r'href="(.*)">', line)
             with suppress(AttributeError):
                 url = p.group(1)
-            p = re.search(r'<td><tt>(\w+)</tt></td>', line)
-            with suppress(AttributeError):
-                sha1 = p.group(1)
-            if "</tr>" in line:
-                in_download = False
-
-        if url is None and sha1 is None:
-            return (None, in_download)
-        return ((url, sha1), in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        """Override this so we can use BS and fetch the checksum separately."""
-        logger.debug("Fetched download page, parsing.")
-
-        page = result[self.download_page]
-
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page_url, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        soup = BeautifulSoup(page.buffer, 'html.parser')
-
-        link = (soup.find('div', class_="install")
-                .find('td', class_="inst-type", text="Linux (.tar.gz)")
-                .parent
-                .find(text=self.arch_trans[get_current_arch()])
-                .parent
-                .parent)
-
-        if link is None:
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-
-        download_url = link.attrs['href']
-        checksum_url = download_url + '.sha256'
-        logger.debug("Found download URL: " + download_url)
-        logger.debug("Downloading checksum first, from " + checksum_url)
-
-        def checksum_downloaded(results):
-            checksum_result = next(iter(results.values()))  # Just get the first.
-            if checksum_result.error:
-                logger.error(checksum_result.error)
-                UI.return_main_screen(status_code=1)
-
-            checksum = checksum_result.buffer.getvalue().decode('utf-8').split()[0]
-            logger.info('Obtained SHA256 checksum: ' + checksum)
-
-            self.download_requests.append(DownloadItem(download_url,
-                                                       checksum=Checksum(ChecksumType.sha256, checksum),
-                                                       ignore_encoding=True))
-            self.start_download_and_install()
-
-        DownloadCenter([DownloadItem(checksum_url)], on_done=checksum_downloaded, download=False)
+                logger.debug("Found link: {}".format(url))
+        return ((url, None), in_download)
 
     def post_install(self):
         """Add rust necessary env variables"""
