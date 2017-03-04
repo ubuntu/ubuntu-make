@@ -83,8 +83,8 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=_supported_archs, expect_license=True,
                          packages_requirements=["openjdk-7-jdk | openjdk-8-jdk",
                                                 "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386"],
-                         download_page="https://developer.android.com/sdk/index.html",
-                         checksum_type=ChecksumType.sha1,
+                         download_page="https://developer.android.com/studio/index.html",
+                         checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="android-studio",
                          desktop_filename="android-studio.desktop",
                          required_files_path=[os.path.join("bin", "studio.sh")])
@@ -114,9 +114,9 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=_supported_archs, expect_license=True,
                          packages_requirements=["openjdk-7-jdk | openjdk-8-jdk",
                                                 "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386"],
-                         download_page="https://developer.android.com/sdk/index.html",
-                         checksum_type=ChecksumType.sha1,
-                         dir_to_decompress_in_tarball="android-sdk-linux",
+                         download_page="https://developer.android.com/studio/index.html",
+                         checksum_type=ChecksumType.sha256,
+                         dir_to_decompress_in_tarball=".",
                          required_files_path=[os.path.join("tools", "android")])
 
     def parse_license(self, line, license_txt, in_license):
