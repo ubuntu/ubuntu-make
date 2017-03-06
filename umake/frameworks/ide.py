@@ -414,7 +414,7 @@ class RubyMine(BaseJetBrains):
                          packages_requirements=['ruby'],
                          dir_to_decompress_in_tarball='RubyMine-*',
                          desktop_filename='jetbrains-rubymine.desktop',
-                         icon_filename='rubymine.png')
+                         icon_filename='RMlogo.svg')
 
 
 class WebStorm(BaseJetBrains):

@@ -158,7 +158,7 @@ class IdeaIDETests(LargeFrameworkTests):
 
     def test_eap_install(self):
         self.installed_path += '-eap'
-        self.desktop_filename.replace('.desktop', '-eap.desktop')
+        self.desktop_filename = self.desktop_filename.replace('.desktop', '-eap.desktop')
         self.command_args += ' --eap'
         self.name += ' EAP'
 
