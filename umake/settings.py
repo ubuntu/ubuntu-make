@@ -18,6 +18,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 import os
+import requests
+import re
 from xdg.BaseDirectory import xdg_data_home
 
 DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join(xdg_data_home, "umake"))
@@ -42,3 +44,8 @@ def get_version():
     except (subprocess.CalledProcessError, FileNotFoundError):
         version += "+unknown"
     return version
+
+def get_latest_version():
+    page = requests.get("https://github.com/ubuntu/ubuntu-make/releases").text
+    latest = re.search('releases/tag/(.*)\">', page).group(1)
+    return latest

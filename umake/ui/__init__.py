@@ -21,6 +21,7 @@
 
 from gi.repository import GLib
 from umake.tools import Singleton, MainLoop
+from umake.settings import get_version, get_latest_version
 
 
 class UI(object, metaclass=Singleton):
@@ -32,6 +33,12 @@ class UI(object, metaclass=Singleton):
 
     @classmethod
     def return_main_screen(cls, status_code=0):
+        if status_code==1 and not (get_latest_version() == get_version()):
+            print('''
+Your currently installed version ({}) differs from the latest release ({})
+Many issues are usually fixed in more up to date versions.
+To get the latest version you can read the instructions at https://github.com/ubuntu/ubuntu-make
+'''.format(get_version(), get_latest_version()))
         cls.currentUI._return_main_screen(status_code=status_code)
 
     @classmethod
