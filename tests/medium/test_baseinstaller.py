@@ -35,7 +35,7 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {8765: ["localhost"], 443: ["github.com"]}
+        self.hosts = {8765: ["localhost"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         self.additional_local_frameworks = [os.path.join("tests", "data", "testframeworks", "baseinstallerfake.py")]
         self.umake_download_page = os.path.join(get_data_dir(), "server-content", "github.com", "ubuntu", "ubuntu-make", "releases", "index.html")
@@ -44,6 +44,7 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
         self.installed_path = os.path.join(self.install_base_path, "base", "base-framework")
 
     def test_install_no_download_link_update(self):
+        self.hosts[443] = ["github.com"]
         with swap_file_and_restore(self.download_page_file_path) as content:
             with open(self.download_page_file_path, "w") as newfile:
                 newfile.write(content.replace('id="linux-bundle', ""))
@@ -61,6 +62,7 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
                 self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
     def test_install_no_download_link_no_update(self):
+        self.hosts[443] = ["github.com"]
         with swap_file_and_restore(self.download_page_file_path) as content:
             with open(self.download_page_file_path, "w") as newfile:
                 newfile.write(content.replace('id="linux-bundle', ""))
@@ -78,3 +80,21 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
 
                 # we have nothing installed
                 self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_no_download_link_404_update(self):
+        self.hosts[443] = ["github.com"]
+        with swap_file_and_restore(self.download_page_file_path) as content:
+            with open(self.download_page_file_path, "w") as newfile:
+                newfile.write(content.replace('id="linux-bundle', ""))
+            self.umake_download_page = os.path.join(get_data_dir(), "server-content", "github.com", "ubuntu",
+                                                    "ubuntu-make", "releases", "fake.html")
+
+            self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn([pexpect.EOF, "\r\nERROR: 404 Client Error: Not found\r\n"],
+                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
+
+            # we have nothing installed
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))

@@ -47,6 +47,9 @@ def get_version():
 
 def get_latest_version():
     '''Get latest available version from github'''
-    page = requests.get("https://github.com/ubuntu/ubuntu-make/releases").text
-    latest = re.search('releases/tag/(.*)\">', page).group(1)
-    return latest
+    try:
+        page = requests.get("https://github.com/ubuntu/ubuntu-make/breleases")
+        page.raise_for_status()
+        latest = re.search('releases/tag/(.*)\">', page).group(1)
+    except requests.exceptions.HTTPError as e:
+        raise e
