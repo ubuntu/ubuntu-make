@@ -27,7 +27,6 @@ from ..large import test_baseinstaller
 from ..tools import UMAKE, spawn_process, get_data_dir, swap_file_and_restore
 
 
-
 class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerTests):
     """This will install the Base Framework inside a container"""
 
@@ -38,7 +37,8 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
         self.hosts = {8765: ["localhost"], 443: ["github.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         self.additional_local_frameworks = [os.path.join("tests", "data", "testframeworks", "baseinstallerfake.py")]
-        self.umake_download_page = os.path.join(get_data_dir(), "server-content", "github.com", "ubuntu", "ubuntu-make", "releases")
+        self.umake_download_page = os.path.join(get_data_dir(), "server-content", "github.com",
+                                                "ubuntu", "ubuntu-make", "releases")
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "base", "base-framework")
@@ -53,7 +53,8 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
                 self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
                 self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
                 self.child.sendline("")
-                self.expect_and_no_warn("To get the latest version you can read the instructions at https://github.com/ubuntu/ubuntu-make\r\n\r\n",
+                self.expect_and_no_warn("To get the latest version you can read the instructions at"
+                                        "https://github.com/ubuntu/ubuntu-make\r\n\r\n",
                                         timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
                 self.wait_and_close(exit_status=1)
 
@@ -73,8 +74,11 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
                 self.child.sendline("")
                 self.expect_and_no_warn(pexpect.EOF,
                                         timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
-                self.assertNotIn('To get the latest version you can read the instructions at https://github.com/ubuntu/ubuntu-make\r\n\r\n', self.child.before)
-                self.assertIn("\r\nERROR: Download page changed its syntax or is not parsable (url missing)\r\n", self.child.before)
+                self.assertNotIn("To get the latest version you can read the instructions at"
+                                 "https://github.com/ubuntu/ubuntu-make\r\n\r\n",
+                                 self.child.before)
+                self.assertIn("\r\nERROR: Download page changed its syntax or is not parsable (url missing)\r\n",
+                              self.child.before)
                 self.wait_and_close(exit_status=1)
 
                 # we have nothing installed

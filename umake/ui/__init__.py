@@ -38,7 +38,7 @@ class UI(object, metaclass=Singleton):
     @classmethod
     def return_main_screen(cls, status_code=0):
         try:
-            if status_code==1 and not (get_latest_version() == get_version()):
+            if status_code == 1 and not (get_latest_version() == get_version()):
                 print('''
 Your currently installed version ({}) differs from the latest release ({})
 Many issues are usually fixed in more up to date versions.

@@ -45,6 +45,7 @@ def get_version():
         version += "+unknown"
     return version
 
+
 def get_latest_version():
     '''Get latest available version from github'''
     try:
