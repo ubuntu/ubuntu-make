@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html data-info-popups="" data-mobile-support="" data-search="">
 <head>
@@ -5,11 +6,15 @@
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no" id="Viewport" name="viewport"/>
 <link rel="shortcut icon" type="image/x-icon" href="/img/favicon-ca31b78daf0dd9a106bbf3c6d87d4ec7.png"/>
 <link href="https://fonts.googleapis.com/css?family=Varela+Round|Montserrat:400,700" rel="stylesheet" type="text/css"/>
-<link rel="stylesheet" type="text/css" href="/css/main-734576f830dc3605e5316a094aa82a3c.css"/>
+<link rel="stylesheet" type="text/css" href="/css/main-b93153f6d5b1b0992dad87fdb332bc02.css"/>
+<script src="/jspm_packages/system-eccc019329febb5a1b06bde008ca5614.js"></script>
 <script>
-        var baseUrl = '/';
+    System.config({baseURL: "/115721d"});
   </script>
-<script async="" src="/lib/curl/src/curl-af0e5211f469b994b367d180c29b7ae3.js" data-curl-run="/run-003143af73fc7624310e21e59d3e6864.js"></script>
+<script src="/config-5a675c9cddea3a5f55b71416e67d47d6.js"></script>
+<script>
+      System.import('app/main.js')
+  </script>
 <meta content="7qGntFPD9lWAVCtUu5U77v4l68PsTHf6xpzgjQv2j2M" name="google-site-verification"/>
 <script>
     //
@@ -31,13 +36,12 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
   </script>
+ 
 <meta content="Spring Tool Suite&trade; (STS) Download page" property="og:title"/>
 <meta property="og:image" content="/img/spring-by-pivotal-9066b55828deb3c10e27e609af322c40.png"/>
 <meta content="Use one of the links below to download an all-in-one distribution for your
     platform. Choose either a native installer or simple archive, they contain equivalent functionality" property="og:description"/>
- 
-</head>
-<body>
+</head><body>
 <script type="text/javascript">
     // Work around Google font rendering issues in webkit browsers on Windows 7
     if (navigator.userAgent.indexOf("NT 6.1") != -1) {
@@ -102,6 +106,12 @@ Home
 </a>
 </div>
 <div class="navbar-link">
+<a href="/docs">
+Docs
+<i class="icon-chevron-right pull-right"></i>
+</a>
+</div>
+<div class="navbar-link">
 <a href="/guides">
 Guides
 <i class="icon-chevron-right pull-right"></i>
@@ -142,7 +152,7 @@ Questions
 <div class="header--container"></div>
 <div class="container-fluid"></div>
 <div></div>
-<div class="body--container container-fluid ">
+<div class="container-fluid">
 <div class="main-body--wrapper">
 <div class="tools--wrapper">
 <div class="content--title">Tools</div>
@@ -154,8 +164,8 @@ distribution for your platform.<br/> Or check the list of
 <div class="tool-versions--wrapper">
 <div class="tool-versions--icon--container">
 <div class="tool-versions--icon sts-icon"></div>
-<h2 class="tool-versions--version">STS 3.7.2.RELEASE</h2>
-<a href="http://static.springsource.org/sts/nan/v372/NewAndNoteworthy.html">New &amp; Noteworthy</a>
+<h2 class="tool-versions--version">STS 3.8.3.RELEASE</h2>
+<a href="http://docs.spring.io/sts/nan/v383/NewAndNoteworthy.html">New &amp; Noteworthy</a>
 </div>
 <div>
 <div class="tool-versions--container">
@@ -164,7 +174,7 @@ distribution for your platform.<br/> Or check the list of
 <h3>Windows</h3>
 <div class="item-dropdown-widget js-item-dropdown--wrapper">
 <div class="item-dropdown--link js-item--open-dropdown">
-<p class="item-dropdown--title tools-version-dropdown--title">Based on Eclipse 4.5.1</p>
+<p class="item-dropdown--title tools-version-dropdown--title">Based on Eclipse 4.6.2</p>
 <i class="item-dropdown--icon icon-reorder place-right"></i>
 </div>
 <div class="item--dropdown no-item--header platform-version--dropdown">
@@ -173,9 +183,9 @@ distribution for your platform.<br/> Or check the list of
 <p class="item--body-title">WIN, 32BIT</p>
 <div>
 <div class="item--body--version">
-<a class="tool-download-link" target="_blank" href="http://dist.springsource.com/release/STS/3.7.2.RELEASE/dist/e4.5/spring-tool-suite-3.7.2.RELEASE-e4.5.1-win32.zip" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS 3.7.2.RELEASE windows&#39;,&#39;http://dist.springsource.com/release/STS/3.7.2.RELEASE/dist/e4.5/spring-tool-suite-3.7.2.RELEASE-e4.5.1-win32.zip&#39;])">
+<a class="tool-download-link" target="_blank" href="http://download.springsource.com/release/STS/3.8.3.RELEASE/dist/e4.6/spring-tool-suite-3.8.3.RELEASE-e4.6.2-win32.zip" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS 3.8.3.RELEASE windows&#39;,&#39;http://download.springsource.com/release/STS/3.8.3.RELEASE/dist/e4.6/spring-tool-suite-3.8.3.RELEASE-e4.6.2-win32.zip&#39;])">
 <p class="file-type">zip</p>
-<span class="file-size">430MB</span>
+<span class="file-size">376MB</span>
 </a>
 </div>
 </div>
@@ -184,9 +194,9 @@ distribution for your platform.<br/> Or check the list of
 <p class="item--body-title">WIN, 64BIT</p>
 <div>
 <div class="item--body--version">
-<a class="tool-download-link" target="_blank" href="http://dist.springsource.com/release/STS/3.7.2.RELEASE/dist/e4.5/spring-tool-suite-3.7.2.RELEASE-e4.5.1-win32-x86_64.zip" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS 3.7.2.RELEASE windows&#39;,&#39;http://dist.springsource.com/release/STS/3.7.2.RELEASE/dist/e4.5/spring-tool-suite-3.7.2.RELEASE-e4.5.1-win32-x86_64.zip&#39;])">
+<a class="tool-download-link" target="_blank" href="http://download.springsource.com/release/STS/3.8.3.RELEASE/dist/e4.6/spring-tool-suite-3.8.3.RELEASE-e4.6.2-win32-x86_64.zip" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS 3.8.3.RELEASE windows&#39;,&#39;http://download.springsource.com/release/STS/3.8.3.RELEASE/dist/e4.6/spring-tool-suite-3.8.3.RELEASE-e4.6.2-win32-x86_64.zip&#39;])">
 <p class="file-type">zip</p>
-<span class="file-size">430MB</span>
+<span class="file-size">376MB</span>
 </a>
 </div>
 </div>
@@ -200,7 +210,7 @@ distribution for your platform.<br/> Or check the list of
 <h3>Mac</h3>
 <div class="item-dropdown-widget js-item-dropdown--wrapper">
 <div class="item-dropdown--link js-item--open-dropdown">
-<p class="item-dropdown--title tools-version-dropdown--title">Based on Eclipse 4.5.1</p>
+<p class="item-dropdown--title tools-version-dropdown--title">Based on Eclipse 4.6.2</p>
 <i class="item-dropdown--icon icon-reorder place-right"></i>
 </div>
 <div class="item--dropdown no-item--header platform-version--dropdown">
@@ -209,9 +219,9 @@ distribution for your platform.<br/> Or check the list of
 <p class="item--body-title">COCOA, 64BIT</p>
 <div>
 <div class="item--body--version">
-<a class="tool-download-link" target="_blank" href="http://dist.springsource.com/release/STS/3.7.2.RELEASE/dist/e4.5/spring-tool-suite-3.7.2.RELEASE-e4.5.1-macosx-cocoa-x86_64.tar.gz" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS 3.7.2.RELEASE mac&#39;,&#39;http://dist.springsource.com/release/STS/3.7.2.RELEASE/dist/e4.5/spring-tool-suite-3.7.2.RELEASE-e4.5.1-macosx-cocoa-x86_64.tar.gz&#39;])">
+<a class="tool-download-link" target="_blank" href="http://download.springsource.com/release/STS/3.8.3.RELEASE/dist/e4.6/spring-tool-suite-3.8.3.RELEASE-e4.6.2-macosx-cocoa-x86_64.tar.gz" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS 3.8.3.RELEASE mac&#39;,&#39;http://download.springsource.com/release/STS/3.8.3.RELEASE/dist/e4.6/spring-tool-suite-3.8.3.RELEASE-e4.6.2-macosx-cocoa-x86_64.tar.gz&#39;])">
 <p class="file-type">tar.gz</p>
-<span class="file-size">428MB</span>
+<span class="file-size">374MB</span>
 </a>
 </div>
 </div>
@@ -225,7 +235,7 @@ distribution for your platform.<br/> Or check the list of
 <h3>Linux</h3>
 <div class="item-dropdown-widget js-item-dropdown--wrapper">
 <div class="item-dropdown--link js-item--open-dropdown">
-<p class="item-dropdown--title tools-version-dropdown--title">Based on Eclipse 4.5.1</p>
+<p class="item-dropdown--title tools-version-dropdown--title">Based on Eclipse 4.6.2</p>
 <i class="item-dropdown--icon icon-reorder place-right"></i>
 </div>
 <div class="item--dropdown no-item--header platform-version--dropdown">
@@ -234,9 +244,9 @@ distribution for your platform.<br/> Or check the list of
 <p class="item--body-title">GTK, 32BIT</p>
 <div>
 <div class="item--body--version">
-<a class="tool-download-link" target="_blank" href="http://dist.springsource.com/release/STS/3.7.2.RELEASE/dist/e4.5/spring-tool-suite-3.7.2.RELEASE-e4.5.1-linux-gtk.tar.gz" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS 3.7.2.RELEASE linux&#39;,&#39;http://dist.springsource.com/release/STS/3.7.2.RELEASE/dist/e4.5/spring-tool-suite-3.7.2.RELEASE-e4.5.1-linux-gtk.tar.gz&#39;])">
+<a class="tool-download-link" target="_blank" href="http://download.springsource.com/release/STS/mock.RELEASE/dist/emock/spring-tool-suite-mock.RELEASE-emock-linux-gtk.tar.gz" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS 3.8.3.RELEASE linux&#39;,&#39;http://download.springsource.com/release/STS/3.8.3.RELEASE/dist/e4.6/spring-tool-suite-3.8.3.RELEASE-e4.6.2-linux-gtk.tar.gz&#39;])">
 <p class="file-type">tar.gz</p>
-<span class="file-size">428MB</span>
+<span class="file-size">374MB</span>
 </a>
 </div>
 </div>
@@ -245,9 +255,9 @@ distribution for your platform.<br/> Or check the list of
 <p class="item--body-title">GTK, 64BIT</p>
 <div>
 <div class="item--body--version">
-<a class="tool-download-link" target="_blank" href="http://dist.springsource.com/release/STS/3.7.2.RELEASE/dist/e4.5/spring-tool-suite-3.7.2.RELEASE-e4.5.1-linux-gtk-x86_64.tar.gz" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS 3.7.2.RELEASE linux&#39;,&#39;http://dist.springsource.com/release/STS/3.7.2.RELEASE/dist/e4.5/spring-tool-suite-3.7.2.RELEASE-e4.5.1-linux-gtk-x86_64.tar.gz&#39;])">
+<a class="tool-download-link" target="_blank" href="http://download.springsource.com/release/STS/mock.RELEASE/dist/emock/spring-tool-suite-mock.RELEASE-emock-linux-gtk-x86_64.tar.gz" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS 3.8.3.RELEASE linux&#39;,&#39;http://download.springsource.com/release/STS/3.8.3.RELEASE/dist/e4.6/spring-tool-suite-3.8.3.RELEASE-e4.6.2-linux-gtk-x86_64.tar.gz&#39;])">
 <p class="file-type">tar.gz</p>
-<span class="file-size">428MB</span>
+<span class="file-size">374MB</span>
 </a>
 </div>
 </div>
@@ -276,14 +286,14 @@ accessing the hosted version of the update repository.</p>
 </thead>
 <tbody>
 <tr>
-<td>4.5.1</td>
-<td><a target="_blank" href="http://download.springsource.com/release/TOOLS/update/3.7.2.RELEASE/e4.5/springsource-tool-suite-3.7.2.RELEASE-e4.5.1-updatesite.zip" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS Eclipse4.5.1 updatesite&#39;,&#39;http://download.springsource.com/release/TOOLS/update/3.7.2.RELEASE/e4.5/springsource-tool-suite-3.7.2.RELEASE-e4.5.1-updatesite.zip&#39;])">springsource-tool-suite-3.7.2.RELEASE-e4.5.1-updatesite.zip</a></td>
-<td>120MB</td>
+<td>4.6.2</td>
+<td><a target="_blank" href="http://download.springsource.com/release/TOOLS/update/3.8.3.RELEASE/e4.6/springsource-tool-suite-3.8.3.RELEASE-e4.6.2-updatesite.zip" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS Eclipse4.6.2 updatesite&#39;,&#39;http://download.springsource.com/release/TOOLS/update/3.8.3.RELEASE/e4.6/springsource-tool-suite-3.8.3.RELEASE-e4.6.2-updatesite.zip&#39;])">springsource-tool-suite-3.8.3.RELEASE-e4.6.2-updatesite.zip</a></td>
+<td>161MB</td>
 </tr>
 <tr>
-<td>4.4.2</td>
-<td><a target="_blank" href="http://download.springsource.com/release/TOOLS/update/3.7.2.RELEASE/e4.4/springsource-tool-suite-3.7.2.RELEASE-e4.4.2-updatesite.zip" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS Eclipse4.4.2 updatesite&#39;,&#39;http://download.springsource.com/release/TOOLS/update/3.7.2.RELEASE/e4.4/springsource-tool-suite-3.7.2.RELEASE-e4.4.2-updatesite.zip&#39;])">springsource-tool-suite-3.7.2.RELEASE-e4.4.2-updatesite.zip</a></td>
-<td>109MB</td>
+<td>4.5.2</td>
+<td><a target="_blank" href="http://download.springsource.com/release/TOOLS/update/3.8.3.RELEASE/e4.5/springsource-tool-suite-3.8.3.RELEASE-e4.5.2-updatesite.zip" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;download STS Eclipse4.5.2 updatesite&#39;,&#39;http://download.springsource.com/release/TOOLS/update/3.8.3.RELEASE/e4.5/springsource-tool-suite-3.8.3.RELEASE-e4.5.2-updatesite.zip&#39;])">springsource-tool-suite-3.8.3.RELEASE-e4.5.2-updatesite.zip</a></td>
+<td>147MB</td>
 </tr>
 </tbody>
 </table>
@@ -303,12 +313,12 @@ If you want to install STS in an existing Eclipse installation, you can use one 
 </thead>
 <tbody>
 <tr>
-<td>4.5</td>
-<td><a href="http://dist.springsource.com/release/TOOLS/update/e4.5/">http://dist.springsource.com/release/TOOLS/update/e4.5/</a></td>
+<td>4.6</td>
+<td><a href="http://dist.springsource.com/release/TOOLS/update/e4.6/">http://dist.springsource.com/release/TOOLS/update/e4.6/</a></td>
 </tr>
 <tr>
-<td>4.4</td>
-<td><a href="http://dist.springsource.com/release/TOOLS/update/e4.4/">http://dist.springsource.com/release/TOOLS/update/e4.4/</a></td>
+<td>4.5</td>
+<td><a href="http://dist.springsource.com/release/TOOLS/update/e4.5/">http://dist.springsource.com/release/TOOLS/update/e4.5/</a></td>
 </tr>
 </tbody>
 </table>
@@ -337,12 +347,14 @@ As an alternative, you can also install STS directly from the Eclipse Marketplac
 <li><a href="/team">Team</a></li>
 <li><a href="/services">Services</a></li>
 <li><a href="/tools">Tools</a></li>
+<li><a href="https://store.spring.io">Store</a></li>
 </ul>
 </div>
 </div>
-&copy; <span>2016</span> <a href="http://www.pivotal.io/">Pivotal Software</a>, Inc. All Rights Reserved.
-<a href="http://www.pivotal.io/terms-of-use">Terms of Use</a> and
-<a href="http://www.pivotal.io/privacy-policy">Privacy</a>
+&copy; <span>2017</span> <a href="https://www.pivotal.io/">Pivotal Software</a>, Inc. All Rights Reserved.
+<a href="https://www.pivotal.io/terms-of-use">Terms of Use</a>,
+<a href="https://www.pivotal.io/privacy-policy">Privacy</a> and
+<a href="/trademarks">Trademark Guidelines</a>
 </div>
 </div>
 </div>
