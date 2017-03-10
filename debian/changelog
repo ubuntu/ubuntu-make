@@ -1,3 +1,25 @@
+ubuntu-make (16.11.1ubuntu1) UNRELEASED; urgency=medium
+
+  [ Galileo Sartor ]
+  * Fix android sdk and android studio
+  * Fix unity3D download page
+  * Fix for never rust download page
+  * Change phpstorm icon
+  * Changed icon in rubymine to svg
+  * Add apm to bin folder
+  * Check when there is a failure if people are using the latest Ubuntu
+    Make version. Direct them to the ppa otherwise.
+  * Fix some tests
+  * Return the pexpect reply so we can use multiple option expect
+  * Add issue template
+
+  [ Didier Roche ]
+  * Add running from master instructions in issue template
+  * Some small tests refactoring
+  * Support running VCS umake version without being in root directory
+
+ -- Didier Roche <didrocks@ubuntu.com>  Fri, 10 Mar 2017 14:44:41 +0100
+
 ubuntu-make (16.11.1) zesty; urgency=medium
 
   * Enable small tests passing on yakkety+ with a more modern trusted
