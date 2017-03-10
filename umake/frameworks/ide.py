@@ -809,7 +809,7 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=['amd64'],
                          download_page="https://api.github.com/repos/Atom/Atom/releases/latest",
                          desktop_filename="atom.desktop",
-                         required_files_path=["atom"],
+                         required_files_path=["atom", "resources/app/apm/bin/apm"],
                          dir_to_decompress_in_tarball="atom-*",
                          checksum_type=ChecksumType.md5)
 
@@ -840,6 +840,9 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Atom Code launcher"""
+        # Add apm to PATH
+        add_exec_link(os.path.join(self.install_path, "resources", "app", "apm", "bin", "apm"),
+                      os.path.join(self.default_binary_link_path, 'apm'))
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Atom"),
                         icon_path=os.path.join(self.install_path, "atom.png"),
                         exec=self.exec_path,
