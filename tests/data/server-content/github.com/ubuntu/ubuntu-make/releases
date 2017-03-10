@@ -494,14 +494,14 @@
 
 <div class="tag-info commit js-details-container Details">
   <h3>
-    <a href="/ubuntu/ubuntu-make/releases/tag/16.11.1">
-      <span class="tag-name">16.11.1</span>
+    <a href="/ubuntu/ubuntu-make/releases/tag/LATESTRELEASE">
+      <span class="tag-name">LATESTRELEASE</span>
     </a>
     <span class="hidden-text-expander inline"><button type="button" class="ellipsis-expander js-details-target" aria-label="Toggle commit message">&hellip;</button></span>
   </h3>
 
   <div class="commit-desc">
-    <pre class="text-small text-gray">releasing package ubuntu-make 16.11.1
+    <pre class="text-small text-gray">releasing package ubuntu-make LATESTRELEASE
 </pre>
   </div>
 
@@ -514,14 +514,14 @@
     </li>
 
     <li>
-      <a href="/ubuntu/ubuntu-make/archive/16.11.1.zip" rel="nofollow">
+      <a href="/ubuntu/ubuntu-make/archive/LATESTRELEASE.zip" rel="nofollow">
         <svg aria-hidden="true" class="octicon octicon-file-zip" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M8.5 1H1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V4.5L8.5 1zM11 14H1V2h3v1h1V2h3l3 3v9zM5 4V3h1v1H5zM4 4h1v1H4V4zm1 2V5h1v1H5zM4 6h1v1H4V6zm1 2V7h1v1H5zM4 9.28A2 2 0 0 0 3 11v1h4v-1a2 2 0 0 0-2-2V8H4v1.28zM6 10v1H4v-1h2z"/></svg>
         zip
       </a>
     </li>
 
     <li>
-      <a href="/ubuntu/ubuntu-make/archive/16.11.1.tar.gz" rel="nofollow">
+      <a href="/ubuntu/ubuntu-make/archive/LATESTRELEASE.tar.gz" rel="nofollow">
         <svg aria-hidden="true" class="octicon octicon-file-zip" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M8.5 1H1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V4.5L8.5 1zM11 14H1V2h3v1h1V2h3l3 3v9zM5 4V3h1v1H5zM4 4h1v1H4V4zm1 2V5h1v1H5zM4 6h1v1H4V6zm1 2V7h1v1H5zM4 9.28A2 2 0 0 0 3 11v1h4v-1a2 2 0 0 0-2-2V8H4v1.28zM6 10v1H4v-1h2z"/></svg>
         tar.gz
       </a>

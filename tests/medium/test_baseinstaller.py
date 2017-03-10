@@ -43,48 +43,48 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "base", "base-framework")
 
-    def test_install_no_download_link_update(self):
+    def test_install_wrong_download_link_update(self):
+        """Install wrong download link, update available"""
+        with swap_file_and_restore(self.download_page_file_path) as content:
+            with open(self.download_page_file_path, "w") as newfile:
+                newfile.write(content.replace('id="linux-bundle', ""))
+            # umake download page can't match any version (LATESTRELEASE)
+            self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn("To get the latest version you can read the instructions at "
+                                    "https://github.com/ubuntu/ubuntu-make\r\n\r\n",
+                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
+
+            # we have nothing installed
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_install_wrong_download_link_no_update(self):
+        """Install wrong download link, no update available"""
         with swap_file_and_restore(self.download_page_file_path) as content:
             with open(self.download_page_file_path, "w") as newfile:
                 newfile.write(content.replace('id="linux-bundle', ""))
             with swap_file_and_restore(self.umake_download_page) as content:
                 with open(self.umake_download_page, "w") as newfile:
-                    newfile.write(content.replace('16.11.1', "LATESTVERSION"))
+                    version = subprocess.check_output(self.command_as_list([UMAKE, '--version']),
+                                                      stderr=subprocess.STDOUT).decode("utf-8")
+                    newfile.write(content.replace('LATESTRELEASE', version))
                 self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
                 self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
                 self.child.sendline("")
-                self.expect_and_no_warn("To get the latest version you can read the instructions at"
-                                        "https://github.com/ubuntu/ubuntu-make\r\n\r\n",
-                                        timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
-                self.wait_and_close(exit_status=1)
-
-                # we have nothing installed
-                self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-
-    def test_install_no_download_link_no_update(self):
-        with swap_file_and_restore(self.download_page_file_path) as content:
-            with open(self.download_page_file_path, "w") as newfile:
-                newfile.write(content.replace('id="linux-bundle', ""))
-            with swap_file_and_restore(self.umake_download_page) as content:
-                with open(self.umake_download_page, "w") as newfile:
-                    version = pexpect.run(self.command('{} --version'.format(UMAKE)))
-                    newfile.write(content.replace('16.11.1', version.decode().rstrip()))
-                self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
-                self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
-                self.child.sendline("")
-                self.expect_and_no_warn(pexpect.EOF,
-                                        timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+                self.wait_and_close(exit_status=1, expect_warn=True)
+                self.assertIn("Download page changed its syntax or is not parsable (url missing)",
+                              self.child.before)
                 self.assertNotIn("To get the latest version you can read the instructions at"
                                  "https://github.com/ubuntu/ubuntu-make\r\n\r\n",
                                  self.child.before)
-                self.assertIn("\r\nERROR: Download page changed its syntax or is not parsable (url missing)\r\n",
-                              self.child.before)
-                self.wait_and_close(exit_status=1)
 
                 # we have nothing installed
                 self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
-    def test_install_no_download_link_404_update(self):
+    def test_install_wrong_download_link_404_update(self):
+        """Install wrong download link, github giving 404"""
         with swap_file_and_restore(self.download_page_file_path) as content:
             with open(self.download_page_file_path, "w") as newfile:
                 newfile.write(content.replace('id="linux-bundle', ""))
@@ -94,15 +94,15 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
                 self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
                 self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
                 self.child.sendline("")
-                self.expect_and_no_warn(pexpect.EOF,
-                                        timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+                self.wait_and_close(exit_status=1, expect_warn=True)
                 self.assertIn("\r\nERROR: 404 Client Error:", self.child.before)
-                self.wait_and_close(exit_status=1)
 
                 # we have nothing installed
                 self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
-    def test_install_no_download_link_github_missing(self):
+    def test_install_wrong_download_link_github_missing(self):
+        # TODO: cut all network connection on the container to enable that test
+        return
         with swap_file_and_restore(self.download_page_file_path) as content:
             with open(self.download_page_file_path, "w") as newfile:
                 newfile.write(content.replace('id="linux-bundle', ""))
