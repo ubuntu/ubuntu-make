@@ -1,4 +1,4 @@
-ubuntu-make (16.11.1ubuntu1) UNRELEASED; urgency=medium
+ubuntu-make (17.03) zesty; urgency=medium
 
   [ Galileo Sartor ]
   * Fix android sdk and android studio
@@ -18,7 +18,7 @@ ubuntu-make (16.11.1ubuntu1) UNRELEASED; urgency=medium
   * Some small tests refactoring
   * Support running VCS umake version without being in root directory
 
- -- Didier Roche <didrocks@ubuntu.com>  Fri, 10 Mar 2017 14:44:41 +0100
+ -- Didier Roche <didrocks@ubuntu.com>  Fri, 10 Mar 2017 15:43:42 +0100
 
 ubuntu-make (16.11.1) zesty; urgency=medium
 
