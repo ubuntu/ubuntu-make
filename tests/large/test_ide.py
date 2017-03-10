@@ -528,6 +528,8 @@ class AtomTest(LargeFrameworkTests):
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
+        # Test if the apm symlink is added correctly:
+        self.assertTrue(self.is_in_path(os.path.join(self.install_base_path, 'bin', 'apm')))
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
