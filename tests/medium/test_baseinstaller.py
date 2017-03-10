@@ -47,19 +47,17 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
         with swap_file_and_restore(self.download_page_file_path) as content:
             with open(self.download_page_file_path, "w") as newfile:
                 newfile.write(content.replace('id="linux-bundle', ""))
-            with swap_file_and_restore(self.umake_download_page) as content:
-                with open(self.umake_download_page, "w") as newfile:
-                    newfile.write(content.replace('16.11.1', "LATESTVERSION"))
-                self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
-                self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
-                self.child.sendline("")
-                self.expect_and_no_warn("To get the latest version you can read the instructions at "
-                                        "https://github.com/ubuntu/ubuntu-make\r\n\r\n",
-                                        timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
-                self.wait_and_close(exit_status=1)
+            # umake download page can't match any version (LATESTRELEASE)
+            self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
+            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.child.sendline("")
+            self.expect_and_no_warn("To get the latest version you can read the instructions at "
+                                    "https://github.com/ubuntu/ubuntu-make\r\n\r\n",
+                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
+            self.wait_and_close(exit_status=1)
 
-                # we have nothing installed
-                self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            # we have nothing installed
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
     def test_install_no_download_link_no_update(self):
         with swap_file_and_restore(self.download_page_file_path) as content:
@@ -67,8 +65,9 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
                 newfile.write(content.replace('id="linux-bundle', ""))
             with swap_file_and_restore(self.umake_download_page) as content:
                 with open(self.umake_download_page, "w") as newfile:
-                    version = pexpect.run(self.command('{} --version'.format(UMAKE)))
-                    newfile.write(content.replace('16.11.1', version.decode().rstrip()))
+                    version = subprocess.check_output(self.command_as_list([UMAKE, '--version']),
+                                                      stderr=subprocess.STDOUT).decode("utf-8")
+                    newfile.write(content.replace('LATESTRELEASE', version))
                 self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
                 self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
                 self.child.sendline("")
