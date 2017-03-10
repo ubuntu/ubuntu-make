@@ -1,0 +1,6800 @@
+
+<!DOCTYPE html>
+<html id="XenForo" lang="en-US" dir="LTR" class="Public NoJs LoggedOut NoSidebar  Responsive" xmlns:fb="https://www.facebook.com/2008/fbml">
+<head>
+
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+	
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	
+		<base href="https://forum.unity3d.com/" />
+		<script>
+			var _b = document.getElementsByTagName('base')[0], _bH = "https://forum.unity3d.com/";
+			if (_b && _b.href != _bH) _b.href = _bH;
+		</script>
+	
+
+	<title>Unity on Linux: Release Notes and Known Issues | Unity Community</title>
+	
+	<noscript><style>.JsOnly, .jsOnly { display: none !important; }</style></noscript>
+	<link rel="stylesheet" href="css.php?css=xenforo,form,public&amp;style=4&amp;dir=LTR&amp;d=1488321491" />
+	<link rel="stylesheet" href="css.php?css=bb_code,likes_summary,message,message_user_info,notices,panel_scroller,thread_view&amp;style=4&amp;dir=LTR&amp;d=1488321491" />
+	
+	
+
+	<script>
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	
+	ga('create', 'UA-2854981-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+		<script src="js/jquery/jquery-1.11.0.min.js"></script>	
+		
+	<script src="js/xenforo/xenforo.js?_v=4bea3599"></script>
+	<script src="js/tagess/tagpreview.js?_v=4bea3599"></script>
+
+	
+	<link rel="apple-touch-icon" href="https://forum.unity3d.com/styles/default/xenforo/logo.og.png" />
+	<link rel="alternate" type="application/rss+xml" title="RSS feed for Unity Community" href="forums/-/index.rss" />
+	
+	
+	<link rel="canonical" href="https://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/" />
+	<meta name="description" content="Hi!  This thread will be used to post new builds of Unity for Linux, including release notes and known issues.
+
+THE LATEST AVAILABLE BUILD WILL BE IN..." />	<meta property="og:site_name" content="Unity Community" />
+	<meta property="og:image" content="https://forum.unity3d.com/data/avatars/m/36/36528.jpg?1443442608" />
+	<meta property="og:image" content="https://forum.unity3d.com/styles/default/xenforo/logo.og.png" />
+	<meta property="og:type" content="article" />
+	<meta property="og:url" content="https://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/" />
+	<meta property="og:title" content="Unity on Linux: Release Notes and Known Issues" />
+	<meta property="og:description" content="Hi!  This thread will be used to post new builds of Unity for Linux, including release notes and known issues.
+
+THE LATEST AVAILABLE BUILD WILL BE IN..." />
+	
+	
+	
+
+<!-- Custom head -->
+	<!-- Fav Icon. -->
+	<link rel="shortcut icon" href="https://unity3d.com/profiles/unity3d/themes/unity/images/assets/favicons/favicon.ico">
+	<link rel="icon" type="image/png" href="https://unity3d.com/profiles/unity3d/themes/unity/images/assets/favicons/favicon.png">
+	<!-- JS -->
+
+
+
+	<script type="text/javascript">var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-2854981-1']); _gaq.push(['_setDomainName', 'unity3d.com']); _gaq.push(['_trackPageview']); (function() {   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();</script>
+	<script>(function(){ var cx = '002645370080425984202:i_d7wpkpdzy'; var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true; gcse.src = 'https://cse.google.com/cse.js?cx=' + cx; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s); })();</script>
+  
+  
+  <script type="text/javascript" src="https://unity3d.com/profiles/unity3d/themes/unity/js/modernizr.min.js"></script>
+
+  <script type="text/javascript" src="styles/UnitySkin/core.js"></script>
+  <script type="text/javascript" src="https://unity3d.com/profiles/unity3d/themes/unity/js/mobile-core.js"></script>
+  <!-- Css -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+  <link href="/styles/UnitySkin/style.css" media="screen" rel="stylesheet">
+  
+	<link href="//unity3d.com/profiles/unity3d/themes/unity/css/responsive-core.css" media="screen" rel="stylesheet">
+<!-- /Custom head -->
+
+
+</head>
+
+<body class="node93 node73 node86 SelectQuotable">
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TXKTVW"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TXKTVW');</script>
+<!-- End Google Tag Manager -->
+
+
+
+
+ <div id="headerMover">
+ <div id="master-wrapper">
+  <div id="page" class="page clear">
+   
+
+
+
+<header id="section-header" class="section section-header mb40">
+ <div class="header-wrapper">
+  <div class="top-fill">
+   <div class="wrap">
+    <div class="fill"></div>
+   </div>
+  </div>
+  
+  <nav class="top-nav">
+   <div class="wrap">
+    <div class="shard"></div>
+    <div class="logo"><a href="https://unity3d.com/"></a></div>
+    <ul>
+     <li><a href="https://unity3d.com/unity">Unity</a></li>
+     <li><a href="https://unity3d.com/services">Services</a></li>
+     <li><a href="https://unity3d.com/showcase">Made with Unity</a></li>
+     <li><a href="https://unity3d.com/learn">Learn</a></li>
+     <li><a href="https://unity3d.com/community" class="active-trail">Community</a></li>
+     <li class="menu-366"><a href="https://unity3d.com/asset-store">Asset Store</a></li>
+     <li class="menu-2982 last"><a href="https://unity3d.com/get-unity" title="">Get Unity</a></li>
+    </ul>
+     
+    <div class="user-icon"></div>
+    <div class="search-icon"></div>
+    <div class="search-wrapper">
+     <div class="search-box"><gcse:searchbox-only resultsUrl="https://unity3d.com/search" queryParameterName="gq"></gcse:searchbox-only></div>
+    </div>
+    
+    <div class="user-wrapper">
+      <div class="content clear">
+        
+    <h2>Unity Account</h2>
+    <small class="bb mb15">You need a Unity Account to shop in the Online and Asset Stores, participate in the Unity Community and manage your license portfolio.</small>
+    <a href="login/" class="blue-btn sbtn mr10">Login</a>
+    <a href="https://accounts.unity3d.com/sign-up" class="gray-btn sbtn">Create account</a>
+  
+      </div>
+    </div>
+   </div>
+  </nav>
+
+  <nav class="sub-nav">
+   <div class="wrap">
+    <div class="sub-fill"></div>
+    <ul class="secondary-menu">
+     <li class="menu-383 first"><a class="active-trail" href="https://forum.unity3d.com/" title="">Forums</a></li>
+     <li class="menu-384"><a href="http://answers.unity3d.com/" title="">Answers</a></li>
+     <li class="menu-385"><a href="https://feedback.unity3d.com/" title="">Feedback</a></li>
+     <li class="menu-767"><a href="https://issuetracker.unity3d.com/" title="">Issue Tracker</a></li>
+     <li class="menu-933"><a href="https://blogs.unity3d.com/" title="">Blog</a></li>
+     <li class="menu-764"><a href="https://evangelists.unity3d.com/" title="">Evangelists</a></li>
+     <li class="menu-860 last"><a href="https://unity3d.com/community/user-groups" title="">User Groups</a></li>
+    </ul>
+    
+    <script> var submore = 'More'; </script>
+   </div>
+  </nav>
+ </div>
+</header>
+			
+			<nav class="mobile-menu">
+				<div class="wrap">		
+					<div class="mobile-search">
+						<div class="search-box"><gcse:searchbox-only resultsUrl="https://unity3d.com/search" queryParameterName="gq"></gcse:searchbox-only></div>
+					</div>
+					<div class="menu">
+						<h2>Navigation</h2>
+						<ul>
+							<li><a href="https://unity3d.com/">Home</a></li>
+							<li><a href="https://unity3d.com/unity">Unity</a></li>
+							<li><a href="https://unity3d.com/services">Services</a></li>
+							<li><a href="https://unity3d.com/showcase">Made with Unity</a></li>
+							<li><a href="https://unity3d.com/learn">Learn</a></li>
+							<li><a href="https://unity3d.com/community"class="active-trail">Community</a>
+							  <ul class="secondary-menu">
+							    <li class="menu-383 first"><a class="active-trail" href="https://forum.unity3d.com/" title="">Forums</a></li>
+							    <li class="menu-384"><a href="http://answers.unity3d.com/" title="">Answers</a></li>
+							    <li class="menu-385"><a href="https://feedback.unity3d.com/" title="">Feedback</a></li>
+							    <li class="menu-767"><a href="https://issuetracker.unity3d.com/" title="">Issue Tracker</a></li>
+							    <li class="menu-933"><a href="https://blogs.unity3d.com/" title="">Blog</a></li>
+							    <li class="menu-764"><a href="https://evangelists.unity3d.com/" title="">Evangelists</a></li>
+							    <li class="menu-860 last"><a href="https://unity3d.com/community/user-groups" title="">User Groups</a></li>
+							  </ul>
+							</li>
+							<li><a href="https://www.assetstore.unity3d.com/">Asset Store</a></li>
+							<li><a href="https://unity3d.com/get-unity">Get Unity</a></li>
+						</ul>
+					</div>
+		<div class="user">
+			<div class="content clear">
+			  
+    <h2>Unity Account</h2>
+    <small class="bb mb15">You need a Unity Account to shop in the Online and Asset Stores, participate in the Unity Community and manage your license portfolio.</small>
+    <a href="login/" class="blue-btn sbtn mr10">Login</a>
+    <a href="https://accounts.unity3d.com/sign-up" class="gray-btn sbtn">Create account</a>
+  
+		  </div>
+		</div>
+		<div class="lang clear">
+			<h2>Language</h2>
+			<div class="language-switcher">
+        <ul id="mobile-lang" class="languages">
+          <li><a href="https://unity3d.com/cn/community" data-lang="cn" lang="zh-hans" hreflang="zh-hans">中文</a></li>
+          <li><a href="https://unity3d.com/kr/community" data-lang="kr" lang="ko" hreflang="ko">한국어</a></li>
+          <li><a href="https://unity3d.com/pt/community" data-lang="pt" lang="pt" hreflang="pt">Portugués</a></li>
+          <li><a href="https://unity3d.com/ru/community" data-lang="ru" lang="ru" hreflang="ru">Русский</a></li>
+          <li><a href="https://unity3d.com/es/community" data-lang="es" lang="es" hreflang="es">Español</a></li>
+          <li><a href="https://japan.unity3d.com/" data-lang="jp">日本語</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+   
+   
+
+
+
+
+<section id="section-content" class="thread_view section section-content">
+<header class="m-header clear">
+					<div class="m-logo"><a href="https://unity3d.com/"></a></div>
+					<div class="m-navbtn rel"><div class="lines"></div></div>
+					<div class="m-searchbtn btn"></div>
+					<div class="m-userbtn btn"></div>
+				</header>
+<div class="background"></div>
+<div class="hero clear"></div>
+<section id="content" class="thread_view content-wrapper gw clear mb80">
+	<div class="pageWidth">
+		<div class="pageContent">
+			<!-- main content area -->
+			
+			
+			
+			
+			
+			
+						
+						
+						
+						
+						<div class="breadBoxTop ">
+							
+							
+
+<nav>
+	
+		
+			
+				
+			
+		
+			
+				
+			
+		
+			
+				
+			
+		
+	
+
+	<fieldset class="breadcrumb">
+		<a href="misc/quick-navigation-menu?selected=node-93" class="OverlayTrigger jumpMenuTrigger" data-cacheOverlay="true" title="Open quick navigation"><!--Jump to...--></a>
+			
+		<div class="boardTitle"><strong>Unity Community</strong></div>
+		
+		<span class="crumbs">
+			
+			
+			
+				<span class="crust selectedTabCrumb" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+					<a href="https://forum.unity3d.com/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Forums</span></a>
+					<span class="arrow"><span>&gt;</span></span>
+				</span>
+			
+			
+			
+				
+					<span class="crust" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+						<a href="https://forum.unity3d.com/#welcome-to-the-unity-forums.73" class="crumb" rel="up" itemprop="url"><span itemprop="title">Welcome to the Unity Forums</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+				
+					<span class="crust" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+						<a href="https://forum.unity3d.com/categories/betas-experimental-features.86/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Betas &amp; Experimental Features</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+				
+					<span class="crust" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
+						<a href="https://forum.unity3d.com/forums/linux-editor.93/" class="crumb" rel="up" itemprop="url"><span itemprop="title">Linux Editor</span></a>
+						<span class="arrow"><span>&gt;</span></span>
+					</span>
+				
+			
+		</span>
+	</fieldset>
+</nav>
+						</div>
+						
+						
+						
+
+<div id="navigation" class="pageWidth withSearch">
+	<div class="nav-container">
+		<nav>
+<div class="navTabs">
+	
+	<ul class="publicTabs">
+	
+		<!-- home -->
+		
+		
+		
+		<!-- extra tabs: home -->
+		
+		
+		
+		<!-- forums -->
+		
+			<li class="navTab forums selected">
+			
+				
+				
+				<div class="tabLinks forumsTabLinks">
+					<div class="primaryContent menuHeader">
+						<h3>Forums</h3>
+						<div class="muted">Quick Links</div>
+					</div>
+					<ul class="secondaryContent blockLinksList">
+					
+						
+						<li><a href=""></a></li>
+						<li><a href="search/?type=post">Search Forums</a></li>
+						
+						<li><a href="find-new/posts" rel="nofollow">Recent Posts</a></li>
+					
+					</ul>
+				</div>
+			</li>
+		
+		
+		
+		<!-- extra tabs: middle -->
+		
+		
+		
+		<!-- members -->
+						
+		
+		<!-- extra tabs: end -->
+		
+
+		<!-- responsive popup -->
+		<li class="navTab navigationHiddenTabs Popup PopupControl PopupClosed" style="display:none">	
+						
+			<a rel="Menu" class="navLink NoPopupGadget"><span class="menuIcon">Menu</span></a>
+			
+			<div class="Menu JsOnly blockLinksList primaryContent" id="NavigationHiddenMenu"></div>
+		</li>
+			
+		
+		<!-- no selection -->
+		
+		
+	</ul>
+	
+	
+</div>
+
+<span class="helper"></span>
+			
+		</nav>	
+	</div>
+</div>
+
+						
+					
+						<!--[if lt IE 8]>
+							<p class="importantMessage">You are using an out of date browser. It  may not display this or other websites correctly.<br />You should upgrade or use an <a href="https://www.google.com/chrome/browser/" target="_blank">alternative browser</a>.</p>
+						<![endif]-->
+
+						
+						
+
+
+
+
+
+<div class="PanelScroller Notices" data-vertical="0" data-speed="400" data-interval="4000">
+	<div class="scrollContainer">
+		<div class="PanelContainer">
+			<ol class="Panels">
+				
+					<li class="panel Notice DismissParent notice_33 " data-notice="33">
+	
+	<div class="baseHtml noticeContent"><font color = "#009ac0">We've introduced thread tags, search within a thread and similar thread search.</font> <a href="https://forum.unity3d.com/threads/introducing-thread-tags-search-within-a-thread-and-similar-thread-search.455763/" target="_blank"><font color = "#FF0066">Read more here.</font></a></div>
+	
+	
+		<a href="account/dismiss-notice?notice_id=33"
+			title="Dismiss Notice" class="DismissCtrl Tooltip" data-offsetx="7" data-tipclass="flipped">Dismiss Notice</a>
+</li>
+				
+					<li class="panel Notice DismissParent notice_32 " data-notice="32">
+	
+	<div class="baseHtml noticeContent"><font color = "#009ac0">We've released our first Timeline Experimental Preview, our new tool for creating cutscenes and more! To check it out </font> <a href="http://bit.ly/2lhC9yZ" target="_blank"> <font color = "#FF0066">click here</font></a>.</div>
+	
+	
+		<a href="account/dismiss-notice?notice_id=32"
+			title="Dismiss Notice" class="DismissCtrl Tooltip" data-offsetx="7" data-tipclass="flipped">Dismiss Notice</a>
+</li>
+				
+					<li class="panel Notice DismissParent notice_30 " data-notice="30">
+	
+	<div class="baseHtml noticeContent"><font color = "#009ac0">All Unity Pro perpetual license customers: your special offer to subscribe is ready!</font> <a href="http://bit.ly/2inLnHj" target="_blank"> <font color = "#FF0066">Click here</font></a>.</div>
+	
+	
+		<a href="account/dismiss-notice?notice_id=30"
+			title="Dismiss Notice" class="DismissCtrl Tooltip" data-offsetx="7" data-tipclass="flipped">Dismiss Notice</a>
+</li>
+				
+					<li class="panel Notice DismissParent notice_26 " data-notice="26">
+	
+	<div class="baseHtml noticeContent"><font color = "#009ac0">Unity 5.5 is </font> <a href="http://bit.ly/2hRnEQf"> <font color = "#FF0066">now released</font></a><font color = "#009ac0">.</font></div>
+	
+	
+		<a href="account/dismiss-notice?notice_id=26"
+			title="Dismiss Notice" class="DismissCtrl Tooltip" data-offsetx="7" data-tipclass="flipped">Dismiss Notice</a>
+</li>
+				
+					<li class="panel Notice DismissParent notice_29 " data-notice="29">
+	
+	<div class="baseHtml noticeContent"><font color = "#009ac0">Check out all the fixes for 5.5 in </font> <a href="http://bit.ly/2h6TsQ7"> <font color = "#FF0066">patch releases 1 & 2</font></a><font color = "#009ac0">.</font></div>
+	
+	
+		<a href="account/dismiss-notice?notice_id=29"
+			title="Dismiss Notice" class="DismissCtrl Tooltip" data-offsetx="7" data-tipclass="flipped">Dismiss Notice</a>
+</li>
+				
+					<li class="panel Notice DismissParent notice_28 " data-notice="28">
+	
+	<div class="baseHtml noticeContent"><font color = "#009ac0">Unity 5.6 beta is </font> <a href="http://bit.ly/2hWthtQ"> <font color = "#FF0066">now available</font></a><font color = "#009ac0"> for download.</font></div>
+	
+	
+		<a href="account/dismiss-notice?notice_id=28"
+			title="Dismiss Notice" class="DismissCtrl Tooltip" data-offsetx="7" data-tipclass="flipped">Dismiss Notice</a>
+</li>
+				
+					<li class="panel Notice DismissParent notice_27 " data-notice="27">
+	
+	<div class="baseHtml noticeContent"><font color = "#009ac0">Get prepared for the Tizen Mobile App Incentive Program! Read more about the upcoming program</font> <a href="http://bit.ly/2gAn3CH"> <font color = "#FF0066">here.</font></a><font color = "#009ac0"></font></div>
+	
+	
+		<a href="account/dismiss-notice?notice_id=27"
+			title="Dismiss Notice" class="DismissCtrl Tooltip" data-offsetx="7" data-tipclass="flipped">Dismiss Notice</a>
+</li>
+				
+			</ol>
+		</div>
+	</div>
+	
+	<div class="navContainer">
+		<span class="navControls Nav JsOnly">
+			
+				<a id="n33" href="/threads/unity-on-linux-release-notes-and-known-issues.350256/#n33" class="current">
+					<span class="arrow"><span></span></span>
+					<!--1 -->New forum features</a>
+			
+				<a id="n32" href="/threads/unity-on-linux-release-notes-and-known-issues.350256/#n32">
+					<span class="arrow"><span></span></span>
+					<!--2 -->Timeline Experimental Build</a>
+			
+				<a id="n30" href="/threads/unity-on-linux-release-notes-and-known-issues.350256/#n30">
+					<span class="arrow"><span></span></span>
+					<!--3 -->Perpetual License Customers</a>
+			
+				<a id="n26" href="/threads/unity-on-linux-release-notes-and-known-issues.350256/#n26">
+					<span class="arrow"><span></span></span>
+					<!--4 -->5.5 released</a>
+			
+				<a id="n29" href="/threads/unity-on-linux-release-notes-and-known-issues.350256/#n29">
+					<span class="arrow"><span></span></span>
+					<!--5 -->Patch releases</a>
+			
+				<a id="n28" href="/threads/unity-on-linux-release-notes-and-known-issues.350256/#n28">
+					<span class="arrow"><span></span></span>
+					<!--6 -->5.6 beta</a>
+			
+				<a id="n27" href="/threads/unity-on-linux-release-notes-and-known-issues.350256/#n27">
+					<span class="arrow"><span></span></span>
+					<!--7 -->Tizen Mobile App Incentive Program!</a>
+			
+		</span>
+	</div>
+</div>
+
+
+
+						
+						
+						
+						
+												
+							<!-- h1 title, description -->
+							<div class="titleBar">
+								
+								<h1>Unity on Linux: Release Notes and Known Issues</h1>
+								
+								<p id="pageDescription" class="muted ">
+	Discussion in '<a href="forums/linux-editor.93/">Linux Editor</a>' started by <a href="members/natosha-bard.36528/" class="username" dir="auto">natosha-bard</a>, <a href="threads/unity-on-linux-release-notes-and-known-issues.350256/"><span class="DateTime" title="Aug 26, 2015 at 9:57 AM">Aug 26, 2015</span></a>.
+</p>
+								
+								<div id="threadSearch">
+  									<form action="search/search" method="post" class="formPopup">
+    										<input type="search" name="keywords" value="" class="textCtrl" placeholder="Search this thread..." title="Enter your search and hit enter" id="QuickSearchQuery" />
+    										<input type="hidden" name="type[post][thread_id]" value="350256"  id="search_bar_thread" class="AutoChecker" data-uncheck="#search_bar_title_only, #search_bar_nodes" />
+  										<input type="hidden" name="_xfToken" value="" />
+  									</form>
+								</div>
+								
+							
+							
+							</div>
+						
+						
+						
+						
+						
+						<!-- main template -->
+						
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<dl class="threadAlerts secondaryContent">
+			<dt>Thread Status:</dt>
+			
+				
+	
+				
+					<dd class="lockedAlert">
+						<span class="icon Tooltip" title="Locked" data-tipclass="iconTip"></span>
+							Not open for further replies.</dd>
+				
+			
+		</dl>
+	
+
+
+
+
+<div class="pageNavLinkGroup">
+	<div class="linkGroup SelectionCountContainer">
+		
+		
+	</div>
+
+	
+</div>
+
+
+
+
+
+<form action="inline-mod/post/switch" method="post"
+	class="InlineModForm section"
+	data-cookieName="posts"
+	data-controls="#InlineModControls"
+	data-imodOptions="#ModerationSelect option">
+
+	<ol class="messageList" id="messageList">
+		
+			
+				
+
+
+<li id="post-2267217" class="message  staff " data-author="natosha-bard">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock ">
+<h3 class="userText">
+	<a href="members/natosha-bard.36528/" class="username" dir="auto" itemprop="name">natosha-bard</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/natosha-bard.36528/" class="avatar Av36528m" data-avatarhtml="true"><img src="data/avatars/m/36/36528.jpg?1443442608" width="96" height="96" alt="natosha-bard" /></a>
+			
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Feb 24, 2011</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=36528" class="concealed" rel="nofollow">29</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<span style="font-size: 15px">Hi!  This thread will be used to post new builds of Unity for Linux, including release notes and known issues.</span><br />
+<br />
+<span style="font-size: 15px"><span style="font-size: 18px"><b>THE LATEST AVAILABLE BUILD WILL BE IN THE LAST POST ON THIS THREAD.</b></span></span><br />
+<span style="font-size: 15px"><br />
+Today, we&#039;re releasing the first public build, so this post contains extra information about system requirements and what you can expect.  Future releases will also be posted in this thread.<br />
+</span><br />
+<b><span style="text-decoration: underline"><span style="font-size: 15px">Installer Types and Supported Systems</span></span></b><br />
+<span style="font-size: 15px"><br />
+The Unity Editor for Linux is packaged into two types of installers:</span><br />
+<ul>
+<li><span style="font-size: 15px">A .deb package, which can be installed via the Ubuntu Software Center and is expected to work on installations of Ubuntu 12.04 or newer.</span></li>
+<li><span style="font-size: 15px">A platform-agnostic self-extracting shell script, which is designed for other distributions.</span></li>
+</ul><span style="font-size: 15px">Unity Technologies is providing official support for Ubuntu 12.04 or newer.  People are welcome to use other distributions with the understanding that we do not guarantee support.<br />
+<br />
+Machines also need a modern graphics card with vendor-supported graphics drivers (provided by NVIDIA, AMD, or Intel).<br />
+<br />
+We do not explicitly support running the Linux editor inside a virtual machine due to limitations related to GPU virtualization (although it does usually work).<br />
+</span><br />
+<b><span style="text-decoration: underline"><span style="font-size: 15px">Supported Target Platforms</span></span></b><br />
+<span style="font-size: 15px">The Unity Editor for Linux supports export to the following platforms:</span><br />
+<ul>
+<li><span style="font-size: 15px">Linux / Windows / Mac Standalone</span></li>
+<li><span style="font-size: 15px">Android (additional dependencies needed, see below)</span></li>
+<li><span style="font-size: 15px">WebGL (additional dependencies needed, see below)</span></li>
+<li><span style="font-size: 15px">Tizen (additional dependencies needed, see below)</span></li>
+<li><span style="font-size: 15px">SamsungTV</span></li>
+<li><span style="font-size: 15px">Legacy WebPlayer</span></li>
+<li><span style="font-size: 15px">iOS project deployment (experimental in 5.5 builds)</span></li>
+</ul><b><span style="text-decoration: underline"><span style="font-size: 15px">Dependencies and Recommended Packages</span></span></b><br />
+<span style="font-size: 15px">The dependencies for Unity itself are:</span><br />
+<ul>
+<li><span style="font-size: 15px">gconf-service</span></li>
+<li><span style="font-size: 15px">lib32gcc1 (&gt;= 1:4.1.1)</span></li>
+<li><span style="font-size: 15px">lib32stdc++6 (&gt;= 4.6) </span></li>
+<li><span style="font-size: 15px">libasound2 (&gt;= 1.0.23)</span></li>
+<li><span style="font-size: 15px">libc6 (&gt;&gt; 2.15)</span></li>
+<li><span style="font-size: 15px">libc6-i386 (&gt;= 2.15)</span></li>
+<li><span style="font-size: 15px">libcairo2 (&gt;= 1.6.0)</span></li>
+<li><span style="font-size: 15px">libcap2 (&gt;= 2.10)</span></li>
+<li><span style="font-size: 15px">libcups2 (&gt;= 1.4.0)</span></li>
+<li><span style="font-size: 15px">libdbus-1-3 (&gt;= 1.2.14)</span></li>
+<li><span style="font-size: 15px">libexpat1 (&gt;= 1.95.8)</span></li>
+<li><span style="font-size: 15px">libfontconfig1 (&gt;= 2.8.0)</span></li>
+<li><span style="font-size: 15px">libfreetype6 (&gt;= 2.3.9)</span></li>
+<li><span style="font-size: 15px">libgcc1 (&gt;= 1:4.1.1)</span></li>
+<li><span style="font-size: 15px">libgconf-2-4 (&gt;= 2.31.1)</span></li>
+<li><span style="font-size: 15px">libgdk-pixbuf2.0-0 (&gt;= 2.22.0)</span></li>
+<li><span style="font-size: 15px">libgl1-mesa-glx | libgl1</span></li>
+<li><span style="font-size: 15px">libglib2.0-0 (&gt;= 2.31.8)</span></li>
+<li><span style="font-size: 15px">libglu1-mesa | libglu1</span></li>
+<li><span style="font-size: 15px">libgtk2.0-0 (&gt;= 2.24.0)</span></li>
+<li><span style="font-size: 15px">libnspr4 (&gt;= 1.8.0.10)</span></li>
+<li><span style="font-size: 15px">libnss3 (&gt;= 3.14.3)</span></li>
+<li><span style="font-size: 15px">libpango1.0-0 (&gt;= 1.22.0)</span></li>
+<li><span style="font-size: 15px">libstdc++6 (&gt;= 4.6)</span></li>
+<li><span style="font-size: 15px">libx11-6 (&gt;= 2:1.4.99.1)</span></li>
+<li><span style="font-size: 15px">libxcomposite1 (&gt;= 1:0.3-1)</span></li>
+<li><span style="font-size: 15px">libxcursor1 (&gt;&gt; 1.1.2)</span></li>
+<li><span style="font-size: 15px">libxdamage1 (&gt;= 1:1.1)</span></li>
+<li><span style="font-size: 15px">libxext6</span></li>
+<li><span style="font-size: 15px">libxfixes3</span></li>
+<li><span style="font-size: 15px">libxi6 (&gt;= 2:1.2.99.4)</span></li>
+<li><span style="font-size: 15px">libxrandr2 (&gt;= 2:1.2.99.2)</span></li>
+<li><span style="font-size: 15px">libxrender1</span></li>
+<li><span style="font-size: 15px">libxtst6</span></li>
+<li><span style="font-size: 15px">zlib1g (&gt;= 1:1.1.4)</span></li>
+<li><span style="font-size: 15px">debconf (&gt;= 0.5) | debconf-2.0</span></li>
+<li><span style="font-size: 15px">npm</span></li>
+</ul><span style="font-size: 15px">The Ubuntu Software Center will install these automatically if using the .deb package.  If using the self-extracting shell script (or another distribution), you&#039;re on your own.<br />
+<br />
+To export players to certain targets, there are other dependencies:<br />
+<br />
+For WebGL:</span><br />
+<ul>
+<li><span style="font-size: 15px">ffmpeg | libav-tools</span></li>
+<li><span style="font-size: 15px">nodejs</span></li>
+<li><span style="font-size: 15px">java6-runtime</span></li>
+<li><span style="font-size: 15px">gzip</span></li>
+</ul><span style="font-size: 15px">For Android and Tizen:</span><br />
+<ul>
+<li><span style="font-size: 15px">java7-jdk</span></li>
+</ul><span style="font-size: 15px">These recommended packages are included in the Recommends section of the .deb package.<br />
+<br />
+We&#039;re also not currently bundling the dependencies for MonoDevelop (and doing so is a bit complicated), so the easiest way to ensure you can run the bundled MonoDevelop is to first install the upstream MonoDevelop from the Ubuntu Software Center.<br />
+</span><br />
+<b><span style="text-decoration: underline"><span style="font-size: 15px">Reporting Bugs</span></span></b><br />
+<span style="font-size: 15px"><br />
+The &#039;Report a Bug&#039; link currently directs users to this area of the forum, which is dedicated to feedback and issues with the Linux Editor.  This is the primary location for providing feedback and reporting issues with the Linux Editor.<br />
+<br />
+Crashes will launch the bug reporter, and you should use this to submit a bug in this case (the bug reporter attaches stacktrace and other information we need to investigate crashes).  After submitting your bug with the bug reporter, please post on the forum with the case number you receive in your confirmation mail.</span><br />
+<br />
+<span style="font-size: 15px">And finally, here is the information for today&#039;s release:<br />
+</span><br />
+<b><span style="text-decoration: underline"><span style="font-size: 18px">Build #2015082501</span></span></b><br />
+<span style="font-size: 15px"><br />
+Official Installer for 64-bit Ubuntu Linux:<br />
+<a href="http://download.unity3d.com/download_unity/unity-editor-5.1.0f3+2015082501_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/unity-editor-5.1.0f3+2015082501_amd64.deb</a><br />
+<br />
+Unsupported Installer for Other 64-bit Distributions:<br />
+<a href="http://download.unity3d.com/download_unity/unity-editor-installer-5.1.0f3+2015082501.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/unity-editor-installer-5.1.0f3+2015082501.sh</a><br />
+</span><br />
+<b><span style="font-size: 15px"><span style="text-decoration: underline">Release Notes</span></span></b><br />
+<ul>
+<li>Initial release</li>
+</ul><b><span style="text-decoration: underline"><span style="font-size: 15px">Known Issues</span></span></b><br />
+<span style="font-size: 15px"><br />
+The Linux Editor currently has some known issues:</span><br />
+<ul>
+<li><span style="font-size: 15px">The asset store window cannot be docked into the main editor window</span></li>
+<li><span style="font-size: 15px">Drag and drop between separate editor windows (e.g build settings window and main editor window) does not work</span></li>
+<li><span style="font-size: 15px">Drag and drop from outside the application does not work</span></li>
+<li><span style="font-size: 15px">Moving/Dragging undocked editor windows doesn&#039;t feel native yet</span></li>
+<li><span style="font-size: 15px">Context menus at the bottom of the screen have unintuitive initial scroll position</span></li>
+<li><span style="font-size: 15px">&quot;Open in Unity&quot; doesn&#039;t work when browsing the Asset Store from an external browser</span></li>
+<li><span style="font-size: 15px">Idle CPU usage is higher than it should be.</span></li>
+<li><span style="font-size: 15px">Certain systems may experience &quot;Service unavailable&quot; errors when trying to log in. <b>WORKAROUND</b>: Launch Unity with <span style="font-family: 'Courier New'">LD_PRELOAD=/usr/lib/libresolv.so.2 /path/to/Unity</span>  (<i>check the path to your local libresolv</i>) (<i>Kudos to <a href="http://forum.unity3d.com/members/spacepluk.919621" class="internalLink">spacepluk</a> and the other hardcore investigators!</i>)</span></li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+			<div class="editDate">
+			
+				Last edited by a moderator: <span class="DateTime" title="Sep 7, 2016 at 10:16 AM">Sep 7, 2016</span>
+			
+			</div>
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/natosha-bard.36528/" class="username author" dir="auto">natosha-bard</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/" title="Permalink" class="datePermalink"><span class="DateTime" title="Aug 26, 2015 at 9:57 AM">Aug 26, 2015</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2267217/permalink">#1</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2267217">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/nonametr.1180562/" class="username" dir="auto">nonametr</a>, <a href="members/dylantaylor.1266090/" class="username" dir="auto">dylantaylor</a>, <a href="members/unity_sria.1256776/" class="username" dir="auto">unity_sria</a> and <a href="posts/2267217/likes" class="OverlayTrigger">77 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2285230" class="message  staff " data-author="natosha-bard">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock ">
+<h3 class="userText">
+	<a href="members/natosha-bard.36528/" class="username" dir="auto" itemprop="name">natosha-bard</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/natosha-bard.36528/" class="avatar Av36528m" data-avatarhtml="true"><img src="data/avatars/m/36/36528.jpg?1443442608" width="96" height="96" alt="natosha-bard" /></a>
+			
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Feb 24, 2011</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=36528" class="concealed" rel="nofollow">29</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					Hello lovely people!  We have prepared a new build for you.  Links and release notes below.  Happy testing!<br />
+<br />
+<b><span style="font-size: 18px"><span style="text-decoration: underline">Build #2015090301</span></span></b><br />
+<br />
+Official Installer for 64-bit Ubuntu Linux:<br />
+<a href="http://download.unity3d.com/download_unity/unity-editor-5.1.0f3+2015090301_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/unity-editor-5.1.0f3+2015090301_amd64.deb</a><br />
+<br />
+Unsupported Installer for Other 64-bit Distributions:<br />
+<a href="http://download.unity3d.com/download_unity/unity-editor-installer-5.1.0f3+2015090301.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/unity-editor-installer-5.1.0f3+2015090301.sh</a><br />
+<br />
+<b><span style="text-decoration: underline">Release Notes</span></b><br />
+<ul>
+<li>Fix login autofail for some users (depend on system libpq5, don&#039;t ship conflicting libs)</li>
+<li>Allow mouse capture in game view<br />
+</li>
+<li>Fix context menus in Animator window<br />
+</li>
+<li>Allow interaction with game view header UI in play mode<br />
+</li>
+<li>Set default new-project location to XDG_DOCUMENTS_DIR</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/natosha-bard.36528/" class="username author" dir="auto">natosha-bard</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2285230" title="Permalink" class="datePermalink"><span class="DateTime" title="Sep 8, 2015 at 9:25 AM">Sep 8, 2015</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2285230" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2285230/permalink">#2</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2285230">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a>, <a href="members/yucelbrendel.395640/" class="username" dir="auto">YucelBrendel</a> and <a href="posts/2285230/likes" class="OverlayTrigger">56 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2298239" class="message  staff " data-author="natosha-bard">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock ">
+<h3 class="userText">
+	<a href="members/natosha-bard.36528/" class="username" dir="auto" itemprop="name">natosha-bard</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/natosha-bard.36528/" class="avatar Av36528m" data-avatarhtml="true"><img src="data/avatars/m/36/36528.jpg?1443442608" width="96" height="96" alt="natosha-bard" /></a>
+			
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Feb 24, 2011</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=36528" class="concealed" rel="nofollow">29</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					Hi again lovely people! We have prepared another build for you. Happy testing!<br />
+<br />
+<b>Build #2015091501</b><br />
+<br />
+Official Installer for 64-bit Ubuntu Linux:<br />
+<a href="http://download.unity3d.com/download_unity/unity-editor-5.1.0f3+2015091501_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/unity-editor-5.1.0f3+2015091601_amd64.deb</a><br />
+<br />
+Unsupported Installer for Other 64-bit Distributions:<br />
+<a href="http://download.unity3d.com/download_unity/unity-editor-installer-5.1.0f3+2015091501.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/unity-editor-installer-5.1.0f3+2015091501.sh</a><br />
+<br />
+<b><span style="text-decoration: underline">Release Notes</span></b><br />
+<ul>
+<li>Make reported mouse offsets consistent everywhere</li>
+<li>Fix direction of mouse scroll delta in play mode</li>
+<li>Report mouse button events when cursor is locked in play mode</li>
+<li>Support &quot;Open in Unity&quot; for Asset Store packages (opens new Unity instance for now)</li>
+<li>Fix Asset Store for comma-decimal locales</li>
+<li>Make popups less prone to inadvertently close</li>
+<li>Fix shift+key in game view</li>
+<li>Don&#039;t crash on first run if XDG user directories aren&#039;t configured</li>
+<li>Fix interaction with Sprite Editor slice dropdown</li>
+<li>Fix intermittent crashes when opening/closing child windows</li>
+<li>Don&#039;t double-report IMGUI key events in play mode</li>
+<li>Fix initialization of fixed-size child windows (color picker)</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/natosha-bard.36528/" class="username author" dir="auto">natosha-bard</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2298239" title="Permalink" class="datePermalink"><span class="DateTime" title="Sep 16, 2015 at 5:09 PM">Sep 16, 2015</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2298239" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2298239/permalink">#3</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2298239">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a>, <a href="members/yucelbrendel.395640/" class="username" dir="auto">YucelBrendel</a> and <a href="posts/2298239/likes" class="OverlayTrigger">70 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2389564" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					It&#039;s been a while, but hopefully it will have been worth it.<br />
+<br />
+<b>Build #2015101801</b><br />
+<br />
+Official Installer for 64-bit Ubuntu Linux:<br />
+<a href="http://files.unity3d.com/levi/unity-editor-5.2.2f1+20151018_amd64.deb" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.2.2f1+20151018_amd64.deb</a><br />
+<br />
+Unsupported Installer for Other 64-bit Distributions:<br />
+<a href="http://files.unity3d.com/levi/unity-editor-installer-5.2.2f1+20151018.sh" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-installer-5.2.2f1+20151018.sh</a><br />
+<br />
+<span style="text-decoration: underline"><b>Release Notes</b></span><br />
+<ul>
+<li>Update to Unity 5.2.2f1</li>
+<li>Avoid crash when creating input context fails at startup</li>
+<li>Make WebGL build output directory layout match the one generated on other platforms</li>
+<li>Don&#039;t leak file handles when communicating with external processes (e.g. audio importer)</li>
+<li>Known issue: There&#039;s a small regression in cursor offset handling in the game view</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+			<div class="editDate">
+			
+				Last edited: <span class="DateTime" title="Nov 20, 2015 at 3:07 PM">Nov 20, 2015</span>
+			
+			</div>
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2389564" title="Permalink" class="datePermalink"><span class="DateTime" title="Nov 20, 2015 at 11:02 AM">Nov 20, 2015</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2389564" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2389564/permalink">#4</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2389564">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a>, <a href="members/yucelbrendel.395640/" class="username" dir="auto">YucelBrendel</a> and <a href="posts/2389564/likes" class="OverlayTrigger">76 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2429209" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					Some known issues in this one, but we wanted to give everybody a chance to play with it over the winter holidays. Enjoy, and we&#039;ll see you next year!<br />
+<br />
+<b>Build #2015121801</b><br />
+<br />
+Official Installer for 64-bit Ubuntu Linux:<br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.3.0f4+20151218_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.3.0f4+20151218_amd64.deb</a> (sha1sum 282ca0f7bd25dc2d3f0a1f9d493ecffe9bb9fb36)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.0f4+20151218.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.0f4+20151218.sh</a> (sha1sum f38ea2b578ac37eacc97440966a42bc17d7b6f81)<br />
+<br />
+Torrent (Includes both installers):<br />
+<a href="http://files.unity3d.com/levi/unity-editor-5.3.0f4+20151218.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.3.0f4+20151218.torrent</a><br />
+<br />
+<span style="text-decoration: underline"><b>Release Notes</b></span><br />
+<ul>
+<li>Update to Unity 5.3.0f4</li>
+<li>Update to MonoDevelop 5.9</li>
+<li>All fixes reported for build #2015101801</li>
+<li>Keyboard input for web views should behave similarly to Unity 5.1 builds<br />
+</li>
+<li>Known issue: Cursor offset in game view is still present</li>
+<li>Known issue: MonoDevelop&#039;s application icon is missing</li>
+<li>Editor still uses legacy OpenGL rendering backend on Linux</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+			<div class="editDate">
+			
+				Last edited: <span class="DateTime" title="Dec 18, 2015 at 2:14 PM">Dec 18, 2015</span>
+			
+			</div>
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2429209" title="Permalink" class="datePermalink"><span class="DateTime" title="Dec 18, 2015 at 1:49 PM">Dec 18, 2015</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2429209" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2429209/permalink">#5</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2429209">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a>, <a href="members/yucelbrendel.395640/" class="username" dir="auto">YucelBrendel</a> and <a href="posts/2429209/likes" class="OverlayTrigger">58 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2453359" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016010601</b><br />
+<br />
+Official Installer for 64-bit Ubuntu Linux:<br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.3.1f1+20160106_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.3.1f1+20160106_amd64.deb</a><br />
+(sha1sum<br />
+6636dbd9350a0589fd23bd7643fba99c8fb83685)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.1f1+20160106.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.1f1+20160106.sh</a><br />
+(sha1sum<br />
+4438875861bbddd18a68230c4062e79cd6139c2f)<br />
+<br />
+Torrent (Includes both installers):<br />
+<a href="http://files.unity3d.com/levi/unity-editor-5.3.1f1+20160106.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.3.1f1+20160106.torrent</a><br />
+<br />
+<b>Release Notes</b><br />
+<ul>
+<li>Update to Unity 5.3.1</li>
+<li>Force harder to OpenGL legacy mode for now</li>
+<li>Improve web view integration (focus, docking, resizing)</li>
+<li>Improve cursor position reporting in game view</li>
+<li>Fix cursor position offset when game view is letterboxed</li>
+<li>Fix keypresses (e.g. arrows) in game view changing keyboard focus</li>
+<li>Fix &quot;Add Resolution&quot; popup for game view</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+			<div class="editDate">
+			
+				Last edited: <span class="DateTime" title="Jan 7, 2016 at 12:37 PM">Jan 7, 2016</span>
+			
+			</div>
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2453359" title="Permalink" class="datePermalink"><span class="DateTime" title="Jan 7, 2016 at 10:37 AM">Jan 7, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2453359" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2453359/permalink">#6</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2453359">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a>, <a href="members/dhanpreet.428568/" class="username" dir="auto">dhanpreet</a> and <a href="posts/2453359/likes" class="OverlayTrigger">72 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2502598" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016020801</b><br />
+<br />
+Official Installer for 64-bit Ubuntu Linux:<br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.3.2f1+20160208_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.3.2f1+20160208_amd64.deb</a><br />
+(sha1sum<br />
+6e4f92b024a603a289965fd16b9ba3513f461590)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.2f1+20160208.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.2f1+20160208.sh</a><br />
+(sha1sum<br />
+7bae74f50050e326594133c8115c3094b97eb8d5)<br />
+<br />
+Torrent (Includes both installers):<br />
+<a href="http://files.unity3d.com/levi/unity-editor-5.3.2f1+20160208.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.3.2f1+20160208.torrent</a><br />
+<br />
+<b>Release Notes</b><br />
+<ul>
+<li>Update to Unity 5.3.2</li>
+<li>Fix &quot;gray webview panel&quot; on first start</li>
+<li>Fix VR publishing for supported platforms (e.g. GearVR)</li>
+<li>Fix menu item invocation after play/stop cycle</li>
+<li>Make file extension filtering case insensitive (e.g. unityPackage)</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2502598" title="Permalink" class="datePermalink"><span class="DateTime" title="Feb 9, 2016 at 11:46 AM">Feb 9, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2502598" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2502598/permalink">#7</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2502598">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a> and <a href="posts/2502598/likes" class="OverlayTrigger">47 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2524691" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016022301</b><br />
+<br />
+Official Installer for 64-bit Ubuntu Linux:<br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.3.3f1+20160223_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.3.3f1+20160223_amd64.deb</a><br />
+(sha1sum<br />
+e31b684d14d890f09073d57ca1f07a96a8814265)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.3f1+20160223.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.3f1+20160223.sh</a><br />
+(sha1sum<br />
+3e6129bcc195303773896ddf667db2f9df4c5fd3)<br />
+<br />
+Torrent (Includes both installers):<br />
+<a href="http://files.unity3d.com/levi/unity-editor-5.3.3f1+20160223.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.3.3f1+20160223.torrent</a><br />
+<br />
+<b>Release Notes</b><br />
+<ul>
+<li>Update to Unity 5.3.3</li>
+<li>Fix importing Unity packages from project browser</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2524691" title="Permalink" class="datePermalink"><span class="DateTime" title="Feb 24, 2016 at 10:56 AM">Feb 24, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2524691" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2524691/permalink">#8</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2524691">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a> and <a href="posts/2524691/likes" class="OverlayTrigger">42 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2556301" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016031601</b><br />
+<br />
+This one&#039;s a double feature!<br />
+Yesterday at GDC, we announced public beta access for Unity 5.4, and you won&#039;t be left out!<br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.3.4f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.3.4f1+20160316_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.3.4f1+20160316_amd64.deb</a><br />
+(sha1sum<br />
+e855743ec80241f54db3a349b3a68a93365c20dd)<br />
+<b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b10+20160316_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b10+20160316_amd64.deb</a><br />
+(sha1sum b29f9d8fe9bcbfe5d1759003c10e66aa66e54f8a)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.3.4f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.4f1+20160316.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.4f1+20160316.sh</a><br />
+(sha1sum<br />
+98cc96e82c5d8703c954ebcdffc392c5e790b5cd)<br />
+<b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b10+20160316.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b10+20160316.sh</a><br />
+(sha1sum 8465fee80eff49595a0f172ce77d35398423dd74)<br />
+<br />
+Torrent (Includes both installers):<br />
+<b>5.3.4f1</b>: <a href="http://files.unity3d.com/levi/unity-editor-5.3.4f1+20160316.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.3.4f1+20160316.torrent</a><br />
+<b>5.4.0b10</b>: <a href="http://files.unity3d.com/levi/unity-editor-5.4.0b10+20160316.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.0b10+20160316.torrent</a><br />
+<br />
+<b>Release Notes: 5.3.4f1</b><br />
+<ul>
+<li>Update to Unity 5.3.4 (includes lots of OpenGL Core fixes for linux)</li>
+</ul><br />
+<b>Release Notes: 5.4.0b10</b><br />
+<ul>
+<li>First 5.4 release for Linux: see main release notes at <a href="http://unity3d.com/unity/beta" target="_blank" class="externalLink">http://unity3d.com/unity/beta</a></li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2556301" title="Permalink" class="datePermalink"><span class="DateTime" title="Mar 16, 2016 at 3:57 PM">Mar 16, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2556301" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2556301/permalink">#9</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2556301">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a> and <a href="posts/2556301/likes" class="OverlayTrigger">46 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2559296" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016031701</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.3.4f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.3.4f1+20160317_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.3.4f1+20160317_amd64.deb</a><br />
+(sha1sum<br />
+886b5a776c40df30114223fc7075d8b9e23a1548)<br />
+<b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b10+20160317_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b10+20160317_amd64.deb</a><br />
+(sha1sum 863418e077688a3f4b5e276c75168518a494bc24)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.3.4f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.4f1+20160317.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.4f1+20160317.sh</a><br />
+(sha1sum<br />
+7b1961fdbe52ccf3e3d567bc6b7211165a263238)<br />
+<b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b10+20160317.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b10+20160317.sh</a><br />
+(sha1sum 8c40895ccdb86c18943e0e72d1d8aca57a9a72ac)<br />
+<br />
+Torrent (Includes both installers):<br />
+<b>5.3.4f1</b>: <a href="http://files.unity3d.com/levi/unity-editor-5.3.4f1+20160317.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.3.4f1+20160317.torrent</a><br />
+<b>5.4.0b10</b>: <a href="http://files.unity3d.com/levi/unity-editor-5.4.0b10+20160317.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.0b10+20160317.torrent</a><br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>Really actually fix &quot;gray welcome window&quot; issue</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2559296" title="Permalink" class="datePermalink"><span class="DateTime" title="Mar 18, 2016 at 12:42 PM">Mar 18, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2559296" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2559296/permalink">#10</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2559296">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a>, <a href="members/dhanpreet.428568/" class="username" dir="auto">dhanpreet</a> and <a href="posts/2559296/likes" class="OverlayTrigger">39 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2586478" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016040601</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.4.0b13</b>: <br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b13+20160406_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b13+20160406_amd64.deb</a><br />
+(sha1sum 2751b591ad3624ed044231f8a16a008a6aa2c5eb)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.4.0b13</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b13+20160406.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b13+20160406.sh</a><br />
+(sha1sum 2ef79bb4923fe706327e95b8f83e9a076819af4b)<br />
+<br />
+Torrent (Includes both installers):<br />
+<b>5.4.0b13</b>: <a href="http://files.unity3d.com/levi/unity-editor-5.4.0b13+20160406.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.0b13+20160406.torrent</a><br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.4.0b13</li>
+<li>Fix vertically-flipped mouse position reporting in Linux standalone</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2586478" title="Permalink" class="datePermalink"><span class="DateTime" title="Apr 7, 2016 at 12:00 PM">Apr 7, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2586478" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2586478/permalink">#11</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2586478">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a>, <a href="members/dhanpreet.428568/" class="username" dir="auto">dhanpreet</a> and <a href="posts/2586478/likes" class="OverlayTrigger">33 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2601332" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016041801</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.4.0b15</b>:<br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b15+20160418_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b15+20160418_amd64.deb</a><br />
+(sha1sum db2379f936be8d40bcf30cffd3664880d9678d9c)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.4.0b15</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b15+20160418.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b15+20160418.sh</a><br />
+(sha1sum 1e94a64a42fc4c92fb405b0b4493025c9074f4bc)<br />
+<br />
+Torrent (Includes both installers):<br />
+<b>5.4.0b15</b>: <a href="http://files.unity3d.com/levi/unity-editor-5.4.0b15+20160418.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.0b15+20160418.torrent</a><br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.4.0b15</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2601332" title="Permalink" class="datePermalink"><span class="DateTime" title="Apr 19, 2016 at 7:46 AM">Apr 19, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2601332" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2601332/permalink">#12</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2601332">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a>, <a href="members/dhanpreet.428568/" class="username" dir="auto">dhanpreet</a> and <a href="posts/2601332/likes" class="OverlayTrigger">24 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2620247" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016050301</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.3.4f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.3.4f1+20160503_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.3.4f1+20160503_amd64.deb</a><br />
+(sha1sum 62868041a95a802f4d59626093548dc93872c69f)<br />
+<b>5.4.0b16</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b16+20160503_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b16+20160503_amd64.deb</a><br />
+(sha1sum b8b0e7963947a002e5fbeb9102e2e0be3a0bf756)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.3.4f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.4f1+20160503.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.4f1+20160503.sh</a><br />
+(sha1sum 2a7b0eb5e0d4d7af107fa2f7146c5564230ea778)<br />
+<b>5.4.0b16</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b16+20160503.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b16+20160503.sh</a><br />
+(sha1sum 96dd447d5ba75f30205eac8dd7c93a76b09546c1)<br />
+<br />
+Torrent (Includes both installers):<br />
+<a href="http://files.unity3d.com/levi/unity-editor-5.4.0b16+20160503.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.0b16+20160503.torrent</a><br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>Fix crash when closing auxiliary windows</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+			<div class="editDate">
+			
+				Last edited: <span class="DateTime" title="May 4, 2016 at 3:55 PM">May 4, 2016</span>
+			
+			</div>
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2620247" title="Permalink" class="datePermalink"><span class="DateTime" title="May 3, 2016 at 12:19 PM">May 3, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2620247" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2620247/permalink">#13</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2620247">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a>, <a href="members/dhanpreet.428568/" class="username" dir="auto">dhanpreet</a> and <a href="posts/2620247/likes" class="OverlayTrigger">33 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2648924" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016052501</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.3.5f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.3.5f1+20160525_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.3.5f1+20160525_amd64.deb</a><br />
+(sha1sum db9c7253d12393543099894a9d2ea523ff7a3b60)<br />
+<b>5.4.0b18</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b18+20160524_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b18+20160524_amd64.deb</a><br />
+(sha1sum a52f4d94233facba1624140a9e5733178c5a4222)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.3.5f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.5f1+20160525.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.5f1+20160525.sh</a><br />
+(sha1sum c9c96baf6b2c1351b83ea2984e0dfa4050d6bce2)<br />
+<b>5.4.0b18</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b18+20160524.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b18+20160524.sh</a><br />
+(sha1sum a4207fdcb8d5cea66c21e81778e6345f2633b520)<br />
+<br />
+Torrent (Includes both installers):<br />
+<a href="http://files.unity3d.com/levi/unity-editor-5.3.5f1+20160525.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.3.5f1+20160525.torrent</a><br />
+<a href="http://files.unity3d.com/levi/unity-editor-5.4.0b18+20160525.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.0b18+20160525.torrent</a><br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>Update to 5.3.5f1/5.4.0b18</li>
+<li>5.4: Fix WebGL deployment</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2648924" title="Permalink" class="datePermalink"><span class="DateTime" title="May 25, 2016 at 1:25 PM">May 25, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2648924" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2648924/permalink">#14</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2648924">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a>, <a href="members/ripster.337198/" class="username" dir="auto">Ripster</a> and <a href="posts/2648924/likes" class="OverlayTrigger">29 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2671500" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016060901</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.4.0b21</b>:<br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b21+20160609_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b21+20160609_amd64.deb</a><br />
+(sha1sum 49555ea7bf8075878d2701203ffc343897d0d909)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.4.0b21</b>:<br />
+<a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b21+20160609.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b21+20160609.sh</a><br />
+(sha1sum d09b743694da1418dec36ead6a6fc1bf087e246f)<br />
+<br />
+Torrent (Includes both installers):<br />
+<a href="http://files.unity3d.com/levi/unity-editor-5.4.0b21+20160609.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.0b21+20160609.torrent</a><br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>Update to 5.4.0b21</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2671500" title="Permalink" class="datePermalink"><span class="DateTime" title="Jun 9, 2016 at 6:13 PM">Jun 9, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2671500" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2671500/permalink">#15</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2671500">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a> and <a href="posts/2671500/likes" class="OverlayTrigger">33 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2699432" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016062801</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.4.0b23</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b23+20160628_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0b23+20160628_amd64.deb</a><br />
+(sha1sum 7f92d9a98d1990d768d72d3d882ce96da46f1efa)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.4.0b23</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b23+20160628.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0b23+20160628.sh</a><br />
+(sha1sum ce1ce2a5aba1f8ecaaf8108b3af7d1fa11ef7a0e)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.4.0b23+20160628.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.0b23+20160628.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>Update to 5.4.0b23</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2699432" title="Permalink" class="datePermalink"><span class="DateTime" title="Jun 29, 2016 at 2:21 PM">Jun 29, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2699432" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2699432/permalink">#16</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2699432">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a> and <a href="posts/2699432/likes" class="OverlayTrigger">17 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2711059" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016071501</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.4.0rc1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0f1+20160715_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0f1+20160715_amd64.deb</a><br />
+(sha1sum 9ca9f8ea0d612c2a00b8484943a4eee5c491852a)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.4.0rc1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0f1+20160715.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0f1+20160715.sh</a><br />
+(sha1sum 01ab531abd3d00e7515aba2ca89ba8d81556defa)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.4.0f1+20160715.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.0f1+20160715.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>Update to 5.4.0rc1</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2711059" title="Permalink" class="datePermalink"><span class="DateTime" title="Jul 15, 2016 at 12:16 PM">Jul 15, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2711059" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2711059/permalink">#17</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2711059">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a> and <a href="posts/2711059/likes" class="OverlayTrigger">14 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2717623" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016072001</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.3.6f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.3.6f1+20160720_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.3.6f1+20160720_amd64.deb</a><br />
+(sha1sum ff4fd5d7de8912e447373c188e052f62a4e45c83)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.3.6f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.6f1+20160720.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.3.6f1+20160720.sh</a><br />
+(sha1sum 7de374693c06bbcf2b882269736c3618c8c09679)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.3.6f1+20160720.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.3.6f1+20160720.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>Update to 5.3.6f1</li>
+<li>Fix command-line license activation</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2717623" title="Permalink" class="datePermalink"><span class="DateTime" title="Jul 20, 2016 at 7:12 PM">Jul 20, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2717623" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2717623/permalink">#18</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2717623">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a> and <a href="posts/2717623/likes" class="OverlayTrigger">14 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2727454" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016072701</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.4.0f3</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0f3+20160727_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0f3+20160727_amd64.deb</a><br />
+(sha1sum 8f0540a95445cb50c592493d0b54f17f05389b85)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.4.0f3</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0f3+20160727.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0f3+20160727.sh</a><br />
+(sha1sum 3b294d04358368b74be53a2f028ce8b00cf518f3)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.4.0f3+20160727.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.0f3+20160727.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>Update to <a href="http://blogs.unity3d.com/2016/07/28/unity-5-4-is-out-heres-whats-in-it/" target="_blank" class="externalLink">5.4.0 final</a> (5.4.0f3)<br />
+</li>
+<li>Fix command-line license activation</li>
+<li>Remove 16GB memory usage limit</li>
+<li>Add JDK search heuristic</li>
+<li>Fix validation of context-aware menus (e.g. &quot;Open Scene Additive&quot;)</li>
+<li>Guard against hypershrinking the main editor window</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2727454" title="Permalink" class="datePermalink"><span class="DateTime" title="Jul 28, 2016 at 2:09 PM">Jul 28, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2727454" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2727454/permalink">#19</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2727454">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/albusen.1309286/" class="username" dir="auto">albusen</a>, <a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a> and <a href="posts/2727454/likes" class="OverlayTrigger">22 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2747477" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #2016081001</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.4.0p1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0p1+20160810_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.0p1+20160810_amd64.deb</a><br />
+(sha1sum 1194c7ac7f075bc768b3b999ecc59b29fbc5be8a)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.4.0p1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0p1+20160810.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.0p1+20160810.sh</a><br />
+(sha1sum b32060f4472ec949ad2321d70324b3568b587bb7)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.4.0p1+20160810.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.0p1+20160810.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>Update to 5.4.0p1</li>
+<li>Fix sporadic crashes on displaying context menus</li>
+<li>Fix occasional crashes when destroying views</li>
+<li>Fix OpenVR deploy</li>
+<li>Fix eyedropper tool inside color picker window</li>
+<li>Fix certificate issue with command-line license activation on first run</li>
+<li>Plugin importer: Track native plugins without &quot;lib&quot; prefix for compatibility with player loading logic</li>
+<li>Implement command-line license return</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2747477" title="Permalink" class="datePermalink"><span class="DateTime" title="Aug 10, 2016 at 5:44 PM">Aug 10, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2747477" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2747477/permalink">#20</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2747477">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/albusen.1309286/" class="username" dir="auto">albusen</a>, <a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a> and <a href="posts/2747477/likes" class="OverlayTrigger">20 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2772944" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					This is an important milestone!<br />
+Not only is this the first beta build for Unity 5.5, but the first Linux editor build shipped <b>from a unified codebase</b> with mainline Unity. That may not <i>sound</i> exciting, but it has a lot of exciting implications. It means that, instead of starting with vanilla Unity and piling thousands of custom changes on top, all of our changes now live in the Unity mainline, where they can be constantly punished by our automated test suites across all of our platforms, and where all of our developers across Unity can easily fix, refactor, and extend Linux editor code alongside everything else. (As an example, the window dragging fix mentioned below was contributed by <a href="https://forum.unity3d.com/members/1849/" class="username" data-user="1849, @shawn">@shawn</a> .) This also means that your bug reports will be easier to track and test, and the fixes easier to verify.<br />
+In addition, your bug reports will now go directly to the main issue tracker instead of being redirected here to the forum. You&#039;re still welcome to post here, and we&#039;ll still be reading and responding to your posts - but when you encounter a problem in Unity, <span style="font-family: 'Courier New'">Help-&gt;Report a Bug</span> will now give you the standard reporting tool for describing the problem and uploading your repro case to us.<br />
+<b><br />
+Build #2016083001</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.5.0b1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.5.0b1+20160830_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.5.0b1+20160830_amd64.deb</a><br />
+(sha1sum 955eaa6b5ea0a44ee8ce0aa7d9d3e46c36234e5a)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.5.0b1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.5.0b1+20160830.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.5.0b1+20160830.sh</a><br />
+(sha1sum ca023d29f545012a2e9ad640dba56b3da382e64e)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.5.0b1+20160830.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.5.0b1+20160830.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.5.0b1</li>
+<li>Unity now uses the OpenGL core rendering backend. <b>This means that your development environment must support OpenGL core profile 3.2 or later</b>.</li>
+<li>Experimental iOS project deployment support</li>
+<li>Fix crash on entering play mode in VR-enabled projects<br />
+</li>
+<li>Fix moving undocked editor windows by dragging the titlebar</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2772944" title="Permalink" class="datePermalink"><span class="DateTime" title="Sep 1, 2016 at 10:34 AM">Sep 1, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2772944" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2772944/permalink">#21</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2772944">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hyperhamster_.1200460/" class="username" dir="auto">HyperHamster_</a> and <a href="posts/2772944/likes" class="OverlayTrigger">38 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2778498" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20160906</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.5.0b2</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.5.0b2+20160906_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.5.0b2+20160906_amd64.deb</a><br />
+(sha1sum 46a41de6524b75a47020fbb88e0ab212d547d26d)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.5.0b2</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.5.0b2+20160906.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.5.0b2+20160906.sh</a><br />
+(sha1sum 6451fcd1aaa4e261c1e7c84feb077c4754719958)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.5.0b2+20160906.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.5.0b2+20160906.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.5.0b2</li>
+<li>Enable deployment of Android player using il2cpp scripting backend</li>
+<li>Fix Collab popup (<a href="https://forum.unity3d.com/members/1163664/" class="username" data-user="1163664, @Ben64">@Ben64</a> <img src="styles/default/xenforo/clear.png" class="mceSmilieSprite mceSmilie2" alt=";)" title="Wink    ;)" /> )</li>
+<li>Fix sporadic ETC compression failures<br />
+</li>
+<li>Clear custom cursor when not playing</li>
+<li>Allow label popups to get keyboard focus</li>
+<li>Make RevealInFinder more consistent with other platforms</li>
+<li>Make MoveToTrash freedesktop-compliant</li>
+<li>Improve update/autoresize of progress bars</li>
+<li>Fix maximize/restore of undocked editor windows</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2778498" title="Permalink" class="datePermalink"><span class="DateTime" title="Sep 6, 2016 at 1:57 PM">Sep 6, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2778498" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2778498/permalink">#22</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2778498">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a>, <a href="members/hugomaiavieira.1162139/" class="username" dir="auto">hugomaiavieira</a> and <a href="posts/2778498/likes" class="OverlayTrigger">20 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2787606" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20160913</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.4.1f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.1f1+20160913_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.1f1+20160913_amd64.deb</a><br />
+(sha1sum 6c03a744f670c435b9366fff80ce2a21a148782f)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.4.1f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.1f1+20160913.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.1f1+20160913.sh</a><br />
+(sha1sum dd55e85526e3b219585acee3186f4f23dc6b8f6b)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.4.1f1+20160913.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.1f1+20160913.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.4.1f1</li>
+<li>Experimental iOS project deployment support</li>
+<li>Fix crash on entering play mode in VR-enabled projects</li>
+<li>Fix crash when building to a different platform than the current one</li>
+<li>Fix Collab popup</li>
+<li>Fix moving undocked editor windows by dragging the titlebar</li>
+<li>Fix maximize/restore of undocked editor windows</li>
+<li>Improve update/autoresize of progress bars</li>
+<li>Make MoveToTrash freedesktop-compliant</li>
+<li>Make RevealInFinder more consistent with other platforms</li>
+<li>Allow label popups to get keyboard focus</li>
+<li>Clear custom cursor when not playing</li>
+<li>Implement project view rename and navigation shortcuts</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2787606" title="Permalink" class="datePermalink"><span class="DateTime" title="Sep 14, 2016 at 10:49 AM">Sep 14, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2787606" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2787606/permalink">#23</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2787606">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/assrussia.932981/" class="username" dir="auto">assrussia</a>, <a href="members/dbaranov90.789073/" class="username" dir="auto">dbaranov90</a> and <a href="posts/2787606/likes" class="OverlayTrigger">25 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2803750" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20160927</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.5.0b5</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.5.0b5+20160927_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.5.0b5+20160927_amd64.deb</a><br />
+(sha1sum 259595cf465e83fea1cf11d2809fbc1680498e4d)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.5.0b5</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.5.0b5+20160927.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.5.0b5+20160927.sh</a><br />
+(sha1sum ce645159e8db3e6228b0b4db7533cab982e50674)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.5.0b5+20160927.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.5.0b5+20160927.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.5.0b5</li>
+<li>Fix menu validation crash</li>
+<li>First pass at update frequency throttling</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2803750" title="Permalink" class="datePermalink"><span class="DateTime" title="Sep 28, 2016 at 10:55 AM">Sep 28, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2803750" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2803750/permalink">#24</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2803750">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/wulfara.907646/" class="username" dir="auto">Wulfara</a>, <a href="members/assrussia.932981/" class="username" dir="auto">assrussia</a> and <a href="posts/2803750/likes" class="OverlayTrigger">46 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2854040" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20161111</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.4.2f2</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.2f2+20161111_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.2f2+20161111_amd64.deb</a><br />
+(sha1sum 537d525edea67f5ce32a2870d684cde7786431d9)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.4.2f2</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.2f2+20161111.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.2f2+20161111.sh</a><br />
+(sha1sum 10db15d9d01a64b6ee9f35c6cf1bcd01c388d9a5)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.4.2f2+20161111.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.2f2+20161111.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.4.2f2</li>
+</ul><b><br />
+Known Issues:</b><br />
+<ul>
+<li>There are dependency issues with the .deb package on Ubuntu 16.10 and newer. We&#039;re working on resolving these; meanwhile, you can still use the .sh installer.</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2854040" title="Permalink" class="datePermalink"><span class="DateTime" title="Nov 16, 2016 at 1:50 PM">Nov 16, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2854040" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2854040/permalink">#25</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2854040">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/wulfara.907646/" class="username" dir="auto">Wulfara</a>, <a href="members/asvany.1153042/" class="username" dir="auto">asvany</a> and <a href="posts/2854040/likes" class="OverlayTrigger">25 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2862344" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20161117</b><br />
+(Upload corrupted)
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+			<div class="editDate">
+			
+				Last edited: <span class="DateTime" title="Nov 28, 2016 at 6:40 PM">Nov 28, 2016</span>
+			
+			</div>
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2862344" title="Permalink" class="datePermalink"><span class="DateTime" title="Nov 24, 2016 at 8:53 AM">Nov 24, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2862344" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2862344/permalink">#26</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2862344">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/wulfara.907646/" class="username" dir="auto">Wulfara</a>, <a href="members/asvany.1153042/" class="username" dir="auto">asvany</a>, <a href="members/assrussia.932981/" class="username" dir="auto">assrussia</a> and <a href="posts/2862344/likes" class="OverlayTrigger">12 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2866746" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20161125</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.4.3f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.4.3f1-3+20161125_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.4.3f1-3+20161125_amd64.deb</a><br />
+(sha1sum 7f9415234d0793e4201f64d64debcdfce008a7e0)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.4.3f1</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.3f1-3+20161125.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.4.3f1-3+20161125.sh</a><br />
+(sha1sum 315b820ec094cd99829d4807b45d7a2b26ec5c9f)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.4.3f1-3+20161125.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.4.3f1-3+20161125.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.4.3f1</li>
+</ul><b><br />
+Known Issues:</b><br />
+<ul>
+<li>There are dependency issues with the .deb package on Ubuntu 16.10 and newer. We&#039;re working on resolving these; meanwhile, you can still use the .sh installer.</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2866746" title="Permalink" class="datePermalink"><span class="DateTime" title="Nov 28, 2016 at 6:43 PM">Nov 28, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2866746" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2866746/permalink">#27</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2866746">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/th0nk3d.1136673/" class="username" dir="auto">Th0nk3d</a>, <a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/wulfara.907646/" class="username" dir="auto">Wulfara</a> and <a href="posts/2866746/likes" class="OverlayTrigger">12 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2869256" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20161125 (5.5)</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.5.0f3</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-5.5.0f3+20161125_amd64.deb" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-5.5.0f3+20161125_amd64.deb</a><br />
+(sha1sum 9511acb2d61fb499ce2d2f8df2888b744d217d20)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.5.0f3</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.5.0f3+20161125.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-5.5.0f3+20161125.sh</a><br />
+(sha1sum c283c3ce99f84465a5b5b69297c5ef87f8da2cc4)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.5.0f3+20161125.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.5.0f3+20161125.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li><a href="https://blogs.unity3d.com/2016/11/29/unity-5-5-is-ready-for-you" target="_blank" class="externalLink">5.5.0f3 final!</a></li>
+<li>For those folks experiencing the &quot;menu/dialogs stop rendering&quot; issue, we&#039;ve added a command line argument <span style="font-family: 'Courier New'">-no-throttle-updates</span> that will give you the old behavior, until we get the problem resolved.</li>
+</ul><b><br />
+Known Issues:</b><br />
+<ul>
+<li>There are dependency issues with the .deb package on Ubuntu 16.10 and newer. We&#039;re working on resolving these; meanwhile, you can still use the .sh installer.</li>
+<li>Some users are experiencing that &quot;native&quot; Gtk UI (menus, dialogs) will stop updating after some time using Unity. For people experiencing this, we recommend that you try the <span style="font-family: 'Courier New'">-no-throttle-updates</span> command line option as a temporary workaround.</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2869256" title="Permalink" class="datePermalink"><span class="DateTime" title="Nov 30, 2016 at 5:24 PM">Nov 30, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2869256" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2869256/permalink">#28</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2869256">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/albusen.1309286/" class="username" dir="auto">albusen</a>, <a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/wulfara.907646/" class="username" dir="auto">Wulfara</a> and <a href="posts/2869256/likes" class="OverlayTrigger">28 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2884733" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20161213</b><br />
+<br />
+Official Installers for 64-bit Ubuntu Linux:<br />
+<b>5.6.0b1</b>: <a href="http://beta.unity3d.com/download/2e25f7ab9f17/unity-editor_amd64.deb" target="_blank" class="externalLink">http://beta.unity3d.com/download/2e25f7ab9f17/unity-editor_amd64.deb</a><br />
+(sha1sum faf9e48a9c1eab80105e2b881d91e05fd83e2a00)<br />
+<br />
+Unsupported installer for Other 64-bit Distributions:<br />
+<b>5.6.0b1</b>: <a href="http://beta.unity3d.com/download/2e25f7ab9f17/unity-editor-installer.sh" target="_blank" class="externalLink">http://beta.unity3d.com/download/2e25f7ab9f17/unity-editor-installer.sh</a><br />
+(sha1sum 3e304f8ee7135f6bb628e5c6846ce09ca98db45d)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.6.0b1+20161213.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.6.0b1+20161213.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.6.0 beta 1 (<a href="https://unity3d.com/unity/beta#notes" target="_blank" class="externalLink">full release notes</a>)</li>
+<li>We&#039;re testing a fix for the deb package dependencies on Ubuntu 16.10 (and newer)</li>
+<li>For those folks experiencing the &quot;menu/dialogs stop rendering&quot; issue, we&#039;ve added a command line argument <span style="font-family: 'Courier New'">-no-throttle-updates</span> that will give you the old behavior, until we get the problem resolved.</li>
+</ul><b><br />
+Known Issues:</b><br />
+<ul>
+<li>Some users are experiencing that &quot;native&quot; Gtk UI (menus, dialogs) will stop updating after some time using Unity. For people experiencing this, we recommend that you try the <span style="font-family: 'Courier New'">-no-throttle-updates</span> command line option as a temporary workaround.</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2884733" title="Permalink" class="datePermalink"><span class="DateTime" title="Dec 13, 2016 at 7:10 PM">Dec 13, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2884733" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2884733/permalink">#29</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2884733">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/slegrand.1174927/" class="username" dir="auto">slegrand</a>, <a href="members/paladin_ramos.635639/" class="username" dir="auto">Paladin_Ramos</a>, <a href="members/wulfara.907646/" class="username" dir="auto">Wulfara</a> and <a href="posts/2884733/likes" class="OverlayTrigger">11 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2893515" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20161220</b><br />
+<br />
+Official Installers:<br />
+<b>5.5.0p1</b>: <a href="http://beta.unity3d.com/download/59c25c92588f/public_download.html" target="_blank" class="externalLink">http://beta.unity3d.com/download/59c25c92588f/public_download.html</a><br />
+(deb: 81d159fab61c6ff0c12bf05a184a55d8ade5a3c2)<br />
+(sh: b17124b8cdc7a88e968043d999ac3342cbbbca76)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.5.0p1+20161220.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.5.0p1+20161220.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.5.0p1</li>
+<li>Refix collab windows</li>
+<li>Fixup Linux NDK download path</li>
+<li>Fix splash screen preview</li>
+<li>Allow audio mixer exposed parameters popup to receive keyboard focus<br />
+</li>
+<li>We&#039;re testing a fix for the deb package dependencies on Ubuntu 16.10 (and newer)</li>
+<li>For those folks experiencing the &quot;menu/dialogs stop rendering&quot; issue, we&#039;ve added a command line argument <span style="font-family: 'Courier New'">-no-throttle-updates</span> that will give you the old behavior, until we get the problem resolved.</li>
+</ul><b><br />
+Known Issues:</b><br />
+<ul>
+<li>Some users are experiencing that &quot;native&quot; Gtk UI (menus, dialogs) will stop updating after some time using Unity. For people experiencing this, we recommend that you try the <span style="font-family: 'Courier New'">-no-throttle-updates</span> command line option as a temporary workaround.</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2893515" title="Permalink" class="datePermalink"><span class="DateTime" title="Dec 21, 2016 at 12:06 PM">Dec 21, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2893515" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2893515/permalink">#30</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2893515">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/slegrand.1174927/" class="username" dir="auto">slegrand</a>, <a href="members/gururise.1180973/" class="username" dir="auto">gururise</a>, <a href="members/r3v1v3r.1262404/" class="username" dir="auto">R3v1v3R</a> and <a href="posts/2893515/likes" class="OverlayTrigger">15 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2901310" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20161229</b><br />
+<br />
+Official Installers:<br />
+<b>5.6.0b3</b>: <a href="http://beta.unity3d.com/download/b7d937b6f596/public_download.html" target="_blank" class="externalLink">http://beta.unity3d.com/download/b7d937b6f596/public_download.html</a><br />
+(deb: 5d71b191d9f2099e0f5552c0b11e33003f441503)<br />
+(sh: 5138c028cf3c8e9333e2a223a4ef34dd2b1683ad)<br />
+<br />
+Torrent (Includes both installers):<a href="http://files.unity3d.com/levi/unity-editor-5.6.0b3+20161229.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.6.0b3+20161229.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.6.0b3</li>
+<li>Fix blender import</li>
+<li>Add diff tool selection<br />
+</li>
+<li>We&#039;re testing a fix for the deb package dependencies on Ubuntu 16.10 (and newer)</li>
+<li>For those folks experiencing the &quot;menu/dialogs stop rendering&quot; issue, we&#039;ve added a command line argument <span style="font-family: 'Courier New'">-no-throttle-updates</span> that will give you the old behavior, until we get the problem resolved.</li>
+</ul><b><br />
+Known Issues:</b><br />
+<ul>
+<li>Some users are experiencing that &quot;native&quot; Gtk UI (menus, dialogs) will stop updating after some time using Unity. For people experiencing this, we recommend that you try the <span style="font-family: 'Courier New'">-no-throttle-updates</span> command line option as a temporary workaround.</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2901310" title="Permalink" class="datePermalink"><span class="DateTime" title="Dec 29, 2016 at 4:46 PM">Dec 29, 2016</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2901310" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2901310/permalink">#31</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2901310">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/kiontauakal.1209278/" class="username" dir="auto">KionTauakal</a>, <a href="members/slegrand.1174927/" class="username" dir="auto">slegrand</a>, <a href="members/jonsweden.1045986/" class="username" dir="auto">JonSWEDEN</a> and <a href="posts/2901310/likes" class="OverlayTrigger">26 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2943102" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20170201</b><br />
+<br />
+Official Installers:<br />
+<b>5.5.1f1</b>: <a href="http://beta.unity3d.com/download/f5287bef00ff/public_download.html" target="_blank" class="externalLink">http://beta.unity3d.com/download/f5287bef00ff/public_download.html</a><br />
+(deb: 90fdfb1e024f92d8b9e9a042a7dfb669807a2884)<br />
+(sh: 99bfd5cd2332d105edcafe68b2392897ffa54112)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.5.1f1+20170201.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.5.1f1+20170201.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.5.1f1</li>
+<li>Fix blender import</li>
+<li>Fix Gtk update bug</li>
+<li>Fix launching Unity from PATH</li>
+<li>Fix batch mode startup crash</li>
+<li>Make menus more consistent<br />
+</li>
+<li>We&#039;re testing a fix for the deb package dependencies on Ubuntu 16.10 (and newer)</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2943102" title="Permalink" class="datePermalink"><span class="DateTime" title="Feb 1, 2017 at 12:22 PM">Feb 1, 2017</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2943102" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2943102/permalink">#32</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2943102">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/kiontauakal.1209278/" class="username" dir="auto">KionTauakal</a>, <a href="members/albusen.1309286/" class="username" dir="auto">albusen</a>, <a href="members/sandbox-micha.165792/" class="username" dir="auto">sandbox-micha</a> and <a href="posts/2943102/likes" class="OverlayTrigger">24 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2945880" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20170203</b><br />
+<br />
+Official Installers:<br />
+<b>5.6.0b6</b>: <a href="http://beta.unity3d.com/download/35e1927e3b6b/public_download.html" target="_blank" class="externalLink">http://beta.unity3d.com/download/35e1927e3b6b/public_download.html</a><br />
+(deb: 7c7fd9264ca70cfb41e6378fb62bae999bc0505c)<br />
+(sh: 865bc4236d5040405df03d92f4641bc5b4b35634)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.6.0b6+20170203.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.6.0b6+20170203.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.6.0b6</li>
+<li>Fix audio in editor</li>
+<li>Fix bundled npm<br />
+</li>
+<li>Fix Gtk update bug<br />
+</li>
+<li>Another fix for multiprocess (ETC) texture import</li>
+<li>Fix crash when registering license if <span style="font-family: 'Courier New'">USER</span> isn&#039;t set</li>
+<li>Improve drag &amp; drop</li>
+<li>We&#039;re testing a fix for the deb package dependencies on Ubuntu 16.10 (and newer)</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2945880" title="Permalink" class="datePermalink"><span class="DateTime" title="Feb 3, 2017 at 2:12 PM">Feb 3, 2017</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2945880" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2945880/permalink">#33</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2945880">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/thiagofm33.936803/" class="username" dir="auto">thiagofm33</a>, <a href="members/kiontauakal.1209278/" class="username" dir="auto">KionTauakal</a>, <a href="members/wenderrondonia.796266/" class="username" dir="auto">wenderRondonia</a> and <a href="posts/2945880/likes" class="OverlayTrigger">21 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2959432" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20170214</b><br />
+<br />
+Official Installers:<br />
+<b>5.6.0b8</b>: <a href="http://beta.unity3d.com/download/1da4c632c3f6/public_download.html" target="_blank" class="externalLink">http://beta.unity3d.com/download/1da4c632c3f6/public_download.html</a><br />
+(deb: 0580af159fa868abbfa9bef3b51666b714198014)<br />
+(sh: 11c08c27810b849961732a82ac1f0094175ab2fb)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.6.0b8+20170214.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.6.0b8+20170214.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.6.0b8</li>
+<li>Reduce event &quot;queuing&quot; in play mode</li>
+<li>Fix custom cursor regression</li>
+<li>Fix webcam texture with loopback source</li>
+<li>Yet another fix for multiprocess (ETC) texture import</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2959432" title="Permalink" class="datePermalink"><span class="DateTime" title="Feb 14, 2017 at 3:20 PM">Feb 14, 2017</span></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2959432" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2959432/permalink">#34</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2959432">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/thiagofm33.936803/" class="username" dir="auto">thiagofm33</a>, <a href="members/kiontauakal.1209278/" class="username" dir="auto">KionTauakal</a>, <a href="members/wenderrondonia.796266/" class="username" dir="auto">wenderRondonia</a> and <a href="posts/2959432/likes" class="OverlayTrigger">16 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+			
+				
+
+
+<li id="post-2976171" class="message  staff " data-author="Tak">
+
+	
+
+<div class="messageUserInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">	
+<div class="messageUserBlock online">
+<h3 class="userText">
+	<a href="members/tak.16512/" class="username" dir="auto" itemprop="name">Tak</a>
+</h3>
+	
+		<div class="avatarHolder">
+			<span class="helper"></span>
+			<a href="members/tak.16512/" class="avatar Av16512m" data-avatarhtml="true"><img src="data/avatars/m/16/16512.jpg?1401698237" width="96" height="96" alt="Tak" /></a>
+			<span class="Tooltip onlineMarker" title="Online Now" data-offsetX="-22" data-offsetY="-8"></span>
+			<!-- slot: message_user_info_avatar -->
+		</div>
+	
+
+
+	
+		<h3 class="userText">
+		
+			
+			<em class="userBanner bannerStaff wrapped" itemprop="title"><span class="before"></span><strong>Unity Technologies</strong><span class="after"></span></em>
+			<!-- slot: message_user_info_text -->
+		</h3>
+	
+		
+	
+		<div class="extraUserInfo">
+			
+			
+				
+					<dl class="pairsJustified">
+						<dt>Joined:</dt>
+						<dd>Mar 8, 2010</dd>
+					</dl>
+				
+				
+				
+					<dl class="pairsJustified">
+						<dt>Messages:</dt>
+						<dd><a href="search/member?user_id=16512" class="concealed" rel="nofollow">549</a></dd>
+					</dl>
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+			
+				
+							
+						
+			
+			
+		</div>
+	
+		
+
+
+	<span class="arrow"><span></span></span>
+</div>
+</div>
+
+	<div class="messageInfo primaryContent">
+		
+		
+		
+		
+		
+		<div class="messageContent">		
+			<article>
+				<blockquote class="messageText SelectQuoteContainer ugc baseHtml">
+					
+					<b>Build #20170228</b><br />
+<br />
+Official Installers:<br />
+<b>5.5.2f1</b>: <a href="http://beta.unity3d.com/download/e06241adb51f/public_download.html" target="_blank" class="externalLink">http://beta.unity3d.com/download/e06241adb51f/public_download.html</a><br />
+(deb: 498d92705ba6c1ead72c222c90b915ff2868ead4)<br />
+(sh: ef83d577413153873495e6e355cd230796533c91)<br />
+<br />
+Torrent (Includes both installers): <a href="http://files.unity3d.com/levi/unity-editor-5.5.2f1+20170228.torrent" target="_blank" class="externalLink">http://files.unity3d.com/levi/unity-editor-5.5.2f1+20170228.torrent</a><br />
+<br />
+<br />
+<b>Release Notes:</b><br />
+<ul>
+<li>5.5.2f1</li>
+<li>Improve drag &amp; drop</li>
+<li>Fixes for multiprocess (ETC) texture import</li>
+<li>Fix crash when registering license if <span style="font-family: 'Courier New'">USER</span> isn&#039;t set</li>
+<li>Reduce event &quot;queuing&quot; in play mode</li>
+<li>Fix webcam texture with loopback source</li>
+<li>Fix &quot;Manage License&quot; UI regression</li>
+<li>Fix hang in background lighting computation</li>
+</ul>
+					<div class="messageTextEndMarker">&nbsp;</div>
+				</blockquote>
+			</article>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		
+				
+		<div class="messageMeta ToggleTriggerAnchor">
+			
+			<div class="privateControls">
+				
+				<span class="item muted">
+					<span class="authorEnd"><a href="members/tak.16512/" class="username author" dir="auto">Tak</a>,</span>
+					<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2976171" title="Permalink" class="datePermalink"><abbr class="DateTime" data-time="1488288839" data-diff="79172" data-datestring="Feb 28, 2017" data-timestring="1:33 PM">Feb 28, 2017 at 1:33 PM</abbr></a>
+				</span>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			<div class="publicControls">
+				<a href="threads/unity-on-linux-release-notes-and-known-issues.350256/#post-2976171" title="Permalink" class="item muted postNumber hashPermalink OverlayTrigger" data-href="posts/2976171/permalink">#35</a>
+				
+				
+				
+				
+			</div>
+		</div>
+	
+		
+		<div id="likes-post-2976171">
+	
+	<div class="likesSummary secondaryContent">
+		<span class="LikeText">
+			<a href="members/thiagofm33.936803/" class="username" dir="auto">thiagofm33</a>, <a href="members/mosaic_school.165919/" class="username" dir="auto">mosaic_school</a>, <a href="members/kodenkm.985998/" class="username" dir="auto">kodenkm</a> and <a href="posts/2976171/likes" class="OverlayTrigger">8 others</a> like this.
+		</span>
+	</div>
+</div>
+	</div>
+
+	
+	
+	
+	
+</li>
+			
+		
+		
+	</ol>
+
+	
+
+	<input type="hidden" name="_xfToken" value="" />
+
+</form>
+
+	<div class="pageNavLinkGroup">
+			
+				<div class="linkGroup">
+					
+						<label for="LoginControl"><a href="login/" class="concealed element">(You must log in or sign up to reply here.)</a></label>
+					
+				</div>
+			
+			<div class="linkGroup" style="display: none"><a href="javascript:" class="muted JsOnly DisplayIgnoredContent Tooltip" title="Show hidden content by ">Show Ignored Content</a></div>
+
+			
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<dl class="threadAlerts secondaryContent">
+			<dt>Thread Status:</dt>
+			
+				
+	
+				
+					<dd class="lockedAlert">
+						<span class="icon Tooltip" title="Locked" data-tipclass="iconTip"></span>
+							Not open for further replies.</dd>
+				
+			
+		</dl>
+	
+
+
+
+						
+						
+						
+						
+							<!-- login form, to be moved to the upper drop-down -->
+							
+
+
+
+
+
+
+
+<form action="login/login" method="post" class="xenForm eAuth" id="login" style="display:none">
+
+	
+
+	<div class="ctrlWrapper">
+		<dl class="ctrlUnit">
+			<dt><label for="LoginControl">Your name or email address:</label></dt>
+			<dd><input type="text" name="login" id="LoginControl" class="textCtrl" tabindex="101" /></dd>
+		</dl>
+	
+	
+		<dl class="ctrlUnit">
+			<dt>
+				<label for="ctrl_password">Password:</label>
+			</dt>
+			<dd>
+				<input type="password" name="password" class="textCtrl" id="ctrl_password" tabindex="102" />
+				<div class="lostPasswordLogin"><a href="lost-password/" class="OverlayTrigger OverlayCloser" tabindex="106">Forgot your password?</a></div>
+			</dd>
+		</dl>
+	
+		
+		<dl class="ctrlUnit submitUnit">
+			<dt></dt>
+			<dd>
+				<input type="submit" class="button primary" value="Log in" tabindex="104" data-loginPhrase="Log in" data-signupPhrase="Sign up" />
+				<label for="ctrl_remember" class="rememberPassword"><input type="checkbox" name="remember" value="1" id="ctrl_remember" tabindex="103" /> Stay logged in</label>
+			</dd>
+		</dl>
+	</div>
+
+	<input type="hidden" name="cookie_check" value="1" />
+	<input type="hidden" name="redirect" value="/threads/unity-on-linux-release-notes-and-known-issues.350256/" />
+	<input type="hidden" name="_xfToken" value="" />
+
+</form>
+						
+						
+					
+			
+
+						
+		</div>
+	</div>
+</section>
+
+
+
+</section>
+</div>
+</div>
+</div>
+
+<div class="overlay" style="-webkit-user-select: none; -webkit-user-drag: none; display: none; height: 2840px;"></div>
+<script>
+
+
+jQuery.extend(true, XenForo,
+{
+	visitor: { user_id: 0 },
+	serverTimeInfo:
+	{
+		now: 1488368011,
+		today: 1488326400,
+		todayDow: 3
+	},
+	_lightBoxUniversal: "0",
+	_enableOverlays: "1",
+	_animationSpeedMultiplier: "1",
+	_overlayConfig:
+	{
+		top: "10%",
+		speed: 200,
+		closeSpeed: 100,
+		mask:
+		{
+			color: "rgb(255, 255, 255)",
+			opacity: "0.6",
+			loadSpeed: 200,
+			closeSpeed: 100
+		}
+	},
+	_ignoredUsers: [],
+	_loadedScripts: {"thread_view":true,"message":true,"bb_code":true,"message_user_info":true,"likes_summary":true,"notices":true,"panel_scroller":true,"js\/tagess\/tagpreview.js?_v=4bea3599":true},
+	_cookieConfig: { path: "/", domain: "", prefix: "xf_"},
+	_csrfToken: "",
+	_csrfRefreshUrl: "login/csrf-token-refresh",
+	_jsVersion: "4bea3599",
+	_noRtnProtect: false,
+	_noSocialLogin: false
+});
+jQuery.extend(XenForo.phrases,
+{
+	cancel: "Cancel",
+
+	a_moment_ago:    "A moment ago",
+	one_minute_ago:  "1 minute ago",
+	x_minutes_ago:   "%minutes% minutes ago",
+	today_at_x:      "Today at %time%",
+	yesterday_at_x:  "Yesterday at %time%",
+	day_x_at_time_y: "%day% at %time%",
+
+	day0: "Sunday",
+	day1: "Monday",
+	day2: "Tuesday",
+	day3: "Wednesday",
+	day4: "Thursday",
+	day5: "Friday",
+	day6: "Saturday",
+
+	_months: "January,February,March,April,May,June,July,August,September,October,November,December",
+	_daysShort: "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
+
+	following_error_occurred: "The following error occurred",
+	server_did_not_respond_in_time_try_again: "The server did not respond in time. Please try again.",
+	logging_in: "Logging in",
+	click_image_show_full_size_version: "Click this image to show the full-size version.",
+	show_hidden_content_by_x: "Show hidden content by {names}"
+});
+
+// Facebook Javascript SDK
+XenForo.Facebook.appId = "";
+XenForo.Facebook.forceInit = false;
+
+
+</script>
+
+
+
+
+
+
+</body>
+</html>

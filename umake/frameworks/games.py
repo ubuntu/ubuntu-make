@@ -27,7 +27,7 @@ import logging
 import os
 import re
 import stat
-import json
+import requests
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem
@@ -111,8 +111,8 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
         super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
                          category=category, only_on_archs=['amd64'],
-                         download_page="https://community.unity.com/t5/" +
-                                       "Linux-Editor/Unity-on-Linux-Release-Notes-and-Known-Issues/m-p/2323665",
+                         download_page="https://forum.unity3d.com/" +
+                                       "threads/unity-on-linux-release-notes-and-known-issues.350256",
                          match_last_link=True,
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball='unity-editor*',
@@ -136,16 +136,21 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse Unity3d download links"""
         url, sha1 = (None, None)
-        if ".sh" in line:
+        if "beta.unity" in line:
             in_download = True
-            p = re.search(r'.deb.*.href="(.*.sh)"', line)
+            p = re.search(r'href="(http://beta.unity.*.html)" target', line)
             with suppress(AttributeError):
-                url = p.group(1)
+                url = self.get_url(p.group(1))
         if in_download is True:
-            p = re.search(r'sha1sum (\w+)\)<BR /><BR />Torrent', line)
+            p = re.search(r'sh: (\w+)\)<br />', line)
             with suppress(AttributeError):
                 sha1 = p.group(1)
         return ((url, sha1), in_download)
+
+    def get_url(self, url):
+        tmp = requests.get(url).text
+        result = re.search(r'http.*?.sh', tmp)
+        return result.group(0)
 
     def decompress_and_install(self, fds):
         """Override to strip the unwanted shell header part"""
