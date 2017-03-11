@@ -495,12 +495,11 @@ class TestDownloadCenter(LoggedTestCase):
 
     def test_download_timeout(self):
         """we fail a download with timeout"""
-        filename = "simplefile"
-        url = self.build_server_address(filename + '-timeout')
-        request = DownloadItem(url, None)
-        DownloadCenter([request], self.callback)
-        self.assertIsNone(self.callback.call_args)
 
+        filename = "simplefile-timeout"
+        request = self.build_server_address(filename)
+        DownloadCenter([DownloadItem(request, None)], self.callback)
+        self.assertIsNone(self.callback.call_args)
 
 class TestDownloadCenterSecure(LoggedTestCase):
     """This will test the download center in secure mode by sending one or more download requests"""
