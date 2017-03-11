@@ -118,6 +118,21 @@ class EclipseCPPIDEInContainer(ContainerTests, test_ide.EclipseCPPIDETests):
                                                         "eclipse-cpp-linux-gtk-x86_64.tar.gz.sha512")
 
 
+class EclipseCheIDEInContainer(ContainerTests, test_ide.EclipseCheIDETests):
+    """This will test the eclipse IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["www.eclipse.org"]}
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-che")
+
+
 class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     """This will test the Idea IDE integration inside a container"""
 

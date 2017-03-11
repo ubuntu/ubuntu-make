@@ -62,16 +62,14 @@ class EclipseJavaIDETests(LargeFrameworkTests):
         self.assert_icon_exists()
         self.assert_exec_link_exists()
 
+        os.environ["JAVA_HOME"] = "/usr"
+
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
 
         # on 64 bits, there is a java subprocess, we kill that one with SIGKILL (eclipse isn't reliable on SIGTERM)
-        if self.arch_option == "x86_64":
-            self.check_and_kill_process(["java", self.arch_option, self.installed_path],
-                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
-        else:
-            self.check_and_kill_process([self.exec_path],
+        self.check_and_kill_process(["java", self.arch_option, self.installed_path],
                                         wait_before=self.TIMEOUT_START, send_sigkill=True)
         proc.wait(self.TIMEOUT_STOP)
 
@@ -113,6 +111,45 @@ class EclipseCPPIDETests(EclipseJavaIDETests):
         self.desktop_filename = "eclipse-cpp.desktop"
         self.command_args = '{} ide eclipse-cpp'.format(UMAKE)
         self.name = "Eclipse CPP"
+
+
+class EclipseCheIDETests(EclipseJavaIDETests):
+    """The Eclipse distribution from the IDE collection."""
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-che")
+        self.desktop_filename = "eclipse-che.desktop"
+        self.command_args = '{} ide eclipse-che'.format(UMAKE)
+        self.name = "Eclipse CHE"
+
+    def test_default_eclipse_ide_install(self):
+        """Install eclipse from scratch test case"""
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+        self.assert_exec_link_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process([self.exec_path],
+                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+        self.child.sendline()
+        self.wait_and_close()
 
 
 class IdeaIDETests(LargeFrameworkTests):
