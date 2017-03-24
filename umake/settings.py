@@ -36,7 +36,11 @@ def get_version():
     '''Get version depending if on dev or released version'''
     version = open(os.path.join(os.path.dirname(__file__), 'version'), 'r', encoding='utf-8').read().strip()
     if not from_dev:
-        return version
+        snap_appendix = ''
+        snap_rev = os.getenv('SNAP_REVISION')
+        if snap_rev:
+            snap_appendix = '+snap{}'.format(snap_rev)
+        return version + snap_appendix
     import subprocess
     try:
         # use git describe to get a revision ref if running from a branch. Will append dirty if local changes
