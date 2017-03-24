@@ -1,15 +1,15 @@
-name: umake
-version: '17.03+git'
-summary: setup your development environment on ubuntu easily
+name: ubuntu-make
+version: 'master'
+summary: Setup your development environment on ubuntu easily
 description: |
   Ubuntu Make provides a set of functionality to setup,
   maintain and personalize your developer environment easily. It will handle
   all dependencies, even those which aren't in Ubuntu itself, and install
   latest versions of the desired and recommended tools.
   .
-  For now, you can configure a complete android studio environment.
-
-
+  This is the latest master from ubuntu make, freshly built from
+  https://github.com/ubuntu/ubuntu-make. It may contain even unreleased
+  features!
 grade: stable
 confinement: classic
 
@@ -19,7 +19,7 @@ apps:
 
 parts:
   umake:
-    source: ..
+    source: .
     plugin: python
     build-packages:
       - debhelper
