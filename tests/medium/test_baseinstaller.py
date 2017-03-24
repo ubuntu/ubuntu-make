@@ -52,8 +52,7 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
             self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
             self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
-            self.expect_and_no_warn("To get the latest version you can read the instructions at "
-                                    "https://github.com/ubuntu/ubuntu-make\r\n\r\n",
+            self.expect_and_no_warn("To get the latest version",
                                     timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
             self.wait_and_close(exit_status=1)
 
@@ -76,9 +75,7 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
                 self.wait_and_close(exit_status=1, expect_warn=True)
                 self.assertIn("Download page changed its syntax or is not parsable (url missing)",
                               self.child.before)
-                self.assertNotIn("To get the latest version you can read the instructions at"
-                                 "https://github.com/ubuntu/ubuntu-make\r\n\r\n",
-                                 self.child.before)
+                self.assertNotIn("To get the latest version", self.child.before)
 
                 # we have nothing installed
                 self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
