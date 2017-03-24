@@ -15,12 +15,14 @@ confinement: classic
 
 apps:
   umake:
-    command: bin/umake
+    command: bin/umake-wrapper
 
 parts:
   umake:
     source: .
     plugin: python
+    organize:
+      lib/python3/dist-packages/umake: lib/python3.5/site-packages/umake
     build-packages:
       - debhelper
       - dh-python
@@ -54,3 +56,8 @@ parts:
       - python3-yaml
       - python3-requests
       - python3-xdg
+  umake-wrapper:
+    source: snap/
+    plugin: dump
+    organize:
+      umake-wrapper: bin/umake-wrapper
