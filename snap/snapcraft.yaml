@@ -24,8 +24,6 @@ parts:
     organize:
       lib/python3/dist-packages/umake: lib/python3.5/site-packages/umake
     build-packages:
-      - debhelper
-      - dh-python
       - gettext
       - python3
       - python3-apt
@@ -56,6 +54,7 @@ parts:
       - python3-yaml
       - python3-requests
       - python3-xdg
+      - libstdc++6
   umake-wrapper:
     source: snap/
     plugin: dump
