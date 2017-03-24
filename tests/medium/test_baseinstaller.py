@@ -66,9 +66,10 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
                 newfile.write(content.replace('id="linux-bundle', ""))
             with swap_file_and_restore(self.umake_download_page) as content:
                 with open(self.umake_download_page, "w") as newfile:
+                    # Note: our version will have +unknown, testing the git/snap case
                     version = subprocess.check_output(self.command_as_list([UMAKE, '--version']),
                                                       stderr=subprocess.STDOUT).decode("utf-8")
-                    newfile.write(content.replace('LATESTRELEASE', version))
+                    newfile.write(content.replace('LATESTRELEASE', version.strip().split("+")[0]))
                 self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
                 self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
                 self.child.sendline("")
