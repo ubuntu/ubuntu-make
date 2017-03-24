@@ -21,3 +21,9 @@ nosetests*
 
 # Idea content
 .idea/
+
+# Snap
+parts/
+stage/
+prime/
+*.snap
