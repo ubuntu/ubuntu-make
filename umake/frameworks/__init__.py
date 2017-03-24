@@ -243,10 +243,10 @@ class BaseFramework(metaclass=abc.ABCMeta):
 
         if self.need_root_access and os.geteuid() != 0:
             logger.debug("Requesting root access")
-            cmd = ["sudo", "-E", "env", "PATH={}".format(os.getenv("PATH")),
-                   "LD_LIBRARY_PATH={}".format(os.getenv("LD_LIBRARY_PATH")),
-                   "PYTHONUSERBASE={}".format(os.getenv("PYTHONUSERBASE")),
-                   "PYTHONHOME={}".format(os.getenv("PYTHONHOME"))]
+            cmd = ["sudo", "-E", "env", "PATH={}".format(os.getenv("PATH"))]
+            for var in ["PATH", "LD_LIBRARY_PATH", "PYTHONUSERBASE", "PYTHONHOME"]:
+                if os.getenv(var):
+                    cmd.append("{}={}".format(var, os.getenv(var)))
             cmd.extend(sys.argv)
             MainLoop().quit(subprocess.call(cmd))
 
