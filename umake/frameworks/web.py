@@ -29,10 +29,11 @@ import platform
 import re
 import umake.frameworks.baseinstaller
 from umake.frameworks.ide import VisualStudioCode
-from umake.interactions import Choice, TextWithChoices
+from umake.interactions import Choice, TextWithChoices, DisplayMessage
 from umake.network.download_center import DownloadItem
 from umake.ui import UI
-from umake.tools import create_launcher, get_application_desktop_file, MainLoop
+from umake.tools import create_launcher, get_application_desktop_file, MainLoop, ChecksumType,\
+    get_current_arch, add_env_to_user
 
 logger = logging.getLogger(__name__)
 
@@ -133,6 +134,42 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
         if args.lang:
             self.arg_lang = args.lang
         super().run_for(args)
+
+
+class PhantomJS(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="PhantomJS", description=_("headless WebKit scriptable with a JavaScript API"),
+                         is_category_default=False,
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page="http://phantomjs.org/download.html",
+                         dir_to_decompress_in_tarball="phantomjs*",
+                         required_files_path=[os.path.join("bin", "phantomjs")])
+
+    arch_trans = {
+        "amd64": "x86_64",
+        "i386": "i686"
+    }
+
+    def parse_download_link(self, line, in_download):
+        """Parse PhantomJS download link, expect to find a sha and a url"""
+        url = None
+        string = 'linux-{}.tar.bz2">'.format(self.arch_trans[get_current_arch()])
+        if string in line:
+            in_download = True
+        if in_download is True:
+            p = re.search(r'href="(.*)">', line)
+            with suppress(AttributeError):
+                url = p.group(1)
+
+        if url is None:
+            return (None, in_download)
+        return ((url, None), in_download)
+
+    def post_install(self):
+        """Add phantomjs necessary env variables"""
+        add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
+        UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
 
 class VisualStudioCode(VisualStudioCode):

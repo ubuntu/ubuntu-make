@@ -47,6 +47,26 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
         self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
+class PhantomJSInContainer(ContainerTests, test_web.PhantomJSTests):
+    """This will test the PhantomJS integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {80: ["phantomjs.org"], 443: ['bitbucket.org']}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "web", "phantomjs")
+
+    def test_install_with_changed_download_page(self):
+        """Installing firefox developer should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "phantomjs.org", "download.html")
+        umake_command = self.command('{} web phantomjs'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.path_exists(self.exec_path))
+
+
 class VisualStudioCodeInContainer(ContainerTests, test_web.VisualStudioCodeTest):
     """This will test the Visual Studio Code integration inside a container"""
 
