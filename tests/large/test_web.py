@@ -200,3 +200,38 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         self.expect_and_no_warn("Visual Studio Code is already installed.*\[.*\] ", expect_warn=True)
         self.child.sendline()
         self.wait_and_close()
+
+    def test_insiders_install(self):
+        """Install visual studio insiders from scratch test case"""
+
+        self.installed_path += '-insiders'
+        self.desktop_filename.replace('.desktop', '-insiders.desktop')
+        self.name += ' Insiders'
+
+        self.child = spawn_process(self.command('{} web visual-studio-code --insiders'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+        self.assert_exec_link_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process([self.exec_path, self.installed_path],
+                                    wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = spawn_process(self.command('{} web visual-studio-code --insiders'.format(UMAKE)))
+        self.expect_and_no_warn("Visual Studio Code Insiders is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_close()
