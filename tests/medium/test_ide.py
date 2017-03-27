@@ -454,15 +454,14 @@ class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest)
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ['spring.io'], 80: ['dist.springsource.com']}
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'eclipse')
+        self.hosts = {443: ['spring.io'], 80: ['download.springsource.com']}
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "spring-tools-suite")
 
     def test_install_with_changed_download_page(self):
         """Installing STS should fail if download page has significantly changed"""
-        return  # framework disabled
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "spring.io", "tools", "sts",
                                                "all")
         umake_command = self.command('{} ide spring-tools-suite'.format(UMAKE))
@@ -472,10 +471,9 @@ class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest)
 
     def test_install_with_changed_checksum_page(self):
         """Installing STS should fail if checksum link is unparseable"""
-        return  # framework disabled
-        download_page_file_path = os.path.join(get_data_dir(), 'server-content', 'dist.springsource.com', 'release',
-                                               'STS', '3.7.2.RELEASE', 'dist', 'e4.5',
-                                               'spring-tool-suite-3.7.2.RELEASE-e4.5.1-linux-gtk-x86_64.tar.gz.sha1')
+        download_page_file_path = os.path.join(get_data_dir(), 'server-content', 'download.springsource.com', 'release',
+                                               'STS', 'mock.RELEASE', 'dist', 'emock',
+                                               'spring-tool-suite-mock.RELEASE-emock-linux-gtk-x86_64.tar.gz.sha1')
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))

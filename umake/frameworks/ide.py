@@ -885,25 +885,38 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
 
 class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
-        return
         super().__init__(name="Spring Tools Suite",
                          description=_("Spring Tools Suite IDE"),
                          download_page="https://spring.io/tools/sts/all",
                          dir_to_decompress_in_tarball='sts-bundle/sts-*',
+                         checksum_type=ChecksumType.sha1,
                          desktop_filename='STS.desktop',
                          category=category, only_on_archs=['i386', 'amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='icon.xpm',
                          required_files_path=["STS"])
         self.arch = '' if platform.machine() == 'i686' else '-x86_64'
+        self.checksum_url = None
 
-    def download_provider_page(self):
-        logger.debug("Download application provider page")
-        DownloadCenter([DownloadItem(self.download_page)], self.get_metadata, download=False)
+    def parse_download_link(self, line, in_download):
+        """Parse STS download links"""
+        url_found = False
+        if 'linux-gtk{}.tar.gz'.format(self.arch) in line:
+            in_download = True
+        else:
+            in_download = False
+        if in_download:
+            p = re.search(r'href="(.*.tar.gz)"', line)
+            with suppress(AttributeError):
+                self.checksum_url = p.group(1) + '.sha1'
+                url_found = True
+                DownloadCenter(urls=[DownloadItem(self.checksum_url, None)],
+                               on_done=self.get_sha_and_start_download, download=False)
+        return (url_found, in_download)
 
     @MainLoop.in_mainloop_thread
-    def get_metadata(self, result):
-        """Download files to download"""
+    def get_metadata_and_check_license(self, result):
+        """Download files to download + license and check it"""
         logger.debug("Parse download metadata")
 
         error_msg = result[self.download_page].error
@@ -923,37 +936,20 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
-    def parse_download_link(self, line, in_download):
-        """Parse STS download link"""
-        url_found = False
-        in_download = False
-
-        keyword = 'linux-gtk{}.tar.gz'.format(self.arch)
-        if keyword in line:
-            in_download = True
-        if in_download:
-            regexp = r'href="(.*.tar.gz)"'
-            p = re.search(regexp, line)
-            with suppress(AttributeError):
-                url_found = True
-                self.sha1_url = '{}.sha1'.format(p.group(1))
-                DownloadCenter(urls=[DownloadItem(self.sha1_url, None)],
-                               on_done=self.get_sha_and_start_download, download=False)
-        return (url_found, in_download)
-
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
-        res = download_result[self.sha1_url]
-        sha1 = res.buffer.getvalue().decode('utf-8').split()[0]
-        url = re.sub('.sha1', '', self.sha1_url)
+        res = download_result[self.checksum_url]
+        checksum = res.buffer.getvalue().decode('utf-8').split()[0]
+        # you get and store self.download_url
+        url = re.sub('.sha1', '', self.checksum_url)
         if url is None:
             logger.error("Download page changed its syntax or is not parsable (missing url)")
             UI.return_main_screen(status_code=1)
-        if sha1 is None:
-            logger.error("Download page changed its syntax or is not parsable (missing checksum)")
+        if checksum is None:
+            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
             UI.return_main_screen(status_code=1)
-        logger.debug("Found download link for {}, checksum: {}".format(url, sha1))
-        self.download_requests.append(DownloadItem(url, Checksum(ChecksumType.sha1, sha1)))
+        logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
+        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
         self.start_download_and_install()
 
     def post_install(self):
