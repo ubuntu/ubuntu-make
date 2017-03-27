@@ -381,7 +381,7 @@ class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTest)
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["code.visualstudio.com"], 80: ["go.microsoft.com"]}
+        self.hosts = {443: ["code.visualstudio.com", "go.microsoft.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'vscode')
         super().setUp()
         # override with container path

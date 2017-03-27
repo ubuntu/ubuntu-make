@@ -715,8 +715,8 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     PERM_DOWNLOAD_LINKS = {
-        "i686": "http://go.microsoft.com/fwlink/?LinkID=620885",
-        "x86_64": "http://go.microsoft.com/fwlink/?LinkID=620884",
+        "i686": "https://go.microsoft.com/fwlink/?LinkID=620885",
+        "x86_64": "https://go.microsoft.com/fwlink/?LinkID=620884",
         "i686-insiders": "https://go.microsoft.com/fwlink/?LinkId=723969",
         "x86_64-insiders": "https://go.microsoft.com/fwlink/?LinkId=723968"
     }
@@ -746,7 +746,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         url = None
         version = platform.machine()
         if 'Insiders' in self.name:
-             version += '-insiders'
+            version += '-insiders'
         with suppress(KeyError):
             url = self.PERM_DOWNLOAD_LINKS[version]
         return ((url, None), in_download)
