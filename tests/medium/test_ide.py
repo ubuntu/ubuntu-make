@@ -150,7 +150,7 @@ class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -168,7 +168,7 @@ class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm")
@@ -184,7 +184,7 @@ class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducation
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-educational")
@@ -200,7 +200,7 @@ class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessi
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-professional")
@@ -216,7 +216,7 @@ class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'rubymine')
         super().setUp()
         # override with container path
@@ -233,7 +233,7 @@ class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "webstorm")
@@ -249,7 +249,7 @@ class CLionIDEInContainer(ContainerTests, test_ide.CLionIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "clion")
@@ -265,7 +265,7 @@ class DataGripIDEInContainer(ContainerTests, test_ide.DataGripIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "datagrip")
@@ -281,7 +281,7 @@ class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "phpstorm")
