@@ -715,8 +715,10 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     PERM_DOWNLOAD_LINKS = {
-        "i686": "http://go.microsoft.com/fwlink/?LinkID=620885",
-        "x86_64": "http://go.microsoft.com/fwlink/?LinkID=620884"
+        "i686": "https://go.microsoft.com/fwlink/?LinkID=620885",
+        "x86_64": "https://go.microsoft.com/fwlink/?LinkID=620884",
+        "i686-insiders": "https://go.microsoft.com/fwlink/?LinkId=723969",
+        "x86_64-insiders": "https://go.microsoft.com/fwlink/?LinkId=723968"
     }
 
     def __init__(self, category):
@@ -742,8 +744,11 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """We have persistent links for Visual Studio Code, return it right away"""
         url = None
+        version = platform.machine()
+        if 'Insiders' in self.name:
+            version += '-insiders'
         with suppress(KeyError):
-            url = self.PERM_DOWNLOAD_LINKS[platform.machine()]
+            url = self.PERM_DOWNLOAD_LINKS[version]
         return ((url, None), in_download)
 
     def post_install(self):
@@ -754,6 +759,21 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_path,
                         comment=_("Visual Studio focused on modern web and cloud"),
                         categories="Development;IDE;"))
+
+    def install_framework_parser(self, parser):
+        this_framework_parser = super().install_framework_parser(parser)
+        this_framework_parser.add_argument('--insiders', action="store_true",
+                                           help=_("Install Insiders version if available"))
+        return this_framework_parser
+
+    def run_for(self, args):
+        if args.insiders:
+            self.name += " Insiders"
+            self.description += " insiders"
+            self.desktop_filename = self.desktop_filename.replace(".desktop", "-insiders.desktop")
+            self.install_path += "-insiders"
+            self.required_files_path = ["bin/code-insiders"]
+        super().run_for(args)
 
 
 class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
