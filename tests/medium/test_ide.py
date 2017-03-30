@@ -125,7 +125,7 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -150,7 +150,7 @@ class IdeaUltimateIDEInContainer(ContainerTests, test_ide.IdeaUltimateIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -168,7 +168,7 @@ class PyCharmIDEInContainer(ContainerTests, test_ide.PyCharmIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm")
@@ -184,7 +184,7 @@ class PyCharmEducationalIDEInContainer(ContainerTests, test_ide.PyCharmEducation
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-educational")
@@ -200,7 +200,7 @@ class PyCharmProfessionalIDEInContainer(ContainerTests, test_ide.PyCharmProfessi
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "pycharm-professional")
@@ -216,7 +216,7 @@ class RubyMineIDEInContainer(ContainerTests, test_ide.RubyMineIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'rubymine')
         super().setUp()
         # override with container path
@@ -233,7 +233,7 @@ class WebStormIDEInContainer(ContainerTests, test_ide.WebStormIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "webstorm")
@@ -249,7 +249,7 @@ class CLionIDEInContainer(ContainerTests, test_ide.CLionIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "clion")
@@ -265,7 +265,7 @@ class DataGripIDEInContainer(ContainerTests, test_ide.DataGripIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "datagrip")
@@ -281,7 +281,7 @@ class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "phpstorm")
@@ -327,7 +327,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
-    TEST_CHECKSUM_NETBEANS_DATA = "1e07ec8775939ba6d35731831bdb7bf0"
+    TEST_CHECKSUM_NETBEANS_DATA = "e5018c428b5657b669155886f58429af63f69436625e876be9710824bbfd144a"
 
     def setUp(self):
         self.hosts = {80: ["download.netbeans.org"], 443: ["netbeans.org"]}
@@ -349,7 +349,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
     def test_install_with_changed_download_reference_page(self):
         """Installing NetBeans ide should fail if download reference page has significantly changed"""
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "netbeans.org", "images_www",
-                                               "v6", "download", "8.0.42", "final", "js", "files.js")
+                                               "v6", "download", "8.2", "final", "js", "files.js")
         umake_command = self.command('{} ide netbeans'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -358,7 +358,7 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
     def test_install_with_changed_checksum_page(self):
         """Installing NetBeans ide should fail if checksum link is wrong"""
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "netbeans.org", "images_www",
-                                               "v6", "download", "8.0.42", "final", "js", "files.js")
+                                               "v6", "download", "8.2", "final", "js", "files.js")
         with swap_file_and_restore(download_page_file_path) as content:
             with open(download_page_file_path, "w") as newfile:
                 newfile.write(content.replace(self.TEST_CHECKSUM_NETBEANS_DATA, "abcdef"))
