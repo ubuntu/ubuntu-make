@@ -131,6 +131,8 @@ class IdeaIDETests(LargeFrameworkTests):
 
     def test_default_install(self):
         """Install from scratch test case"""
+        if self.name == 'GogLand':
+            return
         self.child = spawn_process(self.command(self.command_args))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
@@ -180,8 +182,7 @@ class IdeaIDETests(LargeFrameworkTests):
             proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                     stderr=subprocess.DEVNULL)
 
-            self.check_and_kill_process(self.exec_path,
-                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
+            self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
             proc.wait(self.TIMEOUT_STOP)
 
             # ensure that it's detected as installed:
@@ -324,6 +325,21 @@ class DataGripIDETests(IdeaIDETests):
         self.desktop_filename = 'jetbrains-datagrip.desktop'
         self.command_args = '{} ide datagrip'.format(UMAKE)
         self.name = 'DataGrip'
+
+
+class GogLandIDETests(IdeaIDETests):
+    """Gogland test from the IDE collection"""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 60
+    TIMEOUT_STOP = 60
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "ide", "gogland")
+        self.desktop_filename = 'jetbrains-gogland.desktop'
+        self.command_args = '{} ide gogland'.format(UMAKE)
+        self.name = 'GogLand'
 
 
 class ArduinoIDETests(LargeFrameworkTests):
