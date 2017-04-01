@@ -268,13 +268,18 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
 
         try:
             key, content = json.loads(page.buffer.read().decode()).popitem()
-            download_url = content[0]['downloads']['linux']['link']
-            checksum_url = content[0]['downloads']['linux']['checksumLink']
+            try:
+                download_list = content[0]
+            except (IndexError):
+                if '&type=eap' in self.download_page:
+                    logger.error("No EAP version available.")
+                else:
+                    logger.error("No Stable version available.")
+                UI.return_main_screen(status_code=1)
+            download_url = download_list['downloads']['linux']['link']
+            checksum_url = download_list['downloads']['linux']['checksumLink']
         except (IndexError):
-            if '&type=eap' in self.download_page:
-                logger.error("No EAP version available.")
-            else:
-                logger.error("Can't parse the download URL from the download page.")
+            logger.error("Can't parse the download URL from the download page.")
             UI.return_main_screen(status_code=1)
         except (json.JSONDecodeError):
             logger.error("Can't parse the download URL from the download page.")
