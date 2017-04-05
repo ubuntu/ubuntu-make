@@ -484,18 +484,18 @@ class DataGrip(BaseJetBrains):
 
 
 class GogLand(BaseJetBrains):
-     """The JetBrains GogLand IDE"""
-     download_keyword = 'GO'
-     executable = "gogland.sh"
+    """The JetBrains GogLand IDE"""
+    download_keyword = 'GO'
+    executable = "gogland.sh"
 
-     def __init__(self, category):
-         super().__init__(name="GogLand",
-                          description=_("The Drive to Develop"),
-                          category=category,
-                          only_on_archs=['i386', 'amd64'],
-                          dir_to_decompress_in_tarball='Gogland-*',
-                          desktop_filename='jetbrains-gogland.desktop',
-                          icon_filename='gogland.png')
+    def __init__(self, category):
+        super().__init__(name="GogLand",
+                         description=_("The Drive to Develop"),
+                         category=category,
+                         only_on_archs=['i386', 'amd64'],
+                         dir_to_decompress_in_tarball='Gogland-*',
+                         desktop_filename='jetbrains-gogland.desktop',
+                         icon_filename='gogland.png')
 
 
 class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
