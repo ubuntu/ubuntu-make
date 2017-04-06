@@ -987,12 +987,16 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, category):
         super().__init__(name="Processing", description=_("Processing code editor"),
-                         category=category, only_on_archs=['amd64'],
+                         category=category, only_on_archs=['i386', 'amd64'],
                          download_page="https://api.github.com/repos/processing/processing/releases/latest",
                          desktop_filename="processing.desktop",
                          required_files_path=["processing"],
-                         dir_to_decompress_in_tarball="processing-*",
-                         checksum_type=ChecksumType.md5)
+                         dir_to_decompress_in_tarball="processing-*")
+
+    arch_trans = {
+        "amd64": "64",
+        "i386": "32"
+    }
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -1007,7 +1011,7 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
             assets = json.loads(page.buffer.read().decode())["assets"]
             download_url = None
             for asset in assets:
-                if "linux" in asset["browser_download_url"]:
+                if "linux{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
                     download_url = asset["browser_download_url"]
             if not download_url:
                 raise IndexError
