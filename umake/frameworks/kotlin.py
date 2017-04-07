@@ -48,6 +48,9 @@ class KotlinLang(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="kotlinc",
                          required_files_path=[os.path.join("bin", "kotlinc")])
 
+    def version(self, result):
+        print(json.loads(result[self.download_page].buffer.read().decode())["name"])
+
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
         logger.debug("Fetched download page, parsing.")

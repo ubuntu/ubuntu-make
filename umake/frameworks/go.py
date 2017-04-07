@@ -50,6 +50,14 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="go",
                          required_files_path=[os.path.join("bin", "go")])
 
+    def version(self, result):
+        for line in result[self.download_page].buffer:
+            line_content = line.decode()
+            if "linux-amd64.tar.gz" in line_content:
+                print(re.search(r'go(\d.\d.\d.*).linux', line_content).group(1))
+                return
+                
+
     def parse_download_link(self, line, in_download):
         """Parse Go download link, expect to find a sha and a url"""
         url, sha = (None, None)

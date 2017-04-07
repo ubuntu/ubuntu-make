@@ -97,7 +97,13 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         logger.debug("{} is installed".format(self.name))
         return True
 
-    def setup(self, install_path=None, auto_accept_license=False):
+    def setup(self, install_path=None, auto_accept_license=False, framework_version=False):
+        if framework_version:
+            try:
+                DownloadCenter([DownloadItem(self.download_page)], self.version_num, download=False)
+            except AttributeError:
+                logger.error('Version not available for this framework')
+            UI.return_main_screen()
         self.arg_install_path = install_path
         self.auto_accept_license = auto_accept_license
         super().setup()
@@ -108,6 +114,15 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                              "it anyway?".format(self.name), self.reinstall, UI.return_main_screen))
         else:
             self.confirm_path(self.arg_install_path)
+
+    def version_num(self, result):
+        print(self.version(result))
+        if self.version(result) != self.local_version():
+            print("New version available?")
+        else:
+            print("Latest version already installed")
+        #tmp = self.version(result)
+        #UI.display(DisplayMessage("{}".format(tmp)))
 
     def reinstall(self):
         logger.debug("Mark previous installation path for cleaning.")
