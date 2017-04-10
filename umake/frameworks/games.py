@@ -30,7 +30,7 @@ import stat
 import requests
 
 import umake.frameworks.baseinstaller
-from umake.network.download_center import DownloadItem
+from umake.network.download_center import DownloadItem, DownloadCenter
 from umake.tools import as_root, create_launcher, get_application_desktop_file, get_current_arch,\
     ChecksumType, MainLoop, Checksum
 from umake.ui import UI
@@ -132,25 +132,62 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                              "libxcursor1", "libxdamage1", "libxext6", "libxfixes3", "libxi6",
                              "libxrandr2", "libxrender1", "libxtst6",
                              "monodevelop"])  # monodevelop is for mono deps, temporary
+        self.download_url = None
+        self.checksum = None
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        """Download files to download + license and check it"""
+        logger.debug("Parse download metadata")
+
+        error_msg = result[self.download_page].error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        in_download = False
+        url_found = False
+        for line in result[self.download_page].buffer:
+            if url_found is None or self.match_last_link:
+                line_content = line.decode()
+                (_url_found, in_download) = self.parse_download_link(line_content, in_download)
+                if not url_found:
+                    url_found = _url_found
+        if not url_found:
+            logger.error("Download page changed its syntax or is not parsable")
+            UI.return_main_screen(status_code=1)
+        DownloadCenter(urls=[DownloadItem(self.download_url, None)],
+                       on_done=self.get_url_and_start_download, download=False)
 
     def parse_download_link(self, line, in_download):
         """Parse Unity3d download links"""
-        url, sha1 = (None, None)
+        url_found = False
         if "beta.unity" in line:
             in_download = True
             p = re.search(r'href="(http://beta.unity.*.html)" target', line)
             with suppress(AttributeError):
-                url = self.get_url(p.group(1))
+                url_found = True
+                self.download_url = p.group(1)
         if in_download is True:
-            p = re.search(r'sh: (\w+)\)<br />', line)
+            p = re.search(r'sh: (\w+)\)', line)
             with suppress(AttributeError):
-                sha1 = p.group(1)
-        return ((url, sha1), in_download)
+                self.checksum = p.group(1)
+        return (url_found, in_download)
 
-    def get_url(self, url):
-        tmp = requests.get(url).text
-        result = re.search(r'http.*?.sh', tmp)
-        return result.group(0)
+    @MainLoop.in_mainloop_thread
+    def get_url_and_start_download(self, download_result):
+        res = download_result[self.download_url]
+        text = res.buffer.getvalue().decode('utf-8')
+        url = re.search(r'http.*?.sh', text).group(0)
+        if url is None:
+            logger.error("Download page changed its syntax or is not parsable (missing url)")
+            UI.return_main_screen(status_code=1)
+        if self.checksum is None:
+            logger.error("Download page changed its syntax or is not parsable (missing checksum)")
+            UI.return_main_screen(status_code=1)
+        logger.debug("Found download link for {}, checksum: {}".format(url, self.checksum))
+        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, self.checksum)))
+        self.start_download_and_install()
 
     def decompress_and_install(self, fds):
         """Override to strip the unwanted shell header part"""
