@@ -38,15 +38,11 @@ def get_requirements(tag_to_detect=""):
 
     if tag_to_detect is empty, it will gather every requirement"""
     requirements = []
-    tag_detected = False
     with open("requirements.txt") as f:
         for line in f.read().splitlines():
             if line.startswith("#") or line == "":
-                tag_detected = False
-                if line.startswith(tag_to_detect):
-                    tag_detected = True
                 continue
-            if tag_detected:
+            elif line.startswith(tag_to_detect):
                 requirements.append(line)
     print(requirements)
     return requirements
