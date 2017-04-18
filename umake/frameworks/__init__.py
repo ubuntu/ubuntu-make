@@ -290,6 +290,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
                                                                         "destdir should contain a /"))
         this_framework_parser.add_argument('-r', '--remove', action="store_true",
                                            help=_("Remove framework if installed"))
+        this_framework_parser.add_argument('-f', '--force', action="store_true",
+                                           help=_("Force install with defaults"))
         if self.expect_license:
             this_framework_parser.add_argument('--accept-license', dest="accept_license", action="store_true",
                                                help=_("Accept license without prompting"))
@@ -311,7 +313,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
                 install_path = os.path.abspath(os.path.expanduser(args.destdir))
             if self.expect_license and args.accept_license:
                 auto_accept_license = True
-            self.setup(install_path=install_path, auto_accept_license=auto_accept_license)
+            self.setup(force_defaults=args.force, install_path=install_path, auto_accept_license=auto_accept_license)
 
 
 class MainCategory(BaseCategory):
