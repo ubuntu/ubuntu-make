@@ -139,6 +139,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         UI.delayed_display(DisplayMessage("Suppression done"))
         UI.return_main_screen()
 
+    def set_exec_path(self):
+        if self.desktop_filename:
+            self.exec_path = os.path.join(self.install_path, self.required_files_path[0])
+
     def confirm_path(self, path_dir=""):
         """Confirm path dir"""
 
@@ -161,15 +165,13 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                                      "there?".format(path_dir), self.set_installdir_to_clean, UI.return_main_screen))
                     return
         self.install_path = path_dir
-        if self.desktop_filename:
-            self.exec_path = os.path.join(self.install_path, self.required_files_path[0])
+        self.set_exec_path()
         self.download_provider_page()
 
     def set_installdir_to_clean(self):
         logger.debug("Mark non empty new installation path for cleaning.")
         self._paths_to_clean.add(self.install_path)
-        if self.desktop_filename:
-            self.exec_path = os.path.join(self.install_path, self.required_files_path[0])
+        self.set_exec_path()
         self.download_provider_page()
 
     def download_provider_page(self):
