@@ -168,6 +168,8 @@ class BaseInstaller(umake.frameworks.BaseFramework):
     def set_installdir_to_clean(self):
         logger.debug("Mark non empty new installation path for cleaning.")
         self._paths_to_clean.add(self.install_path)
+        if self.desktop_filename:
+            self.exec_path = os.path.join(self.install_path, self.required_files_path[0])
         self.download_provider_page()
 
     def download_provider_page(self):
