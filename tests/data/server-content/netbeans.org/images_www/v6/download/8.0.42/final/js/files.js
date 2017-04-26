@@ -31,7 +31,7 @@ add_file("zip/netbeans-8.2-201609300101-javase.zip", 195793312, "cf6f94517faa5db
 add_file("zip/netbeans-8.2-201609300101-php.zip", 128805612, "51ae034b99f16c3bab66ab7dfd07c3554953e78828c2493cde1bb67c95c43e2b", "en,ja,zh_CN,pt_BR,ru");
 add_file("zip/netbeans-8.2-201609300101-platform-src.zip", 29983317, "49fb4bc39677fff93994bded90d702447f89f92b402c80a59073bece69a0b270", "en,ja,zh_CN,pt_BR,ru");
 add_file("zip/netbeans-8.2-201609300101-src.zip", 217356974, "5a7141176fe655807f04bdde12073116a77c1844e4ca7a071d95930b7cd7d5ac", "en,ja,zh_CN,pt_BR,ru");
-add_file("zip/netbeans-8.2-201609300101.zip", 351110790, "e5018c428b5657b669155886f58429af63f69436625e876be9710824bbfd144a", "en,ja,zh_CN,pt_BR,ru");
+add_file("zip/netbeans-8.2-201609300101.zip", 351110790, "ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948", "en,ja,zh_CN,pt_BR,ru");
 add_file("zip/stableuc-l10n-201609300101.zip", 7355658, "2ea41b2d226746f3805b98c5d73a8a6d6e7d6f3ddc2f10800ab8eb2e863cc91c", "en,ja,zh_CN,pt_BR,ru");
 add_file("zip/testdist-201609300101.zip", 124768148, "27db3792d39b63ced70c3b3822804e805b66bd37611ce7879c9e41ddfb2feae5", "en,ja,zh_CN,pt_BR,ru");
 add_file("zip/moduleclusters/netbeans-8.2-201609300101-all-in-one.zip", 343724442, "6de9d9afed88e753265b2dc8a7d73bf0874b5a4b8c710e7f2e592b9a99c7e36a", "en,ja,zh_CN,pt_BR,ru");
