@@ -135,7 +135,7 @@ class ContainerTests(LoggedTestCase):
                                                                                       "check_and_kill_process"),
                                                                          send_sigkill,
                                                                          " ".join(process_grep))))[0]:
-            raise BaseException("The process we try to find and kill can't be found".format(process_grep))
+            raise BaseException("The process we try to find and kill can't be found: {}".format(process_grep))
 
     def _get_path_from_desktop_file(self, key, abspath_transform=None):
         """get the path referred as key in the desktop filename exists"""

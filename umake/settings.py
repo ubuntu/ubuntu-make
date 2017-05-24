@@ -18,6 +18,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 import os
+import requests
+import re
 from xdg.BaseDirectory import xdg_data_home
 
 DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join(xdg_data_home, "umake"))
@@ -34,7 +36,11 @@ def get_version():
     '''Get version depending if on dev or released version'''
     version = open(os.path.join(os.path.dirname(__file__), 'version'), 'r', encoding='utf-8').read().strip()
     if not from_dev:
-        return version
+        snap_appendix = ''
+        snap_rev = os.getenv('SNAP_REVISION')
+        if snap_rev:
+            snap_appendix = '+snap{}'.format(snap_rev)
+        return version + snap_appendix
     import subprocess
     try:
         # use git describe to get a revision ref if running from a branch. Will append dirty if local changes
@@ -42,3 +48,14 @@ def get_version():
     except (subprocess.CalledProcessError, FileNotFoundError):
         version += "+unknown"
     return version
+
+
+def get_latest_version():
+    '''Get latest available version from github'''
+    try:
+        page = requests.get("https://github.com/ubuntu/ubuntu-make/releases")
+        page.raise_for_status()
+    except Exception as e:
+        raise e
+    latest = re.search('releases/tag/(.*)\">', page.text).group(1)
+    return latest

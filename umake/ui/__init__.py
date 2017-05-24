@@ -19,8 +19,13 @@
 
 """Abstracted UI interface that will be overriden by different UI types"""
 
+import logging
+from contextlib import suppress
 from gi.repository import GLib
 from umake.tools import Singleton, MainLoop
+from umake.settings import get_version, get_latest_version
+
+logger = logging.getLogger(__name__)
 
 
 class UI(object, metaclass=Singleton):
@@ -32,6 +37,16 @@ class UI(object, metaclass=Singleton):
 
     @classmethod
     def return_main_screen(cls, status_code=0):
+        try:
+            truncated_version = get_version().split("+")[0]
+            if status_code == 1 and not (get_latest_version() == truncated_version):
+                print('''
+Your currently installed version ({}) differs from the latest release ({})
+Many issues are usually fixed in more up to date versions.
+To get the latest version you can read the instructions at https://github.com/ubuntu/ubuntu-make
+'''.format(get_version(), get_latest_version()))
+        except Exception as e:
+            logger.error(e)
         cls.currentUI._return_main_screen(status_code=status_code)
 
     @classmethod

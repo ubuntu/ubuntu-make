@@ -22,6 +22,7 @@ import logging
 import platform
 import subprocess
 import os
+import tempfile
 from tests.large import LargeFrameworkTests
 from tests.tools import UMAKE, spawn_process
 
@@ -115,44 +116,44 @@ class FirefoxDevTests(LargeFrameworkTests):
         return self.path_exists(os.path.join(self.installed_path, "dictionaries", "{}.aff".format(language)))
 
 
-class VisualStudioCodeTest(LargeFrameworkTests):
-    """Tests for Visual Studio Code"""
+class PhantomJSTests(LargeFrameworkTests):
+    """The default PhantomJS test."""
 
-    TIMEOUT_INSTALL_PROGRESS = 120
-    TIMEOUT_START = 20
-    TIMEOUT_STOP = 20
+    TIMEOUT_INSTALL_PROGRESS = 300
+
+    EXAMPLE_PROJECT = """console.log('hello, world');
+                         phantom.exit();"""
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.join(self.install_base_path, "web", "visual-studio-code")
-        self.desktop_filename = "visual-studio-code.desktop"
+        self.installed_path = os.path.join(self.install_base_path, "web", "phantomjs")
+        self.framework_name_for_profile = "PhantomJS"
 
-    def test_default_install(self):
-        """Install visual studio from scratch test case"""
+    @property
+    def exec_path(self):
+        return os.path.join(self.installed_path, "bin", "phantomjs")
 
-        self.child = spawn_process(self.command('{} web visual-studio-code'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path), expect_warn=True)
+    def test_default_phantomjs_install(self):
+        """Install PhantomJS from scratch test case"""
+        if not self.in_container:
+            self.example_prog_dir = tempfile.mkdtemp()
+            self.additional_dirs.append(self.example_prog_dir)
+            example_file = os.path.join(self.example_prog_dir, "hello.js")
+            open(example_file, "w").write(self.EXAMPLE_PROJECT)
+            compile_command = ["bash", "-l", "-c", "phantomjs {}".format(example_file)]
+        else:  # our mock expects getting that path
+            compile_command = ["bash", "-l", "phantomjs /tmp/hello.js"]
+
+        self.child = spawn_process(self.command('{} web phantomjs'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
-        self.child.sendline("a")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
-        # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assert_exec_exists()
-        self.assert_icon_exists()
+        self.assertTrue(self.is_in_path(self.exec_path))
 
-        # launch it, send SIGTERM and check that it exits fine
-        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
-                                stderr=subprocess.DEVNULL)
+        # compile a small project
+        output = subprocess.check_output(self.command_as_list(compile_command)).decode()[:-1]
 
-        self.check_and_kill_process([self.exec_path, self.installed_path],
-                                    wait_before=self.TIMEOUT_START, send_sigkill=True)
-        proc.wait(self.TIMEOUT_STOP)
-
-        # ensure that it's detected as installed:
-        self.child = spawn_process(self.command('{} web visual-studio-code'.format(UMAKE)))
-        self.expect_and_no_warn("Visual Studio Code is already installed.*\[.*\] ", expect_warn=True)
-        self.child.sendline()
-        self.wait_and_close()
+        self.assertEqual(output, "hello, world")

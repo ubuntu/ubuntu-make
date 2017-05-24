@@ -129,7 +129,7 @@ class BaseCategory():
                 message = _("A default framework for category {} was requested where there is none".format(self.name))
                 logger.error(message)
                 self.category_parser.print_usage()
-                UI.return_main_screen(status_code=1)
+                UI.return_main_screen(status_code=2)
             self.default_framework.run_for(args)
             return
         self.frameworks[args.framework].run_for(args)
@@ -239,11 +239,14 @@ class BaseFramework(metaclass=abc.ABCMeta):
         """Method call to setup the Framework"""
         if not self.is_installable:
             logger.error(_("You can't install that framework on this machine"))
-            UI.return_main_screen(status_code=1)
+            UI.return_main_screen(status_code=2)
 
         if self.need_root_access and os.geteuid() != 0:
             logger.debug("Requesting root access")
             cmd = ["sudo", "-E", "env", "PATH={}".format(os.getenv("PATH"))]
+            for var in ["PATH", "LD_LIBRARY_PATH", "PYTHONUSERBASE", "PYTHONHOME"]:
+                if os.getenv(var):
+                    cmd.append("{}={}".format(var, os.getenv(var)))
             cmd.extend(sys.argv)
             MainLoop().quit(subprocess.call(cmd))
 
@@ -255,7 +258,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         """Method call to remove the current framework"""
         if not self.is_installed:
             logger.error(_("You can't remove {} as it isn't installed".format(self.name)))
-            UI.return_main_screen(status_code=1)
+            UI.return_main_screen(status_code=2)
 
     def mark_in_config(self):
         """Mark the installation as installed in the config file"""
@@ -299,7 +302,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
             if args.destdir:
                 message = "You can't specify a destination dir while removing a framework"
                 logger.error(message)
-                UI.return_main_screen(status_code=1)
+                UI.return_main_screen(status_code=2)
             self.remove()
         else:
             install_path = None

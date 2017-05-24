@@ -414,7 +414,7 @@ class RubyMine(BaseJetBrains):
                          packages_requirements=['ruby'],
                          dir_to_decompress_in_tarball='RubyMine-*',
                          desktop_filename='jetbrains-rubymine.desktop',
-                         icon_filename='rubymine.png')
+                         icon_filename='RMlogo.svg')
 
 
 class WebStorm(BaseJetBrains):
@@ -444,7 +444,7 @@ class PhpStorm(BaseJetBrains):
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='PhpStorm-*',
                          desktop_filename='jetbrains-phpstorm.desktop',
-                         icon_filename='webide.png')
+                         icon_filename='phpstorm.png')
 
 
 class CLion(BaseJetBrains):
@@ -736,8 +736,10 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     PERM_DOWNLOAD_LINKS = {
-        "i686": "http://go.microsoft.com/fwlink/?LinkID=620885",
-        "x86_64": "http://go.microsoft.com/fwlink/?LinkID=620884"
+        "i686": "https://go.microsoft.com/fwlink/?LinkID=620885",
+        "x86_64": "https://go.microsoft.com/fwlink/?LinkID=620884",
+        "i686-insiders": "https://go.microsoft.com/fwlink/?LinkId=723969",
+        "x86_64-insiders": "https://go.microsoft.com/fwlink/?LinkId=723968"
     }
 
     def __init__(self, category):
@@ -763,8 +765,11 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """We have persistent links for Visual Studio Code, return it right away"""
         url = None
+        version = platform.machine()
+        if 'Insiders' in self.name:
+            version += '-insiders'
         with suppress(KeyError):
-            url = self.PERM_DOWNLOAD_LINKS[platform.machine()]
+            url = self.PERM_DOWNLOAD_LINKS[version]
         return ((url, None), in_download)
 
     def post_install(self):
@@ -775,6 +780,21 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_path,
                         comment=_("Visual Studio focused on modern web and cloud"),
                         categories="Development;IDE;"))
+
+    def install_framework_parser(self, parser):
+        this_framework_parser = super().install_framework_parser(parser)
+        this_framework_parser.add_argument('--insiders', action="store_true",
+                                           help=_("Install Insiders version if available"))
+        return this_framework_parser
+
+    def run_for(self, args):
+        if args.insiders:
+            self.name += " Insiders"
+            self.description += " insiders"
+            self.desktop_filename = self.desktop_filename.replace(".desktop", "-insiders.desktop")
+            self.install_path += "-insiders"
+            self.required_files_path = ["bin/code-insiders"]
+        super().run_for(args)
 
 
 class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
@@ -830,7 +850,7 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                          category=category, only_on_archs=['amd64'],
                          download_page="https://api.github.com/repos/Atom/Atom/releases/latest",
                          desktop_filename="atom.desktop",
-                         required_files_path=["atom"],
+                         required_files_path=["atom", "resources/app/apm/bin/apm"],
                          dir_to_decompress_in_tarball="atom-*",
                          checksum_type=ChecksumType.md5)
 
@@ -861,6 +881,9 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Atom Code launcher"""
+        # Add apm to PATH
+        add_exec_link(os.path.join(self.install_path, "resources", "app", "apm", "bin", "apm"),
+                      os.path.join(self.default_binary_link_path, 'apm'))
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Atom"),
                         icon_path=os.path.join(self.install_path, "atom.png"),
                         exec=self.exec_path,
@@ -903,25 +926,38 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
 
 class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, category):
-        return
         super().__init__(name="Spring Tools Suite",
                          description=_("Spring Tools Suite IDE"),
                          download_page="https://spring.io/tools/sts/all",
                          dir_to_decompress_in_tarball='sts-bundle/sts-*',
+                         checksum_type=ChecksumType.sha1,
                          desktop_filename='STS.desktop',
                          category=category, only_on_archs=['i386', 'amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='icon.xpm',
                          required_files_path=["STS"])
         self.arch = '' if platform.machine() == 'i686' else '-x86_64'
+        self.checksum_url = None
 
-    def download_provider_page(self):
-        logger.debug("Download application provider page")
-        DownloadCenter([DownloadItem(self.download_page)], self.get_metadata, download=False)
+    def parse_download_link(self, line, in_download):
+        """Parse STS download links"""
+        url_found = False
+        if 'linux-gtk{}.tar.gz'.format(self.arch) in line:
+            in_download = True
+        else:
+            in_download = False
+        if in_download:
+            p = re.search(r'href="(.*.tar.gz)"', line)
+            with suppress(AttributeError):
+                self.checksum_url = p.group(1) + '.sha1'
+                url_found = True
+                DownloadCenter(urls=[DownloadItem(self.checksum_url, None)],
+                               on_done=self.get_sha_and_start_download, download=False)
+        return (url_found, in_download)
 
     @MainLoop.in_mainloop_thread
-    def get_metadata(self, result):
-        """Download files to download"""
+    def get_metadata_and_check_license(self, result):
+        """Download files to download + license and check it"""
         logger.debug("Parse download metadata")
 
         error_msg = result[self.download_page].error
@@ -941,37 +977,20 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
-    def parse_download_link(self, line, in_download):
-        """Parse STS download link"""
-        url_found = False
-        in_download = False
-
-        keyword = 'linux-gtk{}.tar.gz'.format(self.arch)
-        if keyword in line:
-            in_download = True
-        if in_download:
-            regexp = r'href="(.*.tar.gz)"'
-            p = re.search(regexp, line)
-            with suppress(AttributeError):
-                url_found = True
-                self.sha1_url = '{}.sha1'.format(p.group(1))
-                DownloadCenter(urls=[DownloadItem(self.sha1_url, None)],
-                               on_done=self.get_sha_and_start_download, download=False)
-        return (url_found, in_download)
-
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
-        res = download_result[self.sha1_url]
-        sha1 = res.buffer.getvalue().decode('utf-8').split()[0]
-        url = re.sub('.sha1', '', self.sha1_url)
+        res = download_result[self.checksum_url]
+        checksum = res.buffer.getvalue().decode('utf-8').split()[0]
+        # you get and store self.download_url
+        url = re.sub('.sha1', '', self.checksum_url)
         if url is None:
             logger.error("Download page changed its syntax or is not parsable (missing url)")
             UI.return_main_screen(status_code=1)
-        if sha1 is None:
-            logger.error("Download page changed its syntax or is not parsable (missing checksum)")
+        if checksum is None:
+            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
             UI.return_main_screen(status_code=1)
-        logger.debug("Found download link for {}, checksum: {}".format(url, sha1))
-        self.download_requests.append(DownloadItem(url, Checksum(ChecksumType.sha1, sha1)))
+        logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
+        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
         self.start_download_and_install()
 
     def post_install(self):
@@ -983,3 +1002,52 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                                                                             exec='"{}" %f'.format(self.exec_path),
                                                                             comment=_(self.description),
                                                                             categories=categories))
+
+
+class Processing(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Processing", description=_("Processing code editor"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page="https://api.github.com/repos/processing/processing/releases/latest",
+                         desktop_filename="processing.desktop",
+                         required_files_path=["processing"],
+                         dir_to_decompress_in_tarball="processing-*")
+
+    arch_trans = {
+        "amd64": "64",
+        "i386": "32"
+    }
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        logger.debug("Fetched download page, parsing.")
+        page = result[self.download_page]
+        error_msg = page.error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        try:
+            assets = json.loads(page.buffer.read().decode())["assets"]
+            download_url = None
+            for asset in assets:
+                if "linux{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                    download_url = asset["browser_download_url"]
+            if not download_url:
+                raise IndexError
+        except (json.JSONDecodeError, IndexError):
+            logger.error("Can't parse the download URL from the download page.")
+            UI.return_main_screen(status_code=1)
+        logger.debug("Found download URL: " + download_url)
+
+        self.download_requests.append(DownloadItem(download_url, None))
+        self.start_download_and_install()
+
+    def post_install(self):
+        """Create the Processing Code launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Processing"),
+                        icon_path=os.path.join(self.install_path, "lib", "icons", "pde-256.png"),
+                        exec=self.exec_path,
+                        comment=_("Processing is a flexible software sketchbook"),
+                        categories="Development;IDE;"))

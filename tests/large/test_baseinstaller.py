@@ -464,7 +464,7 @@ class BaseInstallerTests(LargeFrameworkTests):
     def test_try_removing_uninstalled_framework(self):
         """Trying to remove an uninstalled framework will fail"""
         self.child = spawn_process(self.command('{} base base-framework --remove'.format(UMAKE)))
-        self.wait_and_close(expect_warn=True, exit_status=1)
+        self.wait_and_close(expect_warn=True, exit_status=2)
 
     # additional test with fake md5sum
     def test_install_with_wrong_md5sum(self):
