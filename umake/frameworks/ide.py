@@ -888,8 +888,8 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse SublimeText download links"""
         url = None
-        if '{}.tar.bz2'.format(self.arch_trans[get_current_arch()]) in line:
-            p = re.search(r'also available as a <a href="(.*.tar.bz2)"', line)
+        if '.tar.bz2' in line:
+            p = re.search(r'href="([^<]*{}.tar.bz2)"'.format(self.arch_trans[get_current_arch()]), line)
             with suppress(AttributeError):
                 url = p.group(1)
         return ((url, None), in_download)
