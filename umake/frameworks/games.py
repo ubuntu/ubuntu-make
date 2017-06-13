@@ -27,7 +27,7 @@ import logging
 import os
 import re
 import stat
-import requests
+import json
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem, DownloadCenter
