@@ -39,6 +39,20 @@ class StencylInContainer(ContainerTests, test_games.StencylTests):
         self.installed_path = os.path.join(self.install_base_path, "games", "stencyl")
 
 
+class BlenderInContainer(ContainerTests, test_games.BlenderTests):
+    """This will test the Blender editor inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["www.blender.org"], 80: ['download.blender.org']}
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'blender')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "games", "blender")
+
+
 class Unity3DInContainer(ContainerTests, test_games.Unity3DTests):
     """This will test the Unity 3D editor inside a container"""
 
