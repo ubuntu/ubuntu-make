@@ -671,7 +671,8 @@ class TestMiscTools(LoggedTestCase):
     def test_get_application_desktop_file(self):
         """We return expect results with normal content"""
         self.assertEqual(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
-                                                            exec="/to/exec/path %f", comment="Comment for Name 1",
+                                                            try_exec="/to/exec/path", exec="command %f",
+                                                            comment="Comment for Name 1",
                                                             categories="Cat1:Cat2"),
                          dedent("""\
                            [Desktop Entry]
@@ -679,7 +680,8 @@ class TestMiscTools(LoggedTestCase):
                            Type=Application
                            Name=Name 1
                            Icon=/to/icon/path
-                           Exec=/to/exec/path %f
+                           TryExec=/to/exec/path
+                           Exec=command %f
                            Comment=Comment for Name 1
                            Categories=Cat1:Cat2
                            Terminal=false
@@ -689,15 +691,17 @@ class TestMiscTools(LoggedTestCase):
     def test_get_application_desktop_file_with_extra(self):
         """We return expect results with extra content"""
         self.assertEqual(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
-                                                            exec="/to/exec/path %f", comment="Comment for Name 1",
-                                                            categories="Cat1:Cat2", extra="Extra=extra1\nFoo=foo"),
+                                                            try_exec="/to/exec/path", exec="command %f",
+                                                            comment="Comment for Name 1", categories="Cat1:Cat2",
+                                                            extra="Extra=extra1\nFoo=foo"),
                          dedent("""\
                            [Desktop Entry]
                            Version=1.0
                            Type=Application
                            Name=Name 1
                            Icon=/to/icon/path
-                           Exec=/to/exec/path %f
+                           TryExec=/to/exec/path
+                           Exec=command %f
                            Comment=Comment for Name 1
                            Categories=Cat1:Cat2
                            Terminal=false
@@ -714,6 +718,7 @@ class TestMiscTools(LoggedTestCase):
                            Type=Application
                            Name=
                            Icon=
+                           TryExec=
                            Exec=
                            Comment=
                            Categories=

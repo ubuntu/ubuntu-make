@@ -161,7 +161,8 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=self.name,
                                                      icon_path=icon_path,
-                                                     exec='"{}" %f'.format(self.exec_path),
+                                                     try_exec=self.exec_path,
+                                                     exec=self.exec_link_name,
                                                      comment=comment,
                                                      categories=categories))
 
@@ -327,7 +328,8 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=self.name,
                                                      icon_path=icon_path,
-                                                     exec='"{}" %f'.format(self.exec_path),
+                                                     try_exec=self.exec_path,
+                                                     exec=self.exec_link_name,
                                                      comment=comment,
                                                      categories=categories))
 
@@ -650,7 +652,8 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=_("Arduino"),
                                                      icon_path=icon_path,
-                                                     exec='"{}" %f'.format(self.exec_path),
+                                                     try_exec=self.exec_path,
+                                                     exec=self.exec_link_name,
                                                      comment=comment,
                                                      categories=categories))
         if not self.was_in_arduino_group:
@@ -758,7 +761,8 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=_("Netbeans IDE"),
                                                      icon_path=join(self.install_path, "nb", "netbeans.png"),
-                                                     exec=self.exec_path,
+                                                     try_exec=self.exec_path,
+                                                     exec=self.exec_link_name,
                                                      comment=_("Netbeans IDE"),
                                                      categories="Development;IDE;"))
 
@@ -807,7 +811,8 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Visual Studio Code"),
                         icon_path=os.path.join(self.install_path, "resources", "app", "resources", "linux",
                                                "code.png"),
-                        exec=self.exec_path,
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=_("Visual Studio focused on modern web and cloud"),
                         categories="Development;IDE;",
                         extra="StartupWMClass=Code"))
@@ -869,7 +874,8 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("LightTable"),
                         icon_path=os.path.join(self.install_path, "resources", "app", "core", "img",
                                                "lticon.png"),
-                        exec=self.exec_path,
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=_("LightTable code editor"),
                         categories="Development;IDE;"))
 
@@ -917,7 +923,8 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                       os.path.join(self.default_binary_link_path, 'apm'))
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Atom"),
                         icon_path=os.path.join(self.install_path, "atom.png"),
-                        exec=self.exec_path,
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=_("The hackable text editor"),
                         categories="Development;IDE;"))
 
@@ -950,7 +957,8 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the Sublime Text Code launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Sublime Text"),
                         icon_path=os.path.join(self.install_path, "Icon", "128x128", "sublime-text.png"),
-                        exec=self.exec_path,
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=_("Sophisticated text editor for code, markup and prose"),
                         categories="Development;TextEditor;"))
 
@@ -1030,7 +1038,8 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_(self.name),
                                                                             icon_path=os.path.join(self.install_path,
                                                                                                    self.icon_filename),
-                                                                            exec='"{}" %f'.format(self.exec_path),
+                                                                            try_exec=self.exec_path,
+                                                                            exec=self.exec_link_name,
                                                                             comment=_(self.description),
                                                                             categories=categories))
 
@@ -1079,6 +1088,7 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the Processing Code launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Processing"),
                         icon_path=os.path.join(self.install_path, "lib", "icons", "pde-256.png"),
-                        exec=self.exec_path,
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=_("Processing is a flexible software sketchbook"),
                         categories="Development;IDE;"))
