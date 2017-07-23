@@ -128,7 +128,7 @@ Finally, you can run a selection of one or more tests:
 $ ./runtests tests/small/test_tools.py:TestConfigHandler
 ```
 
-This enables the debug profile by default, to display all outputs and logging information (in debug level).
+This enables the debug profile by default, to display all outputs and logging information (at debug level).
 
 You can activate/disable/change any of those default selected configurations with **--config/--coverage/--debug/--no-config** (see `runtests --help` for more information)
 
@@ -137,11 +137,11 @@ You can activate/disable/change any of those default selected configurations wit
 Some nose configurations are available in **confs/**. You will find:
 
 * **debug.nose**: this profile shows all outputs and logging information while turning debug logging on.
-* **prod.nose**: this profile keep all outputs captured, but display tests coverage results.
+* **prod.nose**: this profile keeps all outputs captured, but display tests coverage results.
 
-#### Check for python warnings:
+#### Check for Python warnings:
 
-**runtests** is compatible with showing the python warnings:
+**runtests** is compatible with showing the Python warnings:
 
 ```sh
 $ PYTHONWARNINGS=d ./runtests
@@ -162,7 +162,7 @@ $ bin/umake
 
 ### Developing using system package
 
-Instead of using a virtual environment, you can install system packages to be able to run the Ubuntu Make tests. The build dependencies are listed in *debian/control* and should be available in latest development ubuntu version. If you are using the latest LTS, you should find them in a dedicated [Ubuntu Make Build-dep ppa](https://launchpad.net/~ubuntu-desktop/+archive/ubuntu/ubuntu-make-builddeps).
+Instead of using a virtual environment, you can install system packages to be able to run the Ubuntu Make tests. The build dependencies are listed in *debian/control* and should be available in latest development Ubuntu version. If you are using the latest LTS, you should find them in a dedicated [Ubuntu Make Build-dep ppa](https://launchpad.net/~ubuntu-desktop/+archive/ubuntu/ubuntu-make-builddeps).
 
 ## Release management
 Refresh .pot files:
