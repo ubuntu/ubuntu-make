@@ -1,9 +1,9 @@
 # Ubuntu Make
 Ubuntu Make is a project designed to enable quick and easy setup of common needs for developers on Ubuntu.
 
-## Current project health
-
 [![Snap Status](https://build.snapcraft.io/badge/ubuntu/ubuntu-make.svg)](https://build.snapcraft.io/user/ubuntu/ubuntu-make)
+
+## Current project health
 
 [![Build Status](https://api.travis-ci.org/ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make) (pep8 and small tests)
 
