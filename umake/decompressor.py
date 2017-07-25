@@ -43,6 +43,9 @@ class Decompressor:
     # http://bugs.python.org/issue15795
     class ZipFileWithPerm(zipfile.ZipFile):
         def _extract_member(self, member, targetpath, pwd):
+            if not isinstance(member, zipfile.ZipInfo):
+                member = self.getinfo(member)
+
             targetpath = super()._extract_member(member, targetpath, pwd)
             mode = member.external_attr >> 16 & 0x1FF
             os.chmod(targetpath, mode)
