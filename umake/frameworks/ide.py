@@ -268,15 +268,21 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
 
         try:
             key, content = json.loads(page.buffer.read().decode()).popitem()
-            download_url = content[0]['downloads']['linux']['link']
-            checksum_url = content[0]['downloads']['linux']['checksumLink']
+        except (json.JSONDecodeError):
+            logger.error("Can't parse the download URL from the download page.")
+            UI.return_main_screen(status_code=1)
+        try:
+            download_list = content[0]
         except (IndexError):
             if '&type=eap' in self.download_page:
                 logger.error("No EAP version available.")
             else:
-                logger.error("Can't parse the download URL from the download page.")
+                logger.error("No Stable version available.")
             UI.return_main_screen(status_code=1)
-        except (json.JSONDecodeError):
+        try:
+            download_url = download_list['downloads']['linux']['link']
+            checksum_url = download_list['downloads']['linux']['checksumLink']
+        except (IndexError):
             logger.error("Can't parse the download URL from the download page.")
             UI.return_main_screen(status_code=1)
         logger.debug("Found download URL: " + download_url)
@@ -477,6 +483,21 @@ class DataGrip(BaseJetBrains):
                          icon_filename='product.png')
 
 
+class GogLand(BaseJetBrains):
+    """The JetBrains GogLand IDE"""
+    download_keyword = 'GO'
+    executable = "gogland.sh"
+
+    def __init__(self, category):
+        super().__init__(name="GogLand",
+                         description=_("The Drive to Develop"),
+                         category=category,
+                         only_on_archs=['i386', 'amd64'],
+                         dir_to_decompress_in_tarball='Gogland-*',
+                         desktop_filename='jetbrains-gogland.desktop',
+                         icon_filename='gogland.png')
+
+
 class Rider(BaseJetBrains):
     """The JetBrains  cross-platform .NET IDE"""
     download_keyword = 'RD'
@@ -489,9 +510,9 @@ class Rider(BaseJetBrains):
                          packages_requirements=['mono-devel'],
                          dir_to_decompress_in_tarball='Rider-*',
                          desktop_filename='jetbrains-rider.desktop',
-                         icon_filename='rider.png')
-
-
+                         icon_filename='rider.png')                         
+                         
+                         
 class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     """The Arduino Software distribution."""
 
@@ -903,8 +924,8 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse SublimeText download links"""
         url = None
-        if '{}.tar.bz2'.format(self.arch_trans[get_current_arch()]) in line:
-            p = re.search(r'also available as a <a href="(.*.tar.bz2)"', line)
+        if '.tar.bz2' in line:
+            p = re.search(r'href="([^<]*{}.tar.bz2)"'.format(self.arch_trans[get_current_arch()]), line)
             with suppress(AttributeError):
                 url = p.group(1)
         return ((url, None), in_download)

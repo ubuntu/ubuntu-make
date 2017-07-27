@@ -27,7 +27,7 @@ import logging
 import os
 import re
 import stat
-import requests
+import json
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem, DownloadCenter
@@ -164,7 +164,9 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
         url_found = False
         if "beta.unity" in line:
             in_download = True
-            p = re.search(r'href="(http://beta.unity.*.html)" target', line)
+            p = re.search(
+                r'href="(http://beta.unity.*.html)" target="_blank" class="externalLink">http://beta.unity3d.com',
+                line)
             with suppress(AttributeError):
                 url_found = True
                 self.download_url = p.group(1)

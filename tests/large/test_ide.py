@@ -134,27 +134,29 @@ class IdeaIDETests(LargeFrameworkTests):
         self.child = spawn_process(self.command(self.command_args))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
-        self.wait_and_close()
+        result = self.return_and_wait_expect(["ERROR: No Stable version available.",
+                                              "Installation done"], timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        if result == 0:
+            self.assertTrue(self.name == 'GogLand')
+        elif result == 1:
+            # we have an installed launcher, added to the launcher and an icon file
+            self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assert_exec_exists()
+            self.assert_icon_exists()
+            self.assert_exec_link_exists()
 
-        # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assert_exec_exists()
-        self.assert_icon_exists()
-        self.assert_exec_link_exists()
+            # launch it, send SIGTERM and check that it exits fine
+            proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                    stderr=subprocess.DEVNULL)
 
-        # launch it, send SIGTERM and check that it exits fine
-        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
-                                stderr=subprocess.DEVNULL)
+            self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+            proc.wait(self.TIMEOUT_STOP)
 
-        self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
-        proc.wait(self.TIMEOUT_STOP)
-
-        # ensure that it's detected as installed:
-        self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
-        self.child.sendline()
-        self.wait_and_close()
+            # ensure that it's detected as installed:
+            self.child = spawn_process(self.command(self.command_args))
+            self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+            self.child.sendline()
+            self.wait_and_close()
 
     def test_eap_install(self):
         self.installed_path += '-eap'
@@ -180,8 +182,7 @@ class IdeaIDETests(LargeFrameworkTests):
             proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                     stderr=subprocess.DEVNULL)
 
-            self.check_and_kill_process(self.exec_path,
-                                        wait_before=self.TIMEOUT_START, send_sigkill=True)
+            self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
             proc.wait(self.TIMEOUT_STOP)
 
             # ensure that it's detected as installed:
@@ -324,6 +325,21 @@ class DataGripIDETests(IdeaIDETests):
         self.desktop_filename = 'jetbrains-datagrip.desktop'
         self.command_args = '{} ide datagrip'.format(UMAKE)
         self.name = 'DataGrip'
+
+
+class GogLandIDETests(IdeaIDETests):
+    """Gogland test from the IDE collection"""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 60
+    TIMEOUT_STOP = 60
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "ide", "gogland")
+        self.desktop_filename = 'jetbrains-gogland.desktop'
+        self.command_args = '{} ide gogland'.format(UMAKE)
+        self.name = 'GogLand'
 
 
 class RiderIDETests(IdeaIDETests):
