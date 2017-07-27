@@ -360,7 +360,6 @@ class RiderIDETests(IdeaIDETests):
         logger.debug('Rider non EAP not yet available')
 
 
-
 class ArduinoIDETests(LargeFrameworkTests):
     """The Arduino Software distribution from the IDE collection."""
 

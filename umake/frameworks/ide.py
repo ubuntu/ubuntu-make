@@ -510,9 +510,9 @@ class Rider(BaseJetBrains):
                          packages_requirements=['mono-devel'],
                          dir_to_decompress_in_tarball='Rider-*',
                          desktop_filename='jetbrains-rider.desktop',
-                         icon_filename='rider.png')                         
-                         
-                         
+                         icon_filename='rider.png')
+
+
 class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     """The Arduino Software distribution."""
 

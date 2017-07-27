@@ -320,9 +320,8 @@ class RiderIDEInContainer(ContainerTests, test_ide.RiderIDETests):
         self.bad_download_page_file_path = os.path.join(get_data_dir(),
                                                         "server-content", "data.services.jetbrains.com",
                                                         "products", "releases?code=RD")
-                                                        
-                                                        
-                                                        
+
+
 class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
     """This will test the Arduino IDE integration inside a container"""
 
