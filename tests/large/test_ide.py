@@ -356,9 +356,6 @@ class RiderIDETests(IdeaIDETests):
         self.command_args = '{} ide rider'.format(UMAKE)
         self.name = 'Rider'
 
-    def test_default_install(self):
-        logger.debug('Rider non EAP not yet available')
-
 
 class ArduinoIDETests(LargeFrameworkTests):
     """The Arduino Software distribution from the IDE collection."""

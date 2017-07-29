@@ -313,7 +313,9 @@ class RiderIDEInContainer(ContainerTests, test_ide.RiderIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["data.services.jetbrains.com"]}
+        self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'rider')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "rider")
