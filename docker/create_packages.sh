@@ -57,6 +57,12 @@ create_package zlib1g i386
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 
 # rubymine deps
+mkdir -p $repo_root_dir/rider
+cd $repo_root_dir/rider
+create_package mono-devel
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+# rubymine deps
 mkdir -p $repo_root_dir/rubymine
 cd $repo_root_dir/rubymine
 create_package ruby
