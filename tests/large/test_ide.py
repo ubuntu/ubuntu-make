@@ -137,7 +137,7 @@ class IdeaIDETests(LargeFrameworkTests):
         result = self.return_and_wait_expect(["ERROR: No Stable version available.",
                                               "Installation done"], timeout=self.TIMEOUT_INSTALL_PROGRESS)
         if result == 0:
-            self.assertTrue(self.name == 'GogLand')
+            self.assertTrue(self.name == 'GogLand' or self.name == 'Rider')
         elif result == 1:
             # we have an installed launcher, added to the launcher and an icon file
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
