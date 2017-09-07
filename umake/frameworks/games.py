@@ -92,6 +92,74 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
                         extra="Path={}\nStartupWMClass=stencyl-sw-Launcher".format(self.install_path)))
 
 
+class Blender(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, category):
+        super().__init__(name="Blender", description=_("Very fast and versatile 3D modeller/renderer"),
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         download_page="https://www.blender.org/download/",
+                         checksum_type=ChecksumType.md5,
+                         desktop_filename="blender.desktop",
+                         required_files_path=["blender"],
+                         dir_to_decompress_in_tarball='blender*')
+
+    arch_trans = {
+        "amd64": "x86_64",
+        "i386": "i686"
+    }
+    arch = arch_trans[get_current_arch()]
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        """Download files to download + license and check it"""
+        logger.debug("Parse download metadata")
+
+        error_msg = result[self.download_page].error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        in_download = False
+        url = False
+        for line in result[self.download_page].buffer:
+            line_content = line.decode()
+            (_url, in_download) = self.parse_download_link(line_content, in_download)
+            if not url:
+                url = _url
+        self.url = url
+
+    def parse_download_link(self, line, in_download):
+        """Parse Blender download links"""
+        url = None
+        if '.tar.bz2' in line:
+            p = re.search(r'href="(http://download.blender.org/[^<]*{}.tar.bz2)"'.format(self.arch), line)
+            with suppress(AttributeError):
+                url = p.group(1)
+                filename = 'release' + re.search('blender-(.*)-linux', url).group(1).replace('.', '') + '.md5'
+                self.checksum_url = os.path.join(os.path.dirname(url), filename)
+                DownloadCenter(urls=[DownloadItem(self.checksum_url, None)],
+                               on_done=self.get_checksum_and_start_download, download=False)
+        return (url, in_download)
+
+    @MainLoop.in_mainloop_thread
+    def get_checksum_and_start_download(self, download_result):
+        for line in download_result[self.checksum_url].buffer:
+            line = line.decode()
+            if '{}.tar.bz2'.format(self.arch_trans[get_current_arch()]) in line:
+                break
+        checksum = line.split()[0]
+        self.download_requests.append(DownloadItem(self.url, Checksum(self.checksum_type, checksum)))
+        self.start_download_and_install()
+
+    def post_install(self):
+        """Create the Blender launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Blender"),
+                        icon_path=os.path.join(self.install_path, "icons", "scalable", "apps", "blender.svg"),
+                        exec='"{}" %f'.format(self.exec_path),
+                        comment=self.description,
+                        categories="Development;IDE;Graphics"))
+
+
 def _chrome_sandbox_setuid(path):
     """Chown and setUID to chrome sandbox"""
     # switch to root

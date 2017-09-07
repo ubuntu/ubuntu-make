@@ -68,6 +68,48 @@ class StencylTests(LargeFrameworkTests):
         self.wait_and_close()
 
 
+class BlenderTests(LargeFrameworkTests):
+    """This will test the Blender installation"""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 20
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "games", "blender")
+        self.desktop_filename = "blender.desktop"
+
+    def test_default_blender_install(self):
+        """Install blender from scratch test case"""
+        self.child = spawn_process(self.command('{} games blender'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        # we have an installed launcher, added to the launcher
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+        self.assert_exec_link_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        use_cwd = self.installed_path
+        if self.in_container:
+            use_cwd = None
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL, cwd=use_cwd)
+        self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = spawn_process(self.command('{} games blender'.format(UMAKE)))
+        self.expect_and_no_warn("Blender is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_close()
+
+
 class Unity3DTests(LargeFrameworkTests):
     """This will test the Unity 3D editor installation"""
 
