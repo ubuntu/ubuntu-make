@@ -39,6 +39,8 @@ ADD tests/data/forum.unity3d.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/bitbucket.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/go.microsoft.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/download.jetbrains.com.crt /usr/local/share/ca-certificates/
+ADD tests/data/www.apache.org.crt /usr/local/share/ca-certificates/
+ADD tests/data/maven.apache.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.blender.org.crt /usr/local/share/ca-certificates/
 ADD docker/create_packages.sh /tmp/
 
