@@ -292,6 +292,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
                                            help=_("Remove framework if installed"))
         this_framework_parser.add_argument('--framework_version', action="store_true",
                                            help=_("Get version of framework if available"))
+        this_framework_parser.add_argument('--upgrade', action="store_true",
+                                           help=_("Upgrade framework if possible"))
         if self.expect_license:
             this_framework_parser.add_argument('--accept-license', dest="accept_license", action="store_true",
                                                help=_("Accept license without prompting"))
@@ -313,7 +315,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
                 install_path = os.path.abspath(os.path.expanduser(args.destdir))
             if self.expect_license and args.accept_license:
                 auto_accept_license = True
-            self.setup(framework_version=args.framework_version,
+            self.setup(upgrade=args.upgrade,
+                       framework_version=args.framework_version,
                        install_path=install_path,
                        auto_accept_license=auto_accept_license)
 

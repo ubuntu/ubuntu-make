@@ -879,7 +879,8 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="atom.desktop",
                          required_files_path=["atom", "resources/app/apm/bin/apm"],
                          dir_to_decompress_in_tarball="atom-*",
-                         checksum_type=ChecksumType.md5)
+                         checksum_type=ChecksumType.md5,
+                         upgradable=True)
 
     def version(self, result):
         return json.loads(result[self.download_page].buffer.read().decode())["name"]

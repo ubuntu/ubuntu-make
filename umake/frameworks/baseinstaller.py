@@ -65,9 +65,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
         self.match_last_link = kwargs.get("match_last_link", False)
+        self.upgradable = kwargs.get("upgradable", False)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
                           "desktop_filename", "icon_filename", "required_files_path",
-                          "match_last_link"]:
+                          "match_last_link", "upgradable"]:
             with suppress(KeyError):
                 kwargs.pop(extra_arg)
         super().__init__(*args, **kwargs)
@@ -97,12 +98,21 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         logger.debug("{} is installed".format(self.name))
         return True
 
-    def setup(self, install_path=None, auto_accept_license=False, framework_version=False):
+    def setup(self, install_path=None, auto_accept_license=False, upgrade=False, framework_version=False):
         if framework_version:
             try:
-                DownloadCenter([DownloadItem(self.download_page)], self.version_num, download=False)
+                DownloadCenter([DownloadItem(self.download_page)], self.version, download=False)
             except AttributeError:
                 logger.error('Version not available for this framework')
+            UI.return_main_screen()
+        if upgrade:
+            if not self.upgradable:
+                logger.error("Upgrade not available for this framework")
+                UI.return_main_screen()
+            try:
+                DownloadCenter([DownloadItem(self.download_page)], self.upgrade, download=False)
+            except AttributeError:
+                logger.error('Upgrade not available for this framework')
             UI.return_main_screen()
         self.arg_install_path = install_path
         self.auto_accept_license = auto_accept_license
@@ -115,14 +125,11 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         else:
             self.confirm_path(self.arg_install_path)
 
-    def version_num(self, result):
-        print(self.version(result))
-        if self.version(result) != self.local_version():
-            print("New version available?")
+    def upgrade(self, result):
+        if self.version(result) == self.local_version():
+            logger.error("{} already up to date.".format(self.name))
         else:
-            print("Latest version already installed")
-        #tmp = self.version(result)
-        #UI.display(DisplayMessage("{}".format(tmp)))
+            logger.error("Updating {}".format(self.name))
 
     def reinstall(self):
         logger.debug("Mark previous installation path for cleaning.")

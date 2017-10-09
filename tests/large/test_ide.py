@@ -614,10 +614,6 @@ class AtomTest(LargeFrameworkTests):
         self.child.sendline()
         self.wait_and_close()
 
-    def test_version(self):
-        #TODO: make more better test
-        self.child = spawn_process(self.command(self.command_args + " --framework_version"))
-        self.expect_and_no_warn("New version available?")
 
 class SpringToolsSuiteTest(LargeFrameworkTests):
     """Tests for Spring Tools Suite"""
