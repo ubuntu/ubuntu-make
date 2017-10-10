@@ -107,12 +107,12 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             UI.return_main_screen()
         if upgrade:
             if not self.upgradable:
-                logger.error("Upgrade not available for this framework")
-                UI.return_main_screen()
-            try:
-                DownloadCenter([DownloadItem(self.download_page)], self.upgrade, download=False)
-            except AttributeError:
-                logger.error('Upgrade not available for this framework')
+                logger.info("Upgrade not available for this framework")
+            else:
+                try:
+                    DownloadCenter([DownloadItem(self.download_page)], self.upgrade, download=False)
+                except AttributeError:
+                    logger.info('Upgrade not available for this framework')
             UI.return_main_screen()
         self.arg_install_path = install_path
         self.auto_accept_license = auto_accept_license
@@ -127,9 +127,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
     def upgrade(self, result):
         if self.version(result) == self.local_version():
-            logger.error("{} already up to date.".format(self.name))
+            UI.display(DisplayMessage("{} already up to date.".format(self.name)))
         else:
-            logger.error("Updating {}".format(self.name))
+            UI.display(DisplayMessage("Updating {}".format(self.name)))
 
     def reinstall(self):
         logger.debug("Mark previous installation path for cleaning.")

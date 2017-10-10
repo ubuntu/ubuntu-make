@@ -31,7 +31,7 @@ class ContainerTests(LoggedTestCase):
     """Container-based tests utilities"""
 
     DOCKER_USER = "user"
-    DOCKER_TESTIMAGE = "didrocks/docker-umake-manual"
+    DOCKER_TESTIMAGE = "e722f53e0b4f"
     UMAKE_TOOLS_IN_CONTAINER = "/umake"
     APT_FAKE_REPO_PATH = "/apt-fake-repo"
 

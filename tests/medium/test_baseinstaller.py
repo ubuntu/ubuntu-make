@@ -113,3 +113,10 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
 
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_update_available(self):
+        with swap_file_and_restore(self.download_page_file_path) as content:
+
+            self.child = spawn_process(self.command('{} base base-framework --upgrade'.format(UMAKE)))
+            self.wait_and_close()
+            self.assertIn('Updating Base Framework', self.child.before)
