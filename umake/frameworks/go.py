@@ -56,7 +56,6 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
             if "linux-amd64.tar.gz" in line_content:
                 print(re.search(r'go(\d.\d.\d.*).linux', line_content).group(1))
                 return
-                
 
     def parse_download_link(self, line, in_download):
         """Parse Go download link, expect to find a sha and a url"""
