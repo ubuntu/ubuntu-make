@@ -12,13 +12,13 @@ More information on what this snap is available at https://didrocks.fr/2017/07/0
 [All test results](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests/) and [Coverage report](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests-collect/label=ps-trusty-desktop-amd64-1/lastSuccessfulBuild/artifact/html-coverage/index.html)
 
 ## Installing
-We recommend to use the Ubuntu Make ppa to ensure you always have the latest and greatest version, even on older supported releases. We are available on the currently supported Ubuntu version.
+We recommend to use the Ubuntu Make snap to ensure you always have the latest and greatest version, even on older supported releases.
 
 ```sh
-$ sudo add-apt-repository ppa:ubuntu-desktop/ubuntu-make
-$ sudo apt update
-$ sudo apt install ubuntu-make
+$ snap install ubuntu-make --classic
 ```
+
+Umake can then be run as ubuntu-make.umake
 
 ## Running the command line tool
 To run the tool:
