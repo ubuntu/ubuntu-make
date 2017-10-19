@@ -794,7 +794,8 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                                                "code.png"),
                         exec=self.exec_path,
                         comment=_("Visual Studio focused on modern web and cloud"),
-                        categories="Development;IDE;"))
+                        categories="Development;IDE;",
+                        extra="StartupWMClass=Code"))
 
     def install_framework_parser(self, parser):
         this_framework_parser = super().install_framework_parser(parser)
