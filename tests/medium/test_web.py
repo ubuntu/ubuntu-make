@@ -65,17 +65,3 @@ class PhantomJSInContainer(ContainerTests, test_web.PhantomJSTests):
         umake_command = self.command('{} web phantomjs'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.path_exists(self.exec_path))
-
-
-class VisualStudioCodeInContainer(ContainerTests, test_web.VisualStudioCodeTest):
-    """This will test the Visual Studio Code integration inside a container"""
-
-    TIMEOUT_START = 20
-    TIMEOUT_STOP = 10
-
-    def setUp(self):
-        self.hosts = {443: ["code.visualstudio.com"], 80: ["go.microsoft.com"]}
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'vscode')
-        super().setUp()
-        # override with container path
-        self.installed_path = os.path.join(self.install_base_path, "web", "visual-studio-code")
