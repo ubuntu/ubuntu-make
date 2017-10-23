@@ -28,7 +28,6 @@ import os
 import platform
 import re
 import umake.frameworks.baseinstaller
-from umake.frameworks.ide import VisualStudioCode
 from umake.interactions import Choice, TextWithChoices, DisplayMessage
 from umake.network.download_center import DownloadItem
 from umake.ui import UI
@@ -170,12 +169,3 @@ class PhantomJS(umake.frameworks.baseinstaller.BaseInstaller):
         """Add phantomjs necessary env variables"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
-
-
-class VisualStudioCode(VisualStudioCode):
-
-    def setup(self, *args, **kwargs):
-        '''Print a deprecation warning before calling parent setup()'''
-        logger.warning("Visual Studio Code is now in the ide category, please refer it from this category from now on. "
-                       "This compatibility will be dropped after Ubuntu 16.04 LTS.")
-        super().setup(*args, **kwargs)
