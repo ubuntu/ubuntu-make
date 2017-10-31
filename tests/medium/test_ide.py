@@ -99,6 +99,25 @@ class EclipsePHPIDEInContainer(ContainerTests, test_ide.EclipsePHPIDETests):
                                                         "eclipse-php-linux-gtk-x86_64.tar.gz.sha512")
 
 
+class EclipseJSIDEInContainer(ContainerTests, test_ide.EclipseJSIDETests):
+    """This will test the eclipse IDE integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["www.eclipse.org"]}
+        # we reuse the android-studio repo
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-javascript")
+        self.bad_download_page_file_path = os.path.join(get_data_dir(),
+                                                        "server-content", "www.eclipse.org", "technology", "epp",
+                                                        "downloads", "release", "version", "point_release",
+                                                        "eclipse-javascript-linux-gtk-x86_64.tar.gz.sha512")
+
+
 class EclipseCPPIDEInContainer(ContainerTests, test_ide.EclipseCPPIDETests):
     """This will test the eclipse IDE integration inside a container"""
 

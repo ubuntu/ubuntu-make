@@ -217,6 +217,21 @@ class EclipsePHP(BaseEclipse):
                          icon_filename='php.png')
 
 
+class EclipseJS(BaseEclipse):
+    """Eclipse IDE for JavaScript and Web distribution."""
+    download_keyword = 'eclipse-javascript-'
+    executable = 'eclipse'
+
+    def __init__(self, category):
+        super().__init__(name="Eclipse JavaScript",
+                         description=_("Eclipse IDE for JavaScript and Web Developers"),
+                         dir_to_decompress_in_tarball='eclipse',
+                         desktop_filename='eclipse-javascript.desktop',
+                         category=category, only_on_archs=['i386', 'amd64'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         icon_filename='javascript.png')
+
+
 class EclipseCPP(BaseEclipse):
     """The Eclipse CPP Edition distribution."""
     download_keyword = 'eclipse-cpp-'
