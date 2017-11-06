@@ -93,6 +93,17 @@ class EclipseJEEIDETests(EclipseJavaIDETests):
         self.name = "Eclipse JEE"
 
 
+class EclipseJSIDETests(EclipseJavaIDETests):
+    """The Eclipse distribution from the IDE collection."""
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "ide", "eclipse-javascript")
+        self.desktop_filename = "eclipse-javascript.desktop"
+        self.command_args = '{} ide eclipse-javascript'.format(UMAKE)
+        self.name = "Eclipse JavaScript"
+
+
 class EclipsePHPIDETests(EclipseJavaIDETests):
     """The Eclipse distribution from the IDE collection."""
 
