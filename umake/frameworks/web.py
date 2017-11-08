@@ -121,7 +121,8 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
                         icon_path=os.path.join(self.install_path, "browser", "icons", "mozicon128.png"),
                         exec="{} %u".format(os.path.join(self.install_path, "firefox")),
                         comment=_("Firefox Aurora with Developer tools"),
-                        categories="Development;IDE;"))
+                        categories="Development;IDE;",
+                        extra="StartupWMClass=Firefox Developer Edition"))
 
     def install_framework_parser(self, parser):
         this_framework_parser = super().install_framework_parser(parser)
