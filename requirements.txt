@@ -1,5 +1,5 @@
 # runtime requirements
-https://launchpad.net/ubuntu/+archive/primary/+files/python-apt_1.1.0~beta1build1.tar.xz; sys_platform == 'linux'
+-e git://git.launchpad.net/python-apt@1.1.0_beta1#egg=apt
 argcomplete
 beautifulsoup4
 progressbar33
