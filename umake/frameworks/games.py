@@ -180,7 +180,7 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
                          category=category, only_on_archs=['amd64'],
                          download_page="https://forum.unity3d.com/" +
-                                       "threads/unity-on-linux-release-notes-and-known-issues.350256",
+                                       "threads/unity-on-linux-release-notes-and-known-issues.350256/page-2",
                          match_last_link=True,
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball='unity-editor*',
