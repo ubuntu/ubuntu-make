@@ -425,6 +425,7 @@ class TestLauncherIcons(LoggedTestCase):
 
     def setUp(self):
         super().setUp()
+        self.tmpHome = tempfile.mkdtemp()
         self.local_dir = tempfile.mkdtemp()
         os.mkdir(os.path.join(self.local_dir, "applications"))
         os.mkdir(os.path.join(self.local_dir, "icons"))
@@ -657,6 +658,7 @@ class TestLauncherIcons(LoggedTestCase):
         self.assertEqual(get_launcher_path("foo.desktop"), os.path.join(self.local_dir, "applications", "foo.desktop"))
 
     @patch("umake.tools.settings")
+    @patch.dict(os.environ, {'HOME': tempfile.mkdtemp()})
     def test_create_exec_path(self, settings_module):
         """Create link to the executable"""
         settings_module.DEFAULT_BINARY_LINK_PATH = os.path.join(self.local_dir, ".local", "share", "umake", "bin")
