@@ -151,6 +151,10 @@ class PhantomJS(umake.frameworks.baseinstaller.BaseInstaller):
         "i386": "i686"
     }
 
+    def version(self, result):
+        page = result[self.download_page].buffer.read().decode()
+        print(re.search('phantomjs-(.*?)-linux', page).group(1))
+
     def parse_download_link(self, line, in_download):
         """Parse PhantomJS download link, expect to find a sha and a url"""
         url = None

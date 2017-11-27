@@ -270,6 +270,15 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
     def executable(self):
         pass
 
+    def version(self, result):
+        try:
+            key, content = json.loads(result[self.download_page].buffer.read().decode()).popitem()
+            print('Version: ' + content[0]['majorVersion'])
+            print('Build: ' + content[0]['build'])
+        except:
+            # TODO add check.
+            logger.error('Version not available')
+
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
         logger.debug("Fetched download page, parsing.")
@@ -807,7 +816,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Visual Studio Code"),
                         icon_path=os.path.join(self.install_path, "resources", "app", "resources", "linux",
                                                "code.png"),
-                        exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=_("Visual Studio focused on modern web and cloud"),
                         categories="Development;IDE;",
                         extra="StartupWMClass=Code"))
@@ -838,6 +847,9 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["LightTable"],
                          dir_to_decompress_in_tarball="lighttable-*",
                          checksum_type=ChecksumType.md5)
+
+    def version(self, result):
+        print(json.loads(result[self.download_page].buffer.read().decode())["name"])
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -883,7 +895,14 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="atom.desktop",
                          required_files_path=["atom", "resources/app/apm/bin/apm"],
                          dir_to_decompress_in_tarball="atom-*",
-                         checksum_type=ChecksumType.md5)
+                         checksum_type=ChecksumType.md5,
+                         upgradable=True)
+
+    def version(self, result):
+        return json.loads(result[self.download_page].buffer.read().decode())["name"]
+
+    def local_version(self):
+        return re.search('Atom.*: (.*)\n', subprocess.check_output(['atom', '--version']).decode()).group(1)
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -1049,6 +1068,9 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
         "amd64": "64",
         "i386": "32"
     }
+
+    def version(self, result):
+        print(json.loads(result[self.download_page].buffer.read().decode())["name"].split()[1])
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):

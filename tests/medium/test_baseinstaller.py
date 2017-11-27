@@ -25,6 +25,7 @@ import subprocess
 import pexpect
 from ..large import test_baseinstaller
 from ..tools import UMAKE, spawn_process, get_data_dir, swap_file_and_restore
+from unittest.mock import patch
 
 
 class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerTests):
@@ -113,3 +114,15 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
 
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_update_available(self):
+        self.child = spawn_process(self.command('{} base base-framework --upgrade'.format(UMAKE)))
+        self.wait_and_close()
+        self.assertIn('Updating Base Framework', self.child.before)
+
+    def test_update_unavailable(self):
+        with patch('tests.data.testframeworks.baseinstallerfake.BaseFramework.local_version') as local_version_mock:
+            local_version_mock.return_value = 4
+            self.child = spawn_process(self.command('{} base base-framework --upgrade'.format(UMAKE)))
+            self.wait_and_close()
+            self.assertIn('Base Framework already up to date', self.child.before)

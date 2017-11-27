@@ -82,12 +82,19 @@ class BaseFramework(umake.frameworks.baseinstaller.BaseInstaller):
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="base-framework-*",
                          desktop_filename="base-framework.desktop",
-                         required_files_path=[os.path.join("bin", "studio.sh")])
+                         required_files_path=[os.path.join("bin", "studio.sh")],
+                         upgradable=True)
 
         arch = platform.machine()
         self.tag = 'id="linux-bundle64"'
         if arch == 'i686':
             self.tag = 'id="linux-bundle32"'
+
+    def version(self, result):
+        return 4
+
+    def local_version(self):
+        return 3
 
     def parse_license(self, line, license_txt, in_license):
         """Parse download page for license"""
