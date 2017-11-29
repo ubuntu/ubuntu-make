@@ -225,14 +225,15 @@ class EclipseJS(BaseEclipse):
     download_keyword = 'eclipse-javascript-'
     executable = 'eclipse'
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Eclipse JavaScript",
                          description=_("Eclipse IDE for JavaScript and Web Developers"),
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-javascript.desktop',
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-                         icon_filename='javascript.png')
+                         icon_filename='javascript.png',
+                         **kwargs)
 
 
 class EclipseCPP(BaseEclipse):
@@ -511,10 +512,9 @@ class GogLand(BaseJetBrains):
     download_keyword = 'GO'
     executable = "gogland.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="GogLand",
                          description=_("The Drive to Develop"),
-                         category=category,
                          only_on_archs=['i386', 'amd64'],
                          dir_to_decompress_in_tarball='Gogland-*',
                          desktop_filename='jetbrains-gogland.desktop',
@@ -527,10 +527,10 @@ class Rider(BaseJetBrains):
     download_keyword = 'RD'
     executable = "rider.sh"
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Rider",
                          description=_("The JetBrains cross-platform .NET IDE"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['mono-devel'],
                          dir_to_decompress_in_tarball='rider-*',
                          desktop_filename='jetbrains-rider.desktop',
@@ -889,14 +889,14 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
 
 class Atom(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Atom", description=_("The hackable text editor"),
-                         category=category, only_on_archs=['amd64'],
+                         only_on_archs=['amd64'],
                          download_page="https://api.github.com/repos/Atom/Atom/releases/latest",
                          desktop_filename="atom.desktop",
                          required_files_path=["atom", "resources/app/apm/bin/apm"],
                          dir_to_decompress_in_tarball="atom-*",
-                         checksum_type=ChecksumType.md5)
+                         checksum_type=ChecksumType.md5, **kwargs)
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -1053,13 +1053,14 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
 
 class Processing(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Processing", description=_("Processing code editor"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          download_page="https://api.github.com/repos/processing/processing/releases/latest",
                          desktop_filename="processing.desktop",
                          required_files_path=["processing"],
-                         dir_to_decompress_in_tarball="processing-*")
+                         dir_to_decompress_in_tarball="processing-*",
+                         **kwargs)
 
     arch_trans = {
         "amd64": "64",

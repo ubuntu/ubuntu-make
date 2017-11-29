@@ -95,14 +95,14 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
 
 class Blender(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Blender", description=_("Very fast and versatile 3D modeller/renderer"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          download_page="https://www.blender.org/download/",
                          checksum_type=ChecksumType.md5,
                          desktop_filename="blender.desktop",
                          required_files_path=["blender"],
-                         dir_to_decompress_in_tarball='blender*')
+                         dir_to_decompress_in_tarball='blender*', **kwargs)
 
     arch_trans = {
         "amd64": "x86_64",
