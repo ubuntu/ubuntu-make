@@ -117,7 +117,8 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://developer.android.com/studio/index.html",
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball=".",
-                         required_files_path=[os.path.join("tools", "android")],**kwargs)
+                         required_files_path=[os.path.join("tools", "android")],
+                         **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android SDK download page for license"""

@@ -169,7 +169,8 @@ class BasicCLI(LargeFrameworkTests):
         for element in result.split(b"\n"):
             if element and not element.startswith(b"\t"):
                 current_category = element[:element.find(b":")]
-                if previous_category:
+                # Skip the empty category since it' not in alphabetic order
+                if previous_category and current_category is not b'':
                     self.assertTrue(previous_category < current_category)
                 previous_category = current_category
 

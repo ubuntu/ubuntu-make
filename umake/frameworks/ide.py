@@ -447,6 +447,7 @@ class RubyMine(BaseJetBrains):
                          icon_filename='rubymine.png',
                          **kwargs)
 
+
 class WebStorm(BaseJetBrains):
     """The JetBrains WebStorm IDE"""
     download_keyword = 'WS'

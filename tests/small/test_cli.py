@@ -21,12 +21,16 @@
 
 import importlib
 from ..tools import LoggedTestCase
-from umake.ui.cli import mangle_args_for_default_framework
+from umake.ui.cli import mangle_args_for_default_framework, get_frameworks_list_output
 import os
 import sys
 from ..tools import get_data_dir, change_xdg_path, patchelem
 import umake
+from unittest.mock import patch, Mock
 from umake import frameworks
+from argparse import Namespace
+import tempfile
+import shutil
 
 
 class TestCLIFromFrameworks(LoggedTestCase):
