@@ -31,9 +31,9 @@ class DCategory(umake.frameworks.BaseCategory):
 
 class FrameworkA(umake.frameworks.BaseFramework):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Framework A", description="Description for framework A (restricted arch)",
-                         category=category, only_on_archs=["foo", "baz"])
+                         only_on_archs=["foo", "baz"], **kwargs)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
@@ -44,9 +44,9 @@ class FrameworkA(umake.frameworks.BaseFramework):
 
 class FrameworkB(umake.frameworks.BaseFramework):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Framework B", description="Description for framework B (restricted version)",
-                         category=category, only_ubuntu_version=["9.10", "10.04"])
+                         only_ubuntu_version=["9.10", "10.04"], **kwargs)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()
@@ -57,10 +57,10 @@ class FrameworkB(umake.frameworks.BaseFramework):
 
 class FrameworkC(umake.frameworks.BaseFramework):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Framework C", description="Description for framework C (restricted version and arch)",
-                         category=category, only_on_archs=["foo", "bar", "baz"],
-                         only_ubuntu_version=["9.10", "10.04", "10.10.10"])
+                         only_on_archs=["foo", "bar", "baz"],
+                         only_ubuntu_version=["9.10", "10.04", "10.10.10"], **kwargs)
 
     def setup(self, install_path=None, auto_accept_license=False):
         super().setup()

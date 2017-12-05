@@ -34,6 +34,7 @@ from umake.frameworks.baseinstaller import BaseInstaller
 from umake.settings import UMAKE_FRAMEWORKS_ENVIRON_VARIABLE
 from umake.tools import NoneDict, ConfigHandler
 from unittest.mock import Mock, patch, call
+from umake.ui.cli import get_frameworks_list_output
 
 
 class BaseFrameworkLoader(LoggedTestCase):
@@ -421,6 +422,33 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         self.assertIn(str(InheritedFromUninstantiable).split('.')[-1],
                       [str(type(framework)).split('.')[-1] for framework in
                        self.CategoryHandler.main_category.frameworks.values()])
+
+    @patch("umake.frameworks.get_user_frameworks_path")
+    def test_list_installed_default_framework(self, get_user_frameworks_path):
+        """List the correct installed items"""
+        args = Mock()
+        args.list = False
+        args.list_available = False
+        args.list_installed = True
+        self.assertTrue(get_frameworks_list_output(args).startswith("framework-a: Description for framework A"))
+
+    @patch("umake.frameworks.get_user_frameworks_path")
+    def test_list_default_framework(self, get_user_frameworks_path):
+        """List the correct items"""
+        args = Mock()
+        args.list = True
+        args.list_available = False
+        self.assertTrue(get_frameworks_list_output(args).startswith("base: Base category [not installed]"))
+
+    @patch("umake.frameworks.get_user_frameworks_path")
+    def test_list_available_default_framework(self, get_user_frameworks_path):
+        """List the correct available items"""
+        args = Mock()
+        args.list = False
+        args.list_available = True
+        args.list_installed = False
+        print(get_frameworks_list_output(args))
+        self.assertTrue(get_frameworks_list_output(args).startswith("base: Base category [not installed]"))
 
 
 class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
@@ -880,6 +908,15 @@ class TestEmptyFrameworkLoader(BaseFrameworkLoader):
         self.assertEqual(self.CategoryHandler.main_category, main_category)
         self.assertEqual(len(self.CategoryHandler.categories), 1, str(self.CategoryHandler.categories))
 
+    def test_listing_empty_framework(self):
+        """List the correct empty items"""
+        args = Mock()
+        args.destdir = None
+        args.accept_license = False
+        args.list = True
+        args.list_available = False
+        self.assertEquals(get_frameworks_list_output(args), "")
+
 
 class TestDuplicatedFrameworkLoader(BaseFrameworkLoader):
     """This will test the dynamic framework loader activity with some duplicated categories and frameworks"""
@@ -1018,6 +1055,58 @@ class TestInvalidFrameworksLoader(BaseFrameworkLoader):
             frameworks.load_frameworks()
         self.assertEqual(len(self.CategoryHandler.categories["category-a"].frameworks), 0,
                          self.CategoryHandler.categories["category-a"].frameworks)
+
+    @patch("umake.frameworks.get_user_frameworks_path")
+    def test_list_installed_single_framework(self, get_user_frameworks_path):
+        """List the correct installed items in single framework"""
+        with tempfile.TemporaryDirectory() as temp_path:
+            shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "overlayframeworks.py"), temp_path)
+            get_user_frameworks_path.return_value = temp_path
+            # load home framework-directory
+            with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                    patchelem(umake.frameworks, '__package__', "invalidframeworks"):
+                frameworks.load_frameworks()
+
+            args = Mock()
+            args.list = False
+            args.list_available = False
+            args.list_installed = True
+            self.assertTrue(get_frameworks_list_output(args).startswith("No frameworks are currently installed"))
+
+    @patch("umake.frameworks.get_user_frameworks_path")
+    def test_list_single_framework(self, get_user_frameworks_path):
+        """List the correct items in single framework"""
+        with tempfile.TemporaryDirectory() as temp_path:
+            shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "overlayframeworks.py"), temp_path)
+            get_user_frameworks_path.return_value = temp_path
+            # load home framework-directory
+            with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                    patchelem(umake.frameworks, '__package__', "invalidframeworks"):
+                frameworks.load_frameworks()
+
+            args = Mock()
+            args.list = True
+            args.list_available = False
+            self.assertTrue(get_frameworks_list_output(args).startswith(
+                "category-a: Category A description [not installed]"))
+
+    @patch("umake.frameworks.get_user_frameworks_path")
+    def test_list_available_single_framework(self, get_user_frameworks_path):
+        """List the correct available items in single framework"""
+        with tempfile.TemporaryDirectory() as temp_path:
+            shutil.copy(os.path.join(get_data_dir(), "overlayframeworks", "overlayframeworks.py"), temp_path)
+            get_user_frameworks_path.return_value = temp_path
+            # load home framework-directory
+            with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
+                    patchelem(umake.frameworks, '__package__', "invalidframeworks"):
+                frameworks.load_frameworks()
+
+            args = Mock()
+            args.list = False
+            args.list_available = True
+            args.list_installed = False
+            self.assertTrue(get_frameworks_list_output(args).startswith(
+                "category-a: Category A description [not installed]"))
 
 
 class TestFrameworkLoaderCustom(BaseFrameworkLoader):

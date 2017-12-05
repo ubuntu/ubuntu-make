@@ -44,14 +44,15 @@ class MavenCategory(umake.frameworks.BaseCategory):
 
 class MavenLang(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Maven Lang", description=_("Java software project management and comprehension tool"),
-                         is_category_default=True, category=category,
+                         is_category_default=True,
                          packages_requirements=["openjdk-7-jdk | openjdk-8-jdk"],
                          checksum_type=ChecksumType.md5,
                          download_page="https://maven.apache.org/download.cgi",
                          dir_to_decompress_in_tarball="apache-maven-*",
-                         required_files_path=[os.path.join("bin", "mvn")])
+                         required_files_path=[os.path.join("bin", "mvn")],
+                         **kwargs)
         self.checksum_url = None
 
     def parse_download_link(self, line, in_download):
