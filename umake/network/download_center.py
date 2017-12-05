@@ -32,6 +32,7 @@ import requests
 import requests.exceptions
 from umake.network.ftp_adapter import FTPAdapter
 from umake.tools import ChecksumType, root_lock
+from umake.ui import UI
 
 logger = logging.getLogger(__name__)
 
@@ -129,7 +130,8 @@ class DownloadCenter:
         session = requests.Session()
         session.mount('ftp://', FTPAdapter())
         try:
-            with closing(session.get(url, stream=True, headers=headers, cookies=cookies)) as r:
+            with closing(session.get(url, stream=True, headers=headers,
+                                     cookies=cookies, timeout=10.0)) as r:
                 r.raise_for_status()
                 content_size = int(r.headers.get('content-length', -1))
 
@@ -145,6 +147,9 @@ class DownloadCenter:
         except requests.exceptions.InvalidSchema as exc:
             # Wrap this for a nicer error message.
             raise BaseException("Protocol not supported.") from exc
+        except requests.exceptions.Timeout as exc:
+            # Wrap this for a nicer error message.
+            raise BaseException("Timeout has occurred.") from exc
 
         if checksum and checksum.checksum_value:
             checksum_type = checksum.checksum_type

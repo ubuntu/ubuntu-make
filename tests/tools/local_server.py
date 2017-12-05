@@ -29,6 +29,7 @@ import ssl
 from . import get_data_dir
 import urllib
 import urllib.parse
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -196,6 +197,11 @@ class RequestHandler(SimpleHTTPRequestHandler):
                     self.send_error(404)
             # Now we need to chop off the '-headers' part.
             self.path = url.path[:-len('-headers')]
+            super().do_GET()
+        elif 'timeout' in self.path:
+            url = urllib.parse.urlparse(self.path)
+            self.path = url.path[:-len('-timeout')]
+            time.sleep(12)
             super().do_GET()
         else:
             # keep special ?file= to redirect the query
