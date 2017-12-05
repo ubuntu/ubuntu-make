@@ -18,7 +18,22 @@ We recommend to use the Ubuntu Make snap to ensure you always have the latest an
 $ snap install ubuntu-make --classic
 ```
 
-Umake can then be run as ubuntu-make.umake
+If installed via the snap umake has to be run as `ubuntu-make.umake`
+
+If the snap does not work there is a daily build ppa:
+
+```
+sudo add-apt-repository ppa:lyzardking/ubuntu-make
+sudo apt-get update
+sudo apt-get install ubuntu-make
+```
+
+## Listing
+
+Umake has three listing options:
+- `--list` to show all the frameworks
+- `--list-available` to show the available frameworks
+- `--list-installed` to show the installed frameworks
 
 ## Running the command line tool
 To run the tool:
