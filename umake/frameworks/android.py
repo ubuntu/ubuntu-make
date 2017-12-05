@@ -101,7 +101,8 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the Android Studio launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Android Studio"),
                         icon_path=os.path.join(self.install_path, "bin", "studio.png"),
-                        exec='"{}" %f'.format(os.path.join(self.install_path, "bin", "studio.sh")),
+                        try_exec='"{}" %f'.format(os.path.join(self.install_path, "bin", "studio.sh")),
+                        exec=self.exec_link_name,
                         comment=_("Android Studio developer environment"),
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-studio"))

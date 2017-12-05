@@ -86,7 +86,8 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the Stencyl launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Stencyl"),
                         icon_path=os.path.join(self.install_path, "data", "other", "icon-30x30.png"),
-                        exec='"{}" %f'.format(self.exec_path),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;",
                         extra="Path={}\nStartupWMClass=stencyl-sw-Launcher".format(self.install_path)))
@@ -155,7 +156,8 @@ class Blender(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the Blender launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Blender"),
                         icon_path=os.path.join(self.install_path, "icons", "scalable", "apps", "blender.svg"),
-                        exec='"{}" %f'.format(self.exec_path),
+                        try_exec='"{}" %f'.format(self.exec_path),
+                        exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;Graphics"))
 
@@ -277,7 +279,8 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                 UI.return_main_screen(status_code=1)
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Unity3D Editor"),
                         icon_path=os.path.join(self.install_path, "unity-editor-icon.png"),
-                        exec=self.exec_path,
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))
 
@@ -323,7 +326,8 @@ class Twine(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the Twine launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Twine"),
                         icon_path=os.path.join(self.install_path, self.icon_name),
-                        exec='"{}" %f'.format(self.exec_path),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))
 
@@ -373,6 +377,7 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Superpowers"),
                         icon_path=os.path.join(self.install_path, "resources", "app", "renderer",
                                                "images", "superpowers-256.png"),
-                        exec='"{}" %f'.format(self.exec_path),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))

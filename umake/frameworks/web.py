@@ -119,7 +119,8 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the Firefox Developer launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Firefox Developer Edition"),
                         icon_path=os.path.join(self.install_path, "browser", "icons", "mozicon128.png"),
-                        exec="{} %u".format(os.path.join(self.install_path, "firefox")),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=_("Firefox Aurora with Developer tools"),
                         categories="Development;IDE;",
                         extra="StartupWMClass=Firefox Developer Edition"))
