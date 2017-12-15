@@ -157,7 +157,7 @@ class Blender(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the Blender launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Blender"),
                         icon_path=os.path.join(self.install_path, "icons", "scalable", "apps", "blender.svg"),
-                        try_exec='"{}" %f'.format(self.exec_path),
+                        try_exec=self.exec_path,
                         exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;Graphics"))
