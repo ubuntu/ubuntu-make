@@ -7,7 +7,7 @@ More information on what this snap is available at https://didrocks.fr/2017/07/0
 
 ## Current project health
 
-[![Build Status](https://api.travis-ci.org/ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make) (pep8 and small tests)
+[![Build Status](https://api.travis-ci.org/Ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make) (pep8 and small tests)
 
 [All test results](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests/) and [Coverage report](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests-collect/label=ps-trusty-desktop-amd64-1/lastSuccessfulBuild/artifact/html-coverage/index.html)
 
