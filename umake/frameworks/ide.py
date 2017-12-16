@@ -762,6 +762,9 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                          packages_requirements=["libgconf-2-4"],
                          checksum_type=ChecksumType.md5, **kwargs)
 
+    def get_version(self):
+        return subprocess.check_output(["atom", "--version"]).strip
+
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
         logger.debug("Fetched download page, parsing.")

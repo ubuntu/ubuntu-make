@@ -239,7 +239,7 @@ def main(parser):
         print(get_frameworks_list_output(args))
         sys.exit(0)
 
-    if args.version:
+    if args.version and not len(arg_to_parse) > 1:
         print(get_version())
         sys.exit(0)
 
