@@ -299,6 +299,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
                                                                         "destdir should contain a /"))
         this_framework_parser.add_argument('-r', '--remove', action="store_true",
                                            help=_("Remove framework if installed"))
+        this_framework_parser.add_argument('--version', action="store_true",
+                                           help=_("Print the framework version if installed"))
         if self.expect_license:
             this_framework_parser.add_argument('--accept-license', dest="accept_license", action="store_true",
                                                help=_("Accept license without prompting"))
@@ -307,6 +309,12 @@ class BaseFramework(metaclass=abc.ABCMeta):
     def run_for(self, args):
         """Running commands from args namespace"""
         logger.debug("Call run_for on {}".format(self.name))
+        if args.version:
+            if args.destdir:
+                message = "You can't specify a destination dir while removing a framework"
+                logger.error(message)
+                UI.return_main_screen(status_code=2)
+            self.version()
         if args.remove:
             if args.destdir:
                 message = "You can't specify a destination dir while removing a framework"

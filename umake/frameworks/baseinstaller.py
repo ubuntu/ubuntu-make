@@ -117,6 +117,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.confirm_path(self.arg_install_path)
         remove_framework_envs_from_user(self.name)
 
+    def version(self):
+        UI.display(DisplayMessage(self.get_version()))
+        UI.return_main_screen()
+
     def remove(self):
         """Remove current framework if installed
 

@@ -617,6 +617,9 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                 url = asset["browser_download_url"]
         return (url, in_download)
 
+    def get_version(self):
+        return subprocess.check_output(["atom", "--version"]).strip
+
     def post_install(self):
         """Create the Atom Code launcher"""
         # Add apm to PATH
