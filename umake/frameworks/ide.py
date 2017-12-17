@@ -760,10 +760,14 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["atom", "resources/app/apm/bin/apm"],
                          dir_to_decompress_in_tarball="atom-*",
                          packages_requirements=["libgconf-2-4"],
-                         checksum_type=ChecksumType.md5, **kwargs)
+                         checksum_type=ChecksumType.md5,
+                         updatable=True, **kwargs)
 
-    def get_version(self):
-        return subprocess.check_output(["atom", "--version"]).strip
+    def get_upstream_version(self, result):
+        page = result[self.download_page]
+        return json.loads(page.buffer.read().decode())["name"]
+
+    version_parse = {'regex': 'Atom.*: (.*)\n', 'command': 'atom --version'}
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -885,12 +889,16 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="sublime-text.desktop",
                          required_files_path=["sublime_text"],
                          dir_to_decompress_in_tarball="sublime_text_*",
+                         updatable=True,
                          **kwargs)
 
     arch_trans = {
         "amd64": "x64",
         "i386": "x32"
     }
+
+    update_parse = "https://download.sublimetext.com/sublime_text_3_build_(.*)_x64.tar.bz2"
+    version_parse = {'regex': 'Sublime Text Build (.*)\n', 'command': 'sublime-text --version'}
 
     def parse_download_link(self, line, in_download):
         """Parse SublimeText download links"""

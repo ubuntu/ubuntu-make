@@ -82,12 +82,18 @@ class BaseFramework(umake.frameworks.baseinstaller.BaseInstaller):
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="base-framework-*",
                          desktop_filename="base-framework.desktop",
-                         required_files_path=[os.path.join("bin", "studio.sh")], **kwargs)
+                         required_files_path=[os.path.join("bin", "studio.sh")],
+                         updatable=True, **kwargs)
 
         arch = platform.machine()
         self.tag = 'id="linux-bundle64"'
         if arch == 'i686':
             self.tag = 'id="linux-bundle32"'
+
+    update_parse = ">android-studio-ide-(.*)-linux.zip"
+
+    def get_version(self):
+        return "135.1641136"
 
     def parse_license(self, line, license_txt, in_license):
         """Parse download page for license"""

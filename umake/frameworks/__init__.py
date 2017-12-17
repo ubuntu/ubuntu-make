@@ -139,7 +139,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
 
     def __init__(self, name, description, category, force_loading=False, logo_path=None, is_category_default=False,
                  install_path_dir=None, only_on_archs=None, only_ubuntu_version=None, packages_requirements=None,
-                 only_for_removal=False, expect_license=False, need_root_access=False):
+                 only_for_removal=False, expect_license=False, need_root_access=False, updatable=False):
         self.name = name
         self.description = description
         self.logo_path = None
@@ -151,6 +151,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.packages_requirements.extend(self.category.packages_requirements)
         self.only_for_removal = only_for_removal
         self.expect_license = expect_license
+        self.updatable = updatable
 
         # don't detect anything for completion mode (as we need to be quick), so avoid opening apt cache and detect
         # if it's installed.
@@ -260,6 +261,10 @@ class BaseFramework(metaclass=abc.ABCMeta):
             logger.error(_("You can't remove {} as it isn't installed".format(self.name)))
             UI.return_main_screen(status_code=2)
 
+    def version(self):
+        """Method call to get the verison for the current framework"""
+        pass
+
     def mark_in_config(self):
         """Mark the installation as installed in the config file"""
         config = ConfigHandler().config
@@ -292,6 +297,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
                                            help=_("Remove framework if installed"))
         this_framework_parser.add_argument('--version', action="store_true",
                                            help=_("Print the framework version if installed"))
+        this_framework_parser.add_argument('--update', action="store_true",
+                                           help=_("Update the framework if installed and possible"))
         if self.expect_license:
             this_framework_parser.add_argument('--accept-license', dest="accept_license", action="store_true",
                                                help=_("Accept license without prompting"))
@@ -302,7 +309,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         logger.debug("Call run_for on {}".format(self.name))
         if args.version:
             if args.destdir:
-                message = "You can't specify a destination dir while removing a framework"
+                message = "You can't specify a destination dir while getting the version of a framework"
                 logger.error(message)
                 UI.return_main_screen(status_code=2)
             self.version()
@@ -319,7 +326,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
                 install_path = os.path.abspath(os.path.expanduser(args.destdir))
             if self.expect_license and args.accept_license:
                 auto_accept_license = True
-            self.setup(install_path=install_path, auto_accept_license=auto_accept_license)
+            self.setup(install_path=install_path, auto_accept_license=auto_accept_license, update=args.update)
 
 
 class MainCategory(BaseCategory):
