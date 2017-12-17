@@ -27,7 +27,9 @@ import json
 import logging
 from progressbar import ProgressBar
 import os
+import re
 import shutil
+import subprocess
 import umake.frameworks
 from umake.decompressor import Decompressor
 from umake.interactions import InputText, YesNo, LicenseAgreement, DisplayMessage, UnknownProgress
@@ -67,6 +69,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.icon_filename = kwargs.get("icon_filename", None)
         self.match_last_link = kwargs.get("match_last_link", False)
         self.json = kwargs.get("json", False)
+        self.updatable = kwargs.get("updatable", False)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
                           "desktop_filename", "icon_filename", "required_files_path",
                           "match_last_link"]:
@@ -99,13 +102,21 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         logger.debug("{} is installed".format(self.name))
         return True
 
-    def setup(self, install_path=None, auto_accept_license=False):
+    def setup(self, install_path=None, auto_accept_license=False, update=False):
         self.arg_install_path = install_path
         self.auto_accept_license = auto_accept_license
+        self.update = update
         super().setup()
 
         # first step, check if installed
-        if self.is_installed:
+        if self.update and self.updatable:
+            try:
+                self.set_exec_path()
+                self.download_provider_page()
+            except:
+                UI.display(DisplayMessage("The framework {} is not configured to update manually".format(self.name)))
+                UI.return_main_screen()
+        elif self.is_installed:
             UI.display(YesNo("{} is already installed on your system, do you want to reinstall "
                              "it anyway?".format(self.name), self.reinstall, UI.return_main_screen))
         else:
@@ -118,8 +129,40 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         remove_framework_envs_from_user(self.name)
 
     def version(self):
-        UI.display(DisplayMessage(self.get_version()))
+        super().version()
+        if not self.is_installed:
+            logger.error(_("You can't get the version for {} as it isn't installed".format(self.name)))
+            UI.return_main_screen(status_code=2)
+        try:
+            UI.display(DisplayMessage(self.get_version()))
+        except AttributeError as e:
+            logger.error("Version parse not implememted")
         UI.return_main_screen()
+
+    def get_version(self):
+        return re.search(self.version_parse['regex'],
+                         subprocess.check_output(self.version_parse['command'].split()).decode()).group(1)
+
+    @MainLoop.in_mainloop_thread
+    def run_update(self, result):
+        upstream_version = self.get_upstream_version(result)
+        if upstream_version and self.get_version() != upstream_version:
+            logger.debug("Running update of framework {}".format(self.name))
+            self.arg_install_path = self.install_path
+            self.reinstall()
+            DownloadCenter([DownloadItem(self.download_page)], self.get_metadata_and_check_license, download=False)
+            UI.display(DisplayMessage("Framework {} updated succesfully".format(self.name)))
+        else:
+            logger.debug("No update available")
+            UI.display(DisplayMessage("Framework {} already up to date".format(self.name)))
+            UI.return_main_screen()
+
+    def get_upstream_version(self, result):
+        for line in result[self.download_page].buffer:
+            line_content = line.decode()
+            parsed = re.search(self.update_parse, line_content)
+            if parsed:
+                return parsed.group(1)
 
     def remove(self):
         """Remove current framework if installed
@@ -172,7 +215,8 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                     return
         self.install_path = path_dir
         self.set_exec_path()
-        self.download_provider_page()
+        if not self.update:
+            self.download_provider_page()
 
     def set_installdir_to_clean(self):
         logger.debug("Mark non empty new installation path for cleaning.")
@@ -182,7 +226,11 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
     def download_provider_page(self):
         logger.debug("Download application provider page")
-        DownloadCenter([DownloadItem(self.download_page)], self.get_metadata_and_check_license, download=False)
+        if self.update:
+            logger.debug("Check provider page for update")
+            DownloadCenter([DownloadItem(self.download_page)], self.run_update, download=False)
+        else:
+            DownloadCenter([DownloadItem(self.download_page)], self.get_metadata_and_check_license, download=False)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse license per line, eventually write to license_txt if it's in the license part.
