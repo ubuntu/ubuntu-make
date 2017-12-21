@@ -23,7 +23,7 @@ from contextlib import suppress
 import os
 import subprocess
 from . import LargeFrameworkTests
-from ..tools import LoggedTestCase, UMAKE, get_root_dir
+from ..tools import UMAKE, get_root_dir
 
 
 class BasicCLI(LargeFrameworkTests):

@@ -21,28 +21,21 @@
 
 """Generic IDE module."""
 from abc import ABCMeta, abstractmethod
-from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
-import grp
-from io import StringIO
 import json
 import logging
 import os
 from os.path import join
-import pwd
 import platform
 import re
-import subprocess
-from urllib import parse
 import shutil
 
 import umake.frameworks.baseinstaller
 from umake.frameworks.electronics import Arduino
-from umake.interactions import DisplayMessage, LicenseAgreement
 from umake.network.download_center import DownloadCenter, DownloadItem
-from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop,\
-    strip_tags, add_env_to_user, add_exec_link, get_current_arch
+from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop,\
+    add_exec_link, get_current_arch
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)

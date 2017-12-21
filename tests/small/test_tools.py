@@ -20,12 +20,10 @@
 """Tests the various umake tools"""
 
 from concurrent import futures
-from contextlib import contextmanager, suppress
 from gi.repository import GLib
 import os
 import shutil
 import subprocess
-import stat
 import sys
 import tempfile
 from textwrap import dedent

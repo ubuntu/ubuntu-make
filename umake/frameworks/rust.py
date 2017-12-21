@@ -23,15 +23,12 @@
 
 from contextlib import suppress
 from gettext import gettext as _
-from glob import glob
 import logging
 import os
 import re
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.network.download_center import DownloadItem, DownloadCenter
-from umake.tools import get_current_arch, add_env_to_user, ChecksumType, \
-    MainLoop, Checksum
+from umake.tools import get_current_arch, add_env_to_user
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)

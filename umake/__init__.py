@@ -25,7 +25,7 @@ import logging
 import logging.config
 import os
 import sys
-from umake.frameworks import BaseCategory, load_frameworks
+from umake.frameworks import load_frameworks
 from umake.tools import MainLoop
 from .ui import cli
 import yaml

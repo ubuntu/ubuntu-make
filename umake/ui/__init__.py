@@ -20,7 +20,6 @@
 """Abstracted UI interface that will be overriden by different UI types"""
 
 import logging
-from contextlib import suppress
 from gi.repository import GLib
 from umake.tools import Singleton, MainLoop
 from umake.settings import get_version, get_latest_version
