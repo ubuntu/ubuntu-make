@@ -42,6 +42,8 @@ ADD tests/data/www.apache.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/maven.apache.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.blender.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/twinery.org.crt /usr/local/share/ca-certificates/
+ADD tests/data/www.rstudio.com.crt /usr/local/share/ca-certificates/
+ADD tests/data/download1.rstudio.org.crt /usr/local/share/ca-certificates/
 ADD docker/create_packages.sh /tmp/
 
 # Refresh the image

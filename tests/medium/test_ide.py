@@ -511,6 +511,19 @@ class SublimeTextInContainer(ContainerTests, test_ide.SublimeTextTests):
         self.installed_path = os.path.join(self.install_base_path, "ide", "sublime-text")
 
 
+class RStudioInContainer(ContainerTests, test_ide.RStudioTests):
+    """This will test the RStudio integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["www.rstudio.com", "download1.rstudio.org"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "rstudio")
+
+
 class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest):
     """This will test Spring Tools Suite IDE integration inside a container"""
 
