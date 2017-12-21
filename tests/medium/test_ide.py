@@ -478,13 +478,24 @@ class AtomInContainer(ContainerTests, test_ide.AtomTest):
         self.installed_path = os.path.join(self.install_base_path, "ide", "atom")
 
     def test_install_with_changed_download_page(self):
-        """Installing LightTable should fail if download page has significantly changed"""
+        """Installing Atom should fail if download page has significantly changed"""
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
                                                "repos", "Atom", "Atom", "releases", "latest")
         umake_command = self.command('{} ide atom'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
+
+    def test_install_beta_with_changed_download_page(self):
+        """Installing Atom Beta should fail if the latest is not a beta"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
+                                               "repos", "Atom", "Atom", "releases", "index.html")
+        with swap_file_and_restore(download_page_file_path) as content:
+            with open(download_page_file_path, "w") as newfile:
+                newfile.write(content.replace("-beta", ""))
+            self.child = umake_command = self.command('{} ide atom --beta'.format(UMAKE))
+            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertFalse(self.is_in_path(self.exec_link))
 
 
 class SublimeTextInContainer(ContainerTests, test_ide.SublimeTextTests):
