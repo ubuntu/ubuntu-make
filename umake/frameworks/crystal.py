@@ -20,15 +20,13 @@
 
 """Go module"""
 
-from contextlib import suppress
 from gettext import gettext as _
 import json
 import logging
 import os
-import re
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.tools import get_current_arch, add_env_to_user, ChecksumType, MainLoop
+from umake.tools import get_current_arch, add_env_to_user, MainLoop
 from umake.network.download_center import DownloadItem
 from umake.ui import UI
 

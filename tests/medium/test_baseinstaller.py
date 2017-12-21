@@ -22,7 +22,6 @@
 from . import ContainerTests
 import os
 import subprocess
-import pexpect
 from ..large import test_baseinstaller
 from ..tools import UMAKE, spawn_process, get_data_dir, swap_file_and_restore
 

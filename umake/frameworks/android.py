@@ -24,7 +24,6 @@ from contextlib import suppress
 from gettext import gettext as _
 import logging
 import os
-import platform
 import re
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage

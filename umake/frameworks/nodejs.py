@@ -20,16 +20,14 @@
 
 """Nodejs module"""
 
-from contextlib import suppress
 from gettext import gettext as _
 import logging
 import os
 import re
-import subprocess
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.interactions import DisplayMessage
-from umake.tools import get_current_arch, add_env_to_user, ChecksumType, MainLoop
+from umake.tools import get_current_arch, add_env_to_user, ChecksumType
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)

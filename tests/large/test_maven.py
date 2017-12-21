@@ -20,9 +20,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 """Tests for the Maven category"""
-import subprocess
 import os
-import tempfile
 from tests.large import LargeFrameworkTests
 from tests.tools import UMAKE, spawn_process
 
