@@ -1,8 +1,8 @@
 # runtime requirements
--e bzr+lp:python-apt/@0.9.3.5#egg=apt
+-e git://git.launchpad.net/python-apt@1.1.0_beta1#egg=apt
 argcomplete
 beautifulsoup4
-progressbar
+progressbar33
 pyyaml
 requests
 pyxdg
@@ -14,4 +14,3 @@ nose-cov
 nose-json
 pep8
 pexpect>=4.0
-
