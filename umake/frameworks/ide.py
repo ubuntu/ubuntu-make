@@ -915,7 +915,14 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
             UI.return_main_screen(status_code=1)
 
         try:
-            assets = json.loads(page.buffer.read().decode())["assets"]
+            if "beta" in self.description:
+                latest_beta = json.loads(page.buffer.read().decode())[0]
+                if "beta" not in latest_beta["tag_name"]:
+                    logger.error("Latest version is not beta.")
+                    UI.return_main_screen(status_code=1)
+                assets = latest_beta["assets"]
+            else:
+                assets = json.loads(page.buffer.read().decode())["assets"]
             download_url = None
             for asset in assets:
                 if "tar.gz" in asset["browser_download_url"]:
@@ -941,6 +948,21 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=_("The hackable text editor"),
                         categories="Development;IDE;"))
+
+    def install_framework_parser(self, parser):
+        this_framework_parser = super().install_framework_parser(parser)
+        this_framework_parser.add_argument('--beta', action="store_true",
+                                           help=_("Install Beta version if available"))
+        return this_framework_parser
+
+    def run_for(self, args):
+        if args.beta:
+            self.name += " Beta"
+            self.description += " beta"
+            self.desktop_filename = self.desktop_filename.replace(".desktop", "-beta.desktop")
+            self.download_page = "https://api.github.com/repos/Atom/Atom/releases"
+            self.install_path += "-beta"
+        super().run_for(args)
 
 
 class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):

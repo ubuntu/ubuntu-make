@@ -593,6 +593,7 @@ class AtomTest(LargeFrameworkTests):
         self.installed_path = os.path.join(self.install_base_path, "ide", "atom")
         self.desktop_filename = "atom.desktop"
         self.command_args = '{} ide atom'.format(UMAKE)
+        self.name = "Atom"
 
     def test_default_install(self):
         """Install Atom from scratch test case"""
@@ -621,7 +622,42 @@ class AtomTest(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Atom is already installed.*\[.*\] ")
+        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+        self.child.sendline()
+        self.wait_and_close()
+
+    def test_beta_install(self):
+        """Install Atom from scratch test case"""
+        self.installed_path += '-beta'
+        self.desktop_filename = self.desktop_filename.replace('.desktop', '-beta.desktop')
+        self.command_args += ' --beta'
+        self.name += ' Beta'
+
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+        self.assert_exec_link_exists()
+        # Test if the apm symlink is added correctly:
+        self.assertTrue(self.is_in_path(os.path.join(self.install_base_path, 'bin', 'apm')))
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process(["atom", self.installed_path],
+                                    wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
         self.child.sendline()
         self.wait_and_close()
 
