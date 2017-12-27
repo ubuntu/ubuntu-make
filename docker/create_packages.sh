@@ -172,3 +172,28 @@ create_package libxrender1
 create_package libxtst6
 create_package monodevelop
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+# crystal deps
+mkdir -p $repo_root_dir/crystal
+cd $repo_root_dir/crystal
+create_package libbsd-dev
+create_package libedit-dev
+create_package libevent-core-2.0-5
+create_package libevent-dev
+create_package libevent-extra-2.0-5
+create_package libevent-openssl-2.0-5
+create_package libevent-pthreads-2.0-5
+create_package libgc-dev
+create_package libgmp-dev
+create_package libgmpxx4ldbl
+create_package libssl-dev
+create_package libxml2-dev
+create_package libyaml-dev
+create_package libreadline-dev
+create_package automake
+create_package libtool
+create_package git
+create_package llvm
+create_package libpcre3-dev
+create_package build-essential
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
