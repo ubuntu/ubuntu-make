@@ -101,3 +101,16 @@ class SuperpowersInContainer(ContainerTests, test_games.SuperpowersTests):
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
+
+
+class GodotInInContainer(ContainerTests, test_games.GodotTests):
+    """This will test the Godot Engine integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["godotengine.org", "godotengine.org/download"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "games", "godot")
