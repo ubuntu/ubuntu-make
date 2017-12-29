@@ -25,7 +25,6 @@ from contextlib import suppress
 from gettext import gettext as _
 import logging
 import os
-from os.path import join
 import re
 import stat
 import json
@@ -404,7 +403,6 @@ class Godot(umake.frameworks.baseinstaller.BaseInstaller):
         self.icon_url = os.path.join("https://raw.githubusercontent.com/godotengine/godot/",
                                      "master",
                                      self.icon_filename)
-        self.exec_name = ''
 
     arch_trans = {
         "amd64": "64",
@@ -420,16 +418,10 @@ class Godot(umake.frameworks.baseinstaller.BaseInstaller):
                 url = p.group(1)
         return ((url, None), in_download)
 
-    def decompress_and_install(self, fds):
-        """Get Godot executable name from url"""
-        super().decompress_and_install(fds)
-        exec_url = self.download_requests[0].url
-        self.exec_name = os.path.splitext(os.path.basename(exec_url))[0]
-
     def save_icon(self, download_result):
         """Save correct Godot icon"""
         icon = download_result.pop(self.icon_url).fd.name
-        shutil.copy(icon, join(self.install_path, self.icon_filename))
+        shutil.copy(icon, os.path.join(self.install_path, self.icon_filename))
         logger.debug("Copied icon: {}".format(self.icon_url))
 
     def post_install(self):
@@ -437,20 +429,12 @@ class Godot(umake.frameworks.baseinstaller.BaseInstaller):
         DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
                        on_done=self.save_icon, download=True)
 
-        # Rename Godot executable
-        os.rename(os.path.join(self.install_path, self.exec_name),
-                  os.path.join(self.install_path, self.exec_link_name))
-
         # Get icon path
-        icon_path = join(self.install_path, self.icon_filename)
-
-        comment = self.description
-        categories = "Development;IDE;"
-
+        icon_path = os.path.join(self.install_path, self.icon_filename)
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=_("Godot"),
                                                      icon_path=icon_path,
                                                      try_exec=self.exec_path,
                                                      exec=self.exec_link_name,
-                                                     comment=comment,
-                                                     categories=categories))
+                                                     comment=self.description,
+                                                     categories="Development;IDE;"))
