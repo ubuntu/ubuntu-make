@@ -292,13 +292,13 @@ class Twine(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Twine", description=_("Twine tool for creating interactive and nonlinear stories"),
                          only_on_archs=['i386', 'amd64'],
-                         download_page="http://twinery.org/",
+                         download_page="https://twinery.org/",
                          dir_to_decompress_in_tarball='twine*',
                          desktop_filename="twine.desktop",
                          required_files_path=["Twine"],
                          **kwargs)
         # add logo download as the tar doesn't provide one
-        self.download_requests.append(DownloadItem("http://twinery.org/img/logo.svg", None))
+        self.download_requests.append(DownloadItem("https://twinery.org/img/logo.svg", None))
 
     def parse_download_link(self, line, in_download):
         """Parse Twine download links"""
