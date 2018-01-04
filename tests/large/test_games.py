@@ -58,7 +58,7 @@ class StencylTests(LargeFrameworkTests):
             use_cwd = None
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL, cwd=use_cwd)
-        self.check_and_kill_process(["./runtimes/jre-linux/bin/java"], wait_before=self.TIMEOUT_START)
+        self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START)
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
