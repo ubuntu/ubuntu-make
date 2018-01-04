@@ -109,7 +109,7 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
         """Add nodejs necessary env variables and move module folder"""
         if not self.prefix_set():
             with open(os.path.join(os.environ['HOME'], '.npmrc'), 'a+') as file:
-                file.write("prefix = ${HOME}/.npm_modules")
+                file.write("prefix = ${HOME}/.npm_modules\n")
 
         add_env_to_user(self.name, {"PATH": {"value": "{}:{}".format(os.path.join(self.install_path, "bin"),
                                                                      os.path.join(os.path.expanduser('~'),
