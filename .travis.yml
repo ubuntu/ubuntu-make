@@ -1,6 +1,8 @@
 language: python
 sudo: required
 dist: trusty
+services:
+  - docker
 python:
   - "3.4"
 before_install:
@@ -17,4 +19,7 @@ install: "" # we don't want to use virtualenv (see below)
 # instead for both uncompiled and compiled modules.
 # The easiest way without hacking PYTHONPATH, PYTHONHOME is to use the system
 # python version by prepending it in the PATH.
-script: PATH="/usr/bin:$PATH" ./runtests pep8 small
+env:
+  - TESTFOLDER="pep8 small"
+  - TESTFOLDER="medium"
+script: PATH="/usr/bin:$PATH" ./runtests $TESTFOLDER
