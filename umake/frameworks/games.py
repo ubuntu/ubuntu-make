@@ -340,7 +340,7 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Superpowers", description=_("The HTML5 2D+3D game maker"),
                          only_on_archs=['i386', 'amd64'],
-                         download_page="https://api.github.com/repos/superpowers/superpowers-core/releases/latest",
+                         download_page="https://api.github.com/repos/superpowers/superpowers-app/releases/latest",
                          dir_to_decompress_in_tarball='superpowers*',
                          desktop_filename="superpowers.desktop",
                          required_files_path=["Superpowers"],
