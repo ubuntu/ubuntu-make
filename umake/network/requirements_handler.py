@@ -106,6 +106,13 @@ class RequirementsHandler(object, metaclass=Singleton):
         logger.debug("Check if {} is uptodate".format(bucket))
         is_installed_and_uptodate = True
         for pkg_name in bucket:
+            if ' | ' in pkg_name:
+                for package in pkg_name.split(' | '):
+                    if self.is_bucket_available([package]):
+                        bucket.remove(pkg_name)
+                        bucket.append(package)
+                        pkg_name = package
+                        break
             # /!\ danger: if current arch == ':appended_arch', on a non multiarch system, dpkg doesn't
             # understand that. strip :arch then
             if ":" in pkg_name:

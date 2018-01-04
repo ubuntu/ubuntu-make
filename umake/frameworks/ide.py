@@ -1002,14 +1002,13 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
 
 class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
-        return
         super().__init__(name="Spring Tools Suite",
                          description=_("Spring Tools Suite IDE"),
                          download_page="https://spring.io/tools/sts/all",
                          dir_to_decompress_in_tarball='sts-bundle/sts-*',
                          checksum_type=ChecksumType.sha1,
                          desktop_filename='STS.desktop',
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
                          icon_filename='icon.xpm',
                          required_files_path=["STS"],

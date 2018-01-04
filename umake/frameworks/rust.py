@@ -46,29 +46,23 @@ class RustCategory(umake.frameworks.BaseCategory):
 
 
 class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
-    # Button labels on the download page.
-    arch_trans = {
-        "amd64": "x86_64",
-        "i386": "i686"
-    }
-
     def __init__(self, **kwargs):
         super().__init__(name="Rust Lang",
                          description=_("The official Rust distribution"),
                          is_category_default=True,
                          only_on_archs=['i386', 'amd64'],
                          download_page="https://www.rust-lang.org/en-US/other-installers.html",
-                         checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="rust-*",
                          **kwargs)
-        self.arch = get_current_arch()
+    arch_trans = {
+        "amd64": "x86_64",
+        "i386": "i686"
+    }
 
     def parse_download_link(self, line, in_download):
         """Parse Rust download link, expect to find a url"""
         url = None
-        if '{}-unknown-linux-gnu.tar.gz">'.format(self.arch_trans[self.arch]) in line:
-            in_download = True
-        if in_download:
+        if '{}-unknown-linux-gnu.tar.gz">'.format(self.arch_trans[get_current_arch()]) in line:
             p = re.search(r'href="(.*)">', line)
             with suppress(AttributeError):
                 url = p.group(1)
