@@ -298,7 +298,7 @@ class Twine(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["Twine"],
                          **kwargs)
         # add logo download as the tar doesn't provide one
-        self.download_requests.append(DownloadItem("https://twinery.org/img/logo.svg", None))
+        self.download_requests.append(DownloadItem("https://twinery.org/homepage/img/logo.svg", None))
 
     def parse_download_link(self, line, in_download):
         """Parse Twine download links"""
