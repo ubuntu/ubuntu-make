@@ -163,6 +163,36 @@ class Blender(umake.frameworks.baseinstaller.BaseInstaller):
                         categories="Development;IDE;Graphics"))
 
 
+class RenPy(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="RenPy", description=_("Visual novel engine"),
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://www.renpy.org/latest.html",
+                         desktop_filename="renpy.desktop",
+                         required_files_path=["renpy.sh"],
+                         dir_to_decompress_in_tarball="renpy-*",
+                         **kwargs)
+
+    def parse_download_link(self, line, in_download):
+        """Parse Ren'Py download links"""
+        url = None
+        if '.tar.bz2' in line:
+            p = re.search(r'href="(https://www\.renpy\.org/dl/.*-sdk\.tar\.bz2)"', line)
+            with suppress(AttributeError):
+                url = p.group(1)
+        return ((url, None), in_download)
+
+    def post_install(self):
+        """Create the Ren'Py launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Ren'Py"),
+                        icon_path=os.path.join(self.install_path, "launcher/icon.icns"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=self.description,
+                        categories="Development;IDE;"))
+
+
 def _chrome_sandbox_setuid(path):
     """Chown and setUID to chrome sandbox"""
     # switch to root
