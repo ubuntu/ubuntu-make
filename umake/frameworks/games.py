@@ -275,3 +275,10 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))
+
+
+class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Unity3D", description="For removal only (The tarfile is not supported upstream anymore)",
+                         download_page=None, only_on_archs=['amd64'], only_for_removal=True, **kwargs)
