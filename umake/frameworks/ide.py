@@ -799,7 +799,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
-        """Parse Android Studio download page for license"""
+        """Parse Visual Studio Code download page for license"""
         if 'SOFTWARE LICENSE TERMS' in line:
             in_license = True
         if in_license and "</div>" in line:
