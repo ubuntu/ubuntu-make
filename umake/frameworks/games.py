@@ -186,7 +186,7 @@ class RenPy(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Create the Ren'Py launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Ren'Py"),
-                        icon_path=os.path.join(self.install_path, "launcher/icon.icns"),
+                        icon_path=os.path.join(self.install_path, "launcher", "icon.icns"),
                         try_exec=self.exec_path,
                         exec=self.exec_link_name,
                         comment=self.description,

@@ -53,6 +53,20 @@ class BlenderInContainer(ContainerTests, test_games.BlenderTests):
         self.installed_path = os.path.join(self.install_base_path, "games", "blender")
 
 
+class RenPyInContainer(ContainerTests, test_games.RenPyTests):
+    """This will test the Ren'Py editor inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["www.renpy.org"]}
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'renpy')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "games", "renpy")
+
+
 class Unity3DInContainer(ContainerTests, test_games.Unity3DTests):
     """This will test the Unity 3D editor inside a container"""
 
