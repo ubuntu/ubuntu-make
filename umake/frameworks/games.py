@@ -177,116 +177,6 @@ def _chrome_sandbox_setuid(path):
             return False
 
 
-class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
-
-    def __init__(self, **kwargs):
-        super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
-                         only_on_archs=['amd64'],
-                         download_page="https://forum.unity3d.com/" +
-                                       "threads/unity-on-linux-release-notes-and-known-issues.350256/page-2",
-                         match_last_link=True,
-                         checksum_type=ChecksumType.sha1,
-                         dir_to_decompress_in_tarball='unity-editor*',
-                         desktop_filename="unity3d-editor.desktop",
-                         required_files_path=[os.path.join("Editor", "Unity")],
-                         # we need root access for chrome sandbox setUID
-                         need_root_access=True,
-                         # Note that some packages requirements essential to the system itself are not listed (we
-                         # don't want to create fake packages and kill the container for medium tests)
-                         packages_requirements=[
-                             "gconf-service", "lib32gcc1", "lib32stdc++6", "libasound2", "libcairo2",
-                             "libcap2", "libcups2", "libfontconfig1", "libfreetype6", "libgconf-2-4",
-                             "libgdk-pixbuf2.0-0", "libglu1-mesa", "libgtk2.0-0",
-                             "libgl1-mesa-glx | libgl1-mesa-glx-lts-utopic |\
-                              libgl1-mesa-glx-lts-vivid | libgl1-mesa-glx-lts-wily",
-                             "libnspr4", "libnss3", "libpango1.0-0", "libpq5", "libxcomposite1",
-                             "libxcursor1", "libxdamage1", "libxext6", "libxfixes3", "libxi6",
-                             "libxrandr2", "libxrender1", "libxtst6",
-                             "monodevelop"],
-                         **kwargs)  # monodevelop is for mono deps, temporary
-        self.download_url = None
-        self.checksum = None
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        """Download files to download + license and check it"""
-        logger.debug("Parse download metadata")
-
-        error_msg = result[self.download_page].error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        in_download = False
-        url_found = False
-        for line in result[self.download_page].buffer:
-            if url_found is None or self.match_last_link:
-                line_content = line.decode()
-                (_url_found, in_download) = self.parse_download_link(line_content, in_download)
-                if not url_found:
-                    url_found = _url_found
-        if not url_found:
-            logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
-        DownloadCenter(urls=[DownloadItem(self.download_url, None)],
-                       on_done=self.get_url_and_start_download, download=False)
-
-    def parse_download_link(self, line, in_download):
-        """Parse Unity3d download links"""
-        url_found = False
-        if "beta.unity" in line:
-            in_download = True
-            p = re.search(
-                r'href="(http://beta.unity.*.html)" target="_blank" class="externalLink">http://beta.unity3d.com',
-                line)
-            with suppress(AttributeError):
-                url_found = True
-                self.download_url = p.group(1)
-        if in_download is True:
-            p = re.search(r'sh: (\w+)\)', line)
-            with suppress(AttributeError):
-                self.checksum = p.group(1)
-        return (url_found, in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_url_and_start_download(self, download_result):
-        res = download_result[self.download_url]
-        text = res.buffer.getvalue().decode('utf-8')
-        url = re.search(r'http.*?.sh', text).group(0)
-        if url is None:
-            logger.error("Download page changed its syntax or is not parsable (missing url)")
-            UI.return_main_screen(status_code=1)
-        if self.checksum is None:
-            logger.error("Download page changed its syntax or is not parsable (missing checksum)")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download link for {}, checksum: {}".format(url, self.checksum))
-        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, self.checksum)))
-        self.start_download_and_install()
-
-    def decompress_and_install(self, fds):
-        """Override to strip the unwanted shell header part"""
-        logger.debug("Start looking at the archive inside the script")
-        for line in fds[0]:
-            if line.startswith(b"__ARCHIVE_BEGINS_HERE__"):
-                logger.debug("Found the archive inside the script")
-                break
-        super().decompress_and_install(fds)
-
-    def post_install(self):
-        """Create the Unity 3D launcher and setuid chrome sandbox"""
-        with futures.ProcessPoolExecutor(max_workers=1) as executor:
-            # chrome sandbox requires this: https//code.google.com/p/chromium/wiki/LinuxSUIDSandbox
-            f = executor.submit(_chrome_sandbox_setuid, os.path.join(self.install_path, "Editor", "chrome-sandbox"))
-            if not f.result():
-                UI.return_main_screen(status_code=1)
-        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Unity3D Editor"),
-                        icon_path=os.path.join(self.install_path, "unity-editor-icon.png"),
-                        try_exec=self.exec_path,
-                        exec=self.exec_link_name,
-                        comment=self.description,
-                        categories="Development;IDE;"))
-
-
 class Twine(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
@@ -385,3 +275,10 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))
+
+
+class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Unity3D", description="For removal only (The tarfile is not supported upstream anymore)",
+                         download_page=None, only_on_archs=['amd64'], only_for_removal=True, **kwargs)

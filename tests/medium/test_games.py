@@ -53,20 +53,6 @@ class BlenderInContainer(ContainerTests, test_games.BlenderTests):
         self.installed_path = os.path.join(self.install_base_path, "games", "blender")
 
 
-class Unity3DInContainer(ContainerTests, test_games.Unity3DTests):
-    """This will test the Unity 3D editor inside a container"""
-
-    TIMEOUT_START = 20
-    TIMEOUT_STOP = 10
-
-    def setUp(self):
-        self.hosts = {443: ["forum.unity3d.com"], 80: ["beta.unity3d.com"]}
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'unity3d')
-        super().setUp()
-        # override with container path
-        self.installed_path = os.path.join(self.install_base_path, "games", "unity3d")
-
-
 class TwineInContainer(ContainerTests, test_games.TwineTests):
     """This will test Twine inside a container"""
 
