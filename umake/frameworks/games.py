@@ -28,6 +28,7 @@ import os
 import re
 import stat
 import json
+import shutil
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem, DownloadCenter
@@ -277,8 +278,61 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
                         categories="Development;IDE;"))
 
 
+class Godot(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Godot",
+                         description=_("Multi-platform 2D and 3D opensource game engine"),
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://godotengine.org/download",
+                         desktop_filename="godot.desktop",
+                         required_files_path=["godot"],
+                         dir_to_decompress_in_tarball="",
+                         icon_filename='icon.png',
+                         **kwargs)
+        self.icon_url = os.path.join("https://raw.githubusercontent.com/godotengine/godot/",
+                                     "master",
+                                     self.icon_filename)
+
+    arch_trans = {
+        "amd64": "64",
+        "i386": "32"
+    }
+
+    def parse_download_link(self, line, in_download):
+        """Parse Godot download links"""
+        url = None
+        if '.zip' in line:
+            p = re.search(r'href="([^<]*{}.zip)"'.format(self.arch_trans[get_current_arch()]), line)
+            with suppress(AttributeError):
+                url = p.group(1)
+        return ((url, None), in_download)
+
+    def save_icon(self, download_result):
+        """Save correct Godot icon"""
+        icon = download_result.pop(self.icon_url).fd.name
+        shutil.copy(icon, os.path.join(self.install_path, self.icon_filename))
+        logger.debug("Copied icon: {}".format(self.icon_url))
+
+    def post_install(self):
+        """Create the Godot Code launcher"""
+        DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
+                       on_done=self.save_icon, download=True)
+
+        # Get icon path
+        icon_path = os.path.join(self.install_path, self.icon_filename)
+        create_launcher(self.desktop_filename,
+                        get_application_desktop_file(name=_("Godot"),
+                                                     icon_path=icon_path,
+                                                     try_exec=self.exec_path,
+                                                     exec=self.exec_link_name,
+                                                     comment=self.description,
+                                                     categories="Development;IDE;"))
+
+        
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
         super().__init__(name="Unity3D", description="For removal only (The tarfile is not supported upstream anymore)",
                          download_page=None, only_on_archs=['amd64'], only_for_removal=True, **kwargs)
+
