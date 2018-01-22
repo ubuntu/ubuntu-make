@@ -30,7 +30,7 @@ class MavenInContainer(ContainerTests, test_maven.MavenTests):
 
     def setUp(self):
         self.hosts = {443: ["www.apache.org", "maven.apache.org"]}
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'scala')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "maven", "maven-lang")
