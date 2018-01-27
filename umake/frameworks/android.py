@@ -99,6 +99,8 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Android Studio launcher"""
+        add_env_to_user(self.name, {"ANDROID_HOME": {"value": self.install_path, "keep": False},
+                                    "ANDROID_SDK": {"value": self.install_path, "keep": False}})
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Android Studio"),
                         icon_path=os.path.join(self.install_path, "bin", "studio.png"),
                         try_exec=os.path.join(self.install_path, "bin", "studio.sh"),
