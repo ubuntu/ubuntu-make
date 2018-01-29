@@ -535,7 +535,7 @@ class Rider(BaseJetBrains):
                          description=_("The JetBrains cross-platform .NET IDE"),
                          only_on_archs=['i386', 'amd64'],
                          packages_requirements=['mono-devel'],
-                         dir_to_decompress_in_tarball='rider-*',
+                         dir_to_decompress_in_tarball='JetBrains Rider-*',
                          desktop_filename='jetbrains-rider.desktop',
                          icon_filename='rider.png',
                          **kwargs)
