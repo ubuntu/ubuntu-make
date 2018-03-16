@@ -5,11 +5,37 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 
 More information on what this snap is available at https://didrocks.fr/2017/07/05/ubuntu-make-as-a-classic-snap-intro/
 
+Table of Contents (ToC)
+=======================
+
+* [Current project health](#current-project-health)
+* [Installing](#installing)
+* [Running the command line tool](#running-the-command-line-tool)
+* [Requirements](#requirements)
+* [Shell completion](#shell-completion)
+* [Different level of logging](#different-level-of-logging)
+* [Development](#development)
+* [Providing user's framework](#providing-users-framework)
+* [Style guide and checking](#style-guide-and-checking)
+* [Tests](#tests)
+* [Types of tests](#types-of-tests)
+* [Running some tests with all debug infos](#running-some-tests-with-all-debug-infos)
+* [More information on runtests](#more-information-on-runtests)
+* [Nose configurations](#nose-configurations)
+* [Check for python warnings](#check-for-python-warnings)
+* [Create your own environment and run from it](#create-your-own-environment-and-run-from-it)
+* [Developing using system package](#developing-using-system-package)
+* [Release management](#release-management)
+
+---
+
 ## Current project health
 
 [![Build Status](https://api.travis-ci.org/Ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make) (pep8 and small tests)
 
 [All test results](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests/) and [Coverage report](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests-collect/label=ps-trusty-desktop-amd64-1/lastSuccessfulBuild/artifact/html-coverage/index.html)
+
+---
 
 ## Installing
 We recommend to use the Ubuntu Make snap to ensure you always have the latest and greatest version, even on older supported releases.
@@ -35,6 +61,8 @@ Umake has three listing options:
 - `--list-available` to show the available frameworks
 - `--list-installed` to show the installed frameworks
 
+---
+
 ## Running the command line tool
 To run the tool:
 
@@ -44,10 +72,14 @@ $ ./umake
 
 You can use `--help` to get more information and change the verbosity of the output with `-v`, `-vv`.
 
+---
+
 ## Requirements
 
 > Note that this project uses python3 and requires at least python 3.3. All commands use the python 3 version. There are directions later on explaining how to install the corresponding virtualenv.
 
+
+---
 
 ## Shell completion
 
@@ -56,6 +88,8 @@ To enable shell completion on bash or zsh, just run:
 ```sh
 $ . enable_completion
 ```
+
+---
 
 ## Different level of logging
 
@@ -75,6 +109,8 @@ To load one of those logging profiles:
 ```sh
 $ LOG_CFG=confs/debug.logcfg bin/umake
 ```
+
+---
 
 ## Development
 ### Providing user's framework
@@ -184,9 +220,15 @@ $ bin/umake
 
 Instead of using a virtual environment, you can install system packages to be able to run the Ubuntu Make tests. The build dependencies are listed in *debian/control* and should be available in latest development Ubuntu version. If you are using the latest LTS, you should find them in a dedicated [Ubuntu Make Build-dep ppa](https://launchpad.net/~ubuntu-desktop/+archive/ubuntu/ubuntu-make-builddeps).
 
+---
+
 ## Release management
 Refresh .pot files:
 
 ```sh
 $ ./setup.py update_pot
 ```
+
+---
+
+<img src="https://avatars3.githubusercontent.com/u/4604537?s=200&v=4" width="50"></img>
