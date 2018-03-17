@@ -31,7 +31,7 @@ class ContainerTests(LoggedTestCase):
     """Container-based tests utilities"""
 
     DOCKER_USER = "user"
-    DOCKER_TESTIMAGE = "lyzardking/ubuntu-make"
+    DOCKER_TESTIMAGE = "f93b1a9beadd"
     UMAKE_TOOLS_IN_CONTAINER = "/umake"
     APT_FAKE_REPO_PATH = "/apt-fake-repo"
 
