@@ -20,22 +20,45 @@
 
 
 """Generic Electronics module."""
+from abc import ABCMeta, abstractmethod
+from bs4 import BeautifulSoup
+from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
-import logging
 import grp
+from io import StringIO
+import json
+import logging
 import os
-import platform
+from os.path import join
 import pwd
+import platform
 import re
+import subprocess
+from urllib import parse
+import shutil
+
 import umake.frameworks.baseinstaller
-from umake.interactions import DisplayMessage
+from umake.interactions import DisplayMessage, LicenseAgreement
 from umake.network.download_center import DownloadCenter, DownloadItem
-from umake.tools import add_env_to_user, MainLoop, ChecksumType, Checksum,\
-    create_launcher, get_application_desktop_file
+from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop,\
+    strip_tags, add_env_to_user, add_exec_link, get_current_arch
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
+
+
+def _add_to_group(user, group):
+    """Add user to group"""
+    # switch to root
+    with as_root():
+        try:
+            output = subprocess.check_output(["adduser", user, group])
+            logger.debug("Added {} to {}: {}".format(user, group, output))
+            return True
+        except subprocess.CalledProcessError as e:
+            logger.error("Couldn't add {} to {}".format(user, group))
+            return False
 
 
 class ElectronicsCategory(umake.frameworks.BaseCategory):
@@ -166,7 +189,8 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=_("Arduino"),
                                                      icon_path=icon_path,
-                                                     exec='"{}" %f'.format(self.exec_path),
+                                                     try_exec=self.exec_path,
+                                                     exec=self.exec_link_name,
                                                      comment=comment,
                                                      categories=categories))
         if not self.was_in_arduino_group:
@@ -196,7 +220,8 @@ class Eagle(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Create the Eagle launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Eagle"),
-                        icon_path=os.path.join(self.install_path, "bin", "eagleicon50.png"),
-                        exec=self.exec_path,
+                        icon_path=os.path.join(self.install_path, "bin", "eagle-logo.png"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;"))

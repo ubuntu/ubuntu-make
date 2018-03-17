@@ -49,19 +49,6 @@ from umake.ui import UI
 logger = logging.getLogger(__name__)
 
 
-def _add_to_group(user, group):
-    """Add user to group"""
-    # switch to root
-    with as_root():
-        try:
-            output = subprocess.check_output(["adduser", user, group])
-            logger.debug("Added {} to {}: {}".format(user, group, output))
-            return True
-        except subprocess.CalledProcessError as e:
-            logger.error("Couldn't add {} to {}".format(user, group))
-            return False
-
-
 class IdeCategory(umake.frameworks.BaseCategory):
     def __init__(self):
         super().__init__(name="IDE", description=_("Generic IDEs"),
