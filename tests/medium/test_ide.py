@@ -343,38 +343,6 @@ class RiderIDEInContainer(ContainerTests, test_ide.RiderIDETests):
                                                         "products", "releases?code=RD")
 
 
-class ArduinoIDEInContainer(ContainerTests, test_ide.ArduinoIDETests):
-    """This will test the Arduino IDE integration inside a container"""
-
-    TIMEOUT_START = 20
-    TIMEOUT_STOP = 10
-
-    def setUp(self):
-        self.hosts = {80: ["www.arduino.cc"]}
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'arduino')
-        super().setUp()
-        # override with container path
-        self.installed_path = os.path.join(self.install_base_path, "ide", "arduino")
-
-    def test_install_with_changed_download_page(self):
-        """Installing arduino ide should fail if download page has significantly changed"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.arduino.cc", "en", "Main",
-                                               "Software")
-        umake_command = self.command('{} ide arduino'.format(UMAKE))
-        self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(self.exec_link))
-
-    def test_install_with_changed_checksum_page(self):
-        """Installing arduino ide should fail if checksum link is unparseable"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.arduino.cc",
-                                               "checksums.md5sum.txt")
-        umake_command = self.command('{} ide arduino'.format(UMAKE))
-        self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(self.exec_link))
-
-
 class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
     """This will test the NetBeans IDE integration inside a container"""
 
