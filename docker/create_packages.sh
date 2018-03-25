@@ -110,6 +110,7 @@ dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 mkdir -p $repo_root_dir/vscode
 cd $repo_root_dir/vscode
 create_package libgtk2.0-0
+create_package libgconf-2-4
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 
 # arduino deps
