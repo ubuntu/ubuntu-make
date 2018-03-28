@@ -55,3 +55,14 @@ parts:
       - python3-yaml
       - python3-requests
       - python3-xdg
+      - libc6
+      - libuuid1
+      - libreadline6
+      - libtinfo5
+      - libselinux1
+      - libpcre3
+      - libudev1
+      - zlib1g
+      - libbz2-1.0
+      - libgcc1
+      - liblzma5
