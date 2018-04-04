@@ -18,12 +18,15 @@ html-coverage*/
 .coverage
 coverage.xml
 nosetests*
+.cache
 
-# Idea content
+# Editor settings
 .idea/
+.vscode
 
 # Snap
 parts/
 stage/
 prime/
 *.snap
+*.tar.bz2
