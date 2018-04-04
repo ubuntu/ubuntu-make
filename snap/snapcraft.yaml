@@ -16,11 +16,16 @@ confinement: classic
 apps:
   umake:
     command: bin/umake
+    environment:
+      PATH: $SNAP/usr/bin:$SNAP/bin/:$PATH
+      PYTHONPATH: $SNAP/usr/lib/python3.5/site-packages:$SNAP/usr/lib/python3.5/dist-packages:$PYTHONPATH
 
 parts:
   umake:
     source: .
     plugin: python
+    organize:
+      lib/python3/dist-packages/umake: lib/python3.5/site-packages/umake
     build-packages:
       - gettext
       - python3
