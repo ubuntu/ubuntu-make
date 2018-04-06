@@ -382,6 +382,7 @@ def list_frameworks():
                             'is_installable': True or False
                             'is_category_default': True or False
                             'only_for_removal': True or False
+                            'updatable': True or False
                         },
                     ]
             },
@@ -398,7 +399,8 @@ def list_frameworks():
                 "is_installed": framework.is_installed,
                 "is_installable": framework.is_installable,
                 "is_category_default": framework.is_category_default,
-                "only_for_removal": framework.only_for_removal
+                "only_for_removal": framework.only_for_removal,
+                "updatable": framework.updatable
             }
 
             frameworks_dict.append(new_fram)

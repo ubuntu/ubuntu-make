@@ -222,7 +222,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.set_exec_path()
         self.download_provider_page()
 
-    def download_provider_page(self):
+    def download_provider_page(self, update=False):
         logger.debug("Download application provider page")
         if self.update:
             logger.debug("Check provider page for update")
