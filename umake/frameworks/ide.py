@@ -498,18 +498,18 @@ class DataGrip(BaseJetBrains):
                          **kwargs)
 
 
-class GogLand(BaseJetBrains):
-    """The JetBrains GogLand IDE"""
+class GoLand(BaseJetBrains):
+    """The JetBrains GoLand IDE"""
     download_keyword = 'GO'
-    executable = "gogland.sh"
+    executable = "goland.sh"
 
     def __init__(self, **kwargs):
-        super().__init__(name="GogLand",
+        super().__init__(name="GoLand",
                          description=_("The Drive to Develop"),
                          only_on_archs=['i386', 'amd64'],
-                         dir_to_decompress_in_tarball='Gogland-*',
-                         desktop_filename='jetbrains-gogland.desktop',
-                         icon_filename='gogland.png',
+                         dir_to_decompress_in_tarball='GoLand-*',
+                         desktop_filename='jetbrains-goland.desktop',
+                         icon_filename='goland.png',
                          **kwargs)
 
 

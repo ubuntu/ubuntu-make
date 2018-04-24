@@ -309,8 +309,8 @@ class PhpStormIDEInContainer(ContainerTests, test_ide.PhpStormIDETests):
                                                         "products", "releases?code=PS")
 
 
-class GogLandIDEInContainer(ContainerTests, test_ide.GogLandIDETests):
-    """This will test the GogLand IDE integration inside a container"""
+class GoLandIDEInContainer(ContainerTests, test_ide.GoLandIDETests):
+    """This will test the GoLand IDE integration inside a container"""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
@@ -319,7 +319,7 @@ class GogLandIDEInContainer(ContainerTests, test_ide.GogLandIDETests):
         self.hosts = {443: ["data.services.jetbrains.com", 'download.jetbrains.com']}
         super().setUp()
         # override with container path
-        self.installed_path = os.path.join(self.install_base_path, "ide", "gogland")
+        self.installed_path = os.path.join(self.install_base_path, "ide", "goland")
         self.bad_download_page_file_path = os.path.join(get_data_dir(),
                                                         "server-content", "data.services.jetbrains.com",
                                                         "products", "releases?code=GO")

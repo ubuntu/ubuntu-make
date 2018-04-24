@@ -148,7 +148,7 @@ class IdeaIDETests(LargeFrameworkTests):
         result = self.return_and_wait_expect(["ERROR: No Stable version available.",
                                               "Installation done"], timeout=self.TIMEOUT_INSTALL_PROGRESS)
         if result == 0:
-            self.assertTrue(self.name == 'GogLand')
+            self.assertTrue(self.name == 'GoLand')
         elif result == 1:
             # we have an installed launcher, added to the launcher and an icon file
             self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
@@ -338,8 +338,8 @@ class DataGripIDETests(IdeaIDETests):
         self.name = 'DataGrip'
 
 
-class GogLandIDETests(IdeaIDETests):
-    """Gogland test from the IDE collection"""
+class GoLandIDETests(IdeaIDETests):
+    """GoLand test from the IDE collection"""
 
     TIMEOUT_INSTALL_PROGRESS = 120
     TIMEOUT_START = 60
@@ -347,10 +347,10 @@ class GogLandIDETests(IdeaIDETests):
 
     def setUp(self):
         super().setUp()
-        self.installed_path = os.path.join(self.install_base_path, "ide", "gogland")
-        self.desktop_filename = 'jetbrains-gogland.desktop'
-        self.command_args = '{} ide gogland'.format(UMAKE)
-        self.name = 'GogLand'
+        self.installed_path = os.path.join(self.install_base_path, "ide", "goland")
+        self.desktop_filename = 'jetbrains-goland.desktop'
+        self.command_args = '{} ide goland'.format(UMAKE)
+        self.name = 'GoLand'
 
 
 class RiderIDETests(IdeaIDETests):
