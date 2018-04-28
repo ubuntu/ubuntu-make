@@ -43,10 +43,10 @@ class AndroidCategory(umake.frameworks.BaseCategory):
 
     def parse_license(self, tag, line, license_txt, in_license):
         """Parse Android download page for license"""
-        if line.startswith(tag):
+        if tag in line:
             in_license = True
         if in_license:
-            if line.startswith('</div>'):
+            if '</div><div><input id="agree_' in line:
                 in_license = False
             else:
                 license_txt.write(line)
@@ -58,10 +58,11 @@ class AndroidCategory(umake.frameworks.BaseCategory):
         if tag in line:
             in_download = True
         if in_download:
-            p = re.search(r'href="(.*)"', line)
+            p = re.search(r'href=\"(https://dl.google.com.*-linux.zip)\"', line)
             with suppress(AttributeError):
                 url = p.group(1)
             p = re.search(r'<td>(\w+)</td>', line)
+            print(p)
             with suppress(AttributeError):
                 # ensure the size can match a md5 or sha1 checksum
                 if len(p.group(1)) > 15:
@@ -91,11 +92,11 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
-        return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
+        return self.category.parse_license('<div id="studio_linux_bundle_download"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
         """Parse Android Studio download link, expect to find a sha1sum and a url"""
-        return self.category.parse_download_link('id="linux-bundle"', line, in_download)
+        return self.category.parse_download_link('linux_bundle_download', line, in_download)
 
     def post_install(self):
         """Create the Android Studio launcher"""
@@ -125,11 +126,11 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android SDK download page for license"""
-        return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
+        return self.category.parse_license('<div id="sdk_linux_download"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
         """Parse Android SDK download link, expect to find a SHA-1 and a url"""
-        return self.category.parse_download_link('id="linux-tools"', line, in_download)
+        return self.category.parse_download_link('sdk_linux_download', line, in_download)
 
     def post_install(self):
         """Add necessary environment variables"""
