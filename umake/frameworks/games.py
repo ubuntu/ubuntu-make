@@ -26,6 +26,7 @@ from gettext import gettext as _
 import logging
 import os
 import re
+import shutil
 import stat
 import json
 
@@ -275,6 +276,64 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))
+
+
+class GDevelop(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="GDevelop", description=_("Create your own games"),
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://api.github.com/repos/4ian/GD/releases/latest",
+                         packages_requirements=["libgconf-2-4"],
+                         dir_to_decompress_in_tarball='gdevelop*',
+                         desktop_filename="gdevelop.desktop",
+                         required_files_path=["gdevelop"],
+                         **kwargs)
+        self.icon_filename = "GDevelop.png"
+        self.icon_url = os.path.join("https://raw.githubusercontent.com/4ian/GD/master/Binaries/Packaging",
+                                     "linux-extra-files/usr/share/icons/hicolor/128x128/apps", self.icon_filename)
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        logger.debug("Fetched download page, parsing.")
+        page = result[self.download_page]
+        error_msg = page.error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        try:
+            assets = json.loads(page.buffer.read().decode())["assets"]
+            download_url = None
+            for asset in assets:
+                if ".tar.gz" in asset["browser_download_url"]:
+                    download_url = asset["browser_download_url"]
+            if not download_url:
+                raise IndexError
+        except (json.JSONDecodeError, IndexError):
+            logger.error("Can't parse the download URL from the download page.")
+            UI.return_main_screen(status_code=1)
+        logger.debug("Found download URL: " + download_url)
+
+        self.download_requests.append(DownloadItem(download_url, None))
+        self.start_download_and_install()
+
+    def post_install(self):
+        """Create the GDevelop launcher"""
+        DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
+                       on_done=self.save_icon, download=True)
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("GDevelop"),
+                        icon_path=os.path.join(self.install_path, self.icon_filename),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=self.description,
+                        categories="Development;IDE;"))
+
+    def save_icon(self, download_result):
+        """Save correct Eclipse icon"""
+        icon = download_result.pop(self.icon_url).fd.name
+        shutil.copy(icon, os.path.join(self.install_path, self.icon_filename))
+        logger.debug("Copied icon: {}".format(self.icon_url))
 
 
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
