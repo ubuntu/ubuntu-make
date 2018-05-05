@@ -110,3 +110,25 @@ class GDevelopInContainer(ContainerTests, test_games.GDevelopTests):
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
+
+
+class GodotInContainer(ContainerTests, test_games.GodotTests):
+    """This will test Godot inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["godotengine.org", "downloads.tuxfamily.org"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "games", "godot")
+
+    def test_install_with_changed_download_page(self):
+        """Installing Godot should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "godotengine.org",
+                                               "download", "linux", "index.html")
+        umake_command = self.command('{} games godot'.format(UMAKE))
+        self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(self.exec_link))

@@ -23,6 +23,7 @@
 from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
+import glob
 import logging
 import os
 import re
@@ -33,7 +34,7 @@ import json
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem, DownloadCenter
 from umake.tools import as_root, create_launcher, get_application_desktop_file, get_current_arch,\
-    ChecksumType, MainLoop, Checksum
+    ChecksumType, MainLoop, Checksum, add_exec_link
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -330,7 +331,63 @@ class GDevelop(umake.frameworks.baseinstaller.BaseInstaller):
                         categories="Development;IDE;"))
 
     def save_icon(self, download_result):
-        """Save correct Eclipse icon"""
+        """Save correct GDevelop icon"""
+        icon = download_result.pop(self.icon_url).fd.name
+        shutil.copy(icon, os.path.join(self.install_path, self.icon_filename))
+        logger.debug("Copied icon: {}".format(self.icon_url))
+
+
+class Godot(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Godot", description=_("The game engine you waited for"),
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://godotengine.org/download/linux",
+                         desktop_filename="godot.desktop",
+                         required_files_path=['godot'],
+                         **kwargs)
+        self.icon_url = "https://godotengine.org/themes/godotengine/assets/download/godot_logo.svg"
+        self.icon_filename = "Godot.svg"
+
+    arch_trans = {
+        "amd64": "64",
+        "i386": "32"
+    }
+
+    def parse_download_link(self, line, in_download):
+        """Parse Godot download links"""
+        url = None
+        if '{}.zip'.format(self.arch_trans[get_current_arch()]) in line:
+            in_download = True
+            p = re.search(r'href=\"(.*\.zip)\"', line)
+            with suppress(AttributeError):
+                url = p.group(1)
+                bin = re.search(r'(Godot.*)\.zip', url)
+                self.required_files_path[0] = bin.group(1)
+
+        if url is None:
+            return (None, in_download)
+        return ((url, None), in_download)
+
+    def post_install(self):
+        """Create the Godot launcher"""
+        # Override the exec_path.
+        # Rename the binary to remove the version.
+        self.set_exec_path()
+        shutil.move(self.exec_path, os.path.join(self.install_path, 'godot'))
+        self.exec_path = os.path.join(self.install_path, 'godot')
+
+        DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
+                       on_done=self.save_icon, download=True)
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Godot"),
+                        icon_path=os.path.join(self.install_path, self.icon_filename),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=self.description,
+                        categories="Development;IDE;"))
+
+    def save_icon(self, download_result):
+        """Save correct Godot icon"""
         icon = download_result.pop(self.icon_url).fd.name
         shutil.copy(icon, os.path.join(self.install_path, self.icon_filename))
         logger.debug("Copied icon: {}".format(self.icon_url))

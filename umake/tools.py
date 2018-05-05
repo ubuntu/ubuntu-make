@@ -342,6 +342,7 @@ def add_exec_link(exec_path, destination_name):
     os.makedirs(bin_folder, exist_ok=True)
     add_env_to_user("Ubuntu Make binary symlink", {"PATH": {"value": bin_folder}})
     full_dest_path = os.path.join(bin_folder, destination_name)
+    print(exec_path)
     with suppress(FileNotFoundError):
         os.remove(full_dest_path)
     os.symlink(exec_path, full_dest_path)

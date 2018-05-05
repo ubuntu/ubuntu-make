@@ -415,9 +415,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         if error_detected:
             UI.return_main_screen(status_code=1)
 
-        self.post_install()
         if self.exec_link_name:
             add_exec_link(self.exec_path, self.exec_link_name)
+        self.post_install()
         # Mark as installation done in configuration
         self.mark_in_config()
 
