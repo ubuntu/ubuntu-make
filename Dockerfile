@@ -35,6 +35,7 @@ ADD tests/data/spring.io.crt /usr/local/share/ca-certificates/
 ADD tests/data/dl.google.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/sublimetext.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/download.sublimetext.com.crt /usr/local/share/ca-certificates/
+ADD tests/data/forum.unity3d.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/bitbucket.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/go.microsoft.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/download.jetbrains.com.crt /usr/local/share/ca-certificates/
