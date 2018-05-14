@@ -1,3 +1,46 @@
+ubuntu-make (18.05) cosmic; urgency=medium
+
+  [ Galileo Sartor ]
+  * Use symlinks for exec
+  * games: Add Godot
+  * games: Add GDevelop
+  * games: Add Blender
+  * games: Reenable Unity3D
+  * electronics: Add category
+  * electronics: Add Eagle
+  * crystal: Add Crystal Lang
+  * maven: add Maven
+  * ide: Reenable Spring Tools
+  * ide: Add Eclipse Javascript
+  * ide: Add Atom Beta
+  * ide: Add Processing
+  * ide: Add GoLand
+  * ide: Fix vscode dependencies (libgconf)
+  * ide: Add vscode insiders
+  * web: Add PhantomJS
+
+  [ Kevin McCormack ]
+  * web: Add StartupWMClass to firefox-dev
+
+  [ Tito Brasolin ]
+  * android: Add env variables to Android Studio
+
+  [ Tankypon ]
+  * Add Listing support
+
+  [ Valerio Mariani ]
+  * ide: Add StartupWMClass to Visual Studio Code
+
+  [ Alexander Sidorenko ]
+  * ide: Add Rider
+
+  [ Ruoshi Li ]
+  * fix clean exec_path
+
+  And a lot more fixes! 
+
+ -- Galileo Sartor <galileo.sartor@gmail.com>  Mon, 14 May 2018 19:36:48 +0200
+
 ubuntu-make (17.03) zesty; urgency=medium
 
   [ Galileo Sartor ]
