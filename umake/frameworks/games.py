@@ -179,6 +179,62 @@ def _chrome_sandbox_setuid(path):
             return False
 
 
+class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
+                         only_on_archs=['amd64'],
+                         download_page="https://forum.unity3d.com/" +
+                                       "threads/unity-on-linux-release-notes-and-known-issues.350256/page-2",
+                         match_last_link=True,
+                         dir_to_decompress_in_tarball='Editor',
+                         desktop_filename="unity3d-editor.desktop",
+                         required_files_path=[os.path.join("Unity")],
+                         # we need root access for chrome sandbox setUID
+                         need_root_access=True,
+                         # Note that some packages requirements essential to the system itself are not listed (we
+                         # don't want to create fake packages and kill the container for medium tests)
+                         packages_requirements=[
+                             "gconf-service", "lib32gcc1", "lib32stdc++6", "libasound2", "libcairo2",
+                             "libcap2", "libcups2", "libfontconfig1", "libfreetype6", "libgconf-2-4",
+                             "libgdk-pixbuf2.0-0", "libglu1-mesa", "libgtk2.0-0",
+                             "libgl1-mesa-glx | libgl1-mesa-glx-lts-utopic |\
+                              libgl1-mesa-glx-lts-vivid | libgl1-mesa-glx-lts-wily",
+                             "libnspr4", "libnss3", "libpango1.0-0", "libpq5", "libxcomposite1",
+                             "libxcursor1", "libxdamage1", "libxext6", "libxfixes3", "libxi6",
+                             "libxrandr2", "libxrender1", "libxtst6"],
+                         **kwargs)
+
+    def parse_download_link(self, line, in_download):
+        """Parse Unity3d download links"""
+        url = None
+        if "beta.unity" in line:
+            in_download = True
+        if in_download:
+            p = re.search(
+                r'href="(https://beta.unity3d.*.html)" target="_blank" class="externalLink">https://beta.unity3d.com',
+                line)
+            with suppress(AttributeError):
+                url = p.group(1).replace("public_download.html", "LinuxEditorInstaller/Unity.tar.xz")
+        if url is None:
+            return (None, in_download)
+        return ((url, None), in_download)
+
+    def post_install(self):
+        """Create the Unity 3D launcher and setuid chrome sandbox"""
+        with futures.ProcessPoolExecutor(max_workers=1) as executor:
+            # chrome sandbox requires this: https//code.google.com/p/chromium/wiki/LinuxSUIDSandbox
+            f = executor.submit(_chrome_sandbox_setuid, os.path.join(self.install_path, "chrome-sandbox"))
+            if not f.result():
+                UI.return_main_screen(status_code=1)
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Unity3D Editor"),
+                        icon_path=os.path.join(self.install_path, "Data", "Resources", "LargeUnityIcon.png"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=self.description,
+                        categories="Development;IDE;"))
+
+
 class Twine(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
@@ -391,10 +447,3 @@ class Godot(umake.frameworks.baseinstaller.BaseInstaller):
         icon = download_result.pop(self.icon_url).fd.name
         shutil.copy(icon, os.path.join(self.install_path, self.icon_filename))
         logger.debug("Copied icon: {}".format(self.icon_url))
-
-
-class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
-
-    def __init__(self, **kwargs):
-        super().__init__(name="Unity3D", description="For removal only (The tarfile is not supported upstream anymore)",
-                         download_page=None, only_on_archs=['amd64'], only_for_removal=True, **kwargs)
