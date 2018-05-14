@@ -142,7 +142,7 @@ class Unity3DTests(LargeFrameworkTests):
         self.assert_exec_link_exists()
 
         # ensure setuid
-        self.assertEqual(self.get_file_perms(os.path.join(self.installed_path, "Editor", "chrome-sandbox")),
+        self.assertEqual(self.get_file_perms(os.path.join(self.installed_path, "chrome-sandbox")),
                          '-rwsr-xr-x')
 
         # launch it, send SIGTERM and check that it exits fine

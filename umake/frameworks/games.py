@@ -187,10 +187,9 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://forum.unity3d.com/" +
                                        "threads/unity-on-linux-release-notes-and-known-issues.350256/page-2",
                          match_last_link=True,
-                         checksum_type=ChecksumType.sha1,
-                         dir_to_decompress_in_tarball='unity-editor*',
+                         dir_to_decompress_in_tarball='Editor',
                          desktop_filename="unity3d-editor.desktop",
-                         required_files_path=[os.path.join("Editor", "Unity")],
+                         required_files_path=[os.path.join("Unity")],
                          # we need root access for chrome sandbox setUID
                          need_root_access=True,
                          # Note that some packages requirements essential to the system itself are not listed (we
@@ -203,86 +202,33 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                               libgl1-mesa-glx-lts-vivid | libgl1-mesa-glx-lts-wily",
                              "libnspr4", "libnss3", "libpango1.0-0", "libpq5", "libxcomposite1",
                              "libxcursor1", "libxdamage1", "libxext6", "libxfixes3", "libxi6",
-                             "libxrandr2", "libxrender1", "libxtst6",
-                             "monodevelop"],
-                         **kwargs)  # monodevelop is for mono deps, temporary
-        self.download_url = None
-        self.checksum = None
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        """Download files to download + license and check it"""
-        logger.debug("Parse download metadata")
-
-        error_msg = result[self.download_page].error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        in_download = False
-        url_found = False
-        for line in result[self.download_page].buffer:
-            if url_found is None or self.match_last_link:
-                line_content = line.decode()
-                (_url_found, in_download) = self.parse_download_link(line_content, in_download)
-                if not url_found:
-                    url_found = _url_found
-        if not url_found:
-            logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
-        DownloadCenter(urls=[DownloadItem(self.download_url, None)],
-                       on_done=self.get_url_and_start_download, download=False)
+                             "libxrandr2", "libxrender1", "libxtst6"],
+                         **kwargs)
 
     def parse_download_link(self, line, in_download):
         """Parse Unity3d download links"""
-        url_found = False
+        url = None
         if "beta.unity" in line:
             in_download = True
+        if in_download:
             p = re.search(
-                r'href="(http://beta.unity.*.html)" target="_blank" class="externalLink">http://beta.unity3d.com',
+                r'href="(https://beta.unity3d.*.html)" target="_blank" class="externalLink">https://beta.unity3d.com',
                 line)
             with suppress(AttributeError):
-                url_found = True
-                self.download_url = p.group(1)
-        if in_download is True:
-            p = re.search(r'sh: (\w+)\)', line)
-            with suppress(AttributeError):
-                self.checksum = p.group(1)
-        return (url_found, in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_url_and_start_download(self, download_result):
-        res = download_result[self.download_url]
-        text = res.buffer.getvalue().decode('utf-8')
-        url = re.search(r'http.*?.sh', text).group(0)
+                url = p.group(1).replace("public_download.html", "LinuxEditorInstaller/Unity.tar.xz")
         if url is None:
-            logger.error("Download page changed its syntax or is not parsable (missing url)")
-            UI.return_main_screen(status_code=1)
-        if self.checksum is None:
-            logger.error("Download page changed its syntax or is not parsable (missing checksum)")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download link for {}, checksum: {}".format(url, self.checksum))
-        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, self.checksum)))
-        self.start_download_and_install()
-
-    def decompress_and_install(self, fds):
-        """Override to strip the unwanted shell header part"""
-        logger.debug("Start looking at the archive inside the script")
-        for line in fds[0]:
-            if line.startswith(b"__ARCHIVE_BEGINS_HERE__"):
-                logger.debug("Found the archive inside the script")
-                break
-        super().decompress_and_install(fds)
+            return (None, in_download)
+        return ((url, None), in_download)
 
     def post_install(self):
         """Create the Unity 3D launcher and setuid chrome sandbox"""
         with futures.ProcessPoolExecutor(max_workers=1) as executor:
             # chrome sandbox requires this: https//code.google.com/p/chromium/wiki/LinuxSUIDSandbox
-            f = executor.submit(_chrome_sandbox_setuid, os.path.join(self.install_path, "Editor", "chrome-sandbox"))
+            f = executor.submit(_chrome_sandbox_setuid, os.path.join(self.install_path, "chrome-sandbox"))
             if not f.result():
                 UI.return_main_screen(status_code=1)
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Unity3D Editor"),
-                        icon_path=os.path.join(self.install_path, "unity-editor-icon.png"),
+                        icon_path=os.path.join(self.install_path, "Data", "Resources", "LargeUnityIcon.png"),
                         try_exec=self.exec_path,
                         exec=self.exec_link_name,
                         comment=self.description,
