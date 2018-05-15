@@ -15,7 +15,7 @@ confinement: classic
 
 apps:
   umake:
-    command: bin/umake
+    command: bin/umake-wrapper
     completer: umake-completion
 
 parts:
@@ -59,3 +59,8 @@ parts:
     source: snap
     stage:
       - umake-completion
+  umake-wrapper:
+    source: snap/
+    plugin: dump
+    organize:
+      umake-wrapper: bin/umake-wrapper
