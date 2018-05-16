@@ -111,7 +111,6 @@ class Blender(umake.frameworks.baseinstaller.BaseInstaller):
         "amd64": "x86_64",
         "i386": "i686"
     }
-    arch = arch_trans[get_current_arch()]
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
@@ -136,7 +135,8 @@ class Blender(umake.frameworks.baseinstaller.BaseInstaller):
         """Parse Blender download links"""
         url = None
         if '.tar.bz2' in line:
-            p = re.search(r'href="(http://download.blender.org/[^<]*{}.tar.bz2)"'.format(self.arch), line)
+            p = re.search(r'href="(http://download.blender.org/[^<]*{}.tar.bz2)"'.format(
+                          self.arch_trans[get_current_arch()]), line)
             with suppress(AttributeError):
                 url = p.group(1)
                 filename = 'release' + re.search('blender-(.*)-linux', url).group(1).replace('.', '') + '.md5'
