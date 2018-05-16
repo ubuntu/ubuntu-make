@@ -46,7 +46,7 @@ class AndroidCategory(umake.frameworks.BaseCategory):
         if tag in line:
             in_license = True
         if in_license:
-            if '</div><div><input id="agree_' in line:
+            if '<input id="agree_' in line:
                 in_license = False
             else:
                 license_txt.write(line)
@@ -58,11 +58,10 @@ class AndroidCategory(umake.frameworks.BaseCategory):
         if tag in line:
             in_download = True
         if in_download:
-            p = re.search(r'href=\"(https://dl.google.com.*-linux.zip)\"', line)
+            p = re.search(r'href=\"(https://dl.google.com.*-linux.*.zip)\"', line)
             with suppress(AttributeError):
                 url = p.group(1)
             p = re.search(r'<td>(\w+)</td>', line)
-            print(p)
             with suppress(AttributeError):
                 # ensure the size can match a md5 or sha1 checksum
                 if len(p.group(1)) > 15:
@@ -163,11 +162,11 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android NDK download page for license"""
-        return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
+        return self.category.parse_license('<div id="ndk_linux64_download"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
         """Parse Android NDK download link, expect to find a sha1sum and a url"""
-        return self.category.parse_download_link('<td>Linux ', line, in_download)
+        return self.category.parse_download_link('ndk_linux64_download', line, in_download)
 
     def post_install(self):
         """Add necessary environment variables"""
