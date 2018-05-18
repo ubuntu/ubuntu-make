@@ -21,7 +21,6 @@
 
 """Generic IDE module."""
 from abc import ABCMeta, abstractmethod
-from bs4 import BeautifulSoup
 from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _

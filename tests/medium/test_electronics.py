@@ -35,7 +35,7 @@ class ArduinoIDEInContainer(ContainerTests, test_electronics.ArduinoIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {80: ["www.arduino.cc"]}
+        self.hosts = {443: ["www.arduino.cc", "downloads.arduino.cc"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'arduino')
         super().setUp()
         # override with container path
@@ -52,8 +52,8 @@ class ArduinoIDEInContainer(ContainerTests, test_electronics.ArduinoIDETests):
 
     def test_install_with_changed_checksum_page(self):
         """Installing arduino ide should fail if checksum link is unparseable"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.arduino.cc",
-                                               "checksums.md5sum.txt")
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "downloads.arduino.cc",
+                                               "arduino-mock.sha512sum.txt")
         umake_command = self.command('{} electronics arduino'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))

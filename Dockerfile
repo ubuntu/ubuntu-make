@@ -47,6 +47,8 @@ ADD tests/data/twinery.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/eagle-updates.circuits.io.crt /usr/local/share/ca-certificates/
 ADD tests/data/godotengine.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/downloads.tuxfamily.org.crt /usr/local/share/ca-certificates/
+ADD tests/data/www.arduino.cc.crt /usr/local/share/ca-certificates/
+ADD tests/data/downloads.arduino.cc.crt /usr/local/share/ca-certificates/
 ADD docker/create_packages.sh /tmp/
 
 # Refresh the image

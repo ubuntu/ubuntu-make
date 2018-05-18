@@ -28,7 +28,6 @@ parts:
       - gettext
       - python3-apt
       - python3-argcomplete
-      - python3-bs4
       - python3-gi
       - python3-gnupg
       - python3-setuptools
@@ -47,7 +46,6 @@ parts:
     stage-packages:
       - python3-apt
       - python3-argcomplete
-      - python3-bs4
       - python3-gi
       - python3-gnupg
       - python3-progressbar
