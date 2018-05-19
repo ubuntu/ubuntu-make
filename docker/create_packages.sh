@@ -139,6 +139,7 @@ mkdir -p $repo_root_dir/swift
 cd $repo_root_dir/swift
 create_package clang
 create_package libicu-dev
+create_package libicu55
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 
 # unity3d deps
