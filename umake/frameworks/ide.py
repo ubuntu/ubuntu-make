@@ -857,6 +857,41 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
                         categories="Development;TextEditor;"))
 
 
+class DBeaver(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="DBeaver", description=_("Free multi-platform database tool for developers"),
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://dbeaver.io/download/",
+                         desktop_filename="dbeaver.desktop",
+                         required_files_path=["dbeaver"],
+                         dir_to_decompress_in_tarball="dbeaver_*",
+                         **kwargs)
+
+    arch_trans = {
+        "amd64": "x64",
+        "i386": "x32"
+    }
+
+    def parse_download_link(self, line, in_download):
+        """Parse DBeaver download links"""
+        url = None
+        if '.deb' in line:
+            p = re.search(r'href="([^<]*{}.deb)"'.format(self.arch_trans[get_current_arch()]), line)
+            with suppress(AttributeError):
+                url = p.group(1)
+        return ((url, None), in_download)
+
+    def post_install(self):
+        """Create the DBeaver Code launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("DBeaver"),
+                        icon_path=os.path.join(self.install_path, "Icon", "128x128", "dbeaver.png"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=_("Free multi-platform database tool for developers"),
+                        categories="Development;"))
+
+
 class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Spring Tools Suite",

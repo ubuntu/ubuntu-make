@@ -479,6 +479,20 @@ class SublimeTextInContainer(ContainerTests, test_ide.SublimeTextTests):
         self.installed_path = os.path.join(self.install_base_path, "ide", "sublime-text")
 
 
+class DBeaverInContainer(ContainerTests, test_ide.DBeaverTests):
+    """This will test the DBeaver integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["dbeaver.io"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "dbeaver")
+
+
+
 class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest):
     """This will test Spring Tools Suite IDE integration inside a container"""
 
