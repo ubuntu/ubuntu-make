@@ -27,7 +27,6 @@ from glob import glob
 import logging
 import os
 import re
-from bs4 import BeautifulSoup
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
 from umake.network.download_center import DownloadItem, DownloadCenter

@@ -21,7 +21,6 @@
 
 """Generic Electronics module."""
 from abc import ABCMeta, abstractmethod
-from bs4 import BeautifulSoup
 from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
@@ -86,23 +85,39 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
 
         super().__init__(name="Arduino",
                          description=_("The Arduino Software Distribution"),
-                         only_on_archs=['i386', 'amd64'],
-                         download_page='http://www.arduino.cc/en/Main/Software',
+                         only_on_archs=['i386', 'amd64', 'armhf'],
+                         download_page='https://www.arduino.cc/en/Main/Software',
                          dir_to_decompress_in_tarball='arduino-*',
                          desktop_filename='arduino.desktop',
+                         checksum_type=ChecksumType.sha512,
                          packages_requirements=['gcc-avr', 'avr-libc'],
                          need_root_access=not self.was_in_arduino_group,
                          required_files_path=["arduino"], **kwargs)
-        self.scraped_checksum_url = None
-        self.scraped_download_url = None
+        self.checksum_url = None
 
-        # This is needed later in several places.
-        # The framework covers other cases, in combination with self.only_on_archs
-        self.bits = '32' if platform.machine() == 'i686' else '64'
+    arch_trans = {
+        "amd64": "64",
+        "i386": "32",
+        "armhf": "arm"  # This should work on the raspberryPi
+    }
+
+    def parse_download_link(self, line, in_download):
+        """Parse Arduino download links"""
+        url_found = False
+        if "sha512sum.txt" in line:
+            in_download = True
+        else:
+            in_download = False
+        if in_download:
+            p = re.search(r'href=.*href="(.*)" rel', line)
+            with suppress(AttributeError):
+                self.checksum_url = "https:" + p.group(1)
+                url_found = True
+        return (url_found, in_download)
 
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
-        """We diverge from the BaseInstaller implementation a little here."""
+        """Download files to download + license and check it"""
         logger.debug("Parse download metadata")
 
         error_msg = result[self.download_page].error
@@ -110,67 +125,36 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen(status_code=1)
 
-        soup = BeautifulSoup(result[self.download_page].buffer, 'html.parser')
+        in_download = False
+        url_found = False
+        for line in result[self.download_page].buffer:
+            line_content = line.decode()
+            (_url_found, in_download) = self.parse_download_link(line_content, in_download)
+            if not url_found:
+                url_found = _url_found
 
-        # We need to avoid matching arduino-nightly-...
-        download_link_pat = r'arduino-[\d\.\-r]+-linux' + self.bits + '.tar.xz$'
-
-        # Trap no match found, then, download/checksum url will be empty and will raise the error
-        # instead of crashing.
-        with suppress(TypeError):
-            self.scraped_download_url = soup.find('a', href=re.compile(download_link_pat))['href']
-            self.scraped_checksum_url = soup.find('a', text=re.compile('Checksums'))['href']
-
-            self.scraped_download_url = 'http:' + self.scraped_download_url
-            self.scraped_checksum_url = 'http:' + self.scraped_checksum_url
-
-        if not self.scraped_download_url:
-            logger.error("Can't parse the download link from %s.", self.download_page)
-            UI.return_main_screen(status_code=1)
-        if not self.scraped_checksum_url:
-            logger.error("Can't parse the checksum link from %s.", self.download_page)
+        if not url_found:
+            logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
-        DownloadCenter([DownloadItem(self.scraped_download_url), DownloadItem(self.scraped_checksum_url)],
-                       on_done=self.prepare_to_download_archive, download=False)
+        DownloadCenter(urls=[DownloadItem(self.checksum_url, None)],
+                       on_done=self.get_sha_and_start_download, download=False)
 
     @MainLoop.in_mainloop_thread
-    def prepare_to_download_archive(self, results):
-        """Store the md5 for later and fire off the actual download."""
-        download_page = results[self.scraped_download_url]
-        checksum_page = results[self.scraped_checksum_url]
-        if download_page.error:
-            logger.error("Error fetching download page: %s", download_page.error)
+    def get_sha_and_start_download(self, download_result):
+        res = download_result[self.checksum_url].buffer.getvalue().decode()
+        line = re.search(r'.*linux{}.tar.xz'.format(self.arch_trans[get_current_arch()]), res).group(0)
+        # you get and store url and checksum
+        checksum = line.split()[0]
+        url = os.path.join(self.checksum_url.rpartition('/')[0], line.split()[1])
+        if url is None:
+            logger.error("Download page changed its syntax or is not parsable (missing url)")
             UI.return_main_screen(status_code=1)
-        if checksum_page.error:
-            logger.error("Error fetching checksums: %s", checksum_page.error)
+        if checksum is None:
+            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
             UI.return_main_screen(status_code=1)
-
-        match = re.search(r'^(\S+)\s+arduino-[\d\.\-r]+-linux' + self.bits + '.tar.xz$',
-                          checksum_page.buffer.getvalue().decode('ascii'),
-                          re.M)
-        if not match:
-            logger.error("Can't find a checksum.")
-            UI.return_main_screen(status_code=1)
-        checksum = match.group(1)
-
-        soup = BeautifulSoup(download_page.buffer.getvalue(), 'html.parser')
-        btn = soup.find('button', text=re.compile('JUST DOWNLOAD'))
-
-        if not btn:
-            logger.error("Can't parse download button.")
-            UI.return_main_screen(status_code=1)
-
-        base_url = download_page.final_url
-        cookies = download_page.cookies
-
-        final_download_url = parse.urljoin(base_url, btn.parent['href'])
-
-        logger.info('Final download url: %s, cookies: %s.', final_download_url, cookies)
-
-        self.download_requests = [DownloadItem(final_download_url,
-                                               checksum=Checksum(ChecksumType.md5, checksum),
-                                               cookies=cookies)]
+        logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
+        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
 
         # add the user to arduino group
         if not self.was_in_arduino_group:
