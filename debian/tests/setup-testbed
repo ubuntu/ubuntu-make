@@ -37,14 +37,11 @@ Section "Device"
 EndSection
 EOF
 
-# enable autologin to get unity started
-if [ ! -r /etc/lightdm/lightdm.conf.d/umaketests.conf ]; then
-    sudo -n mkdir -p /etc/lightdm/lightdm.conf.d
-    cat << EOF | sudo -n tee /etc/lightdm/lightdm.conf.d/umaketests.conf
-[SeatDefaults]
-autologin-user=ubuntu
+# enable autologin to get user session started
+cat << EOF | sudo -n tee -a /etc/gdm3/custom.conf
+AutomaticLoginEnable = true
+AutomaticLogin = ubuntu
 EOF
-fi
 
 # enable localhost ssh connection without pass
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
