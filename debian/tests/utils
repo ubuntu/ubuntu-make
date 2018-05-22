@@ -78,7 +78,7 @@ function run_tests {
 function wait_for_user_session {
     timeout=100
     # we want 2 gnome-sessions: one for gdm, one for the user session
-    while [ ! `pgrep -c gnome-session` -eq 2 ]; do
+    while [ ! `pgrep -c gnome-session` -gt 0 ]; do
         if [ $timeout -le 0 ]; then
             echo "gnome-session for users didn't start"
             echo "------------- journal: -------------"
