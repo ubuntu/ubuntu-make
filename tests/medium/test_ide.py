@@ -479,7 +479,7 @@ class SublimeTextInContainer(ContainerTests, test_ide.SublimeTextTests):
         self.installed_path = os.path.join(self.install_base_path, "ide", "sublime-text")
 
 
-class DBeaverInContainer(ContainerTests, test_ide.AtomTest):
+class DBeaverInContainer(ContainerTests, test_ide.DBeaverTest):
     """This will test the DBeaver integration inside a container"""
 
     TIMEOUT_START = 20
@@ -496,21 +496,10 @@ class DBeaverInContainer(ContainerTests, test_ide.AtomTest):
         """Installing DBeaver should fail if download page has significantly changed"""
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
                                                "repos", "DBeaver", "DBeaver", "releases", "latest")
-        umake_command = self.command('{} ide atom'.format(UMAKE))
+        umake_command = self.command('{} ide dbeaver'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
-
-    def test_install_beta_with_changed_download_page(self):
-        """Installing DBeaver Beta should fail if the latest is not a beta"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
-                                               "repos", "DBeaver", "DBeaver", "releases", "index.html")
-        with swap_file_and_restore(download_page_file_path) as content:
-            with open(download_page_file_path, "w") as newfile:
-                newfile.write(content.replace("-beta", ""))
-            self.child = umake_command = self.command('{} ide atom --beta'.format(UMAKE))
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-            self.assertFalse(self.is_in_path(self.exec_link))
 
 
 class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest):
