@@ -822,6 +822,76 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
         super().run_for(args)
 
 
+class DBeaver(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="DBeaver", description=_("Free universal database manager and SQL client"),
+                         only_on_archs=['amd64'],
+                         download_page="https://api.github.com/repos/dbeaver/dbeaver/releases/latest",
+                         desktop_filename="DBeaver.desktop",
+                         required_files_path=["DBeaver", "resources/app/apm/bin/apm"],
+                         dir_to_decompress_in_tarball="DBeaver-*",
+                         checksum_type=ChecksumType.md5, **kwargs)
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata_and_check_license(self, result):
+        logger.debug("Fetched download page, parsing.")
+        page = result[self.download_page]
+        error_msg = page.error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        try:
+            if "beta" in self.description:
+                latest_beta = json.loads(page.buffer.read().decode())[0]
+                if "beta" not in latest_beta["tag_name"]:
+                    logger.error("Latest version is not beta.")
+                    UI.return_main_screen(status_code=1)
+                assets = latest_beta["assets"]
+            else:
+                assets = json.loads(page.buffer.read().decode())["assets"]
+            download_url = None
+            for asset in assets:
+                if "tar.gz" in asset["browser_download_url"]:
+                    download_url = asset["browser_download_url"]
+            if not download_url:
+                raise IndexError
+        except (json.JSONDecodeError, IndexError):
+            logger.error("Can't parse the download URL from the download page.")
+            UI.return_main_screen(status_code=1)
+        logger.debug("Found download URL: " + download_url)
+
+        self.download_requests.append(DownloadItem(download_url, None))
+        self.start_download_and_install()
+
+    def post_install(self):
+        """Create the DBeaver launcher"""
+        # Add apm to PATH
+        add_exec_link(os.path.join(self.install_path, "resources", "app", "apm", "bin", "apm"),
+                      os.path.join(self.default_binary_link_path, 'apm'))
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("DBeaver"),
+                        icon_path=os.path.join(self.install_path, "dbeaver.png"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=_("Free universal database manager and SQL client"),
+                        categories="Development;IDE;"))
+
+    def install_framework_parser(self, parser):
+        this_framework_parser = super().install_framework_parser(parser)
+        this_framework_parser.add_argument('--beta', action="store_true",
+                                           help=_("Install Beta version if available"))
+        return this_framework_parser
+
+    def run_for(self, args):
+        if args.beta:
+            self.name += " Beta"
+            self.description += " beta"
+            self.desktop_filename = self.desktop_filename.replace(".desktop", "-beta.desktop")
+            self.download_page = "https://api.github.com/repos/dbeaver/dbeaver/releases"
+            self.install_path += "-beta"
+        super().run_for(args)
+
 class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
@@ -855,41 +925,6 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=_("Sophisticated text editor for code, markup and prose"),
                         categories="Development;TextEditor;"))
-
-
-class DBeaver(umake.frameworks.baseinstaller.BaseInstaller):
-
-    def __init__(self, **kwargs):
-        super().__init__(name="DBeaver", description=_("Free multi-platform database tool for developers"),
-                         only_on_archs=['i386', 'amd64'],
-                         download_page="https://dbeaver.io/download/",
-                         desktop_filename="dbeaver.desktop",
-                         required_files_path=["dbeaver"],
-                         dir_to_decompress_in_tarball="dbeaver_*",
-                         **kwargs)
-
-    arch_trans = {
-        "amd64": "x64",
-        "i386": "x32"
-    }
-
-    def parse_download_link(self, line, in_download):
-        """Parse DBeaver download links"""
-        url = None
-        if '.deb' in line:
-            p = re.search(r'href="([^<]*{}.deb)"'.format(self.arch_trans[get_current_arch()]), line)
-            with suppress(AttributeError):
-                url = p.group(1)
-        return ((url, None), in_download)
-
-    def post_install(self):
-        """Create the DBeaver Code launcher"""
-        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("DBeaver"),
-                        icon_path=os.path.join(self.install_path, "Icon", "128x128", "dbeaver.png"),
-                        try_exec=self.exec_path,
-                        exec=self.exec_link_name,
-                        comment=_("Free multi-platform database tool for developers"),
-                        categories="Development;"))
 
 
 class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
