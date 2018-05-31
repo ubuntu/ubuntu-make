@@ -77,7 +77,7 @@ class AndroidSDKTests(LargeFrameworkTests):
 
     @property
     def exec_path(self):
-        return os.path.join(self.installed_path, "tools", "android")
+        return os.path.join(self.installed_path, "tools", "bin", "sdkmanager")
 
     def test_default_android_sdk_install(self):
         """Install android sdk from scratch test case"""
@@ -94,7 +94,7 @@ class AndroidSDKTests(LargeFrameworkTests):
         self.assertTrue(self.is_in_path(self.exec_path))
 
         # launch it, send SIGTERM and check that it exits fine
-        self.assertEqual(subprocess.check_call(self.command_as_list([self.exec_path, "list"]),
+        self.assertEqual(subprocess.check_call(self.command_as_list([self.exec_path, "--list"]),
                                                stdout=subprocess.DEVNULL,
                                                stderr=subprocess.DEVNULL),
                          0)
@@ -107,7 +107,7 @@ class AndroidSDKTests(LargeFrameworkTests):
 
 
 class AndroidPlatformToolsTests(LargeFrameworkTests):
-    """This will test the Android SDK installation"""
+    """This will test the Android Platform Tools installation"""
 
     TIMEOUT_INSTALL_PROGRESS = 120
 
@@ -119,7 +119,7 @@ class AndroidPlatformToolsTests(LargeFrameworkTests):
     def exec_path(self):
         return os.path.join(self.installed_path, "platform-tools", "adb")
 
-    def test_default_android_sdk_install(self):
+    def test_default_android_platform_tools_install(self):
         """Install android sdk from scratch test case"""
         self.child = spawn_process(self.command('{} android android-platform-tools'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))

@@ -50,7 +50,7 @@ class AndroidSDKInContainer(ContainerTests, test_android.AndroidSDKTests):
 
 
 class AndroidPlatformToolsInContainer(ContainerTests, test_android.AndroidPlatformToolsTests):
-    """This will install Android SDK inside a container"""
+    """This will install Android Platform Tools inside a container"""
 
     def setUp(self):
         self.hosts = {443: ["developer.android.com", "dl.google.com"]}

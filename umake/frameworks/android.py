@@ -120,7 +120,8 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://developer.android.com/studio/index.html",
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball=".",
-                         required_files_path=[os.path.join("tools", "android")],
+                         required_files_path=[os.path.join("tools", "android"),
+                                              os.path.join("tools", "bin", "sdkmanager")],
                          **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
@@ -137,7 +138,8 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
         # do not set ANDROID_SDK_HOME here as that is the path of the preference folder expected by the Android tools
         add_env_to_user(self.name, {"ANDROID_HOME": {"value": self.install_path, "keep": False},
                                     "ANDROID_SDK": {"value": self.install_path, "keep": False},
-                                    "PATH": {"value": [os.path.join(self.install_path, "tools")]}})
+                                    "PATH": {"value": [os.path.join(self.install_path, "tools"),
+                                                       os.path.join(self.install_path, "tools", "bin")]}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
         # print wiki page message
