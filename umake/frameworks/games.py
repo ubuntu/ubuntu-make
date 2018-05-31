@@ -20,6 +20,7 @@
 
 """Game IDEs module"""
 
+from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
 import logging
@@ -27,12 +28,10 @@ import os
 import re
 import shutil
 import stat
-import json
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem, DownloadCenter
-from umake.tools import as_root, create_launcher, get_application_desktop_file, get_current_arch,\
-    ChecksumType, MainLoop, Checksum
+from umake.tools import as_root, create_launcher, get_application_desktop_file, get_current_arch
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)

@@ -23,7 +23,6 @@
 from abc import ABCMeta, abstractmethod
 from contextlib import suppress
 from gettext import gettext as _
-import json
 import logging
 import os
 import pwd
@@ -34,9 +33,8 @@ import shutil
 import umake.frameworks.baseinstaller
 from umake.frameworks.electronics import Arduino
 from umake.network.download_center import DownloadCenter, DownloadItem
-from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop,\
+from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, MainLoop,\
     add_exec_link, get_current_arch
-from umake.ui import UI
 
 logger = logging.getLogger(__name__)
 

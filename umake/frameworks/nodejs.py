@@ -20,6 +20,7 @@
 
 """Nodejs module"""
 
+from contextlib import suppress
 from gettext import gettext as _
 import logging
 import os
@@ -68,7 +69,6 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen(status_code=1)
 
-        url = False
         for line in result[self.download_page].buffer:
             line_content = line.decode()
             with suppress(AttributeError):

@@ -33,8 +33,8 @@ import subprocess
 
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.network.download_center import DownloadCenter, DownloadItem
-from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop
+from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType,\
+    MainLoop, get_current_arch
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)

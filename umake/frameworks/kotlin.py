@@ -22,12 +22,10 @@
 from gettext import gettext as _
 import logging
 import os
-import json
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.tools import add_env_to_user, MainLoop
+from umake.tools import add_env_to_user
 from umake.ui import UI
-from umake.network.download_center import DownloadItem
 
 logger = logging.getLogger(__name__)
 

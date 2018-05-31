@@ -155,8 +155,8 @@ class BaseInstallerTests(LargeFrameworkTests):
             self.assert_exec_exists()
 
             # launch it, send SIGTERM and check that it exits fine
-            proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
-                                    stderr=subprocess.DEVNULL)
+            subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                             stderr=subprocess.DEVNULL)
             self.check_and_kill_process([self.JAVAEXEC, self.installed_path], wait_before=self.TIMEOUT_START)
 
     def test_reinstall_other_path(self):
