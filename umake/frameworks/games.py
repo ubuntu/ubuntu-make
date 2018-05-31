@@ -20,6 +20,7 @@
 
 """Game IDEs module"""
 
+from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
 import logging
@@ -66,7 +67,7 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         """Parse Stencyl download links"""
-        url, md5sum = (None, None)
+        url = None
         if ">Linux <" in line:
             in_download = True
         if in_download:
