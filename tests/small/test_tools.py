@@ -478,6 +478,20 @@ class TestLauncherIcons(LoggedTestCase):
         self.assertEqual(open(get_launcher_path("foo.desktop")).read(), self.get_generic_desktop_content())
 
     @patch("umake.tools.Gio.Settings")
+    def test_can_install_gnome(self, SettingsMock):
+        """Install a basic launcher, default case in gnome"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "org.gnome.shell", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["bar.desktop"]
+        create_launcher("foo.desktop", self.get_generic_desktop_content())
+
+        self.assertTrue(SettingsMock.list_schemas.called)
+        SettingsMock.return_value.get_strv.assert_called_with("favorite-apps")
+        SettingsMock.return_value.set_strv.assert_called_with("favorite-apps", ["bar.desktop", "foo.desktop"])
+
+        self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
+        self.assertEqual(open(get_launcher_path("foo.desktop")).read(), self.get_generic_desktop_content())
+
+    @patch("umake.tools.Gio.Settings")
     def test_can_update_launcher(self, SettingsMock):
         """Update a launcher file"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]

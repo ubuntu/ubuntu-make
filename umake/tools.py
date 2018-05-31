@@ -282,15 +282,23 @@ def launcher_exists_and_is_pinned(desktop_filename):
     """Return true if the desktop filename is pinned in the launcher"""
     if not launcher_exists(desktop_filename):
         return False
-    if os.environ.get("XDG_CURRENT_DESKTOP") != "Unity":
-        logger.debug("Don't check launcher as current environment isn't Unity")
+    if os.environ.get("XDG_CURRENT_DESKTOP") == "Unity":
+        if "com.canonical.Unity.Launcher" not in Gio.Settings.list_schemas():
+            logger.debug("In an Unity environment without the Launcher schema file")
+            return False
+        gsettings = Gio.Settings(schema_id="com.canonical.Unity.Launcher", path="/com/canonical/unity/launcher/")
+        launcher_list = gsettings.get_strv("favorites")
+        res = "application://" + desktop_filename in launcher_list
+    elif os.environ.get("XDG_CURRENT_DESKTOP") == "GNOME":
+        if "org.gnome.shell" not in Gio.Settings.list_schemas():
+            logger.debug("In an Gnome environment without the Launcher schema file")
+            return False
+        gsettings = Gio.Settings(schema_id="org.gnome.shell", path="/org/gnome/shell/")
+        launcher_list = gsettings.get_strv("favorite-apps")
+        res = desktop_filename in launcher_list
+    else:
+        logger.debug("Don't check launcher as current environment isn't Unity or Gnome")
         return True
-    if "com.canonical.Unity.Launcher" not in Gio.Settings.list_schemas():
-        logger.debug("In an Unity environment without the Launcher schema file")
-        return False
-    gsettings = Gio.Settings(schema_id="com.canonical.Unity.Launcher", path="/com/canonical/unity/launcher/")
-    launcher_list = gsettings.get_strv("favorites")
-    res = "application://" + desktop_filename in launcher_list
     if not res:
         logger.debug("Launcher exists but is not pinned (pinned: {}).".format(launcher_list))
     return res
@@ -320,21 +328,28 @@ def create_launcher(desktop_filename, content):
     with open(launcher_path, "w") as f:
         f.write(content)
 
-    if "com.canonical.Unity.Launcher" not in Gio.Settings.list_schemas():
-        logger.info("Don't create a launcher icon, as we are not under Unity")
+    if "com.canonical.Unity.Launcher" in Gio.Settings.list_schemas():
+        gsettings = Gio.Settings(schema_id="com.canonical.Unity.Launcher", path="/com/canonical/unity/launcher/")
+        launcher_list = gsettings.get_strv("favorites")
+        launcher_tag = "application://{}".format(desktop_filename)
+        if launcher_tag not in launcher_list:
+            index = len(launcher_list)
+            with suppress(ValueError):
+                index = launcher_list.index("unity://running-apps")
+            launcher_list.insert(index, launcher_tag)
+            # FIXME: working around a bug in glib: https://bugzilla.gnome.org/show_bug.cgi?id=744030
+            sleep(1.5)
+            ##########
+            gsettings.set_strv("favorites", launcher_list)
+    elif "org.gnome.shell" in Gio.Settings.list_schemas():
+        gsettings = Gio.Settings(schema_id="org.gnome.shell", path="/org/gnome/shell/")
+        launcher_list = gsettings.get_strv("favorite-apps")
+        if desktop_filename not in launcher_list:
+            launcher_list.append(desktop_filename)
+            gsettings.set_strv("favorite-apps", launcher_list)
+    else:
+        logger.info("Don't create a launcher icon, as we are not under Unity or Gnome")
         return
-    gsettings = Gio.Settings(schema_id="com.canonical.Unity.Launcher", path="/com/canonical/unity/launcher/")
-    launcher_list = gsettings.get_strv("favorites")
-    launcher_tag = "application://{}".format(desktop_filename)
-    if launcher_tag not in launcher_list:
-        index = len(launcher_list)
-        with suppress(ValueError):
-            index = launcher_list.index("unity://running-apps")
-        launcher_list.insert(index, launcher_tag)
-        # FIXME: working around a bug in glib: https://bugzilla.gnome.org/show_bug.cgi?id=744030
-        sleep(1.5)
-        ##########
-        gsettings.set_strv("favorites", launcher_list)
 
 
 def add_exec_link(exec_path, destination_name):
