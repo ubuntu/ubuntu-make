@@ -1,7 +1,6 @@
 # runtime requirements
 -e git://git.launchpad.net/python-apt@1.1.0_beta1#egg=apt
 argcomplete
-beautifulsoup4
 progressbar33
 pyyaml
 requests
