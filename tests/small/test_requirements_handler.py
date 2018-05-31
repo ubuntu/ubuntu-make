@@ -41,8 +41,8 @@ class TestRequirementsHandler(DpkgAptSetup):
     def count_number_progress_call(self, call_args_list, tag):
         """Count the number of tag in progress call and return it"""
         count = 0
-        for call in call_args_list:
-            if call[0][0]['step'] == tag:
+        for call_item in call_args_list:
+            if call_item[0][0]['step'] == tag:
                 count += 1
         return count
 
@@ -125,8 +125,8 @@ class TestRequirementsHandler(DpkgAptSetup):
                       [{'step': 0, 'pkg_size_download': 1, 'percentage': 0.0},
                        {'step': 0, 'pkg_size_download': 1698, 'percentage': 0.0}])
         callfound = False
-        for call in progress_callback.call_args_list:
-            if call[0][0] == {'step': 1, 'percentage': 0.0}:
+        for call_item in progress_callback.call_args_list:
+            if call_item[0][0] == {'step': 1, 'percentage': 0.0}:
                 callfound = True
                 break
         self.assertTrue(callfound, "We expect to have one install step at 0% call in the list")
