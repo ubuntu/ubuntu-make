@@ -56,6 +56,12 @@ create_package libstdc++6 i386
 create_package zlib1g i386
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 
+# android-platform-tools dep
+mkdir -p $repo_root_dir/android-platform-tools
+cd $repo_root_dir/android-platform-tools
+create_package android-sdk-platform-tools-common
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
 # rubymine deps
 mkdir -p $repo_root_dir/rider
 cd $repo_root_dir/rider

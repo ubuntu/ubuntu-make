@@ -135,18 +135,42 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
         """Add necessary environment variables"""
         # add a few fall-back variables that might be used by some tools
         # do not set ANDROID_SDK_HOME here as that is the path of the preference folder expected by the Android tools
-        # add "platform-tools" to PATH to ensure "adb" can be run once the platform tools are installed via
-        # the SDK manager
         add_env_to_user(self.name, {"ANDROID_HOME": {"value": self.install_path, "keep": False},
                                     "ANDROID_SDK": {"value": self.install_path, "keep": False},
-                                    "PATH": {"value": [os.path.join(self.install_path, "tools"),
-                                                       os.path.join(self.install_path, "platform-tools")]}})
+                                    "PATH": {"value": [os.path.join(self.install_path, "tools")]}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
         # print wiki page message
         UI.delayed_display(DisplayMessage("SDK installed in {}. More information on how to use it on {}".format(
                                           self.install_path,
                                           "https://developer.android.com/sdk/installing/adding-packages.html")))
+
+
+class AndroidPlatformTools(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Android Platform Tools", description=_("Android Platform Tools"),
+                         only_on_archs=_supported_archs, expect_license=True,
+                         # Install the android-sdk-platform-tools-common package for the udev rules
+                         packages_requirements=['android-sdk-platform-tools-common'],
+                         download_page="https://developer.android.com/studio/releases/platform-tools/index.html",
+                         dir_to_decompress_in_tarball=".",
+                         required_files_path=[os.path.join("platform-tools", "adb")],
+                         **kwargs)
+
+    def parse_license(self, line, license_txt, in_license):
+        """Parse Android SDK download page for license"""
+        return self.category.parse_license('<div class="dialog-content-stretch sdk-terms">',
+                                           line, license_txt, in_license)
+
+    def parse_download_link(self, line, in_download):
+        """Parse Android SDK download link, expect to find a SHA-1 and a url"""
+        return self.category.parse_download_link('dac-download-linux', line, in_download)
+
+    def post_install(self):
+        """Add necessary environment variables"""
+        add_env_to_user(self.name, {"PATH": {"value": [os.path.join(self.install_path, "platform-tools")]}})
+        UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
 
 class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
