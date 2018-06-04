@@ -30,3 +30,4 @@ stage/
 prime/
 *.snap
 *.tar.bz2
+snap/.snapcraft/
