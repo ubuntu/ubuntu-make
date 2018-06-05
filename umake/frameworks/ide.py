@@ -714,30 +714,12 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                          checksum_type=ChecksumType.md5,
                          **kwargs)
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-        page = result[self.download_page]
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            assets = json.loads(page.buffer.read().decode())["assets"]
-            download_url = None
-            for asset in assets:
-                if "linux" in asset["browser_download_url"]:
-                    download_url = asset["browser_download_url"]
-            if not download_url:
-                raise IndexError
-        except (json.JSONDecodeError, IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-
-        self.download_requests.append(DownloadItem(download_url, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        url = None
+        if "linux" in line["browser_download_url"]:
+            in_download = True
+            url = line["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Create the LightTable Code launcher"""
@@ -762,37 +744,12 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                          packages_requirements=["libgconf-2-4"],
                          checksum_type=ChecksumType.md5, **kwargs)
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-        page = result[self.download_page]
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            if "beta" in self.description:
-                latest_beta = json.loads(page.buffer.read().decode())[0]
-                if "beta" not in latest_beta["tag_name"]:
-                    logger.error("Latest version is not beta.")
-                    UI.return_main_screen(status_code=1)
-                assets = latest_beta["assets"]
-            else:
-                assets = json.loads(page.buffer.read().decode())["assets"]
-            download_url = None
-            for asset in assets:
-                if "tar.gz" in asset["browser_download_url"]:
-                    download_url = asset["browser_download_url"]
-            if not download_url:
-                raise IndexError
-        except (json.JSONDecodeError, IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-
-        self.download_requests.append(DownloadItem(download_url, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        url = None
+        if "tar.gz" in line["browser_download_url"]:
+            in_download = True
+            url = line["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Create the Atom Code launcher"""
@@ -922,11 +879,11 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["STS"],
                          **kwargs)
         self.arch = '' if platform.machine() == 'i686' else '-x86_64'
-        self.checksum_url = None
+        self.new_download_url = None
 
     def parse_download_link(self, line, in_download):
         """Parse STS download links"""
-        url_found = False
+        url, checksum = (None, None)
         if 'linux-gtk{}.tar.gz'.format(self.arch) in line:
             in_download = True
         else:
@@ -934,49 +891,18 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
         if in_download:
             p = re.search(r'href="(.*.tar.gz)"', line)
             with suppress(AttributeError):
-                self.checksum_url = p.group(1) + '.sha1'
-                url_found = True
-                DownloadCenter(urls=[DownloadItem(self.checksum_url, None)],
-                               on_done=self.get_sha_and_start_download, download=False)
-        return (url_found, in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        """Download files to download + license and check it"""
-        logger.debug("Parse download metadata")
-
-        error_msg = result[self.download_page].error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        in_download = False
-        url_found = False
-        for line in result[self.download_page].buffer:
-            line_content = line.decode()
-            (_url_found, in_download) = self.parse_download_link(line_content, in_download)
-            if not url_found:
-                url_found = _url_found
-
-        if not url_found:
-            logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
+                # url set to check in baseinstaller if missing
+                url = p.group(1) + '.sha1'
+                self.new_download_url = url
+        return ((None, None), in_download)
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
-        res = download_result[self.checksum_url]
+        res = download_result[self.new_download_url]
         checksum = res.buffer.getvalue().decode('utf-8').split()[0]
         # you get and store self.download_url
-        url = re.sub('.sha1', '', self.checksum_url)
-        if url is None:
-            logger.error("Download page changed its syntax or is not parsable (missing url)")
-            UI.return_main_screen(status_code=1)
-        if checksum is None:
-            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
-        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
-        self.start_download_and_install()
+        url = re.sub('.sha1', '', self.new_download_url)
+        self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
         """Create the Spring Tools Suite launcher"""
@@ -1006,30 +932,12 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
         "i386": "32"
     }
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-        page = result[self.download_page]
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            assets = json.loads(page.buffer.read().decode())["assets"]
-            download_url = None
-            for asset in assets:
-                if "linux{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
-                    download_url = asset["browser_download_url"]
-            if not download_url:
-                raise IndexError
-        except (json.JSONDecodeError, IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-
-        self.download_requests.append(DownloadItem(download_url, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        url = None
+        if "linux{}".format(self.arch_trans[get_current_arch()]) in line["browser_download_url"]:
+            in_download = True
+            url = line["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Create the Processing Code launcher"""
