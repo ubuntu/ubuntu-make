@@ -82,11 +82,12 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
 
     def download_provider_page(self):
         logger.debug("Download application provider page")
-        DownloadCenter([DownloadItem(self.download_page, headers=self.headers)], self.get_metadata, download=False)
+        DownloadCenter([DownloadItem(self.download_page, headers=self.headers)],
+                       self.get_metadata_and_check_license, download=False)
 
     def parse_download_link(self, line, in_download):
         """Parse Eclipse download links"""
-        url_found = False
+        url, checksum = (None, None)
         if self.download_keyword in line and self.bits in line:
             in_download = True
         else:
@@ -94,49 +95,19 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         if in_download:
             p = re.search(r'href="(.*)" title', line)
             with suppress(AttributeError):
-                self.sha512_url = "https://www.eclipse.org/" + p.group(1) + '.sha512&mirror_id=1'
-                url_found = True
-                DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
-                               on_done=self.get_sha_and_start_download, download=False)
-        return (url_found, in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata(self, result):
-        """Download files to download + license and check it"""
-        logger.debug("Parse download metadata")
-
-        error_msg = result[self.download_page].error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        in_download = False
-        url_found = False
-        for line in result[self.download_page].buffer:
-            line_content = line.decode()
-            (_url_found, in_download) = self.parse_download_link(line_content, in_download)
-            if not url_found:
-                url_found = _url_found
-
-        if not url_found:
-            logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
+                self.new_download_url = "https://www.eclipse.org/" + p.group(1) + '.sha512&r=1'
+        return ((None, None), in_download)
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
-        res = download_result[self.sha512_url]
-        sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
-        # you get and store self.download_url
-        url = re.sub('.sha512', '', self.sha512_url)
-        if url is None:
-            logger.error("Download page changed its syntax or is not parsable (missing url)")
-            UI.return_main_screen(status_code=1)
-        if sha512 is None:
-            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
-        self.download_requests.append(DownloadItem(url, Checksum(ChecksumType.sha512, sha512)))
-        self.start_download_and_install()
+        # FIXME: Some variables are not syncing properly...
+        while True:
+            res = download_result[self.new_download_url]
+            if res:
+                break
+        checksum = res.buffer.getvalue().decode('utf-8').split()[0]
+        url = re.sub('.sha512', '', self.new_download_url)
+        self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
         """Create the Eclipse launcher"""
@@ -263,54 +234,20 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
     def executable(self):
         pass
 
+    def parse_download_link(self, line, in_download):
+        key, content = line.popitem()
+        content = content[0]
+        self.url = content['downloads']['linux']['link']
+        self.new_download_url = content['downloads']['linux']['checksumLink']
+
+        # Url is not defined here, but later on in the start_download
+        return (None, in_download)
+
     @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-
-        page = result[self.download_page]
-
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            key, content = json.loads(page.buffer.read().decode()).popitem()
-        except (json.JSONDecodeError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        try:
-            download_list = content[0]
-        except (IndexError):
-            if '&type=eap' in self.download_page:
-                logger.error("No EAP version available.")
-            else:
-                logger.error("No Stable version available.")
-            UI.return_main_screen(status_code=1)
-        try:
-            download_url = download_list['downloads']['linux']['link']
-            checksum_url = download_list['downloads']['linux']['checksumLink']
-        except (IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-        logger.debug("Downloading checksum first, from " + checksum_url)
-
-        def checksum_downloaded(results):
-            checksum_result = next(iter(results.values()))  # Just get the first.
-            if checksum_result.error:
-                logger.error(checksum_result.error)
-                UI.return_main_screen(status_code=1)
-
-            checksum = checksum_result.buffer.getvalue().decode('utf-8').split()[0]
-            logger.info('Obtained SHA256 checksum: ' + checksum)
-
-            self.download_requests.append(DownloadItem(download_url,
-                                                       checksum=Checksum(ChecksumType.sha256, checksum),
-                                                       ignore_encoding=True))
-            self.start_download_and_install()
-
-        DownloadCenter([DownloadItem(checksum_url)], on_done=checksum_downloaded, download=False)
+    def get_sha_and_start_download(self, download_result):
+        res = download_result[self.new_download_url]
+        checksum = res.buffer.getvalue().decode('utf-8').split()[0]
+        self.check_data_and_start_download(self.url, checksum)
 
     def post_install(self):
         """Create the appropriate JetBrains launcher."""
@@ -746,9 +683,10 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         url = None
-        if "tar.gz" in line["browser_download_url"]:
-            in_download = True
-            url = line["browser_download_url"]
+        for asset in line["assets"]:
+            if "tar.gz" in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
         return (url, in_download)
 
     def post_install(self):

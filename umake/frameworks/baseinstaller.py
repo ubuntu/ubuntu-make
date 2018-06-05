@@ -203,23 +203,29 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen(status_code=1)
 
-        if self.download_page.startswith("https://api.github.com"):
-            logger.debug("Use the Github api to fetch the latest release")
+        # TODO: add more meaningful check
+        if self.download_page.startswith("https://api.github.com") or\
+           self.download_page.startswith("https://data.services.jetbrains.com"):
             try:
-                assets = json.loads(result[self.download_page].buffer.read().decode())["assets"]
+                page = result[self.download_page]
+                latest = json.loads(page.buffer.read().decode())
+                # If we override the download page to get a beta version, then update the parsing as well
+                if self.download_page.startswith("https://api.github.com") and\
+                   not self.download_page.endswith("/latest"):
+                    latest = latest[0]
                 url = None
                 in_download = False
-                for asset in assets:
-                    (_url, in_download) = self.parse_download_link(asset, in_download)
-                    if not url:
-                        url = _url
+                (url, in_download) = self.parse_download_link(latest, in_download)
                 if not url:
-                    raise IndexError
+                    if not self.url:
+                        raise IndexError
+                    else:
+                        logger.debug("We set a temporary url while fetching the checksum")
+                        url = self.url
             except (json.JSONDecodeError, IndexError):
                 logger.error("Can't parse the download URL from the download page.")
                 UI.return_main_screen(status_code=1)
             logger.debug("Found download URL: " + url)
-            self.check_data_and_start_download(url, None)
 
         else:
             url, checksum = (None, None)
@@ -247,11 +253,11 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                             elif not self.checksum_type:
                                 logger.debug("Found download link for {}".format(url))
 
-                if not url and callable(self.get_sha_and_start_download):
-                    DownloadCenter(urls=[DownloadItem(self.new_download_url, None)],
-                                   on_done=self.get_sha_and_start_download, download=False)
-                else:
-                    self.check_data_and_start_download(url, checksum, license_txt)
+        if callable(self.get_sha_and_start_download):
+            DownloadCenter(urls=[DownloadItem(self.new_download_url, None)],
+                           on_done=self.get_sha_and_start_download, download=False)
+        else:
+            self.check_data_and_start_download(url, checksum, license_txt)
 
     def check_data_and_start_download(self, url=None, checksum=None, license_txt=StringIO()):
         if url is None:
