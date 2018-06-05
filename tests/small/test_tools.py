@@ -478,20 +478,6 @@ class TestLauncherIcons(LoggedTestCase):
         self.assertEqual(open(get_launcher_path("foo.desktop")).read(), self.get_generic_desktop_content())
 
     @patch("umake.tools.Gio.Settings")
-    def test_can_install_gnome(self, SettingsMock):
-        """Install a basic launcher, default case in gnome"""
-        SettingsMock.list_schemas.return_value = ["foo", "bar", "org.gnome.shell", "baz"]
-        SettingsMock.return_value.get_strv.return_value = ["bar.desktop"]
-        create_launcher("foo.desktop", self.get_generic_desktop_content())
-
-        self.assertTrue(SettingsMock.list_schemas.called)
-        SettingsMock.return_value.get_strv.assert_called_with("favorite-apps")
-        SettingsMock.return_value.set_strv.assert_called_with("favorite-apps", ["bar.desktop", "foo.desktop"])
-
-        self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
-        self.assertEqual(open(get_launcher_path("foo.desktop")).read(), self.get_generic_desktop_content())
-
-    @patch("umake.tools.Gio.Settings")
     def test_can_update_launcher(self, SettingsMock):
         """Update a launcher file"""
         SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
@@ -678,6 +664,99 @@ class TestLauncherIcons(LoggedTestCase):
         settings_module.DEFAULT_BINARY_LINK_PATH = os.path.join(self.local_dir, ".local", "share", "umake", "bin")
         add_exec_link(os.path.join(self.server_dir, "simplefile"), "foo")
         self.assertTrue(os.path.exists(os.path.join(settings_module.DEFAULT_BINARY_LINK_PATH, "foo")))
+
+
+class TestLauncherIconsGnome(TestLauncherIcons):
+    def setUp(self):
+        super().setUp()
+        os.environ["XDG_CURRENT_DESKTOP"] = "GNOME"
+
+    @patch("umake.tools.Gio.Settings")
+    def test_can_install(self, SettingsMock):
+        """Install a basic launcher, default case in gnome"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "org.gnome.shell", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["bar.desktop"]
+        create_launcher("foo.desktop", self.get_generic_desktop_content())
+
+        self.assertTrue(SettingsMock.list_schemas.called)
+        SettingsMock.return_value.get_strv.assert_called_with("favorite-apps")
+        SettingsMock.return_value.set_strv.assert_called_with("favorite-apps", ["bar.desktop", "foo.desktop"])
+
+        self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
+        self.assertEqual(open(get_launcher_path("foo.desktop")).read(), self.get_generic_desktop_content())
+
+    @patch("umake.tools.Gio.Settings")
+    def test_can_update_launcher(self, SettingsMock):
+        """Update a launcher file"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "org.gnome.shell", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["bar.desktop"]
+        create_launcher("foo.desktop", self.get_generic_desktop_content())
+        new_content = dedent("""\
+               [Desktop Entry]
+               Version=1.0
+               Type=Application
+               Name=Android Studio 2
+               Icon=/home/didrocks/{install_dir}/android-studio/bin/idea2.png
+               Exec="/home/didrocks/{install_dir}/android-studio/bin/studio2.sh" %f
+               Comment=Develop with pleasure!
+               Categories=Development;IDE;
+               Terminal=false
+               StartupWMClass=jetbrains-android-studio
+               """.format(install_dir=INSTALL_DIR))
+        create_launcher("foo.desktop", new_content)
+
+        self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
+        self.assertEqual(open(get_launcher_path("foo.desktop")).read(), new_content)
+
+    # Not needed for gnome since it ignores the running apps in the list of favourites
+    def test_can_install_without_unity_running(self):
+        pass
+
+    @patch("umake.tools.Gio.Settings")
+    def test_can_install_already_in_launcher(self, SettingsMock):
+        """A file listed in launcher still install the files, but the entry isn't changed"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "org.gnome.shell", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["foo.desktop", "bar.desktop"]
+        create_launcher("foo.desktop", self.get_generic_desktop_content())
+
+        self.assertFalse(SettingsMock.return_value.set_strv.called)
+        self.assertTrue(os.path.exists(get_launcher_path("foo.desktop")))
+
+    @patch("umake.tools.Gio.Settings")
+    def test_launcher_exists_and_is_pinned(self, SettingsMock):
+        """Launcher exists and is pinned if the file exists and is in favorites list"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "org.gnome.shell", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["foo.desktop", "bar.desktop"]
+        self.write_desktop_file("foo.desktop")
+
+        self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
+
+    @patch("umake.tools.Gio.Settings")
+    def test_launcher_isnt_pinned(self, SettingsMock):
+        """Launcher doesn't exists and is pinned if the file exists but not in favorites list"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "org.gnome.shell", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["bar.desktop"]
+        self.write_desktop_file("foo.desktop")
+
+        self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
+
+    @patch("umake.tools.Gio.Settings")
+    def test_launcher_exists_but_isnt_pinned_in_none_unity(self, SettingsMock):
+        """Launcher exists return True if file exists, not pinned but not in Gnome"""
+        os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "org.gnome.shell", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["bar.desktop"]
+        self.write_desktop_file("foo.desktop")
+
+        self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
+
+    @patch("umake.tools.Gio.Settings")
+    def test_launcher_doesnt_exists_but_pinned(self, SettingsMock):
+        """Launcher doesn't exist if no file, even if pinned"""
+        SettingsMock.list_schemas.return_value = ["foo", "bar", "org.gnome.shell", "baz"]
+        SettingsMock.return_value.get_strv.return_value = ["foo.desktop", "bar.desktop"]
+
+        self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
 
 
 class TestMiscTools(LoggedTestCase):

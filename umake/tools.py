@@ -341,7 +341,7 @@ def create_launcher(desktop_filename, content):
             sleep(1.5)
             ##########
             gsettings.set_strv("favorites", launcher_list)
-    elif "org.gnome.shell" in Gio.Settings.list_schemas():
+    if "org.gnome.shell" in Gio.Settings.list_schemas():
         gsettings = Gio.Settings(schema_id="org.gnome.shell", path="/org/gnome/shell/")
         launcher_list = gsettings.get_strv("favorite-apps")
         if desktop_filename not in launcher_list:
