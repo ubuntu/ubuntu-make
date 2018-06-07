@@ -465,111 +465,128 @@ class Rider(BaseJetBrains):
                          **kwargs)
 
 
-class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
+class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
     """The base for all Netbeans installers."""
 
     BASE_URL = "http://download.netbeans.org/netbeans"
     EXECUTABLE = "nb/netbeans"
 
-    def __init__(self, flavour="", **kwargs):
-        """The constructor.
-        @param category The IDE category.
-        @param flavour The Netbeans flavour (plugins bundled).
-        """
-        # add a separator to the string, like -cpp
-        if flavour:
-            flavour = '-' + flavour
-        self.flavour = flavour
+    def __init__(self, *args, **kwargs):
+        """Add executable required file path to existing list"""
+        if self.executable:
+            current_required_files_path = kwargs.get("required_files_path", [])
+            current_required_files_path.append(os.path.join("bin", self.executable))
+            kwargs["required_files_path"] = current_required_files_path
+        download_page="https://netbeans.org/downloads/zip.html"
+        kwargs["download_page"] = download_page
+        super().__init__(*args, **kwargs)
+    
+    @property
+    @abstractmethod
+    def download_keyword(self):
+        pass
 
-        super().__init__(name="Netbeans",
-                         description=_("Netbeans IDE"),
-                         only_on_archs=['i386', 'amd64'],
-                         download_page="https://netbeans.org/downloads/zip.html",
-                         dir_to_decompress_in_tarball="netbeans*",
-                         desktop_filename="netbeans{}.desktop".format(flavour),
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-                         required_files_path=[os.path.join("bin", "netbeans")],
-                         **kwargs)
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        """Get the latest version and trigger the download of the download_page file.
-        :param result: the file downloaded by DownloadCenter, contains a web page
-        """
-        # Processing the string to obtain metadata (version)
-        try:
-            url_version_str = result[self.download_page].buffer.read().decode('utf-8')
-        except AttributeError:
-            # The file could not be parsed or there is no network connection
-            logger.error("The download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
-
-        preg = re.compile(".*/images_www/v6/download/.*")
-        for line in url_version_str.split("\n"):
-            if preg.match(line):
-                line = line.replace("var PAGE_ARTIFACTS_LOCATION = \"/images"
-                                    "_www/v6/download/", "").replace("/\";", "").replace('/final', '')
-                self.version = line.strip()
-
-        if not self.version:
-            # Fallback
-            logger.error("Could not determine latest version")
-            UI.return_main_screen(status_code=1)
-
-        self.version_download_page = "https://netbeans.org/images_www/v6/download/" \
-                                     "{}/final/js/files.js".format(self.version)
-        DownloadCenter([DownloadItem(self.version_download_page)], self.parse_download_page_callback, download=False)
+    def parse_download_link(self, line, in_download):
+        """Parse Netbeans download links"""
+        url, checksum = (None, None)
+        if 'var PAGE_ARTIFACTS_LOCATION' in line:
+            in_download = True
+        else:
+            in_download = False
+        if in_download:
+            p = re.search(r'var PAGE_ARTIFACTS_LOCATION = \"/images_www/v6/download/(\S+)/final/\";', line)
+            with suppress(AttributeError):
+                # url set to check in baseinstaller if missing
+                self.version = p.group(1)
+                self.new_download_url = "https://netbeans.org/images_www/v6/download/{}/final/js/files.js".format(self.version)
+        return ((None, None), in_download)
 
     @MainLoop.in_mainloop_thread
-    def parse_download_page_callback(self, result):
-        """Get the download_url and trigger the download and installation of the app.
-        :param result: the file downloaded by DownloadCenter, contains js functions with download urls
-        """
-        logger.info("Netbeans {}".format(self.version))
+    def get_sha_and_start_download(self, download_result):
+        res = download_result[self.new_download_url].buffer.getvalue().decode('utf-8').split('\n')
 
-        # Processing the string to obtain metadata (download url)
-        try:
-            url_file = result[self.version_download_page].buffer.read().decode('utf-8')
-        except AttributeError:
-            # The file could not be parsed
-            logger.error("The download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
+        preg = re.compile(r'add_file\(\"zip/netbeans-{}-[0-9]{{12}}-?{}.zip"'.format(self.version,
+                                                                                   self.download_keyword))
 
-        preg = re.compile('add_file\("zip/netbeans-{}-[0-9]{{12}}{}.zip"'.format(self.version,
-                                                                                 self.flavour))
-        for line in url_file.split("\n"):
+        print(preg)
+        for line in res:
             if preg.match(line):
                 # Clean up the string from js (it's a function call)
                 line = line.replace("add_file(", "").replace(");", "").replace('"', "")
                 url_string = line
 
-        if not url_string:
-            # The file could not be parsed
-            logger.error("The download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
-
         string_array = url_string.split(", ")
-        try:
-            url_suffix = string_array[0]
-            sha256 = string_array[2]
-        except IndexError:
-            # The file could not be parsed
-            logger.error("The download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
+        url_suffix = string_array[0]
+        checksum = string_array[2]
 
-        download_url = "{}/{}/final/{}".format(self.BASE_URL, self.version, url_suffix)
-        self.download_requests.append(DownloadItem(download_url, Checksum(ChecksumType.sha256, sha256)))
-        self.start_download_and_install()
+        url = "{}/{}/final/{}".format(self.BASE_URL, self.version, url_suffix)
+        self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
         """Create the Netbeans launcher"""
         create_launcher(self.desktop_filename,
-                        get_application_desktop_file(name=_("Netbeans IDE"),
+                        get_application_desktop_file(name=self.name,
                                                      icon_path=join(self.install_path, "nb", "netbeans.png"),
                                                      try_exec=self.exec_path,
                                                      exec=self.exec_link_name,
-                                                     comment=_("Netbeans IDE"),
+                                                     comment=self.description,
                                                      categories="Development;IDE;"))
+    
+class Netbeans(BaseNetBeans):
+    download_keyword = ''
+    executable = "netbeans"
+
+    def __init__(self, **kwargs):
+        super().__init__(name=_("Netbeans"),
+            description=_("Extensible Java IDE"),
+            only_on_archs=['i386', 'amd64'],
+            desktop_filename="netbeans.desktop",
+            dir_to_decompress_in_tarball="netbeans*",
+            packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+            checksum_type=ChecksumType.sha256,
+            **kwargs)
+
+class NetbeansJavaEE(BaseNetBeans):
+    download_keyword = 'javaee'
+    executable = "netbeans"
+
+    def __init__(self, **kwargs):
+        super().__init__(name=_("Netbeans JavaEE"),
+            description=_("Extensible Java IDE, JavaEE edition"),
+            only_on_archs=['i386', 'amd64'],
+            desktop_filename='netbeansjee.desktop',
+            dir_to_decompress_in_tarball="netbeans*",
+            packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+            checksum_type=ChecksumType.sha256,
+            **kwargs)
+
+class NetbeansHTML(BaseNetBeans):
+    download_keyword = 'html'
+    executable = "netbeans"
+
+    def __init__(self, **kwargs):
+        super().__init__(name=_("Netbeans HTML"),
+            description=_("Extensible Java IDE, HTML edition"),
+            only_on_archs=['i386', 'amd64'],
+            desktop_filename='netbeanshtml.desktop',
+            dir_to_decompress_in_tarball="netbeans*",
+            packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+            checksum_type=ChecksumType.sha256,
+            **kwargs)
+
+class NetbeansJavaEE(BaseNetBeans):
+    download_keyword = 'cpppp'
+    executable = "netbeans"
+
+    def __init__(self, **kwargs):
+        super().__init__(name=_("Netbeans"),
+            description=_("Extensible Java IDE, C C++ edition"),
+            only_on_archs=['i386', 'amd64'],
+            desktop_filename='netbeansc.desktop',
+            dir_to_decompress_in_tarball="netbeans*",
+            packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+            checksum_type=ChecksumType.sha256,
+            **kwargs)
 
 
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
