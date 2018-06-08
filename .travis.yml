@@ -1,6 +1,7 @@
 language: python
 dist: bionic
 python:
+<<<<<<< HEAD
   - "3.6"
 addons:
   apt:
@@ -14,3 +15,23 @@ install:
 script:
   - sudo mv /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config ..
   - ./pyruntests pep8 small
+=======
+  - "3.4"
+virtualenv:
+  system_site_packages: true
+
+dist: trusty
+sudo: required
+
+services:
+  - docker
+
+install:
+  - sudo apt-get update -q
+  - sudo apt install -y gir1.2-gtk-3.0 python3-gi python3-gi-cairo
+  - pip install -r requirements.txt
+env:
+  - TESTFOLDER="pep8 small"
+  - TESTFOLDER="medium"
+script: PATH="/usr/bin:$PATH" ./runtests $TESTFOLDER
+>>>>>>> Temporarily disable apt
