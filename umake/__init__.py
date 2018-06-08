@@ -56,6 +56,14 @@ def _setup_logging(env_key='LOG_CFG', level=_default_log_level):
     """
     path = os.getenv(env_key, '')
     logging.basicConfig(level=level, format="%(levelname)s: %(message)s")
+    if level == logging.DEBUG:
+        logger.debug("Set http/requests logger to debug")
+        import http.client as http_client
+        http_client.HTTPConnection.debuglevel = 1
+
+        requests_log = logging.getLogger("requests.packages.urllib3")
+        requests_log.setLevel(logging.DEBUG)
+        requests_log.propagate = True
     if level == _default_log_level:
         if os.path.exists(path):
             with open(path, 'rt') as f:
