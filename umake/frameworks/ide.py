@@ -317,13 +317,16 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
         icon_path = join(self.install_path, 'bin', self.icon_filename)
         comment = self.description + " (UDTC)"
         categories = "Development;IDE;"
+        wmclass = "StartupWMClass=jetbrains-" + self.name.split(' ', 1)[0].lower()
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=self.name,
                                                      icon_path=icon_path,
                                                      try_exec=self.exec_path,
                                                      exec=self.exec_link_name,
                                                      comment=comment,
-                                                     categories=categories))
+                                                     categories=categories,
+                                                     extra=wmclass,
+                                                     ))
 
     def install_framework_parser(self, parser):
         this_framework_parser = super().install_framework_parser(parser)
