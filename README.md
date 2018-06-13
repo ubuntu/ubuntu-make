@@ -18,7 +18,12 @@ We recommend to use the Ubuntu Make snap to ensure you always have the latest an
 $ snap install ubuntu-make --classic
 ```
 
-If installed via the snap umake has to be run as `ubuntu-make.umake`
+If installed via the snap it can be run as `ubuntu-make.umake`, or via the alias `umake`
+
+### Attention
+The snap currently in the store is known to work on releases up to 16.04 (Xenial).
+
+For later releases there are compatibility issues, so it is recommended to install via the ppa.
 
 If the snap does not work there is a daily build ppa:
 
