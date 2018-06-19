@@ -831,7 +831,7 @@ class DBeaver(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="dbeaver.desktop",
                          required_files_path=["dbeaver"],
                          dir_to_decompress_in_tarball="dbeaver",
-                         packages_requirements=['openjdk-8-jdk'],
+                         packages_requirements=['openjdk-8-jre-headless'],
                          **kwargs)
     arch_trans = {
         "amd64": "x86_64",
