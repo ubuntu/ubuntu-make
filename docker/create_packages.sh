@@ -205,3 +205,9 @@ create_package llvm
 create_package libpcre3-dev
 create_package build-essential
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+# DBeaver deps
+mkdir -p $repo_root_dir/dbeaver
+cd $repo_root_dir/dbeaver
+create_package openjdk-8-jre-headless
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
