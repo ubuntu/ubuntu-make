@@ -487,7 +487,7 @@ class DBeaverInContainer(ContainerTests, test_ide.DBeaverTest):
 
     def setUp(self):
         self.hosts = {443: ["api.github.com", "github.com"]}
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'DBeaver')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'dbeaver')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "dbeaver")
