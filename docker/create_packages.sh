@@ -119,6 +119,12 @@ create_package libgtk2.0-0
 create_package libgconf-2-4
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 
+# atom deps
+mkdir -p $repo_root_dir/atom
+cd $repo_root_dir/atom
+create_package libgconf-2-4
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
 # arduino deps
 mkdir -p $repo_root_dir/arduino
 cd $repo_root_dir/arduino

@@ -759,6 +759,7 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="atom.desktop",
                          required_files_path=["atom", "resources/app/apm/bin/apm"],
                          dir_to_decompress_in_tarball="atom-*",
+                         packages_requirements=["libgconf-2-4"],
                          checksum_type=ChecksumType.md5, **kwargs)
 
     @MainLoop.in_mainloop_thread

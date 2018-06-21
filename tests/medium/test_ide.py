@@ -440,7 +440,7 @@ class AtomInContainer(ContainerTests, test_ide.AtomTest):
 
     def setUp(self):
         self.hosts = {443: ["api.github.com", "github.com"]}
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'Atom')
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'atom')
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "ide", "atom")
