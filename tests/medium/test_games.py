@@ -46,7 +46,7 @@ class BlenderInContainer(ContainerTests, test_games.BlenderTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.blender.org"], 80: ['download.blender.org']}
+        self.hosts = {443: ["www.blender.org", "download.blender.org"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'blender')
         super().setUp()
         # override with container path
