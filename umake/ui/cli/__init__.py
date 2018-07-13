@@ -20,6 +20,7 @@
 """Module for loading the command line interface"""
 
 import argcomplete
+from argparse import Namespace
 from contextlib import suppress
 from gettext import gettext as _
 import logging
@@ -250,14 +251,18 @@ def main(parser):
         for category in sorted(categories, key=lambda cat: cat["category_name"]):
             # Sort the frameworks to prevent a random list at each new program execution
             for framework in sorted(category["frameworks"], key=lambda fram: fram["framework_name"]):
-                if framework['framework_name'] in installed and framework['updatable']:
-                    args = [framework, "update"]
-                    print(framework)
-                    # print(args)
-                    # args = parser.parse_args(args)
-                    # print(args)
-                    # run_command_for_args(args)
-        sys.exit(0)
+                if framework['framework_name'] in installed:
+                    if framework['updatable']:
+                        args = Namespace(category=category['category_name'],
+                                destdir=framework['install_path'],
+                                framework=framework['framework_name'],
+                                update=True, version=False, beta=False,
+                                remove=False)
+                        print("Checking " + framework['framework_name'])
+                        # print(args)
+                        # args = parser.parse_args(args)
+                        run_command_for_args(args)
+        # sys.exit(0)
 
     if args.version and not len(arg_to_parse) > 1:
         print(get_version())

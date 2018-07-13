@@ -149,7 +149,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             self.arg_install_path = self.install_path
             self.reinstall()
             DownloadCenter([DownloadItem(self.download_page)], self.get_metadata_and_check_license, download=False)
-            UI.display(DisplayMessage("Framework {} updated succesfully".format(self.name)))
+            UI.display(DisplayMessage("Framework {} update started".format(self.name)))
         else:
             logger.debug("No update available")
             UI.display(DisplayMessage("Framework {} already up to date".format(self.name)))
