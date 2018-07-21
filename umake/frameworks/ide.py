@@ -94,7 +94,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         if in_download:
             p = re.search(r'href="(.*)" title', line)
             with suppress(AttributeError):
-                self.sha512_url = "https://www.eclipse.org/" + p.group(1) + '.sha512&r=1'
+                self.sha512_url = "https://www.eclipse.org" + p.group(1) + '.sha512&mirror_id=1'
                 url_found = True
                 DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
                                on_done=self.get_sha_and_start_download, download=False)
