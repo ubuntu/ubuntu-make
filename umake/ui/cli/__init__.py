@@ -20,11 +20,13 @@
 """Module for loading the command line interface"""
 
 import argcomplete
+from argparse import Namespace
 from contextlib import suppress
 from gettext import gettext as _
 import logging
 import os
 from progressbar import ProgressBar, BouncingBar
+import re
 import readline
 import sys
 from umake.interactions import InputText, TextWithChoices, LicenseAgreement, DisplayMessage, UnknownProgress
@@ -158,7 +160,7 @@ def mangle_args_for_default_framework(args):
     return result_args
 
 
-def get_frameworks_list_output(args):
+def get_frameworks_list_output(args, showPath=True, showDescription=True):
     """
     Get a frameworks list based on the arguments. It returns a string ready to be printed.
     Multiple forms of the frameworks list can ge given:
@@ -210,9 +212,12 @@ def get_frameworks_list_output(args):
             # Sort the frameworks to prevent a random list at each new program execution
             for framework in sorted(category["frameworks"], key=lambda fram: fram["framework_name"]):
                 if framework["is_installed"]:
-                    print_result += "{}: {}\n".format(framework["framework_name"],
-                                                      framework["framework_description"])
-                    print_result += "\t{}: {}\n".format(_("path"), framework["install_path"])
+                    print_result += "{}".format(framework["framework_name"])
+                    if showDescription:
+                        print_result += ": {}".format(framework["framework_description"])
+                    print_result += "\n"
+                    if showPath:
+                        print_result += "\t{}: {}\n".format(_("path"), framework["install_path"])
 
         if not print_result:
             print_result = _("No frameworks are currently installed")
@@ -239,7 +244,27 @@ def main(parser):
         print(get_frameworks_list_output(args))
         sys.exit(0)
 
-    if args.version:
+    if args.update and not len(arg_to_parse) > 1:
+        args.list_installed=True
+        categories = list_frameworks()
+        installed = get_frameworks_list_output(args, showPath=False, showDescription=False)
+        for category in sorted(categories, key=lambda cat: cat["category_name"]):
+            # Sort the frameworks to prevent a random list at each new program execution
+            for framework in sorted(category["frameworks"], key=lambda fram: fram["framework_name"]):
+                if framework['framework_name'] in installed:
+                    if framework['updatable']:
+                        args = Namespace(category=category['category_name'],
+                                destdir=framework['install_path'],
+                                framework=framework['framework_name'],
+                                update=True, version=False, beta=False,
+                                remove=False)
+                        print("Checking " + framework['framework_name'])
+                        # print(args)
+                        # args = parser.parse_args(args)
+                        run_command_for_args(args)
+        # sys.exit(0)
+
+    if args.version and not len(arg_to_parse) > 1:
         print(get_version())
         sys.exit(0)
 

@@ -27,6 +27,7 @@ import logging
 import os
 import platform
 import re
+import subprocess
 import umake.frameworks.baseinstaller
 from umake.interactions import Choice, TextWithChoices, DisplayMessage
 from umake.network.download_center import DownloadItem
@@ -55,6 +56,8 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="firefox-developer.desktop",
                          required_files_path=["firefox"], **kwargs)
         self.arg_lang = None
+
+    version_parse = {'regex': 'Mozilla Firefox (.*)\n', 'command': 'firefox-developer --version'}
 
     @MainLoop.in_mainloop_thread
     def language_select_callback(self, url):

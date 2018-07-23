@@ -536,3 +536,38 @@ class BaseInstallerTests(LargeFrameworkTests):
 
             # we have nothing installed
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+    def test_update_not_available(self):
+        for loop in ("install", "update"):
+            if loop == "update":
+                pass
+                self.child = spawn_process(self.command('{} base base-framework --update'.format(UMAKE)))
+                self.expect_and_no_warn("\[.*\] ")
+                self.child.sendline("a")
+                self.expect_and_no_warn("Framework Base Framework already up to date",
+                                        timeout=self.TIMEOUT_INSTALL_PROGRESS)
+            else:
+                self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
+                self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+                self.child.sendline("")
+                self.expect_and_no_warn("\[.*\] ")
+                self.child.sendline("a")
+                self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+                self.wait_and_close()
+
+    def test_update_available(self):
+        self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("\[.*\] ")
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+        with swap_file_and_restore(self.download_page_file_path) as content:
+            with open(self.download_page_file_path, "w") as newfile:
+                newfile.write(content.replace('135.1641136-linux.zip', "136.123-linux.zip"))
+            self.child = spawn_process(self.command('{} base base-framework --update'.format(UMAKE)))
+            self.expect_and_no_warn("\[.*\] ")
+            self.child.sendline("a")
+            self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+            self.wait_and_close()
