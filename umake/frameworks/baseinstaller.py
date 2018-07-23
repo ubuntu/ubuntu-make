@@ -108,6 +108,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
         # first step, check if installed
         if self.update and self.updatable:
+            if not self.is_installed:
+                UI.display(DisplayMessage("The framework {} is not installed".format(self.name)))
+                UI.return_main_screen()                
             try:
                 self.set_exec_path()
                 self.download_provider_page()
