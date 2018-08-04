@@ -129,7 +129,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
         # you get and store self.download_url
         url = re.sub('.*\?file=(.*)&type=sha512',
-                     'http://www.eclipse.org/downloads/download.php?file=\g<1>&mirror_id=1', self.sha512_url)
+                     'http://www.eclipse.org/downloads/download.php?file=\g<1>&r=1', self.sha512_url)
         if url is None:
             logger.error("Download page changed its syntax or is not parsable (missing url)")
             UI.return_main_screen(status_code=1)
