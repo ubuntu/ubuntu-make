@@ -92,9 +92,10 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         else:
             in_download = False
         if in_download:
-            p = re.search(r'href="(.*)" title', line)
+            p = re.search(r"href='http://www\.eclipse\.org\/downloads/download\.php\?file=(.*\.tar\.gz)'", line)
             with suppress(AttributeError):
-                self.sha512_url = "https://www.eclipse.org" + p.group(1) + '.sha512&mirror_id=1'
+                self.sha512_url = 'https://www.eclipse.org/downloads/sums.php?file=' + \
+                    parse.quote(p.group(1), safe='') + '&type=sha512'
                 url_found = True
                 DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
                                on_done=self.get_sha_and_start_download, download=False)
@@ -127,7 +128,8 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         res = download_result[self.sha512_url]
         sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
         # you get and store self.download_url
-        url = re.sub('.sha512', '', self.sha512_url)
+        url = re.sub('.*\?file=(.*)&type=sha512',
+                     'http://www.eclipse.org/downloads/download.php?file=\g<1>&r=1', self.sha512_url)
         if url is None:
             logger.error("Download page changed its syntax or is not parsable (missing url)")
             UI.return_main_screen(status_code=1)
