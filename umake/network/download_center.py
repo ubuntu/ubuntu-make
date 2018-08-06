@@ -121,7 +121,7 @@ class DownloadCenter:
             if total_size != -1:
                 current_size = min(current_size, total_size)
             self._download_progress[url] = {"current": current_size, "size": total_size}
-            logger.debug("Deliver download update: {} of {}".format(self._download_progress, total_size))
+            logger.debug("Deliver download update: {}".format(self._download_progress))
             self._wired_report(self._download_progress)
 
         # Requests support redirection out of the box.

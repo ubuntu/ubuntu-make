@@ -87,26 +87,21 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
 
     def parse_download_link(self, line, in_download):
         """Parse Eclipse download links"""
-        url, checksum = (None, None)
-        if self.download_keyword in line and self.bits in line:
+        if self.download_keyword in line and self.bits in line and 'linux' in line:
             in_download = True
         else:
             in_download = False
         if in_download:
-            p = re.search(r'href="(.*)" title', line)
+            p = re.search(r"href='(http://www\.eclipse\.org\/downloads/download\.php\?file=.*\.tar\.gz)'", line)
             with suppress(AttributeError):
-                self.new_download_url = "https://www.eclipse.org/" + p.group(1) + '.sha512&r=1'
+                self.new_download_url = p.group(1).replace('download.php', 'sums.php')
         return ((None, None), in_download)
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
-        # FIXME: Some variables are not syncing properly...
-        while True:
-            res = download_result[self.new_download_url]
-            if res:
-                break
+        res = download_result[self.new_download_url]
         checksum = res.buffer.getvalue().decode('utf-8').split()[0]
-        url = re.sub('.sha512', '', self.new_download_url)
+        url = self.new_download_url.replace('sums.php', 'download.php') + '&r=1'
         self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
@@ -222,6 +217,8 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
             kwargs["required_files_path"] = current_required_files_path
         download_page = "https://data.services.jetbrains.com/products/releases?code={}".format(self.download_keyword)
         kwargs["download_page"] = download_page
+        kwargs["json"] = True
+        kwargs["checksum_type"] = ChecksumType.sha256
         super().__init__(*args, **kwargs)
 
     @property
@@ -477,13 +474,18 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMe
             current_required_files_path = kwargs.get("required_files_path", [])
             current_required_files_path.append(os.path.join("bin", self.executable))
             kwargs["required_files_path"] = current_required_files_path
-        download_page="https://netbeans.org/downloads/zip.html"
+        download_page = "https://netbeans.org/downloads/zip.html"
         kwargs["download_page"] = download_page
         super().__init__(*args, **kwargs)
-    
+
     @property
     @abstractmethod
     def download_keyword(self):
+        pass
+
+    @property
+    @abstractmethod
+    def executable(self):
         pass
 
     def parse_download_link(self, line, in_download):
@@ -498,7 +500,8 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMe
             with suppress(AttributeError):
                 # url set to check in baseinstaller if missing
                 self.version = p.group(1)
-                self.new_download_url = "https://netbeans.org/images_www/v6/download/{}/final/js/files.js".format(self.version)
+                self.new_download_url = "https://netbeans.org/images_www/v6/download/" + \
+                                        "{}/final/js/files.js".format(self.version)
         return ((None, None), in_download)
 
     @MainLoop.in_mainloop_thread
@@ -506,9 +509,8 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMe
         res = download_result[self.new_download_url].buffer.getvalue().decode('utf-8').split('\n')
 
         preg = re.compile(r'add_file\(\"zip/netbeans-{}-[0-9]{{12}}-?{}.zip"'.format(self.version,
-                                                                                   self.download_keyword))
+                                                                                     self.download_keyword))
 
-        print(preg)
         for line in res:
             if preg.match(line):
                 # Clean up the string from js (it's a function call)
@@ -531,20 +533,22 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMe
                                                      exec=self.exec_link_name,
                                                      comment=self.description,
                                                      categories="Development;IDE;"))
-    
+
+
 class Netbeans(BaseNetBeans):
     download_keyword = ''
     executable = "netbeans"
 
     def __init__(self, **kwargs):
         super().__init__(name=_("Netbeans"),
-            description=_("Extensible Java IDE"),
-            only_on_archs=['i386', 'amd64'],
-            desktop_filename="netbeans.desktop",
-            dir_to_decompress_in_tarball="netbeans*",
-            packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-            checksum_type=ChecksumType.sha256,
-            **kwargs)
+                         description=_("Extensible Java IDE"),
+                         only_on_archs=['i386', 'amd64'],
+                         desktop_filename="netbeans.desktop",
+                         dir_to_decompress_in_tarball="netbeans*",
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         checksum_type=ChecksumType.sha256,
+                         **kwargs)
+
 
 class NetbeansJavaEE(BaseNetBeans):
     download_keyword = 'javaee'
@@ -552,13 +556,14 @@ class NetbeansJavaEE(BaseNetBeans):
 
     def __init__(self, **kwargs):
         super().__init__(name=_("Netbeans JavaEE"),
-            description=_("Extensible Java IDE, JavaEE edition"),
-            only_on_archs=['i386', 'amd64'],
-            desktop_filename='netbeansjee.desktop',
-            dir_to_decompress_in_tarball="netbeans*",
-            packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-            checksum_type=ChecksumType.sha256,
-            **kwargs)
+                         description=_("Extensible Java IDE, JavaEE edition"),
+                         only_on_archs=['i386', 'amd64'],
+                         desktop_filename='netbeansjee.desktop',
+                         dir_to_decompress_in_tarball="netbeans*",
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         checksum_type=ChecksumType.sha256,
+                         **kwargs)
+
 
 class NetbeansHTML(BaseNetBeans):
     download_keyword = 'html'
@@ -566,27 +571,28 @@ class NetbeansHTML(BaseNetBeans):
 
     def __init__(self, **kwargs):
         super().__init__(name=_("Netbeans HTML"),
-            description=_("Extensible Java IDE, HTML edition"),
-            only_on_archs=['i386', 'amd64'],
-            desktop_filename='netbeanshtml.desktop',
-            dir_to_decompress_in_tarball="netbeans*",
-            packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-            checksum_type=ChecksumType.sha256,
-            **kwargs)
+                         description=_("Extensible Java IDE, HTML edition"),
+                         only_on_archs=['i386', 'amd64'],
+                         desktop_filename='netbeanshtml.desktop',
+                         dir_to_decompress_in_tarball="netbeans*",
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         checksum_type=ChecksumType.sha256,
+                         **kwargs)
+
 
 class NetbeansJavaEE(BaseNetBeans):
     download_keyword = 'cpppp'
     executable = "netbeans"
 
     def __init__(self, **kwargs):
-        super().__init__(name=_("Netbeans"),
-            description=_("Extensible Java IDE, C C++ edition"),
-            only_on_archs=['i386', 'amd64'],
-            desktop_filename='netbeansc.desktop',
-            dir_to_decompress_in_tarball="netbeans*",
-            packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-            checksum_type=ChecksumType.sha256,
-            **kwargs)
+        super().__init__(name=_("Netbeans JEE"),
+                         description=_("Extensible Java IDE, C C++ edition"),
+                         only_on_archs=['i386', 'amd64'],
+                         desktop_filename='netbeansc.desktop',
+                         dir_to_decompress_in_tarball="netbeans*",
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         checksum_type=ChecksumType.sha256,
+                         **kwargs)
 
 
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
@@ -665,14 +671,14 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="lighttable.desktop",
                          required_files_path=["LightTable"],
                          dir_to_decompress_in_tarball="lighttable-*",
-                         checksum_type=ChecksumType.md5,
-                         **kwargs)
+                         json=True, **kwargs)
 
     def parse_download_link(self, line, in_download):
         url = None
-        if "linux" in line["browser_download_url"]:
-            in_download = True
-            url = line["browser_download_url"]
+        for asset in line["assets"]:
+            if "linux" in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
         return (url, in_download)
 
     def post_install(self):
@@ -696,7 +702,7 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["atom", "resources/app/apm/bin/apm"],
                          dir_to_decompress_in_tarball="atom-*",
                          packages_requirements=["libgconf-2-4"],
-                         checksum_type=ChecksumType.md5, **kwargs)
+                         json=True, **kwargs)
 
     def parse_download_link(self, line, in_download):
         url = None
@@ -744,36 +750,19 @@ class DBeaver(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["dbeaver"],
                          dir_to_decompress_in_tarball="dbeaver",
                          packages_requirements=['openjdk-8-jre-headless'],
-                         **kwargs)
+                         json=True, **kwargs)
     arch_trans = {
         "amd64": "x86_64",
         "i386": "x86"
     }
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-        page = result[self.download_page]
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            assets = json.loads(page.buffer.read().decode())["assets"]
-            download_url = None
-            for asset in assets:
-                if "linux.gtk.{}.tar.gz".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
-                    download_url = asset["browser_download_url"]
-            if not download_url:
-                raise IndexError
-        except (json.JSONDecodeError, IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-
-        self.download_requests.append(DownloadItem(download_url, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if "linux.gtk.{}.tar.gz".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Create the DBeaver launcher"""
@@ -880,7 +869,7 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="processing.desktop",
                          required_files_path=["processing"],
                          dir_to_decompress_in_tarball="processing-*",
-                         **kwargs)
+                         json=True, **kwargs)
 
     arch_trans = {
         "amd64": "64",
@@ -889,9 +878,10 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         url = None
-        if "linux{}".format(self.arch_trans[get_current_arch()]) in line["browser_download_url"]:
-            in_download = True
-            url = line["browser_download_url"]
+        for asset in line["assets"]:
+            if "linux{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
         return (url, in_download)
 
     def post_install(self):
