@@ -82,61 +82,27 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
 
     def download_provider_page(self):
         logger.debug("Download application provider page")
-        DownloadCenter([DownloadItem(self.download_page, headers=self.headers)], self.get_metadata, download=False)
+        DownloadCenter([DownloadItem(self.download_page, headers=self.headers)],
+                       self.get_metadata_and_check_license, download=False)
 
     def parse_download_link(self, line, in_download):
         """Parse Eclipse download links"""
-        url_found = False
-        if self.download_keyword in line and self.bits in line:
+        if self.download_keyword in line and self.bits in line and 'linux' in line:
             in_download = True
         else:
             in_download = False
         if in_download:
-            p = re.search(r'href="(.*)" title', line)
+            p = re.search(r"href='(http://www\.eclipse\.org\/downloads/download\.php\?file=.*\.tar\.gz)'", line)
             with suppress(AttributeError):
-                self.sha512_url = "https://www.eclipse.org" + p.group(1) + '.sha512&mirror_id=1'
-                url_found = True
-                DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
-                               on_done=self.get_sha_and_start_download, download=False)
-        return (url_found, in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata(self, result):
-        """Download files to download + license and check it"""
-        logger.debug("Parse download metadata")
-
-        error_msg = result[self.download_page].error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        in_download = False
-        url_found = False
-        for line in result[self.download_page].buffer:
-            line_content = line.decode()
-            (_url_found, in_download) = self.parse_download_link(line_content, in_download)
-            if not url_found:
-                url_found = _url_found
-
-        if not url_found:
-            logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
+                self.new_download_url = p.group(1).replace('download.php', 'sums.php')
+        return ((None, None), in_download)
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
-        res = download_result[self.sha512_url]
-        sha512 = res.buffer.getvalue().decode('utf-8').split()[0]
-        # you get and store self.download_url
-        url = re.sub('.sha512', '', self.sha512_url)
-        if url is None:
-            logger.error("Download page changed its syntax or is not parsable (missing url)")
-            UI.return_main_screen(status_code=1)
-        if sha512 is None:
-            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download link for {}, checksum: {}".format(url, sha512))
-        self.download_requests.append(DownloadItem(url, Checksum(ChecksumType.sha512, sha512)))
-        self.start_download_and_install()
+        res = download_result[self.new_download_url]
+        checksum = res.buffer.getvalue().decode('utf-8').split()[0]
+        url = self.new_download_url.replace('sums.php', 'download.php') + '&r=1'
+        self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
         """Create the Eclipse launcher"""
@@ -251,6 +217,8 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
             kwargs["required_files_path"] = current_required_files_path
         download_page = "https://data.services.jetbrains.com/products/releases?code={}".format(self.download_keyword)
         kwargs["download_page"] = download_page
+        kwargs["json"] = True
+        kwargs["checksum_type"] = ChecksumType.sha256
         super().__init__(*args, **kwargs)
 
     @property
@@ -263,54 +231,20 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
     def executable(self):
         pass
 
+    def parse_download_link(self, line, in_download):
+        key, content = line.popitem()
+        content = content[0]
+        self.url = content['downloads']['linux']['link']
+        self.new_download_url = content['downloads']['linux']['checksumLink']
+
+        # Url is not defined here, but later on in the start_download
+        return (None, in_download)
+
     @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-
-        page = result[self.download_page]
-
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            key, content = json.loads(page.buffer.read().decode()).popitem()
-        except (json.JSONDecodeError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        try:
-            download_list = content[0]
-        except (IndexError):
-            if '&type=eap' in self.download_page:
-                logger.error("No EAP version available.")
-            else:
-                logger.error("No Stable version available.")
-            UI.return_main_screen(status_code=1)
-        try:
-            download_url = download_list['downloads']['linux']['link']
-            checksum_url = download_list['downloads']['linux']['checksumLink']
-        except (IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-        logger.debug("Downloading checksum first, from " + checksum_url)
-
-        def checksum_downloaded(results):
-            checksum_result = next(iter(results.values()))  # Just get the first.
-            if checksum_result.error:
-                logger.error(checksum_result.error)
-                UI.return_main_screen(status_code=1)
-
-            checksum = checksum_result.buffer.getvalue().decode('utf-8').split()[0]
-            logger.info('Obtained SHA256 checksum: ' + checksum)
-
-            self.download_requests.append(DownloadItem(download_url,
-                                                       checksum=Checksum(ChecksumType.sha256, checksum),
-                                                       ignore_encoding=True))
-            self.start_download_and_install()
-
-        DownloadCenter([DownloadItem(checksum_url)], on_done=checksum_downloaded, download=False)
+    def get_sha_and_start_download(self, download_result):
+        res = download_result[self.new_download_url]
+        checksum = res.buffer.getvalue().decode('utf-8').split()[0]
+        self.check_data_and_start_download(self.url, checksum)
 
     def post_install(self):
         """Create the appropriate JetBrains launcher."""
@@ -528,111 +462,137 @@ class Rider(BaseJetBrains):
                          **kwargs)
 
 
-class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller):
+class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
     """The base for all Netbeans installers."""
 
     BASE_URL = "http://download.netbeans.org/netbeans"
     EXECUTABLE = "nb/netbeans"
 
-    def __init__(self, flavour="", **kwargs):
-        """The constructor.
-        @param category The IDE category.
-        @param flavour The Netbeans flavour (plugins bundled).
-        """
-        # add a separator to the string, like -cpp
-        if flavour:
-            flavour = '-' + flavour
-        self.flavour = flavour
+    def __init__(self, *args, **kwargs):
+        """Add executable required file path to existing list"""
+        if self.executable:
+            current_required_files_path = kwargs.get("required_files_path", [])
+            current_required_files_path.append(os.path.join("bin", self.executable))
+            kwargs["required_files_path"] = current_required_files_path
+        download_page = "https://netbeans.org/downloads/zip.html"
+        kwargs["download_page"] = download_page
+        super().__init__(*args, **kwargs)
 
-        super().__init__(name="Netbeans",
-                         description=_("Netbeans IDE"),
-                         only_on_archs=['i386', 'amd64'],
-                         download_page="https://netbeans.org/downloads/zip.html",
-                         dir_to_decompress_in_tarball="netbeans*",
-                         desktop_filename="netbeans{}.desktop".format(flavour),
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
-                         required_files_path=[os.path.join("bin", "netbeans")],
-                         **kwargs)
+    @property
+    @abstractmethod
+    def download_keyword(self):
+        pass
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        """Get the latest version and trigger the download of the download_page file.
-        :param result: the file downloaded by DownloadCenter, contains a web page
-        """
-        # Processing the string to obtain metadata (version)
-        try:
-            url_version_str = result[self.download_page].buffer.read().decode('utf-8')
-        except AttributeError:
-            # The file could not be parsed or there is no network connection
-            logger.error("The download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
+    @property
+    @abstractmethod
+    def executable(self):
+        pass
 
-        preg = re.compile(".*/images_www/v6/download/.*")
-        for line in url_version_str.split("\n"):
-            if preg.match(line):
-                line = line.replace("var PAGE_ARTIFACTS_LOCATION = \"/images"
-                                    "_www/v6/download/", "").replace("/\";", "").replace('/final', '')
-                self.version = line.strip()
-
-        if not self.version:
-            # Fallback
-            logger.error("Could not determine latest version")
-            UI.return_main_screen(status_code=1)
-
-        self.version_download_page = "https://netbeans.org/images_www/v6/download/" \
-                                     "{}/final/js/files.js".format(self.version)
-        DownloadCenter([DownloadItem(self.version_download_page)], self.parse_download_page_callback, download=False)
+    def parse_download_link(self, line, in_download):
+        """Parse Netbeans download links"""
+        url, checksum = (None, None)
+        if 'var PAGE_ARTIFACTS_LOCATION' in line:
+            in_download = True
+        else:
+            in_download = False
+        if in_download:
+            p = re.search(r'var PAGE_ARTIFACTS_LOCATION = \"/images_www/v6/download/(\S+)/final/\";', line)
+            with suppress(AttributeError):
+                # url set to check in baseinstaller if missing
+                self.version = p.group(1)
+                self.new_download_url = "https://netbeans.org/images_www/v6/download/" + \
+                                        "{}/final/js/files.js".format(self.version)
+        return ((None, None), in_download)
 
     @MainLoop.in_mainloop_thread
-    def parse_download_page_callback(self, result):
-        """Get the download_url and trigger the download and installation of the app.
-        :param result: the file downloaded by DownloadCenter, contains js functions with download urls
-        """
-        logger.info("Netbeans {}".format(self.version))
+    def get_sha_and_start_download(self, download_result):
+        res = download_result[self.new_download_url].buffer.getvalue().decode('utf-8').split('\n')
 
-        # Processing the string to obtain metadata (download url)
-        try:
-            url_file = result[self.version_download_page].buffer.read().decode('utf-8')
-        except AttributeError:
-            # The file could not be parsed
-            logger.error("The download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
+        preg = re.compile(r'add_file\(\"zip/netbeans-{}-[0-9]{{12}}-?{}.zip"'.format(self.version,
+                                                                                     self.download_keyword))
 
-        preg = re.compile('add_file\("zip/netbeans-{}-[0-9]{{12}}{}.zip"'.format(self.version,
-                                                                                 self.flavour))
-        for line in url_file.split("\n"):
+        for line in res:
             if preg.match(line):
                 # Clean up the string from js (it's a function call)
                 line = line.replace("add_file(", "").replace(");", "").replace('"', "")
                 url_string = line
 
-        if not url_string:
-            # The file could not be parsed
-            logger.error("The download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
-
         string_array = url_string.split(", ")
-        try:
-            url_suffix = string_array[0]
-            sha256 = string_array[2]
-        except IndexError:
-            # The file could not be parsed
-            logger.error("The download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
+        url_suffix = string_array[0]
+        checksum = string_array[2]
 
-        download_url = "{}/{}/final/{}".format(self.BASE_URL, self.version, url_suffix)
-        self.download_requests.append(DownloadItem(download_url, Checksum(ChecksumType.sha256, sha256)))
-        self.start_download_and_install()
+        url = "{}/{}/final/{}".format(self.BASE_URL, self.version, url_suffix)
+        self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
         """Create the Netbeans launcher"""
         create_launcher(self.desktop_filename,
-                        get_application_desktop_file(name=_("Netbeans IDE"),
+                        get_application_desktop_file(name=self.name,
                                                      icon_path=join(self.install_path, "nb", "netbeans.png"),
                                                      try_exec=self.exec_path,
                                                      exec=self.exec_link_name,
-                                                     comment=_("Netbeans IDE"),
+                                                     comment=self.description,
                                                      categories="Development;IDE;"))
+
+
+class Netbeans(BaseNetBeans):
+    download_keyword = ''
+    executable = "netbeans"
+
+    def __init__(self, **kwargs):
+        super().__init__(name=_("Netbeans"),
+                         description=_("Extensible Java IDE"),
+                         only_on_archs=['i386', 'amd64'],
+                         desktop_filename="netbeans.desktop",
+                         dir_to_decompress_in_tarball="netbeans*",
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         checksum_type=ChecksumType.sha256,
+                         **kwargs)
+
+
+class NetbeansJavaEE(BaseNetBeans):
+    download_keyword = 'javaee'
+    executable = "netbeans"
+
+    def __init__(self, **kwargs):
+        super().__init__(name=_("Netbeans JavaEE"),
+                         description=_("Extensible Java IDE, JavaEE edition"),
+                         only_on_archs=['i386', 'amd64'],
+                         desktop_filename='netbeansjee.desktop',
+                         dir_to_decompress_in_tarball="netbeans*",
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         checksum_type=ChecksumType.sha256,
+                         **kwargs)
+
+
+class NetbeansHTML(BaseNetBeans):
+    download_keyword = 'html'
+    executable = "netbeans"
+
+    def __init__(self, **kwargs):
+        super().__init__(name=_("Netbeans HTML"),
+                         description=_("Extensible Java IDE, HTML edition"),
+                         only_on_archs=['i386', 'amd64'],
+                         desktop_filename='netbeanshtml.desktop',
+                         dir_to_decompress_in_tarball="netbeans*",
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         checksum_type=ChecksumType.sha256,
+                         **kwargs)
+
+
+class NetbeansJavaEE(BaseNetBeans):
+    download_keyword = 'cpppp'
+    executable = "netbeans"
+
+    def __init__(self, **kwargs):
+        super().__init__(name=_("Netbeans JEE"),
+                         description=_("Extensible Java IDE, C C++ edition"),
+                         only_on_archs=['i386', 'amd64'],
+                         desktop_filename='netbeansc.desktop',
+                         dir_to_decompress_in_tarball="netbeans*",
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         checksum_type=ChecksumType.sha256,
+                         **kwargs)
 
 
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
@@ -711,33 +671,15 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="lighttable.desktop",
                          required_files_path=["LightTable"],
                          dir_to_decompress_in_tarball="lighttable-*",
-                         checksum_type=ChecksumType.md5,
-                         **kwargs)
+                         json=True, **kwargs)
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-        page = result[self.download_page]
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            assets = json.loads(page.buffer.read().decode())["assets"]
-            download_url = None
-            for asset in assets:
-                if "linux" in asset["browser_download_url"]:
-                    download_url = asset["browser_download_url"]
-            if not download_url:
-                raise IndexError
-        except (json.JSONDecodeError, IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-
-        self.download_requests.append(DownloadItem(download_url, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if "linux" in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Create the LightTable Code launcher"""
@@ -760,39 +702,15 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["atom", "resources/app/apm/bin/apm"],
                          dir_to_decompress_in_tarball="atom-*",
                          packages_requirements=["libgconf-2-4"],
-                         checksum_type=ChecksumType.md5, **kwargs)
+                         json=True, **kwargs)
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-        page = result[self.download_page]
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            if "beta" in self.description:
-                latest_beta = json.loads(page.buffer.read().decode())[0]
-                if "beta" not in latest_beta["tag_name"]:
-                    logger.error("Latest version is not beta.")
-                    UI.return_main_screen(status_code=1)
-                assets = latest_beta["assets"]
-            else:
-                assets = json.loads(page.buffer.read().decode())["assets"]
-            download_url = None
-            for asset in assets:
-                if "tar.gz" in asset["browser_download_url"]:
-                    download_url = asset["browser_download_url"]
-            if not download_url:
-                raise IndexError
-        except (json.JSONDecodeError, IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-
-        self.download_requests.append(DownloadItem(download_url, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if "tar.gz" in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Create the Atom Code launcher"""
@@ -832,36 +750,19 @@ class DBeaver(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["dbeaver"],
                          dir_to_decompress_in_tarball="dbeaver",
                          packages_requirements=['openjdk-8-jre-headless'],
-                         **kwargs)
+                         json=True, **kwargs)
     arch_trans = {
         "amd64": "x86_64",
         "i386": "x86"
     }
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-        page = result[self.download_page]
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            assets = json.loads(page.buffer.read().decode())["assets"]
-            download_url = None
-            for asset in assets:
-                if "linux.gtk.{}.tar.gz".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
-                    download_url = asset["browser_download_url"]
-            if not download_url:
-                raise IndexError
-        except (json.JSONDecodeError, IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-
-        self.download_requests.append(DownloadItem(download_url, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if "linux.gtk.{}.tar.gz".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Create the DBeaver launcher"""
@@ -922,11 +823,11 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["STS"],
                          **kwargs)
         self.arch = '' if platform.machine() == 'i686' else '-x86_64'
-        self.checksum_url = None
+        self.new_download_url = None
 
     def parse_download_link(self, line, in_download):
         """Parse STS download links"""
-        url_found = False
+        url, checksum = (None, None)
         if 'linux-gtk{}.tar.gz'.format(self.arch) in line:
             in_download = True
         else:
@@ -934,49 +835,18 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
         if in_download:
             p = re.search(r'href="(.*.tar.gz)"', line)
             with suppress(AttributeError):
-                self.checksum_url = p.group(1) + '.sha1'
-                url_found = True
-                DownloadCenter(urls=[DownloadItem(self.checksum_url, None)],
-                               on_done=self.get_sha_and_start_download, download=False)
-        return (url_found, in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        """Download files to download + license and check it"""
-        logger.debug("Parse download metadata")
-
-        error_msg = result[self.download_page].error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        in_download = False
-        url_found = False
-        for line in result[self.download_page].buffer:
-            line_content = line.decode()
-            (_url_found, in_download) = self.parse_download_link(line_content, in_download)
-            if not url_found:
-                url_found = _url_found
-
-        if not url_found:
-            logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
+                # url set to check in baseinstaller if missing
+                url = p.group(1) + '.sha1'
+                self.new_download_url = url
+        return ((None, None), in_download)
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
-        res = download_result[self.checksum_url]
+        res = download_result[self.new_download_url]
         checksum = res.buffer.getvalue().decode('utf-8').split()[0]
         # you get and store self.download_url
-        url = re.sub('.sha1', '', self.checksum_url)
-        if url is None:
-            logger.error("Download page changed its syntax or is not parsable (missing url)")
-            UI.return_main_screen(status_code=1)
-        if checksum is None:
-            logger.error("Download page changed its syntax or is not parsable (missing sha512)")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
-        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
-        self.start_download_and_install()
+        url = re.sub('.sha1', '', self.new_download_url)
+        self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
         """Create the Spring Tools Suite launcher"""
@@ -999,37 +869,20 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="processing.desktop",
                          required_files_path=["processing"],
                          dir_to_decompress_in_tarball="processing-*",
-                         **kwargs)
+                         json=True, **kwargs)
 
     arch_trans = {
         "amd64": "64",
         "i386": "32"
     }
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-        page = result[self.download_page]
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            assets = json.loads(page.buffer.read().decode())["assets"]
-            download_url = None
-            for asset in assets:
-                if "linux{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
-                    download_url = asset["browser_download_url"]
-            if not download_url:
-                raise IndexError
-        except (json.JSONDecodeError, IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-
-        self.download_requests.append(DownloadItem(download_url, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if "linux{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Create the Processing Code launcher"""
