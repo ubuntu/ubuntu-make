@@ -35,7 +35,7 @@ class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.eclipse.org"]}
+        self.hosts = {443: ["www.eclipse.org"], 80: ["www.eclipse.org"]}
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()

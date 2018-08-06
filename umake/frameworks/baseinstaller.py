@@ -66,6 +66,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
         self.match_last_link = kwargs.get("match_last_link", False)
+        self.json = kwargs.get("json", False)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
                           "desktop_filename", "icon_filename", "required_files_path",
                           "match_last_link"]:
@@ -204,35 +205,35 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             UI.return_main_screen(status_code=1)
 
         # TODO: add more meaningful check
-        if self.download_page.startswith("https://api.github.com") or\
-           self.download_page.startswith("https://data.services.jetbrains.com"):
-            try:
-                page = result[self.download_page]
-                latest = json.loads(page.buffer.read().decode())
-                # If we override the download page to get a beta version, then update the parsing as well
-                if self.download_page.startswith("https://api.github.com") and\
-                   not self.download_page.endswith("/latest"):
-                    latest = latest[0]
-                url = None
-                in_download = False
-                (url, in_download) = self.parse_download_link(latest, in_download)
-                if not url:
-                    if not self.url:
-                        raise IndexError
-                    else:
-                        logger.debug("We set a temporary url while fetching the checksum")
-                        url = self.url
-            except (json.JSONDecodeError, IndexError):
-                logger.error("Can't parse the download URL from the download page.")
-                UI.return_main_screen(status_code=1)
-            logger.debug("Found download URL: " + url)
-
-        else:
+        with StringIO() as license_txt:
             url, checksum = (None, None)
-            with StringIO() as license_txt:
+            page = result[self.download_page]
+            if self.json is True:
+                logger.debug("Using json parser")
+                try:
+                    latest = json.loads(page.buffer.read().decode())
+                    # If we override the download page to get a beta version, then update the parsing as well
+                    if self.download_page.startswith("https://api.github.com") and\
+                       not self.download_page.endswith("/latest"):
+                        latest = latest[0]
+                    url = None
+                    in_download = False
+                    (url, in_download) = self.parse_download_link(latest, in_download)
+                    if not url:
+                        if not self.url:
+                            raise IndexError
+                        else:
+                            logger.debug("We set a temporary url while fetching the checksum")
+                            url = self.url
+                except (json.JSONDecodeError, IndexError):
+                    logger.error("Can't parse the download URL from the download page.")
+                    UI.return_main_screen(status_code=1)
+                logger.debug("Found download URL: " + url)
+
+            else:
                 in_license = False
                 in_download = False
-                for line in result[self.download_page].buffer:
+                for line in page.buffer:
                     line_content = line.decode()
 
                     if self.expect_license and not self.auto_accept_license:
@@ -252,12 +253,12 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                                 logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
                             elif not self.checksum_type:
                                 logger.debug("Found download link for {}".format(url))
-
-        if callable(self.get_sha_and_start_download):
-            DownloadCenter(urls=[DownloadItem(self.new_download_url, None)],
-                           on_done=self.get_sha_and_start_download, download=False)
-        else:
-            self.check_data_and_start_download(url, checksum, license_txt)
+            if hasattr(self, 'get_sha_and_start_download'):
+                logger.debug('Run get_sha_and_start_download')
+                DownloadCenter(urls=[DownloadItem(self.new_download_url, None)],
+                               on_done=self.get_sha_and_start_download, download=False)
+            else:
+                self.check_data_and_start_download(url, checksum, license_txt)
 
     def check_data_and_start_download(self, url=None, checksum=None, license_txt=StringIO()):
         if url is None:
