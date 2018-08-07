@@ -64,6 +64,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
             kwargs["required_files_path"] = current_required_files_path
         download_page = 'https://www.eclipse.org/downloads/eclipse-packages/'
         kwargs["download_page"] = download_page
+        kwargs["checksum_type"] = ChecksumType.sha512
         super().__init__(*args, **kwargs)
         self.icon_url = os.path.join("https://www.eclipse.org/downloads/", "images", self.icon_filename)
         self.bits = '' if platform.machine() == 'i686' else 'x86_64'
