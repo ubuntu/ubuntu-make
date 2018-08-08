@@ -68,7 +68,7 @@ class EclipseJEEIDEInContainer(ContainerTests, test_ide.EclipseJEEIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.eclipse.org"]}
+        self.hosts = {443: ["www.eclipse.org"], 80: ["www.eclipse.org"]}
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -87,7 +87,7 @@ class EclipsePHPIDEInContainer(ContainerTests, test_ide.EclipsePHPIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.eclipse.org"]}
+        self.hosts = {443: ["www.eclipse.org"], 80: ["www.eclipse.org"]}
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -106,7 +106,7 @@ class EclipseJSIDEInContainer(ContainerTests, test_ide.EclipseJSIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.eclipse.org"]}
+        self.hosts = {443: ["www.eclipse.org"], 80: ["www.eclipse.org"]}
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -125,7 +125,7 @@ class EclipseCPPIDEInContainer(ContainerTests, test_ide.EclipseCPPIDETests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.eclipse.org"]}
+        self.hosts = {443: ["www.eclipse.org"], 80: ["www.eclipse.org"]}
         # we reuse the android-studio repo
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
