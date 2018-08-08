@@ -200,6 +200,8 @@ class RequestHandler(SimpleHTTPRequestHandler):
         else:
             # keep special ?file= to redirect the query
             if '?file=' in self.path:
+                if '/downloads/sums.php?file=' in self.path:
+                    self.path += '.sha512'
                 self.path = self.path.split('?file=', 1)[1]
                 self.path = self.path.replace('&', '?', 1)  # Replace the first & with ? to make it valid.
             if RequestHandler.ftp_redir:
