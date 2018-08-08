@@ -262,7 +262,7 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball='superpowers*',
                          desktop_filename="superpowers.desktop",
                          required_files_path=["Superpowers"],
-                         **kwargs)
+                         json=True, **kwargs)
 
     arch_trans = {
         "amd64": "x64",
@@ -271,9 +271,10 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         url = None
-        if "linux-{}".format(self.arch_trans[get_current_arch()]) in line["browser_download_url"]:
-            in_download = True
-            url = line["browser_download_url"]
+        for asset in line["assets"]:
+            if "linux-{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
         return (url, in_download)
 
     def post_install(self):
@@ -297,16 +298,17 @@ class GDevelop(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball='gdevelop*',
                          desktop_filename="gdevelop.desktop",
                          required_files_path=["gdevelop"],
-                         **kwargs)
+                         json=True, **kwargs)
         self.icon_filename = "GDevelop.png"
         self.icon_url = os.path.join("https://raw.githubusercontent.com/4ian/GD/master/Binaries/Packaging",
                                      "linux-extra-files/usr/share/icons/hicolor/128x128/apps", self.icon_filename)
 
     def parse_download_link(self, line, in_download):
         url = None
-        if ".tar.gz" in line["browser_download_url"]:
-            in_download = True
-            url = line["browser_download_url"]
+        for asset in line["assets"]:
+            if ".tar.gz" in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
         return (url, in_download)
 
     def post_install(self):

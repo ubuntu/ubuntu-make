@@ -47,7 +47,7 @@ class ArduinoIDETests(LargeFrameworkTests):
         return platform.machine()
 
     def test_default_install(self):
-        """Install the distribution from scratch test case"""
+        """Install Arduino from scratch test case"""
         self.child = spawn_process(self.command('{} electronics arduino'.format(UMAKE)))
         self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")

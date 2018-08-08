@@ -59,7 +59,7 @@ class CrystalLang(umake.frameworks.baseinstaller.BaseInstaller):
                                                 "build-essential", "libgc-dev"],
                          dir_to_decompress_in_tarball="crystal-*",
                          required_files_path=[os.path.join("bin", "Crystal")],
-                         **kwargs)
+                         json=True, **kwargs)
 
     arch_trans = {
         "amd64": "x86_64",
@@ -68,9 +68,10 @@ class CrystalLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         url = None
-        if "linux-{}.tar.gz".format(self.arch_trans[get_current_arch()]) in line["browser_download_url"]:
-            in_download = True
-            url = line["browser_download_url"]
+        for asset in line["assets"]:
+            if "linux-{}.tar.gz".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
         return (url, in_download)
 
     def post_install(self):

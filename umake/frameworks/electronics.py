@@ -93,7 +93,6 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
                          packages_requirements=['gcc-avr', 'avr-libc'],
                          need_root_access=not self.was_in_arduino_group,
                          required_files_path=["arduino"], **kwargs)
-        self.new_download_url = None
 
     arch_trans = {
         "amd64": "64",
@@ -122,12 +121,6 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         url = os.path.join(self.new_download_url.rpartition('/')[0], line.split()[1])
         self.check_data_and_start_download(url, checksum)
 
-        # add the user to arduino group
-        if not self.was_in_arduino_group:
-            with futures.ProcessPoolExecutor(max_workers=1) as executor:
-                f = executor.submit(_add_to_group, self._current_user, self.ARDUINO_GROUP)
-                if not f.result():
-                    UI.return_main_screen(status_code=1)
 
     def post_install(self):
         """Create the Arduino launcher"""
@@ -141,7 +134,12 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
                                                      exec=self.exec_link_name,
                                                      comment=comment,
                                                      categories=categories))
+        # add the user to arduino group
         if not self.was_in_arduino_group:
+            with futures.ProcessPoolExecutor(max_workers=1) as executor:
+                f = executor.submit(_add_to_group, self._current_user, self.ARDUINO_GROUP)
+                if not f.result():
+                    UI.return_main_screen(status_code=1)
             UI.delayed_display(DisplayMessage(_("You need to logout and login again for your installation to work")))
 
 

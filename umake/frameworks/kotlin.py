@@ -47,10 +47,10 @@ class KotlinLang(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://api.github.com/repos/Jetbrains/kotlin/releases/latest",
                          dir_to_decompress_in_tarball="kotlinc",
                          required_files_path=[os.path.join("bin", "kotlinc")],
-                         **kwargs)
+                         json=True, **kwargs)
 
     def parse_download_link(self, line, in_download):
-        url = line["browser_download_url"]
+        url = line["assets"][0]["browser_download_url"]
         return (url, in_download)
 
     def post_install(self):

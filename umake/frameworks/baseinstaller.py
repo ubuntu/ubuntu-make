@@ -204,7 +204,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen(status_code=1)
 
-        # TODO: add more meaningful check
+        self.new_download_url = None
         with StringIO() as license_txt:
             url, checksum = (None, None)
             page = result[self.download_page]
