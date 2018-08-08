@@ -34,6 +34,11 @@ class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
 
+    # The mock server replaces the checksum path.
+    # this emulates the php function without using the same
+    # filename as the tar archive.
+    # The relevant change can be found in local_server.py
+
     def setUp(self):
         self.hosts = {443: ["www.eclipse.org"], 80: ["www.eclipse.org"]}
         # we reuse the android-studio repo

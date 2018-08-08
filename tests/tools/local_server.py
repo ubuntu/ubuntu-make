@@ -200,6 +200,9 @@ class RequestHandler(SimpleHTTPRequestHandler):
         else:
             # keep special ?file= to redirect the query
             if '?file=' in self.path:
+                # Eclipse frameworks:
+                # Redirect the checksum to the old path to keep different filenames
+                # on the mock server.
                 if '/downloads/sums.php?file=' in self.path:
                     self.path += '.sha512'
                 self.path = self.path.split('?file=', 1)[1]
