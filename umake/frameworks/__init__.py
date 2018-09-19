@@ -139,7 +139,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
 
     def __init__(self, name, description, category, force_loading=False, logo_path=None, is_category_default=False,
                  install_path_dir=None, only_on_archs=None, only_ubuntu_version=None, packages_requirements=None,
-                 only_for_removal=False, expect_license=False, need_root_access=False):
+                 only_for_removal=False, expect_license=False, need_root_access=False, json=False):
         self.name = name
         self.description = description
         self.logo_path = None

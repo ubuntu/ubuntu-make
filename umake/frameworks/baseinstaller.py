@@ -23,6 +23,7 @@
 from contextlib import suppress
 from gettext import gettext as _
 from io import StringIO
+import json
 import logging
 from progressbar import ProgressBar
 import os
@@ -65,6 +66,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.desktop_filename = kwargs.get("desktop_filename", None)
         self.icon_filename = kwargs.get("icon_filename", None)
         self.match_last_link = kwargs.get("match_last_link", False)
+        self.json = kwargs.get("json", False)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
                           "desktop_filename", "icon_filename", "required_files_path",
                           "match_last_link"]:
@@ -202,49 +204,85 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen(status_code=1)
 
-        url, checksum = (None, None)
+        self.new_download_url = None
         with StringIO() as license_txt:
-            in_license = False
-            in_download = False
-            for line in result[self.download_page].buffer:
-                line_content = line.decode()
+            url, checksum = (None, None)
+            page = result[self.download_page]
+            if self.json is True:
+                logger.debug("Using json parser")
+                try:
+                    latest = json.loads(page.buffer.read().decode())
+                    # On a download from github, if the page is not .../releases/latest
+                    # we want to download the latest version (beta/development)
+                    # So we get the first element in the json tree.
+                    # In the framework we only change the url and this condition is satisfied.
+                    if self.download_page.startswith("https://api.github.com") and\
+                       not self.download_page.endswith("/latest"):
+                        latest = latest[0]
+                    url = None
+                    in_download = False
+                    (url, in_download) = self.parse_download_link(latest, in_download)
+                    if not url:
+                        if not self.url:
+                            raise IndexError
+                        else:
+                            logger.debug("We set a temporary url while fetching the checksum")
+                            url = self.url
+                except (json.JSONDecodeError, IndexError):
+                    logger.error("Can't parse the download URL from the download page.")
+                    UI.return_main_screen(status_code=1)
+                logger.debug("Found download URL: " + url)
 
-                if self.expect_license and not self.auto_accept_license:
-                    in_license = self.parse_license(line_content, license_txt, in_license)
-
-                # always take the first valid (url, checksum) if not match_last_link is set to True:
-                download = None
-                if url is None or (self.checksum_type and not checksum) or self.match_last_link:
-                    (download, in_download) = self.parse_download_link(line_content, in_download)
-                if download is not None:
-                    (newurl, new_checksum) = download
-                    url = newurl if newurl is not None else url
-                    checksum = new_checksum if new_checksum is not None else checksum
-                    if url is not None:
-                        if self.checksum_type and checksum:
-                            logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
-                        elif not self.checksum_type:
-                            logger.debug("Found download link for {}".format(url))
-
-            if url is None:
-                logger.error("Download page changed its syntax or is not parsable (url missing)")
-                UI.return_main_screen(status_code=1)
-            if (self.checksum_type and checksum is None):
-                logger.error("Download page changed its syntax or is not parsable (checksum missing)")
-                logger.error("URL is: {}".format(url))
-                UI.return_main_screen(status_code=1)
-            self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
-
-            if license_txt.getvalue() != "":
-                logger.debug("Check license agreement.")
-                UI.display(LicenseAgreement(strip_tags(license_txt.getvalue()).strip(),
-                                            self.start_download_and_install,
-                                            UI.return_main_screen))
-            elif self.expect_license and not self.auto_accept_license:
-                logger.error("We were expecting to find a license on the download page, we didn't.")
-                UI.return_main_screen(status_code=1)
             else:
-                self.start_download_and_install()
+                in_license = False
+                in_download = False
+                for line in page.buffer:
+                    line_content = line.decode()
+
+                    if self.expect_license and not self.auto_accept_license:
+                        in_license = self.parse_license(line_content, license_txt, in_license)
+
+                    # always take the first valid (url, checksum) if not match_last_link is set to True:
+                    download = None
+                    if url is None or (self.checksum_type and not checksum) or\
+                       self.match_last_link or self.new_download_url:
+                        (download, in_download) = self.parse_download_link(line_content, in_download)
+                    if download is not None:
+                        (newurl, new_checksum) = download
+                        url = newurl if newurl is not None else url
+                        checksum = new_checksum if new_checksum is not None else checksum
+                        if url is not None:
+                            if self.checksum_type and checksum:
+                                logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
+                            elif not self.checksum_type:
+                                logger.debug("Found download link for {}".format(url))
+            if hasattr(self, 'get_sha_and_start_download'):
+                logger.debug('Run get_sha_and_start_download')
+                DownloadCenter(urls=[DownloadItem(self.new_download_url, None)],
+                               on_done=self.get_sha_and_start_download, download=False)
+            else:
+                self.check_data_and_start_download(url, checksum, license_txt)
+
+    def check_data_and_start_download(self, url=None, checksum=None, license_txt=StringIO()):
+        if url is None:
+            logger.error("Download page changed its syntax or is not parsable (url missing)")
+            UI.return_main_screen(status_code=1)
+        if (self.checksum_type and checksum is None):
+            logger.error("Download page changed its syntax or is not parsable (checksum missing)")
+            logger.error("URL is: {}".format(url))
+            UI.return_main_screen(status_code=1)
+        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
+
+        if license_txt.getvalue() != "":
+            logger.debug("Check license agreement.")
+            UI.display(LicenseAgreement(strip_tags(license_txt.getvalue()).strip(),
+                                        self.start_download_and_install,
+                                        UI.return_main_screen))
+        elif self.expect_license and not self.auto_accept_license:
+            logger.error("We were expecting to find a license on the download page, we didn't.")
+            UI.return_main_screen(status_code=1)
+        else:
+            self.start_download_and_install()
 
     def start_download_and_install(self):
         self.last_progress_download = None
