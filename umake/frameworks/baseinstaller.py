@@ -212,7 +212,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                 logger.debug("Using json parser")
                 try:
                     latest = json.loads(page.buffer.read().decode())
-                    # If we override the download page to get a beta version, then update the parsing as well
+                    # On a download from github, if the page is not .../releases/latest
+                    # we want to download the latest version (beta/development)
+                    # So we get the first element in the json tree.
+                    # In the framework we only change the url and this condition is satisfied.
                     if self.download_page.startswith("https://api.github.com") and\
                        not self.download_page.endswith("/latest"):
                         latest = latest[0]

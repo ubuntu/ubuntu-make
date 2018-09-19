@@ -121,7 +121,6 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         url = os.path.join(self.new_download_url.rpartition('/')[0], line.split()[1])
         self.check_data_and_start_download(url, checksum)
 
-
     def post_install(self):
         """Create the Arduino launcher"""
         icon_path = join(self.install_path, 'lib', 'arduino_icon.ico')
