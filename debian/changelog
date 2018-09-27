@@ -1,3 +1,24 @@
+ubuntu-make (18.09) cosmic; urgency=medium
+
+  [ Galileo Sartor ]
+  * New upstream release (LP: #1794737) 
+  * Add json parser to baseinstaller
+  * Remove frameworks overriding base
+  * android: Add Android Platform Tools
+  * Fix frameworks
+
+  [ Didier Roche ]
+  * Ignore data files for incorrect language attribution
+  * Enable autopkgtests on artful+
+
+  [ Brendad McGrath ]
+  * ide: Fix Eclipse checksum test
+
+  [ Anton Patsev ]
+  * ide: Add DBeaver support
+
+ -- Galileo Sartor <galileo@moria>  Wed, 26 Sep 2018 11:37:20 +0200
+
 ubuntu-make (18.05) cosmic; urgency=medium
 
   [ Galileo Sartor ]
@@ -37,7 +58,7 @@ ubuntu-make (18.05) cosmic; urgency=medium
   [ Ruoshi Li ]
   * fix clean exec_path
 
-  And a lot more fixes! 
+  And a lot more fixes!
 
  -- Galileo Sartor <galileo.sartor@gmail.com>  Mon, 14 May 2018 19:36:48 +0200
 
