@@ -898,6 +898,42 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
                         categories="Development;IDE;"))
 
 
+class LiteIDE(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="LiteIDE", description=_("LiteIDE is a simple, open source, cross-platform Go IDE."),
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://api.github.com/repos/visualfc/liteide/releases/latest",
+                         packages_requirements=["libqt5core5a"],
+                         desktop_filename="liteide.desktop",
+                         required_files_path=["bin/liteide"],
+                         dir_to_decompress_in_tarball="liteide",
+                         json=True, **kwargs)
+
+    arch_trans = {
+        "amd64": "64",
+        "i386": "32"
+    }
+
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if "linux{}-qt5".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
+
+    def post_install(self):
+        """Create the LiteIDE Code launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("LiteIDE"),
+                        icon_path=os.path.join(self.install_path, "share", "liteide",
+                                               "welcome", "images", "liteide128.xpm"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=_("LiteIDE is a simple, open source, cross-platform Go IDE."),
+                        categories="Development;IDE;"))
+
+
 class Arduino(Arduino):
 
     def setup(self, *args, **kwargs):
