@@ -93,9 +93,10 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         else:
             in_download = False
         if in_download:
-            p = re.search(r"href='(http://www\.eclipse\.org\/downloads/download\.php\?file=.*\.tar\.gz)'", line)
+            p = re.search(r"href='(http:|https:)?(//www\.eclipse\.org\/downloads/download\.php\?file=.*\.tar\.gz)'",
+                          line)
             with suppress(AttributeError):
-                self.new_download_url = p.group(1).replace('download.php', 'sums.php').replace('http://', 'https://')
+                self.new_download_url = 'https:' + p.group(2).replace('download.php', 'sums.php')
                 self.https = True if parse.splittype(self.new_download_url)[0] is "https" else False
         return ((None, None), in_download)
 
@@ -104,8 +105,6 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         res = download_result[self.new_download_url]
         checksum = res.buffer.getvalue().decode('utf-8').split()[0]
         url = self.new_download_url.replace('sums.php', 'download.php') + '&r=1'
-        if not self.https:
-            self.new_download_url = 'https://' + parse.splittype(self.new_download_url)[1]
         self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
