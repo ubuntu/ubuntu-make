@@ -217,3 +217,9 @@ mkdir -p $repo_root_dir/dbeaver
 cd $repo_root_dir/dbeaver
 create_package openjdk-8-jre-headless
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+# liteide deps
+mkdir -p $repo_root_dir/liteide
+cd $repo_root_dir/liteide
+create_package libqt5core5a
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
