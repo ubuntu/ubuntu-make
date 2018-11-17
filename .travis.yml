@@ -1,7 +1,6 @@
 language: python
 dist: bionic
 python:
-<<<<<<< HEAD
   - "3.6"
 addons:
   apt:
@@ -15,25 +14,3 @@ install:
 script:
   - sudo mv /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config ..
   - ./pyruntests pep8 small
-=======
-  - "3.4"
-virtualenv:
-  system_site_packages: true
-
-dist: trusty
-sudo: required
-
-services:
-  - docker
-
-install:
-  - sudo apt install -y gir1.2-gtk-3.0 python3-gi python3-gi-cairo python3-apt
-  # install binary deps
-  - sudo apt-get install -y $(tests/daily_runs/get_binary_depends ubuntu-make)
-  # install tests requirements
-  - sudo tests/daily_runs/install_build_tests_depends
-  env:
-  - TESTFOLDER="pep8 small"
-  - TESTFOLDER="medium"
-script: PATH="/usr/bin:$PATH" ./runtests $TESTFOLDER
->>>>>>> Temporarily disable apt
