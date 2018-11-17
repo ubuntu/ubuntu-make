@@ -27,7 +27,6 @@ services:
   - docker
 
 install:
-  - sudo apt-get update -q
   - sudo apt install -y gir1.2-gtk-3.0 python3-gi python3-gi-cairo python3-apt
   # install binary deps
   - sudo apt-get install -y $(tests/daily_runs/get_binary_depends ubuntu-make)
