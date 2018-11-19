@@ -11,6 +11,14 @@ addons:
     - fakeroot
 install:
   - pip install -r requirements.txt
+<<<<<<< HEAD
 script:
   - sudo mv /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config ..
   - ./pyruntests pep8 small
+=======
+
+env:
+  - TESTFOLDER="pep8 small"
+  - TESTFOLDER="medium"
+script: PATH="/usr/bin:$PATH" ./runtests $TESTFOLDER
+>>>>>>> add requirements
