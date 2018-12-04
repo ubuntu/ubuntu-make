@@ -20,16 +20,6 @@ apps:
     completer: umake-completion
 
 parts:
-  umake-completion:
-    plugin: dump
-    source: snap
-    stage:
-      - umake-completion
-  umake-wrapper:
-    plugin: dump
-    source: snap/
-    organize:
-      umake-wrapper: bin/umake-wrapper
   umake:
     source: .
     plugin: python
@@ -81,3 +71,13 @@ parts:
       - libmount1
       - libncursesw5
       - libdb5.3
+  umake-completion:
+    plugin: dump
+    source: snap/local
+    stage:
+      - umake-completion
+  umake-wrapper:
+    source: snap/local
+    plugin: dump
+    organize:
+      umake-wrapper: bin/umake-wrapper
