@@ -48,7 +48,7 @@ class MavenLang(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Maven Lang", description=_("Java software project management and comprehension tool"),
                          is_category_default=True,
                          packages_requirements=["openjdk-7-jdk | openjdk-8-jdk"],
-                         checksum_type=ChecksumType.sha1,
+                         checksum_type=ChecksumType.sha512,
                          match_last_link=True,
                          download_page="https://www.apache.org/dist/maven/maven-3",
                          dir_to_decompress_in_tarball="apache-maven-*",
@@ -68,7 +68,8 @@ class MavenLang(umake.frameworks.baseinstaller.BaseInstaller):
                 version_url = p.group(1)
                 self.checksum_url = os.path.join(self.download_page, os.path.normpath(version_url),
                                                  'binaries',
-                                                 'apache-maven-{}-bin.tar.gz.sha1'.format(version_url.strip('/')))
+                                                 ('apache-maven-{}-bin.tar.gz.' + str(self.checksum_type.name))
+                                                 .format(version_url.strip('/')))
         return (url_found, in_download)
 
     @MainLoop.in_mainloop_thread
@@ -101,7 +102,7 @@ class MavenLang(umake.frameworks.baseinstaller.BaseInstaller):
         res = download_result[self.checksum_url]
         checksum = res.buffer.getvalue().decode('utf-8').split()[0]
         # you get and store self.download_url
-        url = re.sub('.sha1', '', self.checksum_url)
+        url = re.sub('.' + self.checksum_type.name, '', self.checksum_url)
         if url is None:
             logger.error("Download page changed its syntax or is not parsable (missing url)")
             UI.return_main_screen(status_code=1)
