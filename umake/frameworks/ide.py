@@ -140,7 +140,7 @@ class EclipseJava(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-java.desktop',
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          icon_filename='java.png',
                          **kwargs)
 
@@ -156,7 +156,7 @@ class EclipseJEE(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-jee.desktop',
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          icon_filename='javaee.png',
                          **kwargs)
 
@@ -172,7 +172,7 @@ class EclipsePHP(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-php.desktop',
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          icon_filename='php.png',
                          **kwargs)
 
@@ -188,7 +188,7 @@ class EclipseJS(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-javascript.desktop',
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          icon_filename='javascript.png',
                          **kwargs)
 
@@ -204,7 +204,7 @@ class EclipseCPP(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-cpp.desktop',
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          icon_filename='cdt.png',
                          **kwargs)
 
@@ -335,7 +335,7 @@ class Idea(BaseJetBrains):
         super().__init__(name="Idea",
                          description=_("IntelliJ IDEA Community Edition"),
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          dir_to_decompress_in_tarball='idea-IC-*',
                          desktop_filename='jetbrains-idea-ce.desktop',
                          icon_filename='idea.png',
@@ -351,7 +351,7 @@ class IdeaUltimate(BaseJetBrains):
         super().__init__(name="Idea Ultimate",
                          description=_("IntelliJ IDEA"),
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          dir_to_decompress_in_tarball='idea-IU-*',
                          desktop_filename='jetbrains-idea.desktop',
                          icon_filename='idea.png',
@@ -548,7 +548,7 @@ class Netbeans(BaseNetBeans):
                          only_on_archs=['i386', 'amd64'],
                          desktop_filename="netbeans.desktop",
                          dir_to_decompress_in_tarball="netbeans*",
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          checksum_type=ChecksumType.sha256,
                          **kwargs)
 
@@ -563,7 +563,7 @@ class NetbeansJavaEE(BaseNetBeans):
                          only_on_archs=['i386', 'amd64'],
                          desktop_filename='netbeansjee.desktop',
                          dir_to_decompress_in_tarball="netbeans*",
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          checksum_type=ChecksumType.sha256,
                          **kwargs)
 
@@ -578,7 +578,7 @@ class NetbeansHTML(BaseNetBeans):
                          only_on_archs=['i386', 'amd64'],
                          desktop_filename='netbeanshtml.desktop',
                          dir_to_decompress_in_tarball="netbeans*",
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          checksum_type=ChecksumType.sha256,
                          **kwargs)
 
@@ -593,7 +593,7 @@ class NetbeansJavaEE(BaseNetBeans):
                          only_on_archs=['i386', 'amd64'],
                          desktop_filename='netbeansc.desktop',
                          dir_to_decompress_in_tarball="netbeans*",
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          checksum_type=ChecksumType.sha256,
                          **kwargs)
 
@@ -821,7 +821,7 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                          checksum_type=ChecksumType.sha1,
                          desktop_filename='STS.desktop',
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk'],
+                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          icon_filename='icon.xpm',
                          required_files_path=["STS"],
                          **kwargs)

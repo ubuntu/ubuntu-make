@@ -81,7 +81,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Android Studio", description=_("Android Studio (default)"), is_category_default=True,
                          only_on_archs=_supported_archs, expect_license=True,
-                         packages_requirements=["openjdk-7-jdk | openjdk-8-jdk",
+                         packages_requirements=["openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk",
                                                 "libc6:i386", "libncurses5:i386", "libstdc++6:i386",
                                                 "lib32z1", "zlib1g:i386"],
                          download_page="https://developer.android.com/studio/index.html",
