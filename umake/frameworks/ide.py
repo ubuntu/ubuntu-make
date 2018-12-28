@@ -88,24 +88,11 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
 
     def parse_download_link(self, line, in_download):
         """Parse Eclipse download links"""
-<<<<<<< Updated upstream
         if self.download_keyword in line and self.bits in line and 'linux' in line:
-=======
-        url_found = False
-        if self.download_keyword in line and self.bits in line and "linux" in line:
->>>>>>> Stashed changes
             in_download = True
         else:
             in_download = False
         if in_download:
-<<<<<<< Updated upstream
-            p = re.search(r"href='(http:|https:)?(//www\.eclipse\.org\/downloads/download\.php\?file=.*\.tar\.gz)'",
-                          line)
-            with suppress(AttributeError):
-                self.new_download_url = 'https:' + p.group(2).replace('download.php', 'sums.php')
-                self.https = True if parse.splittype(self.new_download_url)[0] is "https" else False
-        return ((None, None), in_download)
-=======
             p = re.search(r"href='(https:)?\/\/www.eclipse.org(.*)'", line)
             logger.debug(p.group(2))
             with suppress(AttributeError):
@@ -136,7 +123,6 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         if not url_found:
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
->>>>>>> Stashed changes
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
