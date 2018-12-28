@@ -62,7 +62,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
             current_required_files_path = kwargs.get("required_files_path", [])
             current_required_files_path.append(os.path.join(self.executable))
             kwargs["required_files_path"] = current_required_files_path
-        download_page = 'https://www.eclipse.org/downloads/eclipse-packages/'
+        download_page = 'https://www.eclipse.org/downloads/packages/'
         kwargs["download_page"] = download_page
         kwargs["checksum_type"] = ChecksumType.sha512
         super().__init__(*args, **kwargs)
@@ -88,17 +88,55 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
 
     def parse_download_link(self, line, in_download):
         """Parse Eclipse download links"""
+<<<<<<< Updated upstream
         if self.download_keyword in line and self.bits in line and 'linux' in line:
+=======
+        url_found = False
+        if self.download_keyword in line and self.bits in line and "linux" in line:
+>>>>>>> Stashed changes
             in_download = True
         else:
             in_download = False
         if in_download:
+<<<<<<< Updated upstream
             p = re.search(r"href='(http:|https:)?(//www\.eclipse\.org\/downloads/download\.php\?file=.*\.tar\.gz)'",
                           line)
             with suppress(AttributeError):
                 self.new_download_url = 'https:' + p.group(2).replace('download.php', 'sums.php')
                 self.https = True if parse.splittype(self.new_download_url)[0] is "https" else False
         return ((None, None), in_download)
+=======
+            p = re.search(r"href='(https:)?\/\/www.eclipse.org(.*)'", line)
+            logger.debug(p.group(2))
+            with suppress(AttributeError):
+                self.sha512_url = "https://www.eclipse.org" + p.group(2) + '.sha512&r=1'
+                url_found = True
+                DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
+                               on_done=self.get_sha_and_start_download, download=False)
+        return (url_found, in_download)
+
+    @MainLoop.in_mainloop_thread
+    def get_metadata(self, result):
+        """Download files to download + license and check it"""
+        logger.debug("Parse download metadata")
+
+        error_msg = result[self.download_page].error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+            UI.return_main_screen(status_code=1)
+
+        in_download = False
+        url_found = False
+        for line in result[self.download_page].buffer:
+            line_content = line.decode()
+            (_url_found, in_download) = self.parse_download_link(line_content, in_download)
+            if not url_found:
+                url_found = _url_found
+
+        if not url_found:
+            logger.error("Download page changed its syntax or is not parsable")
+            UI.return_main_screen(status_code=1)
+>>>>>>> Stashed changes
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):

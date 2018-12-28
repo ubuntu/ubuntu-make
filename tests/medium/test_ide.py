@@ -54,7 +54,7 @@ class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
     def test_install_with_changed_download_page(self):
         """Installing eclipse ide should fail if download page has significantly changed"""
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.eclipse.org", "downloads",
-                                               "eclipse-packages", "index.html")
+                                               "packages", "index.html")
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
