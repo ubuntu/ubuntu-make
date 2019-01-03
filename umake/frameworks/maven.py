@@ -66,52 +66,19 @@ class MavenLang(umake.frameworks.baseinstaller.BaseInstaller):
             with suppress(AttributeError):
                 url_found = True
                 version_url = p.group(1)
-                self.checksum_url = os.path.join(self.download_page, os.path.normpath(version_url),
-                                                 'binaries',
-                                                 ('apache-maven-{}-bin.tar.gz.' + str(self.checksum_type.name))
-                                                 .format(version_url.strip('/')))
-        return (url_found, in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        """Download files to download + license and check it"""
-        logger.debug("Parse download metadata")
-
-        error_msg = result[self.download_page].error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        in_download = False
-        url_found = False
-        for line in result[self.download_page].buffer:
-            line_content = line.decode()
-            (_url_found, in_download) = self.parse_download_link(line_content, in_download)
-            if not url_found:
-                url_found = _url_found
-
-        if not url_found:
-            logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
-
-        DownloadCenter(urls=[DownloadItem(self.checksum_url, None)],
-                       on_done=self.get_sha_and_start_download, download=False)
+                self.new_download_url = os.path.join(self.download_page, os.path.normpath(version_url),
+                                                     'binaries',
+                                                     ('apache-maven-{}-bin.tar.gz.' + str(self.checksum_type.name))
+                                                     .format(version_url.strip('/')))
+        return (None, in_download)
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
-        res = download_result[self.checksum_url]
+        res = download_result[self.new_download_url]
         checksum = res.buffer.getvalue().decode('utf-8').split()[0]
-        # you get and store self.download_url
-        url = re.sub('.' + self.checksum_type.name, '', self.checksum_url)
-        if url is None:
-            logger.error("Download page changed its syntax or is not parsable (missing url)")
-            UI.return_main_screen(status_code=1)
-        if checksum is None:
-            logger.error("Download page changed its syntax or is not parsable (missing checksum)")
-            UI.return_main_screen(status_code=1)
+        url = re.sub('.' + self.checksum_type.name, '', self.new_download_url)
         logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
-        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
-        self.start_download_and_install()
+        self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
         """Add the necessary Maven environment variables"""

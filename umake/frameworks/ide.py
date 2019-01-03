@@ -96,39 +96,14 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
             p = re.search(r"href='(https:)?\/\/www.eclipse.org(.*)'", line)
             logger.debug(p.group(2))
             with suppress(AttributeError):
-                self.sha512_url = "https://www.eclipse.org" + p.group(2) + '.sha512&r=1'
-                url_found = True
-                DownloadCenter(urls=[DownloadItem(self.sha512_url, None)],
-                               on_done=self.get_sha_and_start_download, download=False)
-        return (url_found, in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata(self, result):
-        """Download files to download + license and check it"""
-        logger.debug("Parse download metadata")
-
-        error_msg = result[self.download_page].error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        in_download = False
-        url_found = False
-        for line in result[self.download_page].buffer:
-            line_content = line.decode()
-            (_url_found, in_download) = self.parse_download_link(line_content, in_download)
-            if not url_found:
-                url_found = _url_found
-
-        if not url_found:
-            logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
+                self.new_download_url = "https://www.eclipse.org" + p.group(2) + '.sha512&r=1'
+        return (None, in_download)
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
         res = download_result[self.new_download_url]
         checksum = res.buffer.getvalue().decode('utf-8').split()[0]
-        url = self.new_download_url.replace('sums.php', 'download.php') + '&r=1'
+        url = self.new_download_url.replace('.sha512', '')
         self.check_data_and_start_download(url, checksum)
 
     def post_install(self):

@@ -48,8 +48,7 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
         super().__init__(name="Swift Lang", description=_("Swift compiler (default)"), is_category_default=True,
-                         packages_requirements=["clang", "libicu-dev",
-                                                "libicu57 | libicu55"],
+                         packages_requirements=["clang", "libicu-dev"],
                          only_on_archs=['amd64'],
                          download_page="https://swift.org/download/",
                          dir_to_decompress_in_tarball="swift*",
