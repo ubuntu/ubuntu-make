@@ -74,7 +74,7 @@ class TwineInContainer(ContainerTests, test_games.TwineTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["bitbucket.org", "twinery.org"]}
+        self.hosts = {443: ["api.github.com", "github.com"]}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "games", "twine")

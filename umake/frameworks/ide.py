@@ -29,7 +29,6 @@ from io import StringIO
 import json
 import logging
 import os
-from os.path import join
 import pwd
 import platform
 import re
@@ -124,7 +123,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
     def save_icon(self, download_result):
         """Save correct Eclipse icon"""
         icon = download_result.pop(self.icon_url).fd.name
-        shutil.copy(icon, join(self.install_path, self.icon_filename))
+        shutil.copy(icon, os.path.join(self.install_path, self.icon_filename))
         logger.debug("Copied icon: {}".format(self.icon_url))
 
 

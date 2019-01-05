@@ -54,35 +54,17 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="http://www.stencyl.com/download/",
                          desktop_filename="stencyl.desktop",
                          required_files_path=["Stencyl"],
-                         packages_requirements=["libxtst6:i386", "libxext6:i386", "libxi6:i386", "libncurses5:i386",
-                                                "libxt6:i386", "libxpm4:i386", "libxmu6:i386",
-                                                "libgtk2.0-0:i386", "libatk1.0-0:i386", "libc6:i386", "libcairo2:i386",
-                                                "libexpat1:i386", "libfontconfig1:i386", "libfreetype6:i386",
-                                                "libglib2.0-0:i386", "libice6:i386", "libpango1.0-0:i386",
-                                                "libpng12-0:i386", "libsm6:i386", "libxau6:i386", "libxcursor1:i386",
-                                                "libxdmcp6:i386", "libxfixes3:i386", "libx11-6:i386",
-                                                "libxinerama1:i386", "libxrandr2:i386", "libxrender1:i386",
-                                                "zlib1g:i386", "libnss3-1d:i386", "libnspr4-0d:i386", "libcurl3:i386",
-                                                "libasound2:i386"],
+                         packages_requirements=["openjdk-8-jre | openjdk-11-jre"],
                          **kwargs)
 
-    def parse_download_link(self, line, in_download):
-        """Parse Stencyl download links"""
-        url, md5sum = (None, None)
-        if ">Linux <" in line:
-            in_download = True
-        if in_download:
-            regexp = r'href="(.*)"><.*64-'
-            if get_current_arch() == "i386":
-                regexp = r'href="(.*)"><.*32-'
-            p = re.search(regexp, line)
-            with suppress(AttributeError):
-                url = p.group(1)
-            if '<div class="spacer"><br/><br/>' in line:
-                in_download = False
+    PERM_DOWNLOAD_LINKS = {
+        "amd64": "http://www.stencyl.com/download/get/lin64",
+        "i386": "http://www.stencyl.com/download/get/lin32"
+    }
 
-        if url is None:
-            return (None, in_download)
+    def parse_download_link(self, line, in_download):
+        """We have persistent links for Stencyl, return it right away"""
+        url = self.PERM_DOWNLOAD_LINKS[get_current_arch()]
         return ((url, None), in_download)
 
     def post_install(self):
@@ -210,47 +192,45 @@ class Twine(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Twine", description=_("Twine tool for creating interactive and nonlinear stories"),
                          only_on_archs=['i386', 'amd64'],
-                         download_page="https://twinery.org/",
+                         download_page="https://api.github.com/repos/klembot/twinejs/releases/latest",
                          dir_to_decompress_in_tarball='twine*',
                          desktop_filename="twine.desktop",
                          required_files_path=["Twine"],
-                         **kwargs)
+                         json=True, **kwargs)
         # add logo download as the tar doesn't provide one
-        self.download_requests.append(DownloadItem("https://twinery.org/homepage/img/logo.svg", None))
+        self.icon_url = "https://github.com/klembot/twinejs/blob/master/icons/app.svg"
+        self.icon_name = 'twine.svg'
+
+    arch_trans = {
+        "amd64": "64",
+        "i386": "32"
+    }
 
     def parse_download_link(self, line, in_download):
         """Parse Twine download links"""
         url = None
-        regexp = r'href="(.*)" .*linux64'
-        if get_current_arch() == "i386":
-            regexp = r'href="(.*)" .*linux32'
-        p = re.search(regexp, line)
-        with suppress(AttributeError):
-            url = p.group(1)
-        return ((url, None), False)
-
-    def decompress_and_install(self, fds):
-        # if icon, we grab the icon name to reference it later on
-        for fd in fds:
-            if fd.name.endswith(".svg"):
-                orig_icon_name = os.path.basename(fd.name)
-                break
-        else:
-            logger.error("We couldn't download the Twine icon")
-            UI.return_main_screen(status_code=1)
-        super().decompress_and_install(fds)
-        # rename the asset logo
-        self.icon_name = "logo.svg"
-        os.rename(os.path.join(self.install_path, orig_icon_name), os.path.join(self.install_path, self.icon_name))
+        for asset in line["assets"]:
+            if 'linux{}'.format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Create the Twine launcher"""
+        DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
+                       on_done=self.save_icon, download=True)
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Twine"),
                         icon_path=os.path.join(self.install_path, self.icon_name),
                         try_exec=self.exec_path,
                         exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))
+
+    def save_icon(self, download_result):
+        """Save correct Twine icon"""
+        icon = download_result.pop(self.icon_url).fd.name
+        shutil.copy(icon, os.path.join(self.install_path, self.icon_name))
+        logger.debug("Copied icon: {}".format(self.icon_url))
 
 
 class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
