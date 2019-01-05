@@ -72,7 +72,6 @@ RUN \
   mkdir /var/run/sshd && \
 # disable DNS to not wait on host name resolution (delay when working offline)
   echo "UseDNS no" >> /etc/ssh/sshd_config && \
-
   echo 'EXTRA_GROUPS="adm cdrom sudo dip plugdev fuse"' >> /etc/adduser.conf && \
   echo 'ADD_EXTRA_GROUPS=1' >> /etc/adduser.conf && \
   echo "user ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/bar && \

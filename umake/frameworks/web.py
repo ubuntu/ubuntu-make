@@ -31,7 +31,7 @@ import umake.frameworks.baseinstaller
 from umake.interactions import Choice, TextWithChoices, DisplayMessage
 from umake.network.download_center import DownloadItem
 from umake.ui import UI
-from umake.tools import create_launcher, get_application_desktop_file, MainLoop, ChecksumType,\
+from umake.tools import create_launcher, get_application_desktop_file, MainLoop,\
     get_current_arch, add_env_to_user
 
 logger = logging.getLogger(__name__)

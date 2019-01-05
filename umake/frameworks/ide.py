@@ -21,28 +21,20 @@
 
 """Generic IDE module."""
 from abc import ABCMeta, abstractmethod
-from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
-import grp
-from io import StringIO
-import json
 import logging
 import os
 import pwd
 import platform
 import re
-import subprocess
-from urllib import parse
 import shutil
 
 import umake.frameworks.baseinstaller
 from umake.frameworks.electronics import Arduino
-from umake.interactions import DisplayMessage, LicenseAgreement
 from umake.network.download_center import DownloadCenter, DownloadItem
-from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType, Checksum, MainLoop,\
-    strip_tags, add_env_to_user, add_exec_link, get_current_arch
-from umake.ui import UI
+from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, MainLoop,\
+    add_exec_link, get_current_arch
 
 logger = logging.getLogger(__name__)
 
@@ -109,7 +101,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         """Create the Eclipse launcher"""
         DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
                        on_done=self.save_icon, download=True)
-        icon_path = join(self.install_path, self.icon_filename)
+        icon_path = os.path.join(self.install_path, self.icon_filename)
         comment = self.description
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
@@ -249,7 +241,7 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
 
     def post_install(self):
         """Create the appropriate JetBrains launcher."""
-        icon_path = join(self.install_path, 'bin', self.icon_filename)
+        icon_path = os.path.join(self.install_path, 'bin', self.icon_filename)
         comment = self.description + " (UDTC)"
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
@@ -529,7 +521,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMe
         """Create the Netbeans launcher"""
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=self.name,
-                                                     icon_path=join(self.install_path, "nb", "netbeans.png"),
+                                                     icon_path=os.path.join(self.install_path, "nb", "netbeans.png"),
                                                      try_exec=self.exec_path,
                                                      exec=self.exec_link_name,
                                                      comment=self.description,
