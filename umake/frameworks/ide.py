@@ -101,7 +101,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
         """Create the Eclipse launcher"""
         DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
                        on_done=self.save_icon, download=True)
-        icon_path = join(self.install_path, self.icon_filename)
+        icon_path = os.path.join(self.install_path, self.icon_filename)
         comment = self.description
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
@@ -241,7 +241,7 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
 
     def post_install(self):
         """Create the appropriate JetBrains launcher."""
-        icon_path = join(self.install_path, 'bin', self.icon_filename)
+        icon_path = os.path.join(self.install_path, 'bin', self.icon_filename)
         comment = self.description + " (UDTC)"
         categories = "Development;IDE;"
         create_launcher(self.desktop_filename,
@@ -521,7 +521,7 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMe
         """Create the Netbeans launcher"""
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=self.name,
-                                                     icon_path=join(self.install_path, "nb", "netbeans.png"),
+                                                     icon_path=os.path.join(self.install_path, "nb", "netbeans.png"),
                                                      try_exec=self.exec_path,
                                                      exec=self.exec_link_name,
                                                      comment=self.description,
