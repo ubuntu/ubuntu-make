@@ -117,7 +117,7 @@ class FlutterLang(umake.frameworks.baseinstaller.BaseInstaller):
         if in_download:
             with suppress(AttributeError):
                 url = "https://storage.googleapis.com/flutter_infra/releases/stable/linux/" +\
-                                        "flutter_linux_v{}-stable.tar.xz".format(p.group(1))
+                      "flutter_linux_v{}-stable.tar.xz".format(p.group(1))
         return ((url, None), in_download)
 
     def post_install(self):
