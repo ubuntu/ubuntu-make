@@ -73,8 +73,9 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
 
         # adjust for rust: some symlinks magic to have stdlib craft available
         arch_lib_folder = '{}-unknown-linux-gnu'.format(self.arch_trans[get_current_arch()])
-        os.symlink(os.path.join(self.install_path, 'rust-std-{}'.format(arch_lib_folder), 'lib', 'rustlib',
-                                arch_lib_folder, 'lib'),
-                   os.path.join(self.install_path, 'rustc', 'lib', 'rustlib', arch_lib_folder, 'lib'))
+        lib_folder = os.path.join(self.install_path, 'rust-std-{}'.format(arch_lib_folder), 'lib', 'rustlib', arch_lib_folder, 'lib')
+        for f in os.listdir(lib_folder):
+            os.symlink(os.path.join(lib_folder, f),
+                       os.path.join(self.install_path, 'rustc', 'lib', 'rustlib', arch_lib_folder, 'lib', f))
 
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
