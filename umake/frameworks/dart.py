@@ -29,7 +29,7 @@ import re
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
 from umake.network.download_center import DownloadItem
-from umake.tools import add_env_to_user, MainLoop
+from umake.tools import add_env_to_user, MainLoop, get_current_arch, ChecksumType
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -55,44 +55,72 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Dart SDK", description=_("Dart SDK (default)"), is_category_default=True,
                          only_on_archs=_supported_archs,
-                         download_page="https://api.dartlang.org",
+                         download_page="https://www.dartlang.org/tools/sdk",
                          dir_to_decompress_in_tarball="dart-sdk",
+                         checksum_type=ChecksumType.sha256,
                          required_files_path=[os.path.join("bin", "dart")],
                          **kwargs)
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        """Get latest version and append files to download"""
-        logger.debug("Set download metadata")
+    arch_trans = {
+        "amd64": "x64",
+        "i386": "ia32"
+        # TODO: add arm
+    }
 
-        error_msg = result[self.download_page].error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        version = ''
-        version_re = r'Dart SDK ([\d\.]+)'
-        for line in result[self.download_page].buffer:
-            p = re.search(version_re, line.decode())
+    def parse_download_link(self, line, in_download):
+        """Parse Dart SDK download links"""
+        in_download = False
+        if '(stable)' in line:
+            p = re.search(r"([\d\.]+)(&nbsp;)*\(stable\)", line)
+            if p is not None:
+                in_download = True
+        if in_download:
             with suppress(AttributeError):
-                version = p.group(1)
-                break
-        else:
-            logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
+                self.new_download_url = "https://storage.googleapis.com/dart-archive/channels/stable/" +\
+                                        "release/{}/sdk/".format(p.group(1)) +\
+                                        "dartsdk-linux-{}-release.zip".format(self.arch_trans[get_current_arch()]) +\
+                                        ".sha256sum"
+        return ((None, None), in_download)
 
-        tag_machine = 'x64'
-        if platform.machine() == 'i686':
-            tag_machine = 'ia32'
-
-        url = "https://storage.googleapis.com/dart-archive/channels/stable/release/{}/sdk/dartsdk-linux-{}-release.zip"\
-            .format(version, tag_machine)
-        logger.debug("Found download link for {}".format(url))
-
-        self.download_requests.append(DownloadItem(url, None))
-        self.start_download_and_install()
+    @MainLoop.in_mainloop_thread
+    def get_sha_and_start_download(self, download_result):
+        res = download_result[self.new_download_url]
+        checksum = res.buffer.getvalue().decode('utf-8').split()[0]
+        # you get and store self.download_url
+        url = re.sub('.sha256sum', '', self.new_download_url)
+        self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
         """Add go necessary env variables"""
+        add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
+        UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
+
+
+class FlutterLang(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Flutter SDK", description=_("Flutter SDK"),
+                         only_on_archs=_supported_archs,
+                         download_page="https://docs.flutter.io/",
+                         dir_to_decompress_in_tarball="flutter",
+                         required_files_path=[os.path.join("bin", "flutter")],
+                         **kwargs)
+
+    def parse_download_link(self, line, in_download):
+        """Parse Flutter SDK download links"""
+        url = None
+        in_download = False
+        if 'Flutter ' in line:
+            p = re.search(r"Flutter\s([\d\.]+)", line)
+            if p is not None:
+                in_download = True
+        if in_download:
+            with suppress(AttributeError):
+                url = "https://storage.googleapis.com/flutter_infra/releases/stable/linux/" +\
+                                        "flutter_linux_v{}-stable.tar.xz".format(p.group(1))
+        return ((url, None), in_download)
+
+    def post_install(self):
+        """Add flutter necessary env variables"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))

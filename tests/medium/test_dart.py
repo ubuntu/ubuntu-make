@@ -25,18 +25,34 @@ from ..large import test_dart
 from ..tools import get_data_dir, UMAKE
 
 
-class DartInContainer(ContainerTests, test_dart.DartEditorTests):
-    """This will test the eclipse IDE integration inside a container"""
+class DartInContainer(ContainerTests, test_dart.DartTests):
+    """This will test the Dart integration inside a container"""
 
     def setUp(self):
-        self.hosts = {443: ["api.dartlang.org", "storage.googleapis.com"]}
+        self.hosts = {443: ["www.dartlang.org", "storage.googleapis.com"]}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "dart", "dart-sdk")
 
     def test_install_with_changed_version_page(self):
         """Installing dart sdk should fail if version page has significantly changed"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.dartlang.org", "index.html")
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.dartlang.org", "tools", "sdk", "index.html")
         umake_command = self.command('{} dart'.format(UMAKE))
+        self.bad_download_page_test(umake_command, download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+
+class FlutterInContainer(ContainerTests, test_dart.FlutterTests):
+    """This will test the Flutter integration inside a container"""
+
+    def setUp(self):
+        self.hosts = {443: ["docs.flutter.io", "storage.googleapis.com"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "dart", "flutter-sdk")
+
+    def test_install_with_changed_version_page(self):
+        """Installing dart sdk should fail if version page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "docs.flutter.io", "index.html")
+        umake_command = self.command('{} dart flutter-sdk'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))

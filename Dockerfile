@@ -22,7 +22,7 @@ ADD tests/data/data.services.jetbrains.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/golang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.mozilla.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/code.visualstudio.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/api.dartlang.org.crt /usr/local/share/ca-certificates/
+ADD tests/data/www.dartlang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/storage.googleapis.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/netbeans.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.rust-lang.org.crt /usr/local/share/ca-certificates/
@@ -50,6 +50,7 @@ ADD tests/data/godotengine.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/downloads.tuxfamily.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.arduino.cc.crt /usr/local/share/ca-certificates/
 ADD tests/data/downloads.arduino.cc.crt /usr/local/share/ca-certificates/
+ADD tests/data/docs.flutter.io.crt /usr/local/share/ca-certificates/
 ADD docker/create_packages.sh /tmp/
 
 # Refresh the image

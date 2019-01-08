@@ -25,7 +25,6 @@ from contextlib import suppress
 from gettext import gettext as _
 import logging
 import os
-import pwd
 import platform
 import re
 import shutil
