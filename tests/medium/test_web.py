@@ -32,7 +32,7 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.mozilla.org"]}
+        self.hosts = {443: ["www.mozilla.org", "download.mozilla.org"]}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "web", "firefox-dev")

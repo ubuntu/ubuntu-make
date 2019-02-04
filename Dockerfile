@@ -21,6 +21,7 @@ ADD tests/data/www.eclipse.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/data.services.jetbrains.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/golang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.mozilla.org.crt /usr/local/share/ca-certificates/
+ADD tests/data/download.mozilla.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/code.visualstudio.com.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.dartlang.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/storage.googleapis.com.crt /usr/local/share/ca-certificates/
