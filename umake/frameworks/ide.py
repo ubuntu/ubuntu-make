@@ -465,7 +465,7 @@ class Rider(BaseJetBrains):
 
 
 class Netbeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
-    
+
     def __init__(self, **kwargs):
         super().__init__(name=_("Netbeans"),
                          description=_("Extensible Java IDE"),
@@ -478,7 +478,6 @@ class Netbeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
                          required_files_path=["bin/netbeans"],
                          **kwargs)
 
-
     def parse_download_link(self, line, in_download):
         """Parse NetBeans download links"""
         if '[DIR]' in line:
@@ -489,7 +488,7 @@ class Netbeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
             p = re.search(r'\[DIR\]\"> <a href=\"(\S+)-(\S+)\/\"', line)
             with suppress(AttributeError):
                 self.new_download_url = self.download_page.replace('?C=M;O=D',
-                                                                   'incubating-{}/'.format(p.group(2)) + 
+                                                                   'incubating-{}/'.format(p.group(2)) +
                                                                    '{}-netbeans-{}-bin.zip.sha512'.format(p.group(1),
                                                                                                           p.group(2)))
         return (None, in_download)

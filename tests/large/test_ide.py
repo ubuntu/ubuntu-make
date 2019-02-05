@@ -368,7 +368,7 @@ class RiderIDETests(IdeaIDETests):
         self.name = 'Rider'
 
 
-class BaseNetBeansTests(LargeFrameworkTests):
+class NetBeansTests(LargeFrameworkTests):
     """Tests for the Netbeans installer."""
 
     TIMEOUT_INSTALL_PROGRESS = 120
