@@ -348,15 +348,14 @@ class RiderIDEInContainer(ContainerTests, test_ide.RiderIDETests):
                                                         "products", "releases?code=RD")
 
 
-class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
+class NetBeansInContainer(ContainerTests, test_ide.NetBeansTests):
     """This will test the NetBeans IDE integration inside a container"""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
-    TEST_CHECKSUM_NETBEANS_DATA = "e5018c428b5657b669155886f58429af63f69436625e876be9710824bbfd144a"
 
     def setUp(self):
-        self.hosts = {80: ["download.netbeans.org"], 443: ["netbeans.org"]}
+        self.hosts = {443: ["www.apache.org"]}
         # Reuse the Android Studio environment.
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'android')
         super().setUp()
@@ -365,39 +364,12 @@ class BaseNetBeansInContainer(ContainerTests, test_ide.BaseNetBeansTests):
 
     def test_install_with_changed_download_page(self):
         """Installing NetBeans ide should fail if download page has significantly changed"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "netbeans.org", "downloads",
-                                               "zip.html")
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.apache.org", "dist",
+                                               "incubator", "netbeans", "incubating-netbeans", "index.html")
         umake_command = self.command('{} ide netbeans'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
-
-    def test_install_with_changed_download_reference_page(self):
-        """Installing NetBeans ide should fail if download reference page has significantly changed"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "netbeans.org", "images_www",
-                                               "v6", "download", "8.2", "final", "js", "files.js")
-        umake_command = self.command('{} ide netbeans'.format(UMAKE))
-        self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(self.exec_link))
-
-    def test_install_with_changed_checksum_page(self):
-        """Installing NetBeans ide should fail if checksum link is wrong"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "netbeans.org", "images_www",
-                                               "v6", "download", "8.2", "final", "js", "files.js")
-        with swap_file_and_restore(download_page_file_path) as content:
-            with open(download_page_file_path, "w") as newfile:
-                newfile.write(content.replace(self.TEST_CHECKSUM_NETBEANS_DATA, "abcdef"))
-            self.child = spawn_process(self.command('{} ide netbeans'.format(UMAKE)))
-            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
-            self.child.sendline("")
-            self.expect_and_no_warn([pexpect.EOF, "Corrupted download? Aborting."],
-                                    timeout=self.TIMEOUT_INSTALL_PROGRESS, expect_warn=True)
-            self.wait_and_close(exit_status=1)
-
-            # we have nothing installed
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-            self.assertFalse(self.is_in_path(self.exec_link))
 
 
 class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTest):

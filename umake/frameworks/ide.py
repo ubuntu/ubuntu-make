@@ -454,70 +454,44 @@ class Rider(BaseJetBrains):
                          **kwargs)
 
 
-class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
-    """The base for all Netbeans installers."""
+class Netbeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
 
-    BASE_URL = "http://download.netbeans.org/netbeans"
-    EXECUTABLE = "nb/netbeans"
-
-    def __init__(self, *args, **kwargs):
-        """Add executable required file path to existing list"""
-        if self.executable:
-            current_required_files_path = kwargs.get("required_files_path", [])
-            current_required_files_path.append(os.path.join("bin", self.executable))
-            kwargs["required_files_path"] = current_required_files_path
-        download_page = "https://netbeans.org/downloads/zip.html"
-        kwargs["download_page"] = download_page
-        super().__init__(*args, **kwargs)
-
-    @property
-    @abstractmethod
-    def download_keyword(self):
-        pass
-
-    @property
-    @abstractmethod
-    def executable(self):
-        pass
+    def __init__(self, **kwargs):
+        super().__init__(name=_("Netbeans"),
+                         description=_("Extensible Java IDE"),
+                         only_on_archs=['i386', 'amd64'],
+                         desktop_filename="netbeans.desktop",
+                         download_page='https://www.apache.org/dist/incubator/netbeans/incubating-netbeans/?C=M;O=D',
+                         dir_to_decompress_in_tarball="netbeans*",
+                         packages_requirements=['openjdk-8-jdk | openjdk-11-jdk'],
+                         checksum_type=ChecksumType.sha512,
+                         required_files_path=["bin/netbeans"],
+                         **kwargs)
 
     def parse_download_link(self, line, in_download):
-        """Parse Netbeans download links"""
-        url, checksum = (None, None)
-        if 'var PAGE_ARTIFACTS_LOCATION' in line:
+        """Parse NetBeans download links"""
+        if '[DIR]' in line:
             in_download = True
         else:
             in_download = False
         if in_download:
-            p = re.search(r'var PAGE_ARTIFACTS_LOCATION = \"/images_www/v6/download/(\S+)/final/\";', line)
+            p = re.search(r'\[DIR\]\"> <a href=\"(\S+)-(\S+)\/\"', line)
             with suppress(AttributeError):
-                # url set to check in baseinstaller if missing
-                self.version = p.group(1)
-                self.new_download_url = "https://netbeans.org/images_www/v6/download/" + \
-                                        "{}/final/js/files.js".format(self.version)
-        return ((None, None), in_download)
+                self.new_download_url = self.download_page.replace('?C=M;O=D',
+                                                                   'incubating-{}/'.format(p.group(2)) +
+                                                                   '{}-netbeans-{}-bin.zip.sha512'.format(p.group(1),
+                                                                                                          p.group(2)))
+        return (None, in_download)
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
-        res = download_result[self.new_download_url].buffer.getvalue().decode('utf-8').split('\n')
-
-        preg = re.compile(r'add_file\(\"zip/netbeans-{}-[0-9]{{12}}-?{}.zip"'.format(self.version,
-                                                                                     self.download_keyword))
-
-        for line in res:
-            if preg.match(line):
-                # Clean up the string from js (it's a function call)
-                line = line.replace("add_file(", "").replace(");", "").replace('"', "")
-                url_string = line
-
-        string_array = url_string.split(", ")
-        url_suffix = string_array[0]
-        checksum = string_array[2]
-
-        url = "{}/{}/final/{}".format(self.BASE_URL, self.version, url_suffix)
+        res = download_result[self.new_download_url]
+        checksum = res.buffer.getvalue().decode('utf-8').split()[0]
+        url = self.new_download_url.replace('.sha512', '')
         self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
-        """Create the Netbeans launcher"""
+        """Create the Apache Netbeans launcher"""
         create_launcher(self.desktop_filename,
                         get_application_desktop_file(name=self.name,
                                                      icon_path=os.path.join(self.install_path, "nb", "netbeans.png"),
@@ -525,66 +499,6 @@ class BaseNetBeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMe
                                                      exec=self.exec_link_name,
                                                      comment=self.description,
                                                      categories="Development;IDE;"))
-
-
-class Netbeans(BaseNetBeans):
-    download_keyword = ''
-    executable = "netbeans"
-
-    def __init__(self, **kwargs):
-        super().__init__(name=_("Netbeans"),
-                         description=_("Extensible Java IDE"),
-                         only_on_archs=['i386', 'amd64'],
-                         desktop_filename="netbeans.desktop",
-                         dir_to_decompress_in_tarball="netbeans*",
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
-                         checksum_type=ChecksumType.sha256,
-                         **kwargs)
-
-
-class NetbeansJavaEE(BaseNetBeans):
-    download_keyword = 'javaee'
-    executable = "netbeans"
-
-    def __init__(self, **kwargs):
-        super().__init__(name=_("Netbeans JavaEE"),
-                         description=_("Extensible Java IDE, JavaEE edition"),
-                         only_on_archs=['i386', 'amd64'],
-                         desktop_filename='netbeansjee.desktop',
-                         dir_to_decompress_in_tarball="netbeans*",
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
-                         checksum_type=ChecksumType.sha256,
-                         **kwargs)
-
-
-class NetbeansHTML(BaseNetBeans):
-    download_keyword = 'html'
-    executable = "netbeans"
-
-    def __init__(self, **kwargs):
-        super().__init__(name=_("Netbeans HTML"),
-                         description=_("Extensible Java IDE, HTML edition"),
-                         only_on_archs=['i386', 'amd64'],
-                         desktop_filename='netbeanshtml.desktop',
-                         dir_to_decompress_in_tarball="netbeans*",
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
-                         checksum_type=ChecksumType.sha256,
-                         **kwargs)
-
-
-class NetbeansJavaEE(BaseNetBeans):
-    download_keyword = 'cpppp'
-    executable = "netbeans"
-
-    def __init__(self, **kwargs):
-        super().__init__(name=_("Netbeans JEE"),
-                         description=_("Extensible Java IDE, C C++ edition"),
-                         only_on_archs=['i386', 'amd64'],
-                         desktop_filename='netbeansc.desktop',
-                         dir_to_decompress_in_tarball="netbeans*",
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
-                         checksum_type=ChecksumType.sha256,
-                         **kwargs)
 
 
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
