@@ -13,12 +13,14 @@ build/
 *.egg-info
 *.pybuild
 
-# Tests results
+# Tests
 html-coverage*/
 .coverage
 coverage.xml
 nosetests*
 .cache
+autopkgtest-*
+.pytest_cache
 
 # Editor settings
 .idea/
