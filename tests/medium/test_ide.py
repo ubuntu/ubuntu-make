@@ -22,10 +22,9 @@
 
 from . import ContainerTests
 import os
-import pexpect
 
 from ..large import test_ide
-from ..tools import get_data_dir, swap_file_and_restore, UMAKE, spawn_process
+from ..tools import get_data_dir, swap_file_and_restore, UMAKE
 
 
 class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):

@@ -26,7 +26,7 @@ import logging
 import os
 import re
 import umake.frameworks.baseinstaller
-from umake.network.download_center import DownloadItem
+from umake.interactions import DisplayMessage
 from umake.tools import add_env_to_user, MainLoop, get_current_arch, ChecksumType
 from umake.ui import UI
 
