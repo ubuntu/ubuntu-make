@@ -243,10 +243,13 @@ class BaseFramework(metaclass=abc.ABCMeta):
 
         if self.need_root_access and os.geteuid() != 0:
             logger.debug("Requesting root access")
-            cmd = ["sudo", "-E", "env", "PATH={}".format(os.getenv("PATH"))]
+            cmd = ["sudo", "-E", "env"]
             for var in ["PATH", "LD_LIBRARY_PATH", "PYTHONUSERBASE", "PYTHONHOME"]:
                 if os.getenv(var):
                     cmd.append("{}={}".format(var, os.getenv(var)))
+            if os.getenv("SNAP"):
+                logger.debug("Found snap environment. Running correct python version")
+                cmd.extend(["{}/usr/bin/python3".format(os.getenv("SNAP"))])
             cmd.extend(sys.argv)
             MainLoop().quit(subprocess.call(cmd))
 
