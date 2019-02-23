@@ -29,6 +29,9 @@ import platform
 import re
 import shutil
 
+import json
+import requests
+
 import umake.frameworks.baseinstaller
 from umake.frameworks.electronics import Arduino
 from umake.network.download_center import DownloadCenter, DownloadItem
@@ -517,7 +520,13 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["bin/code"],
                          dir_to_decompress_in_tarball="VSCode-linux-*",
                          packages_requirements=["libgtk2.0-0", "libgconf-2-4"],
-                         **kwargs)
+                         updatable=True, **kwargs)
+
+    def get_upstream_version(self, result):
+        page = requests.get("https://code.visualstudio.com/Update")
+        return re.search('<strong>Update\s(.*)</strong>', page.text)
+
+    version_parse = {'regex': '(\d+\.\d+\.\d+)', 'command': 'visual-studio-code --version'}
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
@@ -607,8 +616,7 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["atom", "resources/app/apm/bin/apm"],
                          dir_to_decompress_in_tarball="atom-*",
                          packages_requirements=["libgconf-2-4"],
-                         updatable=True,
-                         json=True, **kwargs)
+                         updatable=True, json=True, **kwargs)
 
     def parse_download_link(self, line, in_download):
         url = None

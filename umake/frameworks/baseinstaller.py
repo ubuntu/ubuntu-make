@@ -140,8 +140,11 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         UI.return_main_screen()
 
     def get_version(self):
-        return re.search(self.version_parse['regex'],
-                         subprocess.check_output(self.version_parse['command'].split()).decode()).group(1)
+        if not self.version_parse['regex']:
+            return subprocess.check_output(self.version_parse['command'].split()).decode()
+        else:
+            return re.search(self.version_parse['regex'],
+                             subprocess.check_output(self.version_parse['command'].split()).decode()).group(1)
 
     @MainLoop.in_mainloop_thread
     def run_update(self, result):
