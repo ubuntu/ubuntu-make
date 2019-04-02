@@ -160,11 +160,9 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
         if "beta.unity" in line:
             in_download = True
         if in_download:
-            p = re.search(
-                r'href="(https://beta.unity3d.*.html)" target="_blank" class="externalLink">https://beta.unity3d.com',
-                line)
+            p = re.search(r'a href="(https:\/\/beta\.unity3d\.com\/download\/[^\/]+)', line)
             with suppress(AttributeError):
-                url = p.group(1).replace("public_download.html", "LinuxEditorInstaller/Unity.tar.xz")
+                url = os.path.join(p.group(1), "LinuxEditorInstaller/Unity.tar.xz")
         if url is None:
             return (None, in_download)
         return ((url, None), in_download)
