@@ -44,7 +44,7 @@ class DartCategory(umake.frameworks.BaseCategory):
 class DartLangEditorRemoval(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
-        super().__init__(name="Dart Editor", description=_("Dart SDK with editor (not supported upstream anyymore)"),
+        super().__init__(name="Dart Editor", description=_("Dart SDK with editor (not supported upstream anymore)"),
                          download_page=None, only_on_archs=_supported_archs, only_for_removal=True, **kwargs)
 
 
