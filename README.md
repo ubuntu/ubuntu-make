@@ -1,7 +1,7 @@
 # Ubuntu Make
 Ubuntu Make is a project designed to enable quick and easy setup of common needs for developers on Ubuntu.
 
-[![Snap Status](https://build.snapcraft.io/badge/ubuntu/ubuntu-make.svg)](https://build.snapcraft.io/user/ubuntu/ubuntu-make)
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/ubuntu-make)
 
 More information on what this snap is available at https://didrocks.fr/2017/07/05/ubuntu-make-as-a-classic-snap-intro/
 
@@ -9,7 +9,7 @@ More information on what this snap is available at https://didrocks.fr/2017/07/0
 
 [![Build Status](https://travis-ci.org/ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make) (pep8 and small tests)
 
-[All test results](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests/) and [Coverage report](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests-collect/label=ps-trusty-desktop-amd64-1/lastSuccessfulBuild/artifact/html-coverage/index.html)
+[![Snap Status](https://build.snapcraft.io/badge/ubuntu/ubuntu-make.svg)](https://build.snapcraft.io/user/ubuntu/ubuntu-make)
 
 ## Installing
 We recommend to use the Ubuntu Make snap to ensure you always have the latest and greatest version, even on older supported releases.
@@ -21,10 +21,6 @@ $ snap install ubuntu-make --classic
 If installed via the snap it can be run as `ubuntu-make.umake`, or via the alias `umake`
 
 ### Attention
-The snap currently in the store is known to work on releases up to 16.04 (Xenial).
-
-For later releases there are compatibility issues, so it is recommended to install via the ppa.
-
 If the snap does not work there is a daily build ppa:
 
 ```
