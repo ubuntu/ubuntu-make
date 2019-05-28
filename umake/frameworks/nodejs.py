@@ -123,5 +123,6 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
     def run_for(self, args):
         if args.lts:
             self.download_page = "https://nodejs.org/en/download/"
-        print('Download from {}'.format(self.download_page))
+        if not args.remove:
+            print('Download from {}'.format(self.download_page))
         super().run_for(args)
