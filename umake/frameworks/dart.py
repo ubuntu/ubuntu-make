@@ -109,7 +109,7 @@ class FlutterLang(umake.frameworks.baseinstaller.BaseInstaller):
         url = None
         in_download = False
         if 'Flutter ' in line:
-            p = re.search(r"Flutter\s([\d\.]+)", line)
+            p = re.search(r"Flutter\s([\d\.]+\S+)", line)
             if p is not None:
                 in_download = True
         if in_download:
