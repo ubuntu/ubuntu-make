@@ -44,17 +44,28 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
         super().__init__(name="Go Lang", description=_("Google compiler (default)"), is_category_default=True,
-                         only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64', 'ppc64el', 's390x'],
                          download_page="https://golang.org/dl/",
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="go",
                          required_files_path=[os.path.join("bin", "go")],
                          **kwargs)
 
+    arch_trans = {
+        "i386": "386",
+        "ppc64el": "ppc64le"
+    }
+
+    def get_framework_arch(self):
+        arch = get_current_arch()
+        if arch in self.arch_trans:
+            return self.arch_trans[arch]
+        return arch
+
     def parse_download_link(self, line, in_download):
         """Parse Go download link, expect to find a sha and a url"""
         url, sha = (None, None)
-        if "linux-{}".format(get_current_arch().replace("i386", "386")) in line:
+        if "linux-{}".format(self.get_framework_arch()) in line:
             in_download = True
         if in_download:
             p = re.search(r'href="(.*)">', line)

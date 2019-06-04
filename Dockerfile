@@ -46,6 +46,8 @@ ADD tests/data/maven.apache.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/www.blender.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/download.blender.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/twinery.org.crt /usr/local/share/ca-certificates/
+ADD tests/data/www.rstudio.com.crt /usr/local/share/ca-certificates/
+ADD tests/data/download1.rstudio.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/eagle-updates.circuits.io.crt /usr/local/share/ca-certificates/
 ADD tests/data/godotengine.org.crt /usr/local/share/ca-certificates/
 ADD tests/data/downloads.tuxfamily.org.crt /usr/local/share/ca-certificates/

@@ -723,6 +723,47 @@ class SpringToolsSuiteTest(LargeFrameworkTests):
         self.wait_and_close()
 
 
+class RStudioTests(LargeFrameworkTests):
+    """Tests for Sublime Text"""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 20
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "ide", "rstudio")
+        self.desktop_filename = "rstudio.desktop"
+        self.command_args = '{} ide rstudio'.format(UMAKE)
+
+    def test_default_install(self):
+        """Install Sublime Text from scratch test case"""
+
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+        self.assert_exec_link_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+        self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn("RStudio is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_close()
+
+
 class SublimeTextTests(LargeFrameworkTests):
     """Tests for Sublime Text"""
 

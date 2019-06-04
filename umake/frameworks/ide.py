@@ -836,6 +836,54 @@ class LiteIDE(umake.frameworks.baseinstaller.BaseInstaller):
                         categories="Development;IDE;"))
 
 
+class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="RStudio", description=_("RStudio code editor"),
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://www.rstudio.com/products/rstudio/download/",
+                         packages_requirements=["libjpeg62", "libedit2", "libssl1.0.0 | libssl1.0.2",
+                                                "libgstreamer0.10-0", "libgstreamer-plugins-base0.10-0"],
+                         desktop_filename="rstudio.desktop",
+                         required_files_path=["bin/rstudio"],
+                         dir_to_decompress_in_tarball="rstudio-*",
+                         checksum_type=ChecksumType.md5,
+                         **kwargs)
+
+        self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
+                        "Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36"}
+
+    def download_provider_page(self):
+        logger.debug("Download application provider page")
+        DownloadCenter([DownloadItem(self.download_page, headers=self.headers)],
+                       self.get_metadata_and_check_license, download=False)
+
+    def parse_download_link(self, line, in_download):
+        """Parse RStudio download links"""
+        url = None
+        checksum = None
+        if '-debian.tar.gz' in line:
+            p = re.search(r'href="([^<]*{}-debian.tar.gz)"'.format(get_current_arch()), line)
+            with suppress(AttributeError):
+                url = p.group(1)
+                in_download = True
+        if in_download and '<td><code>' in line:
+            p = re.search('<td><code>(.*)</code></td>', line)
+            with suppress(AttributeError):
+                checksum = p.group(1)
+        return ((url, checksum), in_download)
+
+    def post_install(self):
+        """Create the RStudio launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("RStudio"),
+                        icon_path=os.path.join(self.install_path, "rstudio.png"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=_("RStudio makes R easier to use."
+                                  "It includes a code editor, debugging & visualization tools."),
+                        categories="Development;IDE;"))
+
+
 class Arduino(Arduino):
 
     def setup(self, *args, **kwargs):
