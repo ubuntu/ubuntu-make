@@ -185,8 +185,8 @@ class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
                          only_on_archs=['i386', 'amd64'],
                          download_page="https://api.github.com/repos/mozilla/geckodriver/releases/latest",
                          dir_to_decompress_in_tarball=".",
-                         required_files_path=[os.path.join("geckodriver")],
-                         **kwargs)
+                         required_files_path=["geckodriver"],
+                         json=True, **kwargs)
 
     arch_trans = {
         "amd64": "linux32",
@@ -194,31 +194,13 @@ class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
         "armhf": "arm7hf"
     }
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-        page = result[self.download_page]
-
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            assets = json.loads(page.buffer.read().decode())["assets"]
-            download_url = None
-            for asset in assets:
-                if "{}.tar.gz".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
-                    download_url = asset["browser_download_url"]
-            if not download_url:
-                raise IndexError
-        except (json.JSONDecodeError, IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-
-        self.download_requests.append(DownloadItem(download_url, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if "{}.tar.gz".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Add the Geckodriver binary dir to PATH"""

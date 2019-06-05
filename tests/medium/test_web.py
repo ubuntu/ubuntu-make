@@ -65,3 +65,25 @@ class PhantomJSInContainer(ContainerTests, test_web.PhantomJSTests):
         umake_command = self.command('{} web phantomjs'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.path_exists(self.exec_path))
+
+
+class GeckodriverInContainer(ContainerTests, test_web.GeckodriverTests):
+    """This will test the Geckodriver integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["api.github.com", "github.com"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "web", "geckodriver")
+
+    def test_install_with_changed_download_page(self):
+        """Installing Geckodriver should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
+                                               "repos", "mozilla", "geckodriver", "releases", "latest")
+        umake_command = self.command('{} web geckodriver'.format(UMAKE))
+        self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(self.exec_link))
