@@ -458,9 +458,6 @@ class SublimeTextInContainer(ContainerTests, test_ide.SublimeTextTests):
 class DBeaverInContainer(ContainerTests, test_ide.DBeaverTest):
     """This will test the DBeaver integration inside a container"""
 
-    TIMEOUT_START = 20
-    TIMEOUT_STOP = 10
-
     def setUp(self):
         self.hosts = {443: ["api.github.com", "github.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'dbeaver')
@@ -476,6 +473,32 @@ class DBeaverInContainer(ContainerTests, test_ide.DBeaverTest):
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
+
+
+class RStudioInContainer(ContainerTests, test_ide.RStudioTests):
+    """This will test the RStudio integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["www.rstudio.com", "download1.rstudio.org"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "rstudio")
+
+
+class RStudioInContainer(ContainerTests, test_ide.RStudioTests):
+    """This will test the RStudio integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["www.rstudio.com", "download1.rstudio.org"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "rstudio")
 
 
 class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest):
