@@ -23,6 +23,7 @@
 from contextlib import suppress
 from functools import partial
 from gettext import gettext as _
+import json
 import logging
 import os
 import platform
@@ -172,4 +173,59 @@ class PhantomJS(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Add phantomjs necessary env variables"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
+        UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
+
+
+class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Geckodriver",
+                         description=_("Proxy for using W3C WebDriver compatible clients " +
+                                       "to interact with Gecko-based browsers."),
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://api.github.com/repos/mozilla/geckodriver/releases/latest",
+                         dir_to_decompress_in_tarball=".",
+                         required_files_path=["geckodriver"],
+                         json=True, **kwargs)
+
+    arch_trans = {
+        "amd64": "linux32",
+        "i386": "linux64",
+        "armhf": "arm7hf"
+    }
+
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if "{}.tar.gz".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
+
+    def post_install(self):
+        """Add the Geckodriver binary dir to PATH"""
+        add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path)}})
+        UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
+
+
+class Chromedriver(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Chromedriver", description=_("WebDriver for Chrome"),
+                         only_on_archs=['amd64'],
+                         download_page="https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
+                         dir_to_decompress_in_tarball=".",
+                         required_files_path=["chromedriver"],
+                         **kwargs)
+
+    def parse_download_link(self, line, in_download):
+        """Parse Chromedriver download links"""
+        url = None
+        with suppress(AttributeError):
+            url = "https://chromedriver.storage.googleapis.com/{}/chromedriver_linux64.zip".format(line)
+        return ((url, None), in_download)
+
+    def post_install(self):
+        """Add Chromedriver necessary env variables"""
+        add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path)}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
