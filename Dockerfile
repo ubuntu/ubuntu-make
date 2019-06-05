@@ -16,44 +16,7 @@ RUN locale-gen en_US.UTF-8
 
 ADD debian/control /tmp/
 ADD docker/umake_docker.pub /tmp/
-ADD tests/data/developer.android.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/www.eclipse.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/data.services.jetbrains.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/golang.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/www.mozilla.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/download.mozilla.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/code.visualstudio.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/www.dartlang.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/storage.googleapis.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/netbeans.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/www.rust-lang.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/static.rust-lang.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/swift.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/nodejs.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/github.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/api.github.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/spring.io.crt /usr/local/share/ca-certificates/
-ADD tests/data/dl.google.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/sublimetext.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/download.sublimetext.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/forum.unity3d.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/beta.unity3d.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/bitbucket.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/go.microsoft.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/download.jetbrains.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/www.apache.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/maven.apache.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/www.blender.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/download.blender.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/twinery.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/www.rstudio.com.crt /usr/local/share/ca-certificates/
-ADD tests/data/download1.rstudio.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/eagle-updates.circuits.io.crt /usr/local/share/ca-certificates/
-ADD tests/data/godotengine.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/downloads.tuxfamily.org.crt /usr/local/share/ca-certificates/
-ADD tests/data/www.arduino.cc.crt /usr/local/share/ca-certificates/
-ADD tests/data/downloads.arduino.cc.crt /usr/local/share/ca-certificates/
-ADD tests/data/docs.flutter.io.crt /usr/local/share/ca-certificates/
+ADD tests/data/*.crt /usr/local/share/ca-certificates/
 ADD docker/create_packages.sh /tmp/
 
 # Refresh the image
