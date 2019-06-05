@@ -215,7 +215,7 @@ class Chromedriver(umake.frameworks.baseinstaller.BaseInstaller):
                          only_on_archs=['amd64'],
                          download_page="https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
                          dir_to_decompress_in_tarball=".",
-                         required_files_path=[os.path.join("chromedriver")],
+                         required_files_path=["chromedriver"],
                          **kwargs)
 
     def parse_download_link(self, line, in_download):
