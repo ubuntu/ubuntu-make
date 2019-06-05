@@ -724,7 +724,7 @@ class SpringToolsSuiteTest(LargeFrameworkTests):
 
 
 class RStudioTests(LargeFrameworkTests):
-    """Tests for Sublime Text"""
+    """Tests for RStudio"""
 
     TIMEOUT_INSTALL_PROGRESS = 120
     TIMEOUT_START = 20
