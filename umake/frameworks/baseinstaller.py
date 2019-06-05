@@ -101,9 +101,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         logger.debug("{} is installed".format(self.name))
         return True
 
-    def setup(self, install_path=None, auto_accept_license=False):
+    def setup(self, install_path=None, auto_accept_license=False, url_search_test=False):
         self.arg_install_path = install_path
         self.auto_accept_license = auto_accept_license
+        self.url_search_test = url_search_test
         super().setup()
 
         # first step, check if installed
@@ -272,6 +273,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                                 logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
                             elif not self.checksum_type:
                                 logger.debug("Found download link for {}".format(url))
+
+            if self.url_search_test:
+                logger.error("Url found! Test complete")
+                UI.return_main_screen(status_code=0)
             if hasattr(self, 'get_sha_and_start_download'):
                 logger.debug('Run get_sha_and_start_download')
                 DownloadCenter(urls=[DownloadItem(self.new_download_url, None)],
