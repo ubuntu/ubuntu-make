@@ -1,3 +1,23 @@
+ubuntu-make (19.06) eoan; urgency=medium
+
+  [ Galileo Sartor ]
+  * dart: add flutter sdk framework
+  * ide: add RStudio, Apache Netbeans and liteide
+  * java: Update android and maven to openjdk-11
+  * snap: update to core18
+  * swift: remove libicu dependency on swift
+  * web: add geckodriver and chromedriver
+  * fix and update frameworks
+
+  [ Didier Roche ]
+  * fix autopkgtests on disco
+
+  [ Jason Pell ]
+  * maven: update checksum to use sha512
+  * ide: fix eclipse url parsing
+
+ -- Galileo Sartor <galileo.sartor@gmail.com>  Tue, 11 Jun 2019 15:32:29 +0200
+
 ubuntu-make (18.09) cosmic; urgency=medium
 
   [ Galileo Sartor ]
