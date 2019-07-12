@@ -244,9 +244,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
                     # always take the first valid (url, checksum) if not match_last_link is set to True:
                     download = None
-                    if url is None or (self.checksum_type and not checksum) or\
-                       self.match_last_link or self.new_download_url:
-                        (download, in_download) = self.parse_download_link(line_content, in_download)
+                    if not in_download:
+                        if url is None or (self.checksum_type and not checksum) or\
+                           self.match_last_link or self.new_download_url:
+                            (download, in_download) = self.parse_download_link(line_content, in_download)
                     if download is not None:
                         (newurl, new_checksum) = download
                         url = newurl if newurl is not None else url
