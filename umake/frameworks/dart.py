@@ -53,7 +53,7 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Dart SDK", description=_("Dart SDK (default)"), is_category_default=True,
                          only_on_archs=_supported_archs,
-                         download_page="https://www.dartlang.org/tools/sdk",
+                         download_page="https://raw.githubusercontent.com/dart-lang/sdk/master/CHANGELOG.md",
                          dir_to_decompress_in_tarball="dart-sdk",
                          checksum_type=ChecksumType.sha256,
                          required_files_path=[os.path.join("bin", "dart")],
@@ -68,16 +68,16 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse Dart SDK download links"""
         in_download = False
-        if '(stable)' in line:
-            p = re.search(r"([\d\.]+)(&nbsp;)*\(stable\)", line)
-            if p is not None:
-                in_download = True
+        p = re.search(r"^##\s(\d\S+)", line)
+        if p is not None:
+            in_download = True
         if in_download:
             with suppress(AttributeError):
                 self.new_download_url = "https://storage.googleapis.com/dart-archive/channels/stable/" +\
                                         "release/{}/sdk/".format(p.group(1)) +\
                                         "dartsdk-linux-{}-release.zip".format(self.arch_trans[get_current_arch()]) +\
                                         ".sha256sum"
+                print(self.new_download_url)
         return ((None, None), in_download)
 
     @MainLoop.in_mainloop_thread
@@ -99,7 +99,7 @@ class FlutterLang(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Flutter SDK", description=_("Flutter SDK"),
                          only_on_archs=_supported_archs,
-                         download_page="https://docs.flutter.io/",
+                         download_page="https://api.flutter.dev/flutter/footer.js",
                          dir_to_decompress_in_tarball="flutter",
                          required_files_path=[os.path.join("bin", "flutter")],
                          **kwargs)
@@ -109,7 +109,7 @@ class FlutterLang(umake.frameworks.baseinstaller.BaseInstaller):
         url = None
         in_download = False
         if 'Flutter ' in line:
-            p = re.search(r"Flutter\s([\d\.]+\S+)", line)
+            p = re.search(r"Flutter\s(\S+)", line)
             if p is not None:
                 in_download = True
         if in_download:
