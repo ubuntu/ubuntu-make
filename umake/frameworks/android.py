@@ -51,10 +51,10 @@ class AndroidCategory(umake.frameworks.BaseCategory):
                 license_txt.write(line)
         return in_license
 
-    def parse_download_link(self, tag, line, in_download, regex):
+    def parse_download_link(self, tags, line, in_download, regex):
         """Parse Android download links, expect to find a sha1sum and a url"""
         url, sha1sum = (None, None)
-        if tag in line:
+        if all(tag in line for tag in tags):
             in_download = True
         if in_download:
             p = re.search(regex, line)
@@ -84,7 +84,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                                                 "libc6:i386", "libncurses5:i386", "libstdc++6:i386",
                                                 "lib32z1", "zlib1g:i386"],
                          download_page="https://developer.android.com/studio/index.html",
-                         checksum_type=ChecksumType.sha256,
+                         # checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="android-studio",
                          desktop_filename="android-studio.desktop",
                          required_files_path=[os.path.join("bin", "studio.sh")], **kwargs)
@@ -95,8 +95,8 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         """Parse Android Studio download link, expect to find a sha1sum and a url"""
-        return self.category.parse_download_link('linux_bundle_download', line, in_download,
-                                                 r'href=\"(https://dl.google.com.*-linux.*.tar.gz)\"')
+        return self.category.parse_download_link(['dl.google.com', 'linux.tar.gz'], line, in_download,
+                                                 r'href=\"(https://dl.google.com.*-linux.tar.gz)\"')
 
     def post_install(self):
         """Create the Android Studio launcher"""
@@ -120,7 +120,7 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
                                                 "libc6:i386", "libncurses5:i386", "libstdc++6:i386",
                                                 "lib32z1", "zlib1g:i386"],
                          download_page="https://developer.android.com/studio/index.html",
-                         checksum_type=ChecksumType.sha256,
+                         # checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball=".",
                          required_files_path=[os.path.join("tools", "android"),
                                               os.path.join("tools", "bin", "sdkmanager")],
@@ -132,7 +132,7 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         """Parse Android SDK download link, expect to find a SHA-1 and a url"""
-        return self.category.parse_download_link('sdk_linux_download', line, in_download,
+        return self.category.parse_download_link(['dl.google.com', 'sdk-tools-linux'], line, in_download,
                                                  r'href=\"(https://dl.google.com.*-linux.*.zip)\"')
 
     def post_install(self):
@@ -170,7 +170,7 @@ class AndroidPlatformTools(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         """Parse Android SDK download link, expect to find a SHA-1 and a url"""
-        return self.category.parse_download_link('dac-download-linux', line, in_download,
+        return self.category.parse_download_link(['dl.google.com', 'linux.zip'], line, in_download,
                                                  r'href=\"(https://dl.google.com.*-linux.*.zip)\"')
 
     def post_install(self):
@@ -185,7 +185,7 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Android NDK", description=_("Android NDK"),
                          only_on_archs='amd64', expect_license=True,
                          download_page="https://developer.android.com/ndk/downloads/index.html",
-                         checksum_type=ChecksumType.sha1,
+                         # checksum_type=ChecksumType.sha1,
                          packages_requirements=['clang'],
                          dir_to_decompress_in_tarball="android-ndk-*",
                          required_files_path=[os.path.join("ndk-build")], **kwargs)
@@ -196,7 +196,7 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         """Parse Android NDK download link, expect to find a sha1sum and a url"""
-        return self.category.parse_download_link('ndk_linux64_download', line, in_download,
+        return self.category.parse_download_link(['dl.google.com', 'linux-x86_64.zip'], line, in_download,
                                                  r'href=\"(https://dl.google.com.*-linux.*.zip)\"')
 
     def post_install(self):
