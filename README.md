@@ -1,24 +1,40 @@
 # Ubuntu Make
 Ubuntu Make is a project designed to enable quick and easy setup of common needs for developers on Ubuntu.
 
-[![Snap Status](https://build.snapcraft.io/badge/ubuntu/ubuntu-make.svg)](https://build.snapcraft.io/user/ubuntu/ubuntu-make)
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/ubuntu-make)
 
 More information on what this snap is available at https://didrocks.fr/2017/07/05/ubuntu-make-as-a-classic-snap-intro/
 
 ## Current project health
 
-[![Build Status](https://api.travis-ci.org/ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make) (pep8 and small tests)
+[![Build Status](https://travis-ci.org/ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make) (pep8 and small tests)
 
-[All test results](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests/) and [Coverage report](https://jenkins.qa.ubuntu.com/job/udtc-trusty-tests-collect/label=ps-trusty-desktop-amd64-1/lastSuccessfulBuild/artifact/html-coverage/index.html)
+[![Snap Status](https://build.snapcraft.io/badge/ubuntu/ubuntu-make.svg)](https://build.snapcraft.io/user/ubuntu/ubuntu-make)
 
 ## Installing
-We recommend to use the Ubuntu Make ppa to ensure you always have the latest and greatest version, even on older supported releases. We are available on the currently supported Ubuntu version.
+We recommend to use the Ubuntu Make snap to ensure you always have the latest and greatest version, even on older supported releases.
 
 ```sh
-$ sudo add-apt-repository ppa:ubuntu-desktop/ubuntu-make
-$ sudo apt update
-$ sudo apt install ubuntu-make
+$ snap install ubuntu-make --classic
 ```
+
+If installed via the snap it can be run as `ubuntu-make.umake`, or via the alias `umake`
+
+### Attention
+If the snap does not work there is a daily build ppa:
+
+```
+sudo add-apt-repository ppa:lyzardking/ubuntu-make
+sudo apt-get update
+sudo apt-get install ubuntu-make
+```
+
+## Listing
+
+Umake has three listing options:
+- `--list` to show all the frameworks
+- `--list-available` to show the available frameworks
+- `--list-installed` to show the installed frameworks
 
 ## Running the command line tool
 To run the tool:
@@ -133,7 +149,7 @@ Finally, you can run a selection of one or more tests:
 $ ./runtests tests/small/test_tools.py:TestConfigHandler
 ```
 
-This enables the debug profile by default, to display all outputs and logging information (in debug level).
+This enables the debug profile by default, to display all outputs and logging information (at debug level).
 
 You can activate/disable/change any of those default selected configurations with **--config/--coverage/--debug/--no-config** (see `runtests --help` for more information)
 
@@ -142,11 +158,11 @@ You can activate/disable/change any of those default selected configurations wit
 Some nose configurations are available in **confs/**. You will find:
 
 * **debug.nose**: this profile shows all outputs and logging information while turning debug logging on.
-* **prod.nose**: this profile keep all outputs captured, but display tests coverage results.
+* **prod.nose**: this profile keeps all outputs captured, but display tests coverage results.
 
-#### Check for python warnings:
+#### Check for Python warnings:
 
-**runtests** is compatible with showing the python warnings:
+**runtests** is compatible with showing the Python warnings:
 
 ```sh
 $ PYTHONWARNINGS=d ./runtests
@@ -167,7 +183,7 @@ $ bin/umake
 
 ### Developing using system package
 
-Instead of using a virtual environment, you can install system packages to be able to run the Ubuntu Make tests. The build dependencies are listed in *debian/control* and should be available in latest development ubuntu version. If you are using the latest LTS, you should find them in a dedicated [Ubuntu Make Build-dep ppa](https://launchpad.net/~ubuntu-desktop/+archive/ubuntu/ubuntu-make-builddeps).
+Instead of using a virtual environment, you can install system packages to be able to run the Ubuntu Make tests. The build dependencies are listed in *debian/control* and should be available in latest development Ubuntu version. If you are using the latest LTS, you should find them in a dedicated [Ubuntu Make Build-dep ppa](https://launchpad.net/~ubuntu-desktop/+archive/ubuntu/ubuntu-make-builddeps).
 
 ## Release management
 Refresh .pot files:

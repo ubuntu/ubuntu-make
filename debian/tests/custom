@@ -6,8 +6,8 @@ set -e
 # skip tests if not requested
 skip_if_no_in_list
 
-# require compiz to run as we might right large tests
-wait_for_compiz
+# require user session to run as we might have large tests
+wait_for_user_session
 
 run_tests $TESTS
 

@@ -157,3 +157,81 @@ class PhantomJSTests(LargeFrameworkTests):
         output = subprocess.check_output(self.command_as_list(compile_command)).decode()[:-1]
 
         self.assertEqual(output, "hello, world")
+
+
+class GeckodriverTests(LargeFrameworkTests):
+    """Tests for Geckodriver"""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 20
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "web", "geckodriver")
+        self.command_args = '{} web geckodriver'.format(UMAKE)
+
+    @property
+    def exec_path(self):
+        return os.path.join(self.installed_path, "geckodriver")
+
+    def test_default_install(self):
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        self.assert_exec_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+        self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn("Geckodriver is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_close()
+        self.assert_exec_exists()
+
+
+class ChromedriverTests(LargeFrameworkTests):
+    """Tests for Chromedriver"""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 20
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "web", "chromedriver")
+        self.command_args = '{} web chromedriver'.format(UMAKE)
+
+    @property
+    def exec_path(self):
+        return os.path.join(self.installed_path, "chromedriver")
+
+    def test_default_install(self):
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        self.assert_exec_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+        self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn("Chromedriver is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_close()
+        self.assert_exec_exists()

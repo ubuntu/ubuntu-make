@@ -153,41 +153,34 @@ def vm_run(args):
 
     artefacts_dir = tempfile.mkdtemp(prefix="umake-test-artefacts-")
 
-
-    cmds = ['adt-run', '-s',
-            # add ubuntu-make and ubuntu-make-builddeps ppas with their gpg key
-            '--setup-commands',
-            """apt-key adv --keyserver keyserver.ubuntu.com --recv-key 399B698EEA9EF163B6F9A0F62CC98497A1231595;
-            echo "deb http://ppa.launchpad.net/ubuntu-desktop/ubuntu-make-builddeps/ubuntu trusty main" > /etc/apt/sources.list.d/autopkgtest-ubuntu-desktop-ubuntu-make-builddeps.list;
-            echo "deb-src http://ppa.launchpad.net/ubuntu-desktop/ubuntu-make-builddeps/ubuntu trusty main" >> /etc/apt/sources.list.d/autopkgtest-ubuntu-desktop-ubuntu-make-builddeps.list;
-            echo "deb http://ppa.launchpad.net/ubuntu-desktop/ubuntu-make/ubuntu trusty main" > /etc/apt/sources.list.d/autopkgtest-ubuntu-desktop-ubuntu-make.list;
-            echo "deb-src http://ppa.launchpad.net/ubuntu-desktop/ubuntu-make/ubuntu trusty main" >> /etc/apt/sources.list.d/autopkgtest-ubuntu-desktop-ubuntu-make.list; apt-get update""",
-            # artefacts saving
-            "--output-dir", artefacts_dir,
-            # env variables setting up tests
-            '--env', "TESTS={}".format(' '.join(args.tests))]
+    cmds = ['autopkgtest']
 
     # default target to test is current tree
-    target = ['--built-tree', '.']
+    target = ['.']
     # test package from archive or ppa (the most recent)
     if args.test_package:
-        target = ["--apt-source", "ubuntu-make"]
+        target = ["ubuntu-make"]
     # git checkout testing
     if args.test_git:
-        target = ['--no-built-binaries', "--git-source", args.test_git]
+        target = [args.test_git]
     # local source package testing
     if args.test_source:
-        target = ["--source", args.test_source]
+        target = [args.test_source]
     cmds.extend(target)
 
+    cmds.extend([# artefacts saving
+                 "--output-dir", artefacts_dir,
+                 # env variables setting up tests
+                 '--env', "TESTS={}".format(' '.join(args.tests))])
+
     # add emulator options
-    cmds.extend(['---', 'qemu', '-o', '/var/tmp', args.image])
+    cmds.extend(['--', 'qemu', '-o', '/var/tmp', args.image])
 
     try:
         return_code = subprocess.call(cmds)
         print("Artefacts are available at {}".format(artefacts_dir))
     except FileNotFoundError:
-        print("adt-run isn't installed.")
+        print("autopkgtest isn't installed.")
         shutil.rmtree(artefacts_dir)
         return_code = 1
     sys.exit(return_code)

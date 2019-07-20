@@ -20,12 +20,10 @@
 """Tests the various umake tools"""
 
 from concurrent import futures
-from contextlib import contextmanager, suppress
 from gi.repository import GLib
 import os
 import shutil
 import subprocess
-import stat
 import sys
 import tempfile
 from textwrap import dedent
@@ -425,6 +423,7 @@ class TestLauncherIcons(LoggedTestCase):
 
     def setUp(self):
         super().setUp()
+        self.tmpHome = tempfile.mkdtemp()
         self.local_dir = tempfile.mkdtemp()
         os.mkdir(os.path.join(self.local_dir, "applications"))
         os.mkdir(os.path.join(self.local_dir, "icons"))
@@ -657,6 +656,7 @@ class TestLauncherIcons(LoggedTestCase):
         self.assertEqual(get_launcher_path("foo.desktop"), os.path.join(self.local_dir, "applications", "foo.desktop"))
 
     @patch("umake.tools.settings")
+    @patch.dict(os.environ, {'HOME': tempfile.mkdtemp()})
     def test_create_exec_path(self, settings_module):
         """Create link to the executable"""
         settings_module.DEFAULT_BINARY_LINK_PATH = os.path.join(self.local_dir, ".local", "share", "umake", "bin")
@@ -669,7 +669,8 @@ class TestMiscTools(LoggedTestCase):
     def test_get_application_desktop_file(self):
         """We return expect results with normal content"""
         self.assertEqual(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
-                                                            exec="/to/exec/path %f", comment="Comment for Name 1",
+                                                            try_exec="/to/exec/path", exec="command %f",
+                                                            comment="Comment for Name 1",
                                                             categories="Cat1:Cat2"),
                          dedent("""\
                            [Desktop Entry]
@@ -677,7 +678,8 @@ class TestMiscTools(LoggedTestCase):
                            Type=Application
                            Name=Name 1
                            Icon=/to/icon/path
-                           Exec=/to/exec/path %f
+                           TryExec=/to/exec/path
+                           Exec=command %f
                            Comment=Comment for Name 1
                            Categories=Cat1:Cat2
                            Terminal=false
@@ -687,15 +689,17 @@ class TestMiscTools(LoggedTestCase):
     def test_get_application_desktop_file_with_extra(self):
         """We return expect results with extra content"""
         self.assertEqual(tools.get_application_desktop_file(name="Name 1", icon_path="/to/icon/path",
-                                                            exec="/to/exec/path %f", comment="Comment for Name 1",
-                                                            categories="Cat1:Cat2", extra="Extra=extra1\nFoo=foo"),
+                                                            try_exec="/to/exec/path", exec="command %f",
+                                                            comment="Comment for Name 1", categories="Cat1:Cat2",
+                                                            extra="Extra=extra1\nFoo=foo"),
                          dedent("""\
                            [Desktop Entry]
                            Version=1.0
                            Type=Application
                            Name=Name 1
                            Icon=/to/icon/path
-                           Exec=/to/exec/path %f
+                           TryExec=/to/exec/path
+                           Exec=command %f
                            Comment=Comment for Name 1
                            Categories=Cat1:Cat2
                            Terminal=false
@@ -712,6 +716,7 @@ class TestMiscTools(LoggedTestCase):
                            Type=Application
                            Name=
                            Icon=
+                           TryExec=
                            Exec=
                            Comment=
                            Categories=

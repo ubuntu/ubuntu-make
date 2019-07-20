@@ -22,12 +22,10 @@
 from gettext import gettext as _
 import logging
 import os
-import json
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.tools import add_env_to_user, MainLoop
+from umake.tools import add_env_to_user
 from umake.ui import UI
-from umake.network.download_center import DownloadItem
 
 logger = logging.getLogger(__name__)
 
@@ -40,35 +38,18 @@ class KotlinCategory(umake.frameworks.BaseCategory):
 
 class KotlinLang(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Kotlin Lang", description=_("Kotlin language standalone compiler"),
-                         is_category_default=True, category=category,
+                         is_category_default=True,
                          packages_requirements=["openjdk-7-jre | openjdk-8-jre"],
                          download_page="https://api.github.com/repos/Jetbrains/kotlin/releases/latest",
                          dir_to_decompress_in_tarball="kotlinc",
-                         required_files_path=[os.path.join("bin", "kotlinc")])
+                         required_files_path=[os.path.join("bin", "kotlinc")],
+                         json=True, **kwargs)
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-
-        page = result[self.download_page]
-
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            assets = json.loads(page.buffer.read().decode())["assets"]
-            download_url = assets[0]["browser_download_url"]
-        except (json.JSONDecodeError, IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-
-        self.download_requests.append(DownloadItem(download_url, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        url = line["assets"][0]["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Add the Kotlin binary dir to PATH"""

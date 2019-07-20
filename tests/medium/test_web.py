@@ -32,7 +32,7 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["www.mozilla.org"]}
+        self.hosts = {443: ["www.mozilla.org", "download.mozilla.org"]}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "web", "firefox-dev")
@@ -67,15 +67,45 @@ class PhantomJSInContainer(ContainerTests, test_web.PhantomJSTests):
         self.assertFalse(self.path_exists(self.exec_path))
 
 
-class VisualStudioCodeInContainer(ContainerTests, test_web.VisualStudioCodeTest):
-    """This will test the Visual Studio Code integration inside a container"""
+class GeckodriverInContainer(ContainerTests, test_web.GeckodriverTests):
+    """This will test the Geckodriver integration inside a container"""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["code.visualstudio.com"], 80: ["go.microsoft.com"]}
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'vscode')
+        self.hosts = {443: ["api.github.com", "github.com"]}
         super().setUp()
         # override with container path
-        self.installed_path = os.path.join(self.install_base_path, "web", "visual-studio-code")
+        self.installed_path = os.path.join(self.install_base_path, "web", "geckodriver")
+
+    def test_install_with_changed_download_page(self):
+        """Installing Geckodriver should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
+                                               "repos", "mozilla", "geckodriver", "releases", "latest")
+        umake_command = self.command('{} web geckodriver'.format(UMAKE))
+        self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(self.exec_link))
+
+
+class ChromedriverInContainer(ContainerTests, test_web.ChromedriverTests):
+    """This will test the Chromedriver integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["chromedriver.storage.googleapis.com"]}
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "web", "chromedriver")
+
+    def test_install_with_changed_download_page(self):
+        """Installing Chromedriver should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "chromedriver.storage.googleapis.com",
+                                               "LATEST_RELEASE")
+        umake_command = self.command('{} web chromedriver'.format(UMAKE))
+        self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(self.exec_link))

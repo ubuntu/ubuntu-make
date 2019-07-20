@@ -12,23 +12,23 @@ description: |
   features!
 grade: stable
 confinement: classic
+base: core18
 
 apps:
   umake:
     command: bin/umake-wrapper
+    completer: umake-completion
 
 parts:
   umake:
     source: .
     plugin: python
     organize:
-      lib/python3/dist-packages/umake: lib/python3.5/site-packages/umake
+      lib/python3/dist-packages/umake: lib/python3.6/site-packages/umake
     build-packages:
       - gettext
-      - python3
       - python3-apt
       - python3-argcomplete
-      - python3-bs4
       - python3-gi
       - python3-gnupg
       - python3-setuptools
@@ -47,7 +47,6 @@ parts:
     stage-packages:
       - python3-apt
       - python3-argcomplete
-      - python3-bs4
       - python3-gi
       - python3-gnupg
       - python3-progressbar
@@ -57,7 +56,7 @@ parts:
       - libstdc++6
       - libc6
       - libuuid1
-      - libreadline6
+      - libreadline7
       - libtinfo5
       - libselinux1
       - libpcre3
@@ -66,8 +65,17 @@ parts:
       - libbz2-1.0
       - libgcc1
       - liblzma5
+      - libblkid1
+      - libmount1
+      - libncursesw5
+      - libdb5.3
+  umake-completion:
+    plugin: dump
+    source: snap/local
+    stage:
+      - umake-completion
   umake-wrapper:
-    source: snap/
+    source: snap/local
     plugin: dump
     organize:
       umake-wrapper: bin/umake-wrapper

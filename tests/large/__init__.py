@@ -106,7 +106,7 @@ class LargeFrameworkTests(LoggedTestCase):
 
     @property
     def exec_path(self):
-        return self._get_path_from_desktop_file("Exec")
+        return self._get_path_from_desktop_file("TryExec")
 
     def _get_path_from_desktop_file(self, key, abspath_transform=None):
         """get the path referred as key in the desktop filename exists"""

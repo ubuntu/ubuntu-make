@@ -25,11 +25,10 @@ from gettext import gettext as _
 import logging
 import os
 import re
-import subprocess
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.interactions import DisplayMessage
-from umake.tools import get_current_arch, add_env_to_user, ChecksumType, MainLoop
+from umake.tools import get_current_arch, add_env_to_user, ChecksumType
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -44,13 +43,14 @@ class NodejsCategory(umake.frameworks.BaseCategory):
 
 class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Nodejs Lang", description=_("Nodejs stable"), is_category_default=True,
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          download_page="https://nodejs.org/en/download/current",
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="node*",
-                         required_files_path=[os.path.join("bin", "node")])
+                         required_files_path=[os.path.join("bin", "node")],
+                         **kwargs)
     arch_trans = {
         "amd64": "x64",
         "i386": "x86"
@@ -69,7 +69,6 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
             UI.return_main_screen(status_code=1)
 
-        url = False
         for line in result[self.download_page].buffer:
             line_content = line.decode()
             with suppress(AttributeError):
@@ -108,7 +107,7 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
         """Add nodejs necessary env variables and move module folder"""
         if not self.prefix_set():
             with open(os.path.join(os.environ['HOME'], '.npmrc'), 'a+') as file:
-                file.write("prefix = ${HOME}/.npm_modules")
+                file.write("prefix = ${HOME}/.npm_modules\n")
 
         add_env_to_user(self.name, {"PATH": {"value": "{}:{}".format(os.path.join(self.install_path, "bin"),
                                                                      os.path.join(os.path.expanduser('~'),
@@ -124,5 +123,6 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
     def run_for(self, args):
         if args.lts:
             self.download_page = "https://nodejs.org/en/download/"
-        print('Download from {}'.format(self.download_page))
+        if not args.remove:
+            print('Download from {}'.format(self.download_page))
         super().run_for(args)

@@ -1,0 +1,23 @@
+_umake()
+{
+    local cur prev opts
+    _init_completion -s || return
+
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts=$(ls $SNAP/lib/python3.5/site-packages/umake/frameworks/ | sed '/\(__init__\|baseinstaller\)/d' | sed 's/.py//g' | tr '\n' ' ')
+    
+    case "$prev" in
+        go|web|maven|kotlin|ide|swift|nodejs|android|electronics|scala|games|rust|dart|crystal)
+            frameworks=$(cat $SNAP/lib/python3.5/site-packages/umake/frameworks/$prev.py | grep -oP '(?<=super\(\).__init__\(name=")[\w\s]+(?=\")' | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr '\n' ' ' | sed "s/$prev //g")
+            COMPREPLY=( $(compgen -W "$frameworks" -- $cur))
+            return 0
+            ;;
+        ubuntu-make.umake)
+            COMPREPLY=( $(compgen -W "$opts" -- $cur) )
+            return 0
+            ;;
+    esac
+}
+complete -F _umake ubuntu-make.umake

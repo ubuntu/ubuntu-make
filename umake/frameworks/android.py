@@ -24,7 +24,6 @@ from contextlib import suppress
 from gettext import gettext as _
 import logging
 import os
-import platform
 import re
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
@@ -43,22 +42,22 @@ class AndroidCategory(umake.frameworks.BaseCategory):
 
     def parse_license(self, tag, line, license_txt, in_license):
         """Parse Android download page for license"""
-        if line.startswith(tag):
+        if tag in line:
             in_license = True
         if in_license:
-            if line.startswith('</div>'):
+            if '<input id="agree_' in line:
                 in_license = False
             else:
                 license_txt.write(line)
         return in_license
 
-    def parse_download_link(self, tag, line, in_download):
+    def parse_download_link(self, tags, line, in_download, regex):
         """Parse Android download links, expect to find a sha1sum and a url"""
         url, sha1sum = (None, None)
-        if tag in line:
+        if all(tag in line for tag in tags):
             in_download = True
         if in_download:
-            p = re.search(r'href="(.*)"', line)
+            p = re.search(regex, line)
             with suppress(AttributeError):
                 url = p.group(1)
             p = re.search(r'<td>(\w+)</td>', line)
@@ -78,30 +77,35 @@ class AndroidCategory(umake.frameworks.BaseCategory):
 
 class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Android Studio", description=_("Android Studio (default)"), is_category_default=True,
-                         category=category, only_on_archs=_supported_archs, expect_license=True,
-                         packages_requirements=["openjdk-7-jdk | openjdk-8-jdk",
-                                                "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386"],
+                         only_on_archs=_supported_archs, expect_license=True,
+                         packages_requirements=["openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk",
+                                                "libc6:i386", "libncurses5:i386", "libstdc++6:i386",
+                                                "lib32z1", "zlib1g:i386"],
                          download_page="https://developer.android.com/studio/index.html",
-                         checksum_type=ChecksumType.sha256,
+                         # checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="android-studio",
                          desktop_filename="android-studio.desktop",
-                         required_files_path=[os.path.join("bin", "studio.sh")])
+                         required_files_path=[os.path.join("bin", "studio.sh")], **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
-        return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
+        return self.category.parse_license('<div id="studio_linux_bundle_download"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
         """Parse Android Studio download link, expect to find a sha1sum and a url"""
-        return self.category.parse_download_link('id="linux-bundle"', line, in_download)
+        return self.category.parse_download_link(['dl.google.com', 'linux.tar.gz'], line, in_download,
+                                                 r'href=\"(https://dl.google.com.*-linux.tar.gz)\"')
 
     def post_install(self):
         """Create the Android Studio launcher"""
+        add_env_to_user(self.name, {"ANDROID_HOME": {"value": self.install_path, "keep": False},
+                                    "ANDROID_SDK": {"value": self.install_path, "keep": False}})
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Android Studio"),
                         icon_path=os.path.join(self.install_path, "bin", "studio.png"),
-                        exec='"{}" %f'.format(os.path.join(self.install_path, "bin", "studio.sh")),
+                        try_exec=os.path.join(self.install_path, "bin", "studio.sh"),
+                        exec=self.exec_link_name,
                         comment=_("Android Studio developer environment"),
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-studio"))
@@ -109,36 +113,36 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
 class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Android SDK", description=_("Android SDK"),
-                         category=category, only_on_archs=_supported_archs, expect_license=True,
+                         only_on_archs=_supported_archs, expect_license=True,
                          packages_requirements=["openjdk-7-jdk | openjdk-8-jdk",
-                                                "libncurses5:i386", "libstdc++6:i386", "zlib1g:i386"],
+                                                "libc6:i386", "libncurses5:i386", "libstdc++6:i386",
+                                                "lib32z1", "zlib1g:i386"],
                          download_page="https://developer.android.com/studio/index.html",
-                         checksum_type=ChecksumType.sha256,
+                         # checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball=".",
-                         required_files_path=[os.path.join("tools", "android")])
+                         required_files_path=[os.path.join("tools", "android"),
+                                              os.path.join("tools", "bin", "sdkmanager")],
+                         **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android SDK download page for license"""
-        return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
+        return self.category.parse_license('<div id="sdk_linux_download"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
         """Parse Android SDK download link, expect to find a SHA-1 and a url"""
-        return self.category.parse_download_link('id="linux-tools"', line, in_download)
+        return self.category.parse_download_link(['dl.google.com', 'sdk-tools-linux'], line, in_download,
+                                                 r'href=\"(https://dl.google.com.*-linux.*.zip)\"')
 
     def post_install(self):
         """Add necessary environment variables"""
-        add_env_to_user(self.name, {"ANDROID_HOME": {"value": self.install_path, "keep": False}})
-
         # add a few fall-back variables that might be used by some tools
-        add_env_to_user(self.name, {"ANDROID_SDK": {"value": "$ANDROID_HOME", "keep": False}})
         # do not set ANDROID_SDK_HOME here as that is the path of the preference folder expected by the Android tools
-
-        # add "platform-tools" to PATH to ensure "adb" can be run once the platform tools are installed via
-        # the SDK manager
-        add_env_to_user(self.name, {"PATH": {"value": [os.path.join("$ANDROID_HOME", "tools"),
-                                                       os.path.join("$ANDROID_HOME", "platform-tools")]}})
+        add_env_to_user(self.name, {"ANDROID_HOME": {"value": self.install_path, "keep": False},
+                                    "ANDROID_SDK": {"value": self.install_path, "keep": False},
+                                    "PATH": {"value": [os.path.join(self.install_path, "tools"),
+                                                       os.path.join(self.install_path, "tools", "bin")]}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
         # print wiki page message
@@ -147,32 +151,60 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
                                           "https://developer.android.com/sdk/installing/adding-packages.html")))
 
 
-class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
+class AndroidPlatformTools(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
-        super().__init__(name="Android NDK", description=_("Android NDK"),
-                         category=category, only_on_archs='amd64', expect_license=True,
-                         download_page="https://developer.android.com/ndk/downloads/index.html",
-                         checksum_type=ChecksumType.sha1,
-                         packages_requirements=['clang'],
-                         dir_to_decompress_in_tarball="android-ndk-*",
-                         required_files_path=[os.path.join("ndk-build")])
+    def __init__(self, **kwargs):
+        super().__init__(name="Android Platform Tools", description=_("Android Platform Tools"),
+                         only_on_archs=_supported_archs, expect_license=True,
+                         # Install the android-sdk-platform-tools-common package for the udev rules
+                         packages_requirements=['android-sdk-platform-tools-common'],
+                         download_page="https://developer.android.com/studio/releases/platform-tools/index.html",
+                         dir_to_decompress_in_tarball=".",
+                         required_files_path=[os.path.join("platform-tools", "adb")],
+                         **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
-        """Parse Android NDK download page for license"""
-        return self.category.parse_license('<div class="sdk-terms"', line, license_txt, in_license)
+        """Parse Android SDK download page for license"""
+        return self.category.parse_license('<div class="dialog-content-stretch sdk-terms">',
+                                           line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
-        """Parse Android NDK download link, expect to find a sha1sum and a url"""
-        return self.category.parse_download_link('<td>Linux ', line, in_download)
+        """Parse Android SDK download link, expect to find a SHA-1 and a url"""
+        return self.category.parse_download_link(['dl.google.com', 'linux.zip'], line, in_download,
+                                                 r'href=\"(https://dl.google.com.*-linux.*.zip)\"')
 
     def post_install(self):
         """Add necessary environment variables"""
-        add_env_to_user(self.name, {"NDK_ROOT": {"value": self.install_path, "keep": False}})
+        add_env_to_user(self.name, {"PATH": {"value": [os.path.join(self.install_path, "platform-tools")]}})
+        UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
+
+class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Android NDK", description=_("Android NDK"),
+                         only_on_archs='amd64', expect_license=True,
+                         download_page="https://developer.android.com/ndk/downloads/index.html",
+                         # checksum_type=ChecksumType.sha1,
+                         packages_requirements=['clang'],
+                         dir_to_decompress_in_tarball="android-ndk-*",
+                         required_files_path=[os.path.join("ndk-build")], **kwargs)
+
+    def parse_license(self, line, license_txt, in_license):
+        """Parse Android NDK download page for license"""
+        return self.category.parse_license('<div id="ndk_linux64_download"', line, license_txt, in_license)
+
+    def parse_download_link(self, line, in_download):
+        """Parse Android NDK download link, expect to find a sha1sum and a url"""
+        return self.category.parse_download_link(['dl.google.com', 'linux-x86_64.zip'], line, in_download,
+                                                 r'href=\"(https://dl.google.com.*-linux.*.zip)\"')
+
+    def post_install(self):
+        """Add necessary environment variables"""
         # add a few fall-back variables that might be used by some tools
-        add_env_to_user(self.name, {"ANDROID_NDK": {"value": "$NDK_ROOT", "keep": False}})
-        add_env_to_user(self.name, {"ANDROID_NDK_HOME": {"value": "$NDK_ROOT", "keep": False}})
+        add_env_to_user(self.name, {"NDK_ROOT": {"value": self.install_path, "keep": False},
+                                    "ANDROID_NDK": {"value": self.install_path, "keep": False},
+                                    "ANDROID_NDK_HOME": {"value": self.install_path, "keep": False}})
 
         # print wiki page message
         UI.display(DisplayMessage("NDK installed in {}. More information on how to use it on {}".format(
@@ -182,6 +214,6 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
 
 class EclipseADTForRemoval(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Eclipse ADT", description="For removal only (not supported upstream anymore)",
-                         download_page=None, category=category, only_on_archs=_supported_archs, only_for_removal=True)
+                         download_page=None, only_on_archs=_supported_archs, only_for_removal=True, **kwargs)

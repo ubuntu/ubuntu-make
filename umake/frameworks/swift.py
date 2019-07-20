@@ -46,13 +46,14 @@ class SwiftCategory(umake.frameworks.BaseCategory):
 
 class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Swift Lang", description=_("Swift compiler (default)"), is_category_default=True,
                          packages_requirements=["clang", "libicu-dev"],
-                         category=category, only_on_archs=['amd64'],
+                         only_on_archs=['amd64'],
                          download_page="https://swift.org/download/",
                          dir_to_decompress_in_tarball="swift*",
-                         required_files_path=[os.path.join("usr", "bin", "swift")])
+                         required_files_path=[os.path.join("usr", "bin", "swift")],
+                         **kwargs)
         self.asc_url = "https://swift.org/keys/all-keys.asc"
 
     def parse_download_link(self, line, in_download):
@@ -82,10 +83,11 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
             line_content = line.decode()
             (new_sig_url, in_download) = self.parse_download_link(line_content, in_download)
             if str(new_sig_url) > str(sig_url):
-                tmp_release = re.search("ubuntu(.....).tar", new_sig_url).group(1)
-                if tmp_release <= get_current_ubuntu_version():
-                    sig_url = new_sig_url
-
+                # Avoid fetching development snapshots
+                if 'DEVELOPMENT-SNAPSHOT' not in new_sig_url:
+                    tmp_release = re.search("ubuntu(.....).tar", new_sig_url).group(1)
+                    if tmp_release <= get_current_ubuntu_version():
+                        sig_url = new_sig_url
         if not sig_url:
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)

@@ -22,10 +22,9 @@
 
 from . import ContainerTests
 import os
-import pexpect
 
 from ..large import test_rust
-from ..tools import get_data_dir, UMAKE, swap_file_and_restore, spawn_process
+from ..tools import get_data_dir, UMAKE
 
 
 class RustInContainer(ContainerTests, test_rust.RustTests):

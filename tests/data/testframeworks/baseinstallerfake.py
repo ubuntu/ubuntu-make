@@ -74,15 +74,15 @@ class BaseCategory(umake.frameworks.BaseCategory):
 
 class BaseFramework(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Base Framework", description=_("Base Framework (default)"), is_category_default=True,
-                         category=category, only_on_archs=_supported_archs, expect_license=True,
+                         only_on_archs=_supported_archs, expect_license=True,
                          packages_requirements=["jayatana"],
                          download_page="http://localhost:8765/index.html",
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="base-framework-*",
                          desktop_filename="base-framework.desktop",
-                         required_files_path=[os.path.join("bin", "studio.sh")])
+                         required_files_path=[os.path.join("bin", "studio.sh")], **kwargs)
 
         arch = platform.machine()
         self.tag = 'id="linux-bundle64"'
@@ -125,7 +125,8 @@ class BaseFramework(umake.frameworks.baseinstaller.BaseInstaller):
         """Create the launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Base Framework"),
                         icon_path=os.path.join(self.install_path, "bin", "studio.png"),
-                        exec='"{}" %f'.format(self.exec_path),
+                        try_exec=os.path.join(self.install_path, "bin", "studio.sh"),
+                        exec=self.exec_link_name,
                         comment=_("Base Framework developer environment"),
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-base-framework"))

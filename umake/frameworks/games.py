@@ -26,13 +26,12 @@ from gettext import gettext as _
 import logging
 import os
 import re
+import shutil
 import stat
-import json
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem, DownloadCenter
-from umake.tools import as_root, create_launcher, get_application_desktop_file, get_current_arch,\
-    ChecksumType, MainLoop, Checksum
+from umake.tools import as_root, create_launcher, get_application_desktop_file, get_current_arch
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -46,50 +45,73 @@ class GamesCategory(umake.frameworks.BaseCategory):
 
 class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Stencyl", description=_("Stencyl game developer IDE"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          download_page="http://www.stencyl.com/download/",
                          desktop_filename="stencyl.desktop",
                          required_files_path=["Stencyl"],
-                         packages_requirements=["libxtst6:i386", "libxext6:i386", "libxi6:i386", "libncurses5:i386",
-                                                "libxt6:i386", "libxpm4:i386", "libxmu6:i386",
-                                                "libgtk2.0-0:i386", "libatk1.0-0:i386", "libc6:i386", "libcairo2:i386",
-                                                "libexpat1:i386", "libfontconfig1:i386", "libfreetype6:i386",
-                                                "libglib2.0-0:i386", "libice6:i386", "libpango1.0-0:i386",
-                                                "libpng12-0:i386", "libsm6:i386", "libxau6:i386", "libxcursor1:i386",
-                                                "libxdmcp6:i386", "libxfixes3:i386", "libx11-6:i386",
-                                                "libxinerama1:i386", "libxrandr2:i386", "libxrender1:i386",
-                                                "zlib1g:i386", "libnss3-1d:i386", "libnspr4-0d:i386", "libcurl3:i386",
-                                                "libasound2:i386"])
+                         packages_requirements=["openjdk-8-jre | openjdk-11-jre"],
+                         **kwargs)
+
+    PERM_DOWNLOAD_LINKS = {
+        "amd64": "http://www.stencyl.com/download/get/lin64",
+        "i386": "http://www.stencyl.com/download/get/lin32"
+    }
 
     def parse_download_link(self, line, in_download):
-        """Parse Stencyl download links"""
-        url, md5sum = (None, None)
-        if ">Linux <" in line:
-            in_download = True
-        if in_download:
-            regexp = r'href="(.*)"><.*64-'
-            if get_current_arch() == "i386":
-                regexp = r'href="(.*)"><.*32-'
-            p = re.search(regexp, line)
-            with suppress(AttributeError):
-                url = p.group(1)
-            if '<div class="spacer"><br/><br/>' in line:
-                in_download = False
-
-        if url is None:
-            return (None, in_download)
+        """We have persistent links for Stencyl, return it right away"""
+        url = self.PERM_DOWNLOAD_LINKS[get_current_arch()]
         return ((url, None), in_download)
 
     def post_install(self):
         """Create the Stencyl launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Stencyl"),
                         icon_path=os.path.join(self.install_path, "data", "other", "icon-30x30.png"),
-                        exec='"{}" %f'.format(self.exec_path),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;",
                         extra="Path={}\nStartupWMClass=stencyl-sw-Launcher".format(self.install_path)))
+
+
+class Blender(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Blender", description=_("Very fast and versatile 3D modeller/renderer"),
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://www.blender.org/download/",
+                         desktop_filename="blender.desktop",
+                         required_files_path=["blender"],
+                         dir_to_decompress_in_tarball='blender*', **kwargs)
+
+    arch_trans = {
+        "amd64": "x86_64",
+        "i386": "i686"
+    }
+
+    def parse_download_link(self, line, in_download):
+        """Parse Blender download links"""
+        url = None
+        if '.tar.bz2' in line:
+            p = re.search(r'href=\"(https://www\.blender\.org/[^<]*{}\.tar\.bz2)/?"'.format(
+                          self.arch_trans[get_current_arch()]), line)
+            with suppress(AttributeError):
+                url = p.group(1)
+                filename = 'release' + re.search('blender-(.*)-linux', url).group(1).replace('.', '') + '.md5'
+                self.checksum_url = os.path.join(os.path.dirname(url),
+                                                 filename).replace('download', 'release').replace('www', 'download')
+                url = url.replace('www.blender.org/download', 'download.blender.org/release')
+        return ((url, None), in_download)
+
+    def post_install(self):
+        """Create the Blender launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Blender"),
+                        icon_path=os.path.join(self.install_path, "icons", "scalable", "apps", "blender.svg"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=self.description,
+                        categories="Development;IDE;Graphics"))
 
 
 def _chrome_sandbox_setuid(path):
@@ -108,16 +130,15 @@ def _chrome_sandbox_setuid(path):
 
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
-                         category=category, only_on_archs=['amd64'],
+                         only_on_archs=['amd64'],
                          download_page="https://forum.unity3d.com/" +
-                                       "threads/unity-on-linux-release-notes-and-known-issues.350256",
+                                       "threads/unity-on-linux-release-notes-and-known-issues.350256/page-2",
                          match_last_link=True,
-                         checksum_type=ChecksumType.sha1,
-                         dir_to_decompress_in_tarball='unity-editor*',
+                         dir_to_decompress_in_tarball='Editor',
                          desktop_filename="unity3d-editor.desktop",
-                         required_files_path=[os.path.join("Editor", "Unity")],
+                         required_files_path=[os.path.join("Unity")],
                          # we need root access for chrome sandbox setUID
                          need_root_access=True,
                          # Note that some packages requirements essential to the system itself are not listed (we
@@ -130,181 +151,210 @@ class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
                               libgl1-mesa-glx-lts-vivid | libgl1-mesa-glx-lts-wily",
                              "libnspr4", "libnss3", "libpango1.0-0", "libpq5", "libxcomposite1",
                              "libxcursor1", "libxdamage1", "libxext6", "libxfixes3", "libxi6",
-                             "libxrandr2", "libxrender1", "libxtst6",
-                             "monodevelop"])  # monodevelop is for mono deps, temporary
-        self.download_url = None
-        self.checksum = None
-
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        """Download files to download + license and check it"""
-        logger.debug("Parse download metadata")
-
-        error_msg = result[self.download_page].error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        in_download = False
-        url_found = False
-        for line in result[self.download_page].buffer:
-            if url_found is None or self.match_last_link:
-                line_content = line.decode()
-                (_url_found, in_download) = self.parse_download_link(line_content, in_download)
-                if not url_found:
-                    url_found = _url_found
-        if not url_found:
-            logger.error("Download page changed its syntax or is not parsable")
-            UI.return_main_screen(status_code=1)
-        DownloadCenter(urls=[DownloadItem(self.download_url, None)],
-                       on_done=self.get_url_and_start_download, download=False)
+                             "libxrandr2", "libxrender1", "libxtst6"],
+                         **kwargs)
 
     def parse_download_link(self, line, in_download):
         """Parse Unity3d download links"""
-        url_found = False
+        url = None
         if "beta.unity" in line:
             in_download = True
-            p = re.search(
-                r'href="(http://beta.unity.*.html)" target="_blank" class="externalLink">http://beta.unity3d.com',
-                line)
+        if in_download:
+            p = re.search(r'a href="(https:\/\/beta\.unity3d\.com\/download\/[^\/]+)', line)
             with suppress(AttributeError):
-                url_found = True
-                self.download_url = p.group(1)
-        if in_download is True:
-            p = re.search(r'sh: (\w+)\)', line)
-            with suppress(AttributeError):
-                self.checksum = p.group(1)
-        return (url_found, in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_url_and_start_download(self, download_result):
-        res = download_result[self.download_url]
-        text = res.buffer.getvalue().decode('utf-8')
-        url = re.search(r'http.*?.sh', text).group(0)
+                url = os.path.join(p.group(1), "LinuxEditorInstaller/Unity.tar.xz")
         if url is None:
-            logger.error("Download page changed its syntax or is not parsable (missing url)")
-            UI.return_main_screen(status_code=1)
-        if self.checksum is None:
-            logger.error("Download page changed its syntax or is not parsable (missing checksum)")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download link for {}, checksum: {}".format(url, self.checksum))
-        self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, self.checksum)))
-        self.start_download_and_install()
-
-    def decompress_and_install(self, fds):
-        """Override to strip the unwanted shell header part"""
-        logger.debug("Start looking at the archive inside the script")
-        for line in fds[0]:
-            if line.startswith(b"__ARCHIVE_BEGINS_HERE__"):
-                logger.debug("Found the archive inside the script")
-                break
-        super().decompress_and_install(fds)
+            return (None, in_download)
+        return ((url, None), in_download)
 
     def post_install(self):
         """Create the Unity 3D launcher and setuid chrome sandbox"""
         with futures.ProcessPoolExecutor(max_workers=1) as executor:
             # chrome sandbox requires this: https//code.google.com/p/chromium/wiki/LinuxSUIDSandbox
-            f = executor.submit(_chrome_sandbox_setuid, os.path.join(self.install_path, "Editor", "chrome-sandbox"))
+            f = executor.submit(_chrome_sandbox_setuid, os.path.join(self.install_path, "chrome-sandbox"))
             if not f.result():
                 UI.return_main_screen(status_code=1)
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Unity3D Editor"),
-                        icon_path=os.path.join(self.install_path, "unity-editor-icon.png"),
-                        exec=self.exec_path,
+                        icon_path=os.path.join(self.install_path, "Data", "Resources", "LargeUnityIcon.png"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))
 
 
 class Twine(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Twine", description=_("Twine tool for creating interactive and nonlinear stories"),
-                         category=category, only_on_archs=['i386', 'amd64'],
-                         download_page="http://twinery.org/",
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://api.github.com/repos/klembot/twinejs/releases/latest",
                          dir_to_decompress_in_tarball='twine*',
                          desktop_filename="twine.desktop",
-                         required_files_path=["Twine"])
+                         required_files_path=["Twine"],
+                         json=True, **kwargs)
         # add logo download as the tar doesn't provide one
-        self.download_requests.append(DownloadItem("http://twinery.org/img/logo.svg", None))
+        self.icon_url = "https://github.com/klembot/twinejs/blob/master/icons/app.svg"
+        self.icon_name = 'twine.svg'
+
+    arch_trans = {
+        "amd64": "64",
+        "i386": "32"
+    }
 
     def parse_download_link(self, line, in_download):
         """Parse Twine download links"""
         url = None
-        regexp = r'href="(.*)" .*linux64'
-        if get_current_arch() == "i386":
-            regexp = r'href="(.*)" .*linux32'
-        p = re.search(regexp, line)
-        with suppress(AttributeError):
-            url = p.group(1)
-        return ((url, None), False)
-
-    def decompress_and_install(self, fds):
-        # if icon, we grab the icon name to reference it later on
-        for fd in fds:
-            if fd.name.endswith(".svg"):
-                orig_icon_name = os.path.basename(fd.name)
-                break
-        else:
-            logger.error("We couldn't download the Twine icon")
-            UI.return_main_screen(status_code=1)
-        super().decompress_and_install(fds)
-        # rename the asset logo
-        self.icon_name = "logo.svg"
-        os.rename(os.path.join(self.install_path, orig_icon_name), os.path.join(self.install_path, self.icon_name))
+        for asset in line["assets"]:
+            if 'linux{}'.format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Create the Twine launcher"""
+        DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
+                       on_done=self.save_icon, download=True)
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Twine"),
                         icon_path=os.path.join(self.install_path, self.icon_name),
-                        exec='"{}" %f'.format(self.exec_path),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))
+
+    def save_icon(self, download_result):
+        """Save correct Twine icon"""
+        icon = download_result.pop(self.icon_url).fd.name
+        shutil.copy(icon, os.path.join(self.install_path, self.icon_name))
+        logger.debug("Copied icon: {}".format(self.icon_url))
 
 
 class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, category):
+    def __init__(self, **kwargs):
         super().__init__(name="Superpowers", description=_("The HTML5 2D+3D game maker"),
-                         category=category, only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['i386', 'amd64'],
                          download_page="https://api.github.com/repos/superpowers/superpowers-app/releases/latest",
                          dir_to_decompress_in_tarball='superpowers*',
                          desktop_filename="superpowers.desktop",
-                         required_files_path=["Superpowers"])
+                         required_files_path=["Superpowers"],
+                         json=True, **kwargs)
 
     arch_trans = {
         "amd64": "x64",
         "i386": "ia32"
     }
 
-    @MainLoop.in_mainloop_thread
-    def get_metadata_and_check_license(self, result):
-        logger.debug("Fetched download page, parsing.")
-        page = result[self.download_page]
-        error_msg = page.error
-        if error_msg:
-            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
-            UI.return_main_screen(status_code=1)
-
-        try:
-            assets = json.loads(page.buffer.read().decode())["assets"]
-            download_url = None
-            for asset in assets:
-                if "linux-{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
-                    download_url = asset["browser_download_url"]
-            if not download_url:
-                raise IndexError
-        except (json.JSONDecodeError, IndexError):
-            logger.error("Can't parse the download URL from the download page.")
-            UI.return_main_screen(status_code=1)
-        logger.debug("Found download URL: " + download_url)
-
-        self.download_requests.append(DownloadItem(download_url, None))
-        self.start_download_and_install()
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if "linux-{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Create the Superpowers launcher"""
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Superpowers"),
                         icon_path=os.path.join(self.install_path, "resources", "app", "renderer",
                                                "images", "superpowers-256.png"),
-                        exec='"{}" %f'.format(self.exec_path),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))
+
+
+class GDevelop(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="GDevelop", description=_("Create your own games"),
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://api.github.com/repos/4ian/GD/releases/latest",
+                         packages_requirements=["libgconf-2-4"],
+                         dir_to_decompress_in_tarball='gdevelop*',
+                         desktop_filename="gdevelop.desktop",
+                         required_files_path=["gdevelop"],
+                         json=True, **kwargs)
+        self.icon_filename = "GDevelop.png"
+        self.icon_url = os.path.join("https://raw.githubusercontent.com/4ian/GD/master/Binaries/Packaging",
+                                     "linux-extra-files/usr/share/icons/hicolor/128x128/apps", self.icon_filename)
+
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if ".tar.gz" in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
+
+    def post_install(self):
+        """Create the GDevelop launcher"""
+        DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
+                       on_done=self.save_icon, download=True)
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("GDevelop"),
+                        icon_path=os.path.join(self.install_path, self.icon_filename),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=self.description,
+                        categories="Development;IDE;"))
+
+    def save_icon(self, download_result):
+        """Save correct GDevelop icon"""
+        icon = download_result.pop(self.icon_url).fd.name
+        shutil.copy(icon, os.path.join(self.install_path, self.icon_filename))
+        logger.debug("Copied icon: {}".format(self.icon_url))
+
+
+class Godot(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Godot", description=_("The game engine you waited for"),
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://godotengine.org/download/linux",
+                         desktop_filename="godot.desktop",
+                         required_files_path=['godot'],
+                         **kwargs)
+        self.icon_url = "https://godotengine.org/themes/godotengine/assets/download/godot_logo.svg"
+        self.icon_filename = "Godot.svg"
+
+    arch_trans = {
+        "amd64": "64",
+        "i386": "32"
+    }
+
+    def parse_download_link(self, line, in_download):
+        """Parse Godot download links"""
+        url = None
+        if '{}.zip'.format(self.arch_trans[get_current_arch()]) in line:
+            in_download = True
+            p = re.search(r'href=\"(.*\.zip)\"', line)
+            with suppress(AttributeError):
+                url = p.group(1)
+                bin = re.search(r'(Godot.*)\.zip', url)
+                self.required_files_path[0] = bin.group(1)
+
+        if url is None:
+            return (None, in_download)
+        return ((url, None), in_download)
+
+    def post_install(self):
+        """Create the Godot launcher"""
+        # Override the exec_path.
+        # Rename the binary to remove the version.
+        self.set_exec_path()
+        shutil.move(self.exec_path, os.path.join(self.install_path, 'godot'))
+        self.exec_path = os.path.join(self.install_path, 'godot')
+
+        DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
+                       on_done=self.save_icon, download=True)
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Godot"),
+                        icon_path=os.path.join(self.install_path, self.icon_filename),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=self.description,
+                        categories="Development;IDE;"))
+
+    def save_icon(self, download_result):
+        """Save correct Godot icon"""
+        icon = download_result.pop(self.icon_url).fd.name
+        shutil.copy(icon, os.path.join(self.install_path, self.icon_filename))
+        logger.debug("Copied icon: {}".format(self.icon_url))

@@ -25,7 +25,7 @@ import logging
 import logging.config
 import os
 import sys
-from umake.frameworks import BaseCategory, load_frameworks
+from umake.frameworks import load_frameworks
 from umake.tools import MainLoop
 from .ui import cli
 import yaml
@@ -56,6 +56,14 @@ def _setup_logging(env_key='LOG_CFG', level=_default_log_level):
     """
     path = os.getenv(env_key, '')
     logging.basicConfig(level=level, format="%(levelname)s: %(message)s")
+    if level == logging.DEBUG:
+        logger.debug("Set http/requests logger to debug")
+        import http.client as http_client
+        http_client.HTTPConnection.debuglevel = 1
+
+        requests_log = logging.getLogger("requests.packages.urllib3")
+        requests_log.setLevel(logging.DEBUG)
+        requests_log.propagate = True
     if level == _default_log_level:
         if os.path.exists(path):
             with open(path, 'rt') as f:
@@ -83,6 +91,15 @@ def set_logging_from_args(args, parser):
         _setup_logging(level=logging.DEBUG)
     else:
         _setup_logging()
+
+
+def should_load_all_frameworks(args):
+    """Set partial or complete framework loading condition based on arg"""
+    for arg in args[1:]:
+        if arg in ["-l", "--list", "--list-installed", "--list-available"]:
+            return True
+
+    return False
 
 
 class _HelpAction(argparse._HelpAction):
@@ -117,6 +134,11 @@ def main():
 
     parser.add_argument('-r', '--remove', action="store_true", help=_("Remove specified framework if installed"))
 
+    list_group = parser.add_argument_group("List frameworks").add_mutually_exclusive_group()
+    list_group.add_argument('-l', '--list', action="store_true", help=_("List all frameworks"))
+    list_group.add_argument('--list-installed', action="store_true", help=_("List installed frameworks"))
+    list_group.add_argument('--list-available', action="store_true", help=_("List installable frameworks"))
+
     parser.add_argument('--version', action="store_true", help=_("Print version and exit"))
 
     # set logging ignoring unknown options
@@ -124,8 +146,10 @@ def main():
 
     mainloop = MainLoop()
 
-    # load frameworks and initialize parser
-    load_frameworks()
+    # load frameworks
+    load_frameworks(force_loading=should_load_all_frameworks(sys.argv))
+
+    # initialize parser
     cli.main(parser)
 
     mainloop.run()

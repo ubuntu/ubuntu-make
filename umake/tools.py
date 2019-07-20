@@ -347,7 +347,7 @@ def add_exec_link(exec_path, destination_name):
     os.symlink(exec_path, full_dest_path)
 
 
-def get_application_desktop_file(name="", icon_path="", exec="", comment="", categories="", extra=""):
+def get_application_desktop_file(name="", icon_path="", try_exec="", exec="", comment="", categories="", extra=""):
     """Get a desktop file string content"""
     return dedent("""\
                 [Desktop Entry]
@@ -355,12 +355,13 @@ def get_application_desktop_file(name="", icon_path="", exec="", comment="", cat
                 Type=Application
                 Name={name}
                 Icon={icon_path}
+                TryExec={try_exec}
                 Exec={exec}
                 Comment={comment}
                 Categories={categories}
                 Terminal=false
                 {extra}
-                """).format(name=name, icon_path=icon_path, exec=exec,
+                """).format(name=name, icon_path=icon_path, try_exec=try_exec, exec=exec,
                             comment=comment, categories=categories, extra=extra)
 
 

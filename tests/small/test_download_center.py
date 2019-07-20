@@ -574,7 +574,12 @@ class TestDownloadCenterSecure(LoggedTestCase):
         TestDownloadCenter.wait_for_callback(self, self.callback)
 
         result = self.callback.call_args[0][0][url]
-        self.assertIn("CERTIFICATE_VERIFY_FAILED", result.error)
+        # disco python changed the error type
+        found = False
+        for invalidError in ["CERTIFICATE_VERIFY_FAILED", "bad handshake"]:
+            if invalidError in result.error:
+                found = True
+        self.assertTrue(found)
         self.assertIsNone(result.buffer)
         self.assertIsNone(result.fd)
         self.expect_warn_error = True

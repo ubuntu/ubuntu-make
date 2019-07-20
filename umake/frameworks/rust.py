@@ -23,16 +23,12 @@
 
 from contextlib import suppress
 from gettext import gettext as _
-from glob import glob
 import logging
 import os
 import re
-from bs4 import BeautifulSoup
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.network.download_center import DownloadItem, DownloadCenter
-from umake.tools import get_current_arch, add_env_to_user, ChecksumType, \
-    MainLoop, Checksum
+from umake.tools import get_current_arch, add_env_to_user
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -46,27 +42,23 @@ class RustCategory(umake.frameworks.BaseCategory):
 
 
 class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
-    # Button labels on the download page.
+    def __init__(self, **kwargs):
+        super().__init__(name="Rust Lang",
+                         description=_("The official Rust distribution"),
+                         is_category_default=True,
+                         only_on_archs=['i386', 'amd64'],
+                         download_page="https://www.rust-lang.org/en-US/other-installers.html",
+                         dir_to_decompress_in_tarball="rust-*",
+                         **kwargs)
     arch_trans = {
         "amd64": "x86_64",
         "i386": "i686"
     }
 
-    def __init__(self, category):
-        super().__init__(name="Rust Lang",
-                         description=_("The official Rust distribution"),
-                         is_category_default=True,
-                         category=category, only_on_archs=['i386', 'amd64'],
-                         download_page="https://www.rust-lang.org/en-US/other-installers.html",
-                         dir_to_decompress_in_tarball="rust-*")
-        self.arch = get_current_arch()
-
     def parse_download_link(self, line, in_download):
         """Parse Rust download link, expect to find a url"""
         url = None
-        if '{}-unknown-linux-gnu.tar.gz">'.format(self.arch_trans[self.arch]) in line:
-            in_download = True
-        if in_download:
+        if '{}-unknown-linux-gnu.tar.gz">'.format(self.arch_trans[get_current_arch()]) in line:
             p = re.search(r'href="(.*)">', line)
             with suppress(AttributeError):
                 url = p.group(1)
@@ -79,10 +71,12 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
                                                                      os.path.join(self.install_path, "cargo", "bin"))},
                                     "LD_LIBRARY_PATH": {"value": os.path.join(self.install_path, "rustc", "lib")}})
 
-        # adjust for rust 1.5 some symlinks magic to have stdlib craft available
-        os.chdir(os.path.join(self.install_path, "rustc", "lib"))
-        os.rename("rustlib", "rustlib.init")
-        os.symlink(glob(os.path.join('..', '..', 'rust-std-*', 'lib', 'rustlib'))[0], 'rustlib')
-        os.symlink(os.path.join('..', 'rustlib.init', 'etc'), os.path.join('rustlib', 'etc'))
+        # adjust for rust: some symlinks magic to have stdlib craft available
+        arch_lib_folder = '{}-unknown-linux-gnu'.format(self.arch_trans[get_current_arch()])
+        lib_folder = os.path.join(self.install_path, 'rust-std-{}'.format(arch_lib_folder),
+                                  'lib', 'rustlib', arch_lib_folder, 'lib')
+        for f in os.listdir(lib_folder):
+            os.symlink(os.path.join(lib_folder, f),
+                       os.path.join(self.install_path, 'rustc', 'lib', 'rustlib', arch_lib_folder, 'lib', f))
 
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))

@@ -137,9 +137,9 @@ class BaseCategory():
 
 class BaseFramework(metaclass=abc.ABCMeta):
 
-    def __init__(self, name, description, category, logo_path=None, is_category_default=False, install_path_dir=None,
-                 only_on_archs=None, only_ubuntu_version=None, packages_requirements=None, only_for_removal=False,
-                 expect_license=False, need_root_access=False):
+    def __init__(self, name, description, category, force_loading=False, logo_path=None, is_category_default=False,
+                 install_path_dir=None, only_on_archs=None, only_ubuntu_version=None, packages_requirements=None,
+                 only_for_removal=False, expect_license=False, need_root_access=False, json=False):
         self.name = name
         self.description = description
         self.logo_path = None
@@ -197,7 +197,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
             pass
 
         # This requires install_path and will register need_root or not
-        if not self.is_installed and not self.is_installable:
+        if not force_loading and not self.is_installed and not self.is_installable:
             logger.info("Don't register {} as it's not installable on this configuration.".format(name))
             return
 
@@ -243,10 +243,13 @@ class BaseFramework(metaclass=abc.ABCMeta):
 
         if self.need_root_access and os.geteuid() != 0:
             logger.debug("Requesting root access")
-            cmd = ["sudo", "-E", "env", "PATH={}".format(os.getenv("PATH"))]
+            cmd = ["sudo", "-E", "env"]
             for var in ["PATH", "LD_LIBRARY_PATH", "PYTHONUSERBASE", "PYTHONHOME"]:
                 if os.getenv(var):
                     cmd.append("{}={}".format(var, os.getenv(var)))
+            if os.getenv("SNAP"):
+                logger.debug("Found snap environment. Running correct python version")
+                cmd.extend(["{}/usr/bin/python3".format(os.getenv("SNAP"))])
             cmd.extend(sys.argv)
             MainLoop().quit(subprocess.call(cmd))
 
@@ -329,7 +332,7 @@ def _is_frameworkclass(o):
     return inspect.isclass(o) and issubclass(o, BaseFramework) and not inspect.isabstract(o)
 
 
-def load_module(module_abs_name, main_category):
+def load_module(module_abs_name, main_category, force_loading):
     logger.debug("New framework module: {}".format(module_abs_name))
     if module_abs_name not in sys.modules:
         import_module(module_abs_name)
@@ -344,11 +347,63 @@ def load_module(module_abs_name, main_category):
     if current_category not in BaseCategory.categories.values():
         return
     for framework_name, FrameworkClass in inspect.getmembers(module, _is_frameworkclass):
-        if FrameworkClass(current_category) is not None:
+        if FrameworkClass(category=current_category, force_loading=force_loading) is not None:
             logger.debug("Attach framework {} to {}".format(framework_name, current_category.name))
 
 
-def load_frameworks():
+def list_frameworks():
+    """ Return frameworks and categories description as:
+        [
+            {
+                'category_name':
+                'category_description':
+                'is_installed': BaseCategory.NOT_INSTALLED or
+                                BaseCategory.PARTIALLY_INSTALLED or
+                                BaseCategory.FULLY_INSTALLED
+                'frameworks':
+                    [
+                        {
+                            'framework_name':
+                            'framework_description':
+                            'install_path': None or Path string
+                            'is_installed': True or False
+                            'is_installable': True or False
+                            'is_category_default': True or False
+                            'only_for_removal': True or False
+                        },
+                    ]
+            },
+        ]
+    """
+    categories_dict = list()
+    for category in BaseCategory.categories.values():
+        frameworks_dict = list()
+        for framework in category.frameworks.values():
+            new_fram = {
+                "framework_name": framework.prog_name,
+                "framework_description": framework.description,
+                "install_path": framework.install_path,
+                "is_installed": framework.is_installed,
+                "is_installable": framework.is_installable,
+                "is_category_default": framework.is_category_default,
+                "only_for_removal": framework.only_for_removal
+            }
+
+            frameworks_dict.append(new_fram)
+
+        new_cat = {
+            "category_name": category.prog_name,
+            "category_description": category.description,
+            "is_installed": category.is_installed,
+            "frameworks": frameworks_dict
+        }
+
+        categories_dict.append(new_cat)
+
+    return categories_dict
+
+
+def load_frameworks(force_loading=False):
     """Load all modules and assign to correct category"""
     main_category = MainCategory()
 
@@ -362,7 +417,7 @@ def load_frameworks():
         local_paths.insert(0, environment_path)
 
     for loader, module_name, ispkg in pkgutil.iter_modules(path=local_paths):
-        load_module(module_name, main_category)
+        load_module(module_name, main_category, force_loading)
     for loader, module_name, ispkg in pkgutil.iter_modules(path=[os.path.dirname(__file__)]):
         module_name = "{}.{}".format(__package__, module_name)
-        load_module(module_name, main_category)
+        load_module(module_name, main_category, force_loading)

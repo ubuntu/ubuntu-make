@@ -1,3 +1,87 @@
+ubuntu-make (19.06) eoan; urgency=medium
+
+  [ Galileo Sartor ]
+  * dart: add flutter sdk framework
+  * ide: add RStudio, Apache Netbeans and liteide
+  * java: Update android and maven to openjdk-11
+  * snap: update to core18
+  * swift: remove libicu dependency on swift
+  * web: add geckodriver and chromedriver
+  * fix and update frameworks
+
+  [ Didier Roche ]
+  * fix autopkgtests on disco
+
+  [ Jason Pell ]
+  * maven: update checksum to use sha512
+  * ide: fix eclipse url parsing
+
+ -- Galileo Sartor <galileo.sartor@gmail.com>  Tue, 11 Jun 2019 15:32:29 +0200
+
+ubuntu-make (18.09) cosmic; urgency=medium
+
+  [ Galileo Sartor ]
+  * New upstream release (LP: #1794737) 
+  * Add json parser to baseinstaller
+  * Remove frameworks overriding base
+  * android: Add Android Platform Tools
+  * Fix frameworks
+
+  [ Didier Roche ]
+  * Ignore data files for incorrect language attribution
+  * Enable autopkgtests on artful+
+
+  [ Brendad McGrath ]
+  * ide: Fix Eclipse checksum test
+
+  [ Anton Patsev ]
+  * ide: Add DBeaver support
+
+ -- Galileo Sartor <galileo@moria>  Wed, 26 Sep 2018 11:37:20 +0200
+
+ubuntu-make (18.05) cosmic; urgency=medium
+
+  [ Galileo Sartor ]
+  * Use symlinks for exec
+  * games: Add Godot
+  * games: Add GDevelop
+  * games: Add Blender
+  * games: Reenable Unity3D
+  * electronics: Add category
+  * electronics: Add Eagle
+  * crystal: Add Crystal Lang
+  * maven: add Maven
+  * ide: Reenable Spring Tools
+  * ide: Add Eclipse Javascript
+  * ide: Add Atom Beta
+  * ide: Add Processing
+  * ide: Add GoLand
+  * ide: Fix vscode dependencies (libgconf)
+  * ide: Add vscode insiders
+  * web: Add PhantomJS
+
+  [ Kevin McCormack ]
+  * web: Add StartupWMClass to firefox-dev
+
+  [ Tito Brasolin ]
+  * android: Add env variables to Android Studio
+
+  [ Tankypon ]
+  * Add Listing support
+
+  [ Valerio Mariani ]
+  * ide: Add StartupWMClass to Visual Studio Code
+
+  [ Alexander Sidorenko ]
+  * ide: Add Rider
+
+  [ Ruoshi Li ]
+  * fix clean exec_path
+
+  And a lot more fixes!
+
+ -- Galileo Sartor <galileo.sartor@gmail.com>  Mon, 14 May 2018 19:36:48 +0200
+
 ubuntu-make (17.03) zesty; urgency=medium
 
   [ Galileo Sartor ]

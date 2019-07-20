@@ -13,17 +13,23 @@ build/
 *.egg-info
 *.pybuild
 
-# Tests results
+# Tests
 html-coverage*/
 .coverage
 coverage.xml
 nosetests*
+.cache
+autopkgtest-*
+.pytest_cache
 
-# Idea content
+# Editor settings
 .idea/
+.vscode
 
 # Snap
 parts/
 stage/
 prime/
 *.snap
+*.tar.bz2
+snap/.snapcraft/
