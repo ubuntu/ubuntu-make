@@ -62,14 +62,12 @@ class Terraform(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse Terraform download links"""
         url = None
-        logger.info(line)
         tag_name = line["tag_name"]
         if tag_name:
             version = tag_name[1:]
             arch = self.arch_trans[get_current_arch()]
             url = "https://releases.hashicorp.com/terraform/{version}/terraform_{version}_linux_{arch}.zip".format(
                 version=version, arch=arch)
-            logger.debug("Download url for terraform of version {version} is: {url}".format(version=version, url=url))
         return url, in_download
 
     def post_install(self):
