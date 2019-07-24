@@ -110,7 +110,7 @@ class GDevelopInContainer(ContainerTests, test_games.GDevelopTests):
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["api.github.com", "github.com"]}
+        self.hosts = {443: ["api.github.com", "github.com", "raw.githubusercontent.com"]}
         self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'unity3d')
         super().setUp()
         # override with container path

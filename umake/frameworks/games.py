@@ -275,8 +275,7 @@ class GDevelop(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["gdevelop"],
                          json=True, **kwargs)
         self.icon_filename = "GDevelop.png"
-        self.icon_url = os.path.join("https://raw.githubusercontent.com/4ian/GD/master/Binaries/Packaging",
-                                     "linux-extra-files/usr/share/icons/hicolor/128x128/apps", self.icon_filename)
+        self.icon_url = "https://raw.githubusercontent.com/4ian/GDevelop/gh-pages/res/icon128linux.png"
 
     def parse_download_link(self, line, in_download):
         url = None
