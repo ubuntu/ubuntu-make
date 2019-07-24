@@ -205,6 +205,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             UI.return_main_screen(status_code=1)
 
         self.new_download_url = None
+        self.shasum_read_method = hasattr(self, 'get_sha_and_start_download')
         with StringIO() as license_txt:
             url, checksum = (None, None)
             page = result[self.download_page]
@@ -244,10 +245,11 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
                     # always take the first valid (url, checksum) if not match_last_link is set to True:
                     download = None
-                    if not in_download:
-                        if url is None or (self.checksum_type and not checksum) or\
-                           self.match_last_link or self.new_download_url:
-                            (download, in_download) = self.parse_download_link(line_content, in_download)
+                    # if not in_download:
+                    if (url is None or (self.checksum_type and not checksum) or
+                       self.match_last_link) and\
+                       not(self.shasum_read_method and self.new_download_url):
+                        (download, in_download) = self.parse_download_link(line_content, in_download)
                     if download is not None:
                         (newurl, new_checksum) = download
                         url = newurl if newurl is not None else url

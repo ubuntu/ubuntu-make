@@ -71,13 +71,14 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
         p = re.search(r"^##\s(\d\S+)", line)
         if p is not None:
             in_download = True
+        else:
+            in_download = False
         if in_download:
             with suppress(AttributeError):
                 self.new_download_url = "https://storage.googleapis.com/dart-archive/channels/stable/" +\
                                         "release/{}/sdk/".format(p.group(1)) +\
                                         "dartsdk-linux-{}-release.zip".format(self.arch_trans[get_current_arch()]) +\
                                         ".sha256sum"
-                print(self.new_download_url)
         return ((None, None), in_download)
 
     @MainLoop.in_mainloop_thread
