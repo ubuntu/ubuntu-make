@@ -21,18 +21,18 @@
 
 from . import ContainerTests
 import os
-from ..large import test_web
+from ..large import test_devops
 from ..tools import get_data_dir, UMAKE
 
 
-class TerraformInContainer(ContainerTests, test_web.TerraformTests):
+class TerraformInContainer(ContainerTests, test_devops.TerraformTests):
     """This will test the Terraform integration inside a container"""
 
     TIMEOUT_START = 20
     TIMEOUT_STOP = 10
 
     def setUp(self):
-        self.hosts = {443: ["api.github.com", "github.com"]}
+        self.hosts = {443: ["api.github.com", "releases.hashicorp.com"]}
         super().setUp()
         # override with container path
         self.installed_path = os.path.join(self.install_base_path, "devops", "terraform")

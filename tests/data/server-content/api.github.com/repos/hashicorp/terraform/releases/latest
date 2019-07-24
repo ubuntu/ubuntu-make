@@ -5,7 +5,7 @@
   "html_url": "https://github.com/hashicorp/terraform/releases/tag/v0.12.5",
   "id": 18712110,
   "node_id": "MDc6UmVsZWFzZTE4NzEyMTEw",
-  "tag_name": "v0.12.5",
+  "tag_name": "vmock",
   "target_commitish": "master",
   "name": "v0.12.5",
   "draft": false,
