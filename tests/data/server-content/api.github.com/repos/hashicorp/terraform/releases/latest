@@ -1,0 +1,41 @@
+{
+  "url": "https://api.github.com/repos/hashicorp/terraform/releases/18712110",
+  "assets_url": "https://api.github.com/repos/hashicorp/terraform/releases/18712110/assets",
+  "upload_url": "https://uploads.github.com/repos/hashicorp/terraform/releases/18712110/assets{?name,label}",
+  "html_url": "https://github.com/hashicorp/terraform/releases/tag/v0.12.5",
+  "id": 18712110,
+  "node_id": "MDc6UmVsZWFzZTE4NzEyMTEw",
+  "tag_name": "v0.12.5",
+  "target_commitish": "master",
+  "name": "v0.12.5",
+  "draft": false,
+  "author": {
+    "login": "apparentlymart",
+    "id": 20180,
+    "node_id": "MDQ6VXNlcjIwMTgw",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/20180?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/apparentlymart",
+    "html_url": "https://github.com/apparentlymart",
+    "followers_url": "https://api.github.com/users/apparentlymart/followers",
+    "following_url": "https://api.github.com/users/apparentlymart/following{/other_user}",
+    "gists_url": "https://api.github.com/users/apparentlymart/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/apparentlymart/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/apparentlymart/subscriptions",
+    "organizations_url": "https://api.github.com/users/apparentlymart/orgs",
+    "repos_url": "https://api.github.com/users/apparentlymart/repos",
+    "events_url": "https://api.github.com/users/apparentlymart/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/apparentlymart/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "prerelease": false,
+  "created_at": "2019-07-18T17:04:24Z",
+  "published_at": "2019-07-18T17:14:48Z",
+  "assets": [
+
+  ],
+  "tarball_url": "https://api.github.com/repos/hashicorp/terraform/tarball/v0.12.5",
+  "zipball_url": "https://api.github.com/repos/hashicorp/terraform/zipball/v0.12.5",
+  "body": "ENHANCEMENTS:\r\n* command/format: No longer show no-ops in `terraform show`, since nothing will change ([#21907](https://github.com/hashicorp/terraform/issues/21907))\r\n* backend/s3: Support for assuming role using credential process from the shared AWS configuration file (support profile containing both `credential_process` and `role_arn` configurations) ([#21908](https://github.com/hashicorp/terraform/issues/21908))\r\n* connection/ssh: Abort ssh connections when the server is no longer responding ([#22037](https://github.com/hashicorp/terraform/issues/22037))\r\n* connection/ssh: Support ssh diffie-hellman-group-exchange-sha256 key exchange ([#22037](https://github.com/hashicorp/terraform/issues/22037))\r\n\r\nBUG FIXES:\r\n* backend/remote: fix conflict with normalized config dir and vcs root working directory ([#22096](https://github.com/hashicorp/terraform/issues/22096))\r\n* backend/remote: be transparent about what filesystem prefix Terraform is uploading to the remote system, and why it's doing that ([#22121](https://github.com/hashicorp/terraform/issues/22121))\r\n* configs: Ensure diagnostics are properly recorded from nested modules ([#22098](https://github.com/hashicorp/terraform/issues/22098))\r\n* core: Prevent inconsistent final plan error when using dynamic in a set-type block ([#22057](https://github.com/hashicorp/terraform/issues/22057))\r\n* lang/funcs: Allow null values in `compact` function ([#22044](https://github.com/hashicorp/terraform/issues/22044))\r\n"
+}
