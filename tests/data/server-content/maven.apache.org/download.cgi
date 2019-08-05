@@ -249,9 +249,9 @@
 
 <td>Binary tar.gz archive</td>
 
-<td><a href="http://it.apache.contactlab.it/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz">apache-maven-3.5.0-bin.tar.gz</a></td>
+<td><a href="https://www.apache.org/dist/maven/maven-3/mock/binaries/apache-maven-mock-bin.tar.gz">apache-maven-3.5.0-bin.tar.gz</a></td>
 
-<td><a class="externalLink" href="https://www.apache.org/dist/maven/maven-3/mock/binaries/apache-maven-mock-bin.tar.gz.md5">apache-maven-3.5.0-bin.tar.gz.md5</a></td>
+<td><a class="externalLink" href="https://www.apache.org/dist/maven/maven-3/mock/binaries/apache-maven-mock-bin.tar.gz.sha512">apache-maven-3.5.0-bin.tar.gz.md5</a></td>
 
 <td><a class="externalLink" href="https://www.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz.asc">apache-maven-3.5.0-bin.tar.gz.asc</a></td>
           </tr>
@@ -336,4 +336,3 @@ All rights reserved.</p>
     </footer>
     </body>
 </html>
-
