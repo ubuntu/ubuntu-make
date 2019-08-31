@@ -6,6 +6,8 @@ pyyaml
 requests
 pyxdg
 python-gnupg
+PyGObject
+pycairo
 
 # test tools
 nose
