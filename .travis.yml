@@ -11,5 +11,6 @@ addons:
     - fakeroot
 install:
   - pip install -r requirements.txt
-script: 
+script:
+  - sudo mv /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config ..
   - ./runtests pep8 small
