@@ -72,7 +72,7 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
         for line in result[self.download_page].buffer:
             line_content = line.decode()
             with suppress(AttributeError):
-                shasum_url = re.search('a href="(.*SHASUMS\d\d\d\.txt\.asc)"', line_content).group(1)
+                shasum_url = re.search(r'a href="(.*SHASUMS\d\d\d\.txt\.asc)"', line_content).group(1)
 
         if not result:
             logger.error("Download page changed its syntax or is not parsable")
