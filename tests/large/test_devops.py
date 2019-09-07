@@ -19,10 +19,7 @@
 
 """Tests for the Devops category"""
 import logging
-import platform
-import subprocess
 import os
-import tempfile
 from tests.large import LargeFrameworkTests
 from tests.tools import UMAKE, spawn_process
 

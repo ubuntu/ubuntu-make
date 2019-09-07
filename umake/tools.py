@@ -90,7 +90,7 @@ class ConfigHandler(metaclass=Singleton):
         logger.debug("Opening {}".format(config_file))
         try:
             with open(config_file) as f:
-                self._config = yaml.load(f)
+                self._config = yaml.safe_load(f)
         except (TypeError, FileNotFoundError):
             logger.info("No configuration file found")
         except (yaml.scanner.ScannerError, yaml.parser.ParserError) as e:

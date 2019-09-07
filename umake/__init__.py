@@ -30,7 +30,6 @@ from umake.tools import MainLoop
 from .ui import cli
 import yaml
 
-
 logger = logging.getLogger(__name__)
 
 # if set locale isn't installed, don't load up translations (we don't know what's the locale
