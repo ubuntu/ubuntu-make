@@ -20,7 +20,7 @@
 """Basic large tests class"""
 
 from contextlib import suppress
-from nose.tools import nottest
+from pytest import mark
 import os
 import pexpect
 import shutil
@@ -118,15 +118,15 @@ class LargeFrameworkTests(LoggedTestCase):
 
     def assert_exec_exists(self):
         """Assert that the exec path exists"""
-        self.assertTrue(self.path_exists(self.exec_path))
+        assert self.path_exists(self.exec_path)
 
     def assert_icon_exists(self):
         """Assert that the icon path exists"""
-        self.assertTrue(self.path_exists(self._get_path_from_desktop_file('Icon', get_icon_path)))
+        assert self.path_exists(self._get_path_from_desktop_file('Icon', get_icon_path))
 
     def assert_exec_link_exists(self):
         """Assert that the link to the binary exists"""
-        self.assertTrue(self.is_in_path(self.exec_link))
+        assert self.is_in_path(self.exec_link)
 
     def assert_for_warn(self, content, expect_warn=False):
         """assert if there is any warn"""
@@ -134,8 +134,8 @@ class LargeFrameworkTests(LoggedTestCase):
             # We need to remove the first expected message, which is "Logging level set to "
             # (can be WARNING or ERROR)
             content = content.replace("Logging level set to WARNING", "").replace("Logging level set to ERROR", "")
-            self.assertNotIn("WARNING", content)
-            self.assertNotIn("ERROR", content)
+            assert "WARNING" not in content
+            assert "ERROR" not in content
         else:
             for warn_tag in ("WARNING", "ERROR"):
                 if warn_tag in content:
@@ -182,7 +182,7 @@ class LargeFrameworkTests(LoggedTestCase):
     def close_and_check_status(self, exit_status=0):
         """exit child process and check its exit status"""
         self.child.close()
-        self.assertEqual(exit_status, self.child.exitstatus)
+        assert exit_status == self.child.exitstatus
 
     def wait_and_close(self, expect_warn=False, exit_status=0):
         """wait for exiting and check exit status"""
@@ -238,7 +238,7 @@ class LargeFrameworkTests(LoggedTestCase):
         """passthrough to create a file on the disk"""
         open(path, 'w').write(content)
 
-    @nottest
+    @mark.skip(reason="Not a test")
     def bad_download_page_test(self, command, content_file_path):
         """Helper for running a test to confirm failure on a significantly changed download page."""
         with swap_file_and_restore(content_file_path):

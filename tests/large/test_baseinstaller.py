@@ -103,6 +103,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.JAVAEXEC, self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
 
         # ensure that it's detected as installed:
@@ -296,6 +297,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.JAVAEXEC, self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
 
     def test_start_install_on_empty_dir(self):
@@ -349,6 +351,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.JAVAEXEC, self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
 
     def test_is_default_framework(self):
@@ -391,6 +394,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.JAVAEXEC, self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
 
     def test_removal(self):

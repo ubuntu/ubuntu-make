@@ -100,7 +100,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         # load custom framework-directory
         with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(umake.frameworks, '__package__', "testframeworks"):
-            frameworks.load_frameworks()
+            frameworks.load_frameworks(load_user_frameworks=False)
         self.categoryA = self.CategoryHandler.categories["category-a"]
 
     def tearDown(self):
@@ -472,7 +472,7 @@ class TestFrameworkLoaderWithValidConfig(BaseFrameworkLoader):
         # load custom framework-directory
         with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(umake.frameworks, '__package__', "testframeworks"):
-            frameworks.load_frameworks()
+            frameworks.load_frameworks(load_user_frameworks=False)
         self.categoryA = self.CategoryHandler.categories["category-a"]
 
     def tearDown(self):
@@ -511,7 +511,7 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
         # load custom framework-directory
         with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(umake.frameworks, '__package__', "testframeworks"):
-            frameworks.load_frameworks()
+            frameworks.load_frameworks(load_user_frameworks=False)
         self.categoryA = self.CategoryHandler.categories["category-a"]
         self.config_dir = tempfile.mkdtemp()
         change_xdg_path('XDG_CONFIG_HOME', self.config_dir)
@@ -608,7 +608,7 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
         """Load framework name"""
         with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(umake.frameworks, '__package__', framework_name):
-            frameworks.load_frameworks()
+            frameworks.load_frameworks(load_user_frameworks=False)
 
     def install_category_parser(self, main_parser, categories=[]):
         """Install parser for those categories"""
@@ -899,7 +899,7 @@ class TestEmptyFrameworkLoader(BaseFrameworkLoader):
         # load custom unexisting framework-directory
         with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(umake.frameworks, '__package__', "testframeworksdoesntexist"):
-            frameworks.load_frameworks()
+            frameworks.load_frameworks(load_user_frameworks=False)
 
     def test_invalid_framework(self):
         """There is one main category, but nothing else"""
@@ -915,7 +915,7 @@ class TestEmptyFrameworkLoader(BaseFrameworkLoader):
         args.accept_license = False
         args.list = True
         args.list_available = False
-        self.assertEquals(get_frameworks_list_output(args), "")
+        self.assertEqual(get_frameworks_list_output(args), "")
 
 
 class TestDuplicatedFrameworkLoader(BaseFrameworkLoader):
@@ -936,7 +936,7 @@ class TestDuplicatedFrameworkLoader(BaseFrameworkLoader):
         super().setUp()
         with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(umake.frameworks, '__package__', "duplicatedframeworks"):
-            frameworks.load_frameworks()
+            frameworks.load_frameworks(load_user_frameworks=False)
         self.categoryA = self.CategoryHandler.categories["category-a"]
         self.expect_warn_error = True  # as we load multiple duplicate categories and frameworks
 
@@ -974,7 +974,7 @@ class TestMultipleDefaultFrameworkLoader(BaseFrameworkLoader):
         super().setUp()
         with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(umake.frameworks, '__package__', "multipledefaultsframeworks"):
-            frameworks.load_frameworks()
+            frameworks.load_frameworks(load_user_frameworks=False)
         self.categoryA = self.CategoryHandler.categories["category-a"]
         self.expect_warn_error = True  # as we load multiple default frameworks in a category
 
@@ -1025,7 +1025,7 @@ class TestAbstractFrameworkLoader(BaseFrameworkLoader):
         # load custom unexisting framework-directory
         with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(umake.frameworks, '__package__', "abstractframeworks"):
-            frameworks.load_frameworks()
+            frameworks.load_frameworks(load_user_frameworks=False)
         self.categoryA = self.CategoryHandler.categories["category-a"]
 
     def test_load(self):
@@ -1052,7 +1052,7 @@ class TestInvalidFrameworksLoader(BaseFrameworkLoader):
         """Frameworks that don't have a Framework type aren't loaded"""
         with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                 patchelem(umake.frameworks, '__package__', "invalidframeworks"):
-            frameworks.load_frameworks()
+            frameworks.load_frameworks(load_user_frameworks=False)
         self.assertEqual(len(self.CategoryHandler.categories["category-a"].frameworks), 0,
                          self.CategoryHandler.categories["category-a"].frameworks)
 
@@ -1065,7 +1065,7 @@ class TestInvalidFrameworksLoader(BaseFrameworkLoader):
             # load home framework-directory
             with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                     patchelem(umake.frameworks, '__package__', "invalidframeworks"):
-                frameworks.load_frameworks()
+                frameworks.load_frameworks(load_user_frameworks=False)
 
             args = Mock()
             args.list = False
@@ -1082,7 +1082,7 @@ class TestInvalidFrameworksLoader(BaseFrameworkLoader):
             # load home framework-directory
             with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                     patchelem(umake.frameworks, '__package__', "invalidframeworks"):
-                frameworks.load_frameworks()
+                frameworks.load_frameworks(load_user_frameworks=False)
 
             args = Mock()
             args.list = True
@@ -1099,7 +1099,7 @@ class TestInvalidFrameworksLoader(BaseFrameworkLoader):
             # load home framework-directory
             with patchelem(umake.frameworks, '__file__', os.path.join(self.testframeworks_dir, '__init__.py')),\
                     patchelem(umake.frameworks, '__package__', "invalidframeworks"):
-                frameworks.load_frameworks()
+                frameworks.load_frameworks(load_user_frameworks=False)
 
             args = Mock()
             args.list = False
@@ -1262,7 +1262,7 @@ class TestProductionFrameworkLoader(BaseFrameworkLoader):
 
     def test_load_scala(self):
         """Can load production frameworks"""
-        frameworks.load_frameworks()
+        frameworks.load_frameworks(load_user_frameworks=False)
         self.assertTrue(len(self.CategoryHandler.categories) > 0, str(self.CategoryHandler.categories))
         self.assertIsNotNone(self.CategoryHandler.main_category)
         self.assertEqual(len(self.CategoryHandler.categories["scala"].frameworks), 1,
@@ -1270,7 +1270,7 @@ class TestProductionFrameworkLoader(BaseFrameworkLoader):
 
     def test_ignored_frameworks(self):
         """Ignored frameworks aren't loaded"""
-        frameworks.load_frameworks()
+        frameworks.load_frameworks(load_user_frameworks=False)
         self.assertNotIn(BaseInstaller, frameworks.BaseCategory.main_category.frameworks.values())
 
 

@@ -60,6 +60,7 @@ class FirefoxDevTests(LargeFrameworkTests):
 
         self.check_and_kill_process(["firefox", self.installed_path],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -188,6 +189,7 @@ class GeckodriverTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -227,6 +229,7 @@ class ChromedriverTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:

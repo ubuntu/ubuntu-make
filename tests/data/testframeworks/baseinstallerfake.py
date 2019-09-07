@@ -77,7 +77,8 @@ class BaseFramework(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Base Framework", description=_("Base Framework (default)"), is_category_default=True,
                          only_on_archs=_supported_archs, expect_license=True,
-                         packages_requirements=["jayatana"],
+                         # Remove dependency to enable test on newer systems
+                         # packages_requirements=["jayatana"],
                          download_page="http://localhost:8765/index.html",
                          checksum_type=ChecksumType.sha1,
                          dir_to_decompress_in_tarball="base-framework-*",

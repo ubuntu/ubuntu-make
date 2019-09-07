@@ -57,6 +57,7 @@ class AndroidStudioTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
 
         # ensure that it's detected as installed:

@@ -66,6 +66,7 @@ class ArduinoIDETests(LargeFrameworkTests):
                                 stderr=subprocess.DEVNULL)
 
         self.check_and_kill_process(["java", "processing.app.Base"], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -105,10 +106,11 @@ class EagleTests(LargeFrameworkTests):
 
         # launch it, send SIGTERM and check that it exits fine
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
-                                stderr=subprocess.DEVNULL)
+                                stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
 
-        self.check_and_kill_process([self.exec_path],
+        self.check_and_kill_process(proc,
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:

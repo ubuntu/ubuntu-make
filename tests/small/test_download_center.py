@@ -19,6 +19,7 @@
 
 """Tests for the download center module using a local server"""
 
+import urllib3
 from enum import Enum
 import os
 from os.path import join, getsize
@@ -529,6 +530,8 @@ class TestDownloadCenterSecure(LoggedTestCase):
         request = DownloadItem(url, None)
         # prepare the cert and set it as the trusted system context
         os.environ['REQUESTS_CA_BUNDLE'] = join(get_data_dir(), 'localhost.pem')
+        # Disable SubjectAltNameWarning for custom localhost test certificate
+        urllib3.disable_warnings(urllib3.exceptions.SubjectAltNameWarning)
         try:
             DownloadCenter([request], self.callback)
             TestDownloadCenter.wait_for_callback(self, self.callback)
@@ -549,6 +552,8 @@ class TestDownloadCenterSecure(LoggedTestCase):
         url = TestDownloadCenter.build_server_address(self, filename + "-redirect", localhost=True)
         request = DownloadItem(url, None)
         os.environ['REQUESTS_CA_BUNDLE'] = join(get_data_dir(), 'localhost.pem')
+        # Disable SubjectAltNameWarning for custom localhost test certificate
+        urllib3.disable_warnings(urllib3.exceptions.SubjectAltNameWarning)
         try:
             DownloadCenter([request], self.callback)
             TestDownloadCenter.wait_for_callback(self, self.callback)

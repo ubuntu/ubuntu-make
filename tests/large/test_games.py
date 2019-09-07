@@ -59,6 +59,7 @@ class StencylTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL, cwd=use_cwd)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -101,6 +102,7 @@ class BlenderTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL, cwd=use_cwd)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -149,6 +151,7 @@ class Unity3DTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -189,6 +192,7 @@ class TwineTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -230,6 +234,7 @@ class SuperpowersTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -271,6 +276,7 @@ class GDevelopTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -312,6 +318,7 @@ class GodotTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:

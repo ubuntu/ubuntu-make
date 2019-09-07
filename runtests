@@ -68,7 +68,7 @@ def transform_nose_config_to_cmd(filename):
 def set_logging_profile(log_config_file):
     """Set logging profile for current process and subprocesses"""
     with open(log_config_file, 'rt') as f:
-        logging_config = yaml.load(f.read())
+        logging_config = yaml.safe_load(f.read())
     logging.config.dictConfig(logging_config)
     os.environ["LOG_CFG"] = log_config_file
     if log_config_file == TESTING_LOG_CONFIG:
@@ -116,8 +116,8 @@ def local_run(args):
         # let remove it from there as well
         sys.path.remove(root_dir)
     else:
-        import tests
-        tests.tools.set_local_umake()
+        from tests import tools
+        tools.set_local_umake()
 
     if not "all" in args.tests and len(args.tests) > 0:
         for test_type in args.tests:

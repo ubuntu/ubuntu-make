@@ -23,8 +23,11 @@ import os
 import pwd
 import subprocess
 from ..tools import get_root_dir, get_tools_helper_dir, LoggedTestCase, get_docker_path, get_data_dir, INSTALL_DIR, \
-    BRANCH_TESTS, SYSTEM_UMAKE_DIR
+    BRANCH_TESTS, SYSTEM_UMAKE_DIR, set_local_umake
 from time import sleep
+
+if not BRANCH_TESTS:
+    set_local_umake()
 
 
 class ContainerTests(LoggedTestCase):
@@ -34,12 +37,13 @@ class ContainerTests(LoggedTestCase):
     DOCKER_TESTIMAGE = "409dadf4b0b8"
     UMAKE_TOOLS_IN_CONTAINER = "/umake"
     APT_FAKE_REPO_PATH = "/apt-fake-repo"
-
     in_container = True
 
     def setUp(self):
         super().setUp()  # this will call other parents of ContainerTests ancestors, like LargeFrameworkTests
         self.umake_path = get_root_dir()
+        # Docker permissions
+        os.chmod(os.path.join(get_root_dir(), "docker", "umake_docker"), 0o600)
         self.install_base_path = os.path.expanduser("/home/{}/{}".format(self.DOCKER_USER, INSTALL_DIR))
         self.binary_dir = self.binary_dir.replace(os.environ['HOME'], "/home/{}".format(self.DOCKER_USER))
         self.image_name = self.DOCKER_TESTIMAGE

@@ -73,6 +73,7 @@ class EclipseJavaIDETests(LargeFrameworkTests):
         else:
             self.check_and_kill_process([self.exec_path],
                                         wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -161,6 +162,7 @@ class IdeaIDETests(LargeFrameworkTests):
                                     stderr=subprocess.DEVNULL)
 
             self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+            proc.communicate()
             proc.wait(self.TIMEOUT_STOP)
 
             # ensure that it's detected as installed:
@@ -194,6 +196,7 @@ class IdeaIDETests(LargeFrameworkTests):
                                     stderr=subprocess.DEVNULL)
 
             self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+            proc.communicate()
             proc.wait(self.TIMEOUT_STOP)
 
             # ensure that it's detected as installed:
@@ -401,6 +404,7 @@ class NetBeansTests(LargeFrameworkTests):
                                 stderr=subprocess.DEVNULL)
 
         self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -447,6 +451,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
 
         self.check_and_kill_process([os.path.join(self.installed_path, 'code')],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -483,6 +488,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
 
         self.check_and_kill_process([os.path.join(self.installed_path, 'code-insiders')],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -526,6 +532,7 @@ class LightTableTest(LargeFrameworkTests):
 
         self.check_and_kill_process(["LightTable", self.installed_path],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -572,6 +579,7 @@ class AtomTest(LargeFrameworkTests):
 
         self.check_and_kill_process(["atom", self.installed_path],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -607,6 +615,7 @@ class AtomTest(LargeFrameworkTests):
 
         self.check_and_kill_process(["atom", self.installed_path],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -661,6 +670,7 @@ class DBeaverTest(LargeFrameworkTests):
         else:
             self.check_and_kill_process([self.exec_path],
                                         wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -714,6 +724,7 @@ class SpringToolsSuiteTest(LargeFrameworkTests):
         else:
             self.check_and_kill_process([self.exec_path],
                                         wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -755,6 +766,7 @@ class RStudioTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -796,6 +808,7 @@ class SublimeTextTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -843,6 +856,7 @@ class ProcessingTests(LargeFrameworkTests):
                                 stderr=subprocess.DEVNULL)
 
         self.check_and_kill_process(["java", "processing.app.Base"], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
@@ -891,6 +905,7 @@ class LiteIDETests(LargeFrameworkTests):
 
         self.check_and_kill_process(["liteide", self.installed_path],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:

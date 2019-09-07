@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2014 Canonical
+#
+# Authors:
+#  Didier Roche
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; version 3.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+import argparse
+import configparser
+import logging
+import logging.config
+import pytest
+import os
+import yaml
+import shutil
+import subprocess
+import sys
+import tempfile
+
+root_dir = os.path.abspath(os.path.dirname(__file__))
+TESTS_DIR = os.path.join(root_dir, 'tests')
+
+
+def local_run(args):
+    """Run directly the tests on the host"""
+
+    # setup the environment in plain english so that we standardize the test bed (if some people have some .mo
+    # Ubuntu Make files installed while having a locale set to it) to avoid getting translated strings not
+    # matching our expectations.
+    os.environ["LANGUAGE"] = "C"
+
+    pytest_args = []
+    # nosetests captured logs format
+    pytest_args.extend(['--log-format="%(asctime)s [%(name)s] %(levelname)s: %(message)s"'])
+
+    ## check if we want to run those tests with the system code
+    if args.system:
+        pytest_args.append("-P")
+        # let remove it from there as well
+        sys.path.remove(root_dir)
+    else:
+        from tests import tools
+        tools.set_local_umake()
+
+    if "all" not in args.tests and len(args.tests) > 0:
+        for test_type in args.tests:
+            for named_test_type in ("small", "medium", "large", "pep8"):
+                if test_type == named_test_type:
+                    if test_type == "pep8":
+                        pytest_args.append(os.path.join(TESTS_DIR, "__init__.py"))
+                    else:
+                        pytest_args.append(os.path.join(TESTS_DIR, named_test_type))
+                    break
+            # Not a named test_type, but a list of tests to run
+            else:
+                pytest_args.append(test_type)
+    pytest.main(pytest_args)
+
+
+def add_tests_arg(parser):
+    """add the generic tests arguments to the parser"""
+    parser.add_argument("tests", nargs='*', help="Action to perform: all (or omitted) to run all tests. "
+                                                 "small/medium/large/pep8 or nose syntax: "
+                                                 "tests.small.test_frameworks_loader:TestFrameworkLoaderSaveConfig.foo")
+
+
+if __name__ == '__main__':
+
+    # ensure we have the right chmod on the ssh key to connect to docker containers (git by default reverts to x44)
+    os.chmod(os.path.join(root_dir, "docker", "umake_docker"), 0o600)
+
+    parser = argparse.ArgumentParser(description="Run umake tests. Specified list of test run in debug mode. "
+                                                 "Running a partial suite of tests is using a normal mode. "
+                                                 "Running all tests is using coverage by default.",
+                                     add_help=False)
+
+    command_group = parser.add_subparsers(help='What mode to run tests with')
+    local_mode = command_group.add_parser('local', help='run tests locally (default). Enable easy debugging but large '
+                                                        'tests requires sudo and impact your sessions.')
+
+    ## local options
+    local_mode.set_defaults(run=local_run)
+
+    add_tests_arg(local_mode)
+
+    local_mode.add_argument('-s', "--system", action="store_true", help="Use system umake instead of local one")
+    local_mode.add_argument("--publish", action="store_true", help="Publish xunit results format")
+
+    # set local as default and parse
+    cmd = sys.argv[1:]
+    cmd.insert(0, "local")
+    args = parser.parse_args(cmd)
+
+    args.run(args)

@@ -409,12 +409,13 @@ def list_frameworks():
     return categories_dict
 
 
-def load_frameworks(force_loading=False):
+def load_frameworks(force_loading=False, load_user_frameworks=True):
     """Load all modules and assign to correct category"""
     main_category = MainCategory()
 
     # Prepare local paths (1. environment path, 2. local path, 3. system paths).
     # If we have duplicated categories, only consider the first loaded one.
+    if load_user_frameworks:
     local_paths = [get_user_frameworks_path()]
     sys.path.insert(0, get_user_frameworks_path())
     environment_path = os.environ.get(UMAKE_FRAMEWORKS_ENVIRON_VARIABLE)
@@ -422,6 +423,7 @@ def load_frameworks(force_loading=False):
         sys.path.insert(0, environment_path)
         local_paths.insert(0, environment_path)
 
+    if load_user_frameworks:
     for loader, module_name, ispkg in pkgutil.iter_modules(path=local_paths):
         load_module(module_name, main_category, force_loading)
     for loader, module_name, ispkg in pkgutil.iter_modules(path=[os.path.dirname(__file__)]):
