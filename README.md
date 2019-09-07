@@ -186,15 +186,6 @@ $ source env/bin/activate
 $ bin/umake
 ```
 
-It's also possible to use pipenv, with the included Pipfile:
-```sh
-$ sudo apt-get install -qq apt apt-utils libapt-pkg-dev # those are the requirements to compile python-apt
-$ sudo apt-get install -qq python3-dev # required for pip install -r
-$ pipenv install
-$ pipenv shell
-$ bin/umake
-```
-
 ### Developing using system package
 
 Instead of using a virtual environment, you can install system packages to be able to run the Ubuntu Make tests. The build dependencies are listed in *debian/control* and should be available in latest development Ubuntu version. If you are using the latest LTS, you should find them in a dedicated [Ubuntu Make Build-dep ppa](https://launchpad.net/~ubuntu-desktop/+archive/ubuntu/ubuntu-make-builddeps).
