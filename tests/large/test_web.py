@@ -65,7 +65,7 @@ class FirefoxDevTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command('{} web firefox-dev'.format(UMAKE)))
-        self.expect_and_no_warn("Firefox Dev is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Firefox Dev is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -73,11 +73,11 @@ class FirefoxDevTests(LargeFrameworkTests):
         """Install firefox dev from scratch test case"""
         install_language = "en-US"
         self.child = spawn_process(self.command('{} web firefox-dev'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Choose language:")
+        self.expect_and_no_warn(r"Choose language:")
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
         self.verify_install(install_language)
 
@@ -85,9 +85,9 @@ class FirefoxDevTests(LargeFrameworkTests):
         """Install firefox dev with language selected by --lang"""
         install_language = "bg"
         self.child = spawn_process(self.command('{} web firefox-dev --lang={}'.format(UMAKE, install_language)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
         self.verify_install(install_language)
 
@@ -95,11 +95,11 @@ class FirefoxDevTests(LargeFrameworkTests):
         """Install firefox dev with language selected interactively"""
         install_language = "bg"
         self.child = spawn_process(self.command('{} web firefox-dev'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Choose language:")
+        self.expect_and_no_warn(r"Choose language:")
         self.child.sendline(install_language)
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
         self.verify_install(install_language)
 
@@ -107,7 +107,7 @@ class FirefoxDevTests(LargeFrameworkTests):
         """Installing Firefox-dev in unavailable language should be rejected"""
         install_language = "ABCdwXYZ"
         self.child = spawn_process(self.command('{} web firefox-dev --lang={}'.format(UMAKE, install_language)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         self.wait_and_close(expect_warn=True, exit_status=1)
 
@@ -146,9 +146,9 @@ class PhantomJSTests(LargeFrameworkTests):
             compile_command = ["bash", "-l", "phantomjs /tmp/hello.js"]
 
         self.child = spawn_process(self.command('{} web phantomjs'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         self.assert_exec_exists()
@@ -178,9 +178,9 @@ class GeckodriverTests(LargeFrameworkTests):
 
     def test_default_install(self):
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         self.assert_exec_exists()
@@ -194,7 +194,7 @@ class GeckodriverTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Geckodriver is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Geckodriver is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
         self.assert_exec_exists()
@@ -218,9 +218,9 @@ class ChromedriverTests(LargeFrameworkTests):
 
     def test_default_install(self):
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         self.assert_exec_exists()
@@ -234,7 +234,7 @@ class ChromedriverTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Chromedriver is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Chromedriver is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
         self.assert_exec_exists()

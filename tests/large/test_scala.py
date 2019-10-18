@@ -57,9 +57,9 @@ class ScalaTests(LargeFrameworkTests):
             compile_command = ["bash", "-l", "scala /tmp/hello.scala"]
 
         self.child = spawn_process(self.command('{} scala'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         self.assert_exec_exists()

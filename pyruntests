@@ -31,7 +31,23 @@ import sys
 import tempfile
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
+config_dir = os.path.join(root_dir, 'confs')
 TESTS_DIR = os.path.join(root_dir, 'tests')
+DEBUG_LOG_CONFIG = os.path.join(config_dir, "debug.logcfg")
+TESTING_LOG_CONFIG = os.path.join(config_dir, "testing.logcfg")
+# subprocess need to output on stdout the logs to be monitored
+# the profile is the testing one + console output in warning mode
+TESTING_SUBPROCESS_LOG_CONFIG = os.path.join(config_dir, "testing.subprocess.logcfg")
+
+
+def set_logging_profile(log_config_file):
+    """Set logging profile for current process and subprocesses"""
+    with open(log_config_file, 'rt') as f:
+        logging_config = yaml.safe_load(f.read())
+    logging.config.dictConfig(logging_config)
+    os.environ["LOG_CFG"] = log_config_file
+    if log_config_file == TESTING_LOG_CONFIG:
+        os.environ["LOG_CFG"] = TESTING_SUBPROCESS_LOG_CONFIG
 
 
 def local_run(args):
@@ -46,9 +62,22 @@ def local_run(args):
     # nosetests captured logs format
     pytest_args.extend(['--log-format="%(asctime)s [%(name)s] %(levelname)s: %(message)s"'])
 
-    ## check if we want to run those tests with the system code
+    # handle config first
+    specified_config = False
+    if args.debug:
+        pytest_args.extend(["-s"])
+        set_logging_profile(DEBUG_LOG_CONFIG)
+        specified_config = True
+    elif args.coverage:
+        pytest_args.extend(["--cov=umake", "--cov-report=term-missing", "--cov-report=html",
+                            "--cov-report=xml", "--cov-config=confs/coverage.cov"])
+        set_logging_profile(TESTING_LOG_CONFIG)
+        specified_config = True
+    else:
+        specified_config = True
+
+    # check if we want to run those tests with the system code
     if args.system:
-        pytest_args.append("-P")
         # let remove it from there as well
         sys.path.remove(root_dir)
     else:
@@ -79,9 +108,6 @@ def add_tests_arg(parser):
 
 if __name__ == '__main__':
 
-    # ensure we have the right chmod on the ssh key to connect to docker containers (git by default reverts to x44)
-    os.chmod(os.path.join(root_dir, "docker", "umake_docker"), 0o600)
-
     parser = argparse.ArgumentParser(description="Run umake tests. Specified list of test run in debug mode. "
                                                  "Running a partial suite of tests is using a normal mode. "
                                                  "Running all tests is using coverage by default.",
@@ -91,13 +117,24 @@ if __name__ == '__main__':
     local_mode = command_group.add_parser('local', help='run tests locally (default). Enable easy debugging but large '
                                                         'tests requires sudo and impact your sessions.')
 
-    ## local options
+    # local options
     local_mode.set_defaults(run=local_run)
 
     add_tests_arg(local_mode)
 
     local_mode.add_argument('-s', "--system", action="store_true", help="Use system umake instead of local one")
     local_mode.add_argument("--publish", action="store_true", help="Publish xunit results format")
+
+    config_group = local_mode.add_argument_group('Run configuration options',
+                                                 description="The default configuration is to use the debug profile "
+                                                    "when running some manually specific list of tests. No profile is "
+                                                    "selected when running some suites of tests and coverage "
+                                                    "profile when selecting all tests.")\
+        .add_mutually_exclusive_group()
+    config_group.add_argument("--coverage", action="store_true", help="Force using coverage profile even when some "
+                                                                      "tests or tessuite")
+    config_group.add_argument("--debug", action="store_true", help="Force using debug profile even when running "
+                                                                   "all tests")
 
     # set local as default and parse
     cmd = sys.argv[1:]

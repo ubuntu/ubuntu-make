@@ -44,16 +44,16 @@ class TerraformTests(LargeFrameworkTests):
 
     def test_default_install(self):
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         self.assert_exec_exists()
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Terraform is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Terraform is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
         self.assert_exec_exists()

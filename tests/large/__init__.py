@@ -30,7 +30,7 @@ import subprocess
 from time import sleep
 from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned, remove_framework_envs_from_user
 from ..tools import LoggedTestCase, get_path_from_desktop_file, is_in_group, INSTALL_DIR, swap_file_and_restore, \
-    spawn_process
+    spawn_process, set_local_umake, BRANCH_TESTS
 from umake.settings import DEFAULT_BINARY_LINK_PATH
 
 
@@ -38,6 +38,9 @@ class LargeFrameworkTests(LoggedTestCase):
     """Large framework base utilities"""
 
     in_container = False
+
+    if not BRANCH_TESTS:
+        set_local_umake()
 
     def setUp(self):
         super().setUp()
@@ -245,6 +248,6 @@ class LargeFrameworkTests(LoggedTestCase):
             with open(content_file_path, "w") as newfile:
                 newfile.write("foo")
             self.child = spawn_process(command)
-            self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+            self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
             self.child.sendline("")
             self.wait_and_close(expect_warn=True, exit_status=1)

@@ -41,9 +41,9 @@ class StencylTests(LargeFrameworkTests):
     def test_default_stencyl_install(self):
         """Install stencyl from scratch test case"""
         self.child = spawn_process(self.command('{} games stencyl'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
@@ -64,7 +64,7 @@ class StencylTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command('{} games stencyl'.format(UMAKE)))
-        self.expect_and_no_warn("Stencyl is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Stencyl is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -84,9 +84,9 @@ class BlenderTests(LargeFrameworkTests):
     def test_default_blender_install(self):
         """Install blender from scratch test case"""
         self.child = spawn_process(self.command('{} games blender'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
@@ -107,7 +107,7 @@ class BlenderTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command('{} games blender'.format(UMAKE)))
-        self.expect_and_no_warn("Blender is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Blender is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -132,9 +132,9 @@ class Unity3DTests(LargeFrameworkTests):
             return
 
         self.child = spawn_process(self.command('{} games unity3d'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
@@ -156,7 +156,7 @@ class Unity3DTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command('{} games unity3d'.format(UMAKE)))
-        self.expect_and_no_warn("Unity3d is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Unity3d is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -177,9 +177,9 @@ class TwineTests(LargeFrameworkTests):
         """Install twine editor from scratch test case"""
 
         self.child = spawn_process(self.command('{} games twine'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
@@ -197,7 +197,7 @@ class TwineTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command('{} games twine'.format(UMAKE)))
-        self.expect_and_no_warn("Twine is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Twine is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -219,9 +219,9 @@ class SuperpowersTests(LargeFrameworkTests):
         """Install Superpowers editor from scratch test case"""
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
@@ -239,7 +239,7 @@ class SuperpowersTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Superpowers is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Superpowers is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -261,9 +261,9 @@ class GDevelopTests(LargeFrameworkTests):
         """Install GDevelop editor from scratch test case"""
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
@@ -281,7 +281,7 @@ class GDevelopTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("GDevelop is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"GDevelop is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -303,9 +303,9 @@ class GodotTests(LargeFrameworkTests):
         """Install Godot editor from scratch test case"""
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
@@ -323,6 +323,6 @@ class GodotTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Godot is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Godot is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()

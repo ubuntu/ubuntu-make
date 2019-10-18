@@ -124,7 +124,7 @@ def local_run(args):
             for named_test_type in ("small", "medium", "large", "pep8"):
                 if test_type == named_test_type:
                     if test_type == "pep8":
-                        nose_args.append(os.path.join(TESTS_DIR, "__init__.py"))
+                        nose_args.append(os.path.join(TESTS_DIR, "test_style.py"))
                     else:
                         nose_args.append(os.path.join(TESTS_DIR, named_test_type))
                     break

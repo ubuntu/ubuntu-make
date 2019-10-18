@@ -49,9 +49,9 @@ class ArduinoIDETests(LargeFrameworkTests):
     def test_default_install(self):
         """Install Arduino from scratch test case"""
         self.child = spawn_process(self.command('{} electronics arduino'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -71,7 +71,7 @@ class ArduinoIDETests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command('{} electronics arduino'.format(UMAKE)))
-        self.expect_and_no_warn("Arduino is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Arduino is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -93,9 +93,9 @@ class EagleTests(LargeFrameworkTests):
     def test_default_eclipse_ide_install(self):
         """Install eclipse from scratch test case"""
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -115,7 +115,7 @@ class EagleTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+        self.expect_and_no_warn(r"{} is already installed.*\[.*\] ".format(self.name))
         self.child.sendline()
         self.wait_and_close()
 
