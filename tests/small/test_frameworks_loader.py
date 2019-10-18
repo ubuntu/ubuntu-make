@@ -318,6 +318,22 @@ class TestFrameworkLoader(BaseFrameworkLoader):
             self.assertTrue(setup_call.called)
             self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=False))
 
+    def test_parse_category_and_framework_list_dependencies(self):
+        """Parsing category will run default framework"""
+        args = Mock()
+        args.category = "category-a"
+        args.destdir = None
+        args.framework = "framework-b"
+        args.depends = True
+        args.accept_license = False
+        args.remove = False
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "depends")\
+                as depends_call:
+            self.CategoryHandler.categories[args.category].run_for(args)
+            self.assertTrue(depends_call.called)
+            remove_call.assert_called_with()
+            # self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=False))
+
     def test_parse_category_and_framework_run_correct_remove_framework(self):
         """Parsing category and framework with --remove run remove on right category and framework"""
         args = Mock()

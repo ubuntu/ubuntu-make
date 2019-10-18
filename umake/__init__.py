@@ -132,6 +132,7 @@ def main():
     parser.add_argument("-v", "--verbose", action="count", default=0, help=_("Increase output verbosity (2 levels)"))
 
     parser.add_argument('-r', '--remove', action="store_true", help=_("Remove specified framework if installed"))
+    parser.add_argument('-d', '--depends', action="store_true", help=_("List specified framework dependencies"))
 
     list_group = parser.add_argument_group("List frameworks").add_mutually_exclusive_group()
     list_group.add_argument('-l', '--list', action="store_true", help=_("List all frameworks"))
