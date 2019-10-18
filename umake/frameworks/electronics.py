@@ -34,7 +34,7 @@ import subprocess
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
 from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType,\
-    MainLoop, get_current_arch
+    MainLoop, get_current_arch, get_current_ubuntu_version
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -163,3 +163,56 @@ class Eagle(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;"))
+
+
+class Fritzing(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="Fritzing",
+                         description=_("Electronic Design Automation software with a low entry barrier"),
+                         only_on_archs=['amd64'],
+                         packages_requirements=['libssl1.1 | libssl1.0, libqt5serialport5,libqt5svg5'],
+                         download_page="https://api.github.com/repos/Fritzing/Fritzing-app/releases/latest",
+                         desktop_filename="fritzing.desktop",
+                         required_files_path=["Fritzing"],
+                         dir_to_decompress_in_tarball="fritzing-*",
+                         json=True, **kwargs)
+
+    if get_current_ubuntu_version().split('.')[0] < "18":
+        ubuntu_version = 'xenial'
+    else:
+        ubuntu_version = 'bionic'
+
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if "{}.linux.AMD64.tar.bz2".format(self.ubuntu_version) in asset["browser_download_url"] and \
+               ".md5" not in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
+
+    def post_install(self):
+        """Create the Fritzing launcher"""
+        # Add apm to PATH
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Fritzing"),
+                        icon_path=os.path.join(self.install_path, "icons", "fritzing_icon.png"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=self.description,
+                        categories="Development;"))
+
+    def install_framework_parser(self, parser):
+        this_framework_parser = super().install_framework_parser(parser)
+        this_framework_parser.add_argument('--edge', action="store_true",
+                                           help=_("Install Continuous Build version"))
+        return this_framework_parser
+
+    def run_for(self, args):
+        if args.edge:
+            self.name += " Edge"
+            self.description += " edge"
+            self.desktop_filename = self.desktop_filename.replace(".desktop", "-edge.desktop")
+            self.download_page = "https://api.github.com/repos/Fritzing/Fritzing-app/releases"
+            self.install_path += "-edge"
+        super().run_for(args)
