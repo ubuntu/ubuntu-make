@@ -171,7 +171,8 @@ class Fritzing(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Fritzing",
                          description=_("Electronic Design Automation software with a low entry barrier"),
                          only_on_archs=['amd64'],
-                         packages_requirements=['libssl1.1 | libssl1.0, libqt5serialport5,libqt5svg5'],
+                         packages_requirements=["libssl1.1 | libssl1.0", "libqt5serialport5",
+                                                "libqt5sql5", "libqt5xml5"],
                          download_page="https://api.github.com/repos/Fritzing/Fritzing-app/releases/latest",
                          desktop_filename="fritzing.desktop",
                          required_files_path=["Fritzing"],
@@ -194,7 +195,6 @@ class Fritzing(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Fritzing launcher"""
-        # Add apm to PATH
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Fritzing"),
                         icon_path=os.path.join(self.install_path, "icons", "fritzing_icon.png"),
                         try_exec=self.exec_path,

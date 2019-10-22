@@ -193,3 +193,12 @@ mkdir -p $repo_root_dir/liteide
 cd $repo_root_dir/liteide
 create_package libqt5core5a
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+# fritzing deps
+mkdir -p $repo_root_dir/fritzing
+cd $repo_root_dir/fritzing
+create_package libssl1.1
+create_package libqt5serialport5
+create_package libqt5sql5
+create_package libqt5xml5
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
