@@ -123,7 +123,6 @@ if __name__ == '__main__':
     add_tests_arg(local_mode)
 
     local_mode.add_argument('-s', "--system", action="store_true", help="Use system umake instead of local one")
-    local_mode.add_argument("--publish", action="store_true", help="Publish xunit results format")
 
     config_group = local_mode.add_argument_group('Run configuration options',
                                                  description="The default configuration is to use the debug profile "
