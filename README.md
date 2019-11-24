@@ -3,8 +3,6 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/ubuntu-make)
 
-More information on what this snap is available at https://didrocks.fr/2017/07/05/ubuntu-make-as-a-classic-snap-intro/
-
 ## Current project health
 
 [![Build Status](https://travis-ci.org/ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make) (pep8 and small tests)
@@ -12,6 +10,7 @@ More information on what this snap is available at https://didrocks.fr/2017/07/0
 [![Snap Status](https://build.snapcraft.io/badge/ubuntu/ubuntu-make.svg)](https://build.snapcraft.io/user/ubuntu/ubuntu-make)
 
 ## Installing
+### SNAP
 We recommend to use the Ubuntu Make snap to ensure you always have the latest and greatest version, even on older supported releases.
 
 ```sh
@@ -20,8 +19,14 @@ $ snap install ubuntu-make --classic
 
 If installed via the snap it can be run as `ubuntu-make.umake`, or via the alias `umake`
 
-### Attention
-If the snap does not work there is a daily build ppa:
+Ubuntu Make interacts heavily with the system, in particular with the apt database. Confined or devmode snaps aren’t able to do that. 
+
+Transitioning to a classic snap gives us the same power than a debian package on this regard, while still enabling for a smoother transition.
+
+More information on this confined snap is available at https://didrocks.fr/2017/07/05/ubuntu-make-as-a-classic-snap-intro/
+
+### PPA
+There is also a daily built ppa:
 
 ```
 sudo add-apt-repository ppa:lyzardking/ubuntu-make
