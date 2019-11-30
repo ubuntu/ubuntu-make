@@ -232,18 +232,26 @@ def get_current_ubuntu_version():
     if _version is None:
         try:
             with open(settings.LSB_RELEASE_FILE) as lsb_release_file:
+                ubuntu = False
                 for line in lsb_release_file:
                     line = line.strip()
-                    if line.startswith('DISTRIB_RELEASE='):
-                        tag, release = line.split('=', 1)
+                    if line.startswith('ID_LIKE='):
+                        if line != "ID_LIKE=debian":
+                            message = "This distro is not supported"
+                            logger.error(message)
+                            raise BaseException(message)
+                    if line == "ID=ubuntu":
+                        ubuntu = True
+                    if ubuntu and line.startswith("VERSION_ID="):
+                        release = line.split('"')[1]
                         _version = release
                         break
                 else:
-                    message = "Couldn't find DISTRIB_RELEASE in {}".format(settings.LSB_RELEASE_FILE)
+                    message = "Couldn't find release in {}".format(settings.LSB_RELEASE_FILE)
                     logger.error(message)
                     raise BaseException(message)
         except (FileNotFoundError, IOError) as e:
-            message = "Can't open lsb-release file: {}".format(e)
+            message = "Can't open os-release file: {}".format(e)
             logger.error(message)
             raise BaseException(message)
     return _version

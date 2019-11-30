@@ -26,7 +26,7 @@ DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join(xdg_data_home, "uma
 DEFAULT_BINARY_LINK_PATH = os.path.expanduser(os.path.join(DEFAULT_INSTALL_TOOLS_PATH, "bin"))
 OLD_CONFIG_FILENAME = "udtc"
 CONFIG_FILENAME = "umake"
-LSB_RELEASE_FILE = "/etc/lsb-release"
+LSB_RELEASE_FILE = "/etc/os-release"
 UMAKE_FRAMEWORKS_ENVIRON_VARIABLE = "UMAKE_FRAMEWORKS"
 
 from_dev = False
