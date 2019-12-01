@@ -861,9 +861,9 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
         url = None
         checksum = None
         if get_current_distro_version().split('.')[0] < "18" or \
-           get_current_distro_version(distro="debian") < "9":
+           get_current_distro_version(name="debian") < "9":
             ubuntu_version = 'trusty'
-        elif get_current_distro_version(distro="debian") == "9":
+        elif get_current_distro_version(name="debian") == "9":
             ubuntu_version = "debian9"
         else:
             ubuntu_version = 'bionic'

@@ -231,7 +231,7 @@ def add_foreign_arch(new_arch):
     return arch_added
 
 
-def get_current_distro_version(distro="ubuntu"):
+def get_current_distro_version(name_name="ubuntu"):
     """Return current ubuntu version or raise an error if couldn't find any"""
     global _version
     distro_info = distro.os_release_info
