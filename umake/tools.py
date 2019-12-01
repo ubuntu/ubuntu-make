@@ -23,6 +23,7 @@ from enum import unique, Enum
 from gettext import gettext as _
 from gi.repository import GLib, Gio
 from glob import glob
+import distro
 import logging
 import os
 import re
@@ -231,12 +232,13 @@ def add_foreign_arch(new_arch):
     return arch_added
 
 
-def get_current_distro_version(name_name="ubuntu"):
+def get_current_distro_version(distro_name="ubuntu"):
     """Return current ubuntu version or raise an error if couldn't find any"""
     global _version
-    distro_info = distro.os_release_info
+    distro_info = distro.os_release_info()
     if _version is None:
-        if distro_info["id"] == distro:
+        print(distro_info["id"])
+        if distro_info["id"] == distro_name:
             _version = distro_info["version_id"]
     return _version
 

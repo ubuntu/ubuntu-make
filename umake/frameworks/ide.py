@@ -33,7 +33,7 @@ import umake.frameworks.baseinstaller
 from umake.frameworks.electronics import Arduino
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, MainLoop,\
-    add_exec_link, get_current_arch, get_current_distro_version, get_current_debian_version
+    add_exec_link, get_current_arch, get_current_distro_version
 
 logger = logging.getLogger(__name__)
 
