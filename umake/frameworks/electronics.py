@@ -180,10 +180,12 @@ class Fritzing(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="fritzing-*",
                          json=True, **kwargs)
 
-    if get_current_distro_version().split('.')[0] < "18":
-        ubuntu_version = 'xenial'
-    else:
-        ubuntu_version = 'bionic'
+    @property
+    def ubuntu_version(self):
+        if get_current_distro_version().split('.')[0] < "18":
+            return('xenial')
+        else:
+            return('bionic')
 
     def parse_download_link(self, line, in_download):
         url = None

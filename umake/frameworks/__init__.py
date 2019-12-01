@@ -24,6 +24,7 @@ import abc
 from contextlib import suppress
 from gettext import gettext as _
 from importlib import import_module, reload
+import distro
 import inspect
 import logging
 import os
@@ -217,7 +218,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
                     logger.debug("{} only supports {} archs and you are on {}.".format(self.name, self.only_on_archs,
                                                                                        current_arch))
                     return False
-            if only_ubuntu:
+            if self.only_ubuntu:
                 # set framework installable only on ubuntu
                 if distro.id() != "ubuntu":
                     return False
@@ -229,8 +230,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
                     return False
             if not RequirementsHandler().is_bucket_available(self.packages_requirements):
                 return False
-        except:
-            logger.error("An error occurred when detecting platform, don't register {}".format(self.name))
+        except Exception as e:
+            logger.error("An error occurred when detecting platform, don't register {}: {}".format(self.name, e))
             return False
         return True
 
