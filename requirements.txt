@@ -1,7 +1,6 @@
 # runtime requirements
 # https://launchpad.net/ubuntu/+archive/primary/+files/python-apt_1.1.0~beta1build1.tar.xz
 argcomplete
-distro
 progressbar33
 pyyaml
 requests
