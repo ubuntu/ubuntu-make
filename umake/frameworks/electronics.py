@@ -34,7 +34,7 @@ import subprocess
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
 from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType,\
-    MainLoop, get_current_arch, get_current_ubuntu_version
+    MainLoop, get_current_arch, get_current_distro_version
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -179,7 +179,7 @@ class Fritzing(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="fritzing-*",
                          json=True, **kwargs)
 
-    if get_current_ubuntu_version().split('.')[0] < "18":
+    if get_current_distro_version().split('.')[0] < "18":
         ubuntu_version = 'xenial'
     else:
         ubuntu_version = 'bionic'

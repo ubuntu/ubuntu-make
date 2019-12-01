@@ -32,7 +32,7 @@ import threading
 from . import DpkgAptSetup
 from ..tools import change_xdg_path, get_data_dir, LoggedTestCase, INSTALL_DIR
 from umake import settings, tools
-from umake.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_ubuntu_version,\
+from umake.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_distro_version,\
     create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_icon_path, get_launcher_path, copy_icon,\
     add_exec_link
 from unittest.mock import patch, Mock
@@ -149,23 +149,23 @@ class TestGetUbuntuVersion(LoggedTestCase):
         return os.path.join(get_data_dir(), 'lsb_releases', name)
 
     @patch("umake.tools.settings")
-    def test_get_current_ubuntu_version(self, settings_module):
+    def test_get_current_distro_version(self, settings_module):
         """Current ubuntu version is reported from our lsb_release local file"""
         settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("valid")
-        self.assertEqual(get_current_ubuntu_version(), '14.04')
+        self.assertEqual(get_current_distro_version(), '14.04')
 
     @patch("umake.tools.settings")
-    def test_get_current_ubuntu_version_invalid(self, settings_module):
+    def test_get_current_distro_version_invalid(self, settings_module):
         """Raise an error when parsing an invalid lsb release file"""
         settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("invalid")
-        self.assertRaises(BaseException, get_current_ubuntu_version)
+        self.assertRaises(BaseException, get_current_distro_version)
         self.expect_warn_error = True
 
     @patch("umake.tools.settings")
-    def test_get_current_ubuntu_version_no_lsb_release(self, settings_module):
+    def test_get_current_distro_version_no_lsb_release(self, settings_module):
         """Raise an error when there is no lsb release file"""
         settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("notexist")
-        self.assertRaises(BaseException, get_current_ubuntu_version)
+        self.assertRaises(BaseException, get_current_distro_version)
         self.expect_warn_error = True
 
 

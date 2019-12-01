@@ -231,56 +231,13 @@ def add_foreign_arch(new_arch):
     return arch_added
 
 
-def get_current_ubuntu_version():
+def get_current_distro_version(distro="ubuntu"):
     """Return current ubuntu version or raise an error if couldn't find any"""
     global _version
+    distro_info = distro.os_release_info
     if _version is None:
-        try:
-            with open(settings.LSB_RELEASE_FILE) as lsb_release_file:
-                debian = False
-                for line in lsb_release_file:
-                    line = line.strip()
-                    if line.startswith('ID_LIKE='):
-                        # Only support debian based distros
-                        if line != "ID_LIKE=debian":
-                            message = "This distro is not supported"
-                            logger.error(message)
-                            raise BaseException(message)
-                    if line.startswith("VERSION_ID="):
-                        release = line.split('"')[1]
-                        _version = release
-                        break
-                else:
-                    message = "Couldn't find ubuntu release in {}".format(settings.LSB_RELEASE_FILE)
-                    logger.error(message)
-                    raise BaseException(message)
-        except (FileNotFoundError, IOError) as e:
-            message = "Can't open os-release file: {}".format(e)
-            logger.error(message)
-            raise BaseException(message)
-    return _version
-
-
-def get_current_debian_version():
-    """Return current debian version or raise an error if couldn't find any"""
-    global _version
-    if _version is None:
-        try:
-            with open(settings.LSB_RELEASE_FILE) as lsb_release_file:
-                for line in lsb_release_file:
-                    line = line.strip()
-                    if line.startswith("VERSION_ID="):
-                        release = line.split('"')[1]
-                        _version = release
-                        break
-                else:
-                    message = "Couldn't find debian release in {}".format(settings.LSB_RELEASE_FILE)
-                    logger.error(message)
-                    raise BaseException(message)
-        except (FileNotFoundError, IOError) as e:
-            message = "Can't open os-release file: {}".format(e)
-            logger.error(message)
-            raise BaseException(message)
+        if distro_info["id"] == distro:
+            _version = distro_info["version_id"]
     return _version
 
 

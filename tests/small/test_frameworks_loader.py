@@ -68,15 +68,15 @@ class BaseFrameworkLoader(LoggedTestCase):
         self.get_current_arch_mock.return_value = arch
         umake.frameworks.get_current_arch = self.get_current_arch_mock
 
-        self._saved_current_ubuntu_version_fn = umake.frameworks.get_current_ubuntu_version
-        self.get_current_ubuntu_version_mock = Mock()
-        self.get_current_ubuntu_version_mock.return_value = version
-        umake.frameworks.get_current_ubuntu_version = self.get_current_ubuntu_version_mock
+        self._saved_current_ubuntu_version_fn = umake.frameworks.get_current_distro_version
+        self.get_current_distro_version_mock = Mock()
+        self.get_current_distro_version_mock.return_value = version
+        umake.frameworks.get_current_distro_version = self.get_current_distro_version_mock
 
     def restore_arch_version(self):
         """Restore initial current arch and version"""
         umake.frameworks.get_current_arch = self._saved_current_arch_fn
-        umake.frameworks.get_current_ubuntu_version = self._saved_current_ubuntu_version_fn
+        umake.frameworks.get_current_distro_version = self._saved_current_ubuntu_version_fn
 
 
 class TestFrameworkLoader(BaseFrameworkLoader):
@@ -637,7 +637,7 @@ class TestFrameworkLoadOnDemandLoader(BaseFrameworkLoader):
 
     def test_version_report_issue_framework(self):
         """Framework where we can't reach version and having a restriction isn't installable"""
-        self.get_current_ubuntu_version_mock.side_effect = BaseException('version detection failure!')
+        self.get_current_distro_version_mock.side_effect = BaseException('version detection failure!')
         self.loadFramework("testframeworks")
 
         # restricted version framework isn't installable

@@ -33,7 +33,7 @@ import umake.frameworks.baseinstaller
 from umake.frameworks.electronics import Arduino
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, MainLoop,\
-    add_exec_link, get_current_arch, get_current_ubuntu_version, get_current_debian_version
+    add_exec_link, get_current_arch, get_current_distro_version, get_current_debian_version
 
 logger = logging.getLogger(__name__)
 
@@ -860,10 +860,10 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
         """Parse RStudio download links"""
         url = None
         checksum = None
-        if get_current_ubuntu_version().split('.')[0] < "18" or \
-            get_current_debian_version() < "9":
+        if get_current_distro_version().split('.')[0] < "18" or \
+           get_current_distro_version(distro="debian") < "9":
             ubuntu_version = 'trusty'
-        elif get_current_debian_version() == "9":
+        elif get_current_distro_version(distro="debian") == "9":
             ubuntu_version = "debian9"
         else:
             ubuntu_version = 'bionic'

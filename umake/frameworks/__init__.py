@@ -32,7 +32,7 @@ import sys
 import subprocess
 from umake.network.requirements_handler import RequirementsHandler
 from umake.settings import DEFAULT_INSTALL_TOOLS_PATH, UMAKE_FRAMEWORKS_ENVIRON_VARIABLE, DEFAULT_BINARY_LINK_PATH
-from umake.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
+from umake.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_distro_version,\
     is_completion_mode, switch_to_current_user, MainLoop, get_user_frameworks_path
 from umake.ui import UI
 
@@ -217,7 +217,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
                                                                                        current_arch))
                     return False
             if len(self.only_ubuntu_version) > 0:
-                current_version = get_current_ubuntu_version()
+                current_version = get_current_distro_version()
                 if current_version not in self.only_ubuntu_version:
                     logger.debug("{} only supports {} and you are on {}.".format(self.name, self.only_ubuntu_version,
                                                                                  current_version))
