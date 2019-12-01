@@ -171,6 +171,7 @@ class Fritzing(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Fritzing",
                          description=_("Electronic Design Automation software with a low entry barrier"),
                          only_on_archs=['amd64'],
+                         only_ubuntu=True,
                          packages_requirements=["libssl1.1 | libssl1.0", "libqt5serialport5",
                                                 "libqt5sql5", "libqt5xml5"],
                          download_page="https://api.github.com/repos/Fritzing/Fritzing-app/releases/latest",

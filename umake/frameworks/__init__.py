@@ -138,7 +138,7 @@ class BaseCategory():
 class BaseFramework(metaclass=abc.ABCMeta):
 
     def __init__(self, name, description, category, force_loading=False, logo_path=None, is_category_default=False,
-                 install_path_dir=None, only_on_archs=None, only_ubuntu_version=None, packages_requirements=None,
+                 install_path_dir=None, only_on_archs=None, only_ubuntu=False, only_ubuntu_version=None, packages_requirements=None,
                  only_for_removal=False, expect_license=False, need_root_access=False, json=False):
         self.name = name
         self.description = description
@@ -146,6 +146,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.category = category
         self.is_category_default = is_category_default
         self.only_on_archs = [] if only_on_archs is None else only_on_archs
+        self.only_ubuntu = only_ubuntu
         self.only_ubuntu_version = [] if only_ubuntu_version is None else only_ubuntu_version
         self.packages_requirements = [] if packages_requirements is None else packages_requirements
         self.packages_requirements.extend(self.category.packages_requirements)
@@ -215,6 +216,10 @@ class BaseFramework(metaclass=abc.ABCMeta):
                 if current_arch not in self.only_on_archs:
                     logger.debug("{} only supports {} archs and you are on {}.".format(self.name, self.only_on_archs,
                                                                                        current_arch))
+                    return False
+            if only_ubuntu:
+                # set framework installable only on ubuntu
+                if distro.id() != "ubuntu":
                     return False
             if len(self.only_ubuntu_version) > 0:
                 current_version = get_current_distro_version()

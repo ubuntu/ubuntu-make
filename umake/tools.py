@@ -237,7 +237,6 @@ def get_current_distro_version(distro_name="ubuntu"):
     global _version
     distro_info = distro.os_release_info()
     if _version is None:
-        print(distro_info["id"])
         if distro_info["id"] == distro_name:
             _version = distro_info["version_id"]
     return _version
