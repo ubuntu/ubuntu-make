@@ -145,26 +145,26 @@ class TestGetUbuntuVersion(LoggedTestCase):
         tools._version = None
         super().tearDown()
 
-    def get_lsb_release_filepath(self, name):
-        return os.path.join(get_data_dir(), 'lsb_releases', name)
+    def get_os_release_filepath(self, name):
+        return os.path.join(get_data_dir(), 'os_releases', name)
 
     @patch("umake.tools.settings")
     def test_get_current_distro_version(self, settings_module):
-        """Current ubuntu version is reported from our lsb_release local file"""
-        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("valid")
+        """Current ubuntu version is reported from our os_releases local file"""
+        settings_module.OS_RELEASE_FILE = self.get_os_release_filepath("valid")
         self.assertEqual(get_current_distro_version(), '14.04')
 
     @patch("umake.tools.settings")
     def test_get_current_distro_version_invalid(self, settings_module):
-        """Raise an error when parsing an invalid lsb release file"""
-        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("invalid")
+        """Raise an error when parsing an invalid os_releases file"""
+        settings_module.OS_RELEASE_FILE = self.get_os_release_filepath("invalid")
         self.assertRaises(BaseException, get_current_distro_version)
         self.expect_warn_error = True
 
     @patch("umake.tools.settings")
-    def test_get_current_distro_version_no_lsb_release(self, settings_module):
-        """Raise an error when there is no lsb release file"""
-        settings_module.LSB_RELEASE_FILE = self.get_lsb_release_filepath("notexist")
+    def test_get_current_distro_version_no_os_releases(self, settings_module):
+        """Raise an error when there is no os_releases file"""
+        settings_module.OS_RELEASE_FILE = self.get_os_release_filepath("notexist")
         self.assertRaises(BaseException, get_current_distro_version)
         self.expect_warn_error = True
 

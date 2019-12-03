@@ -230,8 +230,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
                     return False
             if not RequirementsHandler().is_bucket_available(self.packages_requirements):
                 return False
-        except Exception as e:
-            logger.error("An error occurred when detecting platform, don't register {}: {}".format(self.name, e))
+        except:
+            logger.error("An error occurred when detecting platform, don't register {}".format(self.name))
             return False
         return True
 
