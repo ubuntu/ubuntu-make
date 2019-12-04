@@ -168,6 +168,13 @@ class TestGetUbuntuVersion(LoggedTestCase):
         self.assertRaises(BaseException, get_current_distro_version)
         self.expect_warn_error = True
 
+    @patch("umake.tools.settings")
+    def test_get_current_distro_version_debian(self, settings_module):
+        """Report the proper debian release if requested.
+        Report an issue on ubuntu check"""
+        settings_module.OS_RELEASE_FILE = self.get_os_release_filepath("debian")
+        self.assertEqual(get_current_distro_version(distro_name="debian"), '10')
+
 
 class TestCompletion(LoggedTestCase):
 
