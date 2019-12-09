@@ -1,5 +1,5 @@
 [pep8]
 exclude = env/
 max-line-length = 120
-# ignore "Identation is not multiple of 4" for continuation line
+# ignore "Indentation is not multiple of 4" for continuation line
 ignore = "E111" 

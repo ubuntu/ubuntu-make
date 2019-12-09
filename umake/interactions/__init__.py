@@ -144,7 +144,7 @@ class InputText:
 class YesNo(TextWithChoices):
 
     def __init__(self, content, callback_yes, callback_no, default_is_yes=False):
-        """Return a basic Yes No question, default being false or overriden"""
+        """Return a basic Yes No question, default being false or overridden"""
         super().__init__(content, [Choice(0, _("Yes"), callback_yes, txt_shorcut=_('y'), is_default=default_is_yes),
                                    Choice(1, _("No"), callback_no, txt_shorcut=_("N"),
                                           is_default=(not default_is_yes))])

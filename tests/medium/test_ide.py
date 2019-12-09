@@ -59,7 +59,7 @@ class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
         self.assertFalse(self.is_in_path(self.exec_link))
 
     def test_install_with_changed_checksum_page(self):
-        """Installing eclipse ide should fail if checksum link is unparseable"""
+        """Installing eclipse ide should fail if checksum link is unparsable"""
         self.bad_download_page_test(self.command(self.command_args), self.bad_download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
@@ -511,7 +511,7 @@ class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest)
         self.assertFalse(self.is_in_path(self.exec_link))
 
     def test_install_with_changed_checksum_page(self):
-        """Installing STS should fail if checksum link is unparseable"""
+        """Installing STS should fail if checksum link is unparsable"""
         download_page_file_path = os.path.join(get_data_dir(), 'server-content', 'download.springsource.com', 'release',
                                                'STS', 'mock.RELEASE', 'dist', 'emock',
                                                'spring-tool-suite-mock.RELEASE-emock-linux-gtk-x86_64.tar.gz.sha1')

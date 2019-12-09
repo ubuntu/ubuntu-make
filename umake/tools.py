@@ -110,7 +110,7 @@ class ConfigHandler(metaclass=Singleton):
 
 
 class NoneDict(dict):
-    """We don't use a defaultdict(lambda: None) as it's growing everytime something is requested"""
+    """We don't use a defaultdict(lambda: None) as it's growing every time something is requested"""
 
     def __getitem__(self, key):
         return dict.get(self, key)

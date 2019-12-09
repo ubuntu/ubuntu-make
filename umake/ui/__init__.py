@@ -17,7 +17,7 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-"""Abstracted UI interface that will be overriden by different UI types"""
+"""Abstracted UI interface that will be overridden by different UI types"""
 
 import logging
 from gi.repository import GLib

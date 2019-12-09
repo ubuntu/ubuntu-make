@@ -103,7 +103,7 @@ class RequirementsHandler(object, metaclass=Singleton):
         """Check if the bucket is installed and up to date
 
         The bucket is a list of packages to check if installed."""
-        logger.debug("Check if {} is uptodate".format(bucket))
+        logger.debug("Check if {} is up to date".format(bucket))
         is_installed_and_uptodate = True
         for pkg_name in bucket:
             if ' | ' in pkg_name:

@@ -116,7 +116,7 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
 
         # When we install new packages, we are executing as root and then dropping
         # as the user for extracting and such. However, for signature verification,
-        # we use gpg. This one doesn't like priviledge drop (if uid = 0 and
+        # we use gpg. This one doesn't like privilege drop (if uid = 0 and
         # euid = 1000) and asserts if uid != euid.
         # Importing the key as root as well creates new gnupg files owned as root if
         # new keys weren't imported first.

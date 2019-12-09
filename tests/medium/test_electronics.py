@@ -50,7 +50,7 @@ class ArduinoIDEInContainer(ContainerTests, test_electronics.ArduinoIDETests):
         self.assertFalse(self.is_in_path(self.exec_link))
 
     def test_install_with_changed_checksum_page(self):
-        """Installing arduino ide should fail if checksum link is unparseable"""
+        """Installing arduino ide should fail if checksum link is unparsable"""
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "downloads.arduino.cc",
                                                "arduino-mock.sha512sum.txt")
         umake_command = self.command('{} electronics arduino'.format(UMAKE))

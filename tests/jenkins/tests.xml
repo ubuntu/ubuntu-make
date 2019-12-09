@@ -73,7 +73,7 @@ fi
 # We need a pseudo tty (even if we have no input) for medium tests to pass. That&apos;s why we &quot;ssh -t -t&quot;
 # sudo su is used because tests:
 # 1. are better run as non root (hence su whoami)
-# 2. need to be able to gain sudo priviledge when installing packages
+# 2. need to be able to gain sudo privilege when installing packages
 ssh -o StrictHostKeyChecking=no -t -t 127.0.0.1 &quot;sudo su $(whoami) -c &apos;cd ~/ubuntu-make &amp;&amp; $TEST_ENV dbus-launch eatmydata ./runtests --coverage --publish ${ADDITIONAL_OPTS} $type&apos;&quot; || true
 
 # copy artefacts

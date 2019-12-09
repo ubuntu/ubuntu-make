@@ -223,7 +223,7 @@ class BaseInstallerTests(LargeFrameworkTests):
            reinstall question"""
         for loop in ("install", "reinstall"):
             if loop == "reinstall":
-                # remove code (but not laucher)
+                # remove code (but not launcher)
                 self.remove_path(self.installed_path)
 
             self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
@@ -486,7 +486,7 @@ class BaseInstallerTests(LargeFrameworkTests):
             self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
 
     def test_install_with_no_license_in_download_page(self):
-        """Installing should fail if not even license i dowload page"""
+        """Installing should fail if license is not in download page"""
         umake_command = self.command("{} base base-framework".format(UMAKE))
         self.bad_download_page_test(umake_command, self.download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))

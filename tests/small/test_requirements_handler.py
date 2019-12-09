@@ -310,7 +310,7 @@ class TestRequirementsHandler(DpkgAptSetup):
         self.assertTrue(self.handler.is_bucket_uptodate(['testpackage', 'testpackage1']))
 
     def test_is_bucket_uptodate_bucket_not_installed(self):
-        """Not installed bucket is not uptodate"""
+        """Not installed bucket is not up-to-date"""
         self.assertFalse(self.handler.is_bucket_uptodate(['testpackage', 'testpackage1']))
 
     def test_is_bucket_uptodate_bucket_half_installed(self):
@@ -320,21 +320,21 @@ class TestRequirementsHandler(DpkgAptSetup):
         self.assertFalse(self.handler.is_bucket_uptodate(['testpackage', 'testpackage1']))
 
     def test_is_bucket_uptodate_multi_arch_current_arch(self):
-        """Installed bucket should return as being uptodate even if contains multi-arch part with current package"""
+        """Installed bucket should return as being up-to-date even if contains multi-arch part with current package"""
         self.handler.install_bucket(["testpackage"], lambda x: "", self.done_callback)
         self.wait_for_callback(self.done_callback)
         self.assertTrue(self.handler.is_bucket_uptodate(["testpackage:{}".format(tools.get_current_arch())]))
 
     def test_is_bucket_uptodate_with_unavailable_package(self):
-        """Bucket isn't uptodate if some package are even not in the cache"""
+        """Bucket isn't up-to-date if some package are even not in the cache"""
         self.assertFalse(self.handler.is_bucket_uptodate(["testpackagedoesntexist"]))
 
     def test_is_bucket_uptodate_with_unavailable_multiarch_package(self):
-        """Bucket isn't uptodate if some multiarch package are even not in the cache"""
+        """Bucket isn't up-to-date if some multiarch package are even not in the cache"""
         self.assertFalse(self.handler.is_bucket_uptodate(["testpackagedoesntexist:foo"]))
 
     def test_is_bucket_uptodate_with_foreign_archs(self):
-        """After adding a foreign arch, test that the package is uptodate and report so"""
+        """After adding a foreign arch, test that the package is up-to-date and report so"""
         subprocess.call([self.dpkg, "--add-architecture", "foo"])
         self.handler.cache.open()   # reopen the cache with the new added architecture
         self.handler.install_bucket(["testpackagefoo:foo"], lambda x: "", self.done_callback)
@@ -343,7 +343,7 @@ class TestRequirementsHandler(DpkgAptSetup):
         self.assertTrue(self.handler.is_bucket_uptodate(['testpackagefoo:foo']))
 
     def test_is_bucket_uptodate_with_foreign_archs_package_not_installed(self):
-        """After adding a foreign arch, test that the package is not uptodate and report so"""
+        """After adding a foreign arch, test that the package is not up-to-date and report so"""
         subprocess.call([self.dpkg, "--add-architecture", "foo"])
         self.handler.cache.open()   # reopen the cache with the new added architecture
 

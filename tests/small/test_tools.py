@@ -762,7 +762,7 @@ class TestMiscTools(LoggedTestCase):
 
     @patch("umake.tools.os")
     def test_switch_user_from_non_sudo(self, osmock):
-        """Test switch user from a non sudo command (non root), dosen't call anything"""
+        """Test switch user from a non sudo command (non root), doesn't call anything"""
         osmock.getenv.return_value = 1234
         osmock.geteuid.return_value = 1234
         tools.switch_to_current_user()

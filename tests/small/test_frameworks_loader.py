@@ -223,7 +223,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
                          os.path.expanduser("~/{}/category-a/framework-b".format(INSTALL_DIR)))
 
     def test_specified_at_load_install_path(self):
-        """Default install path is overriden by framework specified install path at load time"""
+        """Default install path is overridden by framework specified install path at load time"""
         self.assertEqual(self.categoryA.frameworks["framework-a"].install_path,
                          os.path.expanduser("~/{}/custom/frameworka".format(INSTALL_DIR)))
 

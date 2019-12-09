@@ -63,7 +63,7 @@ class build(_build):
 
 
 class build_trans(cmd.Command):
-    description = 'Compile .po files into .mo files'
+    description = "Compile .po files into .mo files"
     user_options = []
 
     def initialize_options(self):
