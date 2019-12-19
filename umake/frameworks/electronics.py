@@ -34,7 +34,7 @@ import subprocess
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
 from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType,\
-    MainLoop, get_current_arch, get_current_ubuntu_version
+    MainLoop, get_current_arch, get_current_distro_version
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -171,6 +171,7 @@ class Fritzing(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Fritzing",
                          description=_("Electronic Design Automation software with a low entry barrier"),
                          only_on_archs=['amd64'],
+                         only_ubuntu=True,
                          packages_requirements=["libssl1.1 | libssl1.0", "libqt5serialport5",
                                                 "libqt5sql5", "libqt5xml5"],
                          download_page="https://api.github.com/repos/Fritzing/Fritzing-app/releases/latest",
@@ -179,10 +180,12 @@ class Fritzing(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="fritzing-*",
                          json=True, **kwargs)
 
-    if get_current_ubuntu_version().split('.')[0] < "18":
-        ubuntu_version = 'xenial'
-    else:
-        ubuntu_version = 'bionic'
+    @property
+    def ubuntu_version(self):
+        if get_current_distro_version().split('.')[0] < "18":
+            return('xenial')
+        else:
+            return('bionic')
 
     def parse_download_link(self, line, in_download):
         url = None

@@ -30,7 +30,7 @@ import tempfile
 
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.tools import add_env_to_user, as_root, MainLoop, get_current_ubuntu_version
+from umake.tools import add_env_to_user, as_root, MainLoop, get_current_distro_version
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.ui import UI
 
@@ -50,6 +50,7 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Swift Lang", description=_("Swift compiler (default)"), is_category_default=True,
                          packages_requirements=["clang", "libicu-dev"],
                          only_on_archs=['amd64'],
+                         only_ubuntu=True,
                          download_page="https://swift.org/download/",
                          dir_to_decompress_in_tarball="swift*",
                          required_files_path=[os.path.join("usr", "bin", "swift")],
@@ -86,7 +87,7 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
                 # Avoid fetching development snapshots
                 if 'DEVELOPMENT-SNAPSHOT' not in new_sig_url:
                     tmp_release = re.search("ubuntu(.....).tar", new_sig_url).group(1)
-                    if tmp_release <= get_current_ubuntu_version():
+                    if tmp_release <= get_current_distro_version():
                         sig_url = new_sig_url
         if not sig_url:
             logger.error("Download page changed its syntax or is not parsable")

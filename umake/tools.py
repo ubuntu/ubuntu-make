@@ -45,6 +45,7 @@ logger = logging.getLogger(__name__)
 _current_arch = None
 _foreign_arch = None
 _version = None
+_id = None
 
 profile_tag = _("# Ubuntu make installation of {}\n")
 
@@ -210,7 +211,6 @@ def get_foreign_archs():
 def add_foreign_arch(new_arch):
     """Add a new architecture if not already loaded. Return if new arch was added"""
     global _foreign_arch
-
     # try to add the arch if not already present
     arch_added = False
     if new_arch not in get_foreign_archs() and new_arch != get_current_arch():
@@ -226,24 +226,43 @@ def add_foreign_arch(new_arch):
     return arch_added
 
 
-def get_current_ubuntu_version():
+def get_current_distro_id():
+    global _id
+    if _id is None:
+        try:
+            with open(settings.OS_RELEASE_FILE) as os_release_file:
+                for line in os_release_file:
+                    line = line.strip()
+                    if line.startswith('ID='):
+                        _id = line.split('=')[1]
+                        break
+        except (FileNotFoundError, IOError) as e:
+            message = "Can't open os-release file: {}".format(e)
+            logger.error(message)
+            raise BaseException(message)
+    return _id
+
+
+def get_current_distro_version(distro_name="ubuntu"):
     """Return current ubuntu version or raise an error if couldn't find any"""
     global _version
     if _version is None:
         try:
-            with open(settings.LSB_RELEASE_FILE) as lsb_release_file:
-                for line in lsb_release_file:
+            with open(settings.OS_RELEASE_FILE) as os_release_file:
+                for line in os_release_file:
                     line = line.strip()
-                    if line.startswith('DISTRIB_RELEASE='):
-                        tag, release = line.split('=', 1)
-                        _version = release
+                    if line.startswith('ID='):
+                        if line != "ID={}".format(distro_name):
+                            break
+                    if line.startswith('VERSION_ID='):
+                        _version = line.split('=')[1].split('"')[1]
                         break
                 else:
-                    message = "Couldn't find DISTRIB_RELEASE in {}".format(settings.LSB_RELEASE_FILE)
+                    message = "Couldn't find DISTRIB_RELEASE in {}".format(settings.OS_RELEASE_FILE)
                     logger.error(message)
                     raise BaseException(message)
         except (FileNotFoundError, IOError) as e:
-            message = "Can't open lsb-release file: {}".format(e)
+            message = "Can't open os-release file: {}".format(e)
             logger.error(message)
             raise BaseException(message)
     return _version

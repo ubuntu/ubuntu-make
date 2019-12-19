@@ -32,8 +32,8 @@ import sys
 import subprocess
 from umake.network.requirements_handler import RequirementsHandler
 from umake.settings import DEFAULT_INSTALL_TOOLS_PATH, UMAKE_FRAMEWORKS_ENVIRON_VARIABLE, DEFAULT_BINARY_LINK_PATH
-from umake.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_ubuntu_version,\
-    is_completion_mode, switch_to_current_user, MainLoop, get_user_frameworks_path
+from umake.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_distro_version,\
+    is_completion_mode, switch_to_current_user, MainLoop, get_user_frameworks_path, get_current_distro_id
 from umake.ui import UI
 
 
@@ -138,14 +138,16 @@ class BaseCategory():
 class BaseFramework(metaclass=abc.ABCMeta):
 
     def __init__(self, name, description, category, force_loading=False, logo_path=None, is_category_default=False,
-                 install_path_dir=None, only_on_archs=None, only_ubuntu_version=None, packages_requirements=None,
-                 only_for_removal=False, expect_license=False, need_root_access=False, json=False):
+                 install_path_dir=None, only_on_archs=None, only_ubuntu=False, only_ubuntu_version=None,
+                 packages_requirements=None, only_for_removal=False, expect_license=False,
+                 need_root_access=False, json=False):
         self.name = name
         self.description = description
         self.logo_path = None
         self.category = category
         self.is_category_default = is_category_default
         self.only_on_archs = [] if only_on_archs is None else only_on_archs
+        self.only_ubuntu = only_ubuntu
         self.only_ubuntu_version = [] if only_ubuntu_version is None else only_ubuntu_version
         self.packages_requirements = [] if packages_requirements is None else packages_requirements
         self.packages_requirements.extend(self.category.packages_requirements)
@@ -216,8 +218,12 @@ class BaseFramework(metaclass=abc.ABCMeta):
                     logger.debug("{} only supports {} archs and you are on {}.".format(self.name, self.only_on_archs,
                                                                                        current_arch))
                     return False
+            if self.only_ubuntu:
+                # set framework installable only on ubuntu
+                if get_current_distro_id() != "ubuntu":
+                    return False
             if len(self.only_ubuntu_version) > 0:
-                current_version = get_current_ubuntu_version()
+                current_version = get_current_distro_version()
                 if current_version not in self.only_ubuntu_version:
                     logger.debug("{} only supports {} and you are on {}.".format(self.name, self.only_ubuntu_version,
                                                                                  current_version))
