@@ -271,7 +271,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
             UI.return_main_screen(status_code=2)
 
     def version(self):
-        """Method call to get the verison for the current framework"""
+        """Method call to get the version for the current framework"""
         pass
 
     def mark_in_config(self):

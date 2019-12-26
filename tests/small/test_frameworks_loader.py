@@ -533,6 +533,7 @@ class TestFrameworkLoaderSaveConfig(BaseFrameworkLoader):
                              'category-a': {
                                  'framework-b': {
                                      'path': os.path.expanduser('~/{}/category-a/framework-b'.format(INSTALL_DIR))
+                                     'test': "foo"
                                  }}}})
 
     def test_call_setup_save_and_then_mark_in_config_tweaked_path(self):

@@ -657,6 +657,7 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
             self.desktop_filename = self.desktop_filename.replace(".desktop", "-beta.desktop")
             self.download_page = "https://api.github.com/repos/Atom/Atom/releases"
             self.install_path += "-beta"
+            self.edge = "beta"
         super().run_for(args)
 
 
