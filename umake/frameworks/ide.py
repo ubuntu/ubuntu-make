@@ -718,7 +718,7 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Spring Tools Suite",
                          description=_("Spring Tools Suite IDE"),
-                         download_page="https://spring.io/tools/sts/all",
+                         download_page="https://spring.io/tools/",
                          dir_to_decompress_in_tarball='sts-bundle/sts-*',
                          checksum_type=ChecksumType.sha1,
                          desktop_filename='STS.desktop',
