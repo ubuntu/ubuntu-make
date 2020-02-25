@@ -106,12 +106,6 @@ $ ./runtests pep8
 
 This will run those pep8 checks on the code.
 
-You can also run the pep8 tool directly from the project directory:
-
-```sh
-$ pep8 .
-```
-
 ### Tests
 #### Types of tests
 There are four types of tests that can be combined in runtests:
@@ -121,49 +115,36 @@ There are four types of tests that can be combined in runtests:
 * **medium**: Tests the whole workflow. It directly calls end user tools from the command line, but without affecting the local system. Requirements like installing packages are mocked, as well as the usage of a local webserver serving (smaller) content similar to what will be fetched in a real use case. The assets have the same formats and layout.
 * **large**: Runs the same tests as the medium test, but with real server downloads and installation of dpkg packages. Most of these tests need root privileges. Be aware that these tests only run on a graphical environment. It will interfere with it and it is likely to install or remove packages on your system.
 
-To run all the tests, with coverage report, like in our jenkins infra:
+To run the pep8/pycodestyle tests:
 
 ```sh
 $ ./runtests
 ```
 
-Use `--no-config` to disable the coverage report selection.
-
 #### Running some tests with all debug infos
-By default, **runtests** will not display any debug output if the tests are successful, similar to Nose. However, if only some tests are selected, runtests will a display full debug log,
+By default, **runtests** will show the status of the single tests, like pytest does. However, one can select the specific tests to run via:
 
 ```sh
-$  ./runtests tests/small/test_tools.py:TestConfigHandler
+$  ./runtests tests/small/test_tools.py::TestConfigHandler
 ```
 
-Use `--no-config` to disable the debug output selection.
-
 #### More information on runtests
-**runtests** is a small nose wrapper used to simplify the testing process. By default, if no arguments are supplied or if "all" is supplied, runtests will run all available tests on the project using the production nose configuration.
+**runtests** is a small pytest wrapper used to simplify the testing process. By default, if no arguments are supplied or if "pep8" is supplied, runtests will run the pycodestyle/pep8 and flake8 tests.
 It is possible to run only some types of tests:
 
 ```sh
 $ ./runtests small medium
 ```
 
-This will only run small and medium tests, with all nose defaults (no profile is selected).
+This will only run small and medium tests, with all pytest defaults (no profile is selected).
 
 Finally, you can run a selection of one or more tests:
 
 ```sh
-$ ./runtests tests/small/test_tools.py:TestConfigHandler
+$ ./runtests tests/small/test_tools.py::TestConfigHandler
 ```
 
-This enables the debug profile by default, to display all outputs and logging information (at debug level).
-
-You can activate/disable/change any of those default selected configurations with **--config/--coverage/--debug/--no-config** (see `runtests --help` for more information)
-
-#### Nose configurations
-
-Some nose configurations are available in **confs/**. You will find:
-
-* **debug.nose**: this profile shows all outputs and logging information while turning debug logging on.
-* **prod.nose**: this profile keeps all outputs captured, but display tests coverage results.
+You can activate/disable/change any of those default selected configurations with **--config/--coverage/--debug/** (see `runtests --help` for more information)
 
 #### Check for Python warnings:
 

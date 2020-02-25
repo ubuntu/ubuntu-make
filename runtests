@@ -22,7 +22,7 @@ import argparse
 import configparser
 import logging
 import logging.config
-import nose
+import pytest
 import os
 import yaml
 import shutil
@@ -32,37 +32,12 @@ import tempfile
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
 config_dir = os.path.join(root_dir, 'confs')
-DEBUG_CONFIG_FILE = os.path.join(config_dir, "debug.nose")
-COVERAGE_CONFIG_FILE = os.path.join(config_dir, "prod.nose")
 TESTS_DIR = os.path.join(root_dir, 'tests')
 DEBUG_LOG_CONFIG = os.path.join(config_dir, "debug.logcfg")
 TESTING_LOG_CONFIG = os.path.join(config_dir, "testing.logcfg")
 # subprocess need to output on stdout the logs to be monitored
 # the profile is the testing one + console output in warning mode
 TESTING_SUBPROCESS_LOG_CONFIG = os.path.join(config_dir, "testing.subprocess.logcfg")
-
-
-def transform_nose_config_to_cmd(filename):
-    """Manually transform a nose config file to a cmd parameters
-
-    This is needed in case the same parameter is repeated multiple times
-
-    This return the cmd line array parameters."""
-
-    cmd_line = []
-    config = configparser.ConfigParser()
-    config.read(filename)
-    for key in config["nosetests"]:
-        value = config["nosetests"][key]
-        if value == '1':
-            cmd_line.append('--' + key)
-        # multiple values (what the config parameter for nose doesn't support)
-        elif ',' in value:
-            for val in value.split(','):
-                cmd_line.append('--{}={}'.format(key, val))
-        else:
-            cmd_line.append('--{}={}'.format(key, value))
-    return cmd_line
 
 
 def set_logging_profile(log_config_file):
@@ -83,185 +58,71 @@ def local_run(args):
     # matching our expectations.
     os.environ["LANGUAGE"] = "C"
 
-    nose_args = []
-    # nosetests captured logs format
-    nose_args.extend(["--logging-format", "%(asctime)s [%(name)s] %(levelname)s: %(message)s"])
+    pytest_args = []
+    # pytest captured logs format
+    pytest_args.extend(['--log-format="%(asctime)s [%(name)s] %(levelname)s: %(message)s"'])
 
-    ## handle config first
+    # handle config first
     specified_config = False
-    if args.config:
-        nose_args.extend(["--config", args.config])
-        specified_config = True
-    elif args.debug:
-        nose_args.extend(["--config", DEBUG_CONFIG_FILE])
+    if args.debug:
+        pytest_args.extend(["-s"])
         set_logging_profile(DEBUG_LOG_CONFIG)
         specified_config = True
     elif args.coverage:
-        nose_args.extend(transform_nose_config_to_cmd(COVERAGE_CONFIG_FILE))
+        pytest_args.extend(["--cov=umake", "--cov-report=term-missing", "--cov-report=html",
+                            "--cov-report=xml", "--cov-config=confs/coverage.cov"])
         set_logging_profile(TESTING_LOG_CONFIG)
         specified_config = True
-    elif args.no_config:
+    else:
         specified_config = True
 
-    ## output xunit and json if requested
-    if args.publish:
-        nose_args.append("--with-xunit")
-        # FIXME: disable nose-json for now, incompatible with coverage reporting when an exception is raised.
-        # we are going to switch to nose2 anyway.
-        #nose_args.append("--with-json")
-
-    ## check if we want to run those tests with the system code
+    # check if we want to run those tests with the system code
     if args.system:
-        nose_args.append("-P")
         # let remove it from there as well
         sys.path.remove(root_dir)
     else:
         from tests import tools
         tools.set_local_umake()
 
-    if not "all" in args.tests and len(args.tests) > 0:
+    if len(args.tests) > 0:
         for test_type in args.tests:
             for named_test_type in ("small", "medium", "large", "pep8"):
                 if test_type == named_test_type:
                     if test_type == "pep8":
-                        nose_args.append(os.path.join(TESTS_DIR, "test_style.py"))
+                        pytest_args.append(os.path.join(TESTS_DIR, "__init__.py"))
                     else:
-                        nose_args.append(os.path.join(TESTS_DIR, named_test_type))
+                        pytest_args.append(os.path.join(TESTS_DIR, named_test_type))
                     break
             # Not a named test_type, but a list of tests to run
             else:
-                nose_args.append(test_type)
-                # If no config is given, choose debug by default for partial run
-                if not specified_config:
-                    nose_args.extend(["--config", DEBUG_CONFIG_FILE])
-                    set_logging_profile(DEBUG_LOG_CONFIG)
-                    specified_config = True
-    else:
-        # If no config is given, run with coverage
-        if not specified_config:
-            nose_args.extend(transform_nose_config_to_cmd(COVERAGE_CONFIG_FILE))
-            set_logging_profile(TESTING_LOG_CONFIG)
-            specified_config = True
-
-    ## need a fake $0 argument
-    nose_args.insert(0, "")
-    nose.main(argv=nose_args)
-
-
-def vm_run(args):
-    """Run the tests on a qemu vm"""
-
-    artefacts_dir = tempfile.mkdtemp(prefix="umake-test-artefacts-")
-
-    cmds = ['autopkgtest']
-
-    # default target to test is current tree
-    target = ['.']
-    # test package from archive or ppa (the most recent)
-    if args.test_package:
-        target = ["ubuntu-make"]
-    # git checkout testing
-    if args.test_git:
-        target = [args.test_git]
-    # local source package testing
-    if args.test_source:
-        target = [args.test_source]
-    cmds.extend(target)
-
-    cmds.extend([# artefacts saving
-                 "--output-dir", artefacts_dir,
-                 # env variables setting up tests
-                 '--env', "TESTS={}".format(' '.join(args.tests))])
-
-    # add emulator options
-    cmds.extend(['--', 'qemu', '-o', '/var/tmp', args.image])
-
-    try:
-        return_code = subprocess.call(cmds)
-        print("Artefacts are available at {}".format(artefacts_dir))
-    except FileNotFoundError:
-        print("autopkgtest isn't installed.")
-        shutil.rmtree(artefacts_dir)
-        return_code = 1
-    sys.exit(return_code)
-
-
-def remote_run(args):
-    """Start a run on the official ubuntu instances"""
-
-    # Note that we wrap arguments containing spaces with double quoting as they are passed through ssh
-
-    # ssh connection to snakefruit
-    cmds = ["ssh", "snakefruit.canonical.com", "sudo", "-i", "-u", "ubuntu-archive",
-            # run-autopkgtest command
-            "run-autopkgtest", "-s", args.series,
-            # ensure we always add the ppa to be in correct swift container archive
-            "--ppa", "ubuntu-desktop/ubuntu-make-builddeps", "--ppa", "ubuntu-desktop/ubuntu-make",
-            # env variables setting up tests (with double quoting
-            '--env', "'TESTS={}'".format(' '.join(args.tests))]
-
-    # add architectures if any:
-    for arch in args.architecture:
-        cmds.extend(["-a", arch])
-
-    target = []
-    if args.test_package:
-        target = ["ubuntu-make"]
-    # git checkout testing, put results under ubuntu-make-git tag
-    if args.test_git:
-        target = ["--test-git", "'{}'".format(args.test_git), "ubuntu-make-git"]
-    cmds.extend(target)
-
-    sys.exit(subprocess.call(cmds))
+                pytest_args.append(test_type)
+    pytest.main(pytest_args)
 
 
 def add_tests_arg(parser):
     """add the generic tests arguments to the parser"""
     parser.add_argument("tests", nargs='*', help="Action to perform: all (or omitted) to run all tests. "
-                                                 "small/medium/large/pep8 or nose syntax: "
-                                                 "tests.small.test_frameworks_loader:TestFrameworkLoaderSaveConfig.foo")
+                                                 "small/medium/large/pep8 or pytest syntax: "
+                                                 "tests.small.test_frameworks_loader::TestFrameworkLoaderSaveConfig::foo")
 
-class _GlobalHelp(argparse._HelpAction):
-
-    def __call__(self, parser, namespace, values, option_string=None):
-        parser.print_help()
-
-        # retrieve local subparser from parser
-        subparsers_actions = [
-            action for action in parser._actions
-            if isinstance(action, argparse._SubParsersAction)]
-        print("""
--------------------------------------------
-Default mode is 'local' and can be omitted.
--------------------------------------------""")
-        subparsers_actions[0].choices['local'].print_help()
-        parser.exit()
 
 if __name__ == '__main__':
-
-    # ensure we have the right chmod on the ssh key to connect to docker containers (git by default reverts to x44)
-    os.chmod(os.path.join(root_dir, "docker", "umake_docker"), 0o600)
 
     parser = argparse.ArgumentParser(description="Run umake tests. Specified list of test run in debug mode. "
                                                  "Running a partial suite of tests is using a normal mode. "
                                                  "Running all tests is using coverage by default.",
                                      add_help=False)
-    parser.add_argument('--help', action=_GlobalHelp, help='Show this help')
 
     command_group = parser.add_subparsers(help='What mode to run tests with')
     local_mode = command_group.add_parser('local', help='run tests locally (default). Enable easy debugging but large '
                                                         'tests requires sudo and impact your sessions.')
-    vm_mode = command_group.add_parser('vm', help='run tests with vm_mode running on a qemu image.')
-    remote_mode = command_group.add_parser('remote', help='run on official autopkgtests ubuntu instances (only for '
-                                                          'ubuntu archive admins or release team members)')
 
-    ## local options
+    # local options
     local_mode.set_defaults(run=local_run)
 
     add_tests_arg(local_mode)
 
     local_mode.add_argument('-s', "--system", action="store_true", help="Use system umake instead of local one")
-    local_mode.add_argument("--publish", action="store_true", help="Publish xunit results format")
 
     config_group = local_mode.add_argument_group('Run configuration options',
                                                  description="The default configuration is to use the debug profile "
@@ -269,66 +130,14 @@ if __name__ == '__main__':
                                                     "selected when running some suites of tests and coverage "
                                                     "profile when selecting all tests.")\
         .add_mutually_exclusive_group()
-    config_group.add_argument("-c", "--config", help="Force using a particular nose profile, disable autoselection")
     config_group.add_argument("--coverage", action="store_true", help="Force using coverage profile even when some "
                                                                       "tests or tessuite")
     config_group.add_argument("--debug", action="store_true", help="Force using debug profile even when running "
                                                                    "all tests")
-    config_group.add_argument("--no-config", action="store_true", help="Disable any automated or manual config "
-                                                                       "selection")
-
-    ## vm options
-    vm_mode.set_defaults(run=vm_run)
-
-    vm_mode.add_argument('image', metavar="image_path", help="Image against which running the tests. This is what "
-                                                              "determines as well the release and arch against which "
-                                                              "we are testing on. You can build one cloud image via: "
-                                                              "'buildvm-ubuntu-cloud -r trusty' for instance.")
-    add_tests_arg(vm_mode)
-
-    target_group = vm_mode.add_argument_group('Ubuntu Make test target',
-                                                 description="This defines which Ubuntu Make you want to test. Default "
-                                                             "is the local tree (what's your pwd). You can change it "
-                                                             "for a git tree/branch or package from archive.")\
-        .add_mutually_exclusive_group()
-    target_group.add_argument("--test-git", metavar='GITURL [branchname]',
-                              help="A single URL or URL branchname. The test will be git cloned from "
-                                "that URL and ran from the checkout. This will not build binary "
-                                "packages from the branch and run tests against those, the test "
-                                "dependencies will be taken from the archive, or Ubuntu Make PPA.")
-    target_group.add_argument("--test-package", action="store_true", help="Test the ubuntu-make package (system run) "
-                                                                          "from the archive or Ubuntu Make PPA.")
-    target_group.add_argument("--test-source", metavar='DSC or some/pkg.dsc',
-                                help='Build DSC and use its tests and/or generated binary packages')
-
-
-    ## remote options
-    remote_mode.set_defaults(run=remote_run)
-
-    remote_mode.add_argument("series", help='Distro series name.')
-    add_tests_arg(remote_mode)
-
-    remote_mode.add_argument('-a', '--architecture', action='append', default=[],
-                                help='Only run test(s) on given architecture name(s). '
-                                'Can be specified multiple times (default: all).')
-    target_group = remote_mode.add_argument_group('Ubuntu Make test target',
-                                                    description="This defines which Ubuntu Make you want to test. You "
-                                                                 "can change between a git tree/branch of package from "
-                                                                 "archive.")\
-        .add_mutually_exclusive_group(required=True)
-    target_group.add_argument("--test-package", action="store_true", help="Test the ubuntu-make package (system run) "
-                                                                          "from the archive or Ubuntu Make PPA.")
-    target_group.add_argument("--test-git", metavar='GITURL [branchname]',
-                              help="A single URL or URL branchname. The test will be git cloned from "
-                                "that URL and ran from the checkout. This will not build binary "
-                                "packages from the branch and run tests against those, the test "
-                                "dependencies will be taken from the archive, or Ubuntu Make PPA.")
 
     # set local as default and parse
     cmd = sys.argv[1:]
-    if "--help" not in cmd:
-        if cmd[0] not in ["local", "vm", "remote"]:
-            cmd.insert(0, "local")
+    cmd.insert(0, "local")
     args = parser.parse_args(cmd)
 
     args.run(args)
