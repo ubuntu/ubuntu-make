@@ -719,21 +719,20 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Spring Tools Suite",
                          description=_("Spring Tools Suite IDE"),
                          download_page="https://spring.io/tools/",
-                         dir_to_decompress_in_tarball='sts-bundle/sts-*',
+                         dir_to_decompress_in_tarball='sts-*',
                          checksum_type=ChecksumType.sha1,
                          desktop_filename='STS.desktop',
-                         only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['amd64'],
                          packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          icon_filename='icon.xpm',
-                         required_files_path=["STS"],
+                         required_files_path=["SpringToolSuite4"],
                          **kwargs)
-        self.arch = '' if platform.machine() == 'i686' else '-x86_64'
         self.new_download_url = None
 
     def parse_download_link(self, line, in_download):
         """Parse STS download links"""
         url, checksum = (None, None)
-        if 'linux-gtk{}.tar.gz'.format(self.arch) in line:
+        if 'linux.gtk.x86_64.tar.gz' in line:
             in_download = True
         else:
             in_download = False
