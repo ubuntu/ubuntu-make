@@ -54,10 +54,10 @@ class ScalaLang(umake.frameworks.baseinstaller.BaseInstaller):
         """Parse Scala download link, expect to find a url"""
 
         if 'id="#link-main-unixsys"' in line:
-                p = re.search(r'href="(.*)"', line)
-                with suppress(AttributeError):
-                    url = p.group(1)
-                    return ((url, None), True)
+            p = re.search(r'href="(.*)"', line)
+            with suppress(AttributeError):
+                url = p.group(1)
+                return ((url, None), True)
         return ((None, None), False)
 
     def post_install(self):

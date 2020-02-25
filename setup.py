@@ -141,6 +141,24 @@ class update_po(cmd.Command):
         for po_file in glob(os.path.join(os.curdir, 'po', '*.po')):
             subprocess.check_call(["msgmerge", "-U", po_file, source_pot])
 
+
+class pytest(cmd.Command):
+    description = "Run full test suite"
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        import subprocess
+        import sys
+        errno = subprocess.call([sys.executable, 'pyruntests'])
+        raise SystemExit(errno)
+
+
 setup(
     name="Ubuntu Make",
     version=get_version(),
@@ -159,14 +177,12 @@ setup(
         ('share/zsh/vendor-completions', ['confs/completions/_umake']),
     ],
 
-    # In addition to run all nose tests, that will as well show python warnings
-    test_suite="nose.collector",
-
     cmdclass={
         'build': build,
         'build_trans': build_trans,
         'install_data': install_data,
         'update_pot': update_pot,
         'update_po': update_po,
+        'test': pytest
     }
 )

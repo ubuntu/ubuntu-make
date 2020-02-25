@@ -64,14 +64,14 @@ class TestVersionHandler(LoggedTestCase):
         path_join_result.side_effect = self.return_fake_version_path
         os.environ.clear()
         os.environ.update(self.initial_env)
-        self.assertEquals(settings.get_version(), "42.02")
+        self.assertEqual(settings.get_version(), "42.02")
 
     @patch("os.path.join")
     def test_version_git(self, path_join_result):
         """Ensure we are returning the right version for a git repo"""
         settings.from_dev = True
         path_join_result.side_effect = self.return_fake_version_path
-        self.assertEquals(settings.get_version(), "42.03-25-g1fd9507")
+        self.assertEqual(settings.get_version(), "42.03-25-g1fd9507")
 
     @patch("os.path.join")
     def test_version_snap(self, path_join_result):
@@ -80,7 +80,7 @@ class TestVersionHandler(LoggedTestCase):
         os.environ.clear()
         os.environ.update(self.initial_env)
         os.environ["SNAP_REVISION"] = "42"
-        self.assertEquals(settings.get_version(), "42.02+snap42")
+        self.assertEqual(settings.get_version(), "42.02+snap42")
 
     @patch("os.path.join")
     def test_version_git_fail(self, path_join_result):
@@ -88,7 +88,7 @@ class TestVersionHandler(LoggedTestCase):
         settings.from_dev = True
         path_join_result.side_effect = self.return_fake_version_path
         os.environ["PATH"] = "{}:{}".format(os.path.join(get_data_dir(), "mocks", "fails"), os.getenv("PATH"))
-        self.assertEquals(settings.get_version(), "42.02+unknown")
+        self.assertEqual(settings.get_version(), "42.02+unknown")
 
     @patch("os.path.join")
     def test_version_git_not_installed(self, path_join_result):
@@ -96,4 +96,4 @@ class TestVersionHandler(LoggedTestCase):
         settings.from_dev = True
         path_join_result.side_effect = self.return_fake_version_path
         os.environ["PATH"] = ""
-        self.assertEquals(settings.get_version(), "42.02+unknown")
+        self.assertEqual(settings.get_version(), "42.02+unknown")

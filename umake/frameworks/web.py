@@ -23,7 +23,6 @@
 from contextlib import suppress
 from functools import partial
 from gettext import gettext as _
-import json
 import logging
 import os
 import platform

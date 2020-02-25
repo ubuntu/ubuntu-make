@@ -20,20 +20,13 @@
 
 """Devops module"""
 
-from contextlib import suppress
-from functools import partial
 from gettext import gettext as _
-import json
 import logging
 import os
-import platform
-import re
 import umake.frameworks.baseinstaller
-from umake.interactions import Choice, TextWithChoices, DisplayMessage
-from umake.network.download_center import DownloadItem
+from umake.interactions import DisplayMessage
 from umake.ui import UI
-from umake.tools import create_launcher, get_application_desktop_file, MainLoop,\
-    get_current_arch, add_env_to_user
+from umake.tools import get_current_arch, add_env_to_user
 
 logger = logging.getLogger(__name__)
 

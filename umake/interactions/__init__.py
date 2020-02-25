@@ -103,7 +103,7 @@ class TextWithChoices:
             # NOTE: first is prompt, newline and then set of answers
             prompt = _("{}\n[{}] ").format(self.content, '/'.join(possible_answers))
         else:
-                # NOTE: first is prompt, then set of answers:
+            # NOTE: first is prompt, then set of answers:
             prompt = _("{} [{}] ").format(self.content, '/'.join(possible_answers))
         return prompt
 

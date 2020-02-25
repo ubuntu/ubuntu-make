@@ -1,15 +1,18 @@
 # runtime requirements
-# https://launchpad.net/ubuntu/+archive/primary/+files/python-apt_1.1.0~beta1build1.tar.xz
+https://launchpad.net/ubuntu/+archive/primary/+files/python-apt_1.1.0~beta1build1.tar.xz
+# Enable on bionic or later
+# https://launchpad.net/ubuntu/+archive/primary/+files/python-apt_1.8.4.tar.xz
 argcomplete
 progressbar33
-pyyaml
-requests
-pyxdg
+pycairo
+PyGObject
 python-gnupg
+pyxdg
+PyYAML
+requests
 
 # test tools
-nose
-nose-cov
-nose-json
-pep8
+pycodestyle
+flake8
+pytest
 pexpect>=4.0

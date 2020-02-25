@@ -51,9 +51,9 @@ class EclipseJavaIDETests(LargeFrameworkTests):
     def test_default_eclipse_ide_install(self):
         """Install eclipse from scratch test case"""
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -73,11 +73,12 @@ class EclipseJavaIDETests(LargeFrameworkTests):
         else:
             self.check_and_kill_process([self.exec_path],
                                         wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+        self.expect_and_no_warn(r"{} is already installed.*\[.*\] ".format(self.name))
         self.child.sendline()
         self.wait_and_close()
 
@@ -143,7 +144,7 @@ class IdeaIDETests(LargeFrameworkTests):
     def test_default_install(self):
         """Install from scratch test case"""
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
         result = self.return_and_wait_expect(["ERROR: No Stable version available.",
                                               "Installation done"], timeout=self.TIMEOUT_INSTALL_PROGRESS)
@@ -161,11 +162,12 @@ class IdeaIDETests(LargeFrameworkTests):
                                     stderr=subprocess.DEVNULL)
 
             self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+            proc.communicate()
             proc.wait(self.TIMEOUT_STOP)
 
             # ensure that it's detected as installed:
             self.child = spawn_process(self.command(self.command_args))
-            self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+            self.expect_and_no_warn(r"{} is already installed.*\[.*\] ".format(self.name))
             self.child.sendline()
             self.wait_and_close()
 
@@ -176,11 +178,11 @@ class IdeaIDETests(LargeFrameworkTests):
         self.name += ' EAP'
 
         self.child = spawn_process(self.command(self.command_args))
-        result = self.return_and_wait_expect(["ERROR: No EAP version available.*\[.*\]",
-                                              "Choose installation path: {}".format(self.installed_path)])
+        result = self.return_and_wait_expect([r"ERROR: No EAP version available.*\[.*\]",
+                                              r"Choose installation path: {}".format(self.installed_path)])
         if result == 1:
             self.child.sendline("")
-            self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+            self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
             self.wait_and_close()
 
             # we have an installed launcher, added to the launcher and an icon file
@@ -194,11 +196,12 @@ class IdeaIDETests(LargeFrameworkTests):
                                     stderr=subprocess.DEVNULL)
 
             self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+            proc.communicate()
             proc.wait(self.TIMEOUT_STOP)
 
             # ensure that it's detected as installed:
             self.child = spawn_process(self.command(self.command_args))
-            self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+            self.expect_and_no_warn(r"{} is already installed.*\[.*\] ".format(self.name))
             self.child.sendline()
             self.wait_and_close()
 
@@ -383,9 +386,9 @@ class NetBeansTests(LargeFrameworkTests):
     def test_default_install(self):
         """Install from scratch test case"""
         self.child = spawn_process(self.command('{} ide netbeans'.format(UMAKE)))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         logger.info("Installed, running...")
@@ -401,11 +404,12 @@ class NetBeansTests(LargeFrameworkTests):
                                 stderr=subprocess.DEVNULL)
 
         self.check_and_kill_process(["java", self.installed_path], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command('{} ide netbeans'.format(UMAKE)))
-        self.expect_and_no_warn("Netbeans is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Netbeans is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -428,11 +432,11 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         """Install visual studio from scratch test case"""
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
+        self.expect_and_no_warn(r"\[I Accept.*\]")  # ensure we have a license question
         self.child.sendline("a")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -447,11 +451,12 @@ class VisualStudioCodeTest(LargeFrameworkTests):
 
         self.check_and_kill_process([os.path.join(self.installed_path, 'code')],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Visual Studio Code is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Visual Studio Code is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -464,11 +469,11 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         self.name += ' Insiders'
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
+        self.expect_and_no_warn(r"\[I Accept.*\]")  # ensure we have a license question
         self.child.sendline("a")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -483,11 +488,12 @@ class VisualStudioCodeTest(LargeFrameworkTests):
 
         self.check_and_kill_process([os.path.join(self.installed_path, 'code-insiders')],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Visual Studio Code Insiders is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Visual Studio Code Insiders is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -509,9 +515,9 @@ class LightTableTest(LargeFrameworkTests):
         """Install LightTable from scratch test case"""
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -526,11 +532,12 @@ class LightTableTest(LargeFrameworkTests):
 
         self.check_and_kill_process(["LightTable", self.installed_path],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("LightTable is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"LightTable is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -553,9 +560,9 @@ class AtomTest(LargeFrameworkTests):
         """Install Atom from scratch test case"""
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -572,11 +579,12 @@ class AtomTest(LargeFrameworkTests):
 
         self.check_and_kill_process(["atom", self.installed_path],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+        self.expect_and_no_warn(r"{} is already installed.*\[.*\] ".format(self.name))
         self.child.sendline()
         self.wait_and_close()
 
@@ -588,9 +596,9 @@ class AtomTest(LargeFrameworkTests):
         self.name += ' Beta'
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -607,11 +615,12 @@ class AtomTest(LargeFrameworkTests):
 
         self.check_and_kill_process(["atom", self.installed_path],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+        self.expect_and_no_warn(r"{} is already installed.*\[.*\] ".format(self.name))
         self.child.sendline()
         self.wait_and_close()
 
@@ -639,9 +648,9 @@ class DBeaverTest(LargeFrameworkTests):
         """Install DBeaver from scratch test case"""
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -661,11 +670,12 @@ class DBeaverTest(LargeFrameworkTests):
         else:
             self.check_and_kill_process([self.exec_path],
                                         wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+        self.expect_and_no_warn(r"{} is already installed.*\[.*\] ".format(self.name))
         self.child.sendline()
         self.wait_and_close()
 
@@ -692,9 +702,9 @@ class SpringToolsSuiteTest(LargeFrameworkTests):
     def test_default_install(self):
         """Install STS from scratch test case"""
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -714,11 +724,12 @@ class SpringToolsSuiteTest(LargeFrameworkTests):
         else:
             self.check_and_kill_process([self.exec_path],
                                         wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+        self.expect_and_no_warn(r"{} is already installed.*\[.*\] ".format(self.name))
         self.child.sendline()
         self.wait_and_close()
 
@@ -740,9 +751,9 @@ class RStudioTests(LargeFrameworkTests):
         """Install Sublime Text from scratch test case"""
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -755,11 +766,12 @@ class RStudioTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("RStudio is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"RStudio is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -781,9 +793,9 @@ class SublimeTextTests(LargeFrameworkTests):
         """Install Sublime Text from scratch test case"""
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -796,11 +808,12 @@ class SublimeTextTests(LargeFrameworkTests):
         proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL)
         self.check_and_kill_process([self.exec_path], wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Sublime Text is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Sublime Text is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -827,9 +840,9 @@ class ProcessingTests(LargeFrameworkTests):
         """Install Processing from scratch test case"""
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -843,11 +856,12 @@ class ProcessingTests(LargeFrameworkTests):
                                 stderr=subprocess.DEVNULL)
 
         self.check_and_kill_process(["java", "processing.app.Base"], wait_before=self.TIMEOUT_START)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Processing is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Processing is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
@@ -874,9 +888,9 @@ class LiteIDETests(LargeFrameworkTests):
         """Install LiteIDE from scratch test case"""
 
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("Choose installation path: {}".format(self.installed_path))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
         self.child.sendline("")
-        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
@@ -891,10 +905,11 @@ class LiteIDETests(LargeFrameworkTests):
 
         self.check_and_kill_process(["liteide", self.installed_path],
                                     wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
         proc.wait(self.TIMEOUT_STOP)
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("LiteIDE is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"LiteIDE is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
