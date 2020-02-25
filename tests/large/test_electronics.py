@@ -157,6 +157,6 @@ class FritzingTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
-        self.expect_and_no_warn("{} is already installed.*\[.*\] ".format(self.name))
+        self.expect_and_no_warn(r"{} is already installed.*\[.*\] ".format(self.name))
         self.child.sendline()
         self.wait_and_close()
