@@ -20,12 +20,17 @@
 """Ensure we keep a sane formatting syntax"""
 
 import os
-import pycodestyle
+try:
+    import pycodestyle
+except:
+    import pep8 as pycodestyle
 import umake
 import subprocess
+import sys
 
 from .tools import get_root_dir
 from unittest import TestCase
+from pytest import mark
 
 # we want to use either local or system umake, but always local tests files
 umake_dir = os.path.dirname(umake.__file__)
@@ -44,6 +49,7 @@ class CodeCheck(TestCase):
                                          os.path.join(get_root_dir(), "bin")])
         self.assertEqual(results.get_statistics(), [])
 
+    @mark.skipif("pycodestyle" not in sys.modules.keys(), reason="requires pycodestyle")
     def test_pyflakes_imports(self):
         """Check for unused imports with flake8
 

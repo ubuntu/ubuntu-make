@@ -106,6 +106,12 @@ $ ./runtests pep8
 
 This will run those pep8 checks on the code.
 
+You can also run the pycodestyle or pep8 tool directly from the project directory:
+
+```sh
+$ pycodestyle/pep8 .
+```
+
 ### Tests
 #### Types of tests
 There are four types of tests that can be combined in runtests:
@@ -115,21 +121,21 @@ There are four types of tests that can be combined in runtests:
 * **medium**: Tests the whole workflow. It directly calls end user tools from the command line, but without affecting the local system. Requirements like installing packages are mocked, as well as the usage of a local webserver serving (smaller) content similar to what will be fetched in a real use case. The assets have the same formats and layout.
 * **large**: Runs the same tests as the medium test, but with real server downloads and installation of dpkg packages. Most of these tests need root privileges. Be aware that these tests only run on a graphical environment. It will interfere with it and it is likely to install or remove packages on your system.
 
-To run the pep8/pycodestyle tests:
+To run all the tests, with coverage report:
 
 ```sh
 $ ./runtests
 ```
 
-#### Running some tests with all debug infos
-By default, **runtests** will show the status of the single tests, like pytest does. However, one can select the specific tests to run via:
+#### Running some tests with all debug infossome
+By default, **runtests** will not display any debug output if the tests are successful, similar to pytest. However, if only  tests are selected, runtests will a display full debug log,
 
 ```sh
 $  ./runtests tests/small/test_tools.py::TestConfigHandler
 ```
 
 #### More information on runtests
-**runtests** is a small pytest wrapper used to simplify the testing process. By default, if no arguments are supplied or if "pep8" is supplied, runtests will run the pycodestyle/pep8 and flake8 tests.
+**runtests** is a small pytest wrapper used to simplify the testing process. By default, if no arguments are supplied, runtests will run all available tests on the project using the production nose configuration.
 It is possible to run only some types of tests:
 
 ```sh
