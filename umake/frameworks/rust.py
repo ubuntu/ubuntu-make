@@ -59,7 +59,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
         """Parse Rust download link, expect to find a url"""
         url = None
         if '{}-unknown-linux-gnu.tar.gz">'.format(self.arch_trans[get_current_arch()]) in line:
-            p = re.search(r'href="(.*)">', line)
+            p = re.search(r'href="(\S+)">', line)
             with suppress(AttributeError):
                 url = p.group(1)
                 logger.debug("Found link: {}".format(url))
