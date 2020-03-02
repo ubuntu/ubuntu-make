@@ -414,7 +414,7 @@ class NetBeansTests(LargeFrameworkTests):
         self.wait_and_close()
 
 
-class VisualStudioCodeTest(LargeFrameworkTests):
+class VisualStudioCodeTests(LargeFrameworkTests):
     """Tests for Visual Studio Code"""
 
     TIMEOUT_INSTALL_PROGRESS = 120
@@ -498,7 +498,7 @@ class VisualStudioCodeTest(LargeFrameworkTests):
         self.wait_and_close()
 
 
-class LightTableTest(LargeFrameworkTests):
+class LightTableTests(LargeFrameworkTests):
     """Tests for LightTable"""
 
     TIMEOUT_INSTALL_PROGRESS = 120
@@ -542,7 +542,7 @@ class LightTableTest(LargeFrameworkTests):
         self.wait_and_close()
 
 
-class AtomTest(LargeFrameworkTests):
+class AtomTests(LargeFrameworkTests):
     """Tests for Atom"""
 
     TIMEOUT_INSTALL_PROGRESS = 120
@@ -625,7 +625,7 @@ class AtomTest(LargeFrameworkTests):
         self.wait_and_close()
 
 
-class DBeaverTest(LargeFrameworkTests):
+class DBeaverTests(LargeFrameworkTests):
     """Tests for DBeaver"""
 
     TIMEOUT_INSTALL_PROGRESS = 120
@@ -680,7 +680,7 @@ class DBeaverTest(LargeFrameworkTests):
         self.wait_and_close()
 
 
-class SpringToolsSuiteTest(LargeFrameworkTests):
+class SpringToolsSuiteTests(LargeFrameworkTests):
     """Tests for Spring Tools Suite"""
 
     TIMEOUT_INSTALL_PROGRESS = 120
@@ -911,5 +911,50 @@ class LiteIDETests(LargeFrameworkTests):
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command(self.command_args))
         self.expect_and_no_warn(r"LiteIDE is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_close()
+
+
+class VSCodiumTests(LargeFrameworkTests):
+    """Tests for VSCodium"""
+
+    TIMEOUT_INSTALL_PROGRESS = 120
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 20
+
+    def setUp(self):
+        super().setUp()
+        self.installed_path = os.path.join(self.install_base_path, "ide", "vscodium")
+        self.desktop_filename = "vscodium.desktop"
+        self.command_args = '{} ide vscodium'.format(UMAKE)
+        self.name = "VSCodium"
+
+    def test_default_install(self):
+        """Install VSCodium from scratch test case"""
+
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn(r"Choose installation path: {}".format(self.installed_path))
+        self.child.sendline("")
+        self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        # we have an installed launcher, added to the launcher and an icon file
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+        self.assert_exec_link_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+
+        self.check_and_kill_process(["codium", self.installed_path],
+                                    wait_before=self.TIMEOUT_START, send_sigkill=True)
+        proc.communicate()
+        proc.wait(self.TIMEOUT_STOP)
+
+        # ensure that it's detected as installed:
+        self.child = spawn_process(self.command(self.command_args))
+        self.expect_and_no_warn(r"{} is already installed.*\[.*\] ".format(self.name))
         self.child.sendline()
         self.wait_and_close()

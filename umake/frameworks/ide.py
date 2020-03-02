@@ -895,3 +895,38 @@ class Arduino(Arduino):
         logger.warning("Arduino is now in the electronics category, please refer it from this category from now on. "
                        "This compatibility will be dropped in the future.")
         super().setup(*args, **kwargs)
+
+
+class VSCodium(umake.frameworks.baseinstaller.BaseInstaller):
+
+    def __init__(self, **kwargs):
+        super().__init__(name="VSCodium", description=_("Free/Libre Open Source Software Binaries of VSCode"),
+                         download_page="https://api.github.com/repos/VSCodium/VSCodium/releases/latest",
+                         desktop_filename="vscodium.desktop",
+                         only_on_archs=["amd64"],  # TODO: add arm builds
+                         required_files_path=["bin/codium"],
+                         dir_to_decompress_in_tarball=".",
+                         packages_requirements=["libgtk2.0-0", "libgconf-2-4"],
+                         json=True, **kwargs)
+
+    arch_trans = {
+        "amd64": "x64"
+    }
+
+    def parse_download_link(self, line, in_download):
+        url = None
+        for asset in line["assets"]:
+            if "linux-{}".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]\
+               and asset["browser_download_url"].endswith(".tar.gz"):
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
+
+    def post_install(self):
+        """Create the VSCodium Code launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("VSCodium"),
+                        icon_path=os.path.join(self.install_path, "resources/app/resources/linux/code.png"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=self.description,
+                        categories="Development;IDE;"))

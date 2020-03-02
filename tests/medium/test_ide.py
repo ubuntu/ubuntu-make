@@ -371,7 +371,7 @@ class NetBeansInContainer(ContainerTests, test_ide.NetBeansTests):
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
-class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTest):
+class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTests):
     """This will test the Visual Studio Code integration inside a container"""
 
     TIMEOUT_START = 20
@@ -385,7 +385,7 @@ class VisualStudioCodeInContainer(ContainerTests, test_ide.VisualStudioCodeTest)
         self.installed_path = os.path.join(self.install_base_path, "ide", "visual-studio-code")
 
 
-class LightTableInContainer(ContainerTests, test_ide.LightTableTest):
+class LightTableInContainer(ContainerTests, test_ide.LightTableTests):
     """This will test the LightTable integration inside a container"""
 
     TIMEOUT_START = 20
@@ -408,7 +408,7 @@ class LightTableInContainer(ContainerTests, test_ide.LightTableTest):
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
-class AtomInContainer(ContainerTests, test_ide.AtomTest):
+class AtomInContainer(ContainerTests, test_ide.AtomTests):
     """This will test the Atom integration inside a container"""
 
     TIMEOUT_START = 20
@@ -455,7 +455,7 @@ class SublimeTextInContainer(ContainerTests, test_ide.SublimeTextTests):
         self.installed_path = os.path.join(self.install_base_path, "ide", "sublime-text")
 
 
-class DBeaverInContainer(ContainerTests, test_ide.DBeaverTest):
+class DBeaverInContainer(ContainerTests, test_ide.DBeaverTests):
     """This will test the DBeaver integration inside a container"""
 
     def setUp(self):
@@ -488,7 +488,7 @@ class RStudioInContainer(ContainerTests, test_ide.RStudioTests):
         self.installed_path = os.path.join(self.install_base_path, "ide", "rstudio")
 
 
-class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTest):
+class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTests):
     """This will test Spring Tools Suite IDE integration inside a container"""
 
     TIMEOUT_START = 20
@@ -560,6 +560,29 @@ class LiteIDEInContainer(ContainerTests, test_ide.LiteIDETests):
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
                                                "repos", "visualfc", "liteide", "releases", "latest")
         umake_command = self.command('{} ide liteide'.format(UMAKE))
+        self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
+        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.is_in_path(self.exec_link))
+
+
+class VSCodiumInContainer(ContainerTests, test_ide.VSCodiumTests):
+    """This will test the VSCodium integration inside a container"""
+
+    TIMEOUT_START = 20
+    TIMEOUT_STOP = 10
+
+    def setUp(self):
+        self.hosts = {443: ["api.github.com", "github.com"]}
+        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'vscode')
+        super().setUp()
+        # override with container path
+        self.installed_path = os.path.join(self.install_base_path, "ide", "vscodium")
+
+    def test_install_with_changed_download_page(self):
+        """Installing VSCodium should fail if download page has significantly changed"""
+        download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
+                                               "repos", "VSCodium", "VSCodium", "releases", "latest")
+        umake_command = self.command('{} ide vscodium'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
