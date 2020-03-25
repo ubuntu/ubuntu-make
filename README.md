@@ -5,7 +5,7 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 
 ## Current project health
 
-[![Build Status](https://travis-ci.org/ubuntu/ubuntu-make.svg?branch=master)](https://travis-ci.org/ubuntu/ubuntu-make) (pep8 and small tests)
+[![Build Status](https://github.com/ubuntu/ubuntu-make/workflows/style_test/badge.svg?branch=master)](https://github.com/ubuntu/ubuntu-make/actions?workflow=style_test) (pep8 and small tests)
 
 [![Snap Status](https://build.snapcraft.io/badge/ubuntu/ubuntu-make.svg)](https://build.snapcraft.io/user/ubuntu/ubuntu-make)
 
