@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2019-12-14 02:06+0000\n"
-"Last-Translator: gabe9 <gabe.roche@gmail.com>\n"
+"PO-Revision-Date: 2020-01-24 08:21+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.11-dev\n"
 "X-Launchpad-Export-Date: 2015-04-02 06:32+0000\n"
 
 #: umake/tools.py:48
@@ -74,19 +74,19 @@ msgstr "Eclipse Luna"
 
 #: umake/frameworks/ide.py:217
 msgid "PyCharm Community Edition"
-msgstr "PyCharm Edición Comunidad"
+msgstr "PyCharm, edición comunitaria"
 
 #: umake/frameworks/ide.py:233
 msgid "PyCharm Educational Edition"
-msgstr "PyCharm Edición Educacional"
+msgstr "PyCharm, edición educativa"
 
 #: umake/frameworks/ide.py:249
 msgid "PyCharm Professional Edition"
-msgstr "PyCharm Edición Profesional"
+msgstr "PyCharm, edición profesional"
 
 #: umake/frameworks/ide.py:265
 msgid "IntelliJ IDEA Community Edition"
-msgstr "IntelliJ IDEA Community Edition"
+msgstr "IntelliJ IDEA, edición comunitaria"
 
 #: umake/frameworks/ide.py:281
 msgid "IntelliJ IDEA"
