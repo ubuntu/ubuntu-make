@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2015-11-23 15:36+0000\n"
-"Last-Translator: Didier Roche <didrocks@ubuntu.com>\n"
-"Language-Team: French <fr@li.org>\n"
+"PO-Revision-Date: 2020-03-29 13:09+0000\n"
+"Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/ubuntu-make/"
+"ubuntu-make/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.0-dev\n"
 "X-Launchpad-Export-Date: 2015-11-24 07:00+0000\n"
-"X-Generator: Launchpad (build 17850)\n"
-"Language: fr\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
@@ -24,7 +26,7 @@ msgstr "# Ajouté par Ubuntu make de {}\n"
 
 #: umake/__init__.py:99
 msgid "* Command '{}':"
-msgstr "* Commande '{}':"
+msgstr "* Commande '{}' :"
 
 #: umake/__init__.py:107
 msgid "Deploy and setup developers environment easily on ubuntu"
@@ -292,8 +294,7 @@ msgstr "La réponse n'est pas satisfaisante"
 
 #: umake/interactions/__init__.py:75 umake/interactions/__init__.py:83
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
-msgstr ""
-"Votre entrée '{}' n'est pas un choix acceptable. Choisissez parmi: {}"
+msgstr "Votre entrée '{}' n'est pas un choix acceptable. Choisissez parmi : {}"
 
 #: umake/interactions/__init__.py:80
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
