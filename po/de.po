@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2015-10-27 10:42+0000\n"
-"Last-Translator: Oliver Jakobi <Unknown>\n"
-"Language-Team: German <de@li.org>\n"
+"PO-Revision-Date: 2019-11-28 14:05+0000\n"
+"Last-Translator: No Name <maew_nyan@hotmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/ubuntu-make/"
+"ubuntu-make/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10-dev\n"
 "X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
-"X-Generator: Launchpad (build 17838)\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
@@ -31,14 +33,12 @@ msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr "Entwicklerumgebungen einfach auf Ubuntu aufspielen und konfigurieren"
 
 #: umake/__init__.py:108
-#, fuzzy
 msgid ""
 "Note that you can also configure different debug logging behavior using "
 "LOG_CFG that points to a log yaml profile."
 msgstr ""
-"Beachten Sie, dass ebenfalls das Verhalten verschiedener \"debug logs\" "
-"konfiguriert werden kann, indem Sie LOG_CFG benutzen, was auf einen \"log "
-"yaml\"-Profil zeigt."
+"Beachten Sie, dass sie das Verhalten verschiedener \"debug logs\" ebenfalls "
+"mit LOG_CFG das auf ein \"log yaml\"-Profil zeigt konfigurieren können."
 
 #: umake/__init__.py:111
 msgid "Show this help"
@@ -54,7 +54,7 @@ msgstr "Entferne, falls installiert, das spezifizierte Framework"
 
 #: umake/__init__.py:116
 msgid "Print version and exit"
-msgstr ""
+msgstr "Version anzeigen und beenden"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
@@ -77,14 +77,12 @@ msgid "PyCharm Community Edition"
 msgstr "PyCharm Community Ausgabe"
 
 #: umake/frameworks/ide.py:233
-#, fuzzy
 msgid "PyCharm Educational Edition"
-msgstr "PyCharm Community Ausgabe"
+msgstr "PyCharm Studenten Ausgabe"
 
 #: umake/frameworks/ide.py:249
-#, fuzzy
 msgid "PyCharm Professional Edition"
-msgstr "PyCharm Community Ausgabe"
+msgstr "PyCharm Professionelle Ausgabe"
 
 #: umake/frameworks/ide.py:265
 msgid "IntelliJ IDEA Community Edition"
@@ -125,6 +123,8 @@ msgstr ""
 #: umake/frameworks/ide.py:484
 msgid "You need to logout and login again for your installation to work"
 msgstr ""
+"Sie müssen sich abmelden und wieder neu anmelden damit ihre Installation "
+"funktioniert"
 
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
@@ -141,9 +141,8 @@ msgid "Dart SDK with editor (not supported upstream anyymore)"
 msgstr "Dart Software Development Kit mit Editor (Standard)"
 
 #: umake/frameworks/dart.py:56
-#, fuzzy
 msgid "Dart SDK (default)"
-msgstr "Dart Software Development Kit mit Editor (Standard)"
+msgstr "Dart Software Development Kit (Standard)"
 
 #: umake/frameworks/dart.py:97 umake/frameworks/rust.py:134
 #: umake/frameworks/scala.py:66 umake/frameworks/go.py:76
@@ -154,9 +153,8 @@ msgid ""
 msgstr ""
 
 #: umake/frameworks/rust.py:43
-#, fuzzy
 msgid "Rust language"
-msgstr "Go Programmiersprache"
+msgstr "Rust Programmiersprache"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
@@ -196,9 +194,8 @@ msgid "Android Studio developer environment"
 msgstr "Android Studio Entwicklungsumgebung"
 
 #: umake/frameworks/android.py:111
-#, fuzzy
 msgid "Android SDK"
-msgstr "Android NDK"
+msgstr "Android SDK"
 
 #: umake/frameworks/android.py:147
 msgid "Android NDK"
@@ -229,7 +226,7 @@ msgstr "Entferne, falls installiert, das Framework"
 
 #: umake/frameworks/__init__.py:291
 msgid "Accept license without prompting"
-msgstr ""
+msgstr "Lizenz ohne nachfrage akzeptieren"
 
 #: umake/frameworks/web.py:45
 msgid "Web Developer Environment"
@@ -240,9 +237,8 @@ msgid "Firefox Developer Edition"
 msgstr "Firefox Entwicklerausgabe"
 
 #: umake/frameworks/web.py:116
-#, fuzzy
 msgid "Choose language: {}"
-msgstr "Go Programmiersprache"
+msgstr "Sprache auswählen: {}"
 
 #: umake/frameworks/web.py:123
 msgid "Firefox Aurora with Developer tools"
@@ -277,9 +273,8 @@ msgid "Unity 3D Editor Linux experimental support"
 msgstr ""
 
 #: umake/frameworks/games.py:154
-#, fuzzy
 msgid "Unity3D Editor"
-msgstr "Dart Editor"
+msgstr "Unity3D Editor"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
