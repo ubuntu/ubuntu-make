@@ -165,7 +165,6 @@ setup(
         'build_trans': build_trans,
         'install_data': install_data,
         'update_pot': update_pot,
-        'update_po': update_po,
-        'test': pytest
+        'update_po': update_po
     }
 )
