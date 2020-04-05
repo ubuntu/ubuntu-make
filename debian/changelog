@@ -1,3 +1,26 @@
+ubuntu-make (20.04) UNRELEASED; urgency=medium
+
+  [ Galileo Sartor ]
+  * translations: integrate weblate support
+  * various: fix broken url parsers
+  * ide: add vscodium framework
+  * tests: add pre-commit with pyruntests
+  * tests: port to pytest, adding flake8
+  * misc: add Debian support
+  * doc: Add classic snap info in README
+  * electronics: add fritzing  support
+  * games: fix GDevelop icon download link
+  * base: add in_donload check get first link in new_url scenario
+
+  [ Erik Navarrete ]
+  * Update SpringToolsSuite download framework
+
+  [ Alexander Sidorenko ]
+  * Removed not consistent logging
+  * Added terraform support
+
+ -- Galileo Sartor <galileo@moria>  Sun, 05 Apr 2020 12:30:25 +0200
+
 ubuntu-make (19.06) eoan; urgency=medium
 
   [ Galileo Sartor ]
