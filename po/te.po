@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2020-02-19 06:33+0000\n"
-"Last-Translator: Srikanth Pusthem <srikanthpusthem@gmail.com>\n"
+"PO-Revision-Date: 2020-04-03 22:49+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/te/>\n"
 "Language: te\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.11\n"
+"X-Generator: Weblate 4.0-dev\n"
 "X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
 
 #: umake/tools.py:48
@@ -59,7 +59,7 @@ msgstr "ముద్రించు మరియు బయటికి రా"
 #: umake/frameworks/ide.py:63
 #, fuzzy
 msgid "Generic IDEs"
-msgstr "సాధారనమైన  IDEలు"
+msgstr "సాధారనమైన IDEలు"
 
 #: umake/frameworks/ide.py:76
 msgid "Pure Eclipse Luna (4.4)"

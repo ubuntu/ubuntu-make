@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2019-12-08 22:35+0100\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2020-04-05 05:26+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
+"ubuntu-make/ubuntu-make/nb_NO/>\n"
+"Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.4\n"
-"Last-Translator: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: nb\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
@@ -24,7 +25,7 @@ msgstr ""
 
 #: umake/__init__.py:99
 msgid "* Command '{}':"
-msgstr ""
+msgstr "* Kommando '{}':"
 
 #: umake/__init__.py:107
 msgid "Deploy and setup developers environment easily on ubuntu"
@@ -38,7 +39,7 @@ msgstr ""
 
 #: umake/__init__.py:111
 msgid "Show this help"
-msgstr ""
+msgstr "Vis denne hjelpeteksten"
 
 #: umake/__init__.py:112
 msgid "Increase output verbosity (2 levels)"
@@ -114,7 +115,7 @@ msgstr ""
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
-msgstr ""
+msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
 msgid "You need to logout and login again for your installation to work"
@@ -147,11 +148,11 @@ msgstr ""
 
 #: umake/frameworks/rust.py:43
 msgid "Rust language"
-msgstr ""
+msgstr "Språket Rust"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
-msgstr ""
+msgstr "Den offisielle Rust-distribusjonen"
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
@@ -163,7 +164,7 @@ msgstr ""
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
-msgstr ""
+msgstr "Språket Go"
 
 #: umake/frameworks/go.py:46
 msgid "Google compiler (default)"
@@ -199,7 +200,7 @@ msgstr ""
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't install that framework on this machine"
-msgstr ""
+msgstr "Du kan ikke installere det rammeverket på denne maskinen"
 
 #: umake/frameworks/__init__.py:256
 msgid "You can't remove {} as it isn't installed"
@@ -228,7 +229,7 @@ msgstr ""
 
 #: umake/frameworks/web.py:116
 msgid "Choose language: {}"
-msgstr ""
+msgstr "Velg språk: {}"
 
 #: umake/frameworks/web.py:123
 msgid "Firefox Aurora with Developer tools"
@@ -288,33 +289,35 @@ msgstr ""
 
 #: umake/interactions/__init__.py:100
 msgid " ({})"
-msgstr ""
+msgstr " ({})"
 
 #: umake/interactions/__init__.py:104
 msgid ""
 "{}\n"
 "[{}] "
 msgstr ""
+"{}\n"
+"[{}] "
 
 #: umake/interactions/__init__.py:107
 msgid "{} [{}] "
-msgstr ""
+msgstr "{} [{}] "
 
 #: umake/interactions/__init__.py:115
 msgid "I Accept"
-msgstr ""
+msgstr "Jeg godtar"
 
 #: umake/interactions/__init__.py:115
 msgid "a"
-msgstr ""
+msgstr "g"
 
 #: umake/interactions/__init__.py:116
 msgid "I don't accept"
-msgstr ""
+msgstr "Jeg godtar ikke"
 
 #: umake/interactions/__init__.py:116 umake/interactions/__init__.py:149
 msgid "N"
-msgstr ""
+msgstr "N"
 
 #: umake/interactions/__init__.py:125 umake/interactions/__init__.py:126
 msgid "{} ({})"
@@ -322,16 +325,16 @@ msgstr ""
 
 #: umake/interactions/__init__.py:129
 msgid "[{}] "
-msgstr ""
+msgstr "[{}] "
 
 #: umake/interactions/__init__.py:148
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: umake/interactions/__init__.py:148
 msgid "y"
-msgstr ""
+msgstr "j"
 
 #: umake/interactions/__init__.py:149
 msgid "No"
-msgstr ""
+msgstr "Nei"
