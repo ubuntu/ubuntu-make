@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2020-04-05 05:26+0000\n"
+"PO-Revision-Date: 2020-04-07 01:35+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "ubuntu-make/ubuntu-make/nb_NO/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
-msgstr ""
+msgstr "# Ubuntu make-installasjon av {}\n"
 
 #: umake/__init__.py:99
 msgid "* Command '{}':"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: umake/__init__.py:116
 msgid "Print version and exit"
-msgstr ""
+msgstr "Skriv ut versjonsinfo og avslutt"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
