@@ -20,14 +20,12 @@
 
 """Dartlang module"""
 
-from contextlib import suppress
 from gettext import gettext as _
 import logging
 import os
-import re
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
-from umake.tools import add_env_to_user, MainLoop, get_current_arch, ChecksumType
+from umake.tools import add_env_to_user, get_current_arch
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -53,11 +51,11 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Dart SDK", description=_("Dart SDK (default)"), is_category_default=True,
                          only_on_archs=_supported_archs,
-                         download_page="https://raw.githubusercontent.com/dart-lang/sdk/master/CHANGELOG.md",
+                         download_page="https://storage.googleapis.com/dart-archive/channels/" +
+                                       "stable/release/latest/VERSION",
                          dir_to_decompress_in_tarball="dart-sdk",
-                         checksum_type=ChecksumType.sha256,
                          required_files_path=[os.path.join("bin", "dart")],
-                         **kwargs)
+                         json=True, **kwargs)
 
     arch_trans = {
         "amd64": "x64",
@@ -66,28 +64,12 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
     }
 
     def parse_download_link(self, line, in_download):
-        """Parse Dart SDK download links"""
-        in_download = False
-        p = re.search(r"^##\s(\d\S+)", line)
-        if p is not None:
-            in_download = True
-        else:
-            in_download = False
-        if in_download:
-            with suppress(AttributeError):
-                self.new_download_url = "https://storage.googleapis.com/dart-archive/channels/stable/" +\
-                                        "release/{}/sdk/".format(p.group(1)) +\
-                                        "dartsdk-linux-{}-release.zip".format(self.arch_trans[get_current_arch()]) +\
-                                        ".sha256sum"
-        return ((None, None), in_download)
-
-    @MainLoop.in_mainloop_thread
-    def get_sha_and_start_download(self, download_result):
-        res = download_result[self.new_download_url]
-        checksum = res.buffer.getvalue().decode('utf-8').split()[0]
-        # you get and store self.download_url
-        url = re.sub('.sha256sum', '', self.new_download_url)
-        self.check_data_and_start_download(url, checksum)
+        """Parse Flutter SDK download links"""
+        in_download = True
+        url = "https://storage.googleapis.com/dart-archive/channels/stable/" + \
+              "release/{}/sdk/".format(line["version"]) +\
+              "dartsdk-linux-{}-release.zip".format(self.arch_trans[get_current_arch()])
+        return (url, in_download)
 
     def post_install(self):
         """Add go necessary env variables"""
@@ -100,24 +82,19 @@ class FlutterLang(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Flutter SDK", description=_("Flutter SDK"),
                          only_on_archs=_supported_archs,
-                         download_page="https://api.flutter.dev/flutter/footer.js",
+                         download_page="https://storage.googleapis.com/flutter_infra/releases/releases_linux.json",
                          dir_to_decompress_in_tarball="flutter",
                          required_files_path=[os.path.join("bin", "flutter")],
-                         **kwargs)
+                         json=True, **kwargs)
 
     def parse_download_link(self, line, in_download):
         """Parse Flutter SDK download links"""
         url = None
-        in_download = False
-        if 'Flutter ' in line:
-            p = re.search(r"Flutter\s(\S+)", line)
-            if p is not None:
+        for asset in line["releases"]:
+            if "linux" in asset["archive"] and "stable" in asset["archive"]:
                 in_download = True
-        if in_download:
-            with suppress(AttributeError):
-                url = "https://storage.googleapis.com/flutter_infra/releases/stable/linux/" +\
-                      "flutter_linux_v{}-stable.tar.xz".format(p.group(1))
-        return ((url, None), in_download)
+                url = self.download_page.rsplit("/", 1)[0] + "/" + asset["archive"]
+        return (url, in_download)
 
     def post_install(self):
         """Add flutter necessary env variables"""
