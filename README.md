@@ -9,6 +9,8 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 
 [![Snap Status](https://build.snapcraft.io/badge/ubuntu/ubuntu-make.svg)](https://build.snapcraft.io/user/ubuntu/ubuntu-make)
 
+[![Translation status](https://hosted.weblate.org/widgets/ubuntu-make/-/svg-badge.svg)](https://hosted.weblate.org/engage/ubuntu-make/?utm_source=widget)
+
 ## Installing
 ### SNAP
 We recommend to use the Ubuntu Make snap to ensure you always have the latest and greatest version, even on older supported releases.
@@ -127,7 +129,7 @@ To run all the tests, with coverage report:
 $ ./runtests
 ```
 
-#### Running some tests with all debug infossome
+#### Running some tests with all debug info
 By default, **runtests** will not display any debug output if the tests are successful, similar to pytest. However, if only  tests are selected, runtests will a display full debug log,
 
 ```sh
