@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2014-12-09 13:12+0000\n"
-"Last-Translator: Didier Roche <didrocks@ubuntu.com>\n"
-"Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2020-05-14 12:41+0000\n"
+"Last-Translator: Mivik <mivik@qq.com>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
+"ubuntu-make/ubuntu-make/zh_Hans/>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.1-dev\n"
 "X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
-"X-Generator: Launchpad (build 17838)\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
@@ -52,7 +54,7 @@ msgstr "如已安装指定框架，请卸载"
 
 #: umake/__init__.py:116
 msgid "Print version and exit"
-msgstr ""
+msgstr "输出版本并退出"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
@@ -60,31 +62,31 @@ msgstr ""
 
 #: umake/frameworks/ide.py:76
 msgid "Pure Eclipse Luna (4.4)"
-msgstr ""
+msgstr "纯净 Eclipse Luna (4.4)"
 
 #: umake/frameworks/ide.py:128
 msgid "The Eclipse Luna Integrated Development Environment"
-msgstr ""
+msgstr "Eclipse Luna 集成开发环境"
 
 #: umake/frameworks/ide.py:131
 msgid "Eclipse Luna"
-msgstr ""
+msgstr "Eclipse Luna"
 
 #: umake/frameworks/ide.py:217
 msgid "PyCharm Community Edition"
-msgstr ""
+msgstr "PyCharm 社区版"
 
 #: umake/frameworks/ide.py:233
 msgid "PyCharm Educational Edition"
-msgstr ""
+msgstr "PyCharm 教育版"
 
 #: umake/frameworks/ide.py:249
 msgid "PyCharm Professional Edition"
-msgstr ""
+msgstr "PyCharm 专业版"
 
 #: umake/frameworks/ide.py:265
 msgid "IntelliJ IDEA Community Edition"
-msgstr ""
+msgstr "IntelliJ IDEA 社区版"
 
 #: umake/frameworks/ide.py:281
 msgid "IntelliJ IDEA"
@@ -95,16 +97,18 @@ msgid "Ruby on Rails IDE"
 msgstr ""
 
 #: umake/frameworks/ide.py:314
+#, fuzzy
 msgid "Complex client-side and server-side javascript IDE"
-msgstr ""
+msgstr "复杂的前端和后端 JavaScript IDE"
 
 #: umake/frameworks/ide.py:331
 msgid "PHP and web development IDE"
-msgstr ""
+msgstr "PHP 和网页开发 IDE"
 
 #: umake/frameworks/ide.py:348
+#, fuzzy
 msgid "CLion integrated C/C++ IDE"
-msgstr ""
+msgstr "CLion 集成 C/C++ IDE"
 
 #: umake/frameworks/ide.py:376
 msgid "The Arduino Software Distribution"
