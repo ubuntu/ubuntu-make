@@ -53,7 +53,8 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     arch_trans = {
         "i386": "386",
-        "ppc64el": "ppc64le"
+        "ppc64el": "ppc64le",
+        "armhf": "armv6l"
     }
 
     def get_framework_arch(self):
