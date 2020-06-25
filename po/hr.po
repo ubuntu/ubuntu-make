@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2020-01-07 00:21+0000\n"
+"PO-Revision-Date: 2020-06-25 13:41+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/hr/>\n"
@@ -16,9 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
-"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.2-dev\n"
 "X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
 
 #: umake/tools.py:48
@@ -61,7 +61,7 @@ msgstr "Ispiši verziju i zatvori program"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
-msgstr "Generička integrativna okruženja za razvoj"
+msgstr "Generička integrirana razvojna okruženja"
 
 #: umake/frameworks/ide.py:76
 msgid "Pure Eclipse Luna (4.4)"
@@ -97,21 +97,21 @@ msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
 msgid "Ruby on Rails IDE"
-msgstr "Integrativno okruženje za razvoj Ruby on Rails"
+msgstr "Integrirano razvojno okruženje Ruby on Rails"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
 msgstr ""
-"Kompleksno javascript integrativno okruženje za razvoj za klijente i "
+"Kompleksno javascript integrirano razvojno okruženje za klijente i "
 "poslužitelje"
 
 #: umake/frameworks/ide.py:331
 msgid "PHP and web development IDE"
-msgstr "Integrativno okruženje za PHP i web razvoj"
+msgstr "Integrirano razvojno okruženje za PHP i web razvoj"
 
 #: umake/frameworks/ide.py:348
 msgid "CLion integrated C/C++ IDE"
-msgstr "CLion integrirano C/C++ integrativno okruženje za razvoj"
+msgstr "CLion integriran C/C++ integrirano razvojno okruženje"
 
 #: umake/frameworks/ide.py:376
 msgid "The Arduino Software Distribution"
@@ -119,7 +119,7 @@ msgstr "Distribucija Arduino softvera"
 
 #: umake/frameworks/ide.py:475
 msgid "The Arduino Software IDE"
-msgstr "Integrativno okruženje za razvoj Arduino softvera"
+msgstr "Integrirano razvojno okruženje Arduino Software"
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
@@ -132,7 +132,7 @@ msgstr "Da bi instalacija radila, moraš se odjaviti i ponovo prijaviti"
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
 msgid "Netbeans IDE"
-msgstr "Integrativno okruženje za razvoj Netbeans"
+msgstr "Integrirano razvojno okruženje Netbeans"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
@@ -264,7 +264,7 @@ msgstr "Okruženje za razvoj igara"
 
 #: umake/frameworks/games.py:48
 msgid "Stencyl game developer IDE"
-msgstr "Integrativno okruženje za razvoj Stencyl igara"
+msgstr "Integrirano razvojno okruženje Stencyl igara"
 
 #: umake/frameworks/games.py:85
 msgid "Stencyl"
