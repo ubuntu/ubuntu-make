@@ -67,6 +67,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.icon_filename = kwargs.get("icon_filename", None)
         self.match_last_link = kwargs.get("match_last_link", False)
         self.json = kwargs.get("json", False)
+        self.override_install_path = kwargs.get("override_install_path", None)
         for extra_arg in ["download_page", "checksum_type", "dir_to_decompress_in_tarball",
                           "desktop_filename", "icon_filename", "required_files_path",
                           "match_last_link"]:
@@ -167,6 +168,9 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                                      "there?".format(path_dir), self.set_installdir_to_clean, UI.return_main_screen))
                     return
         self.install_path = path_dir
+        if self.override_install_path is not None:
+            logger.info("Install Path has been overridden to fix an upstream issue.")
+            self.install_path += "/" + self.override_install_path
         self.set_exec_path()
         self.download_provider_page()
 

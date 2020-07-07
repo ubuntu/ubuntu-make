@@ -100,8 +100,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Create the Android Studio launcher"""
-        add_env_to_user(self.name, {"ANDROID_HOME": {"value": self.install_path, "keep": False},
-                                    "ANDROID_SDK": {"value": self.install_path, "keep": False}})
+        add_env_to_user(self.name, {"ANDROID_HOME": {"value": self.install_path, "keep": False}})
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Android Studio"),
                         icon_path=os.path.join(self.install_path, "bin", "studio.png"),
                         try_exec=os.path.join(self.install_path, "bin", "studio.sh"),
@@ -116,7 +115,7 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Android SDK", description=_("Android SDK"),
                          only_on_archs=_supported_archs, expect_license=True,
-                         packages_requirements=["openjdk-7-jdk | openjdk-8-jdk",
+                         packages_requirements=["openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk",
                                                 "libc6:i386", "libncurses5:i386", "libstdc++6:i386",
                                                 "lib32z1", "zlib1g:i386"],
                          download_page="https://developer.android.com/studio/index.html",
@@ -124,7 +123,7 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball=".",
                          required_files_path=[os.path.join("tools", "android"),
                                               os.path.join("tools", "bin", "sdkmanager")],
-                         **kwargs)
+                         override_install_path="cmdline-tools", **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android SDK download page for license"""
@@ -140,7 +139,6 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
         # add a few fall-back variables that might be used by some tools
         # do not set ANDROID_SDK_HOME here as that is the path of the preference folder expected by the Android tools
         add_env_to_user(self.name, {"ANDROID_HOME": {"value": self.install_path, "keep": False},
-                                    "ANDROID_SDK": {"value": self.install_path, "keep": False},
                                     "PATH": {"value": [os.path.join(self.install_path, "tools"),
                                                        os.path.join(self.install_path, "tools", "bin")]}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
