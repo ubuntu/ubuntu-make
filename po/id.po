@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2015-03-01 08:40+0000\n"
-"Last-Translator: Eka Y Saputra <ekajogja@gmail.com>\n"
-"Language-Team: Indonesian <id@li.org>\n"
+"PO-Revision-Date: 2020-06-02 16:41+0000\n"
+"Last-Translator: silvyaamalia <silvyaamalia@student.uns.ac.id>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/ubuntu-make/"
+"ubuntu-make/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.1-dev\n"
 "X-Launchpad-Export-Date: 2015-04-02 06:32+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
@@ -53,7 +55,7 @@ msgstr "Hapus framework yang ditentukan jika telah terinstal"
 
 #: umake/__init__.py:116
 msgid "Print version and exit"
-msgstr ""
+msgstr "Cetak versi dan keluar"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
@@ -98,40 +100,39 @@ msgid "Ruby on Rails IDE"
 msgstr ""
 
 #: umake/frameworks/ide.py:314
+#, fuzzy
 msgid "Complex client-side and server-side javascript IDE"
-msgstr ""
+msgstr "IDE Javascript pada sisi klien dan server yang kompleks"
 
 #: umake/frameworks/ide.py:331
-#, fuzzy
 msgid "PHP and web development IDE"
-msgstr "IDE untuk pengembangan game Stencyl"
+msgstr "IDE pengembangan web dan PHP"
 
 #: umake/frameworks/ide.py:348
 msgid "CLion integrated C/C++ IDE"
-msgstr ""
+msgstr "CLion yang terintegrasi C/C++ IDE"
 
 #: umake/frameworks/ide.py:376
 msgid "The Arduino Software Distribution"
-msgstr ""
+msgstr "Distribusi Perangkat Lunak Arduino"
 
 #: umake/frameworks/ide.py:475
 msgid "The Arduino Software IDE"
-msgstr ""
+msgstr "IDE Perangkat Lunak Arduino"
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
-msgstr ""
+msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
 #, fuzzy
 msgid "You need to logout and login again for your installation to work"
-msgstr ""
-"Anda harus menjalankan sebuah sesi shell untuk membuat instalasi Anda bekerja"
+msgstr "Anda harus keluar dan masuk lagi agar instalasi dapat bekerja"
 
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
 msgid "Netbeans IDE"
-msgstr ""
+msgstr "Netbeans IDE"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
@@ -140,7 +141,7 @@ msgstr "Dartlang Development Environment"
 #: umake/frameworks/dart.py:49
 #, fuzzy
 msgid "Dart SDK with editor (not supported upstream anyymore)"
-msgstr "Dart SDK with editor (default)"
+msgstr "Dart SDK dengan editor (tidak mendukung upstream)"
 
 #: umake/frameworks/dart.py:56
 #, fuzzy
