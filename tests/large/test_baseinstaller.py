@@ -415,6 +415,7 @@ class BaseInstallerTests(LargeFrameworkTests):
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
+        self.assertFalse(self.path_exists(os.path.dirname(self.installed_path)))
         self.assertFalse(self.path_exists(self.exec_link))
 
     def test_removal_non_default_path(self):
@@ -453,6 +454,7 @@ class BaseInstallerTests(LargeFrameworkTests):
 
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
+        self.assertFalse(self.path_exists(os.path.dirname(self.installed_path)))
 
     def test_automated_install(self):
         """Install Base Framework automatically with no interactive options"""

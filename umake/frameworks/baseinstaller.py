@@ -34,6 +34,7 @@ from umake.interactions import InputText, YesNo, LicenseAgreement, DisplayMessag
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.network.requirements_handler import RequirementsHandler
 from umake.ui import UI
+from umake.settings import DEFAULT_INSTALL_TOOLS_PATH
 from umake.tools import MainLoop, strip_tags, launcher_exists, get_icon_path, get_launcher_path, \
     Checksum, remove_framework_envs_from_user, add_exec_link
 
@@ -136,6 +137,14 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                 os.remove(get_icon_path(self.icon_filename))
         with suppress(FileNotFoundError):
             shutil.rmtree(self.install_path)
+            path = os.path.dirname(self.install_path)
+            while path is not DEFAULT_INSTALL_TOOLS_PATH:
+                if os.listdir(path) == []:
+                    logger.debug("Empty folder, cleaning recursively: {}".format(path))
+                    os.rmdir(path)
+                    path = os.path.dirname(path)
+                else:
+                    break
         remove_framework_envs_from_user(self.name)
         self.remove_from_config()
 
