@@ -8,13 +8,16 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2020-07-14 01:41+0000\n"
+"Last-Translator: Takumi T <utimukat55@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/ubuntu-make/"
+"ubuntu-make/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
@@ -26,69 +29,76 @@ msgstr ""
 
 #: umake/__init__.py:107
 msgid "Deploy and setup developers environment easily on ubuntu"
-msgstr ""
+msgstr "ubuntuでのデプロイと開発環境のセットアップを簡単にします"
 
 #: umake/__init__.py:108
 msgid ""
 "Note that you can also configure different debug logging behavior using "
 "LOG_CFG that points to a log yaml profile."
-msgstr ""
+msgstr "補足:log yamlプロファイルを指すLOG_CFGを使用して、異なるdebugログ出力を設定することも可能です。"
 
 #: umake/__init__.py:111
 msgid "Show this help"
-msgstr ""
+msgstr "このヘルプを参照してください"
 
 #: umake/__init__.py:112
 msgid "Increase output verbosity (2 levels)"
-msgstr ""
+msgstr "出力の詳細さを増加します(2段階)"
 
 #: umake/__init__.py:114
 msgid "Remove specified framework if installed"
-msgstr ""
+msgstr "指定したframeworkがインストール済みの場合は削除します"
 
 #: umake/__init__.py:116
 msgid "Print version and exit"
-msgstr ""
+msgstr "バージョンを表示し、終了します"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
-msgstr ""
+msgstr "一般的なIDE"
 
 #: umake/frameworks/ide.py:76
 msgid "Pure Eclipse Luna (4.4)"
-msgstr ""
+msgstr "純粋なEclipse Luna(4.4)"
 
 #: umake/frameworks/ide.py:128
 msgid "The Eclipse Luna Integrated Development Environment"
-msgstr ""
+msgstr "統合開発環境であるEclipse Luna"
 
 #: umake/frameworks/ide.py:131
+#, fuzzy
 msgid "Eclipse Luna"
-msgstr ""
+msgstr "Eclipse Luna"
 
 #: umake/frameworks/ide.py:217
+#, fuzzy
 msgid "PyCharm Community Edition"
-msgstr ""
+msgstr "PyCharm Community Edition"
 
 #: umake/frameworks/ide.py:233
+#, fuzzy
 msgid "PyCharm Educational Edition"
-msgstr ""
+msgstr "PyCharm Educational Edition"
 
 #: umake/frameworks/ide.py:249
+#, fuzzy
 msgid "PyCharm Professional Edition"
-msgstr ""
+msgstr "PyCharm Professional Edition"
 
 #: umake/frameworks/ide.py:265
+#, fuzzy
 msgid "IntelliJ IDEA Community Edition"
-msgstr ""
+msgstr "IntelliJ IDEA Community Edition"
 
 #: umake/frameworks/ide.py:281
+#, fuzzy
 msgid "IntelliJ IDEA"
-msgstr ""
+msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
+#, fuzzy
 msgid "Ruby on Rails IDE"
-msgstr ""
+msgstr "Ruby on Rails IDE"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
@@ -103,37 +113,44 @@ msgid "CLion integrated C/C++ IDE"
 msgstr ""
 
 #: umake/frameworks/ide.py:376
+#, fuzzy
 msgid "The Arduino Software Distribution"
-msgstr ""
+msgstr "The Arduino Software Distribution"
 
 #: umake/frameworks/ide.py:475
+#, fuzzy
 msgid "The Arduino Software IDE"
-msgstr ""
+msgstr "The Arduino Software IDE"
 
 #: umake/frameworks/ide.py:478
+#, fuzzy
 msgid "Arduino"
-msgstr ""
+msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
 msgid "You need to logout and login again for your installation to work"
-msgstr ""
+msgstr "インストールを終了するにはもう一度ログアウトとログインが必要です"
 
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
+#, fuzzy
 msgid "Netbeans IDE"
-msgstr ""
+msgstr "Netbeans IDE"
 
 #: umake/frameworks/dart.py:43
+#, fuzzy
 msgid "Dartlang Development Environment"
-msgstr ""
+msgstr "Dartlang Development Environment"
 
 #: umake/frameworks/dart.py:49
+#, fuzzy
 msgid "Dart SDK with editor (not supported upstream anymore)"
-msgstr ""
+msgstr "Dart SDK with editor (not supported upstream anymore)"
 
 #: umake/frameworks/dart.py:56
+#, fuzzy
 msgid "Dart SDK (default)"
-msgstr ""
+msgstr "Dart SDK (default)"
 
 #: umake/frameworks/dart.py:97 umake/frameworks/rust.py:134
 #: umake/frameworks/scala.py:66 umake/frameworks/go.py:76
@@ -141,148 +158,172 @@ msgstr ""
 msgid ""
 "You need to restart your current shell session for your {} installation to "
 "work properly"
-msgstr ""
+msgstr "{} のインストールを適切に行うため、現在のシェルを開き直す必要があります"
 
 #: umake/frameworks/rust.py:43
+#, fuzzy
 msgid "Rust language"
-msgstr ""
+msgstr "Rust language"
 
 #: umake/frameworks/rust.py:56
+#, fuzzy
 msgid "The official Rust distribution"
-msgstr ""
+msgstr "The official Rust distribution"
 
 #: umake/frameworks/scala.py:40
+#, fuzzy
 msgid "The Scala Programming Language"
-msgstr ""
+msgstr "The Scala Programming Language"
 
 #: umake/frameworks/scala.py:46
+#, fuzzy
 msgid "Scala compiler and interpreter (default)"
-msgstr ""
+msgstr "Scala compiler and interpreter (default)"
 
 #: umake/frameworks/go.py:39
+#, fuzzy
 msgid "Go language"
-msgstr ""
+msgstr "Go language"
 
 #: umake/frameworks/go.py:46
+#, fuzzy
 msgid "Google compiler (default)"
-msgstr ""
+msgstr "Google compiler (default)"
 
 #: umake/frameworks/android.py:42
+#, fuzzy
 msgid "Android Development Environment"
-msgstr ""
+msgstr "Android Development Environment"
 
 #: umake/frameworks/android.py:80
+#, fuzzy
 msgid "Android Studio (default)"
-msgstr ""
+msgstr "Android Studio (default)"
 
 #: umake/frameworks/android.py:100
+#, fuzzy
 msgid "Android Studio"
-msgstr ""
+msgstr "Android Studio"
 
 #: umake/frameworks/android.py:103
+#, fuzzy
 msgid "Android Studio developer environment"
-msgstr ""
+msgstr "Android Studio developer environment"
 
 #: umake/frameworks/android.py:111
+#, fuzzy
 msgid "Android SDK"
-msgstr ""
+msgstr "Android SDK"
 
 #: umake/frameworks/android.py:147
+#, fuzzy
 msgid "Android NDK"
-msgstr ""
+msgstr "Android NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
-msgstr ""
+msgstr "デフォルト指定されているframeworkが存在しないカテゴリー {} が要求されました"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't install that framework on this machine"
-msgstr ""
+msgstr "このPCにはこのframeworkはインストールできません"
 
 #: umake/frameworks/__init__.py:256
 msgid "You can't remove {} as it isn't installed"
-msgstr ""
+msgstr "インストールされていない {} を削除できません"
 
 #: umake/frameworks/__init__.py:285
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
-msgstr ""
+msgstr "デフォルトframework名が指定されない場合、destdirは / を含むべきです"
 
 #: umake/frameworks/__init__.py:288
 msgid "Remove framework if installed"
-msgstr ""
+msgstr "frameworkがインストール済みの場合、削除してください"
 
 #: umake/frameworks/__init__.py:291
 msgid "Accept license without prompting"
-msgstr ""
+msgstr "プロンプトに表示されないライセンスに同意してください"
 
 #: umake/frameworks/web.py:45
+#, fuzzy
 msgid "Web Developer Environment"
-msgstr ""
+msgstr "Web Developer Environment"
 
 #: umake/frameworks/web.py:51 umake/frameworks/web.py:120
+#, fuzzy
 msgid "Firefox Developer Edition"
-msgstr ""
+msgstr "Firefox Developer Edition"
 
 #: umake/frameworks/web.py:116
 msgid "Choose language: {}"
-msgstr ""
+msgstr "言語を選択してください: {}"
 
 #: umake/frameworks/web.py:123
+#, fuzzy
 msgid "Firefox Aurora with Developer tools"
-msgstr ""
+msgstr "Firefox Aurora with Developer tools"
 
 #: umake/frameworks/web.py:129
 msgid "Install in given language without prompting"
-msgstr ""
+msgstr "プロンプトに表示せずに、与えられた言語でインストールします"
 
 #: umake/frameworks/web.py:141 umake/frameworks/web.py:226
+#, fuzzy
 msgid "Visual Studio focused on modern web and cloud"
-msgstr ""
+msgstr "Visual Studio focused on modern web and cloud"
 
 #: umake/frameworks/web.py:223
+#, fuzzy
 msgid "Visual Studio Code"
-msgstr ""
+msgstr "Visual Studio Code"
 
 #: umake/frameworks/games.py:42
+#, fuzzy
 msgid "Games Development Environment"
-msgstr ""
+msgstr "Games Development Environment"
 
 #: umake/frameworks/games.py:48
+#, fuzzy
 msgid "Stencyl game developer IDE"
-msgstr ""
+msgstr "Stencyl game developer IDE"
 
 #: umake/frameworks/games.py:85
+#, fuzzy
 msgid "Stencyl"
-msgstr ""
+msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
+#, fuzzy
 msgid "Unity 3D Editor Linux experimental support"
-msgstr ""
+msgstr "Unity 3D Editor Linux experimental support"
 
 #: umake/frameworks/games.py:154
+#, fuzzy
 msgid "Unity3D Editor"
-msgstr ""
+msgstr "Unity3D Editor"
 
 #: umake/frameworks/games.py:164
+#, fuzzy
 msgid "Twine tool for creating interactive and nonlinear stories"
-msgstr ""
+msgstr "Twine tool for creating interactive and nonlinear stories"
 
 #: umake/frameworks/games.py:200
+#, fuzzy
 msgid "Twine"
-msgstr ""
+msgstr "Twine"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
-msgstr ""
+msgstr "適切な回答が提供されていません"
 
 #: umake/interactions/__init__.py:75 umake/interactions/__init__.py:83
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
-msgstr ""
+msgstr "あなたの '{}' は受け入れることができません。選択肢は {} です"
 
 #: umake/interactions/__init__.py:80
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
-msgstr ""
+msgstr "あなたの '{}' は受け入れることができません。選択肢は {} と {} です"
 
 #: umake/interactions/__init__.py:100
 msgid " ({})"
@@ -300,7 +341,7 @@ msgstr ""
 
 #: umake/interactions/__init__.py:115
 msgid "I Accept"
-msgstr ""
+msgstr "了承"
 
 #: umake/interactions/__init__.py:115
 msgid "a"
@@ -308,7 +349,7 @@ msgstr ""
 
 #: umake/interactions/__init__.py:116
 msgid "I don't accept"
-msgstr ""
+msgstr "了承しません"
 
 #: umake/interactions/__init__.py:116 umake/interactions/__init__.py:149
 msgid "N"
