@@ -80,6 +80,12 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
 
         if url is None and sha is None:
             return (None, in_download)
+
+        # The url representaion changes often,
+        # add a custom check that the url is correct.
+        if url is not None and not url.startswith("https://"):
+            url = "https://golang.org" + url
+
         return ((url, sha), in_download)
 
     def post_install(self):
