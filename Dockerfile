@@ -4,7 +4,7 @@
 
 # This enables running medium tests of umake.
 
-FROM	ubuntu:14.04
+FROM	ubuntu:18.04
 MAINTAINER	Didier Roche <didrocks@ubuntu.com>
 
 # Set the env variable DEBIAN_FRONTEND to noninteractive
@@ -12,7 +12,10 @@ ENV DEBIAN_FRONTEND noninteractive
 
 #Set default locale
 ENV LANG C.UTF-8
-RUN locale-gen en_US.UTF-8
+RUN \
+  apt-get update && \
+  apt-get install -y locales && \
+  locale-gen en_US.UTF-8
 
 ADD debian/control /tmp/
 ADD docker/umake_docker.pub /tmp/
@@ -24,10 +27,7 @@ RUN \
   apt-get update && \
   apt-get dist-upgrade -y && \
 # install add-apt-repository and tools to create build-deps
-  apt-get install -y software-properties-common devscripts equivs dpkg-dev && \
-# add umake ppa
-  add-apt-repository -y ppa:ubuntu-desktop/ubuntu-make && \
-  apt-get update && \
+  apt-get install -y software-properties-common devscripts equivs dpkg-dev sudo && \
 # install umake build-deps
   mk-build-deps /tmp/control -i --tool 'apt-get --yes' && \
 # for running it as a daemon (and ssh requires the sshd directory)
@@ -45,11 +45,11 @@ RUN \
   cat /tmp/umake_docker.pub >> /home/user/.ssh/authorized_keys && \
   chown -R user:user /home/user/ && \
 # Twisted for a mock FTP server.
-  apt-get install python-twisted-core -y && \
+  apt-get install python3-twisted -y && \
 # add certificates
   update-ca-certificates && \
 # finally remove all ppas and add local repository
-  rm /etc/apt/sources.list.d/* && \
+  # rm /etc/apt/sources.list.d/* && \
   /tmp/create_packages.sh /apt-fake-repo && \
 # clean up stuff
   apt-get clean -y && \
