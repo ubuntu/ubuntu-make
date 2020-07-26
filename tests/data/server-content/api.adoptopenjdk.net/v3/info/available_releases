@@ -1,0 +1,20 @@
+
+{
+    "available_lts_releases": [
+        8,
+        11
+    ],
+    "available_releases": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+    ],
+    "most_recent_feature_release": 14,
+    "most_recent_feature_version": 15,
+    "most_recent_lts": 11,
+    "tip_version": 16
+}

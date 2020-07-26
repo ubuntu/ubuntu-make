@@ -1,0 +1,861 @@
+
+[
+    {
+        "binary": {
+            "architecture": "aarch64",
+            "download_count": 78,
+            "heap_size": "normal",
+            "image_type": "jdk",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "ee87e9f03b1fbe6f328429b78fe1a9f44900026d220c90dfd747fe0bcd62d904",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_aarch64_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 78,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_aarch64_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jdk_aarch64_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 208174601
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:54:27Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "ppc64",
+            "download_count": 9,
+            "heap_size": "normal",
+            "image_type": "jdk",
+            "jvm_impl": "hotspot",
+            "os": "aix",
+            "package": {
+                "checksum": "3de8fb06072d818c8e157d5a2bfc2bd9913594a3ff70f8e070074aee01ea50ab",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_ppc64_aix_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 9,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_ppc64_aix_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jdk_ppc64_aix_hotspot_14.0.2_12.tar.gz",
+                "size": 190986355
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:54:50Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "ppc64le",
+            "download_count": 81,
+            "heap_size": "normal",
+            "image_type": "jdk",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "465a3b8e931896b8d95e452d479615c4bf543535c05b6ea246323ae114e67d7d",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_ppc64le_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 81,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_ppc64le_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jdk_ppc64le_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 192668722
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:55:00Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "s390x",
+            "download_count": 45,
+            "heap_size": "normal",
+            "image_type": "jdk",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "7d27aea30e359cf0bb561f8dcca6f4591dbc3ae831981f8a19aa367d31a9709b",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_s390x_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 45,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_s390x_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jdk_s390x_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 183724475
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:55:10Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x64",
+            "download_count": 3131,
+            "heap_size": "normal",
+            "image_type": "jdk",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "7d5ee7e06909b8a99c0d029f512f67b092597aa5b0e78c109bd59405bbfa74fe",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x64_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 3131,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-1.2.3_test/OpenJDK14U-jdk_x64_linux_hotspot_1.2.3_test.tar.gz",
+                "name": "OpenJDK14U-jdk_x64_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 210764986
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:55:21Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x64",
+            "download_count": 5737,
+            "heap_size": "normal",
+            "image_type": "jdk",
+            "installer": {
+                "checksum": "9a5d065b47f98632fc9398d3d84086658af3cf8c1297ca1aa576db95918bca4d",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x64_mac_hotspot_14.0.2_12.pkg.sha256.txt",
+                "download_count": 5184,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x64_mac_hotspot_14.0.2_12.pkg",
+                "name": "OpenJDK14U-jdk_x64_mac_hotspot_14.0.2_12.pkg",
+                "size": 200865754
+            },
+            "jvm_impl": "hotspot",
+            "os": "mac",
+            "package": {
+                "checksum": "09b7e6ab5d5eb4b73813f4caa793a0b616d33794a17988fa6a6b7c972e8f3dd3",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x64_mac_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 553,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x64_mac_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jdk_x64_mac_hotspot_14.0.2_12.tar.gz",
+                "size": 195705010
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:55:45Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x64",
+            "download_count": 9348,
+            "heap_size": "normal",
+            "image_type": "jdk",
+            "installer": {
+                "checksum": "9cbd03600e58ad8d2383c15e596396fbdfbc9655ba0019f5bc74c910e4082c7c",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x64_windows_hotspot_14.0.2_12.msi.sha256.txt",
+                "download_count": 7889,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x64_windows_hotspot_14.0.2_12.msi",
+                "name": "OpenJDK14U-jdk_x64_windows_hotspot_14.0.2_12.msi",
+                "size": 183926784
+            },
+            "jvm_impl": "hotspot",
+            "os": "windows",
+            "package": {
+                "checksum": "80926003297bf5afc9357ce24c12aee65483fc7889dc34b65fe08bec4d040611",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x64_windows_hotspot_14.0.2_12.zip.sha256.txt",
+                "download_count": 1459,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x64_windows_hotspot_14.0.2_12.zip",
+                "name": "OpenJDK14U-jdk_x64_windows_hotspot_14.0.2_12.zip",
+                "size": 206854695
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:58:32Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "aarch64",
+            "download_count": 29,
+            "heap_size": "normal",
+            "image_type": "jre",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "2b749ceead19d68dd7e3c28b143dc4f94bb0916378a98b7346e851318ea4da84",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_aarch64_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 29,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_aarch64_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jre_aarch64_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 55569772
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:56:09Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "ppc64",
+            "download_count": 9,
+            "heap_size": "normal",
+            "image_type": "jre",
+            "jvm_impl": "hotspot",
+            "os": "aix",
+            "package": {
+                "checksum": "078233d2c3051010913093716d57a78c22f7f9c8987c937d614534121ef250ef",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_ppc64_aix_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 9,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_ppc64_aix_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jre_ppc64_aix_hotspot_14.0.2_12.tar.gz",
+                "size": 44801558
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:56:16Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "ppc64le",
+            "download_count": 32,
+            "heap_size": "normal",
+            "image_type": "jre",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "0f96998be562cfbe8a4114581349dbd2609d0a23091e538fe142dcd9c83e70cf",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_ppc64le_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 32,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_ppc64le_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jre_ppc64le_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 52511171
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:56:20Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "s390x",
+            "download_count": 23,
+            "heap_size": "normal",
+            "image_type": "jre",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "9c4a87ea44165ccbcab5124b997ec1af1551bd2a2b255fca57d7a4e19c2075d3",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_s390x_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 23,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_s390x_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jre_s390x_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 50640799
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:56:24Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x64",
+            "download_count": 250,
+            "heap_size": "normal",
+            "image_type": "jre",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "1107845947da56e6bdad0da0b79210a079a74ec5c806f815ec5db9d09e1a9236",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x64_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 250,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x64_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jre_x64_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 56839756
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:56:28Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x64",
+            "download_count": 120,
+            "heap_size": "normal",
+            "image_type": "jre",
+            "installer": {
+                "checksum": "6e645faff5a7d2aa748b16a1af0e904a5ff2ee9fb1849bfffe132ee56a6b7567",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x64_mac_hotspot_14.0.2_12.pkg.sha256.txt",
+                "download_count": 76,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x64_mac_hotspot_14.0.2_12.pkg",
+                "name": "OpenJDK14U-jre_x64_mac_hotspot_14.0.2_12.pkg",
+                "size": 54747070
+            },
+            "jvm_impl": "hotspot",
+            "os": "mac",
+            "package": {
+                "checksum": "e8b5196de8ecb2b136a28494c2888784b9d9e22e29d2c38528892fb7d0c95260",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x64_mac_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 44,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x64_mac_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jre_x64_mac_hotspot_14.0.2_12.tar.gz",
+                "size": 49725899
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:56:41Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x64",
+            "download_count": 2658,
+            "heap_size": "normal",
+            "image_type": "jre",
+            "installer": {
+                "checksum": "bf468c78387b8095914a2d46af6961d5c22697929b66961e346a41fc8bf909d4",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x64_windows_hotspot_14.0.2_12.msi.sha256.txt",
+                "download_count": 2126,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x64_windows_hotspot_14.0.2_12.msi",
+                "name": "OpenJDK14U-jre_x64_windows_hotspot_14.0.2_12.msi",
+                "size": 40452096
+            },
+            "jvm_impl": "hotspot",
+            "os": "windows",
+            "package": {
+                "checksum": "772733428098e3a1fe1e6a2815e93ef7761046f6846edf2e366250beb14e4d94",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x64_windows_hotspot_14.0.2_12.zip.sha256.txt",
+                "download_count": 532,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x64_windows_hotspot_14.0.2_12.zip",
+                "name": "OpenJDK14U-jre_x64_windows_hotspot_14.0.2_12.zip",
+                "size": 53786649
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:58:40Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "aarch64",
+            "download_count": 1,
+            "heap_size": "normal",
+            "image_type": "testimage",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "9166c184f19908d5a3d09af0ee296dff1469dfc60e8313150d2ca4badfc2b647",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_aarch64_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 1,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_aarch64_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-testimage_aarch64_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 40865693
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:56:55Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "ppc64",
+            "download_count": 0,
+            "heap_size": "normal",
+            "image_type": "testimage",
+            "jvm_impl": "hotspot",
+            "os": "aix",
+            "package": {
+                "checksum": "df3a4b09f017e43f2422cfa762fac54e5f7e3494ef04527c9d4630cebb75b028",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_ppc64_aix_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 0,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_ppc64_aix_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-testimage_ppc64_aix_hotspot_14.0.2_12.tar.gz",
+                "size": 52494275
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:57:07Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "ppc64le",
+            "download_count": 0,
+            "heap_size": "normal",
+            "image_type": "testimage",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "04c8b3a05678aed8d3b5f6c912f6502e5bc5e43f8f37f75873299a256d925565",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_ppc64le_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 0,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_ppc64le_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-testimage_ppc64le_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 44222103
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:57:12Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "s390x",
+            "download_count": 0,
+            "heap_size": "normal",
+            "image_type": "testimage",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "c82f2aca918156f29da48e99c7ded6eb8d89ac22f9bdeda2b6c93a890b90a4a9",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_s390x_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 0,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_s390x_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-testimage_s390x_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 38872691
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:57:16Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x64",
+            "download_count": 2,
+            "heap_size": "normal",
+            "image_type": "testimage",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "9760f65523f08e56ba8163a15ed34ce51b8821af5baa892f475d9a64d79bdf72",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_x64_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 2,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_x64_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-testimage_x64_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 41651324
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:57:20Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x64",
+            "download_count": 1,
+            "heap_size": "normal",
+            "image_type": "testimage",
+            "jvm_impl": "hotspot",
+            "os": "mac",
+            "package": {
+                "checksum": "0a4d6d84302556c967bbff266536ff43814d380bdc279e8ad1e99ff12b9d2b39",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_x64_mac_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 1,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_x64_mac_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-testimage_x64_mac_hotspot_14.0.2_12.tar.gz",
+                "size": 34819227
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:57:24Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x64",
+            "download_count": 5,
+            "heap_size": "normal",
+            "image_type": "testimage",
+            "jvm_impl": "hotspot",
+            "os": "windows",
+            "package": {
+                "checksum": "a179956ca1473c4476e5d290500fd1116ec1b7bc896735fe4908e8c6ab28e410",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_x64_windows_hotspot_14.0.2_12.zip.sha256.txt",
+                "download_count": 5,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_x64_windows_hotspot_14.0.2_12.zip",
+                "name": "OpenJDK14U-testimage_x64_windows_hotspot_14.0.2_12.zip",
+                "size": 28671141
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:58:43Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "arm",
+            "download_count": 74,
+            "heap_size": "normal",
+            "image_type": "jdk",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "65f193496c6977ba7aed1563edc4b5be091b5ff03e3d790074bb4e389a034b36",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_arm_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 74,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_arm_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jdk_arm_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 196776784
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:54:38Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x32",
+            "download_count": 958,
+            "heap_size": "normal",
+            "image_type": "jdk",
+            "installer": {
+                "checksum": "8de52612e913beb01641f84a0d6ec80d244853c3489116d9ec343adb15df80f7",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x86-32_windows_hotspot_14.0.2_12.msi.sha256.txt",
+                "download_count": 689,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x86-32_windows_hotspot_14.0.2_12.msi",
+                "name": "OpenJDK14U-jdk_x86-32_windows_hotspot_14.0.2_12.msi",
+                "size": 164753408
+            },
+            "jvm_impl": "hotspot",
+            "os": "windows",
+            "package": {
+                "checksum": "8991b357facc4e6a3f805ebee16223cd971d886b4f0b9dc49933da527da1a688",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x86-32_windows_hotspot_14.0.2_12.zip.sha256.txt",
+                "download_count": 269,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jdk_x86-32_windows_hotspot_14.0.2_12.zip",
+                "name": "OpenJDK14U-jdk_x86-32_windows_hotspot_14.0.2_12.zip",
+                "size": 184745066
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:56:04Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x32",
+            "download_count": 478,
+            "heap_size": "normal",
+            "image_type": "jre",
+            "installer": {
+                "checksum": "63080dd3f509300add98f2b452aad5cd2004a485e9ddeb7f326f8a8e931ade3b",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x86-32_windows_hotspot_14.0.2_12.msi.sha256.txt",
+                "download_count": 347,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x86-32_windows_hotspot_14.0.2_12.msi",
+                "name": "OpenJDK14U-jre_x86-32_windows_hotspot_14.0.2_12.msi",
+                "size": 36257792
+            },
+            "jvm_impl": "hotspot",
+            "os": "windows",
+            "package": {
+                "checksum": "08b2ae49e124cf6ce7422a6990dd8f0fc9c4153fb5111a8dd799fd48846e426b",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x86-32_windows_hotspot_14.0.2_12.zip.sha256.txt",
+                "download_count": 131,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_x86-32_windows_hotspot_14.0.2_12.zip",
+                "name": "OpenJDK14U-jre_x86-32_windows_hotspot_14.0.2_12.zip",
+                "size": 48071770
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:56:51Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "arm",
+            "download_count": 1,
+            "heap_size": "normal",
+            "image_type": "testimage",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "46065029f7ec18478ce8128bd7ecffa3c118f30054fb32695002be492f90e7ae",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_arm_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 1,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_arm_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-testimage_arm_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 50583836
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:57:02Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "x32",
+            "download_count": 3,
+            "heap_size": "normal",
+            "image_type": "testimage",
+            "jvm_impl": "hotspot",
+            "os": "windows",
+            "package": {
+                "checksum": "7b5707983072b428706e0fd3fcee5485654184d79c4fd687fc1f9ee4fcd23315",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_x86-32_windows_hotspot_14.0.2_12.zip.sha256.txt",
+                "download_count": 3,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-testimage_x86-32_windows_hotspot_14.0.2_12.zip",
+                "name": "OpenJDK14U-testimage_x86-32_windows_hotspot_14.0.2_12.zip",
+                "size": 25275646
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:57:27Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    },
+    {
+        "binary": {
+            "architecture": "arm",
+            "download_count": 26,
+            "heap_size": "normal",
+            "image_type": "jre",
+            "jvm_impl": "hotspot",
+            "os": "linux",
+            "package": {
+                "checksum": "4468ecf74956783ae41a46e8ba023c003c69e4d111622944aad1af764a1bc4af",
+                "checksum_link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_arm_linux_hotspot_14.0.2_12.tar.gz.sha256.txt",
+                "download_count": 26,
+                "link": "https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.2%2B12/OpenJDK14U-jre_arm_linux_hotspot_14.0.2_12.tar.gz",
+                "name": "OpenJDK14U-jre_arm_linux_hotspot_14.0.2_12.tar.gz",
+                "size": 54308491
+            },
+            "project": "jdk",
+            "scm_ref": "jdk-14.0.2+12_adopt",
+            "updated_at": "2020-07-16T08:56:13Z"
+        },
+        "release_name": "jdk-14.0.2+12",
+        "version": {
+            "build": 12,
+            "major": 14,
+            "minor": 0,
+            "openjdk_version": "14.0.2+12",
+            "security": 2,
+            "semver": "14.0.2+12"
+        }
+    }
+]
