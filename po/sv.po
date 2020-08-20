@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2019-10-15 16:53+0000\n"
-"Last-Translator: Mattias Münster <mattiasmun@gmail.com>\n"
+"PO-Revision-Date: 2020-08-20 10:36+0000\n"
+"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/sv/>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9\n"
+"X-Generator: Weblate 4.2.1-dev\n"
 "X-Launchpad-Export-Date: 2015-05-04 07:08+0000\n"
 
 #: umake/tools.py:48
@@ -132,7 +132,7 @@ msgstr "NetBeans IDE"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
-msgstr ""
+msgstr "Dartlang utvecklingsmiljö"
 
 #: umake/frameworks/dart.py:49
 msgid "Dart SDK with editor (not supported upstream anyymore)"
@@ -140,7 +140,7 @@ msgstr ""
 
 #: umake/frameworks/dart.py:56
 msgid "Dart SDK (default)"
-msgstr ""
+msgstr "Dart SDK (standard)"
 
 #: umake/frameworks/dart.py:97 umake/frameworks/rust.py:134
 #: umake/frameworks/scala.py:66 umake/frameworks/go.py:76
@@ -152,7 +152,7 @@ msgstr ""
 
 #: umake/frameworks/rust.py:43
 msgid "Rust language"
-msgstr ""
+msgstr "Rust språk"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
@@ -160,7 +160,7 @@ msgstr ""
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
-msgstr ""
+msgstr "Scala programmeringsspråk"
 
 #: umake/frameworks/scala.py:46
 msgid "Scala compiler and interpreter (default)"
@@ -168,35 +168,35 @@ msgstr ""
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
-msgstr ""
+msgstr "Go språk"
 
 #: umake/frameworks/go.py:46
 msgid "Google compiler (default)"
-msgstr ""
+msgstr "Google kompilator (standard)"
 
 #: umake/frameworks/android.py:42
 msgid "Android Development Environment"
-msgstr ""
+msgstr "Android utvecklingsmiljö"
 
 #: umake/frameworks/android.py:80
 msgid "Android Studio (default)"
-msgstr ""
+msgstr "Android Studio (standard)"
 
 #: umake/frameworks/android.py:100
 msgid "Android Studio"
-msgstr ""
+msgstr "Android Studio"
 
 #: umake/frameworks/android.py:103
 msgid "Android Studio developer environment"
-msgstr ""
+msgstr "Android Studio utvecklingsmiljö"
 
 #: umake/frameworks/android.py:111
 msgid "Android SDK"
-msgstr ""
+msgstr "Android SDK"
 
 #: umake/frameworks/android.py:147
 msgid "Android NDK"
-msgstr ""
+msgstr "Android NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
@@ -225,19 +225,19 @@ msgstr ""
 
 #: umake/frameworks/web.py:45
 msgid "Web Developer Environment"
-msgstr ""
+msgstr "Webutvecklings miljö"
 
 #: umake/frameworks/web.py:51 umake/frameworks/web.py:120
 msgid "Firefox Developer Edition"
-msgstr ""
+msgstr "Firefox Developer Edition"
 
 #: umake/frameworks/web.py:116
 msgid "Choose language: {}"
-msgstr ""
+msgstr "Välj språk: {}"
 
 #: umake/frameworks/web.py:123
 msgid "Firefox Aurora with Developer tools"
-msgstr ""
+msgstr "Firefox Aurora med Utvecklarverktyg"
 
 #: umake/frameworks/web.py:129
 msgid "Install in given language without prompting"
@@ -245,11 +245,11 @@ msgstr ""
 
 #: umake/frameworks/web.py:141 umake/frameworks/web.py:226
 msgid "Visual Studio focused on modern web and cloud"
-msgstr ""
+msgstr "Visual Studio fokuserad på modern webb och moln"
 
 #: umake/frameworks/web.py:223
 msgid "Visual Studio Code"
-msgstr ""
+msgstr "Visual Studio Code"
 
 #: umake/frameworks/games.py:42
 msgid "Games Development Environment"
@@ -269,7 +269,7 @@ msgstr ""
 
 #: umake/frameworks/games.py:154
 msgid "Unity3D Editor"
-msgstr ""
+msgstr "Unity3D Editor"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
@@ -277,7 +277,7 @@ msgstr ""
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
-msgstr ""
+msgstr "Twine"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
