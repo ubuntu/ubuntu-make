@@ -1,4 +1,4 @@
-name: style_test
+name: small_tests
 
 on: [push, pull_request]
 
