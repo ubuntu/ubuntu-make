@@ -5,33 +5,31 @@
 # This enables running medium tests of umake.
 
 FROM	ubuntu:18.04
-MAINTAINER	Didier Roche <didrocks@ubuntu.com>
+LABEL maintainer	Galileo Sartor <galileo.sartor@gmail.com>
 
 # Set the env variable DEBIAN_FRONTEND to noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
-#Set default locale
 ENV LANG C.UTF-8
-RUN \
-  apt-get update && \
-  apt-get install -y locales && \
-  locale-gen en_US.UTF-8
 
-ADD debian/control /tmp/
-ADD docker/umake_docker.pub /tmp/
-ADD tests/data/*.crt /usr/local/share/ca-certificates/
-ADD docker/create_packages.sh /tmp/
+COPY debian/control /tmp/
+COPY docker/umake_docker.pub /tmp/
+COPY tests/data/*.crt /usr/local/share/ca-certificates/
+COPY docker/create_packages.sh /tmp/
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Refresh the image
 RUN \
   apt-get update && \
-  apt-get dist-upgrade -y && \
 # install add-apt-repository and tools to create build-deps
-  apt-get install -y software-properties-common devscripts equivs dpkg-dev sudo && \
+# Twisted for a mock FTP server and locales
+  apt-get install --no-install-recommends -y software-properties-common devscripts equivs dpkg-dev openssh-server sudo python3-twisted locales && \
+# Set default locale
+  locale-gen en_US.UTF-8 && \
 # install umake build-deps
   mk-build-deps /tmp/control -i --tool 'apt-get --yes' && \
 # for running it as a daemon (and ssh requires the sshd directory)
-  apt-get install openssh-server -y && \
   mkdir /var/run/sshd && \
 # disable DNS to not wait on host name resolution (delay when working offline)
   echo "UseDNS no" >> /etc/ssh/sshd_config && \
@@ -44,12 +42,9 @@ RUN \
   mkdir -p /home/user/.ssh && \
   cat /tmp/umake_docker.pub >> /home/user/.ssh/authorized_keys && \
   chown -R user:user /home/user/ && \
-# Twisted for a mock FTP server.
-  apt-get install python3-twisted -y && \
 # add certificates
   update-ca-certificates && \
 # finally remove all ppas and add local repository
-  # rm /etc/apt/sources.list.d/* && \
   /tmp/create_packages.sh /apt-fake-repo && \
 # clean up stuff
   apt-get clean -y && \
