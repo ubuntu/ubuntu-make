@@ -65,7 +65,7 @@ class LocalHttp:
         for hostname in self.use_ssl:
             pem_file = os.path.join(get_data_dir(), "{}.pem".format(hostname))
             if os.path.isfile(pem_file):
-                context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+                context = ssl.SSLContext(ssl.PROTOCOL_TLS)
                 context.load_cert_chain(pem_file)
                 self.ssl_contexts[hostname] = context
                 if not context_associated:
