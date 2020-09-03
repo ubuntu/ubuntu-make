@@ -34,7 +34,6 @@ from umake.network.requirements_handler import RequirementsHandler
 from umake.settings import DEFAULT_INSTALL_TOOLS_PATH, UMAKE_FRAMEWORKS_ENVIRON_VARIABLE, DEFAULT_BINARY_LINK_PATH
 from umake.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_distro_version,\
     is_completion_mode, switch_to_current_user, MainLoop, get_user_frameworks_path, get_current_distro_id
-from umake.interactions import DisplayMessage
 from umake.ui import UI
 
 
@@ -267,7 +266,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def depends(self):
         """Method call to list depends for current framework"""
-        if not self.is_installable:
+        if not self.is_installable and not self.is_installed:
             logger.error(_("Framework {} is not installable".format(self.name)))
             UI.return_main_screen(status_code=2)
 

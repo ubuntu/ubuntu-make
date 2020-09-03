@@ -297,6 +297,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.framework = "framework-b"
         args.accept_license = False
         args.remove = False
+        args.depends = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "setup")\
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
@@ -312,6 +313,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.framework = None
         args.accept_license = False
         args.remove = False
+        args.depends = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "setup")\
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
@@ -327,11 +329,11 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.depends = True
         args.accept_license = False
         args.remove = False
-        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-a"], "depends")\
+        with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "depends")\
                 as depends_call:
             self.CategoryHandler.categories[args.category].run_for(args)
             self.assertTrue(depends_call.called)
-            remove_call.assert_called_with()
+            depends_call.assert_called_with()
             # self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=False))
 
     def test_parse_category_and_framework_run_correct_remove_framework(self):
@@ -393,6 +395,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.framework = "framework-r-installed-not-installable"
         args.accept_license = False
         args.remove = False
+        args.depends = False
         self.assertRaises(BaseException, self.CategoryHandler.categories[args.category].run_for, args)
 
     def test_parse_category_and_framework_can_remove_not_installable_but_installed_framework(self):
@@ -418,6 +421,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
         args.framework = "framework-b"
         args.accept_license = True
         args.remove = False
+        args.depends = False
         with patch.object(self.CategoryHandler.categories[args.category].frameworks["framework-b"], "setup")\
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
@@ -1304,6 +1308,9 @@ class TestCustomFrameworkCantLoad(BaseFrameworkLoader):
 
         def remove(self):
             super().remove()
+
+        def depends(self):
+            super().depends()
 
         @property
         def is_installable(self):
