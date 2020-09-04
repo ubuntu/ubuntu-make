@@ -1,4 +1,4 @@
-name: small_tests
+name: url_tests
 
 on:
   push:
