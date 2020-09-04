@@ -30,7 +30,6 @@ import re
 import shutil
 
 import umake.frameworks.baseinstaller
-from umake.frameworks.electronics import Arduino
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, MainLoop,\
     add_exec_link, get_current_arch, get_current_distro_version
@@ -230,7 +229,6 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
         self.url = content['downloads']['linux']['link']
         self.new_download_url = content['downloads']['linux']['checksumLink']
 
-        # Url is not defined here, but later on in the start_download
         return (None, in_download)
 
     @MainLoop.in_mainloop_thread
@@ -277,7 +275,7 @@ class PyCharm(BaseJetBrains):
         super().__init__(name="PyCharm",
                          description=_("PyCharm Community Edition"),
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['python', 'python3'],
+                         packages_requirements=['python3'],
                          dir_to_decompress_in_tarball='pycharm-community-*',
                          desktop_filename='jetbrains-pycharm-ce.desktop',
                          icon_filename='pycharm.png',
@@ -293,7 +291,7 @@ class PyCharmEducational(BaseJetBrains):
         super().__init__(name="PyCharm Educational",
                          description=_("PyCharm Educational Edition"),
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['python', 'python3'],
+                         packages_requirements=['python3'],
                          dir_to_decompress_in_tarball='pycharm-edu*',
                          desktop_filename='jetbrains-pycharm-edu.desktop',
                          icon_filename='pycharm.png',
@@ -309,7 +307,7 @@ class PyCharmProfessional(BaseJetBrains):
         super().__init__(name="PyCharm Professional",
                          description=_("PyCharm Professional Edition"),
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['python', 'python3'],
+                         packages_requirements=['python3'],
                          dir_to_decompress_in_tarball='pycharm-*',
                          desktop_filename='jetbrains-pycharm.desktop',
                          icon_filename='pycharm.png',
@@ -462,7 +460,7 @@ class Netbeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
                          description=_("Extensible Java IDE"),
                          only_on_archs=['i386', 'amd64'],
                          desktop_filename="netbeans.desktop",
-                         download_page='https://www.apache.org/dist/incubator/netbeans/incubating-netbeans/?C=M;O=D',
+                         download_page='https://downloads.apache.org/netbeans/netbeans/?C=M;O=D',
                          dir_to_decompress_in_tarball="netbeans*",
                          packages_requirements=['openjdk-8-jdk | openjdk-11-jdk'],
                          checksum_type=ChecksumType.sha512,
@@ -476,12 +474,11 @@ class Netbeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
         else:
             in_download = False
         if in_download:
-            p = re.search(r'\[DIR\]\"> <a href=\"(\S+)-(\S+)\/\"', line)
+            p = re.search(r'\[DIR\]\"> <a href=\"(\S+)\/\"', line)
             with suppress(AttributeError):
                 self.new_download_url = self.download_page.replace('?C=M;O=D',
-                                                                   'incubating-{}/'.format(p.group(2)) +
-                                                                   '{}-netbeans-{}-bin.zip.sha512'.format(p.group(1),
-                                                                                                          p.group(2)))
+                                                                   '{}/'.format(p.group(1)) +
+                                                                   'netbeans-{}-bin.zip.sha512'.format(p.group(1)))
         return (None, in_download)
 
     @MainLoop.in_mainloop_thread
@@ -842,7 +839,7 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="RStudio", description=_("RStudio code editor"),
                          only_on_archs=['amd64'],
                          download_page="https://www.rstudio.com/products/rstudio/download/",
-                         packages_requirements=["libjpeg62", "libedit2", "libssl1.0.0 | libssl1.1", "libclang-dev"],
+                        #  packages_requirements=["libjpeg62", "libedit2", "libssl1.0.0 | libssl1.1", "libclang-dev"],
                          desktop_filename="rstudio.desktop",
                          required_files_path=["bin/rstudio"],
                          dir_to_decompress_in_tarball="rstudio-*",
@@ -862,9 +859,9 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
         url = None
         checksum = None
         if get_current_distro_version().split('.')[0] < "18" or \
-           get_current_distro_version(name="debian") < "9":
-            ubuntu_version = 'trusty'
-        elif get_current_distro_version(name="debian") == "9":
+           get_current_distro_version(distro_name="debian") < "9":
+            ubuntu_version = 'xenial'
+        elif get_current_distro_version(distro_name="debian") == "9":
             ubuntu_version = "debian9"
         else:
             ubuntu_version = 'bionic'
@@ -873,8 +870,8 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
             with suppress(AttributeError):
                 url = p.group(1)
                 in_download = True
-        if in_download and '<td><code>' in line:
-            p = re.search('<td><code>(.*)</code></td>', line)
+        if in_download and 'title="SHA-256"' in line:
+            p = re.search('data-content="(.*)">', line)
             with suppress(AttributeError):
                 checksum = p.group(1)
         return ((url, checksum), in_download)
@@ -888,15 +885,6 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
                         comment=_("RStudio makes R easier to use."
                                   "It includes a code editor, debugging & visualization tools."),
                         categories="Development;IDE;"))
-
-
-class Arduino(Arduino):
-
-    def setup(self, *args, **kwargs):
-        '''Print a deprecation warning before calling parent setup()'''
-        logger.warning("Arduino is now in the electronics category, please refer it from this category from now on. "
-                       "This compatibility will be dropped in the future.")
-        super().setup(*args, **kwargs)
 
 
 class VSCodium(umake.frameworks.baseinstaller.BaseInstaller):

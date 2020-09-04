@@ -47,7 +47,7 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
         super().__init__(name="Stencyl", description=_("Stencyl game developer IDE"),
-                         only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['amd64'],
                          download_page="http://www.stencyl.com/download/",
                          desktop_filename="stencyl.desktop",
                          required_files_path=["Stencyl"],
@@ -56,12 +56,11 @@ class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
 
     PERM_DOWNLOAD_LINKS = {
         "amd64": "http://www.stencyl.com/download/get/lin64",
-        "i386": "http://www.stencyl.com/download/get/lin32"
     }
 
     def parse_download_link(self, line, in_download):
         """We have persistent links for Stencyl, return it right away"""
-        url = self.PERM_DOWNLOAD_LINKS[get_current_arch()]
+        url = self.PERM_DOWNLOAD_LINKS["amd64"]
         return ((url, None), in_download)
 
     def post_install(self):
@@ -79,23 +78,17 @@ class Blender(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
         super().__init__(name="Blender", description=_("Very fast and versatile 3D modeller/renderer"),
-                         only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['amd64'],
                          download_page="https://www.blender.org/download/",
                          desktop_filename="blender.desktop",
                          required_files_path=["blender"],
                          dir_to_decompress_in_tarball='blender*', **kwargs)
 
-    arch_trans = {
-        "amd64": "x86_64",
-        "i386": "i686"
-    }
-
     def parse_download_link(self, line, in_download):
         """Parse Blender download links"""
         url = None
-        if '.tar.bz2' in line:
-            p = re.search(r'href=\"(https://www\.blender\.org/[^<]*{}\.tar\.bz2)/?"'.format(
-                          self.arch_trans[get_current_arch()]), line)
+        if 'linux64.tar.xz' in line:
+            p = re.search(r'href=\"(https://www\.blender\.org/[^<]*64\.tar\.xz)/?\"', line)
             with suppress(AttributeError):
                 url = p.group(1)
                 filename = 'release' + re.search('blender-(.*)-linux', url).group(1).replace('.', '') + '.md5'
@@ -130,56 +123,9 @@ def _chrome_sandbox_setuid(path):
 
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
-    def __init__(self, **kwargs):
-        super().__init__(name="Unity3d", description=_("Unity 3D Editor Linux experimental support"),
-                         only_on_archs=['amd64'],
-                         download_page="https://forum.unity3d.com/" +
-                                       "threads/unity-on-linux-release-notes-and-known-issues.350256/page-2",
-                         match_last_link=True,
-                         dir_to_decompress_in_tarball='Editor',
-                         desktop_filename="unity3d-editor.desktop",
-                         required_files_path=[os.path.join("Unity")],
-                         # we need root access for chrome sandbox setUID
-                         need_root_access=True,
-                         # Note that some packages requirements essential to the system itself are not listed (we
-                         # don't want to create fake packages and kill the container for medium tests)
-                         packages_requirements=[
-                             "gconf-service", "lib32gcc1", "lib32stdc++6", "libasound2", "libcairo2",
-                             "libcap2", "libcups2", "libfontconfig1", "libfreetype6", "libgconf-2-4",
-                             "libgdk-pixbuf2.0-0", "libglu1-mesa", "libgtk2.0-0",
-                             "libgl1-mesa-glx | libgl1-mesa-glx-lts-utopic |\
-                              libgl1-mesa-glx-lts-vivid | libgl1-mesa-glx-lts-wily",
-                             "libnspr4", "libnss3", "libpango1.0-0", "libpq5", "libxcomposite1",
-                             "libxcursor1", "libxdamage1", "libxext6", "libxfixes3", "libxi6",
-                             "libxrandr2", "libxrender1", "libxtst6"],
-                         **kwargs)
-
-    def parse_download_link(self, line, in_download):
-        """Parse Unity3d download links"""
-        url = None
-        if "beta.unity" in line:
-            in_download = True
-        if in_download:
-            p = re.search(r'a href="(https:\/\/beta\.unity3d\.com\/download\/[^\/]+)', line)
-            with suppress(AttributeError):
-                url = os.path.join(p.group(1), "LinuxEditorInstaller/Unity.tar.xz")
-        if url is None:
-            return (None, in_download)
-        return ((url, None), in_download)
-
-    def post_install(self):
-        """Create the Unity 3D launcher and setuid chrome sandbox"""
-        with futures.ProcessPoolExecutor(max_workers=1) as executor:
-            # chrome sandbox requires this: https//code.google.com/p/chromium/wiki/LinuxSUIDSandbox
-            f = executor.submit(_chrome_sandbox_setuid, os.path.join(self.install_path, "chrome-sandbox"))
-            if not f.result():
-                UI.return_main_screen(status_code=1)
-        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Unity3D Editor"),
-                        icon_path=os.path.join(self.install_path, "Data", "Resources", "LargeUnityIcon.png"),
-                        try_exec=self.exec_path,
-                        exec=self.exec_link_name,
-                        comment=self.description,
-                        categories="Development;IDE;"))
+        def __init__(self, **kwargs):
+            super().__init__(name="Unity3D", description="For removal only (tarfile not supported upstream anymore)",
+                            download_page=None, only_on_archs=['amd64'], only_for_removal=True, **kwargs)
 
 
 class Twine(umake.frameworks.baseinstaller.BaseInstaller):
@@ -266,41 +212,8 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
 class GDevelop(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
-        super().__init__(name="GDevelop", description=_("Create your own games"),
-                         only_on_archs=['i386', 'amd64'],
-                         download_page="https://api.github.com/repos/4ian/GD/releases/latest",
-                         packages_requirements=["libgconf-2-4"],
-                         dir_to_decompress_in_tarball='gdevelop*',
-                         desktop_filename="gdevelop.desktop",
-                         required_files_path=["gdevelop"],
-                         json=True, **kwargs)
-        self.icon_filename = "GDevelop.png"
-        self.icon_url = "https://raw.githubusercontent.com/4ian/GDevelop/gh-pages/res/icon128linux.png"
-
-    def parse_download_link(self, line, in_download):
-        url = None
-        for asset in line["assets"]:
-            if ".tar.gz" in asset["browser_download_url"]:
-                in_download = True
-                url = asset["browser_download_url"]
-        return (url, in_download)
-
-    def post_install(self):
-        """Create the GDevelop launcher"""
-        DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
-                       on_done=self.save_icon, download=True)
-        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("GDevelop"),
-                        icon_path=os.path.join(self.install_path, self.icon_filename),
-                        try_exec=self.exec_path,
-                        exec=self.exec_link_name,
-                        comment=self.description,
-                        categories="Development;IDE;"))
-
-    def save_icon(self, download_result):
-        """Save correct GDevelop icon"""
-        icon = download_result.pop(self.icon_url).fd.name
-        shutil.copy(icon, os.path.join(self.install_path, self.icon_filename))
-        logger.debug("Copied icon: {}".format(self.icon_url))
+        super().__init__(name="GDevelop", description="For removal only (tarfile not supported upstream anymore)",
+                         download_page=None, only_on_archs=['i386', 'amd64'], only_for_removal=True, **kwargs)
 
 
 class Godot(umake.frameworks.baseinstaller.BaseInstaller):
