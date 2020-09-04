@@ -839,7 +839,7 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="RStudio", description=_("RStudio code editor"),
                          only_on_archs=['amd64'],
                          download_page="https://www.rstudio.com/products/rstudio/download/",
-                        #  packages_requirements=["libjpeg62", "libedit2", "libssl1.0.0 | libssl1.1", "libclang-dev"],
+                         packages_requirements=["libjpeg62", "libedit2", "libssl1.0.0 | libssl1.1", "libclang-dev"],
                          desktop_filename="rstudio.desktop",
                          required_files_path=["bin/rstudio"],
                          dir_to_decompress_in_tarball="rstudio-*",

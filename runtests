@@ -86,6 +86,8 @@ def local_run(args):
 
     if len(args.tests) > 0:
         for test_type in args.tests:
+            if "test_urls" in test_type:
+                pytest_args.extend(["-n 4"])
             for named_test_type in ("small", "medium", "large", "pep8"):
                 if test_type == named_test_type:
                     if test_type == "pep8":

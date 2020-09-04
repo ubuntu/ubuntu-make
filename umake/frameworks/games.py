@@ -20,7 +20,6 @@
 
 """Game IDEs module"""
 
-from concurrent import futures
 from contextlib import suppress
 from gettext import gettext as _
 import logging
@@ -32,7 +31,6 @@ import stat
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem, DownloadCenter
 from umake.tools import as_root, create_launcher, get_application_desktop_file, get_current_arch
-from umake.ui import UI
 
 logger = logging.getLogger(__name__)
 
@@ -123,9 +121,9 @@ def _chrome_sandbox_setuid(path):
 
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
 
-        def __init__(self, **kwargs):
-            super().__init__(name="Unity3D", description="For removal only (tarfile not supported upstream anymore)",
-                            download_page=None, only_on_archs=['amd64'], only_for_removal=True, **kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(name="Unity3D", description="For removal only (tarfile not supported upstream anymore)",
+                         download_page=None, only_on_archs=['amd64'], only_for_removal=True, **kwargs)
 
 
 class Twine(umake.frameworks.baseinstaller.BaseInstaller):
