@@ -107,8 +107,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.dry_run = dry_run
         super().setup()
 
-        # first step, check if installed
-        if self.is_installed:
+        # first step, check if installed or dry_run
+        if self.dry_run:
+            self.download_provider_page()
+        elif self.is_installed:
             UI.display(YesNo("{} is already installed on your system, do you want to reinstall "
                              "it anyway?".format(self.name), self.reinstall, UI.return_main_screen))
         else:
@@ -274,9 +276,6 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                             elif not self.checksum_type:
                                 logger.debug("Found download link for {}".format(url))
 
-            if self.dry_run:
-                logger.error("Url found! Test complete")
-                UI.return_main_screen(status_code=0)
             if hasattr(self, 'get_sha_and_start_download'):
                 logger.debug('Run get_sha_and_start_download')
                 DownloadCenter(urls=[DownloadItem(self.new_download_url, None)],
@@ -293,6 +292,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
             logger.error("URL is: {}".format(url))
             UI.return_main_screen(status_code=1)
         self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
+
+        if self.dry_run:
+            UI.display(DisplayMessage("Found download URL: " + url))
+            UI.return_main_screen(status_code=0)
 
         if license_txt.getvalue() != "":
             logger.debug("Check license agreement.")
