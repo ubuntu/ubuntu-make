@@ -115,7 +115,7 @@ class BaseInstallerTests(LargeFrameworkTests):
     def test_default_path_install(self):
         """Install base installer from scratch test case in default path"""
         self.child = spawn_process(self.command('{} base base-framework -f'.format(UMAKE)))
-        self.expect_and_no_warn("\[I Accept.*\]")  # ensure we have a license question
+        self.expect_and_no_warn(r"\[I Accept.*\]")  # ensure we have a license question
         self.child.sendline("a")
         self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
@@ -134,7 +134,7 @@ class BaseInstallerTests(LargeFrameworkTests):
 
         # ensure that it's detected as installed:
         self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
-        self.expect_and_no_warn("Base Framework is already installed.*\[.*\] ")
+        self.expect_and_no_warn(r"Base Framework is already installed.*\[.*\] ")
         self.child.sendline()
         self.wait_and_close()
 
