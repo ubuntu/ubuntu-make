@@ -92,7 +92,9 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
         if not sig_url:
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
-
+        if self.dry_run:
+            UI.display(DisplayMessage("Found download URL: " + sig_url))
+            UI.return_main_screen(status_code=0)
         DownloadCenter(urls=[DownloadItem(sig_url, None), DownloadItem(self.asc_url, None)],
                        on_done=self.check_gpg_and_start_download, download=False)
 

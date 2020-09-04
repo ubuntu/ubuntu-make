@@ -60,6 +60,9 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
     def language_select_callback(self, url):
         url = url.replace("&amp;", "&")
         logger.debug("Found download link for {}".format(url))
+        if self.dry_run:
+            UI.display(DisplayMessage("Found download URL: " + url))
+            UI.return_main_screen(status_code=0)
         self.download_requests.append(DownloadItem(url, None))
         self.start_download_and_install()
 

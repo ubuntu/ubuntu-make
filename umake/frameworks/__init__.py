@@ -248,7 +248,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
             logger.error(_("You can't install that framework on this machine"))
             UI.return_main_screen(status_code=2)
 
-        if self.need_root_access and os.geteuid() != 0:
+        if not self.dry_run and self.need_root_access and os.geteuid() != 0:
             logger.debug("Requesting root access")
             cmd = ["sudo", "-E", "env"]
             for var in ["PATH", "LD_LIBRARY_PATH", "PYTHONUSERBASE", "PYTHONHOME"]:
@@ -300,6 +300,9 @@ class BaseFramework(metaclass=abc.ABCMeta):
                                                                         "destdir should contain a /"))
         this_framework_parser.add_argument('-r', '--remove', action="store_true",
                                            help=_("Remove framework if installed"))
+        this_framework_parser.add_argument('--dry-run', dest="dry_run", action="store_true",
+                                           help=_("Fetch only the url, then exit."))
+
         if self.expect_license:
             this_framework_parser.add_argument('--accept-license', dest="accept_license", action="store_true",
                                                help=_("Accept license without prompting"))
@@ -317,11 +320,16 @@ class BaseFramework(metaclass=abc.ABCMeta):
         else:
             install_path = None
             auto_accept_license = False
+            dry_run = False
             if args.destdir:
                 install_path = os.path.abspath(os.path.expanduser(args.destdir))
             if self.expect_license and args.accept_license:
                 auto_accept_license = True
-            self.setup(install_path=install_path, auto_accept_license=auto_accept_license)
+            if args.dry_run:
+                dry_run = True
+            self.setup(install_path=install_path,
+                       auto_accept_license=auto_accept_license,
+                       dry_run=dry_run)
 
 
 class MainCategory(BaseCategory):
