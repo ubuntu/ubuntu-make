@@ -96,7 +96,7 @@ class BaseEclipse(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMet
 
     def post_install(self):
         """Create the Eclipse launcher"""
-        icon_path = os.path.join(self.install_path, icon.xpm)
+        icon_path = os.path.join(self.install_path, "icon.xpm")
         if not os.path.exists(icon_path):
             DownloadCenter(urls=[DownloadItem(self.icon_url, None)],
                            on_done=self.save_icon, download=True)
