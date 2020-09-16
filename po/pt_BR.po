@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2015-07-13 13:02+0000\n"
-"Last-Translator: Renato Cruz <natorsc@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"PO-Revision-Date: 2020-09-16 20:36+0000\n"
+"Last-Translator: Mário Victor Ribeiro Silva <mariovictorrs@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
+"ubuntu-make/ubuntu-make/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.3-dev\n"
 "X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
-"X-Generator: Launchpad (build 17838)\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
@@ -77,14 +79,12 @@ msgid "PyCharm Community Edition"
 msgstr "PyCharm Community Edition"
 
 #: umake/frameworks/ide.py:233
-#, fuzzy
 msgid "PyCharm Educational Edition"
-msgstr "PyCharm Community Edition"
+msgstr "PyCharm Edição Educacional"
 
 #: umake/frameworks/ide.py:249
-#, fuzzy
 msgid "PyCharm Professional Edition"
-msgstr "PyCharm Community Edition"
+msgstr "PyCharm Edição Profissional"
 
 #: umake/frameworks/ide.py:265
 msgid "IntelliJ IDEA Community Edition"
@@ -103,7 +103,6 @@ msgid "Complex client-side and server-side javascript IDE"
 msgstr "IDE Javascript lado cliente e lado servidor"
 
 #: umake/frameworks/ide.py:331
-#, fuzzy
 msgid "PHP and web development IDE"
 msgstr "IDE PHP e desenvolvimento web"
 
@@ -124,7 +123,6 @@ msgid "Arduino"
 msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
-#, fuzzy
 msgid "You need to logout and login again for your installation to work"
 msgstr "Você precisa reiniciar a sessão shell para que sua instalação funcione"
 
@@ -138,28 +136,26 @@ msgid "Dartlang Development Environment"
 msgstr "Ambiente de desenvolvimento Dartlang"
 
 #: umake/frameworks/dart.py:49
-#, fuzzy
 msgid "Dart SDK with editor (not supported upstream anyymore)"
 msgstr "Dart SDK com editor (sem suporte upstream)"
 
 #: umake/frameworks/dart.py:56
-#, fuzzy
 msgid "Dart SDK (default)"
-msgstr "Dart SDK com editor (padrão)"
+msgstr "Dart SDK (padrão)"
 
 #: umake/frameworks/dart.py:97 umake/frameworks/rust.py:134
 #: umake/frameworks/scala.py:66 umake/frameworks/go.py:76
 #: umake/frameworks/android.py:135
-#, fuzzy
 msgid ""
 "You need to restart your current shell session for your {} installation to "
 "work properly"
-msgstr "Você precisa reiniciar a sessão shell para que sua instalação funcione"
+msgstr ""
+"Você precisa reiniciar a sessão atual do shell para que sua instalação {} "
+"funcione corretamente"
 
 #: umake/frameworks/rust.py:43
-#, fuzzy
 msgid "Rust language"
-msgstr "Linguagem Go"
+msgstr "Linguagem Rust"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
@@ -170,7 +166,6 @@ msgid "The Scala Programming Language"
 msgstr "Linguagem de programação Scala"
 
 #: umake/frameworks/scala.py:46
-#, fuzzy
 msgid "Scala compiler and interpreter (default)"
 msgstr "Compilador e interpretador Scala (padrão)"
 
@@ -199,7 +194,6 @@ msgid "Android Studio developer environment"
 msgstr "Ambiente de desenvolvimento Android Studio"
 
 #: umake/frameworks/android.py:111
-#, fuzzy
 msgid "Android SDK"
 msgstr "Android SDK"
 
@@ -243,7 +237,6 @@ msgid "Firefox Developer Edition"
 msgstr "Firefox Developer Edition"
 
 #: umake/frameworks/web.py:116
-#, fuzzy
 msgid "Choose language: {}"
 msgstr "Escolha a linguagem: {}"
 
@@ -280,7 +273,6 @@ msgid "Unity 3D Editor Linux experimental support"
 msgstr "Unity 3D Editor Linux suporte experimental"
 
 #: umake/frameworks/games.py:154
-#, fuzzy
 msgid "Unity3D Editor"
 msgstr "Editor Unity3D"
 
