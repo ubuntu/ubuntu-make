@@ -28,6 +28,7 @@ from contextlib import suppress
 import fcntl
 import logging
 import os
+import re
 import tempfile
 import time
 from umake.tools import Singleton, add_foreign_arch, get_foreign_archs, get_current_arch, as_root
@@ -68,8 +69,11 @@ class RequirementsHandler(object, metaclass=Singleton):
                 if arch == get_current_arch():
                     pkg_name = pkg_without_arch_name
             if pkg_name not in self.cache or not self.cache[pkg_name].is_installed:
-                logger.info("{} isn't installed".format(pkg_name))
-                is_installed = False
+                if "openjdk" in pkg_name:
+                    is_installed = self.check_java_equiv(pkg_name)
+                else:
+                    logger.info("{} isn't installed".format(pkg_name))
+                    is_installed = False
         return is_installed
 
     def is_bucket_available(self, bucket):
@@ -95,8 +99,12 @@ class RequirementsHandler(object, metaclass=Singleton):
                         logger.info("{} isn't available on this platform, but {} isn't enabled. So it may be available "
                                     "later on".format(pkg_name, arch))
                         continue
-                logger.info("{} isn't available on this platform".format(pkg_name))
-                all_in_cache = False
+                if "openjdk" in pkg_name:
+                    if not self.check_java_equiv(pkg_name):
+                        all_in_cache = False
+                else:
+                    logger.info("{} isn't available on this platform".format(pkg_name))
+                    all_in_cache = False
         return all_in_cache
 
     def is_bucket_uptodate(self, bucket):
@@ -125,7 +133,31 @@ class RequirementsHandler(object, metaclass=Singleton):
             elif self.cache[pkg_name].is_upgradable:
                 logger.info("We can update {}".format(pkg_name))
                 is_installed_and_uptodate = False
+            if "openjdk" in pkg_name:
+                if self.check_java_equiv(pkg_name):
+                    is_installed_and_uptodate = True
         return is_installed_and_uptodate
+
+    def check_java_equiv(self, pkg_name):
+        """Add exception if java has been installed otherwhise"""
+        openjdk_regex = re.search(r"openjdk-(\d+)-(j\w\w)", pkg_name)
+        required_version = openjdk_regex.group(1)
+        required_release = openjdk_regex.group(2)
+        java_command = "java" if required_release == "jre" else "javac"
+        try:
+            installed_version_string = subprocess.check_output([java_command, "-version"])
+            if required_release == "jre":
+                installed_version = re.search(r"version \"(\d+)\..*\"", installed_version_string)
+            elif required_release == "jdk":
+                installed_version = re.search(r"(\d+)\..*", installed_version_string)
+            logger.error("VER1 = " + installed_version)
+            logger.error("VER2 = " + required_version)
+            if installed_version >= required_version:
+                logger.debug("Not installing openjdk since correct java version is already available")
+                return True
+        except:
+            pass
+        return False
 
     def install_bucket(self, bucket, progress_callback, installed_callback):
         """Install a specific bucket. If any other bucket is in progress, queue the request
