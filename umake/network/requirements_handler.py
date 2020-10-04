@@ -29,6 +29,7 @@ import fcntl
 import logging
 import os
 import re
+import subprocess
 import tempfile
 import time
 from umake.tools import Singleton, add_foreign_arch, get_foreign_archs, get_current_arch, as_root
@@ -47,6 +48,10 @@ class RequirementsHandler(object, metaclass=Singleton):
         logger.info("Create a new apt cache")
         self.cache = apt.Cache()
         self.executor = futures.ThreadPoolExecutor(max_workers=1)
+
+        # Set defaults for openjdk override
+        self.jre_installed_version = None
+        self.jdk_installed_version = None
 
     def is_bucket_installed(self, bucket):
         """Check if the bucket is installed
@@ -143,20 +148,17 @@ class RequirementsHandler(object, metaclass=Singleton):
         openjdk_regex = re.search(r"openjdk-(\d+)-(j\w\w)", pkg_name)
         required_version = openjdk_regex.group(1)
         required_release = openjdk_regex.group(2)
-        java_command = "java" if required_release == "jre" else "javac"
-        try:
-            installed_version_string = subprocess.check_output([java_command, "-version"])
-            if required_release == "jre":
-                installed_version = re.search(r"version \"(\d+)\..*\"", installed_version_string)
-            elif required_release == "jdk":
-                installed_version = re.search(r"(\d+)\..*", installed_version_string)
-            logger.error("VER1 = " + installed_version)
-            logger.error("VER2 = " + required_version)
-            if installed_version >= required_version:
-                logger.debug("Not installing openjdk since correct java version is already available")
-                return True
-        except:
-            pass
+        if required_release == "jre":
+            if not self.jre_installed_version:
+                self.jre_installed_version = subprocess.check_output(["java", "-version"], stderr=subprocess.STDOUT).decode()
+            installed_version = re.search(r"version \"(\d+)\..*\"", self.jre_installed_version).group(1)
+        elif required_release == "jdk":
+            if not self.jdk_installed_version:
+                self.jdk_installed_version = subprocess.check_output(["javac", "-version"], stderr=subprocess.STDOUT).decode()
+            installed_version = re.search(r"(\d+)\..*", self.jdk_installed_version).group(1)
+        if installed_version >= required_version:
+            logger.debug("Not installing openjdk since correct java version is already available")
+            return True
         return False
 
     def install_bucket(self, bucket, progress_callback, installed_callback):
