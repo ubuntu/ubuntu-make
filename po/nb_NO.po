@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2020-04-07 01:35+0000\n"
+"PO-Revision-Date: 2020-10-10 01:26+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "ubuntu-make/ubuntu-make/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
@@ -128,7 +128,7 @@ msgstr ""
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
-msgstr ""
+msgstr "Dartlang-utviklingsmiljø"
 
 #: umake/frameworks/dart.py:49
 msgid "Dart SDK with editor (not supported upstream anymore)"
@@ -156,11 +156,11 @@ msgstr "Den offisielle Rust-distribusjonen"
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
-msgstr ""
+msgstr "Scala-programmeringsspråket"
 
 #: umake/frameworks/scala.py:46
 msgid "Scala compiler and interpreter (default)"
-msgstr ""
+msgstr "Scala-kompillator og fortolker (forvalg)"
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
@@ -168,31 +168,31 @@ msgstr "Språket Go"
 
 #: umake/frameworks/go.py:46
 msgid "Google compiler (default)"
-msgstr ""
+msgstr "Google-kompilator (forvalg)"
 
 #: umake/frameworks/android.py:42
 msgid "Android Development Environment"
-msgstr ""
+msgstr "Android-utviklingsmiljø"
 
 #: umake/frameworks/android.py:80
 msgid "Android Studio (default)"
-msgstr ""
+msgstr "Android Studio (forvalg)"
 
 #: umake/frameworks/android.py:100
 msgid "Android Studio"
-msgstr ""
+msgstr "Android Studio"
 
 #: umake/frameworks/android.py:103
 msgid "Android Studio developer environment"
-msgstr ""
+msgstr "Android Studio-utviklingsmiljø"
 
 #: umake/frameworks/android.py:111
 msgid "Android SDK"
-msgstr ""
+msgstr "Android-SDK"
 
 #: umake/frameworks/android.py:147
 msgid "Android NDK"
-msgstr ""
+msgstr "Android-NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
@@ -257,7 +257,7 @@ msgstr ""
 
 #: umake/frameworks/games.py:85
 msgid "Stencyl"
-msgstr ""
+msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
@@ -273,7 +273,7 @@ msgstr ""
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
-msgstr ""
+msgstr "Twine"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
@@ -321,7 +321,7 @@ msgstr "N"
 
 #: umake/interactions/__init__.py:125 umake/interactions/__init__.py:126
 msgid "{} ({})"
-msgstr ""
+msgstr "{} ({})"
 
 #: umake/interactions/__init__.py:129
 msgid "[{}] "
