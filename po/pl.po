@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2020-03-12 17:33+0000\n"
-"Last-Translator: WaldiS <admin@sto.ugu.pl>\n"
+"PO-Revision-Date: 2020-10-11 11:26+0000\n"
+"Last-Translator: Michal Biesiada <blade-14@o2.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 "X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
 
 #: umake/tools.py:48
@@ -132,12 +132,10 @@ msgid "Netbeans IDE"
 msgstr "Netbeans IDE"
 
 #: umake/frameworks/dart.py:43
-#, fuzzy
 msgid "Dartlang Development Environment"
 msgstr "Środowisko Programistyczne Dartlang"
 
 #: umake/frameworks/dart.py:49
-#, fuzzy
 msgid "Dart SDK with editor (not supported upstream anyymore)"
 msgstr "Dart SDK z edytorem (nie jest obsługiwany w bieżącym trybie)"
 
