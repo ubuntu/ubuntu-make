@@ -502,10 +502,12 @@ class Netbeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     PERM_DOWNLOAD_LINKS = {
-        "i686": "https://go.microsoft.com/fwlink/?LinkID=620885",
         "x86_64": "https://go.microsoft.com/fwlink/?LinkID=620884",
-        "i686-insiders": "https://go.microsoft.com/fwlink/?LinkId=723969",
-        "x86_64-insiders": "https://go.microsoft.com/fwlink/?LinkId=723968"
+        "x86_64-insiders": "https://go.microsoft.com/fwlink/?LinkId=723968",
+        "armhf": "https://aka.ms/linux-armhf",
+        "armhf-insiders": "https://aka.ms/linux-armhf-insider",
+        "arm64": "https://aka.ms/linux-arm64",
+        "arm64-insiders": "https://aka.ms/linux-arm64-insider"
     }
 
     def __init__(self, **kwargs):
@@ -519,7 +521,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
-        """Parse Android Studio download page for license"""
+        """Parse Visual Studio Code download page for license"""
         if 'SOFTWARE LICENSE TERMS' in line:
             in_license = True
         if in_license and "</div>" in line:
@@ -619,8 +621,6 @@ class Atom(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Create the Atom Code launcher"""
         # Add apm to PATH
-        add_exec_link(os.path.join(self.install_path, "resources", "app", "apm", "bin", "apm"),
-                      os.path.join(self.default_binary_link_path, 'apm'))
         create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Atom"),
                         icon_path=os.path.join(self.install_path, "atom.png"),
                         try_exec=self.exec_path,
