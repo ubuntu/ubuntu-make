@@ -22,7 +22,6 @@
 
 from contextlib import suppress
 from gettext import gettext as _
-import gnupg
 import logging
 import os
 import re
@@ -60,6 +59,7 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse Swift download link, expect to find a .sig file"""
         sig_url = None
+        in_download = False
         if '.tar.gz.sig' in line:
             in_download = True
         if in_download:
@@ -98,18 +98,6 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
         DownloadCenter(urls=[DownloadItem(sig_url, None), DownloadItem(self.asc_url, None)],
                        on_done=self.check_gpg_and_start_download, download=False)
 
-    def _check_gpg_signature(self, gnupgdir, asc_content, sig):
-        """check gpg signature (temporary stock in dir)"""
-        gpg = gnupg.GPG(gnupghome=gnupgdir)
-        imported_keys = gpg.import_keys(asc_content)
-        if imported_keys.count == 0:
-            logger.error("Keys not valid")
-            UI.return_main_screen(status_code=1)
-        verify = gpg.verify(sig)
-        if verify is False:
-            logger.error("Signature not valid")
-            UI.return_main_screen(status_code=1)
-
     @MainLoop.in_mainloop_thread
     def check_gpg_and_start_download(self, download_result):
         asc_content = download_result.pop(self.asc_url).buffer.getvalue().decode('utf-8')
@@ -130,10 +118,10 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
         if self.need_root_access:
             with as_root():
                 with tempfile.TemporaryDirectory() as tmpdirname:
-                    self._check_gpg_signature(tmpdirname, asc_content, sig)
+                    _check_gpg_signature(tmpdirname, asc_content, sig)
         else:
             with tempfile.TemporaryDirectory() as tmpdirname:
-                self._check_gpg_signature(tmpdirname, asc_content, sig)
+                _check_gpg_signature(tmpdirname, asc_content, sig)
 
         # you get and store self.download_url
         url = re.sub('.sig', '', sig_url)

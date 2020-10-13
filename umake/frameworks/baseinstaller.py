@@ -23,6 +23,7 @@
 from contextlib import suppress
 from gettext import gettext as _
 from io import StringIO
+import gnupg
 import json
 import logging
 from progressbar import ProgressBar
@@ -460,6 +461,18 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                                                                   dest=self.install_path)
         Decompressor(decompress_fds, self.decompress_and_install_done)
         UI.display(UnknownProgress(self.iterate_until_install_done))
+
+    def _check_gpg_signature(gnupgdir, asc_content, sig):
+        """check gpg signature (temporary stock in dir)"""
+        gpg = gnupg.GPG(gnupghome=gnupgdir)
+        imported_keys = gpg.import_keys(asc_content)
+        if imported_keys.count == 0:
+            logger.error("Keys not valid")
+            UI.return_main_screen(status_code=1)
+        verify = gpg.verify(sig)
+        if verify is False:
+            logger.error("Signature not valid")
+            UI.return_main_screen(status_code=1)
 
     def post_install(self):
         """Call the post_install process, like creating a launcher, adding env variables…"""
