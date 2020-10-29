@@ -68,15 +68,16 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
     def post_install(self):
         """Add rust necessary env variables"""
         add_env_to_user(self.name, {"PATH": {"value": "{}:{}".format(os.path.join(self.install_path, "rustc", "bin"),
-                                                                     os.path.join(self.install_path, "cargo", "bin"))},
-                                    "LD_LIBRARY_PATH": {"value": os.path.join(self.install_path, "rustc", "lib")}})
+                                                                     os.path.join(self.install_path, "cargo", "bin"))}})
 
         # adjust for rust: some symlinks magic to have stdlib craft available
         arch_lib_folder = '{}-unknown-linux-gnu'.format(self.arch_trans[get_current_arch()])
         lib_folder = os.path.join(self.install_path, 'rust-std-{}'.format(arch_lib_folder),
                                   'lib', 'rustlib', arch_lib_folder, 'lib')
+        arch_dest_lib_folder = os.path.join(self.install_path, 'rustc', 'lib', 'rustlib', arch_lib_folder, 'lib')
+        os.mkdir(arch_dest_lib_folder)
         for f in os.listdir(lib_folder):
             os.symlink(os.path.join(lib_folder, f),
-                       os.path.join(self.install_path, 'rustc', 'lib', 'rustlib', arch_lib_folder, 'lib', f))
+                       os.path.join(arch_dest_lib_folder, f))
 
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
