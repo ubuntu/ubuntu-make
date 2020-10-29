@@ -67,8 +67,9 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def post_install(self):
         """Add rust necessary env variables"""
-        add_env_to_user(self.name, {"PATH": {"value": "{}:{}".format(os.path.join(self.install_path, "rustc", "bin"),
-                                                                     os.path.join(self.install_path, "cargo", "bin"))}})
+        add_env_to_user(self.name, {"PATH": {"value": "{}:{}:{}".format(os.path.join(self.install_path, "rustc", "bin"),
+                                                                        os.path.join(self.install_path, "cargo", "bin"),
+                                                                        "$HOME/.cargo/bin")}})
 
         # adjust for rust: some symlinks magic to have stdlib craft available
         arch_lib_folder = '{}-unknown-linux-gnu'.format(self.arch_trans[get_current_arch()])
