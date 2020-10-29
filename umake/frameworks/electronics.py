@@ -100,7 +100,8 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
         else:
             in_download = False
         if in_download:
-            p = re.search(r'href=.*href="(.*)" rel', line)
+            p = re.search(r'href=\"([^>]+\.sha512sum\.txt)\"', line)
+            logger.error(p)
             with suppress(AttributeError):
                 self.new_download_url = "https:" + p.group(1)
         return ((None, None), in_download)
@@ -108,6 +109,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
         res = download_result[self.new_download_url].buffer.getvalue().decode()
+        logger.error(res)
         line = re.search(r'.*linux{}.tar.xz'.format(self.arch_trans[get_current_arch()]), res).group(0)
         # you get and store url and checksum
         checksum = line.split()[0]
