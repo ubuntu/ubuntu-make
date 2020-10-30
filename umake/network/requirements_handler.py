@@ -150,11 +150,19 @@ class RequirementsHandler(object, metaclass=Singleton):
         required_release = openjdk_regex.group(2)
         if required_release == "jre":
             if not self.jre_installed_version:
-                self.jre_installed_version = subprocess.check_output(["java", "-version"], stderr=subprocess.STDOUT).decode()
+                try:
+                    self.jre_installed_version = subprocess.check_output(["java", "-version"], stderr=subprocess.STDOUT).decode()
+                except FileNotFoundError as e:
+                    logger.debug("Missing java command: consider it not installed")
+                    return False
             installed_version = re.search(r"version \"([\d\.]+).*\"", self.jre_installed_version).group(1)
         elif required_release == "jdk":
             if not self.jdk_installed_version:
-                self.jdk_installed_version = subprocess.check_output(["javac", "-version"], stderr=subprocess.STDOUT).decode()
+                try:
+                    self.jdk_installed_version = subprocess.check_output(["javac", "-version"], stderr=subprocess.STDOUT).decode()
+                except FileNotFoundError as e:
+                    logger.debug("Missing javac command: consider it not installed")
+                    return False
             installed_version = re.search(r"([\d\.]+).*", self.jdk_installed_version).group(1)
         if installed_version >= required_version:
             logger.debug("Not installing openjdk since correct java version is already available")
