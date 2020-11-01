@@ -130,11 +130,7 @@ class DownloadCenter:
         session.mount('ftp://', FTPAdapter())
         try:
             with closing(session.get(url, stream=True, headers=headers, cookies=cookies)) as r:
-                if url == "https://godotengine.org/download/linux" and r.status_code == 404:
-                    logger.debug("Do not raise for 404 error if url is godot: " +
-                                 "the webpage returns a 404 even on success")
-                else:
-                    r.raise_for_status()
+                r.raise_for_status()
                 content_size = int(r.headers.get('content-length', -1))
 
                 # read in chunk and send report updates
