@@ -90,7 +90,8 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
     arch_trans = {
         "amd64": "64",
         "i386": "32",
-        "armhf": "arm"  # This should work on the raspberryPi
+        "armhf": "arm",  # This should work on the raspberryPi
+        "arm64": "aarch64"
     }
 
     def parse_download_link(self, line, in_download):
