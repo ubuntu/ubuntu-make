@@ -78,7 +78,7 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
 
         super().__init__(name="Arduino",
                          description=_("The Arduino Software Distribution"),
-                         only_on_archs=['i386', 'amd64', 'armhf'],
+                         only_on_archs=['i386', 'amd64', 'armhf', 'arm64'],
                          download_page='https://www.arduino.cc/en/Main/Software',
                          dir_to_decompress_in_tarball='arduino-*',
                          desktop_filename='arduino.desktop',
