@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2020-01-04 20:21+0000\n"
-"Last-Translator: THANOS SIOURDAKIS <siourdakisthanos@gmail.com>\n"
+"PO-Revision-Date: 2020-12-03 17:29+0000\n"
+"Last-Translator: george k <norhorn@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/el/>\n"
 "Language: el\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 4.4-dev\n"
 "X-Launchpad-Export-Date: 2015-05-04 07:08+0000\n"
 
 #: umake/tools.py:48
@@ -65,7 +65,7 @@ msgstr "Γενικά IDE"
 
 #: umake/frameworks/ide.py:76
 msgid "Pure Eclipse Luna (4.4)"
-msgstr ""
+msgstr "Pure Eclipse Luna (4.4)"
 
 #: umake/frameworks/ide.py:128
 msgid "The Eclipse Luna Integrated Development Environment"
@@ -97,7 +97,7 @@ msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
 msgid "Ruby on Rails IDE"
-msgstr ""
+msgstr "Ruby σε Rails IDE"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
@@ -122,19 +122,16 @@ msgstr ""
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
-msgstr ""
+msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
-#, fuzzy
 msgid "You need to logout and login again for your installation to work"
-msgstr ""
-"Πρέπει να επανεκκινήσεις μια συνεδρία κελύφους για να δουλέψει η εγκατάστασή "
-"σου"
+msgstr "Θα πρέπει να επανασυνδεθείτε για εφαρμογή των αλλαγών"
 
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
 msgid "Netbeans IDE"
-msgstr ""
+msgstr "Netbeans IDE"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
@@ -145,20 +142,17 @@ msgid "Dart SDK with editor (not supported upstream anyymore)"
 msgstr ""
 
 #: umake/frameworks/dart.py:56
-#, fuzzy
 msgid "Dart SDK (default)"
-msgstr "Android Στούντιο (προεπιλεγμένο)"
+msgstr "Dart SDK (προεπιλογή)"
 
 #: umake/frameworks/dart.py:97 umake/frameworks/rust.py:134
 #: umake/frameworks/scala.py:66 umake/frameworks/go.py:76
 #: umake/frameworks/android.py:135
-#, fuzzy
 msgid ""
 "You need to restart your current shell session for your {} installation to "
 "work properly"
 msgstr ""
-"Πρέπει να επανεκκινήσεις μια συνεδρία κελύφους για να δουλέψει η εγκατάστασή "
-"σου"
+"Επανεκκινήστε την τρέχουσα συνεδρία κελύφους για σωστή λειτουργεία του {}"
 
 #: umake/frameworks/rust.py:43
 msgid "Rust language"
