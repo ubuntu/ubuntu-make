@@ -843,7 +843,7 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="rstudio.desktop",
                          required_files_path=["bin/rstudio"],
                          dir_to_decompress_in_tarball="rstudio-*",
-                         checksum_type=ChecksumType.md5,
+                         checksum_type=ChecksumType.sha256,
                          **kwargs)
 
         self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
