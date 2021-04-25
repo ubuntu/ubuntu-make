@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2020-05-14 12:41+0000\n"
-"Last-Translator: Mivik <mivik@qq.com>\n"
+"PO-Revision-Date: 2021-01-08 10:32+0000\n"
+"Last-Translator: Liao junchao <liaojunchao@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "ubuntu-make/ubuntu-make/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
-msgstr ""
+msgstr "# {} 的 Ubuntu make 安装\n"
 
 #: umake/__init__.py:99
 msgid "* Command '{}':"
@@ -33,12 +33,10 @@ msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr "在 Ubuntu 上轻松部署和设置开发环境"
 
 #: umake/__init__.py:108
-#, fuzzy
 msgid ""
 "Note that you can also configure different debug logging behavior using "
 "LOG_CFG that points to a log yaml profile."
-msgstr ""
-"请注意，您还可以通过 LOG_CFG 指向的 yaml 配置文件来设置不同的调试日志行为。"
+msgstr "请注意，您还可以通过 LOG_CFG 指向的 yaml 配置文件来设置不同的调试日志行为。"
 
 #: umake/__init__.py:111
 msgid "Show this help"
@@ -58,7 +56,7 @@ msgstr "输出版本并退出"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
-msgstr ""
+msgstr "一般集成开发环境"
 
 #: umake/frameworks/ide.py:76
 msgid "Pure Eclipse Luna (4.4)"
@@ -90,50 +88,53 @@ msgstr "IntelliJ IDEA 社区版"
 
 #: umake/frameworks/ide.py:281
 msgid "IntelliJ IDEA"
-msgstr ""
+msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
+#, fuzzy
 msgid "Ruby on Rails IDE"
-msgstr ""
+msgstr "Ruby on Rails IDE"
 
 #: umake/frameworks/ide.py:314
-#, fuzzy
 msgid "Complex client-side and server-side javascript IDE"
-msgstr "复杂的前端和后端 JavaScript IDE"
+msgstr "复杂的客户端和服务端 JavaScript IDE"
 
 #: umake/frameworks/ide.py:331
 msgid "PHP and web development IDE"
 msgstr "PHP 和网页开发 IDE"
 
 #: umake/frameworks/ide.py:348
-#, fuzzy
 msgid "CLion integrated C/C++ IDE"
 msgstr "CLion 集成 C/C++ IDE"
 
 #: umake/frameworks/ide.py:376
+#, fuzzy
 msgid "The Arduino Software Distribution"
-msgstr ""
+msgstr "The Arduino Software Distribution"
 
 #: umake/frameworks/ide.py:475
+#, fuzzy
 msgid "The Arduino Software IDE"
-msgstr ""
+msgstr "The Arduino Software IDE"
 
 #: umake/frameworks/ide.py:478
+#, fuzzy
 msgid "Arduino"
-msgstr ""
+msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
 msgid "You need to logout and login again for your installation to work"
-msgstr ""
+msgstr "要使安装生效，您需要注销再登录"
 
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
+#, fuzzy
 msgid "Netbeans IDE"
-msgstr ""
+msgstr "Netbeans IDE"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
-msgstr ""
+msgstr "Dartlang 开发环境"
 
 #: umake/frameworks/dart.py:49
 msgid "Dart SDK with editor (not supported upstream anyymore)"
@@ -149,11 +150,11 @@ msgstr ""
 msgid ""
 "You need to restart your current shell session for your {} installation to "
 "work properly"
-msgstr ""
+msgstr "您需要重启当前shell session以使您的{}安装正常工作"
 
 #: umake/frameworks/rust.py:43
 msgid "Rust language"
-msgstr ""
+msgstr "Rust 语言"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
@@ -161,19 +162,19 @@ msgstr ""
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
-msgstr ""
+msgstr "Scala 程序语言"
 
 #: umake/frameworks/scala.py:46
 msgid "Scala compiler and interpreter (default)"
-msgstr ""
+msgstr "Scala 编译器和解释器（默认）"
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
-msgstr ""
+msgstr "Go语言"
 
 #: umake/frameworks/go.py:46
 msgid "Google compiler (default)"
-msgstr ""
+msgstr "Google 编译器（默认）"
 
 #: umake/frameworks/android.py:42
 msgid "Android Development Environment"
@@ -181,7 +182,7 @@ msgstr "Android 开发环境"
 
 #: umake/frameworks/android.py:80
 msgid "Android Studio (default)"
-msgstr ""
+msgstr "Android Studio（默认）"
 
 #: umake/frameworks/android.py:100
 msgid "Android Studio"
@@ -192,13 +193,12 @@ msgid "Android Studio developer environment"
 msgstr "Android Studio 开发者环境"
 
 #: umake/frameworks/android.py:111
-#, fuzzy
 msgid "Android SDK"
-msgstr "Android Studio"
+msgstr "Android SDK"
 
 #: umake/frameworks/android.py:147
 msgid "Android NDK"
-msgstr ""
+msgstr "Android NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
@@ -206,7 +206,7 @@ msgstr ""
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't install that framework on this machine"
-msgstr ""
+msgstr "你不能在这台机器上安装那个框架"
 
 #: umake/frameworks/__init__.py:256
 msgid "You can't remove {} as it isn't installed"
@@ -227,19 +227,19 @@ msgstr ""
 
 #: umake/frameworks/web.py:45
 msgid "Web Developer Environment"
-msgstr ""
+msgstr "Web 开发环境"
 
 #: umake/frameworks/web.py:51 umake/frameworks/web.py:120
 msgid "Firefox Developer Edition"
-msgstr ""
+msgstr "Firefox 开发版"
 
 #: umake/frameworks/web.py:116
 msgid "Choose language: {}"
-msgstr ""
+msgstr "选择语言：{}"
 
 #: umake/frameworks/web.py:123
 msgid "Firefox Aurora with Developer tools"
-msgstr ""
+msgstr "内置开发工具的 Firefox Aurora"
 
 #: umake/frameworks/web.py:129
 msgid "Install in given language without prompting"
@@ -251,27 +251,29 @@ msgstr ""
 
 #: umake/frameworks/web.py:223
 msgid "Visual Studio Code"
-msgstr ""
+msgstr "Visual Studio Code"
 
 #: umake/frameworks/games.py:42
 msgid "Games Development Environment"
-msgstr ""
+msgstr "游戏开发环境"
 
 #: umake/frameworks/games.py:48
+#, fuzzy
 msgid "Stencyl game developer IDE"
-msgstr ""
+msgstr "Stencyl 游戏开发者集成开发环境"
 
 #: umake/frameworks/games.py:85
 msgid "Stencyl"
-msgstr ""
+msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
 msgstr ""
 
 #: umake/frameworks/games.py:154
+#, fuzzy
 msgid "Unity3D Editor"
-msgstr ""
+msgstr "Unity3D Editor"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
@@ -279,7 +281,7 @@ msgstr ""
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
-msgstr ""
+msgstr "Twine"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
