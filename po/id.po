@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2020-06-02 16:41+0000\n"
-"Last-Translator: silvyaamalia <silvyaamalia@student.uns.ac.id>\n"
+"PO-Revision-Date: 2021-04-29 02:32+0000\n"
+"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/id/>\n"
 "Language: id\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 "X-Launchpad-Export-Date: 2015-04-02 06:32+0000\n"
 
 #: umake/tools.py:48
@@ -33,13 +33,12 @@ msgid "Deploy and setup developers environment easily on ubuntu"
 msgstr "Memasang dan mengatur lingkungan pengembangan dengan mudah di ubuntu"
 
 #: umake/__init__.py:108
-#, fuzzy
 msgid ""
 "Note that you can also configure different debug logging behavior using "
 "LOG_CFG that points to a log yaml profile."
 msgstr ""
 "Anda juga bisa mengonfigurasikan perilaku pencatatan debug yang berbeda "
-"menggunakan LOG_CFG yang merujuk ke sebuah profil pencatatan yaml"
+"menggunakan LOG_CFG yang merujuk ke sebuah profil pencatatan yaml."
 
 #: umake/__init__.py:111
 msgid "Show this help"
@@ -78,14 +77,12 @@ msgid "PyCharm Community Edition"
 msgstr "PyCharm Community Edition"
 
 #: umake/frameworks/ide.py:233
-#, fuzzy
 msgid "PyCharm Educational Edition"
-msgstr "PyCharm Community Edition"
+msgstr "PyCharm Edisi Edukasi"
 
 #: umake/frameworks/ide.py:249
-#, fuzzy
 msgid "PyCharm Professional Edition"
-msgstr "PyCharm Community Edition"
+msgstr "PyCharm Edisi Professional"
 
 #: umake/frameworks/ide.py:265
 msgid "IntelliJ IDEA Community Edition"
@@ -97,12 +94,11 @@ msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
 msgid "Ruby on Rails IDE"
-msgstr ""
+msgstr "Ruby on Rails IDE"
 
 #: umake/frameworks/ide.py:314
-#, fuzzy
 msgid "Complex client-side and server-side javascript IDE"
-msgstr "IDE Javascript pada sisi klien dan server yang kompleks"
+msgstr "Complex client-side dan server-side javascript IDE"
 
 #: umake/frameworks/ide.py:331
 msgid "PHP and web development IDE"
@@ -125,7 +121,6 @@ msgid "Arduino"
 msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
-#, fuzzy
 msgid "You need to logout and login again for your installation to work"
 msgstr "Anda harus keluar dan masuk lagi agar instalasi dapat bekerja"
 
@@ -139,42 +134,36 @@ msgid "Dartlang Development Environment"
 msgstr "Dartlang Development Environment"
 
 #: umake/frameworks/dart.py:49
-#, fuzzy
 msgid "Dart SDK with editor (not supported upstream anyymore)"
 msgstr "Dart SDK dengan editor (tidak mendukung upstream)"
 
 #: umake/frameworks/dart.py:56
-#, fuzzy
 msgid "Dart SDK (default)"
-msgstr "Dart SDK with editor (default)"
+msgstr "Dart SDK (default)"
 
 #: umake/frameworks/dart.py:97 umake/frameworks/rust.py:134
 #: umake/frameworks/scala.py:66 umake/frameworks/go.py:76
 #: umake/frameworks/android.py:135
-#, fuzzy
 msgid ""
 "You need to restart your current shell session for your {} installation to "
 "work properly"
-msgstr ""
-"Anda harus menjalankan sebuah sesi shell untuk membuat instalasi Anda bekerja"
+msgstr "Anda harus memulai ulang sesi shell {} agar instalasi Anda bekerja"
 
 #: umake/frameworks/rust.py:43
-#, fuzzy
 msgid "Rust language"
-msgstr "Bahasa Go"
+msgstr "Bahasa Rust"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
-msgstr ""
+msgstr "Distribusi resmi Rust"
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
-msgstr ""
+msgstr "Bahasa pemograman Scala"
 
 #: umake/frameworks/scala.py:46
-#, fuzzy
 msgid "Scala compiler and interpreter (default)"
-msgstr "Google compiler (default)"
+msgstr "Scala compiler dan interpreter (default)"
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
@@ -201,9 +190,8 @@ msgid "Android Studio developer environment"
 msgstr "Lingkungan pengembangan Android Studio"
 
 #: umake/frameworks/android.py:111
-#, fuzzy
 msgid "Android SDK"
-msgstr "Android NDK"
+msgstr "Android SDK"
 
 #: umake/frameworks/android.py:147
 msgid "Android NDK"
@@ -211,11 +199,11 @@ msgstr "Android NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
-msgstr ""
+msgstr "Framework default untuk kategori {} dibutuhkan jika tidak ada"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't install that framework on this machine"
-msgstr ""
+msgstr "Anda tidak dapat menginstal framework pada perangkat ini"
 
 #: umake/frameworks/__init__.py:256
 msgid "You can't remove {} as it isn't installed"
@@ -233,7 +221,7 @@ msgstr "Hapus framework jika terinstal"
 
 #: umake/frameworks/__init__.py:291
 msgid "Accept license without prompting"
-msgstr ""
+msgstr "Terima lisensi tanpa bertanya"
 
 #: umake/frameworks/web.py:45
 msgid "Web Developer Environment"
@@ -244,9 +232,8 @@ msgid "Firefox Developer Edition"
 msgstr "Firefox Developer Edition"
 
 #: umake/frameworks/web.py:116
-#, fuzzy
 msgid "Choose language: {}"
-msgstr "Bahasa Go"
+msgstr "Pilih bahasa: {}"
 
 #: umake/frameworks/web.py:123
 msgid "Firefox Aurora with Developer tools"
@@ -254,15 +241,15 @@ msgstr "Firefox Aurora with Developer tools"
 
 #: umake/frameworks/web.py:129
 msgid "Install in given language without prompting"
-msgstr ""
+msgstr "Instal dalam bahasa tertentu tanpa bertanya"
 
 #: umake/frameworks/web.py:141 umake/frameworks/web.py:226
 msgid "Visual Studio focused on modern web and cloud"
-msgstr ""
+msgstr "Visual Studio berfokus pada web dan cloud modern"
 
 #: umake/frameworks/web.py:223
 msgid "Visual Studio Code"
-msgstr ""
+msgstr "Visual Studio Code"
 
 #: umake/frameworks/games.py:42
 msgid "Games Development Environment"
@@ -278,20 +265,19 @@ msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
-msgstr ""
+msgstr "Dukungan eksperimental Unity 3D Editor Linux"
 
 #: umake/frameworks/games.py:154
-#, fuzzy
 msgid "Unity3D Editor"
-msgstr "Dart Editor"
+msgstr "Editor Unity3D"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
-msgstr ""
+msgstr "Twine untuk membuat cerita interaktif dan nonlinear"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
-msgstr ""
+msgstr "Twine"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
@@ -330,7 +316,7 @@ msgstr "Setuju"
 
 #: umake/interactions/__init__.py:115
 msgid "a"
-msgstr ""
+msgstr "a"
 
 #: umake/interactions/__init__.py:116
 msgid "I don't accept"
@@ -338,7 +324,7 @@ msgstr "Tidak setuju"
 
 #: umake/interactions/__init__.py:116 umake/interactions/__init__.py:149
 msgid "N"
-msgstr ""
+msgstr "N"
 
 #: umake/interactions/__init__.py:125 umake/interactions/__init__.py:126
 msgid "{} ({})"
@@ -354,7 +340,7 @@ msgstr "Ya"
 
 #: umake/interactions/__init__.py:148
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: umake/interactions/__init__.py:149
 msgid "No"
