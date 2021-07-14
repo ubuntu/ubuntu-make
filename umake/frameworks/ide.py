@@ -512,7 +512,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
         super().__init__(name="Visual Studio Code", description=_("Visual Studio focused on modern web and cloud"),
-                         only_on_archs=['i386', 'amd64'], expect_license=True,
+                         only_on_archs=['i386', 'amd64', 'arm', 'arm64'], expect_license=True,
                          download_page="https://code.visualstudio.com/License",
                          desktop_filename="visual-studio-code.desktop",
                          required_files_path=["bin/code"],
@@ -682,23 +682,23 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
         super().__init__(name="Sublime Text", description=_("Sophisticated text editor for code, markup and prose"),
-                         only_on_archs=['i386', 'amd64'],
-                         download_page="https://sublimetext.com/3",
+                         only_on_archs=['amd64', 'aarch64'],
+                         download_page="https://sublimetext.com/download",
                          desktop_filename="sublime-text.desktop",
                          required_files_path=["sublime_text"],
-                         dir_to_decompress_in_tarball="sublime_text_*",
+                         dir_to_decompress_in_tarball="sublime_text",
                          **kwargs)
 
     arch_trans = {
         "amd64": "x64",
-        "i386": "x32"
+        "aarch64": "arm64"
     }
 
     def parse_download_link(self, line, in_download):
         """Parse SublimeText download links"""
         url = None
-        if '.tar.bz2' in line:
-            p = re.search(r'href="([^<]*{}.tar.bz2)"'.format(self.arch_trans[get_current_arch()]), line)
+        if '.tar.xz' in line:
+            p = re.search(r'href="([^<]*{}.tar.xz)"'.format(self.arch_trans[get_current_arch()]), line)
             with suppress(AttributeError):
                 url = p.group(1)
         return ((url, None), in_download)
