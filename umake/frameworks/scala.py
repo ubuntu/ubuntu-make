@@ -46,19 +46,19 @@ class ScalaLang(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="Scala Lang", description=_("Scala compiler and interpreter (default)"),
                          is_category_default=True,
                          packages_requirements=["openjdk-7-jre | openjdk-8-jre"],
-                         download_page="http://www.scala-lang.org/download/",
+                         download_page="https://api.github.com/repos/lampepfl/dotty/releases/latest",
                          dir_to_decompress_in_tarball="scala-*",
-                         required_files_path=[os.path.join("bin", "scala")], **kwargs)
+                         required_files_path=[os.path.join("bin", "scala")],
+                         json=True, **kwargs)
 
     def parse_download_link(self, line, in_download):
         """Parse Scala download link, expect to find a url"""
-
-        if 'id="#link-main-unixsys"' in line:
-            p = re.search(r'href="(.*)"', line)
-            with suppress(AttributeError):
-                url = p.group(1)
-                return ((url, None), True)
-        return ((None, None), False)
+        url = None
+        for asset in line["assets"]:
+            if ".tar." in asset["browser_download_url"]:
+                in_download = True
+                url = asset["browser_download_url"]
+        return (url, in_download)
 
     def post_install(self):
         """Add the necessary Scala environment variables"""
