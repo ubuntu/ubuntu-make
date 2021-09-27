@@ -172,14 +172,11 @@ class EclipseJS(BaseEclipse):
     executable = 'eclipse'
 
     def __init__(self, **kwargs):
-        super().__init__(name="Eclipse JavaScript",
-                         description=_("Eclipse IDE for JavaScript and Web Developers"),
-                         dir_to_decompress_in_tarball='eclipse',
-                         desktop_filename='eclipse-javascript.desktop',
-                         only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
-                         icon_filename='javascript.png',
-                         **kwargs)
+            super().__init__(name="Eclipse JavaScript",
+                             description="For removal only (tarfile not supported upstream anymore)",
+                             download_page=None, only_on_archs=['i386', 'amd64'],
+                             icon_filename='js.png',
+                             only_for_removal=True, **kwargs)
 
 
 class EclipseCPP(BaseEclipse):

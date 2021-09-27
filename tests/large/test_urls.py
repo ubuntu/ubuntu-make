@@ -153,11 +153,6 @@ class UrlFetchTests(LargeFrameworkTests):
         self.child = spawn_process(self.command(f'{UMAKE} ide eclipse-jee --dry-run'))
         self.expect_and_no_warn("Found download URL:.*")
 
-    def test_eclipse_javascript_install(self):
-        """Install base installer from scratch test case"""
-        self.child = spawn_process(self.command(f'{UMAKE} ide eclipse-javascript --dry-run'))
-        self.expect_and_no_warn("Found download URL:.*")
-
     def test_eclipse_install(self):
         """Install base installer from scratch test case"""
         self.child = spawn_process(self.command(f'{UMAKE} ide eclipse --dry-run'))
