@@ -96,7 +96,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse Android Studio download link, expect to find a sha1sum and a url"""
         return self.category.parse_download_link('studio_linux_bundle_download', line, in_download,
-                                                 r'href=\"(.*android-studio-ide-.*-linux.*.tar.gz)\"')
+                                                 r'href=\"(.*android-studio-.*-linux.tar.gz)\"')
 
     def post_install(self):
         """Create the Android Studio launcher"""
