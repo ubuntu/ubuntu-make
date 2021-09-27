@@ -296,6 +296,8 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
         if self.dry_run:
             UI.display(DisplayMessage("Found download URL: " + url))
+            if checksum is not None:
+                UI.display(DisplayMessage("Found download checksum: " + checksum))
             UI.return_main_screen(status_code=0)
 
         if license_txt.getvalue() != "":
