@@ -182,20 +182,19 @@ class AndroidNDK(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Android NDK", description=_("Android NDK"),
                          only_on_archs='amd64', expect_license=True,
-                         download_page="https://developer.android.com/ndk/downloads/index.html",
-                         checksum_type=ChecksumType.sha1,
+                         download_page="https://developer.android.com/ndk/downloads",
                          packages_requirements=['clang'],
                          dir_to_decompress_in_tarball="android-ndk-*",
                          required_files_path=[os.path.join("ndk-build")], **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android NDK download page for license"""
-        return self.category.parse_license('<div id="ndk_linux64_download"', line, license_txt, in_license)
+        return self.category.parse_license('<div id=\"ndk_lts_linux64_download\"', line, license_txt, in_license)
 
     def parse_download_link(self, line, in_download):
         """Parse Android NDK download link, expect to find a sha1sum and a url"""
-        return self.category.parse_download_link('ndk_linux64_download', line, in_download,
-                                                 r'href=\"(https://dl.google.com.*-linux.*.zip)\"')
+        return self.category.parse_download_link('agree_ndk_lts_linux64_download', line, in_download,
+                                                 r'href=\"(https://dl.google.com.*-linux.zip)\"')
 
     def post_install(self):
         """Add necessary environment variables"""
