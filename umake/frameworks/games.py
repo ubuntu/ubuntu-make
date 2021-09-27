@@ -85,8 +85,8 @@ class Blender(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse Blender download links"""
         url = None
-        if 'linux64.tar.xz' in line:
-            p = re.search(r'href=\"(https://www\.blender\.org/[^<]*64\.tar\.xz)/?\"', line)
+        if 'linux-x64.tar.xz' in line:
+            p = re.search(r'href=\"(https:\/\/www\.blender\.org\/.*linux-x64\.tar\.xz).?"', line)
             with suppress(AttributeError):
                 url = p.group(1)
                 filename = 'release' + re.search('blender-(.*)-linux', url).group(1).replace('.', '') + '.md5'
