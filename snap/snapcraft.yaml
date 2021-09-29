@@ -12,20 +12,21 @@ description: |
   features!
 grade: stable
 confinement: classic
-base: core18
+base: core20
 
 apps:
   umake:
     command: bin/umake-wrapper
     completer: umake-completion
+    environment:
+      PYTHONPATH: $SNAP/lib/python3.8/site-packages:$PYTHONPATH
 
 parts:
   umake:
     source: .
     plugin: python
-    organize:
-      lib/python3/dist-packages/umake: lib/python3.6/site-packages/umake
     build-packages:
+      - libapt-pkg-dev
       - gettext
       - python3-apt
       - python3-argcomplete
@@ -54,7 +55,7 @@ parts:
       - libstdc++6
       - libc6
       - libuuid1
-      - libreadline7
+      - libreadline8
       - libtinfo5
       - libselinux1
       - libpcre3
@@ -67,6 +68,23 @@ parts:
       - libmount1
       - libncursesw5
       - libdb5.3
+    build-environment:
+      - SNAPCRAFT_PYTHON_VENV_ARGS: "--system-site-packages"
+  python3:
+    plugin: nil
+    source: .
+    stage-packages:
+      - libpython3-stdlib
+      - libpython3.8-stdlib
+      - libpython3.8-minimal
+      - python3-pip
+      - python3-setuptools
+      - python3-wheel
+      - python3-venv
+      - python3-minimal
+      - python3-distutils
+      - python3-pkg-resources
+      - python3.8-minimal
   umake-completion:
     plugin: dump
     source: snap/local
