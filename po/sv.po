@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2021-07-10 02:34+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2021-10-01 15:38+0000\n"
+"Last-Translator: Kristoffer Grundström <lovaren@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/sv/>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Launchpad-Export-Date: 2015-05-04 07:08+0000\n"
 
 #: umake/tools.py:48
@@ -136,7 +136,7 @@ msgstr "Dartlang utvecklingsmiljö"
 
 #: umake/frameworks/dart.py:49
 msgid "Dart SDK with editor (not supported upstream anyymore)"
-msgstr ""
+msgstr "Dart SDK med redigerare (stöds inte längre uppströms)"
 
 #: umake/frameworks/dart.py:56
 msgid "Dart SDK (default)"
@@ -149,6 +149,8 @@ msgid ""
 "You need to restart your current shell session for your {} installation to "
 "work properly"
 msgstr ""
+"Du behöver starta om din nuvarande skal-session för att din {}-installation "
+"ska fungera korrekt"
 
 #: umake/frameworks/rust.py:43
 msgid "Rust language"
@@ -156,7 +158,7 @@ msgstr "Språket Rust"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
-msgstr ""
+msgstr "Den officiella Rust-distributionen"
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
@@ -201,10 +203,11 @@ msgstr "Android NDK"
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
 msgstr ""
+"Ett standardiserat ramverk för kategorin {} begärdes där det inte fanns någon"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't install that framework on this machine"
-msgstr ""
+msgstr "Du kan inte installera det här ramverket i den här maskinen"
 
 #: umake/frameworks/__init__.py:256
 msgid "You can't remove {} as it isn't installed"
@@ -221,7 +224,7 @@ msgstr "Avinstallera ramverket om det är installerat"
 
 #: umake/frameworks/__init__.py:291
 msgid "Accept license without prompting"
-msgstr ""
+msgstr "Acceptera licensen utan att fråga"
 
 #: umake/frameworks/web.py:45
 msgid "Web Developer Environment"
@@ -241,7 +244,7 @@ msgstr "Firefox Aurora med Utvecklarverktyg"
 
 #: umake/frameworks/web.py:129
 msgid "Install in given language without prompting"
-msgstr ""
+msgstr "Installera i det angivna språket utan att fråga"
 
 #: umake/frameworks/web.py:141 umake/frameworks/web.py:226
 msgid "Visual Studio focused on modern web and cloud"
