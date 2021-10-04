@@ -1,4 +1,70 @@
-ubuntu-make (20.04) UNRELEASED; urgency=medium
+ubuntu-make (21.09) UNRELEASED; urgency=medium
+
+  [ Galileo Sartor ]
+  * Java: Add AdoptOpenJDK and OpenJFX builds+tests
+  * Ide: Add aarch64 in Arduino ide
+  * Ide: Add arm/arm64 vscode builds
+  * Ide: Add dependencies to rstudio
+  * Java: Add java equivalent check to enable use of different releases
+  * Go: Add raspberrypi 3 go arch
+  * Add initial update function with baseinstaller tests
+  * Add url parsing tests
+  * Deprecate Eclipse JS
+  * Move snap package to core20
+  * Parse openjdk version only once per run
+  * Rust: symlink arch-specific libraries
+  * Switch scala lang to github repo
+  * Update to sublime-text 4
+  * Update/deprecate framework parsers
+
+  [ Allan Nordhøy ]
+  * Update Norwegian translations
+
+  [ Kristoffer Grundström ]
+  * updated Swedish translations
+  
+  [ Liao junchao ]
+  * updated Chinese (Simplified) translations
+  
+  [ Luna Jernberg ]
+  * updated Swedish translations
+  
+  [ Michal Biesiada ]
+  * updated Polish translations
+  
+  [ Milo Ivir ]
+  * updated Croatian translations
+  
+  [ Mivik ]
+  * updated Chinese (Simplified) translations
+  
+  [ Mário Victor Ribeiro Silva ]
+  * updated Portuguese (Brazil) translations
+  
+  [ Reza Almanda ]
+  * updated Indonesian translations
+  
+  [ Takumi T ]
+  * updated Japanese translations
+  
+  [ Translator ]
+  * updated Finnish translations
+  
+  [ george k ]
+  * updated Greek translations
+  
+  [ marklin0913da248e4cdada422a ]
+  * updated Chinese (Traditional) translations
+  
+  [ silvyaamalia ]
+  * updated Indonesian translations
+  
+  [ udo pton ]
+  * updated Turkish translations
+
+ -- Galileo Sartor <galileo.sartor@gmail.com>  Tue, 28 Sep 2021 11:49:48 +0200
+
+ubuntu-make (20.04) groovy; urgency=medium
 
   [ Galileo Sartor ]
   * translations: integrate weblate support
@@ -19,7 +85,7 @@ ubuntu-make (20.04) UNRELEASED; urgency=medium
   * Removed not consistent logging
   * Added terraform support
 
- -- Galileo Sartor <galileo@moria>  Sun, 05 Apr 2020 12:30:25 +0200
+ -- Galileo Sartor <galileo.sartor@gmail.com>  Sun, 05 Apr 2020 12:30:25 +0200
 
 ubuntu-make (19.06) eoan; urgency=medium
 
