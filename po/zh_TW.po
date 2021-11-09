@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
 "PO-Revision-Date: 2020-08-20 10:36+0000\n"
-"Last-Translator: marklin0913da248e4cdada422a <marklin0913@protonmail.com>\n"
+"Last-Translator: 曾嘉禾 <olivertzengolivertzeng@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "ubuntu-make/ubuntu-make/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -55,7 +55,7 @@ msgstr "如果已被安裝的話移除指定的軟體框架"
 
 #: umake/__init__.py:116
 msgid "Print version and exit"
-msgstr ""
+msgstr "顯示版本並離開"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
@@ -358,5 +358,5 @@ msgstr "否"
 #~ msgid "Stencyl Game developer environment"
 #~ msgstr "Stencyl 遊戲開發環境"
 
-#~ msgid "Dart Editor for the dart language"
-#~ msgstr "用於 Dart 語言的 Dart 編輯器"
+msgid "Dart Editor for the dart language"
+msgstr "用於 Dart 語言的 Dart 編輯器"
