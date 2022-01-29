@@ -1,7 +1,5 @@
 # runtime requirements
-# https://launchpad.net/ubuntu/+archive/primary/+files/python-apt_1.1.0~beta1build1.tar.xz
-# Enable on bionic or later
-# https://launchpad.net/ubuntu/+archive/primary/+files/python-apt_1.8.4.tar.xz
+# python-apt @ https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/python-apt/2.0.0ubuntu0.20.04.6/python-apt_2.0.0ubuntu0.20.04.6.tar.xz
 argcomplete
 progressbar33
 pycairo

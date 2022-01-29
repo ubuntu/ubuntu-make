@@ -47,7 +47,7 @@ class AdoptOpenJDK(umake.frameworks.baseinstaller.BaseInstaller):
                          description=_("Prebuilt OpenJDK binaries from a fully open " +
                                        "source set of build scripts and infrastructure"),
                          is_category_default=True,
-                         download_page="https://api.adoptopenjdk.net/v3/info/available_releases",
+                         download_page="https://api.adoptium.net/v3/info/available_releases",
                          dir_to_decompress_in_tarball="jdk-*",
                          required_files_path=["bin/java"],
                          only_on_archs=['amd64'],
@@ -55,10 +55,13 @@ class AdoptOpenJDK(umake.frameworks.baseinstaller.BaseInstaller):
 
         self.lts = False
         self.jvm_impl = "hotspot"
+        self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
+                                      "Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36"}
 
     def download_provider_page(self):
         logger.debug("Download application provider page")
-        DownloadCenter([DownloadItem(self.download_page)], self.complete_download_url, download=False)
+        DownloadCenter([DownloadItem(self.download_page, headers=self.headers)],
+                       self.complete_download_url, download=False)
 
     def complete_download_url(self, result):
         """Parse the download page and get the SHASUMS256.txt page"""
