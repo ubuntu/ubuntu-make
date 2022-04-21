@@ -88,11 +88,6 @@ class UrlFetchTests(LargeFrameworkTests):
         self.child = spawn_process(self.command(f'{UMAKE} electronics eagle --dry-run'))
         self.expect_and_no_warn("Found download URL:.*")
 
-    def test_fritzing_install(self):
-        """Install base installer from scratch test case"""
-        self.child = spawn_process(self.command(f'{UMAKE} electronics fritzing --dry-run'))
-        self.expect_and_no_warn("Found download URL:.*")
-
     def test_blender_install(self):
         """Install base installer from scratch test case"""
         self.child = spawn_process(self.command(f'{UMAKE} games blender --dry-run'))
@@ -101,11 +96,6 @@ class UrlFetchTests(LargeFrameworkTests):
     def test_godot_install(self):
         """Install base installer from scratch test case"""
         self.child = spawn_process(self.command(f'{UMAKE} games godot --dry-run'))
-        self.expect_and_no_warn("Found download URL:.*")
-
-    def test_stencyl_install(self):
-        """Install base installer from scratch test case"""
-        self.child = spawn_process(self.command(f'{UMAKE} games stencyl --dry-run'))
         self.expect_and_no_warn("Found download URL:.*")
 
     def test_superpowers_install(self):

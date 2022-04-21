@@ -25,6 +25,8 @@ from gettext import gettext as _
 import logging
 import os
 import re
+import json
+import requests
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
 from umake.network.download_center import DownloadCenter, DownloadItem
@@ -65,7 +67,7 @@ class AdoptOpenJDK(umake.frameworks.baseinstaller.BaseInstaller):
 
     def complete_download_url(self, result):
         """Parse the download page and get the SHASUMS256.txt page"""
-        version = None
+        version, version_prev = None, None
 
         logger.debug("Set the version in the download url")
 
@@ -76,20 +78,23 @@ class AdoptOpenJDK(umake.frameworks.baseinstaller.BaseInstaller):
 
         for line in result[self.download_page].buffer:
             line_content = line.decode()
-            with suppress(AttributeError):
+            with suppress(AttributeError, IndexError):
                 if self.lts and "most_recent_lts" in line_content:
                     version = re.search(r': (.*),', line_content).group(1)
-                elif not self.lts and "most_recent_feature_release" in line_content:
-                    version = re.search(r': (.*),', line_content).group(1)
+                elif not self.lts:
+                    if "most_recent_feature_release" in line_content:
+                        version = re.search(r': (.*),', line_content).group(1)
+                    elif line_content.strip()[0].isdigit():
+                        version_prev = re.search(r'(.*),', line_content.strip()).group(1)
 
         if not result:
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
-        self.download_page = "https://api.adoptopenjdk.net/v3/assets/latest/{}/".format(version) + \
-                             "{}?release=latest&".format(self.jvm_impl) + \
-                             "jvm_impl={}".format(self.jvm_impl) + \
-                             "&vendor=adoptopenjdk&="
+        self.download_page = f"https://api.adoptopenjdk.net/v3/assets/latest/{version}/{self.jvm_impl}"
+        # Check download page, or revert to previous version
+        if requests.get(self.download_page).json() == []:
+            self.download_page = f"https://api.adoptopenjdk.net/v3/assets/latest/{version_prev}/{self.jvm_impl}"
         DownloadCenter([DownloadItem(self.download_page)], self.get_metadata_and_check_license, download=False)
 
     def parse_download_link(self, line, in_download):
@@ -136,7 +141,8 @@ class OpenJFX(umake.frameworks.baseinstaller.BaseInstaller):
                          description=_("Client application platform for desktop, " +
                                        "mobile and embedded systems built on Java"),
                          is_category_default=False,
-                         download_page="https://gluonhq.com/products/javafx/",
+                        #  download_page="https://gluonhq.com/products/javafx/",
+                         download_page="https://api.github.com/repos/openjdk/jfx/contents/doc-files",
                          dir_to_decompress_in_tarball="javafx-*",
                          only_on_archs=['amd64'], checksum_type=ChecksumType.sha256,
                          **kwargs)
@@ -145,12 +151,14 @@ class OpenJFX(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         """Parse OpenJFX download link, expect to find a url"""
-        if (not self.lts and 'Latest Release' in line) or self.lts:
-            in_download = True
-        if in_download and 'linux-x64_bin-sdk.zip.sha256' in line:
-            p = re.search(r'href="(https.*)"', line)
-            with suppress(AttributeError):
-                self.new_download_url = p.group(1)
+        # if (not self.lts and 'Latest Release' in line) or self.lts:
+        #     in_download = True
+        version = None
+        for item in json.loads(line):
+            if "release-notes" in item["name"]:
+                version = re.search(r'release-notes-(.*).md', item["name"]).group(1)
+        with suppress(AttributeError):
+            self.new_download_url = f"https://download2.gluonhq.com/openjfx/{version}/openjfx-{version}_linux-x64_bin-sdk.zip.sha256"
         return (None, in_download)
 
     @MainLoop.in_mainloop_thread
@@ -165,16 +173,3 @@ class OpenJFX(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH_TO_FX": {"value": os.path.join(self.install_path, "lib"), "keep": False}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
-    def install_framework_parser(self, parser):
-        this_framework_parser = super().install_framework_parser(parser)
-        this_framework_parser.add_argument('--lts', action="store_true",
-                                           help=_("Install LTS version"))
-        return this_framework_parser
-
-    def run_for(self, args):
-        if args.lts:
-            self.name += " LTS"
-            self.description += " LTS"
-            self.install_path += "-lts"
-            self.lts = True
-        super().run_for(args)

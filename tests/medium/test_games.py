@@ -25,20 +25,6 @@ from ..large import test_games
 from ..tools import get_data_dir, UMAKE
 
 
-class StencylInContainer(ContainerTests, test_games.StencylTests):
-    """This will test the Stencyl editor inside a container"""
-
-    TIMEOUT_START = 20
-    TIMEOUT_STOP = 10
-
-    def setUp(self):
-        self.hosts = {80: ["www.stencyl.com"]}
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'stencyl')
-        super().setUp()
-        # override with container path
-        self.installed_path = os.path.join(self.install_base_path, "games", "stencyl")
-
-
 class BlenderInContainer(ContainerTests, test_games.BlenderTests):
     """This will test the Blender editor inside a container"""
 

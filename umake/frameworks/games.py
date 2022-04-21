@@ -44,32 +44,8 @@ class GamesCategory(umake.frameworks.BaseCategory):
 class Stencyl(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
-        super().__init__(name="Stencyl", description=_("Stencyl game developer IDE"),
-                         only_on_archs=['amd64'],
-                         download_page="http://www.stencyl.com/download/",
-                         desktop_filename="stencyl.desktop",
-                         required_files_path=["Stencyl"],
-                         packages_requirements=["openjdk-8-jre | openjdk-11-jre"],
-                         **kwargs)
-
-    PERM_DOWNLOAD_LINKS = {
-        "amd64": "http://www.stencyl.com/download/get/lin64",
-    }
-
-    def parse_download_link(self, line, in_download):
-        """We have persistent links for Stencyl, return it right away"""
-        url = self.PERM_DOWNLOAD_LINKS["amd64"]
-        return ((url, None), in_download)
-
-    def post_install(self):
-        """Create the Stencyl launcher"""
-        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Stencyl"),
-                        icon_path=os.path.join(self.install_path, "data", "other", "icon-30x30.png"),
-                        try_exec=self.exec_path,
-                        exec=self.exec_link_name,
-                        comment=self.description,
-                        categories="Development;IDE;",
-                        extra="Path={}\nStartupWMClass=stencyl-sw-Launcher".format(self.install_path)))
+        super().__init__(name="Stencyl", description=_("For removal only (SSL errors on download page)"),
+                         download_page=None, only_on_archs=['amd64'], only_for_removal=True, **kwargs)
 
 
 class Blender(umake.frameworks.baseinstaller.BaseInstaller):

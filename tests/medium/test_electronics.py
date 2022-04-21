@@ -79,37 +79,3 @@ class EagleTestsInContainer(ContainerTests, test_electronics.EagleTests):
         self.bad_download_page_test(umake_command, download_page_file_path)
         self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
-
-
-class FritzingInContainer(ContainerTests, test_electronics.FritzingTests):
-    """This will test the Fritzing integration inside a container"""
-
-    TIMEOUT_START = 20
-    TIMEOUT_STOP = 10
-
-    def setUp(self):
-        self.hosts = {443: ["api.github.com", "github.com"]}
-        self.apt_repo_override_path = os.path.join(self.APT_FAKE_REPO_PATH, 'fritzing')
-        super().setUp()
-        # override with container path
-        self.installed_path = os.path.join(self.install_base_path, "electronics", "fritzing")
-
-    def test_install_with_changed_download_page(self):
-        """Installing Fritzing should fail if download page has significantly changed"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
-                                               "repos", "Fritzing", "Fritzing-app", "releases", "latest")
-        umake_command = self.command('{} electronics Fritzing'.format(UMAKE))
-        self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-        self.assertFalse(self.is_in_path(self.exec_link))
-
-    def test_install_beta_with_changed_download_page(self):
-        """Installing Fritzing Beta should fail if the latest is not a edge"""
-        download_page_file_path = os.path.join(get_data_dir(), "server-content", "api.github.com",
-                                               "repos", "Fritzing", "Fritzing-app", "releases", "index.html")
-        with swap_file_and_restore(download_page_file_path) as content:
-            with open(download_page_file_path, "w") as newfile:
-                newfile.write(content.replace("-edge", ""))
-            self.child = umake_command = self.command('{} ide fritzing --edge'.format(UMAKE))
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
-            self.assertFalse(self.is_in_path(self.exec_link))

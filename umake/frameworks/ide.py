@@ -836,7 +836,7 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="RStudio", description=_("RStudio code editor"),
                          only_on_archs=['amd64'],
                          download_page="https://www.rstudio.com/products/rstudio/download/",
-                         packages_requirements=["libjpeg62", "libedit2", "libssl1.0.0 | libssl1.0.3 | libssl1.1", "libclang-dev", "libpq5", "r-base"],
+                        #  packages_requirements=["libjpeg62", "libedit2", "libssl1.0.0 | libssl1.0.3 | libssl1.1", "libclang-dev", "libpq5", "r-base"],
                          desktop_filename="rstudio.desktop",
                          required_files_path=["bin/rstudio"],
                          dir_to_decompress_in_tarball="rstudio-*",
@@ -855,10 +855,7 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
         """Parse RStudio download links"""
         url = None
         checksum = None
-        if int(get_current_distro_version().split('.')[0]) < 18 or \
-           int(get_current_distro_version(distro_name="debian").split('.')[0]) < 9:
-            ubuntu_version = 'xenial'
-        elif int(get_current_distro_version(distro_name="debian").split('.')[0]) == 9:
+        if int(get_current_distro_version(distro_name="debian").split('.')[0]) == 9:
             ubuntu_version = "debian9"
         else:
             ubuntu_version = 'bionic'
@@ -867,7 +864,7 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
             with suppress(AttributeError):
                 url = p.group(1)
                 in_download = True
-        if in_download and 'title="SHA-256"' in line:
+        if in_download and 'data-ls-toggle="popover"' in line:
             p = re.search('data-content="(.*)">', line)
             with suppress(AttributeError):
                 checksum = p.group(1)
