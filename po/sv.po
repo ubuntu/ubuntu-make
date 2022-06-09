@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
 "PO-Revision-Date: 2022-04-21 07:07+0000\n"
-"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
+"Last-Translator: Kristoffer Grundström <lovaren@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/sv/>\n"
 "Language: sv\n"
@@ -277,7 +277,7 @@ msgstr "Unity3D Editor"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
-msgstr ""
+msgstr "Twine-verktyg för skapandet av interaktiva och icke-linjära berättelser"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
