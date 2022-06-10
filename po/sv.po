@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2021-10-01 15:38+0000\n"
+"PO-Revision-Date: 2022-04-21 07:07+0000\n"
 "Last-Translator: Kristoffer Grundström <lovaren@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 "X-Launchpad-Export-Date: 2015-05-04 07:08+0000\n"
 
 #: umake/tools.py:48
@@ -166,7 +166,7 @@ msgstr "Scala programmeringsspråk"
 
 #: umake/frameworks/scala.py:46
 msgid "Scala compiler and interpreter (default)"
-msgstr ""
+msgstr "Scala kompilator och tolk (standard)"
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
@@ -217,6 +217,7 @@ msgstr "Du kan inte avinstallera {} eftersom det inte är installerat"
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
 msgstr ""
+"Om inget namn angivits för standard ramverk, behöver destdir innehålla ett /"
 
 #: umake/frameworks/__init__.py:288
 msgid "Remove framework if installed"
@@ -268,7 +269,7 @@ msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
-msgstr ""
+msgstr "Unity 3D Editor Linux experimentellt stöd"
 
 #: umake/frameworks/games.py:154
 msgid "Unity3D Editor"
@@ -276,7 +277,7 @@ msgstr "Unity3D Editor"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
-msgstr ""
+msgstr "Twine-verktyg för skapandet av interaktiva och icke-linjära berättelser"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
@@ -288,11 +289,11 @@ msgstr "Inget lämpligt svar angivet"
 
 #: umake/interactions/__init__.py:75 umake/interactions/__init__.py:83
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
-msgstr ""
+msgstr "Ditt val '{}' är inte giltigt. Giltiga val är: {}"
 
 #: umake/interactions/__init__.py:80
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
-msgstr ""
+msgstr "Ditt val '{}' är inte giltigt. Giltiga val är {} och {}"
 
 #: umake/interactions/__init__.py:100
 msgid " ({})"
