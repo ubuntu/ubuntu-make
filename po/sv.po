@@ -277,7 +277,8 @@ msgstr "Unity3D Editor"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
-msgstr "Twine-verktyg för skapandet av interaktiva och icke-linjära berättelser"
+msgstr ""
+"Twine-verktyg för skapandet av interaktiva och icke-linjära berättelser"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
