@@ -74,19 +74,19 @@ msgstr "Eclipse Luna"
 
 #: umake/frameworks/ide.py:217
 msgid "PyCharm Community Edition"
-msgstr "PyCharm Community Edition"
+msgstr "Gemenskapsutgåva för PyCharm"
 
 #: umake/frameworks/ide.py:233
 msgid "PyCharm Educational Edition"
-msgstr "PyCharm Educational Edition"
+msgstr "Utbildningsutgåva för PyCharm"
 
 #: umake/frameworks/ide.py:249
 msgid "PyCharm Professional Edition"
-msgstr "PyCharm Professional Edition"
+msgstr "Proffsutgåva för PyCharm"
 
 #: umake/frameworks/ide.py:265
 msgid "IntelliJ IDEA Community Edition"
-msgstr "IntelliJ IDEA Community Edition"
+msgstr "Gemenskapsutgåva för IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:281
 msgid "IntelliJ IDEA"
@@ -94,7 +94,7 @@ msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
 msgid "Ruby on Rails IDE"
-msgstr "Ruby on Rails IDE"
+msgstr "IDE för Ruby on Rails"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
@@ -233,7 +233,7 @@ msgstr "Webutvecklings miljö"
 
 #: umake/frameworks/web.py:51 umake/frameworks/web.py:120
 msgid "Firefox Developer Edition"
-msgstr "Firefox Developer Edition"
+msgstr "Utvecklingsversion av Firefox"
 
 #: umake/frameworks/web.py:116
 msgid "Choose language: {}"
@@ -253,7 +253,7 @@ msgstr "Visual Studio fokuserad på modern webb och moln"
 
 #: umake/frameworks/web.py:223
 msgid "Visual Studio Code"
-msgstr "Visual Studio Code"
+msgstr "Visual Studio-kod"
 
 #: umake/frameworks/games.py:42
 msgid "Games Development Environment"
