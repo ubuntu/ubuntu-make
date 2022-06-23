@@ -130,7 +130,7 @@ $ ./runtests
 ```
 
 #### Running some tests with all debug info
-By default, **runtests** will not display any debug output if the tests are successful, similar to pytest. However, if only  tests are selected, runtests will a display full debug log,
+By default, **runtests** will not display any debug output if the tests are successful, similar to pytest. However, if only  tests are selected, runtests will a display full debug log:
 
 ```sh
 $  ./runtests tests/small/test_tools.py::TestConfigHandler
@@ -140,7 +140,7 @@ $  ./runtests tests/small/test_tools.py::TestConfigHandler
 **runtests** is a small pytest wrapper used to simplify the testing process. By default, if no arguments are supplied, runtests will run all available tests on the project using the production nose configuration.
 It is possible to run only some types of tests:
 
-```sh
+```shView all b
 $ ./runtests small medium
 ```
 
