@@ -191,15 +191,15 @@ class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
                          json=True, **kwargs)
 
     arch_trans = {
-        "amd64": "linux32",
-        "i386": "linux64",
+        "amd64": "linux64",
+        "i386": "linux32",
         "armhf": "arm7hf"
     }
 
     def parse_download_link(self, line, in_download):
         url = None
         for asset in line["assets"]:
-            if "{}.tar.gz".format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+            if asset["browser_download_url"].endswith("{}.tar.gz".format(self.arch_trans[get_current_arch()])):
                 in_download = True
                 url = asset["browser_download_url"]
         return (url, in_download)
