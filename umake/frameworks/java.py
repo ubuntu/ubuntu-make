@@ -91,10 +91,10 @@ class AdoptOpenJDK(umake.frameworks.baseinstaller.BaseInstaller):
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
 
-        self.download_page = f"https://api.adoptopenjdk.net/v3/assets/latest/{version}/{self.jvm_impl}"
+        self.download_page = f"https://api.adoptopenjdk.net/v3/assets/latest/{}/{}".format(version, self.jvm_impl)
         # Check download page, or revert to previous version
         if requests.get(self.download_page).json() == []:
-            self.download_page = f"https://api.adoptopenjdk.net/v3/assets/latest/{version_prev}/{self.jvm_impl}"
+            self.download_page = f"https://api.adoptopenjdk.net/v3/assets/latest/{}/{}".format(version_prev, self.jvm_impl)
         DownloadCenter([DownloadItem(self.download_page)], self.get_metadata_and_check_license, download=False)
 
     def parse_download_link(self, line, in_download):
