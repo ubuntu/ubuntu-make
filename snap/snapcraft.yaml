@@ -71,6 +71,8 @@ parts:
       - libdb5.3
     build-environment:
       - SNAPCRAFT_PYTHON_VENV_ARGS: "--system-site-packages"
+    organize: 
+      lib/python3/dist-packages/umake/version: lib/python3.8/site-packages/umake/version
   python3:
     plugin: nil
     source: .

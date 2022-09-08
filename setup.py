@@ -26,7 +26,7 @@ from glob import glob
 import os
 from setuptools import setup, find_packages
 import subprocess
-import umake  # that initializes the gettext domain
+# import umake # that initializes the gettext domain
 from umake.settings import get_version
 
 I18N_DOMAIN = gettext.textdomain()
@@ -144,6 +144,12 @@ class update_po(cmd.Command):
 
 setup(
     name="Ubuntu Make",
+    maintainer="Galileo Sartor",
+    maintainer_email="galileo.sartor@gmail.com",
+    description="""Ubuntu Make provides a set of functionality to setup,
+ maintain and personalize your developer environment easily. It will handle
+ all dependencies, even those which aren't in Ubuntu itself, and install
+ latest versions of the desired and recommended tools.""",
     version=get_version(),
     packages=find_packages(exclude=["tests*"]),
     package_data={},

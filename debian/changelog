@@ -1,4 +1,18 @@
-ubuntu-make (21.09) UNRELEASED; urgency=medium
+ubuntu-make (22.04) UNRELEASED; urgency=medium
+
+  [ Galileo Sartor ]
+  * Update url parsing and tests
+  * Switch java to adoptium
+
+  [ OliverTzeng ]
+  * Update Traditional Chinese translation
+
+  [ Weblate ]
+  * Add Galician translation
+
+ -- Galileo Sartor <galileo.sartor@gmail.com>  Tue, 26 Apr 2022 09:00:00 +0200
+
+ubuntu-make (21.09) impish; urgency=medium
 
   [ Galileo Sartor ]
   * Java: Add AdoptOpenJDK and OpenJFX builds+tests

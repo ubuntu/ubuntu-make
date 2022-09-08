@@ -36,3 +36,13 @@ snap/.snapcraft/
 
 # Pipenv
 Pipfile*
+
+# Debian config
+debian/.debhelper
+debian/tmp
+debian/ubuntu-developer-tools-center
+debian/ubuntu-make
+debian/files
+debian/*substvars
+debian/*.debhelper
+debian/*.1
