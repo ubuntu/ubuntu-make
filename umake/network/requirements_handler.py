@@ -151,7 +151,8 @@ class RequirementsHandler(object, metaclass=Singleton):
         if required_release == "jre":
             if not self.jre_installed_version:
                 try:
-                    self.jre_installed_version = subprocess.check_output(["java", "-version"], stderr=subprocess.STDOUT).decode()
+                    self.jre_installed_version = subprocess.check_output(["java", "-version"],
+                                                                         stderr=subprocess.STDOUT).decode()
                 except FileNotFoundError as e:
                     logger.debug("Missing java command: consider it not installed")
                     return False
@@ -159,7 +160,8 @@ class RequirementsHandler(object, metaclass=Singleton):
         elif required_release == "jdk":
             if not self.jdk_installed_version:
                 try:
-                    self.jdk_installed_version = subprocess.check_output(["javac", "-version"], stderr=subprocess.STDOUT).decode()
+                    self.jdk_installed_version = subprocess.check_output(["javac", "-version"],
+                                                                         stderr=subprocess.STDOUT).decode()
                 except FileNotFoundError as e:
                     logger.debug("Missing javac command: consider it not installed")
                     return False

@@ -24,7 +24,7 @@ from . import ContainerTests
 import os
 
 from ..large import test_electronics
-from ..tools import get_data_dir, swap_file_and_restore, UMAKE
+from ..tools import get_data_dir, UMAKE
 
 
 class ArduinoIDEInContainer(ContainerTests, test_electronics.ArduinoIDETests):

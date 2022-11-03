@@ -94,7 +94,8 @@ class AdoptOpenJDK(umake.frameworks.baseinstaller.BaseInstaller):
         self.download_page = f"https://api.adoptopenjdk.net/v3/assets/latest/{}/{}".format(version, self.jvm_impl)
         # Check download page, or revert to previous version
         if requests.get(self.download_page).json() == []:
-            self.download_page = f"https://api.adoptopenjdk.net/v3/assets/latest/{}/{}".format(version_prev, self.jvm_impl)
+            self.download_page = f"https://api.adoptopenjdk.net/v3/assets/latest/{}/{}".format(version_prev,
+                                                                                               self.jvm_impl)
         DownloadCenter([DownloadItem(self.download_page)], self.get_metadata_and_check_license, download=False)
 
     def parse_download_link(self, line, in_download):
@@ -141,7 +142,6 @@ class OpenJFX(umake.frameworks.baseinstaller.BaseInstaller):
                          description=_("Client application platform for desktop, " +
                                        "mobile and embedded systems built on Java"),
                          is_category_default=False,
-                        #  download_page="https://gluonhq.com/products/javafx/",
                          download_page="https://api.github.com/repos/openjdk/jfx/contents/doc-files",
                          dir_to_decompress_in_tarball="javafx-*",
                          only_on_archs=['amd64'], checksum_type=ChecksumType.sha256,
@@ -158,7 +158,8 @@ class OpenJFX(umake.frameworks.baseinstaller.BaseInstaller):
             if "release-notes" in item["name"]:
                 version = re.search(r'release-notes-(.*).md', item["name"]).group(1)
         with suppress(AttributeError):
-            self.new_download_url = f"https://download2.gluonhq.com/openjfx/{version}/openjfx-{version}_linux-x64_bin-sdk.zip.sha256"
+            self.new_download_url = \
+                f"https://download2.gluonhq.com/openjfx/{version}/openjfx-{version}_linux-x64_bin-sdk.zip.sha256"
         return (None, in_download)
 
     @MainLoop.in_mainloop_thread
@@ -172,4 +173,3 @@ class OpenJFX(umake.frameworks.baseinstaller.BaseInstaller):
         """Add the necessary OpenJFX environment variables"""
         add_env_to_user(self.name, {"PATH_TO_FX": {"value": os.path.join(self.install_path, "lib"), "keep": False}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
-

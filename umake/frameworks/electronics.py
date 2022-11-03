@@ -34,7 +34,7 @@ import subprocess
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
 from umake.tools import as_root, create_launcher, get_application_desktop_file, ChecksumType,\
-    MainLoop, get_current_arch, get_current_distro_version
+    MainLoop, get_current_arch
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
@@ -171,4 +171,3 @@ class Fritzing(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Fritzing", description="For removal only (tarfile not supported upstream anymore)",
                          download_page=None, only_on_archs=['amd64'], only_for_removal=True, **kwargs)
-    

@@ -32,7 +32,7 @@ import shutil
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.tools import create_launcher, get_application_desktop_file, ChecksumType, MainLoop,\
-    add_exec_link, get_current_arch, get_current_distro_version
+    get_current_arch, get_current_distro_version
 
 logger = logging.getLogger(__name__)
 
@@ -172,11 +172,11 @@ class EclipseJS(BaseEclipse):
     executable = 'eclipse'
 
     def __init__(self, **kwargs):
-            super().__init__(name="Eclipse JavaScript",
-                             description="For removal only (tarfile not supported upstream anymore)",
-                             download_page=None, only_on_archs=['i386', 'amd64'],
-                             icon_filename='js.png',
-                             only_for_removal=True, **kwargs)
+        super().__init__(name="Eclipse JavaScript",
+                         description="For removal only (tarfile not supported upstream anymore)",
+                         download_page=None, only_on_archs=['i386', 'amd64'],
+                         icon_filename='js.png',
+                         only_for_removal=True, **kwargs)
 
 
 class EclipseCPP(BaseEclipse):
@@ -836,7 +836,8 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
         super().__init__(name="RStudio", description=_("RStudio code editor"),
                          only_on_archs=['amd64'],
                          download_page="https://www.rstudio.com/products/rstudio/download/",
-                        #  packages_requirements=["libjpeg62", "libedit2", "libssl1.0.0 | libssl1.0.3 | libssl1.1", "libclang-dev", "libpq5", "r-base"],
+                         packages_requirements=["libjpeg62", "libedit2", "libssl1.0.0 | libssl1.0.3 | libssl1.1",
+                                                "libclang-dev", "libpq5", "r-base"],
                          desktop_filename="rstudio.desktop",
                          required_files_path=["bin/rstudio"],
                          dir_to_decompress_in_tarball="rstudio-*",

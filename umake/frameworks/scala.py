@@ -21,11 +21,9 @@
 
 """Scala module"""
 
-from contextlib import suppress
 from gettext import gettext as _
 import logging
 import os
-import re
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
 from umake.tools import add_env_to_user
