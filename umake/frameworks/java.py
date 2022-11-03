@@ -159,7 +159,7 @@ class OpenJFX(umake.frameworks.baseinstaller.BaseInstaller):
                 version = re.search(r'release-notes-(.*).md', item["name"]).group(1)
         with suppress(AttributeError):
             self.new_download_url = \
-                f"https://download2.gluonhq.com/openjfx/{version}/openjfx-{version}_linux-x64_bin-sdk.zip.sha256"
+                "https://download2.gluonhq.com/openjfx/{}/openjfx-{}_linux-x64_bin-sdk.zip.sha256".format(version, version)
         return (None, in_download)
 
     @MainLoop.in_mainloop_thread

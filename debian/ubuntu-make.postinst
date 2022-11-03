@@ -3,7 +3,11 @@ set -e
 
 case "$1" in
     configure)
-        register-python-argcomplete3 umake > /etc/bash_completion.d/umake
+        if [ -f "$(which register-python-argcomplete3)" ]; then
+            register-python-argcomplete3 umake > /etc/bash_completion.d/umake
+        else
+            register-python-argcomplete umake > /etc/bash_completion.d/umake
+        fi
     ;;
 
     *)
