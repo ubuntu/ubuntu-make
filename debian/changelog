@@ -1,4 +1,4 @@
-ubuntu-make (22.04) UNRELEASED; urgency=medium
+ubuntu-make (22.10) kinetic; urgency=medium
 
   [ Galileo Sartor ]
   * Update url parsing and tests
