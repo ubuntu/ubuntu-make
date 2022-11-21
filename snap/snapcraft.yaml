@@ -29,6 +29,7 @@ parts:
     build-packages:
       - libapt-pkg-dev
       - gettext
+      - python3-venv
       - python3-apt
       - python3-argcomplete
       - python3-gi
