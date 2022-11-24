@@ -117,15 +117,16 @@ class Twine(umake.frameworks.baseinstaller.BaseInstaller):
         self.icon_name = 'twine.svg'
 
     arch_trans = {
-        "amd64": "64",
-        "i386": "32"
+        "amd64": "x64",
+        "aarch64": "arm64",
+        "i386": "ia32"
     }
 
     def parse_download_link(self, line, in_download):
         """Parse Twine download links"""
         url = None
         for asset in line["assets"]:
-            if 'linux{}'.format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
+            if 'Linux-{}.zip'.format(self.arch_trans[get_current_arch()]) in asset["browser_download_url"]:
                 in_download = True
                 url = asset["browser_download_url"]
         return (url, in_download)

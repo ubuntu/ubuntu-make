@@ -20,6 +20,7 @@
 import os
 import requests
 import re
+import json
 from xdg.BaseDirectory import xdg_data_home
 
 DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join(xdg_data_home, "umake"))
@@ -53,9 +54,9 @@ def get_version():
 def get_latest_version():
     '''Get latest available version from github'''
     try:
-        page = requests.get("https://github.com/ubuntu/ubuntu-make/releases")
+        page = requests.get("https://api.github.com/repos/ubuntu/ubuntu-make/releases/latest")
         page.raise_for_status()
     except Exception as e:
         raise e
-    latest = re.search('releases/tag/(.*)\">', page.text).group(1)
+    latest = page.json().get("tag_name")
     return latest

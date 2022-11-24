@@ -598,47 +598,8 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
 class Atom(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
-        super().__init__(name="Atom", description=_("The hackable text editor"),
-                         only_on_archs=['amd64'],
-                         download_page="https://api.github.com/repos/Atom/Atom/releases/latest",
-                         desktop_filename="atom.desktop",
-                         required_files_path=["atom", "resources/app/apm/bin/apm"],
-                         dir_to_decompress_in_tarball="atom-*",
-                         packages_requirements=["libgconf-2-4"],
-                         json=True, **kwargs)
-
-    def parse_download_link(self, line, in_download):
-        url = None
-        for asset in line["assets"]:
-            if "tar.gz" in asset["browser_download_url"]:
-                in_download = True
-                url = asset["browser_download_url"]
-        return (url, in_download)
-
-    def post_install(self):
-        """Create the Atom Code launcher"""
-        # Add apm to PATH
-        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Atom"),
-                        icon_path=os.path.join(self.install_path, "atom.png"),
-                        try_exec=self.exec_path,
-                        exec=self.exec_link_name,
-                        comment=_("The hackable text editor"),
-                        categories="Development;IDE;"))
-
-    def install_framework_parser(self, parser):
-        this_framework_parser = super().install_framework_parser(parser)
-        this_framework_parser.add_argument('--beta', action="store_true",
-                                           help=_("Install Beta version if available"))
-        return this_framework_parser
-
-    def run_for(self, args):
-        if args.beta:
-            self.name += " Beta"
-            self.description += " beta"
-            self.desktop_filename = self.desktop_filename.replace(".desktop", "-beta.desktop")
-            self.download_page = "https://api.github.com/repos/Atom/Atom/releases"
-            self.install_path += "-beta"
-        super().run_for(args)
+        super().__init__(name="Atom", description=_("The hackable text editor (not supported upstream anymore)"),
+                         download_page=None, only_on_archs=['amd64'], only_for_removal=True, **kwargs)
 
 
 class DBeaver(umake.frameworks.baseinstaller.BaseInstaller):
@@ -680,7 +641,7 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Sublime Text", description=_("Sophisticated text editor for code, markup and prose"),
                          only_on_archs=['amd64', 'aarch64'],
-                         download_page="https://sublimetext.com/download",
+                         download_page="https://www.sublimetext.com/download_thanks",
                          desktop_filename="sublime-text.desktop",
                          required_files_path=["sublime_text"],
                          dir_to_decompress_in_tarball="sublime_text",
@@ -694,7 +655,7 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
     def parse_download_link(self, line, in_download):
         """Parse SublimeText download links"""
         url = None
-        if '.tar.xz' in line:
+        if '{}.tar.xz'.format(self.arch_trans[get_current_arch()]) in line:
             p = re.search(r'href="([^<]*{}.tar.xz)"'.format(self.arch_trans[get_current_arch()]), line)
             with suppress(AttributeError):
                 url = p.group(1)
@@ -733,7 +694,7 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
         else:
             in_download = False
         if in_download:
-            p = re.search(r'href="(.*.tar.gz)"', line)
+            p = re.search(r'href="(.+?.tar.gz)"', line)
             with suppress(AttributeError):
                 # url set to check in baseinstaller if missing
                 url = p.group(1) + '.sha1'
@@ -835,22 +796,13 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="RStudio", description=_("RStudio code editor"),
                          only_on_archs=['amd64'],
-                         download_page="https://www.rstudio.com/products/rstudio/download/",
-                         packages_requirements=["libjpeg62", "libedit2", "libssl1.0.0 | libssl1.0.3 | libssl1.1",
+                         download_page="https://posit.co/download/rstudio-desktop/",
+                         packages_requirements=["libjpeg62", "libedit2", "libssl1.1 | libssl3",
                                                 "libclang-dev", "libpq5", "r-base"],
                          desktop_filename="rstudio.desktop",
                          required_files_path=["bin/rstudio"],
                          dir_to_decompress_in_tarball="rstudio-*",
-                         checksum_type=ChecksumType.sha256,
                          **kwargs)
-
-        self.headers = {'User-agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu "
-                        "Chromium/41.0.2272.76 Chrome/41.0.2272.76 Safari/537.36"}
-
-    def download_provider_page(self):
-        logger.debug("Download application provider page")
-        DownloadCenter([DownloadItem(self.download_page, headers=self.headers)],
-                       self.get_metadata_and_check_license, download=False)
 
     def parse_download_link(self, line, in_download):
         """Parse RStudio download links"""
@@ -864,11 +816,6 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
             p = re.search(r'href=\"([^<]*{}.*-debian\.tar\.gz)\"'.format(ubuntu_version), line)
             with suppress(AttributeError):
                 url = p.group(1)
-                in_download = True
-        if in_download and 'data-ls-toggle="popover"' in line:
-            p = re.search('data-content="(.*)">', line)
-            with suppress(AttributeError):
-                checksum = p.group(1)
         return ((url, checksum), in_download)
 
     def post_install(self):

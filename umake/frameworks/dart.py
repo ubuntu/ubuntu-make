@@ -23,14 +23,16 @@
 from gettext import gettext as _
 import logging
 import os
+import re
 import umake.frameworks.baseinstaller
 from umake.interactions import DisplayMessage
+from umake.network.download_center import DownloadCenter, DownloadItem
 from umake.tools import add_env_to_user, get_current_arch
 from umake.ui import UI
 
 logger = logging.getLogger(__name__)
 
-_supported_archs = ['i386', 'amd64']
+_supported_archs = ['i386', 'amd64', 'armhf', 'aarch64']
 
 
 class DartCategory(umake.frameworks.BaseCategory):
@@ -59,8 +61,9 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     arch_trans = {
         "amd64": "x64",
-        "i386": "ia32"
-        # TODO: add arm
+        "i386": "ia32",
+        "aarch64": "arm64",
+        "armhf": "arm"
     }
 
     def parse_download_link(self, line, in_download):
@@ -82,19 +85,20 @@ class FlutterLang(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Flutter SDK", description=_("Flutter SDK"),
                          only_on_archs=_supported_archs,
-                         download_page="https://storage.googleapis.com/flutter_infra/releases/releases_linux.json",
+                         download_page="https://raw.githubusercontent.com/wiki/flutter/flutter/Hotfixes-to-the-Stable-Channel.md",
                          dir_to_decompress_in_tarball="flutter",
                          required_files_path=[os.path.join("bin", "flutter")],
-                         json=True, **kwargs)
+                         packages_requirements=["libglu1-mesa"],
+                         **kwargs)
 
     def parse_download_link(self, line, in_download):
         """Parse Flutter SDK download links"""
         url = None
-        for asset in line["releases"]:
-            if "linux" in asset["archive"] and "stable" in asset["archive"]:
-                in_download = True
-                url = self.download_page.rsplit("/", 1)[0] + "/" + asset["archive"]
-        return (url, in_download)
+        if "flutter/releases/tag" in line:
+            in_download = True
+            url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/" +\
+                  "flutter_linux_{}-stable.tar.xz".format(re.findall("\[(.*)\]", line)[0])
+        return ((url, None), in_download)
 
     def post_install(self):
         """Add flutter necessary env variables"""

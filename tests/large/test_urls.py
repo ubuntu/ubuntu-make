@@ -113,11 +113,6 @@ class UrlFetchTests(LargeFrameworkTests):
         self.child = spawn_process(self.command(f'{UMAKE} go go-lang --dry-run'))
         self.expect_and_no_warn("Found download URL:.*")
 
-    def test_atom_install(self):
-        """Install base installer from scratch test case"""
-        self.child = spawn_process(self.command(f'{UMAKE} ide atom --dry-run'))
-        self.expect_and_no_warn("Found download URL:.*")
-
     def test_clion_install(self):
         """Install base installer from scratch test case"""
         self.child = spawn_process(self.command(f'{UMAKE} ide clion --dry-run'))

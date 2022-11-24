@@ -58,24 +58,30 @@ class MavenLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def parse_download_link(self, line, in_download):
         """Parse Maven download link, expect to find a url"""
-        if '<td><a href="' in line:
-            p = re.search(r'href="(.*-bin.tar.gz)"', line)
+        url = None
+        if 'bin.tar.gz"' in line:
+            p = re.search(r'href="(.+?-bin.tar.gz)"', line)
             with suppress(AttributeError):
-                self.url = p.group(1)
+                url = p.group(1)
                 in_download = True
-        if in_download and '<td><a class="externalLink"' in line:
-            print(line)
-            p = re.search(r'href="(.*.sha512)"', line)
+        return ((url), in_download)
+
+    def parse_download_link(self, line, in_download):
+        """Parse Maven download link"""
+        url, checksum = (None, None)
+        if 'bin.tar.gz.sha512' in line:
+            p = re.search(r'href="(.+?-bin.tar.gz.sha512)"', line)
             with suppress(AttributeError):
                 self.new_download_url = p.group(1)
-        return (None, in_download)
+        return ((None, None), in_download)
 
     @MainLoop.in_mainloop_thread
     def get_sha_and_start_download(self, download_result):
         res = download_result[self.new_download_url]
         checksum = res.buffer.getvalue().decode('utf-8').split()[0]
-        logger.debug("Found download link for {}, checksum: {}".format(self.url, checksum))
-        self.check_data_and_start_download(self.url, checksum)
+        # you get and store self.download_url
+        url = re.sub('.sha512', '', self.new_download_url)
+        self.check_data_and_start_download(url, checksum)
 
     def post_install(self):
         """Add the necessary Maven environment variables"""

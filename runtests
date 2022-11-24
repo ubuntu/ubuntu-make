@@ -76,6 +76,9 @@ def local_run(args):
     else:
         specified_config = True
 
+    if args.cache:
+        pytest_args.extend(["--last-failed"])
+
     # check if we want to run those tests with the system code
     if args.system:
         # let remove it from there as well
@@ -134,6 +137,7 @@ if __name__ == '__main__':
                                                                       "tests or tessuite")
     config_group.add_argument("--debug", action="store_true", help="Force using debug profile even when running "
                                                                    "all tests")
+    config_group.add_argument("--cache", action="store_true", help="Run only previously failed tests")
 
     # set local as default and parse
     cmd = sys.argv[1:]
