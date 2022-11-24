@@ -128,6 +128,9 @@ class DownloadCenter:
         # Create a session so we can mount our own FTP adapter.
         session = requests.Session()
         session.mount('ftp://', FTPAdapter())
+
+        if "api.github.com" in url and os.getenv("UMAKE_GITHUB_TOKEN") is not None:
+            headers["Authorization"] = os.getenv("UMAKE_GITHUB_TOKEN")
         try:
             with closing(session.get(url, stream=True, headers=headers, cookies=cookies)) as r:
                 r.raise_for_status()
