@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2021-01-08 10:32+0000\n"
-"Last-Translator: Liao junchao <liaojunchao@outlook.com>\n"
+"PO-Revision-Date: 2023-01-01 04:47+0000\n"
+"Last-Translator: Xiang Heng Wei <yylteam@hotmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "ubuntu-make/ubuntu-make/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
 
 #: umake/tools.py:48
@@ -91,9 +91,8 @@ msgid "IntelliJ IDEA"
 msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
-#, fuzzy
 msgid "Ruby on Rails IDE"
-msgstr "Ruby on Rails IDE"
+msgstr "Rails IDE 上的 Ruby"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
@@ -108,17 +107,14 @@ msgid "CLion integrated C/C++ IDE"
 msgstr "CLion 集成 C/C++ IDE"
 
 #: umake/frameworks/ide.py:376
-#, fuzzy
 msgid "The Arduino Software Distribution"
-msgstr "The Arduino Software Distribution"
+msgstr "Arduino 软件发布"
 
 #: umake/frameworks/ide.py:475
-#, fuzzy
 msgid "The Arduino Software IDE"
-msgstr "The Arduino Software IDE"
+msgstr "Arduino 软件 IDE"
 
 #: umake/frameworks/ide.py:478
-#, fuzzy
 msgid "Arduino"
 msgstr "Arduino"
 
@@ -128,7 +124,6 @@ msgstr "要使安装生效，您需要注销再登录"
 
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
-#, fuzzy
 msgid "Netbeans IDE"
 msgstr "Netbeans IDE"
 
@@ -142,7 +137,7 @@ msgstr ""
 
 #: umake/frameworks/dart.py:56
 msgid "Dart SDK (default)"
-msgstr ""
+msgstr "Dart SDK（默认）"
 
 #: umake/frameworks/dart.py:97 umake/frameworks/rust.py:134
 #: umake/frameworks/scala.py:66 umake/frameworks/go.py:76
@@ -158,7 +153,7 @@ msgstr "Rust 语言"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
-msgstr ""
+msgstr "Rust 官方发布"
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
@@ -202,7 +197,7 @@ msgstr "Android NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
-msgstr ""
+msgstr "在没有类别 {} 的情况下请求了它的默认框架"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't install that framework on this machine"
@@ -223,7 +218,7 @@ msgstr "如已安装框架，请卸载"
 
 #: umake/frameworks/__init__.py:291
 msgid "Accept license without prompting"
-msgstr ""
+msgstr "接受许可证而不提示"
 
 #: umake/frameworks/web.py:45
 msgid "Web Developer Environment"
@@ -243,11 +238,11 @@ msgstr "内置开发工具的 Firefox Aurora"
 
 #: umake/frameworks/web.py:129
 msgid "Install in given language without prompting"
-msgstr ""
+msgstr "在没有提示的情况下以指定的语言安装"
 
 #: umake/frameworks/web.py:141 umake/frameworks/web.py:226
 msgid "Visual Studio focused on modern web and cloud"
-msgstr ""
+msgstr "Visual Studio专注于现代网络和云"
 
 #: umake/frameworks/web.py:223
 msgid "Visual Studio Code"
@@ -258,9 +253,8 @@ msgid "Games Development Environment"
 msgstr "游戏开发环境"
 
 #: umake/frameworks/games.py:48
-#, fuzzy
 msgid "Stencyl game developer IDE"
-msgstr "Stencyl 游戏开发者集成开发环境"
+msgstr "Stencyl 游戏开发者 IDE"
 
 #: umake/frameworks/games.py:85
 msgid "Stencyl"
@@ -268,16 +262,15 @@ msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
-msgstr ""
+msgstr "Unity 3D Editor Linux 实验性支持"
 
 #: umake/frameworks/games.py:154
-#, fuzzy
 msgid "Unity3D Editor"
-msgstr "Unity3D Editor"
+msgstr "Unity3D 编辑器"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
-msgstr ""
+msgstr "用于创建交互式和非线性故事的 Twine 工具"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
