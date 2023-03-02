@@ -41,7 +41,7 @@ class KotlinLang(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Kotlin Lang", description=_("Kotlin language standalone compiler"),
                          is_category_default=True,
-                         packages_requirements=["openjdk-7-jre | openjdk-8-jre"],
+                         packages_requirements=["openjdk-11-jdk | openjdk-17-jdk | openjdk-18-jdk | openjdk-19-jdk | openjdk-20-jdk"],
                          download_page="https://api.github.com/repos/Jetbrains/kotlin/releases/latest",
                          dir_to_decompress_in_tarball="kotlinc",
                          required_files_path=[os.path.join("bin", "kotlinc")],

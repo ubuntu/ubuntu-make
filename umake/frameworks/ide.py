@@ -129,7 +129,7 @@ class EclipseJava(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-java.desktop',
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
+                         packages_requirements=['openjdk-11-jdk | openjdk-17-jdk | openjdk-18-jdk | openjdk-19-jdk | openjdk-20-jdk"'],
                          icon_filename='java.png',
                          **kwargs)
 
@@ -145,7 +145,7 @@ class EclipseJEE(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-jee.desktop',
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
+                         packages_requirements=['openjdk-11-jdk | openjdk-17-jdk | openjdk-18-jdk | openjdk-19-jdk | openjdk-20-jdk"'],
                          icon_filename='javaee.png',
                          **kwargs)
 
@@ -161,7 +161,7 @@ class EclipsePHP(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-php.desktop',
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
+                         packages_requirements=['openjdk-11-jdk | openjdk-17-jdk | openjdk-18-jdk | openjdk-19-jdk | openjdk-20-jdk"'],
                          icon_filename='php.png',
                          **kwargs)
 
@@ -190,7 +190,7 @@ class EclipseCPP(BaseEclipse):
                          dir_to_decompress_in_tarball='eclipse',
                          desktop_filename='eclipse-cpp.desktop',
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
+                         packages_requirements=['openjdk-11-jdk | openjdk-17-jdk | openjdk-18-jdk | openjdk-19-jdk | openjdk-20-jdk"'],
                          icon_filename='cdt.png',
                          **kwargs)
 
@@ -320,7 +320,6 @@ class Idea(BaseJetBrains):
         super().__init__(name="Idea",
                          description=_("IntelliJ IDEA Community Edition"),
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          dir_to_decompress_in_tarball='idea-IC-*',
                          desktop_filename='jetbrains-idea-ce.desktop',
                          icon_filename='idea.png',
@@ -336,7 +335,6 @@ class IdeaUltimate(BaseJetBrains):
         super().__init__(name="Idea Ultimate",
                          description=_("IntelliJ IDEA"),
                          only_on_archs=['i386', 'amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
                          dir_to_decompress_in_tarball='idea-IU-*',
                          desktop_filename='jetbrains-idea.desktop',
                          icon_filename='idea.png',
@@ -680,7 +678,7 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                          checksum_type=ChecksumType.sha1,
                          desktop_filename='STS.desktop',
                          only_on_archs=['amd64'],
-                         packages_requirements=['openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk'],
+                         packages_requirements=['openjdk-11-jdk | openjdk-17-jdk | openjdk-18-jdk | openjdk-19-jdk | openjdk-20-jdk"'],
                          icon_filename='icon.xpm',
                          required_files_path=["SpringToolSuite4"],
                          **kwargs)

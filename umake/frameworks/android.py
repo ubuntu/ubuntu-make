@@ -80,9 +80,8 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Android Studio", description=_("Android Studio (default)"), is_category_default=True,
                          only_on_archs=_supported_archs, expect_license=True,
-                         packages_requirements=["openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk",
-                                                "libc6:i386", "libncurses5:i386", "libstdc++6:i386",
-                                                "lib32z1", "zlib1g:i386"],
+                         packages_requirements=["libc6:i386", "libncurses5:i386", "libstdc++6:i386",
+                                                "lib32z1", "libbz2-1.0:i386"],
                          download_page="https://developer.android.com/studio/index.html",
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="android-studio",
@@ -115,9 +114,9 @@ class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Android SDK", description=_("Android SDK"),
                          only_on_archs=_supported_archs, expect_license=True,
-                         packages_requirements=["openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk",
+                         packages_requirements=["openjdk-11-jdk | openjdk-17-jdk | openjdk-18-jdk | openjdk-19-jdk | openjdk-20-jdk"
                                                 "libc6:i386", "libncurses5:i386", "libstdc++6:i386",
-                                                "lib32z1", "zlib1g:i386"],
+                                                "lib32z1", "libbz2-1.0:i386"],
                          download_page="https://developer.android.com/studio/index.html",
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball=".",

@@ -46,7 +46,7 @@ class MavenLang(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Maven Lang", description=_("Java software project management and comprehension tool"),
                          is_category_default=True,
-                         packages_requirements=["openjdk-7-jdk | openjdk-8-jdk | openjdk-11-jdk"],
+                         packages_requirements=["openjdk-11-jdk | openjdk-17-jdk | openjdk-18-jdk | openjdk-19-jdk | openjdk-20-jdk"],
                          checksum_type=ChecksumType.sha512,
                          match_last_link=True,
                          download_page="https://maven.apache.org/download.cgi",
