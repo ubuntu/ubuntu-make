@@ -675,7 +675,6 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                          description=_("Spring Tools Suite IDE"),
                          download_page="https://spring.io/tools/",
                          dir_to_decompress_in_tarball='sts-*',
-                         checksum_type=ChecksumType.sha1,
                          desktop_filename='STS.desktop',
                          only_on_archs=['amd64'],
                          packages_requirements=['openjdk-11-jdk | openjdk-17-jdk | openjdk-18-jdk | openjdk-19-jdk | openjdk-20-jdk"'],
@@ -684,28 +683,19 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                          **kwargs)
         self.new_download_url = None
 
-    def parse_download_link(self, line, in_download):
-        """Parse STS download links"""
-        url, checksum = (None, None)
-        if 'linux.gtk.x86_64.tar.gz' in line:
-            in_download = True
-        else:
-            in_download = False
-        if in_download:
-            p = re.search(r'href="(.+?.tar.gz)"', line)
-            with suppress(AttributeError):
-                # url set to check in baseinstaller if missing
-                url = p.group(1) + '.sha1'
-                self.new_download_url = url
-        return ((None, None), in_download)
+    arch_trans = {
+        "amd64": "x86_64",
+        "aarch64": "aarch64"
+    }
 
-    @MainLoop.in_mainloop_thread
-    def get_sha_and_start_download(self, download_result):
-        res = download_result[self.new_download_url]
-        checksum = res.buffer.getvalue().decode('utf-8').split()[0]
-        # you get and store self.download_url
-        url = re.sub('.sha1', '', self.new_download_url)
-        self.check_data_and_start_download(url, checksum)
+    def parse_download_link(self, line, in_download):
+        """Parse STS download links"""    
+        url = None
+        if '{}.tar.gz'.format(self.arch_trans[get_current_arch()]) in line:
+            p = re.search(r'href="([^<]*{}.tar.gz)"'.format(self.arch_trans[get_current_arch()]), line)
+            with suppress(AttributeError):
+                url = p.group(1)
+        return ((url, None), in_download)
 
     def post_install(self):
         """Create the Spring Tools Suite launcher"""
