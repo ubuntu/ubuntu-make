@@ -7,8 +7,6 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 
 [![Build Status](https://github.com/ubuntu/ubuntu-make/workflows/style_test/badge.svg?branch=master)](https://github.com/ubuntu/ubuntu-make/actions?workflow=style_test) (pep8 and small tests)
 
-[![Snap Status](https://build.snapcraft.io/badge/ubuntu/ubuntu-make.svg)](https://build.snapcraft.io/user/ubuntu/ubuntu-make)
-
 [![Translation status](https://hosted.weblate.org/widgets/ubuntu-make/-/svg-badge.svg)](https://hosted.weblate.org/engage/ubuntu-make/?utm_source=widget)
 
 ## Installing
