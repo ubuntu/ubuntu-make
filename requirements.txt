@@ -2,8 +2,8 @@
 # python-apt @ https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/python-apt/2.0.0ubuntu0.20.04.6/python-apt_2.0.0ubuntu0.20.04.6.tar.xz
 argcomplete
 progressbar33
-pycairo
-PyGObject
+# pycairo
+# PyGObject
 python-gnupg
 pyxdg
 PyYAML
