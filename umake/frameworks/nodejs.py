@@ -45,7 +45,7 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
         super().__init__(name="Nodejs Lang", description=_("Nodejs stable"), is_category_default=True,
-                         only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['amd64'],
                          download_page="https://nodejs.org/en/download/current",
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="node*",
@@ -53,7 +53,7 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
                          **kwargs)
     arch_trans = {
         "amd64": "x64",
-        "i386": "x86"
+        "aarch64": "arm64"
     }
 
     def download_provider_page(self):
@@ -72,7 +72,7 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
         for line in result[self.download_page].buffer:
             line_content = line.decode()
             with suppress(AttributeError):
-                shasum_url = re.search(r'a href="(.*SHASUMS\d\d\d\.txt\.asc)"', line_content).group(1)
+                shasum_url = re.search(r'a href=\"(https://nodejs\.org/dist/v[\d\.]+/SHASUMS\d\d\d\.txt\.asc)\"', line_content).group(1)
 
         if not result:
             logger.error("Download page changed its syntax or is not parsable")
