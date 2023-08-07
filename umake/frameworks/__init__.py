@@ -302,7 +302,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
                                            help=_("Remove framework if installed"))
         this_framework_parser.add_argument('--dry-run', dest="dry_run", action="store_true",
                                            help=_("Fetch only the url, then exit."))
-
+        this_framework_parser.add_argument('-f', '--force', action="store_true",
+                                           help=_("Force install with defaults"))
         if self.expect_license:
             this_framework_parser.add_argument('--accept-license', dest="accept_license", action="store_true",
                                                help=_("Accept license without prompting"))
@@ -329,7 +330,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
                 dry_run = True
             self.setup(install_path=install_path,
                        auto_accept_license=auto_accept_license,
-                       dry_run=dry_run)
+                       dry_run=dry_run,
+                       force_defaults=args.force)
 
 
 class MainCategory(BaseCategory):

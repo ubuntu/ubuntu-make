@@ -112,6 +112,32 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.child.sendline()
         self.wait_and_close()
 
+    def test_default_path_install(self):
+        """Install base installer from scratch test case in default path"""
+        self.child = spawn_process(self.command('{} base base-framework -f'.format(UMAKE)))
+        self.expect_and_no_warn(r"\[I Accept.*\]")  # ensure we have a license question
+        self.child.sendline("a")
+        self.expect_and_no_warn("Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
+        self.wait_and_close()
+
+        # we have an installed launcher, added to the launcher
+        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assert_exec_exists()
+        self.assert_icon_exists()
+        self.assert_exec_link_exists()
+
+        # launch it, send SIGTERM and check that it exits fine
+        proc = subprocess.Popen(self.command_as_list(self.exec_path), stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+        self.check_and_kill_process([self.JAVAEXEC, self.installed_path], wait_before=self.TIMEOUT_START)
+        self.assertEqual(proc.wait(self.TIMEOUT_STOP), 143)
+
+        # ensure that it's detected as installed:
+        self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
+        self.expect_and_no_warn(r"Base Framework is already installed.*\[.*\] ")
+        self.child.sendline()
+        self.wait_and_close()
+
     def test_no_license_accept(self):
         """We don't accept the license (default)"""
         self.child = spawn_process(self.command('{} base base-framework'.format(UMAKE)))
