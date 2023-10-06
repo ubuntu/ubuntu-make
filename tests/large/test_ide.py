@@ -57,7 +57,7 @@ class EclipseJavaIDETests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -141,7 +141,7 @@ class IdeaIDETests(LargeFrameworkTests):
             self.assertTrue(self.name == 'GoLand')
         elif result == 1:
             # we have an installed launcher, added to the launcher and an icon file
-            self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertTrue(self.launcher_exists(self.desktop_filename))
             self.assert_exec_exists()
             self.assert_icon_exists()
             self.assert_exec_link_exists()
@@ -175,7 +175,7 @@ class IdeaIDETests(LargeFrameworkTests):
             self.wait_and_close()
 
             # we have an installed launcher, added to the launcher and an icon file
-            self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertTrue(self.launcher_exists(self.desktop_filename))
             self.assert_exec_exists()
             self.assert_icon_exists()
             self.assert_exec_link_exists()
@@ -383,7 +383,7 @@ class NetBeansTests(LargeFrameworkTests):
         logger.info("Installed, running...")
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -429,7 +429,7 @@ class VisualStudioCodeTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -466,7 +466,7 @@ class VisualStudioCodeTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -510,7 +510,7 @@ class LightTableTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -560,7 +560,7 @@ class DBeaverTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -614,7 +614,7 @@ class SpringToolsSuiteTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -663,7 +663,7 @@ class RStudioTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -705,7 +705,7 @@ class SublimeTextTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -752,7 +752,7 @@ class ProcessingTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -800,7 +800,7 @@ class LiteIDETests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -845,7 +845,7 @@ class VSCodiumTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()

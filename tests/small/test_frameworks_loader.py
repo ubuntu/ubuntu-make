@@ -302,7 +302,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
             self.CategoryHandler.categories[args.category].run_for(args)
 
             self.assertTrue(setup_call.called)
-            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=False))
+            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=False, dry_run = True))
 
     def test_parse_no_framework_run_default_for_category(self):
         """Parsing category will run default framework"""
@@ -316,7 +316,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
                 as setup_call:
             self.CategoryHandler.categories[args.category].run_for(args)
             self.assertTrue(setup_call.called)
-            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=False))
+            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=False, dry_run = True))
 
     def test_parse_category_and_framework_run_correct_remove_framework(self):
         """Parsing category and framework with --remove run remove on right category and framework"""
@@ -407,7 +407,7 @@ class TestFrameworkLoader(BaseFrameworkLoader):
             self.CategoryHandler.categories[args.category].run_for(args)
 
             self.assertTrue(setup_call.called)
-            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=True))
+            self.assertEqual(setup_call.call_args, call(install_path=None, auto_accept_license=True, dry_run=True))
 
     def test_uninstantiable_framework(self):
         """A uninstantiable framework isn't loaded"""

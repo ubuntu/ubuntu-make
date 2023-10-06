@@ -33,7 +33,7 @@ from . import DpkgAptSetup
 from ..tools import change_xdg_path, get_data_dir, LoggedTestCase, INSTALL_DIR
 from umake import settings, tools
 from umake.tools import ConfigHandler, Singleton, get_current_arch, get_foreign_archs, get_current_distro_version,\
-    create_launcher, launcher_exists_and_is_pinned, launcher_exists, get_icon_path, get_launcher_path, copy_icon,\
+    create_launcher, launcher_exists, get_icon_path, get_launcher_path, copy_icon,\
     add_exec_link
 from unittest.mock import patch, Mock
 from contextlib import suppress
@@ -567,61 +567,6 @@ class TestLauncherIcons(LoggedTestCase):
     def test_desktop_file_doesnt_exist(self):
         """Launcher file doesn't exists"""
         self.assertFalse(launcher_exists("foo.desktop"))
-
-    @patch("umake.tools.Gio.Settings")
-    def test_launcher_exists_and_is_pinned(self, SettingsMock):
-        """Launcher exists and is pinned if the file exists and is in favorites list"""
-        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
-                                                           "unity://running-apps"]
-        self.write_desktop_file("foo.desktop")
-
-        self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
-
-    @patch("umake.tools.Gio.Settings")
-    def test_launcher_isnt_pinned(self, SettingsMock):
-        """Launcher doesn't exists and is pinned if the file exists but not in favorites list"""
-        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running-apps"]
-        self.write_desktop_file("foo.desktop")
-
-        self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
-
-    @patch("umake.tools.Gio.Settings")
-    def test_launcher_exists_but_isnt_pinned_in_none_unity(self, SettingsMock):
-        """Launcher exists return True if file exists, not pinned but not in Unity"""
-        os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
-        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "unity://running-apps"]
-        self.write_desktop_file("foo.desktop")
-
-        self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
-
-    @patch("umake.tools.Gio.Settings")
-    def test_launcher_exists_but_not_schema_in_none_unity(self, SettingsMock):
-        """Launcher exists return True if file exists, even if Unity schema isn't installed"""
-        os.environ["XDG_CURRENT_DESKTOP"] = "FOOenv"
-        SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
-        self.write_desktop_file("foo.desktop")
-
-        self.assertTrue(launcher_exists_and_is_pinned("foo.desktop"))
-
-    @patch("umake.tools.Gio.Settings")
-    def test_launcher_exists_but_not_schema_in_unity(self, SettingsMock):
-        """Launcher exists return False if file exists, but no Unity schema installed"""
-        SettingsMock.list_schemas.return_value = ["foo", "bar", "baz"]
-        self.write_desktop_file("foo.desktop")
-
-        self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
-
-    @patch("umake.tools.Gio.Settings")
-    def test_launcher_doesnt_exists_but_pinned(self, SettingsMock):
-        """Launcher doesn't exist if no file, even if pinned"""
-        SettingsMock.list_schemas.return_value = ["foo", "bar", "com.canonical.Unity.Launcher", "baz"]
-        SettingsMock.return_value.get_strv.return_value = ["application://bar.desktop", "application://foo.desktop",
-                                                           "unity://running-apps"]
-
-        self.assertFalse(launcher_exists_and_is_pinned("foo.desktop"))
 
     def test_can_copy_icon(self):
         """Copy a basic icon"""

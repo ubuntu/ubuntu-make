@@ -37,7 +37,7 @@ from umake.network.requirements_handler import RequirementsHandler
 from umake.ui import UI
 from umake.settings import DEFAULT_INSTALL_TOOLS_PATH
 from umake.tools import MainLoop, strip_tags, launcher_exists, get_icon_path, get_launcher_path, \
-    Checksum, remove_framework_envs_from_user, add_exec_link
+    Checksum, remove_framework_envs_from_user, add_exec_link, validate_url
 
 logger = logging.getLogger(__name__)
 
@@ -295,7 +295,8 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.download_requests.append(DownloadItem(url, Checksum(self.checksum_type, checksum)))
 
         if self.dry_run:
-            UI.display(DisplayMessage("Found download URL: " + url))
+            if validate_url(url):
+                UI.display(DisplayMessage("Found download URL: " + url))
             if checksum is not None:
                 UI.display(DisplayMessage("Found download checksum: " + checksum))
             UI.return_main_screen(status_code=0)

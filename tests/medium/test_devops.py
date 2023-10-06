@@ -43,5 +43,5 @@ class TerraformInContainer(ContainerTests, test_devops.TerraformTests):
                                                "repos", "hashicorp", "terraform", "releases", "latest")
         self.command('{} devops terraform'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))

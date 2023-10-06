@@ -43,7 +43,7 @@ class FirefoxDevContainer(ContainerTests, test_web.FirefoxDevTests):
                                                "firefox", "developer", "all")
         umake_command = self.command('{} web firefox-dev'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(os.path.join(self.binary_dir, self.desktop_filename.split('.')[0])))
 
 
@@ -85,7 +85,7 @@ class GeckodriverInContainer(ContainerTests, test_web.GeckodriverTests):
                                                "repos", "mozilla", "geckodriver", "releases", "latest")
         umake_command = self.command('{} web geckodriver'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -107,5 +107,5 @@ class ChromedriverInContainer(ContainerTests, test_web.ChromedriverTests):
                                                "LATEST_RELEASE")
         umake_command = self.command('{} web chromedriver'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))

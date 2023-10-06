@@ -178,11 +178,6 @@ class ContainerTests(LoggedTestCase):
                                         desktop_filename])
         return self._exec_command(command)[1]
 
-    def launcher_exists_and_is_pinned(self, desktop_filename):
-        """Check if launcher exists and is pinned inside the container"""
-        command = self.command_as_list([os.path.join(get_tools_helper_dir(), "check_launcher_exists_and_is_pinned"),
-                                        desktop_filename])
-        return self._exec_command(command)[0]
 
     def path_exists(self, path):
         """Check if a path exists inside the container"""

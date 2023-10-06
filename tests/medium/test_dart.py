@@ -41,7 +41,7 @@ class DartInContainer(ContainerTests, test_dart.DartTests):
                                                "channels/stable/release/latest/VERSION")
         umake_command = self.command('{} dart'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
 
 
 class FlutterInContainer(ContainerTests, test_dart.FlutterTests):
@@ -60,4 +60,4 @@ class FlutterInContainer(ContainerTests, test_dart.FlutterTests):
                                                "releases/releases_linux.json")
         umake_command = self.command('{} dart flutter-sdk'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))

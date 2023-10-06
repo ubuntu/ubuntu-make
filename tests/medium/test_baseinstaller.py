@@ -56,7 +56,7 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
             self.wait_and_close(exit_status=1)
 
             # we have nothing installed
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_install_wrong_download_link_no_update(self):
         """Install wrong download link, no update available"""
@@ -78,7 +78,7 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
                 self.assertNotIn("To get the latest version", self.child.before)
 
                 # we have nothing installed
-                self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+                self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_install_wrong_download_link_404_update(self):
         """Install wrong download link, github giving 404"""
@@ -95,7 +95,7 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
                 self.assertIn("\r\nERROR: 404 Client Error:", self.child.before)
 
                 # we have nothing installed
-                self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+                self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_install_wrong_download_link_github_missing(self):
         # TODO: cut all network connection on the container to enable that test
@@ -111,4 +111,4 @@ class BaseInstallerInContainer(ContainerTests, test_baseinstaller.BaseInstallerT
             self.wait_and_close(exit_status=1)
 
             # we have nothing installed
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertFalse(self.launcher_exists(self.desktop_filename))

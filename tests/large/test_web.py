@@ -48,7 +48,7 @@ class FirefoxDevTests(LargeFrameworkTests):
 
     def verify_install(self, installed_language):
         # we have an installed launcher, added to the launcher, a dictionary file and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assertTrue(self.language_file_exists(installed_language))
         self.assert_exec_exists()
         self.assert_icon_exists()
@@ -111,7 +111,7 @@ class FirefoxDevTests(LargeFrameworkTests):
         self.child.sendline("")
         self.wait_and_close(expect_warn=True, exit_status=1)
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def language_file_exists(self, language):
         return self.path_exists(os.path.join(self.installed_path, "dictionaries", "{}.aff".format(language)))

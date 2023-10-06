@@ -55,13 +55,13 @@ class EclipseJavaIDEInContainer(ContainerTests, test_ide.EclipseJavaIDETests):
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "www.eclipse.org", "downloads",
                                                "packages", "index.html")
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
     def test_install_with_changed_checksum_page(self):
         """Installing eclipse ide should fail if checksum link is unparsable"""
         self.bad_download_page_test(self.command(self.command_args), self.bad_download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -143,7 +143,7 @@ class IdeaIDEInContainer(ContainerTests, test_ide.IdeaIDETests):
     def test_install_with_changed_download_page(self):
         """Installing IntelliJ Idea should fail if download page has changed"""
         self.bad_download_page_test(self.command(self.command_args), self.bad_download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -348,7 +348,7 @@ class NetBeansInContainer(ContainerTests, test_ide.NetBeansTests):
                                                "incubator", "netbeans", "incubating-netbeans", "index.html")
         umake_command = self.command('{} ide netbeans'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -385,7 +385,7 @@ class LightTableInContainer(ContainerTests, test_ide.LightTableTests):
                                                "repos", "LightTable", "LightTable", "releases", "latest")
         umake_command = self.command('{} ide lighttable'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -418,7 +418,7 @@ class DBeaverInContainer(ContainerTests, test_ide.DBeaverTests):
                                                "repos", "DBeaver", "DBeaver", "releases", "latest")
         umake_command = self.command('{} ide dbeaver'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -453,7 +453,7 @@ class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTests
         download_page_file_path = os.path.join(get_data_dir(), "server-content", "spring.io", "tools")
         umake_command = self.command('{} ide spring-tools-suite'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
     def test_install_with_changed_checksum_page(self):
@@ -462,7 +462,7 @@ class SpringToolsSuiteInContainer(ContainerTests, test_ide.SpringToolsSuiteTests
                                                'STS4', 'mock.RELEASE', 'dist', 'emock',
                                                'spring-tool-suite-mock.RELEASE-emock-linux.gtk.x86_64.tar.gz.sha1')
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -485,7 +485,7 @@ class ProcessingInContainer(ContainerTests, test_ide.ProcessingTests):
                                                "repos", "processing", "processing", "releases", "latest")
         umake_command = self.command('{} ide processing'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -508,7 +508,7 @@ class LiteIDEInContainer(ContainerTests, test_ide.LiteIDETests):
                                                "repos", "visualfc", "liteide", "releases", "latest")
         umake_command = self.command('{} ide liteide'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -531,5 +531,5 @@ class VSCodiumInContainer(ContainerTests, test_ide.VSCodiumTests):
                                                "repos", "VSCodium", "VSCodium", "releases", "latest")
         umake_command = self.command('{} ide vscodium'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))

@@ -46,7 +46,7 @@ class ArduinoIDEInContainer(ContainerTests, test_electronics.ArduinoIDETests):
                                                "Software")
         umake_command = self.command('{} electronics arduino'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
     def test_install_with_changed_checksum_page(self):
@@ -55,7 +55,7 @@ class ArduinoIDEInContainer(ContainerTests, test_electronics.ArduinoIDETests):
                                                "arduino-mock.sha512sum.txt")
         umake_command = self.command('{} electronics arduino'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -77,5 +77,5 @@ class EagleTestsInContainer(ContainerTests, test_electronics.EagleTests):
                                                "downloads", "latest.html")
         umake_command = self.command('{} electronics eagle'.format(UMAKE))
         self.bad_download_page_test(umake_command, download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))

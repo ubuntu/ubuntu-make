@@ -93,10 +93,10 @@ class AdoptOpenJDK(umake.frameworks.baseinstaller.BaseInstaller):
 
         self.download_page = "https://api.adoptopenjdk.net/v3/assets/latest/{}/{}".format(version, self.jvm_impl)
         # Check download page, or revert to previous version
-        if requests.get(self.download_page).json() == []:
+        if requests.get(self.download_page, headers=self.headers).json() == []:
             self.download_page = "https://api.adoptopenjdk.net/v3/assets/latest/{}/{}".format(version_prev,
                                                                                               self.jvm_impl)
-        DownloadCenter([DownloadItem(self.download_page)], self.get_metadata_and_check_license, download=False)
+        DownloadCenter([DownloadItem(self.download_page, headers=self.headers)], self.get_metadata_and_check_license, download=False)
 
     def parse_download_link(self, line, in_download):
         """Parse Java download link, expect to find a url"""

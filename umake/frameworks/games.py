@@ -68,7 +68,6 @@ class Blender(umake.frameworks.baseinstaller.BaseInstaller):
                 filename = 'release' + re.search('blender-(.*)-linux', url).group(1).replace('.', '') + '.md5'
                 self.checksum_url = os.path.join(os.path.dirname(url),
                                                  filename).replace('download', 'release').replace('www', 'download')
-                url = url.replace('www.blender.org/download', 'download.blender.org/release')
         return ((url, None), in_download)
 
     def post_install(self):
@@ -79,20 +78,6 @@ class Blender(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;Graphics"))
-
-
-def _chrome_sandbox_setuid(path):
-    """Chown and setUID to chrome sandbox"""
-    # switch to root
-    with as_root():
-        try:
-            os.chown(path, 0, -1)
-            os.chmod(path, stat.S_ISUID | stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
-            logger.debug("Changed setUID mode {}".format(path))
-            return True
-        except Exception as e:
-            logger.error("Couldn't change owner and file perm to {}: {}".format(path, e))
-            return False
 
 
 class Unity3D(umake.frameworks.baseinstaller.BaseInstaller):
@@ -195,7 +180,7 @@ class Godot(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
         super().__init__(name="Godot", description=_("The game engine you waited for"),
-                         only_on_archs=['i386', 'amd64'],
+                         only_on_archs=['amd64'],
                          download_page="https://godotengine.org/download/linux",
                          desktop_filename="godot.desktop",
                          required_files_path=['godot'],
@@ -204,8 +189,7 @@ class Godot(umake.frameworks.baseinstaller.BaseInstaller):
         self.icon_filename = "Godot.svg"
 
     arch_trans = {
-        "amd64": "64",
-        "i386": "32"
+        "amd64": "x86_64",
     }
 
     def parse_download_link(self, line, in_download):
@@ -213,7 +197,7 @@ class Godot(umake.frameworks.baseinstaller.BaseInstaller):
         url = None
         if '{}.zip'.format(self.arch_trans[get_current_arch()]) in line:
             in_download = True
-            p = re.search(r'href=\"(.*\.zip)\"', line)
+            p = re.search(r'(.*\.zip)', line)
             with suppress(AttributeError):
                 url = p.group(1)
                 bin = re.search(r'(Godot.*)\.zip', url)

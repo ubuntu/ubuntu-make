@@ -97,7 +97,7 @@ def set_logging_from_args(args, parser):
 def should_load_all_frameworks(args):
     """Set partial or complete framework loading condition based on arg"""
     for arg in args[1:]:
-        if arg in ["-l", "--list", "--list-installed", "--list-available"]:
+        if arg in ["-l", "--list", "--list-installed", "--list-available", "--list-json"]:
             return True
 
     return False
@@ -139,6 +139,7 @@ def main():
     list_group.add_argument('-l', '--list', action="store_true", help=_("List all frameworks"))
     list_group.add_argument('--list-installed', action="store_true", help=_("List installed frameworks"))
     list_group.add_argument('--list-available', action="store_true", help=_("List installable frameworks"))
+    list_group.add_argument('--list-json', action="store_true", help=_("List installable frameworks (json)"))
 
     parser.add_argument('--version', action="store_true", help=_("Print version and exit"))
 

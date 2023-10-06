@@ -796,10 +796,11 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
         """Parse RStudio download links"""
         url = None
         checksum = None
-        if int(get_current_distro_version(distro_name="debian").split('.')[0]) == 9:
-            ubuntu_version = "debian9"
+        if int(get_current_distro_version(distro_name="debian").split('.')[0]) == 9 or\
+            int(get_current_distro_version().split('.')[0]) == 20:
+            ubuntu_version = "focal"
         else:
-            ubuntu_version = 'bionic'
+            ubuntu_version = 'jammy'
         if '-debian.tar.gz' in line:
             p = re.search(r'href=\"([^<]*{}.*-debian\.tar\.gz)\"'.format(ubuntu_version), line)
             with suppress(AttributeError):

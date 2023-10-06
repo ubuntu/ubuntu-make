@@ -94,7 +94,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()
@@ -121,7 +121,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.accept_default_and_wait()
         self.close_and_check_status()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_doesnt_accept_wrong_path(self):
         """We don't accept a wrong path"""
@@ -134,7 +134,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.child.sendcontrol('C')
         self.wait_and_no_warn()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_reinstall(self):
         """Reinstall once installed"""
@@ -152,7 +152,7 @@ class BaseInstallerTests(LargeFrameworkTests):
             self.wait_and_close()
 
             # we have an installed launcher, added to the launcher
-            self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertTrue(self.launcher_exists(self.desktop_filename))
             self.assert_exec_exists()
 
             # launch it, send SIGTERM and check that it exits fine
@@ -180,7 +180,7 @@ class BaseInstallerTests(LargeFrameworkTests):
             self.wait_and_close()
 
             # we have an installed launcher, added to the launcher
-            self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertTrue(self.launcher_exists(self.desktop_filename))
             self.assert_exec_exists()
 
         # ensure that version first isn't installed anymore
@@ -213,7 +213,7 @@ class BaseInstallerTests(LargeFrameworkTests):
             self.wait_and_close()
 
             # we have an installed launcher, added to the launcher
-            self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertTrue(self.launcher_exists(self.desktop_filename))
             self.assert_exec_exists()
 
         # ensure that version first isn't installed anymore
@@ -236,7 +236,7 @@ class BaseInstallerTests(LargeFrameworkTests):
             self.wait_and_close()
 
             # we have an installed launcher, added to the launcher
-            self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertTrue(self.launcher_exists(self.desktop_filename))
             self.assert_exec_exists()
 
     def test_reinstall_previous_launcher_removed(self):
@@ -259,7 +259,7 @@ class BaseInstallerTests(LargeFrameworkTests):
             self.wait_and_close()
 
             # we have an installed launcher, added to the launcher
-            self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertTrue(self.launcher_exists(self.desktop_filename))
             self.assert_exec_exists()
 
     def test_xdg_data_install_path(self):
@@ -276,7 +276,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.expect_and_no_warn(r"\[I Accept.*\]")
         self.accept_default_and_wait()
         self.close_and_check_status()
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_custom_install_path(self):
         """We install Base Framework in a custom path"""
@@ -289,7 +289,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
 
@@ -311,7 +311,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.accept_default_and_wait()
         self.close_and_check_status()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_start_install_on_existing_dir_refuse(self):
         """We prompt if we try to install on an existing directory which isn't empty. Refusing doesn't install"""
@@ -325,7 +325,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.accept_default_and_wait()
         self.close_and_check_status()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_start_install_on_existing_dir_accept(self):
         """We prompt if we try to install on an existing directory which isn't empty. Accepting install"""
@@ -343,7 +343,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
 
@@ -386,7 +386,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
 
@@ -406,14 +406,14 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.child.sendline("a")
         self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assertTrue(self.path_exists(self.installed_path))
 
         # now, remove it
         self.child = spawn_process(self.command('{} base base-framework --remove'.format(UMAKE)))
         self.wait_and_close()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
         self.assertFalse(self.path_exists(os.path.dirname(self.installed_path)))
         self.assertFalse(self.path_exists(self.exec_link))
@@ -426,14 +426,14 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.child.sendline("a")
         self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assertTrue(self.path_exists(self.installed_path))
 
         # now, remove it
         self.child = spawn_process(self.command('{} base base-framework --remove'.format(UMAKE)))
         self.wait_and_close()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
 
     def test_removal_global_option(self):
@@ -445,14 +445,14 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.child.sendline("a")
         self.expect_and_no_warn(r"Installation done", timeout=self.TIMEOUT_INSTALL_PROGRESS)
         self.wait_and_close()
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assertTrue(self.path_exists(self.installed_path))
 
         # now, remove it
         self.child = spawn_process(self.command('{} --remove base base-framework'.format(UMAKE)))
         self.wait_and_close()
 
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.path_exists(self.installed_path))
         self.assertFalse(self.path_exists(os.path.dirname(self.installed_path)))
 
@@ -464,7 +464,7 @@ class BaseInstallerTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
 
     def test_try_removing_uninstalled_framework(self):
@@ -489,13 +489,13 @@ class BaseInstallerTests(LargeFrameworkTests):
             self.wait_and_close(exit_status=1)
 
             # we have nothing installed
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_install_with_no_license_in_download_page(self):
         """Installing should fail if license is not in download page"""
         umake_command = self.command("{} base base-framework".format(UMAKE))
         self.bad_download_page_test(umake_command, self.download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_install_with_no_download_links(self):
         """Installing should fail if no valid download links are found"""
@@ -509,7 +509,7 @@ class BaseInstallerTests(LargeFrameworkTests):
             self.wait_and_close(exit_status=1)
 
             # we have nothing installed
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_install_with_404(self):
         """Installing should fail with a 404 download asset reported correctly"""
@@ -527,7 +527,7 @@ class BaseInstallerTests(LargeFrameworkTests):
             self.wait_and_close(exit_status=1)
 
             # we have nothing installed
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertFalse(self.launcher_exists(self.desktop_filename))
 
     def test_download_page_404(self):
         """Download page changed address or is just 404 should be reported correctly"""
@@ -541,4 +541,4 @@ class BaseInstallerTests(LargeFrameworkTests):
             self.wait_and_close(exit_status=1)
 
             # we have nothing installed
-            self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+            self.assertFalse(self.launcher_exists(self.desktop_filename))

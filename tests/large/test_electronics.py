@@ -55,7 +55,7 @@ class ArduinoIDETests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assertTrue(self.is_in_group("dialout"))
@@ -99,7 +99,7 @@ class EagleTests(LargeFrameworkTests):
         self.wait_and_close()
 
         # we have an installed launcher, added to the launcher and an icon file
-        self.assertTrue(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertTrue(self.launcher_exists(self.desktop_filename))
         self.assert_exec_exists()
         self.assert_icon_exists()
         self.assert_exec_link_exists()

@@ -28,7 +28,7 @@ import signal
 import stat
 import subprocess
 from time import sleep
-from umake.tools import get_icon_path, get_launcher_path, launcher_exists_and_is_pinned, remove_framework_envs_from_user
+from umake.tools import get_icon_path, get_launcher_path, remove_framework_envs_from_user
 from ..tools import LoggedTestCase, get_path_from_desktop_file, is_in_group, INSTALL_DIR, swap_file_and_restore, \
     spawn_process, set_local_umake, BRANCH_TESTS
 from umake.settings import DEFAULT_BINARY_LINK_PATH
@@ -203,10 +203,6 @@ class LargeFrameworkTests(LoggedTestCase):
     def get_launcher_path(self, desktop_filename):
         """passthrough getting the launcher path from umake tools"""
         return get_launcher_path(desktop_filename)
-
-    def launcher_exists_and_is_pinned(self, desktop_filename):
-        """passthrough to in process method"""
-        return launcher_exists_and_is_pinned(desktop_filename)
 
     def path_exists(self, path):
         """passthrough to os.path.exists"""

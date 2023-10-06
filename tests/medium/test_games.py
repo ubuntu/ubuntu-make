@@ -85,7 +85,7 @@ class SuperpowersInContainer(ContainerTests, test_games.SuperpowersTests):
                                                "repos", "superpowers", "superpowers-app", "releases", "latest")
         umake_command = self.command('{} games superpowers'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -108,7 +108,7 @@ class GDevelopInContainer(ContainerTests, test_games.GDevelopTests):
                                                "repos", "4ian", "GD", "releases", "latest")
         umake_command = self.command('{} games gdevelop'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))
 
 
@@ -130,5 +130,5 @@ class GodotInContainer(ContainerTests, test_games.GodotTests):
                                                "download", "linux", "index.html")
         umake_command = self.command('{} games godot'.format(UMAKE))
         self.bad_download_page_test(self.command(self.command_args), download_page_file_path)
-        self.assertFalse(self.launcher_exists_and_is_pinned(self.desktop_filename))
+        self.assertFalse(self.launcher_exists(self.desktop_filename))
         self.assertFalse(self.is_in_path(self.exec_link))

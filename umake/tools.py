@@ -20,12 +20,15 @@
 from collections import namedtuple
 from contextlib import contextmanager, suppress
 from enum import unique, Enum
+from http.client import HTTPConnection
 from gettext import gettext as _
 from gi.repository import GLib, Gio
 from glob import glob
+from urllib.parse import urlsplit
 import logging
 import os
 import re
+import requests
 import shutil
 import signal
 import subprocess
@@ -297,24 +300,6 @@ def launcher_exists(desktop_filename):
     return True
 
 
-def launcher_exists_and_is_pinned(desktop_filename):
-    """Return true if the desktop filename is pinned in the launcher"""
-    if not launcher_exists(desktop_filename):
-        return False
-    if os.environ.get("XDG_CURRENT_DESKTOP") != "Unity":
-        logger.debug("Don't check launcher as current environment isn't Unity")
-        return True
-    if "com.canonical.Unity.Launcher" not in Gio.Settings.list_schemas():
-        logger.debug("In an Unity environment without the Launcher schema file")
-        return False
-    gsettings = Gio.Settings(schema_id="com.canonical.Unity.Launcher", path="/com/canonical/unity/launcher/")
-    launcher_list = gsettings.get_strv("favorites")
-    res = "application://" + desktop_filename in launcher_list
-    if not res:
-        logger.debug("Launcher exists but is not pinned (pinned: {}).".format(launcher_list))
-    return res
-
-
 def copy_icon(source_icon_filepath, icon_filename):
     """copy icon from source filepath to xdg destination as icon_filename
 
@@ -477,3 +462,7 @@ def add_env_to_user(framework_tag, env_dict):
                 export = "export "
             f.write("{}{}={}\n".format(export, env, value))
         f.write("\n")
+
+
+def validate_url(url):
+    return requests.head(url).ok
