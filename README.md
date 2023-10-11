@@ -4,8 +4,10 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/ubuntu-make)
 
 ## Current project health
-
-[![Build Status](https://github.com/ubuntu/ubuntu-make/workflows/style_test/badge.svg?branch=master)](https://github.com/ubuntu/ubuntu-make/actions?workflow=style_test) (pep8 and small tests)
+| Test | Status |
+|------|--------|
+| Style check tests | [![Style tests](https://github.com/ubuntu/ubuntu-make/workflows/style_test/badge.svg?branch=master)](https://github.com/ubuntu/ubuntu-make/actions?workflow=style_test) |
+| Url availability check | [![Url parsing](https://github.com/ubuntu/ubuntu-make/actions/workflows/url_tests.yml/badge.svg)](https://github.com/ubuntu/ubuntu-make/actions/workflows/url_tests.yml) |
 
 [![Translation status](https://hosted.weblate.org/widgets/ubuntu-make/-/svg-badge.svg)](https://hosted.weblate.org/engage/ubuntu-make/?utm_source=widget)
 
