@@ -11,7 +11,6 @@ Ubuntu Make is a project designed to enable quick and easy setup of common needs
 
 ## Installing
 ### SNAP
-We recommend to use the Ubuntu Make snap to ensure you always have the latest and greatest version, even on older supported releases.
 
 ```sh
 $ snap install ubuntu-make --classic
@@ -28,10 +27,16 @@ More information on this confined snap is available at https://didrocks.fr/2017/
 ### PPA
 There is also a daily built ppa:
 
-```
+```sh
 sudo add-apt-repository ppa:lyzardking/ubuntu-make
 sudo apt-get update
 sudo apt-get install ubuntu-make
+```
+
+If you are running  deb-get, then you can simply run:
+
+```sh
+deb-get install ubuntu-make
 ```
 
 ## Listing
