@@ -19,7 +19,7 @@
 
 
 """Logic module"""
-
+import re
 from gettext import gettext as _
 import logging
 import os
@@ -69,3 +69,11 @@ class Protege(umake.frameworks.baseinstaller.BaseInstaller):
                                                      exec=self.exec_link_name,
                                                      comment=comment,
                                                      categories=categories))
+
+    def parse_latest_version_from_package_url(self):
+        return (re.search(r'/protege-(\d+\.\d+\.\d+)/', self.package_url).group(1)
+                if self.package_url else 'Missing information')
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        return 'Missing information'

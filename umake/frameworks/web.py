@@ -19,7 +19,7 @@
 
 
 """Web module"""
-
+import subprocess
 from contextlib import suppress
 from functools import partial
 from gettext import gettext as _
@@ -140,6 +140,15 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
             self.arg_lang = args.lang
         super().run_for(args)
 
+    @staticmethod
+    def parse_latest_version_from_package_url(self):
+        return 'Missing information'
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        return 'Missing information'
+
+
 
 class PhantomJS(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -177,6 +186,20 @@ class PhantomJS(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
+    def parse_latest_version_from_package_url(self):
+        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
+                if self.package_url else 'Missing information')
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'ChangeLog'), 'r') as file:
+                lines = ''.join(file.readline() for _ in range(3))
+                match = re.search(r'(\d+\.\d+)', lines)
+                return match.group(1) if match else 'Missing information'
+        except FileNotFoundError:
+            return 'Missing information'
+
 
 class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -209,6 +232,22 @@ class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path)}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
+    def parse_latest_version_from_package_url(self):
+        return (re.search(r'v(\d+\.\d+\.\d+)', self.package_url).group(1)
+                if self.package_url else 'Missing information')
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            command = f"{os.path.join(install_path, 'geckodriver')} --version"
+            result = subprocess.check_output(command, shell=True, text=True)
+            first_line = result.split('\n')[0]
+            match = re.search(r'geckodriver\s+(\d+\.\d+\.\d+)', first_line)
+            return match.group(1) if match else 'Missing information'
+        except subprocess.CalledProcessError as e:
+            return 'Missing information'
+
+
 
 class Chromedriver(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -231,3 +270,17 @@ class Chromedriver(umake.frameworks.baseinstaller.BaseInstaller):
         """Add Chromedriver necessary env variables"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path)}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
+
+    def parse_latest_version_from_package_url(self):
+        return (re.search(r'/(\d+\.\d+\.\d+\.\d+)', self.package_url).group(1)
+                if self.package_url else 'Missing information')
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            command = f"{os.path.join(install_path, 'chromedriver')} --version"
+            result = subprocess.check_output(command, shell=True, text=True)
+            match = re.search(r'ChromeDriver\s+([\d.]+)', result)
+            return match.group(1) if match else 'Missing information'
+        except subprocess.CalledProcessError as e:
+            return 'Missing information'

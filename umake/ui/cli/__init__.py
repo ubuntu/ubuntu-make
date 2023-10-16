@@ -19,6 +19,7 @@
 
 """Module for loading the command line interface"""
 
+import threading
 import argcomplete
 from contextlib import suppress
 from gettext import gettext as _
@@ -28,6 +29,7 @@ from progressbar import ProgressBar, BouncingBar
 import readline
 import sys
 from umake.interactions import InputText, TextWithChoices, LicenseAgreement, DisplayMessage, UnknownProgress
+from umake.network.download_center import DownloadItem, DownloadCenter
 from umake.ui import UI
 from umake.frameworks import BaseCategory, list_frameworks
 from umake.tools import InputError, MainLoop
@@ -220,6 +222,61 @@ def get_frameworks_list_output(args):
     return print_result
 
 
+def is_first_version_higher(version1, version2):
+    if version2 == 'Missing information':
+        return True
+    elif version1 == 'Missing information':
+        return False
+
+    v1_parts = list(map(int, version1.split('.')))
+    v2_parts = list(map(int, version2.split('.')))
+
+    for v1, v2 in zip(v1_parts, v2_parts):
+        if v1 > v2:
+            return True
+        elif v1 < v2:
+            return False
+    return len(v1_parts) > len(v2_parts)
+
+
+def pretty_print_package_manager_output(data):
+    max_name_length = max(len(item['framework_name']) for item in data)
+    max_version_length = max(len(item['latest_version']) for item in data)
+    supports_color = os.getenv('TERM') and os.getenv('TERM') != 'dumb'
+
+    reset_color = ''
+    if supports_color:
+        reset_color = '\033[m'
+
+    for item in data:
+        latest_version = item['latest_version']
+        user_version = item['user_version']
+        latest_version_color = ''
+        user_version_color = ''
+
+        if not item['is_outdated']:
+            symbol = '+'
+            if supports_color:
+                latest_version_color = '\033[32m'
+                user_version_color = '\033[32m'
+        else:
+            symbol = '-'
+            if supports_color:
+                latest_version_color = '\033[31m'
+                user_version_color = '\033[31m'
+
+        latest_version_formatted = f"{latest_version_color}{latest_version}{reset_color}"
+        latest_version_padding = len(latest_version_formatted)
+        latest_version_formatted = latest_version_formatted.ljust(
+            latest_version_padding -
+            len(latest_version) +
+            max_version_length
+        )
+        print(f"{item['framework_name'].ljust(max_name_length)} | "
+              f"Latest Version: {latest_version_formatted} | "
+              f"User Version: {user_version_color}{user_version} {symbol}{reset_color}")
+
+
 def main(parser):
     """Main entry point of the cli command"""
     categories_parser = parser.add_subparsers(help='Developer environment', dest="category")
@@ -242,6 +299,49 @@ def main(parser):
     if args.version:
         print(get_version())
         sys.exit(0)
+
+    if args.update:
+        frameworks = list_frameworks()
+        installed_frameworks = sorted([
+            {'framework_name': framework['framework_name'], 'install_path': framework['install_path'],
+             'category_name': category['category_name']}
+            for category in frameworks
+            for framework in category['frameworks'] if framework['is_installed']
+        ], key=lambda x: x['framework_name'])
+        frameworks_version = []
+        for installed_framework in installed_frameworks:
+            category_name = installed_framework['category_name']
+            framework_name = installed_framework['framework_name']
+            if category_name == 'java' or framework_name == 'firefox-dev':
+                continue
+            install_path = installed_framework['install_path']
+            framework = BaseCategory.categories[category_name].frameworks[framework_name]
+            fetch_package_url = threading.Event()
+            DownloadCenter([DownloadItem(framework.download_page)], framework.store_package_url,
+                           download=False,
+                           report=lambda arg: fetch_package_url.set() if arg == 'all downloads finished' else None)
+            fetch_package_url.wait()
+            user_version = framework.get_current_user_version(install_path)
+            latest_version = framework.parse_latest_version_from_package_url()
+            is_outdated = is_first_version_higher(latest_version, user_version) \
+                if latest_version != 'Missing information' and user_version != 'Missing information' else False
+            frameworks_version.append({
+                'framework_name': framework_name,
+                'category_name': category_name,
+                'user_version': user_version,
+                'latest_version': latest_version,
+                'is_outdated': is_outdated
+            })
+        pretty_print_package_manager_output(frameworks_version)
+        outdated_frameworks = [item for item in frameworks_version if item['is_outdated']]
+        if not outdated_frameworks:
+            sys.exit(0)
+        else:
+            args = parser.parse_args([outdated_frameworks[0]['category_name'], outdated_frameworks[0]['framework_name']])
+            CliUI()
+            run_command_for_args(args)
+
+            return
 
     if not args.category:
         parser.print_help()

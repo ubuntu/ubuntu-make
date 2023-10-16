@@ -19,7 +19,7 @@
 
 
 """Android module"""
-
+import json
 from contextlib import suppress
 from gettext import gettext as _
 import logging
@@ -107,6 +107,21 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                         comment=_("Android Studio developer environment"),
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-studio"))
+
+    def parse_latest_version_from_package_url(self):
+        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
+                if self.package_url else 'Missing information')
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                version_not_formatted = data.get('dataDirectoryName', 'Missing information')
+                match = re.search(r'\d+\.\d+', version_not_formatted)
+                return match.group() if match else 'Missing information'
+        except FileNotFoundError:
+            return 'Missing information'
 
 
 class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):

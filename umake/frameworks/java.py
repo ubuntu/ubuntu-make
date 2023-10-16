@@ -134,6 +134,20 @@ class AdoptOpenJDK(umake.frameworks.baseinstaller.BaseInstaller):
             self.lts = True
         super().run_for(args)
 
+    def parse_latest_version_from_package_url(self):
+        return 'Missing information'
+        print(self.package_url)
+        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
+                if self.package_url else 'Missing information')
+
+    @staticmethod
+    def parse_latest_version_from_package_url(self):
+        return 'Missing information'
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        return 'Missing information'
+
 
 class OpenJFX(umake.frameworks.baseinstaller.BaseInstaller):
 

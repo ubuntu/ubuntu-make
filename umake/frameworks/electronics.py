@@ -114,6 +114,14 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
                     UI.return_main_screen(status_code=1)
             UI.delayed_display(DisplayMessage(_("You need to logout and login again for your installation to work")))
 
+    def parse_latest_version_from_package_url(self):
+        return 'Missing information'
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        return 'Missing information'
+
+
 
 
 class ArduinoLegacy(umake.frameworks.baseinstaller.BaseInstaller):
@@ -175,6 +183,13 @@ class ArduinoLegacy(umake.frameworks.baseinstaller.BaseInstaller):
                     UI.return_main_screen(status_code=1)
             UI.delayed_display(DisplayMessage(_("You need to logout and login again for your installation to work")))
 
+    def parse_latest_version_from_package_url(self):
+        return 'Missing information'
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        return 'Missing information'
+
 
 class Eagle(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -204,6 +219,18 @@ class Eagle(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;"))
+
+    def parse_latest_version_from_package_url(self):
+        return re.search(r'/(\d+(?:_\d+)*)/', self.package_url).group(1). \
+            replace('_', '.') if self.package_url else 'Missing information'
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'bin', 'eagle.def'), 'r') as file:
+                return re.search(r'(\d+(\.\d+)+)', next(file)).group(1) if file else 'Missing information'
+        except FileNotFoundError:
+            return 'Missing information'
 
 
 class Fritzing(umake.frameworks.baseinstaller.BaseInstaller):

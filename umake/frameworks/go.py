@@ -93,3 +93,15 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")},
                                     "GOROOT": {"value": self.install_path, "keep": False}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
+
+    def parse_latest_version_from_package_url(self):
+        return (re.search(r'go(\d+(\.\d+)+)', self.package_url).group(1)
+                if self.package_url else 'Missing information')
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'VERSION'), 'r') as file:
+                return re.search(r'go(\d+(\.\d+)+)', next(file)).group(1) if file else 'Missing information'
+        except FileNotFoundError:
+            return 'Missing information'

@@ -206,6 +206,7 @@ class DownloadCenter:
         """
         logger.info("All pending downloads for {} done".format(self._urls))
         self._done_callback(self._downloaded_content)
+        self._wired_report('all downloads finished')
 
     @classmethod
     def _checksum_for_fd(cls, algorithm, f, block_size=2 ** 20):

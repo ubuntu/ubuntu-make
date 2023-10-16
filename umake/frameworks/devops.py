@@ -19,7 +19,8 @@
 
 
 """Devops module"""
-
+import re
+import subprocess
 from gettext import gettext as _
 import logging
 import os
@@ -67,3 +68,18 @@ class Terraform(umake.frameworks.baseinstaller.BaseInstaller):
         """Add Terraform necessary env variables"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path)}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
+
+    def parse_latest_version_from_package_url(self):
+        return (re.search(r'/(\d+\.\d+\.\d+)', self.package_url).group(1)
+                if self.package_url else 'Missing information')
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        file = os.path.join(install_path, 'terraform')
+        command = f"{file} --version"
+        try:
+            result = subprocess.check_output(command, shell=True, text=True)
+            match = re.search(r'Terraform\s+v(\d+\.\d+\.\d+)', result)
+            return match.group(1) if match else 'Missing information'
+        except subprocess.CalledProcessError as e:
+            return 'Missing information'

@@ -82,3 +82,14 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
                        os.path.join(arch_dest_lib_folder, f))
 
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
+
+    def parse_latest_version_from_package_url(self):
+        return re.search(r'rust-(\d+(\.\d+)+)', self.package_url).group(1) if self.package_url else None
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'version'), 'r') as file:
+                return re.search(r'(\d+(\.\d+)+)', next(file)).group(1) if file else 'Missing information'
+        except FileNotFoundError:
+            return 'Missing information'

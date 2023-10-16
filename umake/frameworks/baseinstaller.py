@@ -61,6 +61,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         """The Downloader framework isn't instantiated directly, but is useful to inherit from for all frameworks
 
         having a set of downloads to proceed, some eventual supported_archs."""
+        self.package_url = None
         self.download_page = kwargs["download_page"]
         self.checksum_type = kwargs.get("checksum_type", None)
         self.dir_to_decompress_in_tarball = kwargs.get("dir_to_decompress_in_tarball", "")
@@ -211,6 +212,78 @@ class BaseInstaller(umake.frameworks.BaseFramework):
                           ((url, md5sum), in_download=True/False)"""
         pass
 
+    def store_package_url(self, result):
+        logger.debug("Parse download metadata")
+        self.auto_accept_license = True
+        self.dry_run = True
+
+        error_msg = result[self.download_page].error
+        if error_msg:
+            logger.error("An error occurred while downloading {}: {}".format(self.download_page, error_msg))
+
+        self.new_download_url = None
+        self.shasum_read_method = hasattr(self, 'get_sha_and_start_download')
+        with StringIO() as license_txt:
+            url, checksum = self.get_metadata(result, license_txt)
+            self.package_url = url
+
+    def get_metadata(self, result, license_txt):
+
+        url, checksum = (None, None)
+        page = result[self.download_page]
+        if self.json is True:
+            logger.debug("Using json parser")
+            try:
+                latest = json.loads(page.buffer.read().decode())
+                # On a download from github, if the page is not .../releases/latest
+                # we want to download the latest version (beta/development)
+                # So we get the first element in the json tree.
+                # In the framework we only change the url and this condition is satisfied.
+                if self.download_page.startswith("https://api.github.com") and \
+                        not self.download_page.endswith("/latest"):
+                    latest = latest[0]
+                url = None
+                in_download = False
+                (url, in_download) = self.parse_download_link(latest, in_download)
+                if not url:
+                    if not self.url:
+                        raise IndexError
+                    else:
+                        logger.debug("We set a temporary url while fetching the checksum")
+                        url = self.url
+            except (json.JSONDecodeError, IndexError):
+                logger.error("Can't parse the download URL from the download page.")
+                UI.return_main_screen(status_code=1)
+            logger.debug("Found download URL: " + url)
+
+        else:
+            in_license = False
+            in_download = False
+            for line in page.buffer:
+                line_content = line.decode()
+
+                if self.expect_license and not self.auto_accept_license:
+                    in_license = self.parse_license(line_content, license_txt, in_license)
+
+                # always take the first valid (url, checksum) if not match_last_link is set to True:
+                download = None
+                # if not in_download:
+                if (url is None or (self.checksum_type and not checksum) or
+                    self.match_last_link) and \
+                        not (self.shasum_read_method and self.new_download_url):
+                    (download, in_download) = self.parse_download_link(line_content, in_download)
+
+                if download is not None:
+                    (newurl, new_checksum) = download
+                    url = newurl if newurl is not None else url
+                    checksum = new_checksum if new_checksum is not None else checksum
+                    if url is not None:
+                        if self.checksum_type and checksum:
+                            logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
+                        elif not self.checksum_type:
+                            logger.debug("Found download link for {}".format(url))
+        return url, checksum
+
     @MainLoop.in_mainloop_thread
     def get_metadata_and_check_license(self, result):
         """Download files to download + license and check it"""
@@ -224,59 +297,7 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.new_download_url = None
         self.shasum_read_method = hasattr(self, 'get_sha_and_start_download')
         with StringIO() as license_txt:
-            url, checksum = (None, None)
-            page = result[self.download_page]
-            if self.json is True:
-                logger.debug("Using json parser")
-                try:
-                    latest = json.loads(page.buffer.read().decode())
-                    # On a download from github, if the page is not .../releases/latest
-                    # we want to download the latest version (beta/development)
-                    # So we get the first element in the json tree.
-                    # In the framework we only change the url and this condition is satisfied.
-                    if self.download_page.startswith("https://api.github.com") and\
-                       not self.download_page.endswith("/latest"):
-                        latest = latest[0]
-                    url = None
-                    in_download = False
-                    (url, in_download) = self.parse_download_link(latest, in_download)
-                    if not url:
-                        if not self.url:
-                            raise IndexError
-                        else:
-                            logger.debug("We set a temporary url while fetching the checksum")
-                            url = self.url
-                except (json.JSONDecodeError, IndexError):
-                    logger.error("Can't parse the download URL from the download page.")
-                    UI.return_main_screen(status_code=1)
-                logger.debug("Found download URL: " + url)
-
-            else:
-                in_license = False
-                in_download = False
-                for line in page.buffer:
-                    line_content = line.decode()
-
-                    if self.expect_license and not self.auto_accept_license:
-                        in_license = self.parse_license(line_content, license_txt, in_license)
-
-                    # always take the first valid (url, checksum) if not match_last_link is set to True:
-                    download = None
-                    # if not in_download:
-                    if (url is None or (self.checksum_type and not checksum) or
-                       self.match_last_link) and\
-                       not(self.shasum_read_method and self.new_download_url):
-                        (download, in_download) = self.parse_download_link(line_content, in_download)
-                    if download is not None:
-                        (newurl, new_checksum) = download
-                        url = newurl if newurl is not None else url
-                        checksum = new_checksum if new_checksum is not None else checksum
-                        if url is not None:
-                            if self.checksum_type and checksum:
-                                logger.debug("Found download link for {}, checksum: {}".format(url, checksum))
-                            elif not self.checksum_type:
-                                logger.debug("Found download link for {}".format(url))
-
+            url, checksum = self.get_metadata(result, license_txt)
             if hasattr(self, 'get_sha_and_start_download'):
                 logger.debug('Run get_sha_and_start_download')
                 DownloadCenter(urls=[DownloadItem(self.new_download_url, None)],
