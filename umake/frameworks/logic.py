@@ -24,8 +24,11 @@ from gettext import gettext as _
 import logging
 import os
 import umake.frameworks.baseinstaller
-from umake.tools import create_launcher, get_application_desktop_file
+from umake.tools import create_launcher, get_application_desktop_file, add_env_to_user
 from umake.ui import UI
+from umake.interactions import DisplayMessage
+import re
+from contextlib import suppress
 
 logger = logging.getLogger(__name__)
 

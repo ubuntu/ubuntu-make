@@ -115,7 +115,6 @@ class Arduino(umake.frameworks.baseinstaller.BaseInstaller):
             UI.delayed_display(DisplayMessage(_("You need to logout and login again for your installation to work")))
 
 
-
 class ArduinoLegacy(umake.frameworks.baseinstaller.BaseInstaller):
     """The Arduino Software distribution."""
 

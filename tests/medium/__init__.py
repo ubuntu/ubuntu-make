@@ -178,7 +178,6 @@ class ContainerTests(LoggedTestCase):
                                         desktop_filename])
         return self._exec_command(command)[1]
 
-
     def path_exists(self, path):
         """Check if a path exists inside the container"""
         # replace current user home dir with container one.

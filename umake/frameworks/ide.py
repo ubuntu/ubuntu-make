@@ -689,7 +689,7 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
     }
 
     def parse_download_link(self, line, in_download):
-        """Parse STS download links"""    
+        """Parse STS download links"""
         url = None
         if '{}.tar.gz'.format(self.arch_trans[get_current_arch()]) in line:
             p = re.search(r'href="([^<]*{}.tar.gz)"'.format(self.arch_trans[get_current_arch()]), line)
@@ -797,7 +797,7 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
         url = None
         checksum = None
         if int(get_current_distro_version(distro_name="debian").split('.')[0]) == 9 or\
-            int(get_current_distro_version().split('.')[0]) == 20:
+           int(get_current_distro_version().split('.')[0]) == 20:
             ubuntu_version = "focal"
         else:
             ubuntu_version = 'jammy'

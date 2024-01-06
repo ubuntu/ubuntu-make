@@ -26,11 +26,10 @@ import logging
 import os
 import re
 import shutil
-import stat
 
 import umake.frameworks.baseinstaller
 from umake.network.download_center import DownloadItem, DownloadCenter
-from umake.tools import as_root, create_launcher, get_application_desktop_file, get_current_arch
+from umake.tools import create_launcher, get_application_desktop_file, get_current_arch
 
 logger = logging.getLogger(__name__)
 

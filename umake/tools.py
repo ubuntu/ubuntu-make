@@ -20,11 +20,9 @@
 from collections import namedtuple
 from contextlib import contextmanager, suppress
 from enum import unique, Enum
-from http.client import HTTPConnection
 from gettext import gettext as _
 from gi.repository import GLib, Gio
 from glob import glob
-from urllib.parse import urlsplit
 import logging
 import os
 import re
