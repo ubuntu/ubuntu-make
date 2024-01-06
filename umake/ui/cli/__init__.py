@@ -22,6 +22,7 @@
 import argcomplete
 from contextlib import suppress
 from gettext import gettext as _
+import json
 import logging
 import os
 from progressbar import ProgressBar, BouncingBar
@@ -169,7 +170,9 @@ def get_frameworks_list_output(args):
     categories = list_frameworks()
     print_result = str()
 
-    if args.list or args.list_available:
+    if args.list_json:
+        return json.dumps(categories, indent=4)
+    elif args.list or args.list_available:
         # Sort the categories to prevent a random list at each new program execution
         for category in sorted(categories, key=lambda cat: cat["category_name"]):
             if category["category_name"] == "main" and len(category["frameworks"]) == 0:
@@ -235,7 +238,7 @@ def main(parser):
         arg_to_parse = mangle_args_for_default_framework(arg_to_parse)
     args = parser.parse_args(arg_to_parse)
 
-    if args.list or args.list_installed or args.list_available:
+    if args.list or args.list_installed or args.list_available or args.list_json:
         print(get_frameworks_list_output(args))
         sys.exit(0)
 

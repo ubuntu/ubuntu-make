@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "umake"
+authors = [
+    {name = "Galileo Saortr", email = "galileo.sartor@gmail.com"},
+]
+description = "Easy setup of common tools for developers on Ubuntu."
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["one", "two"]
+license = {text = "BSD-3-Clause"}
+classifiers = [
+    "Framework :: Django",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "argcomplete",
+    "progressbar33",
+    "python-gnupg",
+    "pyxdg",
+    "PyYAML",
+    "requests"
+]
+dynamic = ["version"]
+
+[tool.setuptools.packages.find]
+where = ["umake"]
+
+[project.scripts]
+umake = "umake:main"

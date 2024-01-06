@@ -12,7 +12,7 @@ description: |
   features!
 grade: stable
 confinement: classic
-base: core20
+base: core22
 compression: lzo
 
 apps:
@@ -20,12 +20,14 @@ apps:
     command: bin/umake-wrapper
     completer: umake-completion
     environment:
-      PYTHONPATH: $SNAP/lib/python3.8/site-packages:$PYTHONPATH
+      PYTHONPATH: $SNAP/lib/python3.10/site-packages:$PYTHONPATH
 
 parts:
   umake:
     source: .
     plugin: python
+    after:
+      - python3
     build-packages:
       - libapt-pkg-dev
       - gettext
@@ -71,16 +73,16 @@ parts:
       - libncursesw5
       - libdb5.3
     build-environment:
-      - SNAPCRAFT_PYTHON_VENV_ARGS: "--system-site-packages"
+      - PARTS_PYTHON_VENV_ARGS: "--system-site-packages"
     organize: 
-      lib/python3/dist-packages/umake/version: lib/python3.8/site-packages/umake/version
+      lib/python3/dist-packages/umake/version: lib/python3.10/site-packages/umake/version
   python3:
     plugin: nil
     source: .
     stage-packages:
       - libpython3-stdlib
-      - libpython3.8-stdlib
-      - libpython3.8-minimal
+      - libpython3.10-stdlib
+      - libpython3.10-minimal
       - python3-pip
       - python3-setuptools
       - python3-wheel
@@ -88,7 +90,7 @@ parts:
       - python3-minimal
       - python3-distutils
       - python3-pkg-resources
-      - python3.8-minimal
+      - python3.10-minimal
   umake-completion:
     plugin: dump
     source: snap/local
