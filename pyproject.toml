@@ -11,9 +11,11 @@ description = "Easy setup of common tools for developers on Ubuntu."
 readme = "README.md"
 requires-python = ">=3.7"
 keywords = ["one", "two"]
-license = {text = "BSD-3-Clause"}
+license = {text = "COPYING"}
 classifiers = [
-    "Framework :: Django",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: Software Development",
+    "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
@@ -27,7 +29,11 @@ dependencies = [
 dynamic = ["version"]
 
 [tool.setuptools.packages.find]
-where = ["umake"]
+where = ["."]
+include = ["umake*"]
+
+[tool.setuptools.package-data]
+umake = ["version"]
 
 [project.scripts]
 umake = "umake:main"

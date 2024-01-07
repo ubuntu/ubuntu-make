@@ -4,6 +4,15 @@
 
 %:
 	dh $@ --with python3 --buildsystem=pybuild --fail-missing
+	dh_clean
+
+override_dh_auto_build:
+	dh_auto_build
+	# Add commands to generate .mo files from .po files for all languages
+	for lang in $(shell ls po/*.po | cut -d/ -f2 | cut -d. -f1); do \
+		mkdir -p debian/locale/$$lang/LC_MESSAGES; \
+		msgfmt -o debian/locale/$$lang/LC_MESSAGES/ubuntu-make.mo po/$$lang.po; \
+	done
 
 override_dh_auto_test:
 	./runtests pep8
@@ -15,4 +24,5 @@ override_dh_installman:
 
 override_dh_clean:
 	rm -f debian/umake.1
+	rm -rf debian/locale
 	dh_clean

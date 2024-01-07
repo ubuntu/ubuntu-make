@@ -22,7 +22,7 @@ msgstr ""
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
-msgstr "{}\n'in Ubuntu make kurulumu"
+msgstr "{}\n'in Ubuntu make kurulumu\n"
 
 #: umake/__init__.py:99
 msgid "* Command '{}':"
