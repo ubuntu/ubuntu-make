@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2019-10-15 16:53+0000\n"
-"Last-Translator: Galileo Sartor <galileo.sartor@gmail.com>\n"
+"PO-Revision-Date: 2023-08-23 13:50+0000\n"
+"Last-Translator: Gabriele <gabboxl0@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
 
 #: umake/tools.py:48
@@ -94,7 +94,7 @@ msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
 msgid "Ruby on Rails IDE"
-msgstr ""
+msgstr "IDE Ruby on Rails"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
@@ -118,7 +118,7 @@ msgstr ""
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
-msgstr ""
+msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
 msgid "You need to logout and login again for your installation to work"
@@ -127,7 +127,7 @@ msgstr ""
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
 msgid "Netbeans IDE"
-msgstr ""
+msgstr "IDE Netbeans"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
@@ -151,7 +151,7 @@ msgstr ""
 
 #: umake/frameworks/rust.py:43
 msgid "Rust language"
-msgstr ""
+msgstr "Linguaggio Rust"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"

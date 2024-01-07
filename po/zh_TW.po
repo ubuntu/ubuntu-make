@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2020-08-20 10:36+0000\n"
-"Last-Translator: 曾嘉禾 <olivertzengolivertzeng@gmail.com>\n"
+"PO-Revision-Date: 2023-12-14 08:05+0000\n"
+"Last-Translator: reimu105 <peter112548@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "ubuntu-make/ubuntu-make/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.2.1-dev\n"
+"X-Generator: Weblate 5.3-rc\n"
 "X-Launchpad-Export-Date: 2015-05-04 07:08+0000\n"
 
 #: umake/tools.py:48
@@ -97,11 +97,11 @@ msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
 msgid "Ruby on Rails IDE"
-msgstr ""
+msgstr "Rails IDE 上的 Ruby"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
-msgstr ""
+msgstr "複雜的客戶端和伺服器端 JavaScript IDE"
 
 #: umake/frameworks/ide.py:331
 #, fuzzy
@@ -110,15 +110,15 @@ msgstr "Stencyl 遊戲開發者整合式開發環境"
 
 #: umake/frameworks/ide.py:348
 msgid "CLion integrated C/C++ IDE"
-msgstr ""
+msgstr "CLion 整合 C/C++ IDE"
 
 #: umake/frameworks/ide.py:376
 msgid "The Arduino Software Distribution"
-msgstr ""
+msgstr "Arduino 軟體發行版"
 
 #: umake/frameworks/ide.py:475
 msgid "The Arduino Software IDE"
-msgstr ""
+msgstr "Arduino 軟體 IDE"
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
@@ -132,7 +132,7 @@ msgstr "您必須重新啟動殼程式(shell)工作階段您的安裝才會生�
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
 msgid "Netbeans IDE"
-msgstr ""
+msgstr "Netbeans IDE"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
@@ -164,11 +164,11 @@ msgstr "Go 程式語言"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
-msgstr ""
+msgstr "Rust 官方發行"
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
-msgstr ""
+msgstr "Scala 程式語言"
 
 #: umake/frameworks/scala.py:46
 #, fuzzy
@@ -210,11 +210,11 @@ msgstr "Android NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
-msgstr ""
+msgstr "在沒有類別 {} 的情況下請求了它的預設框架"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't install that framework on this machine"
-msgstr ""
+msgstr "您無法在這台機器上安裝該框架"
 
 #: umake/frameworks/__init__.py:256
 msgid "You can't remove {} as it isn't installed"
@@ -223,7 +223,7 @@ msgstr "您不能移除 {} 因為它沒有被安裝"
 #: umake/frameworks/__init__.py:285
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
-msgstr ""
+msgstr "如未提供預設框架名稱，輸出目錄應包含斜線 /"
 
 #: umake/frameworks/__init__.py:288
 msgid "Remove framework if installed"
@@ -231,7 +231,7 @@ msgstr "如果軟體框架已經被安裝的話移除它"
 
 #: umake/frameworks/__init__.py:291
 msgid "Accept license without prompting"
-msgstr ""
+msgstr "接受許可證而不提示"
 
 #: umake/frameworks/web.py:45
 msgid "Web Developer Environment"
@@ -252,15 +252,15 @@ msgstr "內建開發工具的 Firefox Aurora"
 
 #: umake/frameworks/web.py:129
 msgid "Install in given language without prompting"
-msgstr ""
+msgstr "在沒有提示的情況下以指定的語言安裝"
 
 #: umake/frameworks/web.py:141 umake/frameworks/web.py:226
 msgid "Visual Studio focused on modern web and cloud"
-msgstr ""
+msgstr "Visual Studio 專注於現代 網路和雲端"
 
 #: umake/frameworks/web.py:223
 msgid "Visual Studio Code"
-msgstr ""
+msgstr "Visual Studio Code"
 
 #: umake/frameworks/games.py:42
 msgid "Games Development Environment"
@@ -276,7 +276,7 @@ msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
-msgstr ""
+msgstr "Unity 3D 編輯器 Linux 實驗性支持"
 
 #: umake/frameworks/games.py:154
 #, fuzzy
@@ -285,7 +285,7 @@ msgstr "Dart 編輯器"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
-msgstr ""
+msgstr "用於創建互動式和非線性故事的 Twine 工具"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
