@@ -76,6 +76,21 @@ parts:
       - PARTS_PYTHON_VENV_ARGS: "--system-site-packages"
     organize: 
       lib/python3/dist-packages/umake/version: lib/python3.10/site-packages/umake/version
+  locale:
+    plugin: nil
+    source: .
+    build-packages:
+      - gettext
+    override-build: |
+      craftctl default
+      for lang in $(ls po/*.po | cut -d/ -f2 | cut -d. -f1); do \
+        mkdir -p $SNAPCRAFT_PART_INSTALL/usr/share/locale/$lang/LC_MESSAGES; \
+        msgfmt -o $SNAPCRAFT_PART_INSTALL/usr/share/locale/$lang/LC_MESSAGES/ubuntu-make.mo po/$lang.po; \
+      done
+    stage:
+      - usr/share/locale/*
+    prime:
+      - usr/share/locale/*
   python3:
     plugin: nil
     source: .
