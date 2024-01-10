@@ -8,15 +8,18 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2015-11-17 21:34+0300\n"
-"Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
-"Language-Team: Russian <ru@li.org>\n"
+"PO-Revision-Date: 2024-01-07 13:06+0000\n"
+"Last-Translator: Vin <k3kelm4vw@mozmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/ubuntu-make/"
+"ubuntu-make/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Launchpad-Export-Date: 2015-11-05 13:56+0000\n"
-"X-Generator: Poedit 1.7.7\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
@@ -44,7 +47,7 @@ msgstr "Показать эту справку"
 
 #: umake/__init__.py:112
 msgid "Increase output verbosity (2 levels)"
-msgstr "Увеличить многословность выхода (2 уровня)"
+msgstr "Увеличить детализацию вывода (2 уровня)"
 
 #: umake/__init__.py:114
 msgid "Remove specified framework if installed"
@@ -193,11 +196,11 @@ msgstr "Среда разработки Android Studio"
 
 #: umake/frameworks/android.py:111
 msgid "Android SDK"
-msgstr "Комплект средств разработки Android"
+msgstr "Android SDK"
 
 #: umake/frameworks/android.py:147
 msgid "Android NDK"
-msgstr "Родной комплект разработки Android"
+msgstr "Android NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
