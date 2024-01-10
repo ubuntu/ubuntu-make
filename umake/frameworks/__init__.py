@@ -141,7 +141,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
     def __init__(self, name, description, category, force_loading=False, logo_path=None, is_category_default=False,
                  install_path_dir=None, only_on_archs=None, only_ubuntu=False, only_ubuntu_version=None,
                  packages_requirements=None, only_for_removal=False, expect_license=False,
-                 need_root_access=False, json=False, override_install_path=None, version_regex=None):
+                 need_root_access=False, json=False, override_install_path=None,
+                 version_regex=None, supports_update=False):
         self.name = name
         self.description = description
         self.logo_path = None
@@ -155,7 +156,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.only_for_removal = only_for_removal
         self.expect_license = expect_license
         self.version_regex = version_regex
-        self.forbidden_to_update = False
+        self.supports_update = supports_update
         # self.override_install_path = "" if override_install_path is None else override_install_path
 
         # don't detect anything for completion mode (as we need to be quick), so avoid opening apt cache and detect

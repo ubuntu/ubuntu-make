@@ -211,7 +211,6 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
         kwargs["json"] = True
         kwargs["checksum_type"] = ChecksumType.sha256
         super().__init__(*args, **kwargs)
-        self.forbidden_to_update = True
 
     @property
     @abstractmethod
@@ -684,6 +683,7 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="lighttable-*",
                          json=True,
                          version_regex=r'(\d+\.\d+)',
+                         supports_update=True,
                          **kwargs)
 
     def parse_download_link(self, line, in_download):
@@ -765,6 +765,7 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["sublime_text"],
                          dir_to_decompress_in_tarball="sublime_text",
                          version_regex=r'_build_(\d+)',
+                         supports_update=True,
                          **kwargs)
 
     arch_trans = {
@@ -852,6 +853,7 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="processing-*",
                          json=True,
                          version_regex=r'(\d+\.\d+)',
+                         supports_update=True,
                          **kwargs)
 
     arch_trans = {
@@ -899,6 +901,7 @@ class LiteIDE(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="liteide",
                          json=True,
                          version_regex=r'(\d+\.\d+)',
+                         supports_update=True,
                          **kwargs)
 
     arch_trans = {

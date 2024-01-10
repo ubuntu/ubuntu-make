@@ -59,6 +59,7 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=[os.path.join("bin", "dart")],
                          json=True,
                          version_regex='/(\d+\.\d+\.\d+)',
+                         supports_update=True,
                          **kwargs)
 
     arch_trans = {

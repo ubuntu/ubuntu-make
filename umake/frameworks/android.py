@@ -88,6 +88,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="android-studio.desktop",
                          required_files_path=[os.path.join("bin", "studio.sh")],
                          version_regex='(\d+\.\d+)',
+                         supports_update=True,
                          **kwargs)
 
     def parse_license(self, line, license_txt, in_license):

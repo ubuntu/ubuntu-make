@@ -48,6 +48,7 @@ class Terraform(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["terraform"],
                          json=True,
                          version_regex='/(\d+\.\d+\.\d+)',
+                         supports_update=True,
                          **kwargs)
 
     arch_trans = {

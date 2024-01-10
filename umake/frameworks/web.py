@@ -151,6 +151,7 @@ class PhantomJS(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="phantomjs*",
                          required_files_path=[os.path.join("bin", "phantomjs")],
                          version_regex=r'(\d+\.\d+)',
+                         supports_update=True,
                          **kwargs)
 
     arch_trans = {
@@ -200,6 +201,7 @@ class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball=".",
                          required_files_path=["geckodriver"],
                          version_regex=r'v(\d+\.\d+\.\d+)',
+                         supports_update=True,
                          json=True, **kwargs)
 
     arch_trans = {
@@ -243,6 +245,7 @@ class Chromedriver(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball=".",
                          required_files_path=["chromedriver"],
                          version_regex=r'/(\d+\.\d+\.\d+\.\d+)',
+                         supports_update=True,
                          **kwargs)
 
     def parse_download_link(self, line, in_download):

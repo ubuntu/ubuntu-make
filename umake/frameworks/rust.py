@@ -50,6 +50,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://www.rust-lang.org/en-US/other-installers.html",
                          dir_to_decompress_in_tarball="rust-*",
                          version_regex=r'rust-(\d+(\.\d+)+)',
+                         supports_update=True,
                          **kwargs)
     arch_trans = {
         "amd64": "x86_64",

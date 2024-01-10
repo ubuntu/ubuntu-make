@@ -186,6 +186,7 @@ class Eagle(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["eagle"],
                          dir_to_decompress_in_tarball="eagle-*",
                          version_regex=r'/(\d+(?:_\d+)*)/',
+                         supports_update=True,
                          **kwargs)
 
     def parse_download_link(self, line, in_download):

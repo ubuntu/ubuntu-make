@@ -145,6 +145,7 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
                          required_files_path=["Superpowers"],
                          json=True,
                          version_regex='/v(\d+\.\d+\.\d+)',
+                         supports_update=True,
                          **kwargs)
 
     arch_trans = {

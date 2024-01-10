@@ -50,6 +50,7 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="go",
                          required_files_path=[os.path.join("bin", "go")],
                          version_regex=r'go(\d+(\.\d+)+)',
+                         supports_update=True,
                          **kwargs)
 
     arch_trans = {

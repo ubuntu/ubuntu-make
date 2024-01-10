@@ -309,35 +309,34 @@ def main(parser):
                 continue
             install_path = installed_framework['install_path']
             framework = BaseCategory.categories[category_name].frameworks[framework_name]
-            fetch_package_url = threading.Event()
-            DownloadCenter([DownloadItem(framework.download_page)], framework.store_package_url,
-                           download=False,
-                           report=lambda arg: fetch_package_url.set() if arg == 'all downloads finished' else None)
-            fetch_package_url.wait()
-            user_version = framework.get_current_user_version(install_path)
-            latest_version = framework.get_latest_version()
-            is_outdated = is_first_version_higher(latest_version, user_version) \
-                if (latest_version is not None and user_version is not None) else False
-            if is_outdated:
-                outdated_frameworks.append({
-                    'framework_name': framework_name,
-                    'category_name': category_name,
-                    'user_version': user_version,
-                    'latest_version': latest_version,
-                    'is_outdated': is_outdated,
-                    'forbidden_to_update': framework.forbidden_to_update
-                })
+            if framework.supports_update:
+                fetch_package_url = threading.Event()
+                DownloadCenter([DownloadItem(framework.download_page)], framework.store_package_url,
+                               download=False,
+                               report=lambda arg: fetch_package_url.set() if arg == 'all downloads finished' else None)
+                fetch_package_url.wait()
+                user_version = framework.get_current_user_version(install_path)
+                latest_version = framework.get_latest_version()
+                is_outdated = is_first_version_higher(latest_version, user_version) \
+                    if (latest_version is not None and user_version is not None) else False
+                if is_outdated:
+                    outdated_frameworks.append({
+                        'framework_name': framework_name,
+                        'category_name': category_name,
+                        'user_version': user_version,
+                        'latest_version': latest_version,
+                        'is_outdated': is_outdated,
+                    })
         if len(outdated_frameworks) == 0:
             print('All packages are up-to-date.')
             sys.exit(0)
         else:
             pretty_print_versions(outdated_frameworks)
             for outdated_framework in outdated_frameworks:
-                if outdated_framework['forbidden_to_update'] is False:
-                    args = parser.parse_args([outdated_framework['category_name'], outdated_framework['framework_name']])
-                    CliUI()
-                    run_command_for_args(args)
-                    return
+                args = parser.parse_args([outdated_framework['category_name'], outdated_framework['framework_name']])
+                CliUI()
+                run_command_for_args(args)
+                return
             sys.exit(0)
 
     if not args.category:
