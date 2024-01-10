@@ -63,11 +63,3 @@ class ScalaLang(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")},
                                     "SCALA_HOME": {"value": self.install_path}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
-
-    @staticmethod
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'

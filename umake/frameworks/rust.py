@@ -49,6 +49,7 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
                          only_on_archs=['i386', 'amd64'],
                          download_page="https://www.rust-lang.org/en-US/other-installers.html",
                          dir_to_decompress_in_tarball="rust-*",
+                         version_regex=r'rust-(\d+(\.\d+)+)',
                          **kwargs)
     arch_trans = {
         "amd64": "x86_64",
@@ -83,13 +84,10 @@ class RustLang(umake.frameworks.baseinstaller.BaseInstaller):
 
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
-    def parse_latest_version_from_package_url(self):
-        return re.search(r'rust-(\d+(\.\d+)+)', self.package_url).group(1) if self.package_url else None
-
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'version'), 'r') as file:
-                return re.search(r'(\d+(\.\d+)+)', next(file)).group(1) if file else 'Missing information'
+                return re.search(r'(\d+(\.\d+)+)', next(file)).group(1) if file else None
         except FileNotFoundError:
-            return 'Missing information'
+            return

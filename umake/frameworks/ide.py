@@ -135,13 +135,6 @@ class EclipseJava(BaseEclipse):
                          icon_filename='java.png',
                          **kwargs)
 
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
-
 
 class EclipseJEE(BaseEclipse):
     """The Eclipse JEE Edition distribution."""
@@ -158,13 +151,6 @@ class EclipseJEE(BaseEclipse):
                          icon_filename='javaee.png',
                          **kwargs)
 
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
-
 
 class EclipsePHP(BaseEclipse):
     """The Eclipse PHP Edition distribution."""
@@ -180,13 +166,6 @@ class EclipsePHP(BaseEclipse):
                          packages_requirements=['openjdk-11-jdk | openjdk-17-jdk | openjdk-18-jdk | openjdk-19-jdk | openjdk-20-jdk"'],
                          icon_filename='php.png',
                          **kwargs)
-
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
 
 
 class EclipseJS(BaseEclipse):
@@ -217,13 +196,6 @@ class EclipseCPP(BaseEclipse):
                          icon_filename='cdt.png',
                          **kwargs)
 
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
-
 
 class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
     """The base for all JetBrains installers."""
@@ -239,6 +211,7 @@ class BaseJetBrains(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCM
         kwargs["json"] = True
         kwargs["checksum_type"] = ChecksumType.sha256
         super().__init__(*args, **kwargs)
+        self.forbidden_to_update = True
 
     @property
     @abstractmethod
@@ -306,22 +279,18 @@ class PyCharm(BaseJetBrains):
                          dir_to_decompress_in_tarball='pycharm-community-*',
                          desktop_filename='jetbrains-pycharm-ce.desktop',
                          icon_filename='pycharm.png',
+                         version_regex=r'(\d+\.\d+)',
                          **kwargs)
-
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
 
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
                 data = json.load(file)
-                version_not_formatted = data.get('dataDirectoryName', 'Missing information')
-                match = re.search(r'\d+\.\d+', version_not_formatted)
-                return match.group() if match else 'Missing information'
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class PyCharmEducational(BaseJetBrains):
@@ -337,22 +306,19 @@ class PyCharmEducational(BaseJetBrains):
                          dir_to_decompress_in_tarball='pycharm-edu*',
                          desktop_filename='jetbrains-pycharm-edu.desktop',
                          icon_filename='pycharm.png',
+                         version_regex=r'(\d+\.\d+)',
                          **kwargs)
 
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
 
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
                 data = json.load(file)
-                version_not_formatted = data.get('dataDirectoryName', 'Missing information')
-                match = re.search(r'\d+\.\d+', version_not_formatted)
-                return match.group() if match else 'Missing information'
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class PyCharmProfessional(BaseJetBrains):
@@ -368,22 +334,19 @@ class PyCharmProfessional(BaseJetBrains):
                          dir_to_decompress_in_tarball='pycharm-*',
                          desktop_filename='jetbrains-pycharm.desktop',
                          icon_filename='pycharm.png',
+                         version_regex=r'(\d+\.\d+)',
                          **kwargs)
 
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
 
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
                 data = json.load(file)
-                version_not_formatted = data.get('dataDirectoryName', 'Missing information')
-                match = re.search(r'\d+\.\d+', version_not_formatted)
-                return match.group() if match else 'Missing information'
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class Idea(BaseJetBrains):
@@ -398,22 +361,18 @@ class Idea(BaseJetBrains):
                          dir_to_decompress_in_tarball='idea-IC-*',
                          desktop_filename='jetbrains-idea-ce.desktop',
                          icon_filename='idea.png',
+                         version_regex=r'(\d+\.\d+)',
                          **kwargs)
-
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
 
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
                 data = json.load(file)
-                version_not_formatted = data.get('dataDirectoryName', 'Missing information')
-                match = re.search(r'\d+\.\d+', version_not_formatted)
-                return match.group() if match else 'Missing information'
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class IdeaUltimate(BaseJetBrains):
@@ -428,22 +387,18 @@ class IdeaUltimate(BaseJetBrains):
                          dir_to_decompress_in_tarball='idea-IU-*',
                          desktop_filename='jetbrains-idea.desktop',
                          icon_filename='idea.png',
+                         version_regex=r'(\d+\.\d+)',
                          **kwargs)
-
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
 
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
                 data = json.load(file)
-                version_not_formatted = data.get('dataDirectoryName', 'Missing information')
-                match = re.search(r'\d+\.\d+', version_not_formatted)
-                return match.group() if match else 'Missing information'
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class RubyMine(BaseJetBrains):
@@ -461,13 +416,6 @@ class RubyMine(BaseJetBrains):
                          icon_filename='rubymine.png',
                          **kwargs)
 
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
-
 
 class WebStorm(BaseJetBrains):
     """The JetBrains WebStorm IDE"""
@@ -481,20 +429,17 @@ class WebStorm(BaseJetBrains):
                          dir_to_decompress_in_tarball='WebStorm-*',
                          desktop_filename='jetbrains-webstorm.desktop',
                          icon_filename='webstorm.svg',
+                         version_regex=r'WebStorm-(\d+(\.\d+)+)',
                          **kwargs)
-
-    def parse_latest_version_from_package_url(self):
-        return re.search(r'WebStorm-(\d+(\.\d+)+)', self.package_url).group(1) if self.package_url else None
 
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
                 data = json.load(file)
-                return data.get('version', 'Missing information')
+                return data.get('version')
         except FileNotFoundError:
-            return 'Missing information'
-
+            return
 
 
 class PhpStorm(BaseJetBrains):
@@ -509,19 +454,17 @@ class PhpStorm(BaseJetBrains):
                          dir_to_decompress_in_tarball='PhpStorm-*',
                          desktop_filename='jetbrains-phpstorm.desktop',
                          icon_filename='phpstorm.png',
+                         version_regex=r'-(\d+\.\d+\.\d+)',
                          **kwargs)
-
-    def parse_latest_version_from_package_url(self):
-        return re.search(r'-(\d+\.\d+\.\d+)', self.package_url).group(1) if self.package_url else None
 
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
                 data = json.load(file)
-                return data.get('version', 'Missing information')
+                return data.get('version')
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class CLion(BaseJetBrains):
@@ -536,19 +479,17 @@ class CLion(BaseJetBrains):
                          dir_to_decompress_in_tarball='clion-*',
                          desktop_filename='jetbrains-clion.desktop',
                          icon_filename='clion.svg',
+                         version_regex=r'-(\d+\.\d+\.\d+)',
                          **kwargs)
-
-    def parse_latest_version_from_package_url(self):
-        return re.search(r'-(\d+\.\d+\.\d+)', self.package_url).group(1) if self.package_url else None
 
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
                 data = json.load(file)
-                return data.get('version', 'Missing information')
+                return data.get('version')
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class DataGrip(BaseJetBrains):
@@ -563,21 +504,17 @@ class DataGrip(BaseJetBrains):
                          dir_to_decompress_in_tarball='DataGrip-*',
                          desktop_filename='jetbrains-datagrip.desktop',
                          icon_filename='datagrip.png',
+                         version_regex=r'-(\d+\.\d+\.\d+)',
                          **kwargs)
-
-    def parse_latest_version_from_package_url(self):
-        return re.search(r'-(\d+\.\d+\.\d+)', self.package_url).group(1) if self.package_url else None
 
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
                 data = json.load(file)
-                return data.get('version', 'Missing information')
+                return data.get('version')
         except FileNotFoundError:
-            return 'Missing information'
-
-
+            return
 
 
 class GoLand(BaseJetBrains):
@@ -592,19 +529,17 @@ class GoLand(BaseJetBrains):
                          dir_to_decompress_in_tarball='GoLand-*',
                          desktop_filename='jetbrains-goland.desktop',
                          icon_filename='goland.png',
+                         version_regex=r'-(\d+\.\d+\.\d+)',
                          **kwargs)
-
-    def parse_latest_version_from_package_url(self):
-        return re.search(r'-(\d+\.\d+\.\d+)', self.package_url).group(1) if self.package_url else None
 
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
                 data = json.load(file)
-                return data.get('version', 'Missing information')
+                return data.get('version')
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class Rider(BaseJetBrains):
@@ -621,13 +556,6 @@ class Rider(BaseJetBrains):
                          desktop_filename='jetbrains-rider.desktop',
                          icon_filename='rider.png',
                          **kwargs)
-
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
 
 
 class Netbeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
@@ -674,13 +602,6 @@ class Netbeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
                                                      exec=self.exec_link_name,
                                                      comment=self.description,
                                                      categories="Development;IDE;"))
-
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
 
 
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
@@ -751,13 +672,6 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
             self.required_files_path = ["bin/code-insiders"]
         super().run_for(args)
 
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
-
 
 class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -768,7 +682,9 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="lighttable.desktop",
                          required_files_path=["LightTable"],
                          dir_to_decompress_in_tarball="lighttable-*",
-                         json=True, **kwargs)
+                         json=True,
+                         version_regex=r'(\d+\.\d+)',
+                         **kwargs)
 
     def parse_download_link(self, line, in_download):
         url = None
@@ -788,18 +704,14 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                         comment=_("LightTable code editor"),
                         categories="Development;IDE;"))
 
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
-
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'resources', 'app', 'package.json'), 'r') as file:
                 data = json.load(file)
-                return data.get('version', 'Missing information')
+                return data.get('version')
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class Atom(umake.frameworks.baseinstaller.BaseInstaller):
@@ -842,13 +754,6 @@ class DBeaver(umake.frameworks.baseinstaller.BaseInstaller):
                         comment=self.description,
                         categories="Development;IDE;"))
 
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
-
 
 class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -859,6 +764,7 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="sublime-text.desktop",
                          required_files_path=["sublime_text"],
                          dir_to_decompress_in_tarball="sublime_text",
+                         version_regex=r'_build_(\d+)',
                          **kwargs)
 
     arch_trans = {
@@ -884,19 +790,15 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
                         comment=_("Sophisticated text editor for code, markup and prose"),
                         categories="Development;TextEditor;"))
 
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'_build_(\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
-
     @staticmethod
     def get_current_user_version(install_path):
         try:
             command = f"{os.path.join(install_path, 'sublime_text')} --version"
             result = subprocess.check_output(command, shell=True, text=True)
             match = re.search(r'(\d+)', result)
-            return match.group(1) if match else 'Missing information'
-        except subprocess.CalledProcessError as e:
-            return 'Missing information'
+            return match.group(1) if match else None
+        except subprocess.CalledProcessError:
+            return
 
 
 class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
@@ -938,13 +840,6 @@ class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
                                                                             comment=_(self.description),
                                                                             categories=categories))
 
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
-
 
 class Processing(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -955,7 +850,9 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="processing.desktop",
                          required_files_path=["processing"],
                          dir_to_decompress_in_tarball="processing-*",
-                         json=True, **kwargs)
+                         json=True,
+                         version_regex=r'(\d+\.\d+)',
+                         **kwargs)
 
     arch_trans = {
         "amd64": "64",
@@ -979,19 +876,15 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
                         comment=_("Processing is a flexible software sketchbook"),
                         categories="Development;IDE;"))
 
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
-
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'revisions.txt'), 'r') as file:
                 first_line = file.readline().strip()
                 match = re.search(r'(\d+\.\d+\.\d+)', first_line)
-                return match.group(1) if match else 'Missing information'
+                return match.group(1) if match else None
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class LiteIDE(umake.frameworks.baseinstaller.BaseInstaller):
@@ -1004,7 +897,9 @@ class LiteIDE(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="liteide.desktop",
                          required_files_path=["bin/liteide"],
                          dir_to_decompress_in_tarball="liteide",
-                         json=True, **kwargs)
+                         json=True,
+                         version_regex=r'(\d+\.\d+)',
+                         **kwargs)
 
     arch_trans = {
         "amd64": "64",
@@ -1029,19 +924,15 @@ class LiteIDE(umake.frameworks.baseinstaller.BaseInstaller):
                         comment=_("LiteIDE is a simple, open source, cross-platform Go IDE."),
                         categories="Development;IDE;"))
 
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
-
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'README.md'), 'r') as file:
                 content = ''.join(file.readline() for _ in range(15))
                 match = re.search(r'(\d+\.\d+)', content)
-                return match.group(1) if match else 'Missing information'
+                return match.group(1) if match else None
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
@@ -1082,13 +973,6 @@ class RStudio(umake.frameworks.baseinstaller.BaseInstaller):
                                   "It includes a code editor, debugging & visualization tools."),
                         categories="Development;IDE;"))
 
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
-
 
 class VSCodium(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -1123,10 +1007,3 @@ class VSCodium(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))
-
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'

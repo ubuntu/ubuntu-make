@@ -127,15 +127,12 @@ class NodejsLang(umake.frameworks.baseinstaller.BaseInstaller):
             print('Download from {}'.format(self.download_page))
         super().run_for(args)
 
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
     @staticmethod
     def get_current_user_version(install_path):
         try:
             command = f"{os.path.join(install_path, 'bin', 'node')} --version"
             result = subprocess.check_output(command, shell=True, text=True)
             match = re.search(r'v(\d+\.\d+\.\d+)', result)
-            return match.group(1) if match else 'Missing information'
-        except subprocess.CalledProcessError as e:
-            return 'Missing information'
+            return match.group(1) if match else None
+        except subprocess.CalledProcessError:
+            return

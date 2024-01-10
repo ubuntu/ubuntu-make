@@ -86,7 +86,9 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="android-studio",
                          desktop_filename="android-studio.desktop",
-                         required_files_path=[os.path.join("bin", "studio.sh")], **kwargs)
+                         required_files_path=[os.path.join("bin", "studio.sh")],
+                         version_regex='(\d+\.\d+)',
+                         **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
@@ -108,20 +110,15 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-studio"))
 
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
-
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
                 data = json.load(file)
-                version_not_formatted = data.get('dataDirectoryName', 'Missing information')
-                match = re.search(r'\d+\.\d+', version_not_formatted)
-                return match.group() if match else 'Missing information'
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):

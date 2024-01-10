@@ -223,14 +223,13 @@ def get_frameworks_list_output(args):
 
 
 def is_first_version_higher(version1, version2):
-    if version2 == 'Missing information':
+    if version2 is None:
         return True
-    elif version1 == 'Missing information':
+    elif version1 is None:
         return False
 
     v1_parts = list(map(int, version1.split('.')))
     v2_parts = list(map(int, version2.split('.')))
-
     for v1, v2 in zip(v1_parts, v2_parts):
         if v1 > v2:
             return True
@@ -239,7 +238,7 @@ def is_first_version_higher(version1, version2):
     return len(v1_parts) > len(v2_parts)
 
 
-def pretty_print_package_manager_output(data):
+def pretty_print_versions(data):
     max_name_length = max(len(item['framework_name']) for item in data)
     max_version_length = max(len(item['latest_version']) for item in data)
     supports_color = os.getenv('TERM') and os.getenv('TERM') != 'dumb'
@@ -253,17 +252,10 @@ def pretty_print_package_manager_output(data):
         user_version = item['user_version']
         latest_version_color = ''
         user_version_color = ''
-
-        if not item['is_outdated']:
-            symbol = '+'
-            if supports_color:
-                latest_version_color = '\033[32m'
-                user_version_color = '\033[32m'
-        else:
-            symbol = '-'
-            if supports_color:
-                latest_version_color = '\033[31m'
-                user_version_color = '\033[31m'
+        symbol = '+'
+        if supports_color:
+            latest_version_color = '\033[32m'
+            user_version_color = '\033[31m'
 
         latest_version_formatted = f"{latest_version_color}{latest_version}{reset_color}"
         latest_version_padding = len(latest_version_formatted)
@@ -303,12 +295,13 @@ def main(parser):
     if args.update:
         frameworks = list_frameworks()
         installed_frameworks = sorted([
-            {'framework_name': framework['framework_name'], 'install_path': framework['install_path'],
+            {'framework_name': framework['framework_name'],
+             'install_path': framework['install_path'],
              'category_name': category['category_name']}
             for category in frameworks
             for framework in category['frameworks'] if framework['is_installed']
         ], key=lambda x: x['framework_name'])
-        frameworks_version = []
+        outdated_frameworks = []
         for installed_framework in installed_frameworks:
             category_name = installed_framework['category_name']
             framework_name = installed_framework['framework_name']
@@ -322,26 +315,30 @@ def main(parser):
                            report=lambda arg: fetch_package_url.set() if arg == 'all downloads finished' else None)
             fetch_package_url.wait()
             user_version = framework.get_current_user_version(install_path)
-            latest_version = framework.parse_latest_version_from_package_url()
+            latest_version = framework.get_latest_version()
             is_outdated = is_first_version_higher(latest_version, user_version) \
-                if latest_version != 'Missing information' and user_version != 'Missing information' else False
-            frameworks_version.append({
-                'framework_name': framework_name,
-                'category_name': category_name,
-                'user_version': user_version,
-                'latest_version': latest_version,
-                'is_outdated': is_outdated
-            })
-        pretty_print_package_manager_output(frameworks_version)
-        outdated_frameworks = [item for item in frameworks_version if item['is_outdated']]
-        if not outdated_frameworks:
+                if (latest_version is not None and user_version is not None) else False
+            if is_outdated:
+                outdated_frameworks.append({
+                    'framework_name': framework_name,
+                    'category_name': category_name,
+                    'user_version': user_version,
+                    'latest_version': latest_version,
+                    'is_outdated': is_outdated,
+                    'forbidden_to_update': framework.forbidden_to_update
+                })
+        if len(outdated_frameworks) == 0:
+            print('All packages are up-to-date.')
             sys.exit(0)
         else:
-            args = parser.parse_args([outdated_frameworks[0]['category_name'], outdated_frameworks[0]['framework_name']])
-            CliUI()
-            run_command_for_args(args)
-
-            return
+            pretty_print_versions(outdated_frameworks)
+            for outdated_framework in outdated_frameworks:
+                if outdated_framework['forbidden_to_update'] is False:
+                    args = parser.parse_args([outdated_framework['category_name'], outdated_framework['framework_name']])
+                    CliUI()
+                    run_command_for_args(args)
+                    return
+            sys.exit(0)
 
     if not args.category:
         parser.print_help()

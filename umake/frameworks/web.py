@@ -140,15 +140,6 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
             self.arg_lang = args.lang
         super().run_for(args)
 
-    @staticmethod
-    def parse_latest_version_from_package_url(self):
-        return 'Missing information'
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
-
-
 
 class PhantomJS(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -159,6 +150,7 @@ class PhantomJS(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="http://phantomjs.org/download.html",
                          dir_to_decompress_in_tarball="phantomjs*",
                          required_files_path=[os.path.join("bin", "phantomjs")],
+                         version_regex=r'(\d+\.\d+)',
                          **kwargs)
 
     arch_trans = {
@@ -186,19 +178,15 @@ class PhantomJS(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'(\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
-
     @staticmethod
     def get_current_user_version(install_path):
         try:
             with open(os.path.join(install_path, 'ChangeLog'), 'r') as file:
                 lines = ''.join(file.readline() for _ in range(3))
                 match = re.search(r'(\d+\.\d+)', lines)
-                return match.group(1) if match else 'Missing information'
+                return match.group(1) if match else None
         except FileNotFoundError:
-            return 'Missing information'
+            return
 
 
 class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
@@ -211,6 +199,7 @@ class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://api.github.com/repos/mozilla/geckodriver/releases/latest",
                          dir_to_decompress_in_tarball=".",
                          required_files_path=["geckodriver"],
+                         version_regex=r'v(\d+\.\d+\.\d+)',
                          json=True, **kwargs)
 
     arch_trans = {
@@ -232,10 +221,6 @@ class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path)}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'v(\d+\.\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
-
     @staticmethod
     def get_current_user_version(install_path):
         try:
@@ -243,9 +228,9 @@ class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
             result = subprocess.check_output(command, shell=True, text=True)
             first_line = result.split('\n')[0]
             match = re.search(r'geckodriver\s+(\d+\.\d+\.\d+)', first_line)
-            return match.group(1) if match else 'Missing information'
-        except subprocess.CalledProcessError as e:
-            return 'Missing information'
+            return match.group(1) if match else None
+        except subprocess.CalledProcessError:
+            return
 
 
 
@@ -257,6 +242,7 @@ class Chromedriver(umake.frameworks.baseinstaller.BaseInstaller):
                          download_page="https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
                          dir_to_decompress_in_tarball=".",
                          required_files_path=["chromedriver"],
+                         version_regex=r'/(\d+\.\d+\.\d+\.\d+)',
                          **kwargs)
 
     def parse_download_link(self, line, in_download):
@@ -271,16 +257,12 @@ class Chromedriver(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path)}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
 
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'/(\d+\.\d+\.\d+\.\d+)', self.package_url).group(1)
-                if self.package_url else 'Missing information')
-
     @staticmethod
     def get_current_user_version(install_path):
         try:
             command = f"{os.path.join(install_path, 'chromedriver')} --version"
             result = subprocess.check_output(command, shell=True, text=True)
             match = re.search(r'ChromeDriver\s+([\d.]+)', result)
-            return match.group(1) if match else 'Missing information'
-        except subprocess.CalledProcessError as e:
-            return 'Missing information'
+            return match.group(1) if match else None
+        except subprocess.CalledProcessError:
+            return

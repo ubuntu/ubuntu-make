@@ -19,7 +19,7 @@
 
 
 """Logic module"""
-import re
+
 from gettext import gettext as _
 import logging
 import os
@@ -47,6 +47,7 @@ class Protege(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="Protege-*",
                          required_files_path=["protege"],
                          desktop_filename="protege.desktop",
+                         version_regex=r'/protege-(\d+\.\d+\.\d+)/',
                          json=True, **kwargs)
 
     def parse_download_link(self, line, in_download):
@@ -69,11 +70,3 @@ class Protege(umake.frameworks.baseinstaller.BaseInstaller):
                                                      exec=self.exec_link_name,
                                                      comment=comment,
                                                      categories=categories))
-
-    def parse_latest_version_from_package_url(self):
-        return (re.search(r'/protege-(\d+\.\d+\.\d+)/', self.package_url).group(1)
-                if self.package_url else 'Missing information')
-
-    @staticmethod
-    def get_current_user_version(install_path):
-        return 'Missing information'
