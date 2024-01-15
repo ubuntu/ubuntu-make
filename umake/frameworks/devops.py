@@ -47,7 +47,7 @@ class Terraform(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball=".",
                          required_files_path=["terraform"],
                          json=True,
-                         version_regex='/(\d+\.\d+\.\d+)',
+                         version_regex=r'/(\d+\.\d+\.\d+)',
                          supports_update=True,
                          **kwargs)
 

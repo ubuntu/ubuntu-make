@@ -87,7 +87,7 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="android-studio",
                          desktop_filename="android-studio.desktop",
                          required_files_path=[os.path.join("bin", "studio.sh")],
-                         version_regex='(\d+\.\d+)',
+                         version_regex=r'(\d+\.\d+)',
                          supports_update=True,
                          **kwargs)
 

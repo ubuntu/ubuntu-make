@@ -58,7 +58,7 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="dart-sdk",
                          required_files_path=[os.path.join("bin", "dart")],
                          json=True,
-                         version_regex='/(\d+\.\d+\.\d+)',
+                         version_regex=r'/(\d+\.\d+\.\d+)',
                          supports_update=True,
                          **kwargs)
 
