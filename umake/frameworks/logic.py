@@ -47,6 +47,7 @@ class Protege(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball="Protege-*",
                          required_files_path=["protege"],
                          desktop_filename="protege.desktop",
+                         version_regex=r'/protege-(\d+\.\d+\.\d+)/',
                          json=True, **kwargs)
 
     def parse_download_link(self, line, in_download):

@@ -19,7 +19,7 @@
 
 
 """Android module"""
-
+import json
 from contextlib import suppress
 from gettext import gettext as _
 import logging
@@ -86,7 +86,10 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="android-studio",
                          desktop_filename="android-studio.desktop",
-                         required_files_path=[os.path.join("bin", "studio.sh")], **kwargs)
+                         required_files_path=[os.path.join("bin", "studio.sh")],
+                         version_regex=r'(\d+\.\d+)',
+                         supports_update=True,
+                         **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
         """Parse Android Studio download page for license"""
@@ -107,6 +110,16 @@ class AndroidStudio(umake.frameworks.baseinstaller.BaseInstaller):
                         comment=_("Android Studio developer environment"),
                         categories="Development;IDE;",
                         extra="StartupWMClass=jetbrains-studio"))
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
+        except FileNotFoundError:
+            return
 
 
 class AndroidSDK(umake.frameworks.baseinstaller.BaseInstaller):

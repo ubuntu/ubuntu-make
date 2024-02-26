@@ -30,6 +30,7 @@ import os
 import pkgutil
 import sys
 import subprocess
+import re
 from umake.network.requirements_handler import RequirementsHandler
 from umake.settings import DEFAULT_INSTALL_TOOLS_PATH, UMAKE_FRAMEWORKS_ENVIRON_VARIABLE, DEFAULT_BINARY_LINK_PATH
 from umake.tools import ConfigHandler, NoneDict, classproperty, get_current_arch, get_current_distro_version,\
@@ -140,7 +141,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
     def __init__(self, name, description, category, force_loading=False, logo_path=None, is_category_default=False,
                  install_path_dir=None, only_on_archs=None, only_ubuntu=False, only_ubuntu_version=None,
                  packages_requirements=None, only_for_removal=False, expect_license=False,
-                 need_root_access=False, json=False, override_install_path=None):
+                 need_root_access=False, json=False, override_install_path=None,
+                 version_regex=None, supports_update=False):
         self.name = name
         self.description = description
         self.logo_path = None
@@ -153,6 +155,8 @@ class BaseFramework(metaclass=abc.ABCMeta):
         self.packages_requirements.extend(self.category.packages_requirements)
         self.only_for_removal = only_for_removal
         self.expect_license = expect_license
+        self.version_regex = version_regex
+        self.supports_update = supports_update
         # self.override_install_path = "" if override_install_path is None else override_install_path
 
         # don't detect anything for completion mode (as we need to be quick), so avoid opening apt cache and detect
@@ -330,6 +334,14 @@ class BaseFramework(metaclass=abc.ABCMeta):
             self.setup(install_path=install_path,
                        auto_accept_license=auto_accept_license,
                        dry_run=dry_run)
+
+    def get_latest_version(self):
+        return (re.search(self.version_regex, self.package_url).group(1).replace('_', '.')
+            if self.package_url and self.version_regex else None)
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        return None
 
 
 class MainCategory(BaseCategory):
