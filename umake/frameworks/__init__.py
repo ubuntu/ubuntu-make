@@ -325,15 +325,19 @@ class BaseFramework(metaclass=abc.ABCMeta):
             install_path = None
             auto_accept_license = False
             dry_run = False
+            assume_yes = False
             if args.destdir:
                 install_path = os.path.abspath(os.path.expanduser(args.destdir))
             if self.expect_license and args.accept_license:
                 auto_accept_license = True
             if args.dry_run:
                 dry_run = True
+            if args.assume_yes:
+                assume_yes = True
             self.setup(install_path=install_path,
                        auto_accept_license=auto_accept_license,
-                       dry_run=dry_run)
+                       dry_run=dry_run,
+                       assume_yes=assume_yes)
 
     def get_latest_version(self):
         return (re.search(self.version_regex, self.package_url).group(1).replace('_', '.')

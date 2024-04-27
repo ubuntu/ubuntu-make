@@ -103,18 +103,22 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         logger.debug("{} is installed".format(self.name))
         return True
 
-    def setup(self, install_path=None, auto_accept_license=False, dry_run=False):
+    def setup(self, install_path=None, auto_accept_license=False, dry_run=False, assume_yes=False):
         self.arg_install_path = install_path
         self.auto_accept_license = auto_accept_license
         self.dry_run = dry_run
+        self.assume_yes = assume_yes
         super().setup()
 
         # first step, check if installed or dry_run
         if self.dry_run:
             self.download_provider_page()
         elif self.is_installed:
-            UI.display(YesNo("{} is already installed on your system, do you want to reinstall "
-                             "it anyway?".format(self.name), self.reinstall, UI.return_main_screen))
+            if self.assume_yes:
+                self.reinstall()
+            else:
+                UI.display(YesNo("{} is already installed on your system, do you want to reinstall "
+                                 "it anyway?".format(self.name), self.reinstall, UI.return_main_screen))
         else:
             self.confirm_path(self.arg_install_path)
 
@@ -162,6 +166,10 @@ class BaseInstaller(umake.frameworks.BaseFramework):
 
     def confirm_path(self, path_dir=""):
         """Confirm path dir"""
+
+        if self.assume_yes:
+            UI.display(DisplayMessage("Assuming default path: " + self.install_path))
+            path_dir = self.install_path
 
         if not path_dir:
             logger.debug("No installation path provided. Requesting one.")

@@ -133,6 +133,7 @@ def main():
     parser.add_argument('--help', action=_HelpAction, help=_('Show this help'))  # add custom help
     parser.add_argument("-v", "--verbose", action="count", default=0, help=_("Increase output verbosity (2 levels)"))
     parser.add_argument('-u', '--update', action='store_true', help=_('Update installed frameworks'))
+    parser.add_argument('-y', '--assume-yes', action='store_true', help=_('Assume yes at interactive prompts'))
     parser.add_argument('-r', '--remove', action="store_true", help=_("Remove specified framework if installed"))
 
     list_group = parser.add_argument_group("List frameworks").add_mutually_exclusive_group()

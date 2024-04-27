@@ -120,6 +120,9 @@ def mangle_args_for_default_framework(args):
         if not category_name and arg in ("--remove", "-r"):
             args_to_append.append(arg)
             continue
+        if arg in ("--assume-yes", '-y'):
+            args_to_append.append(arg)
+            continue
         if not arg.startswith('-') and not skip_all:
             if not category_name:
                 if arg in BaseCategory.categories.keys():
@@ -283,6 +286,7 @@ def main(parser):
         # manipulate sys.argv for default frameworks:
         arg_to_parse = mangle_args_for_default_framework(arg_to_parse)
     args = parser.parse_args(arg_to_parse)
+    assume_yes = args.assume_yes
 
     if args.list or args.list_installed or args.list_available:
         print(get_frameworks_list_output(args))
@@ -334,6 +338,7 @@ def main(parser):
             pretty_print_versions(outdated_frameworks)
             for outdated_framework in outdated_frameworks:
                 args = parser.parse_args([outdated_framework['category_name'], outdated_framework['framework_name']])
+                args.assume_yes = assume_yes
                 CliUI()
                 run_command_for_args(args)
                 return
