@@ -20,6 +20,7 @@
 """Tests the umake settings handler"""
 
 import os
+import re
 import shutil
 import tempfile
 from ..tools import get_data_dir, LoggedTestCase
@@ -97,3 +98,24 @@ class TestVersionHandler(LoggedTestCase):
         path_join_result.side_effect = self.return_fake_version_path
         os.environ["PATH"] = ""
         self.assertEqual(settings.get_version(), "42.02+unknown")
+
+    def test_get_latest_version(self):
+        class DartSdk:
+            def __init__(self):
+                self.package_url = 'https://storage.googleapis.com/dart-archive/channels/stable/release/3.2.4/sdk/dartsdk-linux-x64-release.zip'
+                self.version_regex = r'/(\d+\.\d+\.\d+)'
+
+            def get_latest_version(self):
+                print(self.version_regex, self.package_url)
+                return (re.search(self.version_regex, self.package_url).group(1).replace('_', '.')
+                        if self.package_url and self.version_regex else None)
+
+        framework = DartSdk()
+        self.assertEqual(framework.get_latest_version(), '3.2.4')
+
+    @patch("os.path.join")
+    def test_get_current_user_version(self, path_join_result):
+        # 1) install dart-sdk or a dummy framework and store the install_path
+        # 2) Initiate a framework object
+        # 3) assertEqual(framework.get_current_user_version(install_path), '3.2.4')
+        pass

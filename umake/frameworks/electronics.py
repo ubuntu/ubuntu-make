@@ -185,6 +185,8 @@ class Eagle(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="eagle.desktop",
                          required_files_path=["eagle"],
                          dir_to_decompress_in_tarball="eagle-*",
+                         version_regex=r'/(\d+(?:_\d+)*)/',
+                         supports_update=True,
                          **kwargs)
 
     def parse_download_link(self, line, in_download):
@@ -204,6 +206,14 @@ class Eagle(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;"))
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'bin', 'eagle.def'), 'r') as file:
+                return re.search(r'(\d+(\.\d+)+)', next(file)).group(1) if file else None
+        except FileNotFoundError:
+            return
 
 
 class Fritzing(umake.frameworks.baseinstaller.BaseInstaller):

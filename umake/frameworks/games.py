@@ -62,9 +62,12 @@ class Blender(umake.frameworks.baseinstaller.BaseInstaller):
         """Parse Blender download links"""
         url = None
         if 'linux-x64.tar.xz' in line:
-            p = re.search(r'href=\"https:\/\/www\.blender\.org\/download(.*linux-x64\.tar\.xz).?"', line)
-            url = "https://mirrors.dotsrc.org/blender/" + p.group(1)
-            print(url)
+            p = re.search(r'href=\"(https:\/\/www\.blender\.org\/.*linux-x64\.tar\.xz).?"', line)
+            with suppress(AttributeError):
+                url = p.group(1)
+                filename = 'release' + re.search('blender-(.*)-linux', url).group(1).replace('.', '') + '.md5'
+                self.checksum_url = os.path.join(os.path.dirname(url),
+                                                 filename).replace('download', 'release').replace('www', 'download')
         return ((url, None), in_download)
 
     def post_install(self):
@@ -140,7 +143,10 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
                          dir_to_decompress_in_tarball='superpowers*',
                          desktop_filename="superpowers.desktop",
                          required_files_path=["Superpowers"],
-                         json=True, **kwargs)
+                         json=True,
+                         version_regex='/v(\d+\.\d+\.\d+)',
+                         supports_update=True,
+                         **kwargs)
 
     arch_trans = {
         "amd64": "x64",
@@ -164,6 +170,14 @@ class Superpowers(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=self.description,
                         categories="Development;IDE;"))
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'version'), 'r') as file:
+                return file.readline().strip() if file else None
+        except FileNotFoundError:
+            return
 
 
 class GDevelop(umake.frameworks.baseinstaller.BaseInstaller):

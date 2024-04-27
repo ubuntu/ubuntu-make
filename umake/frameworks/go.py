@@ -49,6 +49,8 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
                          checksum_type=ChecksumType.sha256,
                          dir_to_decompress_in_tarball="go",
                          required_files_path=[os.path.join("bin", "go")],
+                         version_regex=r'go(\d+(\.\d+)+)',
+                         supports_update=True,
                          **kwargs)
 
     arch_trans = {
@@ -93,3 +95,11 @@ class GoLang(umake.frameworks.baseinstaller.BaseInstaller):
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")},
                                     "GOROOT": {"value": self.install_path, "keep": False}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'VERSION'), 'r') as file:
+                return re.search(r'go(\d+(\.\d+)+)', next(file)).group(1) if file else None
+        except FileNotFoundError:
+            return
