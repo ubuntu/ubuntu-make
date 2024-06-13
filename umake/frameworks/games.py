@@ -21,6 +21,7 @@
 """Game IDEs module"""
 
 from contextlib import suppress
+from html.parser import HTMLParser
 from gettext import gettext as _
 import logging
 import os
@@ -194,7 +195,7 @@ class Godot(umake.frameworks.baseinstaller.BaseInstaller):
         url = None
         if '{}.zip'.format(self.arch_trans[get_current_arch()]) in line:
             in_download = True
-            p = re.search(r'(.*\.zip)', line)
+            p = re.search(r'.*href=(.*\.zip)', line)
             with suppress(AttributeError):
                 url = p.group(1)
                 bin = re.search(r'(Godot.*)\.zip', url)
