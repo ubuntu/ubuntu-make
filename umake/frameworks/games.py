@@ -21,7 +21,6 @@
 """Game IDEs module"""
 
 from contextlib import suppress
-from html.parser import HTMLParser
 from gettext import gettext as _
 import logging
 import os
