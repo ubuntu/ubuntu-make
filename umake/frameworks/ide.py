@@ -621,7 +621,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="visual-studio-code.desktop",
                          required_files_path=["bin/code"],
                          dir_to_decompress_in_tarball="VSCode-linux-*",
-                         packages_requirements=["libgtk2.0-0", "libgconf-2-4"],
+                         packages_requirements=["libgtk2.0-0"],
                          **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
