@@ -1,6 +1,6 @@
 name: ubuntu-make
 version: 'master'
-summary: Setup your development environment on ubuntu easily
+summary: Setup your development environment on Ubuntu easily
 description: |
   Ubuntu Make provides a set of functionality to setup,
   maintain and personalize your developer environment easily. It will handle
