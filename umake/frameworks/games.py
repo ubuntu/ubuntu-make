@@ -196,7 +196,7 @@ class Godot(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="godot.desktop",
                          required_files_path=['godot'],
                          **kwargs)
-        self.icon_url = "https://godotengine.org/assets/press/icon_color.png"
+        self.icon_url = "https://godotengine.org/assets/press/icon_color.svg"
         self.icon_filename = "Godot.svg"
 
     arch_trans = {
