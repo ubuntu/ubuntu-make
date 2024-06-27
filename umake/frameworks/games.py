@@ -194,7 +194,7 @@ class Godot(umake.frameworks.baseinstaller.BaseInstaller):
         url = None
         if '{}.zip'.format(self.arch_trans[get_current_arch()]) in line:
             in_download = True
-            p = re.search(r'.*href=(.*\.zip)', line)
+            p = re.search(r'.*href=\"?([^\s]+\.zip)', line)
             with suppress(AttributeError):
                 url = p.group(1)
                 bin = re.search(r'(Godot.*)\.zip', url)
