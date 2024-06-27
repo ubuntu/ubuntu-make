@@ -308,7 +308,6 @@ class PyCharmEducational(BaseJetBrains):
                          version_regex=r'(\d+\.\d+)',
                          **kwargs)
 
-
     @staticmethod
     def get_current_user_version(install_path):
         try:
@@ -335,7 +334,6 @@ class PyCharmProfessional(BaseJetBrains):
                          icon_filename='pycharm.png',
                          version_regex=r'(\d+\.\d+)',
                          **kwargs)
-
 
     @staticmethod
     def get_current_user_version(install_path):

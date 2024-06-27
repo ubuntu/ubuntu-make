@@ -25,7 +25,6 @@ import logging
 import os
 import umake.frameworks.baseinstaller
 from umake.tools import create_launcher, get_application_desktop_file
-from umake.ui import UI
 
 logger = logging.getLogger(__name__)
 

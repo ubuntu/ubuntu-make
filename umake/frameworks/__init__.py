@@ -341,7 +341,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
 
     def get_latest_version(self):
         return (re.search(self.version_regex, self.package_url).group(1).replace('_', '.')
-            if self.package_url and self.version_regex else None)
+                if self.package_url and self.version_regex else None)
 
     @staticmethod
     def get_current_user_version(install_path):

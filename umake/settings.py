@@ -19,8 +19,6 @@
 
 import os
 import requests
-import re
-import json
 from xdg.BaseDirectory import xdg_data_home
 
 DEFAULT_INSTALL_TOOLS_PATH = os.path.expanduser(os.path.join(xdg_data_home, "umake"))

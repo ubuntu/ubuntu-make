@@ -235,7 +235,6 @@ class Geckodriver(umake.frameworks.baseinstaller.BaseInstaller):
             return
 
 
-
 class Chromedriver(umake.frameworks.baseinstaller.BaseInstaller):
 
     def __init__(self, **kwargs):
