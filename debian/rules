@@ -6,7 +6,7 @@
 	dh $@ --with python3 --buildsystem=pybuild --fail-missing
 
 override_dh_auto_test:
-	./runtests pep8 small
+	./runtests pep8
 
 override_dh_installman:
 	help2man -n "Deploy and setup developers environment easily on ubuntu" -o debian/umake.1 bin/umake
