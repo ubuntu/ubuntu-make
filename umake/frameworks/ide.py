@@ -20,6 +20,8 @@
 
 
 """Generic IDE module."""
+import json
+import subprocess
 from abc import ABCMeta, abstractmethod
 from contextlib import suppress
 from gettext import gettext as _
@@ -276,7 +278,18 @@ class PyCharm(BaseJetBrains):
                          dir_to_decompress_in_tarball='pycharm-community-*',
                          desktop_filename='jetbrains-pycharm-ce.desktop',
                          icon_filename='pycharm.png',
+                         version_regex=r'(\d+\.\d+)',
                          **kwargs)
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
+        except FileNotFoundError:
+            return
 
 
 class PyCharmEducational(BaseJetBrains):
@@ -292,7 +305,19 @@ class PyCharmEducational(BaseJetBrains):
                          dir_to_decompress_in_tarball='pycharm-edu*',
                          desktop_filename='jetbrains-pycharm-edu.desktop',
                          icon_filename='pycharm.png',
+                         version_regex=r'(\d+\.\d+)',
                          **kwargs)
+
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
+        except FileNotFoundError:
+            return
 
 
 class PyCharmProfessional(BaseJetBrains):
@@ -308,7 +333,19 @@ class PyCharmProfessional(BaseJetBrains):
                          dir_to_decompress_in_tarball='pycharm-*',
                          desktop_filename='jetbrains-pycharm.desktop',
                          icon_filename='pycharm.png',
+                         version_regex=r'(\d+\.\d+)',
                          **kwargs)
+
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
+        except FileNotFoundError:
+            return
 
 
 class Idea(BaseJetBrains):
@@ -323,7 +360,18 @@ class Idea(BaseJetBrains):
                          dir_to_decompress_in_tarball='idea-IC-*',
                          desktop_filename='jetbrains-idea-ce.desktop',
                          icon_filename='idea.png',
+                         version_regex=r'(\d+\.\d+)',
                          **kwargs)
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
+        except FileNotFoundError:
+            return
 
 
 class IdeaUltimate(BaseJetBrains):
@@ -338,7 +386,18 @@ class IdeaUltimate(BaseJetBrains):
                          dir_to_decompress_in_tarball='idea-IU-*',
                          desktop_filename='jetbrains-idea.desktop',
                          icon_filename='idea.png',
+                         version_regex=r'(\d+\.\d+)',
                          **kwargs)
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                version_not_formatted = data.get('dataDirectoryName')
+                return re.search(r'\d+\.\d+', version_not_formatted).group() if version_not_formatted else None
+        except FileNotFoundError:
+            return
 
 
 class RubyMine(BaseJetBrains):
@@ -369,7 +428,17 @@ class WebStorm(BaseJetBrains):
                          dir_to_decompress_in_tarball='WebStorm-*',
                          desktop_filename='jetbrains-webstorm.desktop',
                          icon_filename='webstorm.svg',
+                         version_regex=r'WebStorm-(\d+(\.\d+)+)',
                          **kwargs)
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                return data.get('version')
+        except FileNotFoundError:
+            return
 
 
 class PhpStorm(BaseJetBrains):
@@ -384,7 +453,17 @@ class PhpStorm(BaseJetBrains):
                          dir_to_decompress_in_tarball='PhpStorm-*',
                          desktop_filename='jetbrains-phpstorm.desktop',
                          icon_filename='phpstorm.png',
+                         version_regex=r'-(\d+\.\d+\.\d+)',
                          **kwargs)
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                return data.get('version')
+        except FileNotFoundError:
+            return
 
 
 class CLion(BaseJetBrains):
@@ -399,7 +478,17 @@ class CLion(BaseJetBrains):
                          dir_to_decompress_in_tarball='clion-*',
                          desktop_filename='jetbrains-clion.desktop',
                          icon_filename='clion.svg',
+                         version_regex=r'-(\d+\.\d+\.\d+)',
                          **kwargs)
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                return data.get('version')
+        except FileNotFoundError:
+            return
 
 
 class DataGrip(BaseJetBrains):
@@ -414,7 +503,17 @@ class DataGrip(BaseJetBrains):
                          dir_to_decompress_in_tarball='DataGrip-*',
                          desktop_filename='jetbrains-datagrip.desktop',
                          icon_filename='datagrip.png',
+                         version_regex=r'-(\d+\.\d+\.\d+)',
                          **kwargs)
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                return data.get('version')
+        except FileNotFoundError:
+            return
 
 
 class GoLand(BaseJetBrains):
@@ -429,7 +528,17 @@ class GoLand(BaseJetBrains):
                          dir_to_decompress_in_tarball='GoLand-*',
                          desktop_filename='jetbrains-goland.desktop',
                          icon_filename='goland.png',
+                         version_regex=r'-(\d+\.\d+\.\d+)',
                          **kwargs)
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'product-info.json'), 'r') as file:
+                data = json.load(file)
+                return data.get('version')
+        except FileNotFoundError:
+            return
 
 
 class Rider(BaseJetBrains):
@@ -512,7 +621,7 @@ class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="visual-studio-code.desktop",
                          required_files_path=["bin/code"],
                          dir_to_decompress_in_tarball="VSCode-linux-*",
-                         packages_requirements=["libgtk2.0-0", "libgconf-2-4"],
+                         packages_requirements=["libgtk2.0-0"],
                          **kwargs)
 
     def parse_license(self, line, license_txt, in_license):
@@ -572,7 +681,10 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="lighttable.desktop",
                          required_files_path=["LightTable"],
                          dir_to_decompress_in_tarball="lighttable-*",
-                         json=True, **kwargs)
+                         json=True,
+                         version_regex=r'(\d+\.\d+)',
+                         supports_update=True,
+                         **kwargs)
 
     def parse_download_link(self, line, in_download):
         url = None
@@ -591,6 +703,15 @@ class LightTable(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=_("LightTable code editor"),
                         categories="Development;IDE;"))
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'resources', 'app', 'package.json'), 'r') as file:
+                data = json.load(file)
+                return data.get('version')
+        except FileNotFoundError:
+            return
 
 
 class Atom(umake.frameworks.baseinstaller.BaseInstaller):
@@ -643,6 +764,8 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="sublime-text.desktop",
                          required_files_path=["sublime_text"],
                          dir_to_decompress_in_tarball="sublime_text",
+                         version_regex=r'_build_(\d+)',
+                         supports_update=True,
                          **kwargs)
 
     arch_trans = {
@@ -667,6 +790,16 @@ class SublimeText(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=_("Sophisticated text editor for code, markup and prose"),
                         categories="Development;TextEditor;"))
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            command = f"{os.path.join(install_path, 'sublime_text')} --version"
+            result = subprocess.check_output(command, shell=True, text=True)
+            match = re.search(r'(\d+)', result)
+            return match.group(1) if match else None
+        except subprocess.CalledProcessError:
+            return
 
 
 class SpringToolsSuite(umake.frameworks.baseinstaller.BaseInstaller):
@@ -718,7 +851,10 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="processing.desktop",
                          required_files_path=["processing"],
                          dir_to_decompress_in_tarball="processing-*",
-                         json=True, **kwargs)
+                         json=True,
+                         version_regex=r'(\d+\.\d+)',
+                         supports_update=True,
+                         **kwargs)
 
     arch_trans = {
         "amd64": "64",
@@ -742,6 +878,16 @@ class Processing(umake.frameworks.baseinstaller.BaseInstaller):
                         comment=_("Processing is a flexible software sketchbook"),
                         categories="Development;IDE;"))
 
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'revisions.txt'), 'r') as file:
+                first_line = file.readline().strip()
+                match = re.search(r'(\d+\.\d+\.\d+)', first_line)
+                return match.group(1) if match else None
+        except FileNotFoundError:
+            return
+
 
 class LiteIDE(umake.frameworks.baseinstaller.BaseInstaller):
 
@@ -753,7 +899,10 @@ class LiteIDE(umake.frameworks.baseinstaller.BaseInstaller):
                          desktop_filename="liteide.desktop",
                          required_files_path=["bin/liteide"],
                          dir_to_decompress_in_tarball="liteide",
-                         json=True, **kwargs)
+                         json=True,
+                         version_regex=r'(\d+\.\d+)',
+                         supports_update=True,
+                         **kwargs)
 
     arch_trans = {
         "amd64": "64",
@@ -777,6 +926,16 @@ class LiteIDE(umake.frameworks.baseinstaller.BaseInstaller):
                         exec=self.exec_link_name,
                         comment=_("LiteIDE is a simple, open source, cross-platform Go IDE."),
                         categories="Development;IDE;"))
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'README.md'), 'r') as file:
+                content = ''.join(file.readline() for _ in range(15))
+                match = re.search(r'(\d+\.\d+)', content)
+                return match.group(1) if match else None
+        except FileNotFoundError:
+            return
 
 
 class RStudio(umake.frameworks.baseinstaller.BaseInstaller):

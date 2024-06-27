@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2023-12-14 08:05+0000\n"
-"Last-Translator: reimu105 <peter112548@gmail.com>\n"
+"PO-Revision-Date: 2024-06-26 17:09+0000\n"
+"Last-Translator: Peter Dave Hello <hsu@peterdavehello.org>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "ubuntu-make/ubuntu-make/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3-rc\n"
+"X-Generator: Weblate 5.6-rc\n"
 "X-Launchpad-Export-Date: 2015-05-04 07:08+0000\n"
 
 #: umake/tools.py:48
@@ -30,16 +30,14 @@ msgstr "* 命令「{}」："
 
 #: umake/__init__.py:107
 msgid "Deploy and setup developers environment easily on ubuntu"
-msgstr "在 Ubuntu 上輕易地佈署與安裝開發環境"
+msgstr "在 Ubuntu 上輕鬆佈署與設置開發者環境"
 
 #: umake/__init__.py:108
-#, fuzzy
 msgid ""
 "Note that you can also configure different debug logging behavior using "
 "LOG_CFG that points to a log yaml profile."
-msgstr ""
-"注意您也可以使用 LOG_CFG 環境變數指向一個 YAML 格式除錯紀錄設定檔來設定不同的"
-"除錯紀錄行為。"
+msgstr "注意，您也可以使用 LOG_CFG 環境變數指向一個 YAML "
+"格式的日誌設定檔來配置不同的除錯日誌行為。"
 
 #: umake/__init__.py:111
 msgid "Show this help"
@@ -47,11 +45,11 @@ msgstr "顯示此幫助訊息"
 
 #: umake/__init__.py:112
 msgid "Increase output verbosity (2 levels)"
-msgstr "增加輸出訊息的冗長程度（最多可提高 2 級）"
+msgstr "增加輸出訊息的詳細程度（最多可提高 2 級）"
 
 #: umake/__init__.py:114
 msgid "Remove specified framework if installed"
-msgstr "如果已被安裝的話移除指定的軟體框架"
+msgstr "移除已安裝的指定框架"
 
 #: umake/__init__.py:116
 msgid "Print version and exit"
@@ -59,37 +57,35 @@ msgstr "顯示版本並離開"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
-msgstr "一般整合式開發環境"
+msgstr "通用整合式開發環境 (IDE)"
 
 #: umake/frameworks/ide.py:76
 msgid "Pure Eclipse Luna (4.4)"
-msgstr "純粹的 Eclipse Luna (4.4) 整合式開發環境"
+msgstr "純粹的 Eclipse Luna (4.4) 整合式開發環境 (IDE)"
 
 #: umake/frameworks/ide.py:128
 msgid "The Eclipse Luna Integrated Development Environment"
-msgstr "Eclipse Luna 整合式開發環境"
+msgstr "Eclipse Luna 整合式開發環境 (IDE)"
 
 #: umake/frameworks/ide.py:131
 msgid "Eclipse Luna"
-msgstr "Eclipse Luna 整合式開發環境"
+msgstr "Eclipse Luna 整合式開發環境 (IDE)"
 
 #: umake/frameworks/ide.py:217
 msgid "PyCharm Community Edition"
-msgstr "PyCharm 社群版本"
+msgstr "PyCharm 社群版"
 
 #: umake/frameworks/ide.py:233
-#, fuzzy
 msgid "PyCharm Educational Edition"
-msgstr "PyCharm 社群版本"
+msgstr "PyCharm 教育版"
 
 #: umake/frameworks/ide.py:249
-#, fuzzy
 msgid "PyCharm Professional Edition"
-msgstr "PyCharm 社群版本"
+msgstr "PyCharm 專業版"
 
 #: umake/frameworks/ide.py:265
 msgid "IntelliJ IDEA Community Edition"
-msgstr "IntelliJ IDEA 社群版本"
+msgstr "IntelliJ IDEA 社群版"
 
 #: umake/frameworks/ide.py:281
 msgid "IntelliJ IDEA"
@@ -97,20 +93,19 @@ msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
 msgid "Ruby on Rails IDE"
-msgstr "Rails IDE 上的 Ruby"
+msgstr "Rails on Ruby 整合式開發環境 (IDE)"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
-msgstr "複雜的客戶端和伺服器端 JavaScript IDE"
+msgstr "複雜的客戶端和伺服器端 JavaScript 整合式開發環境 (IDE)"
 
 #: umake/frameworks/ide.py:331
-#, fuzzy
 msgid "PHP and web development IDE"
-msgstr "Stencyl 遊戲開發者整合式開發環境"
+msgstr "PHP 和網頁整合式開發環境 (IDE)"
 
 #: umake/frameworks/ide.py:348
 msgid "CLion integrated C/C++ IDE"
-msgstr "CLion 整合 C/C++ IDE"
+msgstr "CLion 整合 C/C++ 整合式開發環境 (IDE)"
 
 #: umake/frameworks/ide.py:376
 msgid "The Arduino Software Distribution"
@@ -118,35 +113,32 @@ msgstr "Arduino 軟體發行版"
 
 #: umake/frameworks/ide.py:475
 msgid "The Arduino Software IDE"
-msgstr "Arduino 軟體 IDE"
+msgstr "Arduino 軟體整合式開發環境 (IDE)"
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
 msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
-#, fuzzy
 msgid "You need to logout and login again for your installation to work"
-msgstr "您必須重新啟動殼程式(shell)工作階段您的安裝才會生效"
+msgstr "您需要登出並重新登入，您的安裝才會生效"
 
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
 msgid "Netbeans IDE"
-msgstr "Netbeans IDE"
+msgstr "Netbeans 整合式開發環境 (IDE)"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
 msgstr "Dartlang 開發環境"
 
 #: umake/frameworks/dart.py:49
-#, fuzzy
 msgid "Dart SDK with editor (not supported upstream anyymore)"
-msgstr "Dart 軟體開發工具(SDK)與編輯器（預設）"
+msgstr "Dart 軟體開發工具包 (SDK) 及編輯器（不再支援）"
 
 #: umake/frameworks/dart.py:56
-#, fuzzy
 msgid "Dart SDK (default)"
-msgstr "Dart 軟體開發工具(SDK)與編輯器（預設）"
+msgstr "Dart 軟體開發工具包 (SDK)（預設）"
 
 #: umake/frameworks/dart.py:97 umake/frameworks/rust.py:134
 #: umake/frameworks/scala.py:66 umake/frameworks/go.py:76
@@ -158,22 +150,20 @@ msgid ""
 msgstr "您必須重新啟動殼程式(shell)工作階段您的安裝才會生效"
 
 #: umake/frameworks/rust.py:43
-#, fuzzy
 msgid "Rust language"
-msgstr "Go 程式語言"
+msgstr "Rust 程式語言"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
-msgstr "Rust 官方發行"
+msgstr "Rust 官方發行版"
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
 msgstr "Scala 程式語言"
 
 #: umake/frameworks/scala.py:46
-#, fuzzy
 msgid "Scala compiler and interpreter (default)"
-msgstr "Google 編譯器（預設）"
+msgstr "Scala 編譯器和直譯器（預設）"
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
@@ -200,13 +190,12 @@ msgid "Android Studio developer environment"
 msgstr "Android Studio 軟體開發環境"
 
 #: umake/frameworks/android.py:111
-#, fuzzy
 msgid "Android SDK"
-msgstr "Android NDK"
+msgstr "Android 軟體開發工具包 (SDK)"
 
 #: umake/frameworks/android.py:147
 msgid "Android NDK"
-msgstr "Android NDK"
+msgstr "Android 原生開發工具包 (NDK)"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
@@ -218,16 +207,16 @@ msgstr "您無法在這台機器上安裝該框架"
 
 #: umake/frameworks/__init__.py:256
 msgid "You can't remove {} as it isn't installed"
-msgstr "您不能移除 {} 因為它沒有被安裝"
+msgstr "您不能移除 {}，因為它沒有被安裝"
 
 #: umake/frameworks/__init__.py:285
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
-msgstr "如未提供預設框架名稱，輸出目錄應包含斜線 /"
+msgstr "如果未提供預設框架名稱，則輸出目錄應包含斜線 /"
 
 #: umake/frameworks/__init__.py:288
 msgid "Remove framework if installed"
-msgstr "如果軟體框架已經被安裝的話移除它"
+msgstr "移除已安裝的框架"
 
 #: umake/frameworks/__init__.py:291
 msgid "Accept license without prompting"
@@ -235,16 +224,15 @@ msgstr "接受許可證而不提示"
 
 #: umake/frameworks/web.py:45
 msgid "Web Developer Environment"
-msgstr "Web 開發環境"
+msgstr "網頁開發環境"
 
 #: umake/frameworks/web.py:51 umake/frameworks/web.py:120
 msgid "Firefox Developer Edition"
-msgstr "Firefox 開發版"
+msgstr "Firefox 開發者版"
 
 #: umake/frameworks/web.py:116
-#, fuzzy
 msgid "Choose language: {}"
-msgstr "Go 程式語言"
+msgstr "選擇語言：{}"
 
 #: umake/frameworks/web.py:123
 msgid "Firefox Aurora with Developer tools"
@@ -256,7 +244,7 @@ msgstr "在沒有提示的情況下以指定的語言安裝"
 
 #: umake/frameworks/web.py:141 umake/frameworks/web.py:226
 msgid "Visual Studio focused on modern web and cloud"
-msgstr "Visual Studio 專注於現代 網路和雲端"
+msgstr "Visual Studio 專注於現代網頁和雲端"
 
 #: umake/frameworks/web.py:223
 msgid "Visual Studio Code"
@@ -268,7 +256,7 @@ msgstr "遊戲開發環境"
 
 #: umake/frameworks/games.py:48
 msgid "Stencyl game developer IDE"
-msgstr "Stencyl 遊戲開發者整合式開發環境"
+msgstr "Stencyl 遊戲開發者整合式開發環境 (IDE)"
 
 #: umake/frameworks/games.py:85
 msgid "Stencyl"
@@ -276,16 +264,15 @@ msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
-msgstr "Unity 3D 編輯器 Linux 實驗性支持"
+msgstr "Unity 3D 編輯器 Linux 實驗性支援"
 
 #: umake/frameworks/games.py:154
-#, fuzzy
 msgid "Unity3D Editor"
-msgstr "Dart 編輯器"
+msgstr "Unity3D 編輯器"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
-msgstr "用於創建互動式和非線性故事的 Twine 工具"
+msgstr "用於創作互動式和非線性故事的 Twine 工具"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
@@ -293,7 +280,7 @@ msgstr "Twine"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
-msgstr "沒有得到適當的答案"
+msgstr "沒有提供合適的答案"
 
 #: umake/interactions/__init__.py:75 umake/interactions/__init__.py:83
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
@@ -359,4 +346,4 @@ msgstr "否"
 #~ msgstr "Stencyl 遊戲開發環境"
 
 msgid "Dart Editor for the dart language"
-msgstr "用於 Dart 語言的 Dart 編輯器"
+msgstr "用於 Dart 程式語言的 Dart 編輯器"

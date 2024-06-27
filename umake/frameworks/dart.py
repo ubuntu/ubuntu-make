@@ -57,7 +57,10 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
                                        "stable/release/latest/VERSION",
                          dir_to_decompress_in_tarball="dart-sdk",
                          required_files_path=[os.path.join("bin", "dart")],
-                         json=True, **kwargs)
+                         json=True,
+                         version_regex=r'/(\d+\.\d+\.\d+)',
+                         supports_update=True,
+                         **kwargs)
 
     arch_trans = {
         "amd64": "x64",
@@ -78,6 +81,14 @@ class DartLang(umake.frameworks.baseinstaller.BaseInstaller):
         """Add go necessary env variables"""
         add_env_to_user(self.name, {"PATH": {"value": os.path.join(self.install_path, "bin")}})
         UI.delayed_display(DisplayMessage(self.RELOGIN_REQUIRE_MSG.format(self.name)))
+
+    @staticmethod
+    def get_current_user_version(install_path):
+        try:
+            with open(os.path.join(install_path, 'version'), 'r') as file:
+                return file.readline().strip() if file else None
+        except FileNotFoundError:
+            return
 
 
 class FlutterLang(umake.frameworks.baseinstaller.BaseInstaller):
