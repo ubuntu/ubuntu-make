@@ -57,7 +57,7 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
         self.arg_lang = None
 
     def get_tag_machine(self):
-        return "" if platform.machine() == "x86_64" else "64"
+        return "64" if platform.machine() == "x86_64" else ""
 
     @MainLoop.in_mainloop_thread
     def language_select_callback(self, url):
