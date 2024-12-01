@@ -50,11 +50,14 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
     def __init__(self, **kwargs):
         super().__init__(name="Firefox Dev", description=_("Firefox Developer Edition"),
                          only_on_archs=_supported_archs,
-                         download_page="https://www.mozilla.org/en-US/firefox/developer/all",
+                         download_page=f"https://www.mozilla.org/en-US/firefox/all/desktop-developer/linux{self.get_tag_machine()}/",
                          dir_to_decompress_in_tarball="firefox",
                          desktop_filename="firefox-developer.desktop",
                          required_files_path=["firefox"], **kwargs)
         self.arg_lang = None
+
+    def get_tag_machine(self):
+        return "64" if platform.machine() == "x86_64" else ""
 
     @MainLoop.in_mainloop_thread
     def language_select_callback(self, url):
@@ -79,20 +82,17 @@ class FirefoxDev(umake.frameworks.baseinstaller.BaseInstaller):
         arch = platform.machine()
         arg_lang_url = None
         default_label = ''
-        tag_machine = ''
-        if arch == 'x86_64':
-            tag_machine = '64'
+        tag_machine = self.get_tag_machine()
 
-        reg_expression = r'href="(\S+firefox-devedition\S+os=linux{}&amp;lang=\S+)"'.format(tag_machine)
+        reg_expression = r'href="\S+desktop-developer\/linux{}\/([\w\-]+)\/"'.format(tag_machine)
         languages = []
         decoded_page = result[self.download_page].buffer.getvalue().decode()
         for index, p in enumerate(re.finditer(reg_expression, decoded_page)):
             with suppress(AttributeError):
-                url = p.group(1)
+                lang = p.group(1)
 
-            m = re.search(r'lang=(.*)', url)
             with suppress(AttributeError):
-                lang = m.group(1)
+                url = f'https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=linux{tag_machine}&lang={lang}'
 
             if self.arg_lang and self.arg_lang.lower() == lang.lower():
                 arg_lang_url = url
