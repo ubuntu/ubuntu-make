@@ -603,6 +603,37 @@ class Netbeans(umake.frameworks.baseinstaller.BaseInstaller, metaclass=ABCMeta):
                                                      categories="Development;IDE;"))
 
 
+class CodeiumWindsurf(umake.frameworks.baseinstaller.BaseInstaller):
+    def __init__(self, **kwargs):
+        super().__init__(name="Codeium Windsurf", description=_("Codeium Windsurf focused on modern web and cloud"),
+                         only_on_archs=['amd64'],
+                         download_page="https://windsurf-stable.codeium.com/api/update/linux-x64/stable/latest",
+                         desktop_filename="codeium-windsurf.desktop",
+                         required_files_path=["bin/windsurf"],
+                         dir_to_decompress_in_tarball="Windsurf",
+                         packages_requirements=["libgtk2.0-0"],
+                         checksum_type=ChecksumType.sha256,
+                         **kwargs)
+
+    def parse_download_link(self, line, in_download):
+        data = json.loads(line)
+
+        in_download = True if 'url' in data else in_download
+
+        return (data.get('url'), data.get('sha256hash')), in_download
+
+    def post_install(self):
+        """Create the Codeium Windsurf launcher"""
+        create_launcher(self.desktop_filename, get_application_desktop_file(name=_("Codeium Windsurf"),
+                        icon_path=os.path.join(self.install_path, "resources", "app", "resources", "linux",
+                                               "code.png"),
+                        try_exec=self.exec_path,
+                        exec=self.exec_link_name,
+                        comment=_("Codeium Windsurf focused on modern web and cloud"),
+                        categories="Development;IDE;",
+                        extra="StartupWMClass=Windsurf"))
+
+
 class VisualStudioCode(umake.frameworks.baseinstaller.BaseInstaller):
 
     PERM_DOWNLOAD_LINKS = {
