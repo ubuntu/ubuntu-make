@@ -40,6 +40,9 @@ class Uninstantiable(umake.frameworks.BaseFramework):
     def remove(self):
         super().remove()
 
+    def depends(self):
+        super().depends()
+
 
 class InheritedFromUninstantiable(Uninstantiable):
 
