@@ -12,7 +12,7 @@ description: |
   features!
 grade: stable
 confinement: classic
-base: core20
+base: core24
 compression: lzo
 
 apps:
@@ -20,12 +20,14 @@ apps:
     command: bin/umake-wrapper
     completer: umake-completion
     environment:
-      PYTHONPATH: $SNAP/lib/python3.8/site-packages:$PYTHONPATH
+      PYTHONPATH: ${SNAP}/lib/python3.12/site-packages:${SNAP}/usr/lib/python3/dist-packages:${PYTHONPATH}
 
 parts:
   umake:
     source: .
     plugin: python
+    build-attributes:
+      - enable-patchelf
     build-packages:
       - libapt-pkg-dev
       - gettext
@@ -46,6 +48,9 @@ parts:
       - fakeroot
       - help2man
     stage-packages:
+      - python3.12-minimal
+      - libpython3.12-minimal
+      - libpython3.12-stdlib
       - python3-apt
       - python3-argcomplete
       - python3-gi
@@ -58,7 +63,7 @@ parts:
       - libc6
       - libuuid1
       - libreadline8
-      - libtinfo5
+      - libtinfo6
       - libselinux1
       - libpcre3
       - libudev1
@@ -68,27 +73,12 @@ parts:
       - liblzma5
       - libblkid1
       - libmount1
-      - libncursesw5
+      - libncursesw6
       - libdb5.3
-    build-environment:
-      - SNAPCRAFT_PYTHON_VENV_ARGS: "--system-site-packages"
-    organize: 
-      lib/python3/dist-packages/umake/version: lib/python3.8/site-packages/umake/version
-  python3:
-    plugin: nil
-    source: .
-    stage-packages:
-      - libpython3-stdlib
-      - libpython3.8-stdlib
-      - libpython3.8-minimal
-      - python3-pip
-      - python3-setuptools
-      - python3-wheel
-      - python3-venv
-      - python3-minimal
-      - python3-distutils
-      - python3-pkg-resources
-      - python3.8-minimal
+    # build-environment:
+    #   - SNAPCRAFT_PYTHON_VENV_ARGS: "--system-site-packages"
+    # organize: 
+    #   lib/python3/dist-packages/umake/version: lib/python3.12/site-packages/umake/version
   umake-completion:
     plugin: dump
     source: snap/local

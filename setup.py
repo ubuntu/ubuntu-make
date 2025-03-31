@@ -27,7 +27,14 @@ import os
 from setuptools import setup, find_packages
 import subprocess
 # import umake # that initializes the gettext domain
-from umake.settings import get_version
+
+snap_rev = os.getenv('SNAP_REVISION')
+if snap_rev:
+    version = open(os.path.join(os.getenv("CRAFT_PART_SRC"), "umake", 'version'), 'r', encoding='utf-8').read().strip()
+    version += "+snap{}".format(snap_rev)
+else:
+    from umake.settings import get_version
+    version = get_version()
 
 I18N_DOMAIN = gettext.textdomain()
 PO_DIR = os.path.join(os.path.dirname(os.curdir), 'po')
@@ -150,7 +157,7 @@ setup(
  maintain and personalize your developer environment easily. It will handle
  all dependencies, even those which aren't in Ubuntu itself, and install
  latest versions of the desired and recommended tools.""",
-    version=get_version(),
+    version=version,
     packages=find_packages(exclude=["tests*"]),
     package_data={},
     entry_points={
