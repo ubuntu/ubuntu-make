@@ -159,7 +159,11 @@ setup(
  latest versions of the desired and recommended tools.""",
     version=version,
     packages=find_packages(exclude=["tests*"]),
-    package_data={},
+    package_data={
+        'umake': [
+            'version'
+        ],
+    },
     entry_points={
         'console_scripts': [
             'umake = umake:main',
@@ -168,7 +172,6 @@ setup(
     },
 
     data_files=[
-        ('lib/python3/dist-packages/umake', ['umake/version']),
         ("share/ubuntu-make/log-confs", glob('log-confs/*.yaml')),
         ('share/zsh/vendor-completions', ['confs/completions/_umake']),
     ],

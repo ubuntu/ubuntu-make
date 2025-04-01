@@ -75,10 +75,6 @@ parts:
       - libmount1
       - libncursesw6
       - libdb5.3
-    # build-environment:
-    #   - SNAPCRAFT_PYTHON_VENV_ARGS: "--system-site-packages"
-    # organize: 
-    #   lib/python3/dist-packages/umake/version: lib/python3.12/site-packages/umake/version
   umake-completion:
     plugin: dump
     source: snap/local
