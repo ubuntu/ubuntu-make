@@ -74,7 +74,7 @@ parts:
       - libblkid1
       - libmount1
       - libncursesw6
-      - libdb5.3
+      - libdb5.3t64
   umake-completion:
     plugin: dump
     source: snap/local
