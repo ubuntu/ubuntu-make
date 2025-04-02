@@ -62,7 +62,7 @@ parts:
       - libstdc++6
       - libc6
       - libuuid1
-      - libreadline8
+      - libreadline8t64
       - libtinfo6
       - libselinux1
       - libpcre3
