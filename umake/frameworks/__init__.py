@@ -260,7 +260,7 @@ class BaseFramework(metaclass=abc.ABCMeta):
                     cmd.append("{}={}".format(var, os.getenv(var)))
             if os.getenv("SNAP"):
                 logger.debug("Found snap environment. Running correct python version")
-                cmd.extend(["{}/usr/bin/python3".format(os.getenv("SNAP"))])
+                cmd.extend(["{}/usr/bin/python3.12".format(os.getenv("SNAP"))])
             cmd.extend(sys.argv)
             MainLoop().quit(subprocess.call(cmd))
 
