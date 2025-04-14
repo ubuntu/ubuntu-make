@@ -128,6 +128,15 @@ class BaseInstaller(umake.frameworks.BaseFramework):
         self.confirm_path(self.arg_install_path)
         remove_framework_envs_from_user(self.name)
 
+    def depends(self):
+        """List necessary apt dependencies"""
+        if not self.need_root_access:
+            UI.display(DisplayMessage("Required packages are installed"))
+        else:
+            UI.display(DisplayMessage("Required packages will be installed"))
+        UI.display(DisplayMessage(' '.join(self.packages_requirements)))
+        UI.return_main_screen(status_code=0)
+
     def remove(self):
         """Remove current framework if installed
 
