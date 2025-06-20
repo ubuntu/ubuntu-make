@@ -41,6 +41,9 @@ class FrameworkA(umake.frameworks.BaseFramework):
     def remove(self):
         super().remove()
 
+    def depends(self):
+        super().depends()
+
     @property
     def is_installed(self):
         return False
@@ -57,6 +60,9 @@ class FrameworkB(umake.frameworks.BaseFramework):
 
     def remove(self):
         super().remove()
+
+    def depends(self):
+        super().depends()
 
     @property
     def is_installed(self):
