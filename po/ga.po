@@ -8,132 +8,140 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-09-15 13:01+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
+"Language-Team: Irish <https://hosted.weblate.org/projects/ubuntu-make/"
+"ubuntu-make/ga/>\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
+"n>6 && n<11) ? 3 : 4;\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
-msgstr ""
+msgstr "# Suiteáil Ubuntu de {}\n"
 
 #: umake/__init__.py:99
 msgid "* Command '{}':"
-msgstr ""
+msgstr "* Ordú '{}':"
 
 #: umake/__init__.py:107
 msgid "Deploy and setup developers environment easily on ubuntu"
-msgstr ""
+msgstr "Imscaradh agus socrú timpeallacht forbróirí go héasca ar Ubuntu"
 
 #: umake/__init__.py:108
 msgid ""
 "Note that you can also configure different debug logging behavior using "
 "LOG_CFG that points to a log yaml profile."
 msgstr ""
+"Tabhair faoi deara gur féidir leat iompar logála dífhabhtaithe éagsúil a "
+"chumrú freisin ag baint úsáide as LOG_CFG a dhíríonn ar phróifíl loga yaml."
 
 #: umake/__init__.py:111
 msgid "Show this help"
-msgstr ""
+msgstr "Taispeáin an chabhair seo"
 
 #: umake/__init__.py:112
 msgid "Increase output verbosity (2 levels)"
-msgstr ""
+msgstr "Méadaigh foclaíocht an aschuir (2 leibhéal)"
 
 #: umake/__init__.py:114
 msgid "Remove specified framework if installed"
-msgstr ""
+msgstr "Bain an creatlach shonraithe má tá sé suiteáilte"
 
 #: umake/__init__.py:116
 msgid "Print version and exit"
-msgstr ""
+msgstr "Leagan priontála agus scoir"
 
 #: umake/frameworks/ide.py:63
 msgid "Generic IDEs"
-msgstr ""
+msgstr "IDEanna Ginearálacha"
 
 #: umake/frameworks/ide.py:76
 msgid "Pure Eclipse Luna (4.4)"
-msgstr ""
+msgstr "Luna Éclipse Glan (4.4)"
 
 #: umake/frameworks/ide.py:128
 msgid "The Eclipse Luna Integrated Development Environment"
-msgstr ""
+msgstr "Timpeallacht Forbartha Chomhtháite Eclipse Luna"
 
 #: umake/frameworks/ide.py:131
 msgid "Eclipse Luna"
-msgstr ""
+msgstr "Luna Eclipse"
 
 #: umake/frameworks/ide.py:217
 msgid "PyCharm Community Edition"
-msgstr ""
+msgstr "Eagrán Pobail PyCharm"
 
 #: umake/frameworks/ide.py:233
 msgid "PyCharm Educational Edition"
-msgstr ""
+msgstr "Eagrán Oideachais PyCharm"
 
 #: umake/frameworks/ide.py:249
 msgid "PyCharm Professional Edition"
-msgstr ""
+msgstr "Eagrán Gairmiúil PyCharm"
 
 #: umake/frameworks/ide.py:265
 msgid "IntelliJ IDEA Community Edition"
-msgstr ""
+msgstr "Eagrán Pobail IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:281
 msgid "IntelliJ IDEA"
-msgstr ""
+msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
 msgid "Ruby on Rails IDE"
-msgstr ""
+msgstr "Ruby on Rails IDE"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
-msgstr ""
+msgstr "IDE javascript casta taobh cliaint agus taobh freastalaí"
 
 #: umake/frameworks/ide.py:331
 msgid "PHP and web development IDE"
-msgstr ""
+msgstr "PHP agus IDE forbartha gréasáin"
 
 #: umake/frameworks/ide.py:348
 msgid "CLion integrated C/C++ IDE"
-msgstr ""
+msgstr "IDE comhtháite C/C++ CLion"
 
 #: umake/frameworks/ide.py:376
 msgid "The Arduino Software Distribution"
-msgstr ""
+msgstr "Dáileadh Bogearraí Arduino"
 
 #: umake/frameworks/ide.py:475
 msgid "The Arduino Software IDE"
-msgstr ""
+msgstr "An IDE Bogearraí Arduino"
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
-msgstr ""
+msgstr "Arduino"
 
 #: umake/frameworks/ide.py:484
 msgid "You need to logout and login again for your installation to work"
 msgstr ""
+"Ní mór duit logáil amach agus logáil isteach arís le go n-oibreoidh do "
+"shuiteáil"
 
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
 msgid "Netbeans IDE"
-msgstr ""
+msgstr "Netbeans IDE"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
-msgstr ""
+msgstr "Timpeallacht Forbartha Dartlang"
 
 #: umake/frameworks/dart.py:49
 msgid "Dart SDK with editor (not supported upstream anymore)"
-msgstr ""
+msgstr "SDK Dart le heagarthóir (ní thacaítear leis an sruth suas a thuilleadh)"
 
 #: umake/frameworks/dart.py:56
 msgid "Dart SDK (default)"
-msgstr ""
+msgstr "SDK Dart (réamhshocraithe)"
 
 #: umake/frameworks/dart.py:97 umake/frameworks/rust.py:134
 #: umake/frameworks/scala.py:66 umake/frameworks/go.py:76
@@ -142,194 +150,206 @@ msgid ""
 "You need to restart your current shell session for your {} installation to "
 "work properly"
 msgstr ""
+"Ní mór duit do sheisiún sliogáin reatha a atosú le go n-oibreoidh do "
+"shuiteáil {} i gceart"
 
 #: umake/frameworks/rust.py:43
 msgid "Rust language"
-msgstr ""
+msgstr "Teanga Rust"
 
 #: umake/frameworks/rust.py:56
 msgid "The official Rust distribution"
-msgstr ""
+msgstr "Dáileadh oifigiúil an Rust"
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
-msgstr ""
+msgstr "Teanga Chlársceidealaithe Scala"
 
 #: umake/frameworks/scala.py:46
 msgid "Scala compiler and interpreter (default)"
-msgstr ""
+msgstr "Tiomsaitheoir agus léirmhínitheoir Scala (réamhshocraithe)"
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
-msgstr ""
+msgstr "Teanga Go"
 
 #: umake/frameworks/go.py:46
 msgid "Google compiler (default)"
-msgstr ""
+msgstr "Tiomsaitheoir Google (réamhshocraithe)"
 
 #: umake/frameworks/android.py:42
 msgid "Android Development Environment"
-msgstr ""
+msgstr "Timpeallacht Forbartha Android"
 
 #: umake/frameworks/android.py:80
 msgid "Android Studio (default)"
-msgstr ""
+msgstr "Stiúideo Android (réamhshocraithe)"
 
 #: umake/frameworks/android.py:100
 msgid "Android Studio"
-msgstr ""
+msgstr "Stiúideo Android"
 
 #: umake/frameworks/android.py:103
 msgid "Android Studio developer environment"
-msgstr ""
+msgstr "Timpeallacht fhorbróra Stiúideo Android"
 
 #: umake/frameworks/android.py:111
 msgid "Android SDK"
-msgstr ""
+msgstr "Android SDK"
 
 #: umake/frameworks/android.py:147
 msgid "Android NDK"
-msgstr ""
+msgstr "Android NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
 msgstr ""
+"Iarradh creatlach réamhshocraithe do chatagóir {} nuair nach bhfuil aon "
+"cheann ann"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't install that framework on this machine"
-msgstr ""
+msgstr "Ní féidir leat an creatlach sin a shuiteáil ar an meaisín seo"
 
 #: umake/frameworks/__init__.py:256
 msgid "You can't remove {} as it isn't installed"
-msgstr ""
+msgstr "Ní féidir leat {} a bhaint mar níl sé suiteáilte"
 
 #: umake/frameworks/__init__.py:285
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
 msgstr ""
+"Mura gcuirtear ainm an chreata réamhshocraithe ar fáil, ba chóir go mbeadh / "
+"sa destdir"
 
 #: umake/frameworks/__init__.py:288
 msgid "Remove framework if installed"
-msgstr ""
+msgstr "Bain an creat má tá sé suiteáilte"
 
 #: umake/frameworks/__init__.py:291
 msgid "Accept license without prompting"
-msgstr ""
+msgstr "Glac leis an gceadúnas gan iarraidh"
 
 #: umake/frameworks/web.py:45
 msgid "Web Developer Environment"
-msgstr ""
+msgstr "Timpeallacht Forbróra Gréasáin"
 
 #: umake/frameworks/web.py:51 umake/frameworks/web.py:120
 msgid "Firefox Developer Edition"
-msgstr ""
+msgstr "Eagrán Forbróra Firefox"
 
 #: umake/frameworks/web.py:116
 msgid "Choose language: {}"
-msgstr ""
+msgstr "Roghnaigh teanga: {}"
 
 #: umake/frameworks/web.py:123
 msgid "Firefox Aurora with Developer tools"
-msgstr ""
+msgstr "Firefox Aurora le huirlisí Forbróra"
 
 #: umake/frameworks/web.py:129
 msgid "Install in given language without prompting"
-msgstr ""
+msgstr "Suiteáil sa teanga shonraithe gan leid"
 
 #: umake/frameworks/web.py:141 umake/frameworks/web.py:226
 msgid "Visual Studio focused on modern web and cloud"
-msgstr ""
+msgstr "Visual Studio dírithe ar an ngréasán agus an scamall nua-aimseartha"
 
 #: umake/frameworks/web.py:223
 msgid "Visual Studio Code"
-msgstr ""
+msgstr "Visual Studio Code"
 
 #: umake/frameworks/games.py:42
 msgid "Games Development Environment"
-msgstr ""
+msgstr "Timpeallacht Forbartha Cluichí"
 
 #: umake/frameworks/games.py:48
 msgid "Stencyl game developer IDE"
-msgstr ""
+msgstr "IDE forbróra cluichí Stencyl"
 
 #: umake/frameworks/games.py:85
 msgid "Stencyl"
-msgstr ""
+msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
-msgstr ""
+msgstr "Tacaíocht turgnamhach Linux d'Eagarthóir Unity 3D"
 
 #: umake/frameworks/games.py:154
 msgid "Unity3D Editor"
-msgstr ""
+msgstr "Eagarthóir Unity3D"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
 msgstr ""
+"Uirlis sreangáin chun scéalta idirghníomhacha agus neamhlíneacha a chruthú"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
-msgstr ""
+msgstr "Twine"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
-msgstr ""
+msgstr "Níor tugadh freagra oiriúnach"
 
 #: umake/interactions/__init__.py:75 umake/interactions/__init__.py:83
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
 msgstr ""
+"Ní rogha inghlactha é d'iontráil '{}'. Is iad na roghanna seo a leanas: {}"
 
 #: umake/interactions/__init__.py:80
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
 msgstr ""
+"Ní rogha inghlactha é d'iontráil '{}'. Is iad na roghanna seo a leanas: {} "
+"agus {}"
 
 #: umake/interactions/__init__.py:100
 msgid " ({})"
-msgstr ""
+msgstr " ({})"
 
 #: umake/interactions/__init__.py:104
 msgid ""
 "{}\n"
 "[{}] "
 msgstr ""
+"{}\n"
+"[{}] "
 
 #: umake/interactions/__init__.py:107
 msgid "{} [{}] "
-msgstr ""
+msgstr "{} [{}] "
 
 #: umake/interactions/__init__.py:115
 msgid "I Accept"
-msgstr ""
+msgstr "Glacaim"
 
 #: umake/interactions/__init__.py:115
 msgid "a"
-msgstr ""
+msgstr "a"
 
 #: umake/interactions/__init__.py:116
 msgid "I don't accept"
-msgstr ""
+msgstr "Ní ghlacaim leis"
 
 #: umake/interactions/__init__.py:116 umake/interactions/__init__.py:149
 msgid "N"
-msgstr ""
+msgstr "N"
 
 #: umake/interactions/__init__.py:125 umake/interactions/__init__.py:126
 msgid "{} ({})"
-msgstr ""
+msgstr "{} ({})"
 
 #: umake/interactions/__init__.py:129
 msgid "[{}] "
-msgstr ""
+msgstr "[{}] "
 
 #: umake/interactions/__init__.py:148
 msgid "Yes"
-msgstr ""
+msgstr "Tá"
 
 #: umake/interactions/__init__.py:148
 msgid "y"
-msgstr ""
+msgstr "t"
 
 #: umake/interactions/__init__.py:149
 msgid "No"
-msgstr ""
+msgstr "Níl"
