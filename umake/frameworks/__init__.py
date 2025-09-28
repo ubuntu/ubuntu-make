@@ -254,10 +254,19 @@ class BaseFramework(metaclass=abc.ABCMeta):
 
         if not self.dry_run and self.need_root_access and os.geteuid() != 0:
             logger.debug("Requesting root access")
-            cmd = ["sudo", "-E", "env"]
-            for var in ["PATH", "LD_LIBRARY_PATH", "PYTHONUSERBASE", "PYTHONHOME", "PYTHONPATH"]:
+            env_variables = ["PATH", "LD_LIBRARY_PATH", "PYTHONUSERBASE", "PYTHONHOME", "PYTHONPATH"]
+            cmd = ["sudo"]
+            # sudo-rs returns the version in stderr
+            is_sudo_rs = "sudo-rs" in subprocess.run(["sudo", "--version"], capture_output=True).stderr.decode()
+            # -E is not supported by sudo-rs, so we need to use --preserve-env for each variable needed
+            if not is_sudo_rs:
+                cmd = ["sudo", "-E", "env"]
+            for var in env_variables:
                 if os.getenv(var):
-                    cmd.append("{}={}".format(var, os.getenv(var)))
+                    if is_sudo_rs:
+                        cmd.append("--preserve-env={}".format(var))
+                    else:
+                        cmd.append("{}={}".format(var, os.getenv(var)))
             if os.getenv("SNAP"):
                 logger.debug("Found snap environment. Running correct python version")
                 cmd.extend(["{}/usr/bin/python3.12".format(os.getenv("SNAP"))])
