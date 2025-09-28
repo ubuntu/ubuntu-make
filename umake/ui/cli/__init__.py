@@ -260,16 +260,22 @@ def pretty_print_versions(data):
             latest_version_color = '\033[32m'
             user_version_color = '\033[31m'
 
-        latest_version_formatted = f"{latest_version_color}{latest_version}{reset_color}"
+        latest_version_formatted = latest_version_color + latest_version + reset_color
         latest_version_padding = len(latest_version_formatted)
         latest_version_formatted = latest_version_formatted.ljust(
             latest_version_padding -
             len(latest_version) +
             max_version_length
         )
-        print(f"{item['framework_name'].ljust(max_name_length)} | "
-              f"Latest Version: {latest_version_formatted} | "
-              f"User Version: {user_version_color}{user_version} {symbol}{reset_color}")
+        print("{} | Latest Version: {} | User Version: {} {}{}".format(
+            item['framework_name'].ljust(max_name_length),
+            latest_version_formatted,
+            user_version_color + user_version,
+            symbol,
+            reset_color))
+        # print(f"{item['framework_name'].ljust(max_name_length)} | "
+        #       f"Latest Version: {latest_version_formatted} | "
+        #       f"User Version: {user_version_color}{user_version} {symbol}{reset_color}")
 
 
 def main(parser):
