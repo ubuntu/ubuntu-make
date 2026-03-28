@@ -41,6 +41,9 @@ class FrameworkRuninstalled(umake.frameworks.BaseFramework):
     def remove(self):
         super().remove()
 
+    def depends(self):
+        super().depends()
+
 
 class FrameworkRinstalled(umake.frameworks.BaseFramework):
 
@@ -53,6 +56,9 @@ class FrameworkRinstalled(umake.frameworks.BaseFramework):
 
     def remove(self):
         super().remove()
+
+    def depends(self):
+        super().depends()
 
     @property
     def is_installed(self):
@@ -71,6 +77,9 @@ class FrameworkRinstallednotinstallable(umake.frameworks.BaseFramework):
 
     def remove(self):
         super().remove()
+
+    def depends(self):
+        super().depends()
 
     @property
     def is_installed(self):

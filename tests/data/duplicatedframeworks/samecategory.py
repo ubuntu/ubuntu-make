@@ -41,6 +41,9 @@ class FrameworkC(umake.frameworks.BaseFramework):
     def remove(self):
         super().remove()
 
+    def depends(self):
+        super().depends()
+
 
 class FrameworkD(umake.frameworks.BaseFramework):
 
@@ -53,3 +56,6 @@ class FrameworkD(umake.frameworks.BaseFramework):
 
     def remove(self):
         super().remove()
+
+    def depends(self):
+        super().depends()

@@ -41,6 +41,9 @@ class FrameworkA(umake.frameworks.BaseFramework):
     def remove(self):
         super().remove()
 
+    def depends(self):
+        super().depends()
+
     @property
     def is_installable(self):
         return super().is_installable
@@ -60,6 +63,9 @@ class FrameworkB(umake.frameworks.BaseFramework):
     def remove(self):
         super().remove()
 
+    def depends(self):
+        super().depends()
+
     @property
     def is_installable(self):
         """overridden to say True"""
@@ -78,6 +84,9 @@ class FrameworkC(umake.frameworks.BaseFramework):
 
     def remove(self):
         super().remove()
+
+    def depends(self):
+        super().depends()
 
     @property
     def is_installable(self):
