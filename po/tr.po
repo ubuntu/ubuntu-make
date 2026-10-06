@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2021-05-09 11:32+0000\n"
-"Last-Translator: udo pton <udopton@gmail.com>\n"
+"PO-Revision-Date: 2026-09-24 00:51+0000\n"
+"Last-Translator: Juan Benites <benitesjn@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/tr/>\n"
 "Language: tr\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Launchpad-Export-Date: 2015-05-04 07:08+0000\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
-msgstr "{}\n'in Ubuntu make kurulumu"
+msgstr "# Ubuntu make ile {} kurulumu\n"
 
 #: umake/__init__.py:99
 msgid "* Command '{}':"
@@ -70,7 +70,7 @@ msgstr "Eclipse Luna Entegre Geliştirme Ortamı"
 
 #: umake/frameworks/ide.py:131
 msgid "Eclipse Luna"
-msgstr "Eclipse Luna Tümleşik Geliştirme Ortamı (IDE)"
+msgstr "Eclipse Luna tümleşik geliştirme ortamı (IDE)"
 
 #: umake/frameworks/ide.py:217
 msgid "PyCharm Community Edition"
@@ -94,7 +94,7 @@ msgstr "IntelliJ IDEA"
 
 #: umake/frameworks/ide.py:297
 msgid "Ruby on Rails IDE"
-msgstr "Ruby on Rails IDE"
+msgstr "Ruby on Rаils IDE"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
@@ -118,7 +118,7 @@ msgstr "Arduino Yazılım IDEsi"
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
-msgstr "Arduino"
+msgstr "Arduіno"
 
 #: umake/frameworks/ide.py:484
 msgid "You need to logout and login again for your installation to work"
@@ -127,7 +127,7 @@ msgstr "Kurulumunuzun çalışabilmesi için tekrar çıkış ve giriş yapmaya 
 #: umake/frameworks/ide.py:504 umake/frameworks/ide.py:584
 #: umake/frameworks/ide.py:587
 msgid "Netbeans IDE"
-msgstr "Netbeans IDE"
+msgstr "Nеtbeans IDE"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
@@ -197,7 +197,7 @@ msgstr "Android SDK"
 
 #: umake/frameworks/android.py:147
 msgid "Android NDK"
-msgstr "Android NDK"
+msgstr "Andrоid NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
@@ -263,7 +263,7 @@ msgstr "Stencyl oyun geliştirici IDEsi"
 
 #: umake/frameworks/games.py:85
 msgid "Stencyl"
-msgstr "Stencyl"
+msgstr "Stеncyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
@@ -279,7 +279,7 @@ msgstr "Etkileşimli ve nonlineer hikayeleri oluşturma için Twine aracı"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
-msgstr "Twine"
+msgstr "Twіne"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
