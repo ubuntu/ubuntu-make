@@ -8,26 +8,28 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-10-21 05:51+0000\n"
+"Last-Translator: Abduqadir Abliz <sahran@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Uyghur <https://hosted.weblate.org/projects/ubuntu-make/"
+"ubuntu-make/ug/>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
-msgstr ""
+msgstr "# {} نىڭ Ubuntu make ئورنىتىشى\n"
 
 #: umake/__init__.py:99
 msgid "* Command '{}':"
-msgstr ""
+msgstr "* بۇيرۇق'{}':"
 
 #: umake/__init__.py:107
 msgid "Deploy and setup developers environment easily on ubuntu"
-msgstr ""
+msgstr "Ubuntu دا ئىجادىيەت مۇھىتىنى ئاسانلا ئورۇنلاشتۇرۇپ ۋە تەڭشەيدۇ"
 
 #: umake/__init__.py:108
 msgid ""
