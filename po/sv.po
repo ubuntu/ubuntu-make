@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: ubuntu-make\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-17 09:26+0100\n"
-"PO-Revision-Date: 2023-09-25 19:59+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2026-10-06 14:07+0000\n"
+"Last-Translator: Daniel Nylander <yeagersthlm@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/ubuntu-make/"
 "ubuntu-make/sv/>\n"
 "Language: sv\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Launchpad-Export-Date: 2015-05-04 07:08+0000\n"
 
 #: umake/tools.py:48
 msgid "# Ubuntu make installation of {}\n"
-msgstr "# Ubuntu gör installation av {}\n"
+msgstr "# Ubuntu Make-installation av {}\n"
 
 #: umake/__init__.py:99
 msgid "* Command '{}':"
@@ -30,7 +30,7 @@ msgstr "* Kommando '{}':"
 
 #: umake/__init__.py:107
 msgid "Deploy and setup developers environment easily on ubuntu"
-msgstr "Installera och konfigurera utvecklares arbetsmiljö enkelt på Ubuntu"
+msgstr "Installera och konfigurera utvecklingsmiljöer enkelt på Ubuntu"
 
 #: umake/__init__.py:108
 msgid ""
@@ -46,7 +46,7 @@ msgstr "Visa denna hjälptext"
 
 #: umake/__init__.py:112
 msgid "Increase output verbosity (2 levels)"
-msgstr "Öka utdata utförlighet (2 nivåer)"
+msgstr "Öka utdatautförligheten (2 nivåer)"
 
 #: umake/__init__.py:114
 msgid "Remove specified framework if installed"
@@ -66,7 +66,7 @@ msgstr "Ren Eclipse Luna (4.4)"
 
 #: umake/frameworks/ide.py:128
 msgid "The Eclipse Luna Integrated Development Environment"
-msgstr "Eclipse Luna integrerad utvecklingsmiljö"
+msgstr "Den integrerade utvecklingsmiljön Eclipse Luna"
 
 #: umake/frameworks/ide.py:131
 msgid "Eclipse Luna"
@@ -98,23 +98,23 @@ msgstr "IDE för Ruby on Rails"
 
 #: umake/frameworks/ide.py:314
 msgid "Complex client-side and server-side javascript IDE"
-msgstr "Avancerad JavaScript IDE på klientsidan och serversidan"
+msgstr "JavaScript-IDE för klient- och serversidan"
 
 #: umake/frameworks/ide.py:331
 msgid "PHP and web development IDE"
-msgstr "PHP och webbutvecklings IDE"
+msgstr "IDE för PHP och webbutveckling"
 
 #: umake/frameworks/ide.py:348
 msgid "CLion integrated C/C++ IDE"
-msgstr "CLion integrerad C/C++ IDE"
+msgstr "CLion, en integrerad C/C++-IDE"
 
 #: umake/frameworks/ide.py:376
 msgid "The Arduino Software Distribution"
-msgstr "Arduino programvarudistribution"
+msgstr "Arduino-programvarudistributionen"
 
 #: umake/frameworks/ide.py:475
 msgid "The Arduino Software IDE"
-msgstr "Arduino IDE programvara"
+msgstr "Arduino-programvarans IDE"
 
 #: umake/frameworks/ide.py:478
 msgid "Arduino"
@@ -132,7 +132,7 @@ msgstr "NetBeans IDE"
 
 #: umake/frameworks/dart.py:43
 msgid "Dartlang Development Environment"
-msgstr "Dartlang utvecklingsmiljö"
+msgstr "Dart-utvecklingsmiljö"
 
 #: umake/frameworks/dart.py:49
 msgid "Dart SDK with editor (not supported upstream anyymore)"
@@ -162,7 +162,7 @@ msgstr "Den officiella Rust-distributionen"
 
 #: umake/frameworks/scala.py:40
 msgid "The Scala Programming Language"
-msgstr "Scala programmeringsspråk"
+msgstr "Programmeringsspråket Scala"
 
 #: umake/frameworks/scala.py:46
 msgid "Scala compiler and interpreter (default)"
@@ -170,15 +170,15 @@ msgstr "Scala-kompilatorn och tolk (standard)"
 
 #: umake/frameworks/go.py:39
 msgid "Go language"
-msgstr "Go språk"
+msgstr "Programmeringsspråket Go"
 
 #: umake/frameworks/go.py:46
 msgid "Google compiler (default)"
-msgstr "Google kompilator (standard)"
+msgstr "Google-kompilatorn (standard)"
 
 #: umake/frameworks/android.py:42
 msgid "Android Development Environment"
-msgstr "Android utvecklingsmiljö"
+msgstr "Android-utvecklingsmiljö"
 
 #: umake/frameworks/android.py:80
 msgid "Android Studio (default)"
@@ -190,7 +190,7 @@ msgstr "Android Studio"
 
 #: umake/frameworks/android.py:103
 msgid "Android Studio developer environment"
-msgstr "Android Studio utvecklingsmiljö"
+msgstr "Android Studio-utvecklingsmiljö"
 
 #: umake/frameworks/android.py:111
 msgid "Android SDK"
@@ -202,8 +202,7 @@ msgstr "Android NDK"
 
 #: umake/frameworks/__init__.py:129
 msgid "A default framework for category {} was requested where there is none"
-msgstr ""
-"Ett standardiserat ramverk för kategorin {} begärdes där det inte fanns någon"
+msgstr "Ett standardramverk för kategorin {} begärdes, men det finns inget"
 
 #: umake/frameworks/__init__.py:240
 msgid "You can't install that framework on this machine"
@@ -216,8 +215,7 @@ msgstr "Du kan inte avinstallera {} eftersom det inte är installerat"
 #: umake/frameworks/__init__.py:285
 msgid ""
 "If the default framework name isn't provided, destdir should contain a /"
-msgstr ""
-"Om inget namn angivits för standard ramverk, behöver destdir innehålla ett /"
+msgstr "Om inget namn på standardramverket anges bör destdir innehålla ett /"
 
 #: umake/frameworks/__init__.py:288
 msgid "Remove framework if installed"
@@ -241,7 +239,7 @@ msgstr "Välj språk: {}"
 
 #: umake/frameworks/web.py:123
 msgid "Firefox Aurora with Developer tools"
-msgstr "Firefox Aurora med Utvecklarverktyg"
+msgstr "Firefox Aurora med utvecklarverktyg"
 
 #: umake/frameworks/web.py:129
 msgid "Install in given language without prompting"
@@ -249,11 +247,11 @@ msgstr "Installera i det angivna språket utan att fråga"
 
 #: umake/frameworks/web.py:141 umake/frameworks/web.py:226
 msgid "Visual Studio focused on modern web and cloud"
-msgstr "Visual Studio fokuserad på modern webb och moln"
+msgstr "Visual Studio med fokus på modern webb och molnet"
 
 #: umake/frameworks/web.py:223
 msgid "Visual Studio Code"
-msgstr "Visual Studio-kod"
+msgstr "Visual Studio Code"
 
 #: umake/frameworks/games.py:42
 msgid "Games Development Environment"
@@ -261,7 +259,7 @@ msgstr "Spelutvecklingsmiljö"
 
 #: umake/frameworks/games.py:48
 msgid "Stencyl game developer IDE"
-msgstr "Stencyl spelutvecklingsmiljö"
+msgstr "Stencyl-spelutvecklingsmiljö"
 
 #: umake/frameworks/games.py:85
 msgid "Stencyl"
@@ -269,7 +267,7 @@ msgstr "Stencyl"
 
 #: umake/frameworks/games.py:114
 msgid "Unity 3D Editor Linux experimental support"
-msgstr "Unity 3D Editor Linux experimentellt stöd"
+msgstr "Experimentellt Linux-stöd för Unity 3D Editor"
 
 #: umake/frameworks/games.py:154
 msgid "Unity3D Editor"
@@ -277,8 +275,7 @@ msgstr "Unity3D Editor"
 
 #: umake/frameworks/games.py:164
 msgid "Twine tool for creating interactive and nonlinear stories"
-msgstr ""
-"Twine-verktyg för skapandet av interaktiva och icke-linjära berättelser"
+msgstr "Twine-verktyg för att skapa interaktiva och icke-linjära berättelser"
 
 #: umake/frameworks/games.py:200
 msgid "Twine"
@@ -286,11 +283,11 @@ msgstr "Twine"
 
 #: umake/interactions/__init__.py:73
 msgid "No suitable answer provided"
-msgstr "Inget lämpligt svar angivet"
+msgstr "Inget lämpligt svar angavs"
 
 #: umake/interactions/__init__.py:75 umake/interactions/__init__.py:83
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {}"
-msgstr "Din inmatning '{}' är inte ett accepterat val. valen är: {}"
+msgstr "Din inmatning '{}' är inte ett giltigt val. Giltiga val är: {}"
 
 #: umake/interactions/__init__.py:80
 msgid "Your entry '{}' isn't an acceptable choice. choices are: {} and {}"
@@ -314,7 +311,7 @@ msgstr "{} [{}] "
 
 #: umake/interactions/__init__.py:115
 msgid "I Accept"
-msgstr "Jag godkänner"
+msgstr "Jag accepterar"
 
 #: umake/interactions/__init__.py:115
 msgid "a"
